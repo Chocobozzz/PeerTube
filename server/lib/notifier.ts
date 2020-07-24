@@ -10,7 +10,7 @@ import {
 } from '@server/types/models/user'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
 import { MVideoImportVideo } from '@server/types/models/video/video-import'
-import { Abuse } from '@shared/models'
+import { UserAbuse } from '@shared/models'
 import { UserNotificationSettingValue, UserNotificationType, UserRight } from '../../shared/models/users'
 import { VideoPrivacy, VideoState } from '../../shared/models/videos'
 import { logger } from '../helpers/logger'
@@ -73,7 +73,7 @@ class Notifier {
         .catch(err => logger.error('Cannot notify mentions of comment %s.', comment.url, { err }))
   }
 
-  notifyOnNewAbuse (parameters: { abuse: Abuse, abuseInstance: MAbuseFull, reporter: string }): void {
+  notifyOnNewAbuse (parameters: { abuse: UserAbuse, abuseInstance: MAbuseFull, reporter: string }): void {
     this.notifyModeratorsOfNewAbuse(parameters)
         .catch(err => logger.error('Cannot notify of new abuse %d.', parameters.abuseInstance.id, { err }))
   }
@@ -350,7 +350,7 @@ class Notifier {
   }
 
   private async notifyModeratorsOfNewAbuse (parameters: {
-    abuse: Abuse
+    abuse: UserAbuse
     abuseInstance: MAbuseFull
     reporter: string
   }) {

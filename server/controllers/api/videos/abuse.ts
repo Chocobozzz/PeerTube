@@ -2,7 +2,6 @@ import * as express from 'express'
 import { AbuseModel } from '@server/models/abuse/abuse'
 import { getServerActor } from '@server/models/application/application'
 import { AbuseCreate, UserRight, VideoAbuseCreate } from '../../../../shared'
-import { getFormattedObjects } from '../../../helpers/utils'
 import {
   abusesSortValidator,
   asyncMiddleware,
@@ -63,7 +62,7 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
   const serverActor = await getServerActor()
 
-  const resultList = await AbuseModel.listForApi({
+  const resultList = await AbuseModel.listForAdminApi({
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
@@ -81,7 +80,10 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
     user
   })
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json({
+    total: resultList.total,
+    data: resultList.data.map(d => d.toFormattedAdminJSON())
+  })
 }
 
 async function updateVideoAbuse (req: express.Request, res: express.Response) {

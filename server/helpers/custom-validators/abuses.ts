@@ -4,6 +4,7 @@ import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { exists, isArray } from './misc'
 
 const ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.ABUSES
+const ABUSE_MESSAGES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.ABUSE_MESSAGES
 
 function isAbuseReasonValid (value: string) {
   return exists(value) && validator.isLength(value, ABUSES_CONSTRAINTS_FIELDS.REASON)
@@ -46,13 +47,18 @@ function isAbuseVideoIsValid (value: AbuseVideoIs) {
   )
 }
 
+function isAbuseMessageValid (value: string) {
+  return exists(value) && validator.isLength(value, ABUSE_MESSAGES_CONSTRAINTS_FIELDS.MESSAGE)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   isAbuseReasonValid,
   isAbuseFilterValid,
   isAbusePredefinedReasonValid,
-  areAbusePredefinedReasonsValid as isAbusePredefinedReasonsValid,
+  isAbuseMessageValid,
+  areAbusePredefinedReasonsValid,
   isAbuseTimestampValid,
   isAbuseTimestampCoherent,
   isAbuseModerationCommentValid,

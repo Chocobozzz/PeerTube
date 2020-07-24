@@ -1,20 +1,24 @@
 import * as express from 'express'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation'
 import { AbuseModel } from '@server/models/abuse/abuse'
+import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { getServerActor } from '@server/models/application/application'
 import { AbuseCreate, abusePredefinedReasonsMap, AbuseState, UserRight } from '../../../shared'
 import { getFormattedObjects } from '../../helpers/utils'
 import { sequelizeTypescript } from '../../initializers/database'
 import {
   abuseGetValidator,
-  abuseListValidator,
+  abuseListForAdminsValidator,
   abuseReportValidator,
   abusesSortValidator,
   abuseUpdateValidator,
+  addAbuseMessageValidator,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  deleteAbuseMessageValidator,
   ensureUserHasRight,
+  getAbuseValidator,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort
@@ -30,8 +34,8 @@ abuseRouter.get('/',
   abusesSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  abuseListValidator,
-  asyncMiddleware(listAbuses)
+  abuseListForAdminsValidator,
+  asyncMiddleware(listAbusesForAdmins)
 )
 abuseRouter.put('/:id',
   authenticate,
@@ -51,13 +55,33 @@ abuseRouter.delete('/:id',
   asyncRetryTransactionMiddleware(deleteAbuse)
 )
 
+abuseRouter.get('/:id/messages',
+  authenticate,
+  asyncMiddleware(getAbuseValidator),
+  asyncRetryTransactionMiddleware(listAbuseMessages)
+)
+
+abuseRouter.post('/:id/messages',
+  authenticate,
+  asyncMiddleware(getAbuseValidator),
+  addAbuseMessageValidator,
+  asyncRetryTransactionMiddleware(addAbuseMessage)
+)
+
+abuseRouter.delete('/:id/messages/:messageId',
+  authenticate,
+  asyncMiddleware(getAbuseValidator),
+  asyncMiddleware(deleteAbuseMessageValidator),
+  asyncRetryTransactionMiddleware(deleteAbuseMessage)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
   abuseRouter,
 
   // FIXME: deprecated in 2.3. Remove these exports
-  listAbuses,
+  listAbusesForAdmins,
   updateAbuse,
   deleteAbuse,
   reportAbuse
@@ -65,11 +89,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function listAbuses (req: express.Request, res: express.Response) {
+async function listAbusesForAdmins (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
   const serverActor = await getServerActor()
 
-  const resultList = await AbuseModel.listForApi({
+  const resultList = await AbuseModel.listForAdminApi({
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
@@ -87,7 +111,10 @@ async function listAbuses (req: express.Request, res: express.Response) {
     user
   })
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json({
+    total: resultList.total,
+    data: resultList.data.map(d => d.toFormattedAdminJSON())
+  })
 }
 
 async function updateAbuse (req: express.Request, res: express.Response) {
@@ -99,6 +126,8 @@ async function updateAbuse (req: express.Request, res: express.Response) {
   await sequelizeTypescript.transaction(t => {
     return abuse.save({ transaction: t })
   })
+
+  // TODO: Notification
 
   // Do not send the delete to other instances, we updated OUR copy of this abuse
 
@@ -165,4 +194,42 @@ async function reportAbuse (req: express.Request, res: express.Response) {
   })
 
   return res.json({ abuse: { id } })
+}
+
+async function listAbuseMessages (req: express.Request, res: express.Response) {
+  const abuse = res.locals.abuse
+
+  const resultList = await AbuseMessageModel.listForApi(abuse.id)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function addAbuseMessage (req: express.Request, res: express.Response) {
+  const abuse = res.locals.abuse
+  const user = res.locals.oauth.token.user
+
+  const abuseMessage = await AbuseMessageModel.create({
+    message: req.body.message,
+    byModerator: abuse.reporterAccountId !== user.Account.id,
+    accountId: user.Account.id,
+    abuseId: abuse.id
+  })
+
+  // TODO: Notification
+
+  return res.json({
+    abuseMessage: {
+      id: abuseMessage.id
+    }
+  })
+}
+
+async function deleteAbuseMessage (req: express.Request, res: express.Response) {
+  const abuseMessage = res.locals.abuseMessage
+
+  await sequelizeTypescript.transaction(t => {
+    return abuseMessage.destroy({ transaction: t })
+  })
+
+  return res.sendStatus(204)
 }

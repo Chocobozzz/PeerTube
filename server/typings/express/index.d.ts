@@ -1,6 +1,7 @@
 import { RegisterServerAuthExternalOptions } from '@server/types'
 import {
   MAbuse,
+  MAbuseMessage,
   MAccountBlocklist,
   MActorUrl,
   MStreamingPlaylist,
@@ -78,6 +79,7 @@ declare module 'express' {
       videoCaption?: MVideoCaptionVideo
 
       abuse?: MAbuse
+      abuseMessage?: MAbuseMessage
 
       videoStreamingPlaylist?: MStreamingPlaylist
 

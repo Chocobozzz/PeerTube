@@ -4,7 +4,7 @@ import { AbusePredefinedReasonsString } from './abuse-reason.model'
 import { VideoConstant } from '../../videos/video-constant.model'
 import { VideoChannel } from '../../videos/channel/video-channel.model'
 
-export interface VideoAbuse {
+export interface AdminVideoAbuse {
   id: number
   name: string
   uuid: string
@@ -23,7 +23,7 @@ export interface VideoAbuse {
   nthReport: number
 }
 
-export interface VideoCommentAbuse {
+export interface AdminVideoCommentAbuse {
   id: number
   threadId: number
 
@@ -38,7 +38,7 @@ export interface VideoCommentAbuse {
   deleted: boolean
 }
 
-export interface Abuse {
+export interface AdminAbuse {
   id: number
 
   reason: string
@@ -50,14 +50,16 @@ export interface Abuse {
   state: VideoConstant<AbuseState>
   moderationComment?: string
 
-  video?: VideoAbuse
-  comment?: VideoCommentAbuse
+  video?: AdminVideoAbuse
+  comment?: AdminVideoCommentAbuse
 
   createdAt: Date
   updatedAt: Date
 
   countReportsForReporter?: number
   countReportsForReportee?: number
+
+  countMessages: number
 
   // FIXME: deprecated in 2.3, remove the following properties
 
@@ -71,3 +73,10 @@ export interface Abuse {
   // @deprecated
   nth?: number
 }
+
+export type UserVideoAbuse = Omit<AdminVideoAbuse, 'countReports' | 'nthReport'>
+
+export type UserVideoCommentAbuse = AdminVideoCommentAbuse
+
+export type UserAbuse = Omit<AdminAbuse, 'reporterAccount' | 'countReportsForReportee' | 'countReportsForReporter' | 'startAt' | 'endAt'
+| 'count' | 'nth'>

@@ -13,7 +13,11 @@ import {
   setAccessTokensToServers,
   updateAbuse,
   uploadVideo,
-  userLogin
+  userLogin,
+  generateUserAccessToken,
+  addAbuseMessage,
+  listAbuseMessages,
+  deleteAbuseMessage
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
@@ -26,7 +30,9 @@ describe('Test abuses API validators', function () {
 
   let server: ServerInfo
   let userAccessToken = ''
+  let userAccessToken2 = ''
   let abuseId: number
+  let messageId: number
 
   // ---------------------------------------------------------------
 
@@ -42,11 +48,15 @@ describe('Test abuses API validators', function () {
     await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
     userAccessToken = await userLogin(server, { username, password })
 
+    {
+      userAccessToken2 = await generateUserAccessToken(server, 'user_2')
+    }
+
     const res = await uploadVideo(server.url, server.accessToken, {})
     server.video = res.body.video
   })
 
-  describe('When listing abuses', function () {
+  describe('When listing abuses for admins', function () {
     const path = basePath
 
     it('Should fail with a bad start pagination', async function () {
@@ -113,47 +123,89 @@ describe('Test abuses API validators', function () {
     })
   })
 
+  describe('When listing abuses for users', function () {
+    const path = '/api/v1/users/me/abuses'
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with a non authenticated user', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        statusCodeExpected: 401
+      })
+    })
+
+    it('Should fail with a bad id filter', async function () {
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, query: { id: 'toto' } })
+    })
+
+    it('Should fail with a bad state filter', async function () {
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, query: { state: 'toto' } })
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, query: { state: 0 } })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      const query = {
+        id: 13,
+        state: 2
+      }
+
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, query, statusCodeExpected: 200 })
+    })
+  })
+
   describe('When reporting an abuse', function () {
     const path = basePath
 
     it('Should fail with nothing', async function () {
       const fields = {}
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should fail with a wrong video', async function () {
       const fields = { video: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path: path, token: userAccessToken, fields })
     })
 
     it('Should fail with an unknown video', async function () {
       const fields = { video: { id: 42 }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields, statusCodeExpected: 404 })
+      await makePostBodyRequest({ url: server.url, path: path, token: userAccessToken, fields, statusCodeExpected: 404 })
     })
 
     it('Should fail with a wrong comment', async function () {
       const fields = { comment: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path: path, token: userAccessToken, fields })
     })
 
     it('Should fail with an unknown comment', async function () {
       const fields = { comment: { id: 42 }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields, statusCodeExpected: 404 })
+      await makePostBodyRequest({ url: server.url, path: path, token: userAccessToken, fields, statusCodeExpected: 404 })
     })
 
     it('Should fail with a wrong account', async function () {
       const fields = { account: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path: path, token: userAccessToken, fields })
     })
 
     it('Should fail with an unknown account', async function () {
       const fields = { account: { id: 42 }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields, statusCodeExpected: 404 })
+      await makePostBodyRequest({ url: server.url, path: path, token: userAccessToken, fields, statusCodeExpected: 404 })
     })
 
     it('Should fail with not account, comment or video', async function () {
       const fields = { reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields, statusCodeExpected: 400 })
+      await makePostBodyRequest({ url: server.url, path: path, token: userAccessToken, fields, statusCodeExpected: 400 })
     })
 
     it('Should fail with a non authenticated user', async function () {
@@ -165,38 +217,38 @@ describe('Test abuses API validators', function () {
     it('Should fail with a reason too short', async function () {
       const fields = { video: { id: server.video.id }, reason: 'h' }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should fail with a too big reason', async function () {
       const fields = { video: { id: server.video.id }, reason: 'super'.repeat(605) }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should succeed with the correct parameters (basic)', async function () {
       const fields: AbuseCreate = { video: { id: server.video.id }, reason: 'my super reason' }
 
-      const res = await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 200 })
+      const res = await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, statusCodeExpected: 200 })
       abuseId = res.body.abuse.id
     })
 
     it('Should fail with a wrong predefined reason', async function () {
       const fields = { video: { id: server.video.id }, reason: 'my super reason', predefinedReasons: [ 'wrongPredefinedReason' ] }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should fail with negative timestamps', async function () {
       const fields = { video: { id: server.video.id, startAt: -1 }, reason: 'my super reason' }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should fail mith misordered startAt/endAt', async function () {
       const fields = { video: { id: server.video.id, startAt: 5, endAt: 1 }, reason: 'my super reason' }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
     })
 
     it('Should succeed with the corret parameters (advanced)', async function () {
@@ -210,7 +262,7 @@ describe('Test abuses API validators', function () {
         predefinedReasons: [ 'serverRules' ]
       }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 200 })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, statusCodeExpected: 200 })
     })
   })
 
@@ -241,6 +293,73 @@ describe('Test abuses API validators', function () {
     it('Should succeed with the correct params', async function () {
       const body = { state: AbuseState.ACCEPTED }
       await updateAbuse(server.url, server.accessToken, abuseId, body)
+    })
+  })
+
+  describe('When creating an abuse message', function () {
+    const message = 'my super message'
+
+    it('Should fail with an invalid abuse id', async function () {
+      await addAbuseMessage(server.url, userAccessToken2, 888, message, 404)
+    })
+
+    it('Should fail with a non authenticated user', async function () {
+      await addAbuseMessage(server.url, 'fake_token', abuseId, message, 401)
+    })
+
+    it('Should fail with an invalid logged in user', async function () {
+      await addAbuseMessage(server.url, userAccessToken2, abuseId, message, 403)
+    })
+
+    it('Should fail with an invalid message', async function () {
+      await addAbuseMessage(server.url, userAccessToken, abuseId, 'a'.repeat(5000), 400)
+    })
+
+    it('Should suceed with the correct params', async function () {
+      const res = await addAbuseMessage(server.url, userAccessToken, abuseId, message)
+      messageId = res.body.abuseMessage.id
+    })
+  })
+
+  describe('When listing abuse message', function () {
+
+    it('Should fail with an invalid abuse id', async function () {
+      await listAbuseMessages(server.url, userAccessToken, 888, 404)
+    })
+
+    it('Should fail with a non authenticated user', async function () {
+      await listAbuseMessages(server.url, 'fake_token', abuseId, 401)
+    })
+
+    it('Should fail with an invalid logged in user', async function () {
+      await listAbuseMessages(server.url, userAccessToken2, abuseId, 403)
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await listAbuseMessages(server.url, userAccessToken, abuseId)
+    })
+  })
+
+  describe('When deleting an abuse message', function () {
+
+    it('Should fail with an invalid abuse id', async function () {
+      await deleteAbuseMessage(server.url, userAccessToken, 888, messageId, 404)
+    })
+
+    it('Should fail with an invalid message id', async function () {
+      await deleteAbuseMessage(server.url, userAccessToken, abuseId, 888, 404)
+    })
+
+    it('Should fail with a non authenticated user', async function () {
+      await deleteAbuseMessage(server.url, 'fake_token', abuseId, messageId, 401)
+    })
+
+    it('Should fail with an invalid logged in user', async function () {
+      await deleteAbuseMessage(server.url, userAccessToken2, abuseId, messageId, 403)
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await deleteAbuseMessage(server.url, userAccessToken, abuseId, messageId)
     })
   })
 

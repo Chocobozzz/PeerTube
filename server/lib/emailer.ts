@@ -5,7 +5,7 @@ import { join } from 'path'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
 import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
-import { Abuse, EmailPayload } from '@shared/models'
+import { UserAbuse, EmailPayload } from '@shared/models'
 import { SendEmailOptions } from '../../shared/models/server/emailer.model'
 import { isTestInstance, root } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
@@ -283,7 +283,7 @@ class Emailer {
   }
 
   addAbuseModeratorsNotification (to: string[], parameters: {
-    abuse: Abuse
+    abuse: UserAbuse
     abuseInstance: MAbuseFull
     reporter: string
   }) {

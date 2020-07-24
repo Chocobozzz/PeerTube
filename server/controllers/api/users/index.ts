@@ -1,10 +1,20 @@
 import * as express from 'express'
 import * as RateLimit from 'express-rate-limit'
+import { tokensRouter } from '@server/controllers/api/users/token'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { MUser, MUserAccountDefault } from '@server/types/models'
 import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
+import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
+import { UserRegister } from '../../../../shared/models/users/user-register.model'
+import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { logger } from '../../../helpers/logger'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils'
+import { CONFIG } from '../../../initializers/config'
 import { WEBSERVER } from '../../../initializers/constants'
+import { sequelizeTypescript } from '../../../initializers/database'
 import { Emailer } from '../../../lib/emailer'
+import { Notifier } from '../../../lib/notifier'
+import { deleteUserToken } from '../../../lib/oauth-model'
 import { Redis } from '../../../lib/redis'
 import { createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
 import {
@@ -18,9 +28,9 @@ import {
   setDefaultPagination,
   setDefaultSort,
   userAutocompleteValidator,
-  usersListValidator,
   usersAddValidator,
   usersGetValidator,
+  usersListValidator,
   usersRegisterValidator,
   usersRemoveValidator,
   usersSortValidator,
@@ -35,22 +45,13 @@ import {
   usersVerifyEmailValidator
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/account/user'
-import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { meRouter } from './me'
-import { deleteUserToken } from '../../../lib/oauth-model'
+import { myAbusesRouter } from './my-abuses'
 import { myBlocklistRouter } from './my-blocklist'
-import { myVideoPlaylistsRouter } from './my-video-playlists'
 import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
-import { Notifier } from '../../../lib/notifier'
 import { mySubscriptionsRouter } from './my-subscriptions'
-import { CONFIG } from '../../../initializers/config'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
-import { UserRegister } from '../../../../shared/models/users/user-register.model'
-import { MUser, MUserAccountDefault } from '@server/types/models'
-import { Hooks } from '@server/lib/plugins/hooks'
-import { tokensRouter } from '@server/controllers/api/users/token'
+import { myVideoPlaylistsRouter } from './my-video-playlists'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -72,6 +73,7 @@ usersRouter.use('/', mySubscriptionsRouter)
 usersRouter.use('/', myBlocklistRouter)
 usersRouter.use('/', myVideosHistoryRouter)
 usersRouter.use('/', myVideoPlaylistsRouter)
+usersRouter.use('/', myAbusesRouter)
 usersRouter.use('/', meRouter)
 
 usersRouter.get('/autocomplete',

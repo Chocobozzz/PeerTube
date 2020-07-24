@@ -5,7 +5,7 @@ import { chain } from 'lodash'
 import * as path from 'path'
 import * as winston from 'winston'
 import { AUDIT_LOG_FILENAME } from '@server/initializers/constants'
-import { Abuse, User, VideoChannel, VideoDetails, VideoImport } from '../../shared'
+import { AdminAbuse, User, VideoChannel, VideoDetails, VideoImport } from '../../shared'
 import { CustomConfig } from '../../shared/models/server/custom-config.model'
 import { VideoComment } from '../../shared/models/videos/video-comment.model'
 import { CONFIG } from '../initializers/config'
@@ -219,7 +219,7 @@ const abuseKeysToKeep = [
   'createdAt'
 ]
 class AbuseAuditView extends EntityAuditView {
-  constructor (private readonly abuse: Abuse) {
+  constructor (private readonly abuse: AdminAbuse) {
     super(abuseKeysToKeep, 'abuse', abuse)
   }
 }

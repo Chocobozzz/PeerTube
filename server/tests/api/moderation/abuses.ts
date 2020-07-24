@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { Abuse, AbuseFilter, AbusePredefinedReasonsString, AbuseState, VideoComment, Account } from '@shared/models'
+import { AbuseFilter, AbusePredefinedReasonsString, AbuseState, Account, AdminAbuse, UserAbuse, VideoComment, AbuseMessage } from '@shared/models'
 import {
   addVideoCommentThread,
   cleanupTests,
@@ -10,11 +10,15 @@ import {
   deleteAbuse,
   deleteVideoComment,
   flushAndRunMultipleServers,
-  getAbusesList,
+  generateUserAccessToken,
+  getAccount,
+  getAdminAbusesList,
+  getUserAbusesList,
   getVideoCommentThreads,
   getVideoIdFromUUID,
   getVideosList,
   immutableAssign,
+  removeUser,
   removeVideo,
   reportAbuse,
   ServerInfo,
@@ -23,9 +27,9 @@ import {
   uploadVideo,
   uploadVideoAndGetId,
   userLogin,
-  getAccount,
-  removeUser,
-  generateUserAccessToken
+  addAbuseMessage,
+  listAbuseMessages,
+  deleteAbuseMessage
 } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -40,8 +44,8 @@ const expect = chai.expect
 
 describe('Test abuses', function () {
   let servers: ServerInfo[] = []
-  let abuseServer1: Abuse
-  let abuseServer2: Abuse
+  let abuseServer1: AdminAbuse
+  let abuseServer2: AdminAbuse
 
   before(async function () {
     this.timeout(50000)
@@ -87,7 +91,7 @@ describe('Test abuses', function () {
     })
 
     it('Should not have abuses', async function () {
-      const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+      const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.be.an('array')
@@ -105,13 +109,13 @@ describe('Test abuses', function () {
     })
 
     it('Should have 1 video abuses on server 1 and 0 on server 2', async function () {
-      const res1 = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+      const res1 = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
       expect(res1.body.total).to.equal(1)
       expect(res1.body.data).to.be.an('array')
       expect(res1.body.data.length).to.equal(1)
 
-      const abuse: Abuse = res1.body.data[0]
+      const abuse: AdminAbuse = res1.body.data[0]
       expect(abuse.reason).to.equal('my super bad reason')
 
       expect(abuse.reporterAccount.name).to.equal('root')
@@ -131,7 +135,7 @@ describe('Test abuses', function () {
       expect(abuse.countReportsForReporter).to.equal(1)
       expect(abuse.countReportsForReportee).to.equal(1)
 
-      const res2 = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken })
+      const res2 = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken })
       expect(res2.body.total).to.equal(0)
       expect(res2.body.data).to.be.an('array')
       expect(res2.body.data.length).to.equal(0)
@@ -141,19 +145,20 @@ describe('Test abuses', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason 2'
-      await reportAbuse({ url: servers[0].url, token: servers[0].accessToken, videoId: servers[1].video.id, reason })
+      const videoId = await getVideoIdFromUUID(servers[0].url, servers[1].video.uuid)
+      await reportAbuse({ url: servers[0].url, token: servers[0].accessToken, videoId, reason })
 
       // We wait requests propagation
       await waitJobs(servers)
     })
 
     it('Should have 2 video abuses on server 1 and 1 on server 2', async function () {
-      const res1 = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+      const res1 = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
       expect(res1.body.total).to.equal(2)
       expect(res1.body.data.length).to.equal(2)
 
-      const abuse1: Abuse = res1.body.data[0]
+      const abuse1: AdminAbuse = res1.body.data[0]
       expect(abuse1.reason).to.equal('my super bad reason')
       expect(abuse1.reporterAccount.name).to.equal('root')
       expect(abuse1.reporterAccount.host).to.equal(servers[0].host)
@@ -171,7 +176,7 @@ describe('Test abuses', function () {
       expect(abuse1.state.label).to.equal('Pending')
       expect(abuse1.moderationComment).to.be.null
 
-      const abuse2: Abuse = res1.body.data[1]
+      const abuse2: AdminAbuse = res1.body.data[1]
       expect(abuse2.reason).to.equal('my super bad reason 2')
 
       expect(abuse2.reporterAccount.name).to.equal('root')
@@ -188,7 +193,7 @@ describe('Test abuses', function () {
       expect(abuse2.state.label).to.equal('Pending')
       expect(abuse2.moderationComment).to.be.null
 
-      const res2 = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken })
+      const res2 = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken })
       expect(res2.body.total).to.equal(1)
       expect(res2.body.data.length).to.equal(1)
 
@@ -213,7 +218,7 @@ describe('Test abuses', function () {
         await reportAbuse({ url: servers[1].url, token: servers[1].accessToken, videoId, reason: 'will mute this' })
         await waitJobs(servers)
 
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
         expect(res.body.total).to.equal(3)
       }
 
@@ -222,7 +227,7 @@ describe('Test abuses', function () {
       {
         await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, accountToBlock)
 
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
         expect(res.body.total).to.equal(2)
 
         const abuse = res.body.data.find(a => a.reason === 'will mute this')
@@ -232,7 +237,7 @@ describe('Test abuses', function () {
       {
         await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, accountToBlock)
 
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
         expect(res.body.total).to.equal(3)
       }
     })
@@ -243,7 +248,7 @@ describe('Test abuses', function () {
       {
         await addServerToServerBlocklist(servers[0].url, servers[0].accessToken, servers[1].host)
 
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
         expect(res.body.total).to.equal(2)
 
         const abuse = res.body.data.find(a => a.reason === 'will mute this')
@@ -253,7 +258,7 @@ describe('Test abuses', function () {
       {
         await removeServerFromServerBlocklist(servers[0].url, servers[0].accessToken, serverToBlock)
 
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
         expect(res.body.total).to.equal(3)
       }
     })
@@ -265,11 +270,11 @@ describe('Test abuses', function () {
 
       await waitJobs(servers)
 
-      const res = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken })
+      const res = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken })
       expect(res.body.total).to.equal(2, "wrong number of videos returned")
       expect(res.body.data).to.have.lengthOf(2, "wrong number of videos returned")
 
-      const abuse: Abuse = res.body.data[0]
+      const abuse: AdminAbuse = res.body.data[0]
       expect(abuse.id).to.equal(abuseServer2.id, "wrong origin server id for first video")
       expect(abuse.video.id).to.equal(abuseServer2.video.id, "wrong video id")
       expect(abuse.video.channel).to.exist
@@ -303,8 +308,8 @@ describe('Test abuses', function () {
       await reportAbuse({ url: servers[0].url, token: userAccessToken, videoId: servers[0].video.id, reason: reason4 })
 
       {
-        const res2 = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
-        const abuses = res2.body.data as Abuse[]
+        const res2 = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+        const abuses = res2.body.data as AdminAbuse[]
 
         const abuseVideo3 = res2.body.data.find(a => a.video.id === video3.id)
         expect(abuseVideo3).to.not.be.undefined
@@ -333,10 +338,10 @@ describe('Test abuses', function () {
         endAt: 5
       })).body.abuse
 
-      const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+      const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
       {
-        const abuse = (res.body.data as Abuse[]).find(a => a.id === createdAbuse.id)
+        const abuse = (res.body.data as AdminAbuse[]).find(a => a.id === createdAbuse.id)
         expect(abuse.reason).to.equals(reason5)
         expect(abuse.predefinedReasons).to.deep.equals(predefinedReasons5, "predefined reasons do not match the one reported")
         expect(abuse.video.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
@@ -352,14 +357,14 @@ describe('Test abuses', function () {
       await waitJobs(servers)
 
       {
-        const res = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken })
+        const res = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken })
         expect(res.body.total).to.equal(1)
         expect(res.body.data.length).to.equal(1)
         expect(res.body.data[0].id).to.not.equal(abuseServer2.id)
       }
 
       {
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken })
         expect(res.body.total).to.equal(6)
       }
     })
@@ -367,7 +372,7 @@ describe('Test abuses', function () {
     it('Should list and filter video abuses', async function () {
       this.timeout(10000)
 
-      async function list (query: Omit<Parameters<typeof getAbusesList>[0], 'url' | 'token'>) {
+      async function list (query: Omit<Parameters<typeof getAdminAbusesList>[0], 'url' | 'token'>) {
         const options = {
           url: servers[0].url,
           token: servers[0].accessToken
@@ -375,9 +380,9 @@ describe('Test abuses', function () {
 
         Object.assign(options, query)
 
-        const res = await getAbusesList(options)
+        const res = await getAdminAbusesList(options)
 
-        return res.body.data as Abuse[]
+        return res.body.data as AdminAbuse[]
       }
 
       expect(await list({ id: 56 })).to.have.lengthOf(0)
@@ -446,12 +451,12 @@ describe('Test abuses', function () {
     it('Should have 1 comment abuse on server 1 and 0 on server 2', async function () {
       {
         const comment = await getComment(servers[0].url, servers[0].video.id)
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment' })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment' })
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
 
-        const abuse: Abuse = res.body.data[0]
+        const abuse: AdminAbuse = res.body.data[0]
         expect(abuse.reason).to.equal('it is a bad comment')
 
         expect(abuse.reporterAccount.name).to.equal('root')
@@ -471,7 +476,7 @@ describe('Test abuses', function () {
       }
 
       {
-        const res = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'comment' })
+        const res = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'comment' })
         expect(res.body.total).to.equal(0)
         expect(res.body.data.length).to.equal(0)
       }
@@ -491,16 +496,16 @@ describe('Test abuses', function () {
     it('Should have 2 comment abuses on server 1 and 1 on server 2', async function () {
       const commentServer2 = await getComment(servers[0].url, servers[1].video.id)
 
-      const res1 = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment' })
+      const res1 = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment' })
       expect(res1.body.total).to.equal(2)
       expect(res1.body.data.length).to.equal(2)
 
-      const abuse: Abuse = res1.body.data[0]
+      const abuse: AdminAbuse = res1.body.data[0]
       expect(abuse.reason).to.equal('it is a bad comment')
       expect(abuse.countReportsForReporter).to.equal(6)
       expect(abuse.countReportsForReportee).to.equal(5)
 
-      const abuse2: Abuse = res1.body.data[1]
+      const abuse2: AdminAbuse = res1.body.data[1]
 
       expect(abuse2.reason).to.equal('it is a really bad comment')
 
@@ -523,7 +528,7 @@ describe('Test abuses', function () {
       expect(abuse2.countReportsForReporter).to.equal(6)
       expect(abuse2.countReportsForReportee).to.equal(2)
 
-      const res2 = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'comment' })
+      const res2 = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'comment' })
       expect(res2.body.total).to.equal(1)
       expect(res2.body.data.length).to.equal(1)
 
@@ -550,11 +555,11 @@ describe('Test abuses', function () {
 
       await waitJobs(servers)
 
-      const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment' })
+      const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment' })
       expect(res.body.total).to.equal(2)
       expect(res.body.data).to.have.lengthOf(2)
 
-      const abuse = (res.body.data as Abuse[]).find(a => a.comment?.id === commentServer2.id)
+      const abuse = (res.body.data as AdminAbuse[]).find(a => a.comment?.id === commentServer2.id)
       expect(abuse).to.not.be.undefined
 
       expect(abuse.comment.text).to.be.empty
@@ -570,36 +575,46 @@ describe('Test abuses', function () {
       await waitJobs(servers)
 
       {
-        const res = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'comment' })
+        const res = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'comment' })
         expect(res.body.total).to.equal(0)
         expect(res.body.data.length).to.equal(0)
       }
 
       {
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment' })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment' })
         expect(res.body.total).to.equal(2)
       }
     })
 
     it('Should list and filter video abuses', async function () {
       {
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment', searchReportee: 'foo' })
+        const res = await getAdminAbusesList({
+          url: servers[0].url,
+          token: servers[0].accessToken,
+          filter: 'comment',
+          searchReportee: 'foo'
+        })
         expect(res.body.total).to.equal(0)
       }
 
       {
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'comment', searchReportee: 'ot' })
+        const res = await getAdminAbusesList({
+          url: servers[0].url,
+          token: servers[0].accessToken,
+          filter: 'comment',
+          searchReportee: 'ot'
+        })
         expect(res.body.total).to.equal(2)
       }
 
       {
         const baseParams = { url: servers[0].url, token: servers[0].accessToken, filter: 'comment' as AbuseFilter, start: 1, count: 1 }
 
-        const res1 = await getAbusesList(immutableAssign(baseParams, { sort: 'createdAt' }))
+        const res1 = await getAdminAbusesList(immutableAssign(baseParams, { sort: 'createdAt' }))
         expect(res1.body.data).to.have.lengthOf(1)
         expect(res1.body.data[0].comment.text).to.be.empty
 
-        const res2 = await getAbusesList(immutableAssign(baseParams, { sort: '-createdAt' }))
+        const res2 = await getAdminAbusesList(immutableAssign(baseParams, { sort: '-createdAt' }))
         expect(res2.body.data).to.have.lengthOf(1)
         expect(res2.body.data[0].comment.text).to.equal('comment server 1')
       }
@@ -638,12 +653,12 @@ describe('Test abuses', function () {
 
     it('Should have 1 account abuse on server 1 and 0 on server 2', async function () {
       {
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'account' })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'account' })
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
 
-        const abuse: Abuse = res.body.data[0]
+        const abuse: AdminAbuse = res.body.data[0]
         expect(abuse.reason).to.equal('it is a bad account')
 
         expect(abuse.reporterAccount.name).to.equal('root')
@@ -657,7 +672,7 @@ describe('Test abuses', function () {
       }
 
       {
-        const res = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'comment' })
+        const res = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'comment' })
         expect(res.body.total).to.equal(0)
         expect(res.body.data.length).to.equal(0)
       }
@@ -675,14 +690,14 @@ describe('Test abuses', function () {
     })
 
     it('Should have 2 comment abuses on server 1 and 1 on server 2', async function () {
-      const res1 = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'account' })
+      const res1 = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'account' })
       expect(res1.body.total).to.equal(2)
       expect(res1.body.data.length).to.equal(2)
 
-      const abuse: Abuse = res1.body.data[0]
+      const abuse: AdminAbuse = res1.body.data[0]
       expect(abuse.reason).to.equal('it is a bad account')
 
-      const abuse2: Abuse = res1.body.data[1]
+      const abuse2: AdminAbuse = res1.body.data[1]
       expect(abuse2.reason).to.equal('it is a really bad account')
 
       expect(abuse2.reporterAccount.name).to.equal('root')
@@ -696,7 +711,7 @@ describe('Test abuses', function () {
 
       expect(abuse2.moderationComment).to.be.null
 
-      const res2 = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'account' })
+      const res2 = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'account' })
       expect(res2.body.total).to.equal(1)
       expect(res2.body.data.length).to.equal(1)
 
@@ -721,11 +736,11 @@ describe('Test abuses', function () {
 
       await waitJobs(servers)
 
-      const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'account' })
+      const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'account' })
       expect(res.body.total).to.equal(2)
       expect(res.body.data).to.have.lengthOf(2)
 
-      const abuse = (res.body.data as Abuse[]).find(a => a.reason === 'it is a really bad account')
+      const abuse = (res.body.data as AdminAbuse[]).find(a => a.reason === 'it is a really bad account')
       expect(abuse).to.not.be.undefined
     })
 
@@ -737,13 +752,13 @@ describe('Test abuses', function () {
       await waitJobs(servers)
 
       {
-        const res = await getAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'account' })
+        const res = await getAdminAbusesList({ url: servers[1].url, token: servers[1].accessToken, filter: 'account' })
         expect(res.body.total).to.equal(0)
         expect(res.body.data.length).to.equal(0)
       }
 
       {
-        const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'account' })
+        const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, filter: 'account' })
         expect(res.body.total).to.equal(2)
 
         abuseServer1 = res.body.data[0]
@@ -757,7 +772,7 @@ describe('Test abuses', function () {
       const body = { state: AbuseState.REJECTED }
       await updateAbuse(servers[0].url, servers[0].accessToken, abuseServer1.id, body)
 
-      const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, id: abuseServer1.id })
+      const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, id: abuseServer1.id })
       expect(res.body.data[0].state.id).to.equal(AbuseState.REJECTED)
     })
 
@@ -765,9 +780,181 @@ describe('Test abuses', function () {
       const body = { state: AbuseState.ACCEPTED, moderationComment: 'It is valid' }
       await updateAbuse(servers[0].url, servers[0].accessToken, abuseServer1.id, body)
 
-      const res = await getAbusesList({ url: servers[0].url, token: servers[0].accessToken, id: abuseServer1.id })
+      const res = await getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, id: abuseServer1.id })
       expect(res.body.data[0].state.id).to.equal(AbuseState.ACCEPTED)
       expect(res.body.data[0].moderationComment).to.equal('It is valid')
+    })
+  })
+
+  describe('My abuses', async function () {
+    let abuseId1: number
+    let userAccessToken: string
+
+    before(async function () {
+      userAccessToken = await generateUserAccessToken(servers[0], 'user_42')
+
+      await reportAbuse({ url: servers[0].url, token: userAccessToken, videoId: servers[0].video.id, reason: 'user reason 1' })
+
+      const videoId = await getVideoIdFromUUID(servers[0].url, servers[1].video.uuid)
+      await reportAbuse({ url: servers[0].url, token: userAccessToken, videoId, reason: 'user reason 2' })
+    })
+
+    it('Should correctly list my abuses', async function () {
+      {
+        const res = await getUserAbusesList({ url: servers[0].url, token: userAccessToken, start: 0, count: 5, sort: 'createdAt' })
+        expect(res.body.total).to.equal(2)
+
+        const abuses: UserAbuse[] = res.body.data
+        expect(abuses[0].reason).to.equal('user reason 1')
+        expect(abuses[1].reason).to.equal('user reason 2')
+
+        abuseId1 = abuses[0].id
+      }
+
+      {
+        const res = await getUserAbusesList({ url: servers[0].url, token: userAccessToken, start: 1, count: 1, sort: 'createdAt' })
+        expect(res.body.total).to.equal(2)
+
+        const abuses: UserAbuse[] = res.body.data
+        expect(abuses[0].reason).to.equal('user reason 2')
+      }
+
+      {
+        const res = await getUserAbusesList({ url: servers[0].url, token: userAccessToken, start: 1, count: 1, sort: '-createdAt' })
+        expect(res.body.total).to.equal(2)
+
+        const abuses: UserAbuse[] = res.body.data
+        expect(abuses[0].reason).to.equal('user reason 1')
+      }
+    })
+
+    it('Should correctly filter my abuses by id', async function () {
+      const res = await getUserAbusesList({ url: servers[0].url, token: userAccessToken, id: abuseId1 })
+
+      expect(res.body.total).to.equal(1)
+
+      const abuses: UserAbuse[] = res.body.data
+      expect(abuses[0].reason).to.equal('user reason 1')
+    })
+
+    it('Should correctly filter my abuses by search', async function () {
+      const res = await getUserAbusesList({
+        url: servers[0].url,
+        token: userAccessToken,
+        search: 'server 2'
+      })
+
+      expect(res.body.total).to.equal(1)
+
+      const abuses: UserAbuse[] = res.body.data
+      expect(abuses[0].reason).to.equal('user reason 2')
+    })
+
+    it('Should correctly filter my abuses by state', async function () {
+      const body = { state: AbuseState.REJECTED }
+      await updateAbuse(servers[0].url, servers[0].accessToken, abuseId1, body)
+
+      const res = await getUserAbusesList({
+        url: servers[0].url,
+        token: userAccessToken,
+        state: AbuseState.REJECTED
+      })
+
+      expect(res.body.total).to.equal(1)
+
+      const abuses: UserAbuse[] = res.body.data
+      expect(abuses[0].reason).to.equal('user reason 1')
+    })
+  })
+
+  describe('Abuse messages', async function () {
+    let abuseId: number
+    let userAccessToken: string
+    let abuseMessageUserId: number
+    let abuseMessageModerationId: number
+
+    before(async function () {
+      userAccessToken = await generateUserAccessToken(servers[0], 'user_43')
+
+      const res = await reportAbuse({
+        url: servers[0].url,
+        token: userAccessToken,
+        videoId: servers[0].video.id,
+        reason: 'user 43 reason 1'
+      })
+
+      abuseId = res.body.abuse.id
+    })
+
+    it('Should create some messages on the abuse', async function () {
+      await addAbuseMessage(servers[0].url, userAccessToken, abuseId, 'message 1')
+      await addAbuseMessage(servers[0].url, servers[0].accessToken, abuseId, 'message 2')
+      await addAbuseMessage(servers[0].url, servers[0].accessToken, abuseId, 'message 3')
+      await addAbuseMessage(servers[0].url, userAccessToken, abuseId, 'message 4')
+    })
+
+    it('Should have the correct messages count when listing abuses', async function () {
+      const results = await Promise.all([
+        getAdminAbusesList({ url: servers[0].url, token: servers[0].accessToken, start: 0, count: 50 }),
+        getUserAbusesList({ url: servers[0].url, token: userAccessToken, start: 0, count: 50 })
+      ])
+
+      for (const res of results) {
+        const abuses: AdminAbuse[] = res.body.data
+        const abuse = abuses.find(a => a.id === abuseId)
+        expect(abuse.countMessages).to.equal(4)
+      }
+    })
+
+    it('Should correctly list messages of this abuse', async function () {
+      const results = await Promise.all([
+        listAbuseMessages(servers[0].url, servers[0].accessToken, abuseId),
+        listAbuseMessages(servers[0].url, userAccessToken, abuseId)
+      ])
+
+      for (const res of results) {
+        expect(res.body.total).to.equal(4)
+
+        const abuseMessages: AbuseMessage[] = res.body.data
+
+        expect(abuseMessages[0].message).to.equal('message 1')
+        expect(abuseMessages[0].byModerator).to.be.false
+        expect(abuseMessages[0].account.name).to.equal('user_43')
+
+        abuseMessageUserId = abuseMessages[0].id
+
+        expect(abuseMessages[1].message).to.equal('message 2')
+        expect(abuseMessages[1].byModerator).to.be.true
+        expect(abuseMessages[1].account.name).to.equal('root')
+
+        expect(abuseMessages[2].message).to.equal('message 3')
+        expect(abuseMessages[2].byModerator).to.be.true
+        expect(abuseMessages[2].account.name).to.equal('root')
+        abuseMessageModerationId = abuseMessages[2].id
+
+        expect(abuseMessages[3].message).to.equal('message 4')
+        expect(abuseMessages[3].byModerator).to.be.false
+        expect(abuseMessages[3].account.name).to.equal('user_43')
+      }
+    })
+
+    it('Should delete messages', async function () {
+      await deleteAbuseMessage(servers[0].url, servers[0].accessToken, abuseId, abuseMessageModerationId)
+      await deleteAbuseMessage(servers[0].url, userAccessToken, abuseId, abuseMessageUserId)
+
+      const results = await Promise.all([
+        listAbuseMessages(servers[0].url, servers[0].accessToken, abuseId),
+        listAbuseMessages(servers[0].url, userAccessToken, abuseId)
+      ])
+
+      for (const res of results) {
+        expect(res.body.total).to.equal(2)
+
+        const abuseMessages: AbuseMessage[] = res.body.data
+
+        expect(abuseMessages[0].message).to.equal('message 2')
+        expect(abuseMessages[1].message).to.equal('message 4')
+      }
     })
   })
 

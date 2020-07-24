@@ -18,7 +18,6 @@ import {
 } from 'sequelize-typescript'
 import { isAbuseModerationCommentValid, isAbuseReasonValid, isAbuseStateValid } from '@server/helpers/custom-validators/abuses'
 import {
-  Abuse,
   AbuseFilter,
   AbuseObject,
   AbusePredefinedReasons,
@@ -26,11 +25,14 @@ import {
   AbusePredefinedReasonsString,
   AbuseState,
   AbuseVideoIs,
-  VideoAbuse,
-  VideoCommentAbuse
+  AdminVideoAbuse,
+  AdminAbuse,
+  AdminVideoCommentAbuse,
+  UserAbuse,
+  UserVideoAbuse
 } from '@shared/models'
 import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { MAbuse, MAbuseAP, MAbuseFormattable, MUserAccountId } from '../../types/models'
+import { MAbuse, MAbuseAdminFormattable, MAbuseAP, MUserAccountId, MAbuseUserFormattable } from '../../types/models'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from '../video/thumbnail'
@@ -51,6 +53,16 @@ export enum ScopeNames {
     return {
       attributes: {
         include: [
+          [
+            literal(
+              '(' +
+                'SELECT count(*) ' +
+                'FROM "abuseMessage" ' +
+                'WHERE "abuseId" = "AbuseModel"."id"' +
+              ')'
+            ),
+            'countMessages'
+          ],
           [
             // we don't care about this count for deleted videos, so there are not included
             literal(
@@ -285,7 +297,7 @@ export class AbuseModel extends Model<AbuseModel> {
     return AbuseModel.findOne(query)
   }
 
-  static async listForApi (parameters: {
+  static async listForAdminApi (parameters: {
     start: number
     count: number
     sort: string
@@ -353,70 +365,97 @@ export class AbuseModel extends Model<AbuseModel> {
     return { total, data }
   }
 
-  toFormattedJSON (this: MAbuseFormattable): Abuse {
+  static async listForUserApi (parameters: {
+    user: MUserAccountId
+
+    start: number
+    count: number
+    sort: string
+
+    id?: number
+    search?: string
+    state?: AbuseState
+  }) {
+    const {
+      start,
+      count,
+      sort,
+      search,
+      user,
+      state,
+      id
+    } = parameters
+
+    const queryOptions: BuildAbusesQueryOptions = {
+      start,
+      count,
+      sort,
+      id,
+      search,
+      state,
+      reporterAccountId: user.Account.id
+    }
+
+    const [ total, data ] = await Promise.all([
+      AbuseModel.internalCountForApi(queryOptions),
+      AbuseModel.internalListForApi(queryOptions)
+    ])
+
+    return { total, data }
+  }
+
+  buildBaseVideoCommentAbuse (this: MAbuseUserFormattable) {
+    if (!this.VideoCommentAbuse) return null
+
+    const abuseModel = this.VideoCommentAbuse
+    const entity = abuseModel.VideoComment
+
+    return {
+      id: entity.id,
+      threadId: entity.getThreadId(),
+
+      text: entity.text ?? '',
+
+      deleted: entity.isDeleted(),
+
+      video: {
+        id: entity.Video.id,
+        name: entity.Video.name,
+        uuid: entity.Video.uuid
+      }
+    }
+  }
+
+  buildBaseVideoAbuse (this: MAbuseUserFormattable): UserVideoAbuse {
+    if (!this.VideoAbuse) return null
+
+    const abuseModel = this.VideoAbuse
+    const entity = abuseModel.Video || abuseModel.deletedVideo
+
+    return {
+      id: entity.id,
+      uuid: entity.uuid,
+      name: entity.name,
+      nsfw: entity.nsfw,
+
+      startAt: abuseModel.startAt,
+      endAt: abuseModel.endAt,
+
+      deleted: !abuseModel.Video,
+      blacklisted: abuseModel.Video?.isBlacklisted() || false,
+      thumbnailPath: abuseModel.Video?.getMiniatureStaticPath(),
+
+      channel: abuseModel.Video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel,
+    }
+  }
+
+  buildBaseAbuse (this: MAbuseUserFormattable, countMessages: number): UserAbuse {
     const predefinedReasons = AbuseModel.getPredefinedReasonsStrings(this.predefinedReasons)
-
-    const countReportsForVideo = this.get('countReportsForVideo') as number
-    const nthReportForVideo = this.get('nthReportForVideo') as number
-
-    const countReportsForReporter = this.get('countReportsForReporter') as number
-    const countReportsForReportee = this.get('countReportsForReportee') as number
-
-    let video: VideoAbuse = null
-    let comment: VideoCommentAbuse = null
-
-    if (this.VideoAbuse) {
-      const abuseModel = this.VideoAbuse
-      const entity = abuseModel.Video || abuseModel.deletedVideo
-
-      video = {
-        id: entity.id,
-        uuid: entity.uuid,
-        name: entity.name,
-        nsfw: entity.nsfw,
-
-        startAt: abuseModel.startAt,
-        endAt: abuseModel.endAt,
-
-        deleted: !abuseModel.Video,
-        blacklisted: abuseModel.Video?.isBlacklisted() || false,
-        thumbnailPath: abuseModel.Video?.getMiniatureStaticPath(),
-
-        channel: abuseModel.Video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel,
-
-        countReports: countReportsForVideo,
-        nthReport: nthReportForVideo
-      }
-    }
-
-    if (this.VideoCommentAbuse) {
-      const abuseModel = this.VideoCommentAbuse
-      const entity = abuseModel.VideoComment
-
-      comment = {
-        id: entity.id,
-        threadId: entity.getThreadId(),
-
-        text: entity.text ?? '',
-
-        deleted: entity.isDeleted(),
-
-        video: {
-          id: entity.Video.id,
-          name: entity.Video.name,
-          uuid: entity.Video.uuid
-        }
-      }
-    }
 
     return {
       id: this.id,
       reason: this.reason,
       predefinedReasons,
-
-      reporterAccount: this.ReporterAccount
-        ? this.ReporterAccount.toFormattedJSON()
-        : null,
 
       flaggedAccount: this.FlaggedAccount
         ? this.FlaggedAccount.toFormattedJSON()
@@ -429,11 +468,41 @@ export class AbuseModel extends Model<AbuseModel> {
 
       moderationComment: this.moderationComment,
 
+      countMessages,
+
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    }
+  }
+
+  toFormattedAdminJSON (this: MAbuseAdminFormattable): AdminAbuse {
+    const countReportsForVideo = this.get('countReportsForVideo') as number
+    const nthReportForVideo = this.get('nthReportForVideo') as number
+
+    const countReportsForReporter = this.get('countReportsForReporter') as number
+    const countReportsForReportee = this.get('countReportsForReportee') as number
+
+    const countMessages = this.get('countMessages') as number
+
+    const baseVideo = this.buildBaseVideoAbuse()
+    const video: AdminVideoAbuse = baseVideo
+      ? Object.assign(baseVideo, {
+        countReports: countReportsForVideo,
+        nthReport: nthReportForVideo
+      })
+      : null
+
+    const comment: AdminVideoCommentAbuse = this.buildBaseVideoCommentAbuse()
+
+    const abuse = this.buildBaseAbuse(countMessages || 0)
+
+    return Object.assign(abuse, {
       video,
       comment,
 
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      reporterAccount: this.ReporterAccount
+        ? this.ReporterAccount.toFormattedJSON()
+        : null,
 
       countReportsForReporter: (countReportsForReporter || 0),
       countReportsForReportee: (countReportsForReportee || 0),
@@ -443,7 +512,20 @@ export class AbuseModel extends Model<AbuseModel> {
       endAt: null,
       count: countReportsForVideo || 0,
       nth: nthReportForVideo || 0
-    }
+    })
+  }
+
+  toFormattedUserJSON (this: MAbuseUserFormattable): UserAbuse {
+    const countMessages = this.get('countMessages') as number
+
+    const video = this.buildBaseVideoAbuse()
+    const comment: AdminVideoCommentAbuse = this.buildBaseVideoCommentAbuse()
+    const abuse = this.buildBaseAbuse(countMessages || 0)
+
+    return Object.assign(abuse, {
+      video,
+      comment
+    })
   }
 
   toActivityPubObject (this: MAbuseAP): AbuseObject {

@@ -11,8 +11,8 @@ import {
   createUser,
   deleteMe,
   flushAndRunServer,
-  getAbusesList,
   getAccountRatings,
+  getAdminAbusesList,
   getBlacklistedVideosList,
   getCustomConfig,
   getMyUserInformation,
@@ -928,7 +928,7 @@ describe('Test users', function () {
       const reason = 'my super bad reason'
       await reportAbuse({ url: server.url, token: user17AccessToken, videoId, reason })
 
-      const res1 = await getAbusesList({ url: server.url, token: server.accessToken })
+      const res1 = await getAdminAbusesList({ url: server.url, token: server.accessToken })
       const abuseId = res1.body.data[0].id
 
       const res2 = await getUserInformation(server.url, server.accessToken, user17Id, true)

@@ -1,6 +1,7 @@
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { AbuseModel } from '@server/models/abuse/abuse'
+import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
 import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
 import { isTestInstance } from '../helpers/core-utils'
@@ -87,6 +88,7 @@ async function initDatabaseModels (silent: boolean) {
     TagModel,
     AccountVideoRateModel,
     UserModel,
+    AbuseMessageModel,
     AbuseModel,
     VideoCommentAbuseModel,
     VideoAbuseModel,
