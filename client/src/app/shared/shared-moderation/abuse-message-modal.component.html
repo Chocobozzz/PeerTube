@@ -1,0 +1,40 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Messages</h4>
+
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+  </div>
+
+  <div class="modal-body">
+    <div class="messages" #messagesBlock>
+      <div
+        *ngFor="let message of abuseMessages"
+        class="message-block" [ngClass]="{ 'by-moderator': message.byModerator, 'by-me': isMessageByMe(message) }"
+      >
+
+        <div class="author">{{ message.account.name }}</div>
+
+        <div class="bubble">
+          <div class="content">{{ message.message }}</div>
+          <div class="date">{{ message.createdAt | date }}</div>
+        </div>
+      </div>
+    </div>
+
+    <form novalidate [formGroup]="form" (ngSubmit)="addMessage()">
+      <div class="form-group">
+        <textarea formControlName="message" ngbAutofocus [ngClass]="{ 'input-error': formErrors['message'] }" class="form-control"></textarea>
+
+        <div *ngIf="formErrors.message" class="form-error">
+          {{ formErrors.message }}
+        </div>
+      </div>
+
+      <div class="form-group inputs">
+        <input type="submit" i18n-value value="Add message" class="action-button-submit" [disabled]="!form.valid || sendingMessage">
+      </div>
+    </form>
+
+  </div>
+
+</ng-template>

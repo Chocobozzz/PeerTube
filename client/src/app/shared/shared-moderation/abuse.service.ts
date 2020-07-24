@@ -5,7 +5,7 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { Abuse, AbuseCreate, AbuseFilter, AbusePredefinedReasonsString, AbuseState, AbuseUpdate, ResultList } from '@shared/models'
+import { AdminAbuse, AbuseCreate, AbuseFilter, AbusePredefinedReasonsString, AbuseState, AbuseUpdate, ResultList, UserAbuse, AbuseMessage } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
@@ -20,11 +20,11 @@ export class AbuseService {
     private restExtractor: RestExtractor
   ) { }
 
-  getAbuses (options: {
+  getAdminAbuses (options: {
     pagination: RestPagination,
     sort: SortMeta,
     search?: string
-  }): Observable<ResultList<Abuse>> {
+  }): Observable<ResultList<AdminAbuse>> {
     const { pagination, sort, search } = options
     const url = AbuseService.BASE_ABUSE_URL
 
@@ -61,7 +61,7 @@ export class AbuseService {
       params = this.restService.addObjectParams(params, filters)
     }
 
-    return this.authHttp.get<ResultList<Abuse>>(url, { params })
+    return this.authHttp.get<ResultList<AdminAbuse>>(url, { params })
       .pipe(
         catchError(res => this.restExtractor.handleError(res))
       )
@@ -79,7 +79,7 @@ export class AbuseService {
       )
   }
 
-  updateAbuse (abuse: Abuse, abuseUpdate: AbuseUpdate) {
+  updateAbuse (abuse: AdminAbuse, abuseUpdate: AbuseUpdate) {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id
 
     return this.authHttp.put(url, abuseUpdate)
@@ -89,7 +89,7 @@ export class AbuseService {
       )
   }
 
-  removeAbuse (abuse: Abuse) {
+  removeAbuse (abuse: AdminAbuse) {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id
 
     return this.authHttp.delete(url)
@@ -97,6 +97,35 @@ export class AbuseService {
         map(this.restExtractor.extractDataBool),
         catchError(res => this.restExtractor.handleError(res))
       )
+  }
+
+  addAbuseMessage (abuse: UserAbuse, message: string) {
+    const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id + '/messages'
+
+    return this.authHttp.post(url, { message })
+    .pipe(
+      map(this.restExtractor.extractDataBool),
+      catchError(res => this.restExtractor.handleError(res))
+    )
+  }
+
+  listAbuseMessages (abuse: UserAbuse) {
+    const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id + '/messages'
+
+    return this.authHttp.get<ResultList<AbuseMessage>>(url)
+    .pipe(
+      catchError(res => this.restExtractor.handleError(res))
+    )
+  }
+
+  deleteAbuseMessage (abuse: UserAbuse, abuseMessage: AbuseMessage) {
+    const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id + '/messages/' + abuseMessage.id
+
+    return this.authHttp.delete(url)
+    .pipe(
+      map(this.restExtractor.extractDataBool),
+      catchError(res => this.restExtractor.handleError(res))
+    )
   }
 
   getPrefefinedReasons (type: AbuseFilter) {

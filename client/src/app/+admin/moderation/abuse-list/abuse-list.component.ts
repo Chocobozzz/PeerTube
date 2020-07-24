@@ -8,17 +8,17 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
-import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
+import { AbuseService, BlocklistService, VideoBlockService, AbuseMessageModalComponent } from '@app/shared/shared-moderation'
 import { VideoCommentService } from '@app/shared/shared-video-comment'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Abuse, AbuseState } from '@shared/models'
+import { AdminAbuse, AbuseState } from '@shared/models'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 
 const logger = debug('peertube:moderation:AbuseListComponent')
 
 // Don't use an abuse model because we need external services to compute some properties
 // And this model is only used in this component
-export type ProcessedAbuse = Abuse & {
+export type ProcessedAbuse = AdminAbuse & {
   moderationCommentHtml?: string,
   reasonHtml?: string
   embedHtml?: SafeHtml
@@ -31,8 +31,8 @@ export type ProcessedAbuse = Abuse & {
   truncatedCommentHtml?: string
   commentHtml?: string
 
-  video: Abuse['video'] & {
-    channel: Abuse['video']['channel'] & {
+  video: AdminAbuse['video'] & {
+    channel: AdminAbuse['video']['channel'] & {
       ownerAccount: Account
     }
   }
@@ -45,6 +45,7 @@ export type ProcessedAbuse = Abuse & {
 })
 export class AbuseListComponent extends RestTable implements OnInit, AfterViewInit {
   @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
+  @ViewChild('abuseMessagesModal', { static: true }) abuseMessagesModal: AbuseMessageModalComponent
 
   abuses: ProcessedAbuse[] = []
   totalRecords = 0
@@ -104,7 +105,7 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     return 'AbuseListComponent'
   }
 
-  openModerationCommentModal (abuse: Abuse) {
+  openModerationCommentModal (abuse: AdminAbuse) {
     this.moderationCommentModal.openModal(abuse)
   }
 
@@ -132,19 +133,19 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
   }
   /* END Table filter functions */
 
-  isAbuseAccepted (abuse: Abuse) {
+  isAbuseAccepted (abuse: AdminAbuse) {
     return abuse.state.id === AbuseState.ACCEPTED
   }
 
-  isAbuseRejected (abuse: Abuse) {
+  isAbuseRejected (abuse: AdminAbuse) {
     return abuse.state.id === AbuseState.REJECTED
   }
 
-  getVideoUrl (abuse: Abuse) {
+  getVideoUrl (abuse: AdminAbuse) {
     return Video.buildClientUrl(abuse.video.uuid)
   }
 
-  getCommentUrl (abuse: Abuse) {
+  getCommentUrl (abuse: AdminAbuse) {
     return Video.buildClientUrl(abuse.comment.video.uuid) + ';threadId=' + abuse.comment.threadId
   }
 
@@ -152,7 +153,7 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     return '/accounts/' + abuse.flaggedAccount.nameWithHost
   }
 
-  getVideoEmbed (abuse: Abuse) {
+  getVideoEmbed (abuse: AdminAbuse) {
     return buildVideoEmbed(
       buildVideoLink({
         baseUrl: `${environment.embedUrl}/videos/embed/${abuse.video.uuid}`,
@@ -168,7 +169,7 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
   }
 
-  async removeAbuse (abuse: Abuse) {
+  async removeAbuse (abuse: AdminAbuse) {
     const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this abuse report?'), this.i18n('Delete'))
     if (res === false) return
 
@@ -182,7 +183,7 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     )
   }
 
-  updateAbuseState (abuse: Abuse, state: AbuseState) {
+  updateAbuseState (abuse: AdminAbuse, state: AbuseState) {
     this.abuseService.updateAbuse(abuse, { state })
       .subscribe(
         () => this.loadData(),
@@ -191,10 +192,25 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
       )
   }
 
+  onCountMessagesUpdated (event: { abuseId: number, countMessages: number }) {
+    const abuse = this.abuses.find(a => a.id === event.abuseId)
+
+    if (!abuse) {
+      console.error('Cannot find abuse %d.', event.abuseId)
+      return
+    }
+
+    abuse.countMessages = event.countMessages
+  }
+
+  openAbuseMessagesModal (abuse: AdminAbuse) {
+    this.abuseMessagesModal.openModal(abuse)
+  }
+
   protected loadData () {
     logger('Load data.')
 
-    return this.abuseService.getAbuses({
+    return this.abuseService.getAdminAbuses({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
@@ -257,7 +273,11 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
         handler: abuse => this.removeAbuse(abuse)
       },
       {
-        label: this.i18n('Add note'),
+        label: this.i18n('Messages'),
+        handler: abuse => this.openAbuseMessagesModal(abuse)
+      },
+      {
+        label: this.i18n('Add internal note'),
         handler: abuse => this.openModerationCommentModal(abuse),
         isDisplayed: abuse => !abuse.moderationComment
       },

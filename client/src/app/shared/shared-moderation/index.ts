@@ -1,5 +1,6 @@
 export * from './report-modals'
 
+export * from './abuse-message-modal.component'
 export * from './abuse.service'
 export * from './account-block.model'
 export * from './account-blocklist.component'

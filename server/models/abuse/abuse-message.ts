@@ -94,6 +94,8 @@ export class AbuseMessageModel extends Model<AbuseMessageModel> {
 
     return {
       id: this.id,
+      createdAt: this.createdAt,
+
       byModerator: this.byModerator,
       message: this.message,
 
