@@ -1,6 +1,6 @@
 import { HotkeysService } from 'angular2-hotkeys'
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { AuthService, AuthStatus, RedirectService, ScreenService, ServerService, User, UserService } from '@app/core'
+import { AuthService, AuthStatus, RedirectService, ScreenService, ServerService, AuthUser, UserService } from '@app/core'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -15,7 +15,7 @@ export class MenuComponent implements OnInit {
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
   @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
 
-  user: User
+  user: AuthUser
   isLoggedIn: boolean
 
   userHasAdminAccess = false
@@ -111,20 +111,6 @@ export class MenuComponent implements OnInit {
 
       case 'display':
         return this.i18n('display')
-    }
-  }
-
-  canSeeVideosLink () {
-    const { videoQuota, videoQuotaDaily, videosCount } = this.user
-
-    // can upload
-    if ((videoQuota > 0 || videoQuota === -1) && (videoQuotaDaily > 0 || videoQuotaDaily === -1)) {
-      return true
-    }
-
-    // cannot upload but has already some videos
-    if (videosCount > 0) {
-      return true
     }
   }
 
