@@ -1,4 +1,4 @@
-<div *ngIf="!user.canUpload()" class="no-upload">
+<div *ngIf="user.isUploadDisabled()" class="no-upload">
   <div class="alert alert-warning">
     <div i18n>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</div>
     <a i18n routerLink="/about/instance" class="about-link">Read instance rules for help</a>
@@ -6,7 +6,7 @@
   <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
 </div>
 
-<div *ngIf="user.canUpload()" class="margin-content">
+<div *ngIf="!user.isUploadDisabled()" class="margin-content">
   <div class="alert alert-warning" *ngIf="isRootUser()" i18n>
     We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.
     <br />
