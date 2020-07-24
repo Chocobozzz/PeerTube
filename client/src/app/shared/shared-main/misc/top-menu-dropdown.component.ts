@@ -9,12 +9,12 @@ import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 export type TopMenuDropdownParam = {
   label: string
   routerLink?: string
-  isHidden?: boolean
+  isDisplayed(): boolean
 
   children?: {
     label: string
     routerLink: string
-    isHidden?: boolean
+    isDisplayed(): boolean
     iconName?: GlobalIconName
   }[]
 }

@@ -32,32 +32,37 @@ export class MyAccountComponent implements OnInit {
       () => {
         const libraryEntries: TopMenuDropdownParam = {
           label: this.i18n('My library'),
+          isDisplayed: () => true,
           children: [
             {
               label: this.i18n('My channels'),
               routerLink: '/my-account/video-channels',
-              iconName: 'channel'
+              iconName: 'channel',
+              isDisplayed: () => true
             },
             {
               label: this.i18n('My videos'),
               routerLink: '/my-account/videos',
               iconName: 'videos',
-              isHidden: !this.user.canSeeVideosLink()
+              isDisplayed: () => this.user.canSeeVideosLink()
             },
             {
               label: this.i18n('My playlists'),
               routerLink: '/my-account/video-playlists',
-              iconName: 'playlists'
+              iconName: 'playlists',
+              isDisplayed: () => true
             },
             {
               label: this.i18n('My subscriptions'),
               routerLink: '/my-account/subscriptions',
-              iconName: 'inbox-full'
+              iconName: 'inbox-full',
+              isDisplayed: () => true
             },
             {
               label: this.i18n('My history'),
               routerLink: '/my-account/history/videos',
-              iconName: 'history'
+              iconName: 'history',
+              isDisplayed: () => true
             }
           ]
         }
@@ -67,27 +72,31 @@ export class MyAccountComponent implements OnInit {
             label: 'My imports',
             routerLink: '/my-account/video-imports',
             iconName: 'cloud-download',
-            isHidden: !this.user.canSeeVideosLink()
+            isDisplayed: () => this.user.canSeeVideosLink()
           })
         }
 
         const miscEntries: TopMenuDropdownParam = {
           label: this.i18n('Misc'),
+          isDisplayed: () => true,
           children: [
             {
               label: this.i18n('Muted accounts'),
               routerLink: '/my-account/blocklist/accounts',
-              iconName: 'user-x'
+              iconName: 'user-x',
+              isDisplayed: () => true
             },
             {
               label: this.i18n('Muted servers'),
               routerLink: '/my-account/blocklist/servers',
-              iconName: 'peertube-x'
+              iconName: 'peertube-x',
+              isDisplayed: () => true
             },
             {
               label: this.i18n('Ownership changes'),
               routerLink: '/my-account/ownership',
-              iconName: 'download'
+              iconName: 'download',
+              isDisplayed: () => true
             }
           ]
         }
@@ -95,11 +104,13 @@ export class MyAccountComponent implements OnInit {
         this.menuEntries = [
           {
             label: this.i18n('My settings'),
-            routerLink: '/my-account/settings'
+            routerLink: '/my-account/settings',
+            isDisplayed: () => true
           },
           {
             label: this.i18n('My notifications'),
-            routerLink: '/my-account/notifications'
+            routerLink: '/my-account/notifications',
+            isDisplayed: () => true
           },
           libraryEntries,
           miscEntries
