@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core'
 @Injectable()
 export class UserValidatorsService {
   readonly USER_USERNAME: BuildFormValidator
+  readonly USER_CHANNEL_NAME: BuildFormValidator
   readonly USER_EMAIL: BuildFormValidator
   readonly USER_PASSWORD: BuildFormValidator
   readonly USER_PASSWORD_OPTIONAL: BuildFormValidator
@@ -33,6 +34,21 @@ export class UserValidatorsService {
         'minlength': this.i18n('Username must be at least 1 character long.'),
         'maxlength': this.i18n('Username cannot be more than 50 characters long.'),
         'pattern': this.i18n('Username should be lowercase alphanumeric; dots and underscores are allowed.')
+      }
+    }
+
+    this.USER_CHANNEL_NAME = {
+      VALIDATORS: [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(50),
+        Validators.pattern(/^[a-z0-9][a-z0-9._]*$/)
+      ],
+      MESSAGES: {
+        'required': this.i18n('Channel name is required.'),
+        'minlength': this.i18n('Channel name must be at least 1 character long.'),
+        'maxlength': this.i18n('Channel name cannot be more than 50 characters long.'),
+        'pattern': this.i18n('Channel name should be lowercase alphanumeric; dots and underscores are allowed.')
       }
     }
 
