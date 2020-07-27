@@ -22,7 +22,7 @@ import {
   setDefaultPagination,
   setDefaultSearchSort,
   videoChannelsSearchSortValidator,
-  videoChannelsSearchValidator,
+  videoChannelsListSearchValidator,
   videosSearchSortValidator,
   videosSearchValidator
 } from '../../middlewares'
@@ -49,7 +49,7 @@ searchRouter.get('/video-channels',
   videoChannelsSearchSortValidator,
   setDefaultSearchSort,
   optionalAuthenticate,
-  videoChannelsSearchValidator,
+  videoChannelsListSearchValidator,
   asyncMiddleware(searchVideoChannels)
 )
 

@@ -96,14 +96,14 @@ describe('Test users subscriptions', function () {
 
   it('Should list subscriptions', async function () {
     {
-      const res = await listUserSubscriptions(servers[0].url, servers[0].accessToken)
+      const res = await listUserSubscriptions({ url: servers[0].url, token: servers[0].accessToken })
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.be.an('array')
       expect(res.body.data).to.have.lengthOf(0)
     }
 
     {
-      const res = await listUserSubscriptions(servers[0].url, users[0].accessToken, 'createdAt')
+      const res = await listUserSubscriptions({ url: servers[0].url, token: users[0].accessToken, sort: 'createdAt' })
       expect(res.body.total).to.equal(2)
 
       const subscriptions: VideoChannel[] = res.body.data
@@ -154,6 +154,34 @@ describe('Test users subscriptions', function () {
     expect(body['root2_channel@localhost:' + servers[0].port]).to.be.false
     expect(body['root_channel@localhost:' + servers[0].port]).to.be.true
     expect(body['user3_channel@localhost:' + servers[0].port]).to.be.false
+  })
+
+  it('Should search among subscriptions', async function () {
+    {
+      const res = await listUserSubscriptions({
+        url: servers[0].url,
+        token: users[0].accessToken,
+        sort: '-createdAt',
+        search: 'user3_channel'
+      })
+      expect(res.body.total).to.equal(1)
+
+      const subscriptions = res.body.data
+      expect(subscriptions).to.have.lengthOf(1)
+    }
+
+    {
+      const res = await listUserSubscriptions({
+        url: servers[0].url,
+        token: users[0].accessToken,
+        sort: '-createdAt',
+        search: 'toto'
+      })
+      expect(res.body.total).to.equal(0)
+
+      const subscriptions = res.body.data
+      expect(subscriptions).to.have.lengthOf(0)
+    }
   })
 
   it('Should list subscription videos', async function () {

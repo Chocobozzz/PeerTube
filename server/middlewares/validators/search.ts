@@ -28,7 +28,7 @@ const videosSearchValidator = [
   }
 ]
 
-const videoChannelsSearchValidator = [
+const videoChannelsListSearchValidator = [
   query('search').not().isEmpty().withMessage('Should have a valid search'),
   query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
 
@@ -57,6 +57,6 @@ const videoChannelsOwnSearchValidator = [
 
 export {
   videosSearchValidator,
-  videoChannelsSearchValidator,
+  videoChannelsListSearchValidator,
   videoChannelsOwnSearchValidator
 }
