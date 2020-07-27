@@ -12,7 +12,14 @@ function addUserSubscription (url: string, token: string, targetUri: string, sta
   })
 }
 
-function listUserSubscriptions (url: string, token: string, sort = '-createdAt', statusCodeExpected = 200) {
+function listUserSubscriptions (parameters: {
+  url: string
+  token: string
+  sort?: string
+  search?: string
+  statusCodeExpected?: number
+}) {
+  const { url, token, sort = '-createdAt', search, statusCodeExpected = 200 } = parameters
   const path = '/api/v1/users/me/subscriptions'
 
   return makeGetRequest({
@@ -20,7 +27,10 @@ function listUserSubscriptions (url: string, token: string, sort = '-createdAt',
     path,
     token,
     statusCodeExpected,
-    query: { sort }
+    query: {
+      sort,
+      search
+    }
   })
 }
 

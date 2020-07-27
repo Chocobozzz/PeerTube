@@ -53,6 +53,7 @@ export class UserNotificationsComponent implements OnInit {
       ignoreLoadingBar: this.ignoreLoadingBar,
       sort: {
         field: this.sortField,
+        // if we order by creation date, we want DESC. all other fields are ASC (like unread).
         order: this.sortField === 'createdAt' ? -1 : 1
       }
     })

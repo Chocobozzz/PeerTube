@@ -421,6 +421,32 @@ describe('Test video channels', function () {
     expect(totoChannel.videosCount).to.equal(0)
   })
 
+  it('Should search among account video channels', async function () {
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[0].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        search: 'root'
+      })
+      expect(res.body.total).to.equal(1)
+
+      const channels = res.body.data
+      expect(channels).to.have.lengthOf(1)
+    }
+
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[0].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        search: 'does not exist'
+      })
+      expect(res.body.total).to.equal(0)
+
+      const channels = res.body.data
+      expect(channels).to.have.lengthOf(0)
+    }
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })
