@@ -25,7 +25,7 @@ export class AbuseDetailsComponent {
       hatefulOrAbusive: this.i18n('Hateful or Abusive'),
       spamOrMisleading: this.i18n('Spam or Misleading'),
       privacy: this.i18n('Privacy'),
-      rights: this.i18n('Rights'),
+      rights: this.i18n('Copyright'),
       serverRules: this.i18n('Server rules'),
       thumbnails: this.i18n('Thumbnails'),
       captions: this.i18n('Captions')

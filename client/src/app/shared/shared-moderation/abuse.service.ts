@@ -158,8 +158,8 @@ export class AbuseService {
       },
       {
         id: 'rights',
-        label: this.i18n('Intellectual property violation'),
-        help: this.i18n('Infringes my intellectual property or copyright, wrt. the regional rules with which the server must comply.')
+        label: this.i18n('Copyright'),
+        help: this.i18n('Infringes your copyright wrt. the regional laws with which the server must comply.')
       },
       {
         id: 'serverRules',
