@@ -2,6 +2,7 @@
 
 import 'mocha'
 import { v4 as uuidv4 } from 'uuid'
+
 import {
   addVideoCommentThread,
   addVideoToBlacklist,
@@ -21,7 +22,9 @@ import {
   unfollow,
   updateCustomConfig,
   updateCustomSubConfig,
-  wait
+  wait,
+  updateAbuse,
+  addAbuseMessage
 } from '../../../../shared/extra-utils'
 import { ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
@@ -38,12 +41,15 @@ import {
   checkUserRegistered,
   checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
-  prepareNotificationsTest
+  prepareNotificationsTest,
+  checkAbuseStateChange,
+  checkNewAbuseMessage
 } from '../../../../shared/extra-utils/users/user-notifications'
 import { addUserSubscription, removeUserSubscription } from '../../../../shared/extra-utils/users/user-subscriptions'
 import { CustomConfig } from '../../../../shared/models/server'
 import { UserNotification } from '../../../../shared/models/users'
 import { VideoPrivacy } from '../../../../shared/models/videos'
+import { AbuseState } from '@shared/models'
 
 describe('Test moderation notifications', function () {
   let servers: ServerInfo[] = []
@@ -65,7 +71,7 @@ describe('Test moderation notifications', function () {
     adminNotificationsServer2 = res.adminNotificationsServer2
   })
 
-  describe('Video abuse for moderators notification', function () {
+  describe('Abuse for moderators notification', function () {
     let baseParams: CheckerBaseParams
 
     before(() => {
@@ -166,6 +172,122 @@ describe('Test moderation notifications', function () {
 
       await waitJobs(servers)
       await checkNewAccountAbuseForModerators(baseParams, username, 'presence')
+    })
+  })
+
+  describe('Abuse state change notification', function () {
+    let baseParams: CheckerBaseParams
+    let abuseId: number
+
+    before(async function () {
+      baseParams = {
+        server: servers[0],
+        emails,
+        socketNotifications: userNotifications,
+        token: userAccessToken
+      }
+
+      const name = 'abuse ' + uuidv4()
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
+      const video = resVideo.body.video
+
+      const res = await reportAbuse({ url: servers[0].url, token: userAccessToken, videoId: video.id, reason: 'super reason' })
+      abuseId = res.body.abuse.id
+    })
+
+    it('Should send a notification to reporter if the abuse has been accepted', async function () {
+      this.timeout(10000)
+
+      await updateAbuse(servers[0].url, servers[0].accessToken, abuseId, { state: AbuseState.ACCEPTED })
+      await waitJobs(servers)
+
+      await checkAbuseStateChange(baseParams, abuseId, AbuseState.ACCEPTED, 'presence')
+    })
+
+    it('Should send a notification to reporter if the abuse has been rejected', async function () {
+      this.timeout(10000)
+
+      await updateAbuse(servers[0].url, servers[0].accessToken, abuseId, { state: AbuseState.REJECTED })
+      await waitJobs(servers)
+
+      await checkAbuseStateChange(baseParams, abuseId, AbuseState.REJECTED, 'presence')
+    })
+  })
+
+  describe('New abuse message notification', function () {
+    let baseParamsUser: CheckerBaseParams
+    let baseParamsAdmin: CheckerBaseParams
+    let abuseId: number
+    let abuseId2: number
+
+    before(async function () {
+      baseParamsUser = {
+        server: servers[0],
+        emails,
+        socketNotifications: userNotifications,
+        token: userAccessToken
+      }
+
+      baseParamsAdmin = {
+        server: servers[0],
+        emails,
+        socketNotifications: adminNotifications,
+        token: servers[0].accessToken
+      }
+
+      const name = 'abuse ' + uuidv4()
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
+      const video = resVideo.body.video
+
+      {
+        const res = await reportAbuse({ url: servers[0].url, token: userAccessToken, videoId: video.id, reason: 'super reason' })
+        abuseId = res.body.abuse.id
+      }
+
+      {
+        const res = await reportAbuse({ url: servers[0].url, token: userAccessToken, videoId: video.id, reason: 'super reason 2' })
+        abuseId2 = res.body.abuse.id
+      }
+    })
+
+    it('Should send a notification to reporter on new message', async function () {
+      this.timeout(10000)
+
+      const message = 'my super message to users'
+      await addAbuseMessage(servers[0].url, servers[0].accessToken, abuseId, message)
+      await waitJobs(servers)
+
+      await checkNewAbuseMessage(baseParamsUser, abuseId, message, 'user_1@example.com', 'presence')
+    })
+
+    it('Should not send a notification to the admin if sent by the admin', async function () {
+      this.timeout(10000)
+
+      const message = 'my super message that should not be sent to the admin'
+      await addAbuseMessage(servers[0].url, servers[0].accessToken, abuseId, message)
+      await waitJobs(servers)
+
+      await checkNewAbuseMessage(baseParamsAdmin, abuseId, message, 'admin1@example.com', 'absence')
+    })
+
+    it('Should send a notification to moderators', async function () {
+      this.timeout(10000)
+
+      const message = 'my super message to moderators'
+      await addAbuseMessage(servers[0].url, userAccessToken, abuseId2, message)
+      await waitJobs(servers)
+
+      await checkNewAbuseMessage(baseParamsAdmin, abuseId2, message, 'admin1@example.com', 'presence')
+    })
+
+    it('Should not send a notification to reporter if sent by the reporter', async function () {
+      this.timeout(10000)
+
+      const message = 'my super message that should not be sent to reporter'
+      await addAbuseMessage(servers[0].url, userAccessToken, abuseId2, message)
+      await waitJobs(servers)
+
+      await checkNewAbuseMessage(baseParamsUser, abuseId2, message, 'user_1@example.com', 'absence')
     })
   })
 

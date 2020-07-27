@@ -5,13 +5,13 @@ import { join } from 'path'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
 import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
-import { UserAbuse, EmailPayload } from '@shared/models'
+import { AbuseState, EmailPayload, UserAbuse } from '@shared/models'
 import { SendEmailOptions } from '../../shared/models/server/emailer.model'
 import { isTestInstance, root } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { WEBSERVER } from '../initializers/constants'
-import { MAbuseFull, MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
+import { MAbuseFull, MAbuseMessage, MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
 import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
 import { JobQueue } from './job-queue'
 
@@ -351,6 +351,55 @@ class Emailer {
           reporter,
           action
         }
+      }
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addAbuseStateChangeNotification (to: string[], abuse: MAbuseFull) {
+    const text = abuse.state === AbuseState.ACCEPTED
+      ? 'Report #' + abuse.id + ' has been accepted'
+      : 'Report #' + abuse.id + ' has been rejected'
+
+    const action = {
+      text,
+      url: WEBSERVER.URL + '/my-account/abuses?search=%23' + abuse.id
+    }
+
+    const emailPayload: EmailPayload = {
+      template: 'abuse-state-change',
+      to,
+      subject: text,
+      locals: {
+        action,
+        abuseId: abuse.id,
+        isAccepted: abuse.state === AbuseState.ACCEPTED
+      }
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addAbuseNewMessageNotification (to: string[], options: { target: 'moderator' | 'reporter', abuse: MAbuseFull, message: MAbuseMessage }) {
+    const { abuse, target, message } = options
+
+    const text = 'New message on abuse #' + abuse.id
+    const action = {
+      text,
+      url: target === 'moderator'
+        ? WEBSERVER.URL + '/admin/moderation/abuses/list?search=%23' + abuse.id
+        : WEBSERVER.URL + '/my-account/abuses?search=%23' + abuse.id
+    }
+
+    const emailPayload: EmailPayload = {
+      template: 'abuse-new-message',
+      to,
+      subject: text,
+      locals: {
+        abuseUrl: action.url,
+        messageText: message.message,
+        action
       }
     }
 

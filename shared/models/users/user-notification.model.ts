@@ -1,4 +1,5 @@
 import { FollowState } from '../actors'
+import { AbuseState } from '../moderation'
 
 export enum UserNotificationType {
   NEW_VIDEO_FROM_SUBSCRIPTION = 1,
@@ -21,7 +22,11 @@ export enum UserNotificationType {
 
   NEW_INSTANCE_FOLLOWER = 13,
 
-  AUTO_INSTANCE_FOLLOWING = 14
+  AUTO_INSTANCE_FOLLOWING = 14,
+
+  ABUSE_STATE_CHANGE = 15,
+
+  ABUSE_NEW_MESSAGE = 16
 }
 
 export interface VideoInfo {
@@ -66,6 +71,7 @@ export interface UserNotification {
 
   abuse?: {
     id: number
+    state: AbuseState
 
     video?: VideoInfo
 

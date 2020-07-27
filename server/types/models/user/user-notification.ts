@@ -56,7 +56,7 @@ export module UserNotificationIncludes {
     PickWith<VideoCommentModel, 'Video', Pick<VideoModel, 'id' | 'name' | 'uuid'>>>
 
   export type AbuseInclude =
-    Pick<AbuseModel, 'id'> &
+    Pick<AbuseModel, 'id' | 'state'> &
     PickWith<AbuseModel, 'VideoAbuse', VideoAbuseInclude> &
     PickWith<AbuseModel, 'VideoCommentAbuse', VideoCommentAbuseInclude> &
     PickWith<AbuseModel, 'FlaggedAccount', AccountIncludeActor>

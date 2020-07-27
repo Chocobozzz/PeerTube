@@ -32,14 +32,14 @@ import {
   UserVideoAbuse
 } from '@shared/models'
 import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { MAbuse, MAbuseAdminFormattable, MAbuseAP, MAbuseReporter, MAbuseUserFormattable, MUserAccountId } from '../../types/models'
+import { MAbuseAdminFormattable, MAbuseAP, MAbuseFull, MAbuseReporter, MAbuseUserFormattable, MUserAccountId } from '../../types/models'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from '../video/thumbnail'
-import { VideoModel } from '../video/video'
+import { ScopeNames as VideoScopeNames, VideoModel } from '../video/video'
 import { VideoBlacklistModel } from '../video/video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions as ChannelSummaryOptions, VideoChannelModel } from '../video/video-channel'
-import { VideoCommentModel } from '../video/video-comment'
+import { ScopeNames as CommentScopeNames, VideoCommentModel } from '../video/video-comment'
 import { buildAbuseListQuery, BuildAbusesQueryOptions } from './abuse-query-builder'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoCommentAbuseModel } from './video-comment-abuse'
@@ -307,6 +307,52 @@ export class AbuseModel extends Model<AbuseModel> {
     return AbuseModel.findOne(query)
   }
 
+  static loadFull (id: number): Bluebird<MAbuseFull> {
+    const query = {
+      where: {
+        id
+      },
+      include: [
+        {
+          model: AccountModel.scope(AccountScopeNames.SUMMARY),
+          required: false,
+          as: 'ReporterAccount'
+        },
+        {
+          model: AccountModel.scope(AccountScopeNames.SUMMARY),
+          as: 'FlaggedAccount'
+        },
+        {
+          model: VideoAbuseModel,
+          required: false,
+          include: [
+            {
+              model: VideoModel.scope([ VideoScopeNames.WITH_ACCOUNT_DETAILS ])
+            }
+          ]
+        },
+        {
+          model: VideoCommentAbuseModel,
+          required: false,
+          include: [
+            {
+              model: VideoCommentModel.scope([
+                CommentScopeNames.WITH_ACCOUNT
+              ]),
+              include: [
+                {
+                  model: VideoModel
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    return AbuseModel.findOne(query)
+  }
+
   static async listForAdminApi (parameters: {
     start: number
     count: number
@@ -455,7 +501,7 @@ export class AbuseModel extends Model<AbuseModel> {
       blacklisted: abuseModel.Video?.isBlacklisted() || false,
       thumbnailPath: abuseModel.Video?.getMiniatureStaticPath(),
 
-      channel: abuseModel.Video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel,
+      channel: abuseModel.Video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel
     }
   }
 

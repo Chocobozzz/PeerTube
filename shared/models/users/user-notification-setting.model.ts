@@ -5,16 +5,23 @@ export enum UserNotificationSettingValue {
 }
 
 export interface UserNotificationSetting {
-  newVideoFromSubscription: UserNotificationSettingValue
-  newCommentOnMyVideo: UserNotificationSettingValue
   abuseAsModerator: UserNotificationSettingValue
   videoAutoBlacklistAsModerator: UserNotificationSettingValue
+  newUserRegistration: UserNotificationSettingValue
+
+  newVideoFromSubscription: UserNotificationSettingValue
+
   blacklistOnMyVideo: UserNotificationSettingValue
   myVideoPublished: UserNotificationSettingValue
   myVideoImportFinished: UserNotificationSettingValue
-  newUserRegistration: UserNotificationSettingValue
-  newFollow: UserNotificationSettingValue
+
   commentMention: UserNotificationSettingValue
+  newCommentOnMyVideo: UserNotificationSettingValue
+
+  newFollow: UserNotificationSettingValue
   newInstanceFollower: UserNotificationSettingValue
   autoInstanceFollowing: UserNotificationSettingValue
+
+  abuseStateChange: UserNotificationSettingValue
+  abuseNewMessage: UserNotificationSettingValue
 }
