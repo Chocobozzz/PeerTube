@@ -5,13 +5,24 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { AdminAbuse, AbuseCreate, AbuseFilter, AbusePredefinedReasonsString, AbuseState, AbuseUpdate, ResultList, UserAbuse, AbuseMessage } from '@shared/models'
-import { environment } from '../../../environments/environment'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import {
+  AbuseCreate,
+  AbuseFilter,
+  AbuseMessage,
+  AbusePredefinedReasonsString,
+  AbuseState,
+  AbuseUpdate,
+  AdminAbuse,
+  ResultList,
+  UserAbuse
+} from '@shared/models'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class AbuseService {
   private static BASE_ABUSE_URL = environment.apiUrl + '/api/v1/abuses'
+  private static BASE_MY_ABUSE_URL = environment.apiUrl + '/api/v1/users/me/abuses'
 
   constructor (
     private i18n: I18n,
@@ -32,36 +43,31 @@ export class AbuseService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     if (search) {
-      const filters = this.restService.parseQueryStringFilter(search, {
-        id: { prefix: '#' },
-        state: {
-          prefix: 'state:',
-          handler: v => {
-            if (v === 'accepted') return AbuseState.ACCEPTED
-            if (v === 'pending') return AbuseState.PENDING
-            if (v === 'rejected') return AbuseState.REJECTED
-
-            return undefined
-          }
-        },
-        videoIs: {
-          prefix: 'videoIs:',
-          handler: v => {
-            if (v === 'deleted') return v
-            if (v === 'blacklisted') return v
-
-            return undefined
-          }
-        },
-        searchReporter: { prefix: 'reporter:' },
-        searchReportee: { prefix: 'reportee:' },
-        predefinedReason: { prefix: 'tag:' }
-      })
-
-      params = this.restService.addObjectParams(params, filters)
+      params = this.buildParamsFromSearch(search, params)
     }
 
     return this.authHttp.get<ResultList<AdminAbuse>>(url, { params })
+      .pipe(
+        catchError(res => this.restExtractor.handleError(res))
+      )
+  }
+
+  getUserAbuses (options: {
+    pagination: RestPagination,
+    sort: SortMeta,
+    search?: string
+  }): Observable<ResultList<UserAbuse>> {
+    const { pagination, sort, search } = options
+    const url = AbuseService.BASE_MY_ABUSE_URL
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) {
+      params = this.buildParamsFromSearch(search, params)
+    }
+
+    return this.authHttp.get<ResultList<UserAbuse>>(url, { params })
       .pipe(
         catchError(res => this.restExtractor.handleError(res))
       )
@@ -180,4 +186,33 @@ export class AbuseService {
     return reasons
   }
 
+  private buildParamsFromSearch (search: string, params: HttpParams) {
+    const filters = this.restService.parseQueryStringFilter(search, {
+      id: { prefix: '#' },
+      state: {
+        prefix: 'state:',
+        handler: v => {
+          if (v === 'accepted') return AbuseState.ACCEPTED
+          if (v === 'pending') return AbuseState.PENDING
+          if (v === 'rejected') return AbuseState.REJECTED
+
+          return undefined
+        }
+      },
+      videoIs: {
+        prefix: 'videoIs:',
+        handler: v => {
+          if (v === 'deleted') return v
+          if (v === 'blacklisted') return v
+
+          return undefined
+        }
+      },
+      searchReporter: { prefix: 'reporter:' },
+      searchReportee: { prefix: 'reportee:' },
+      predefinedReason: { prefix: 'tag:' }
+    })
+
+    return this.restService.addObjectParams(params, filters)
+  }
 }

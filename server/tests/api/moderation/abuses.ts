@@ -2,12 +2,23 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { AbuseFilter, AbusePredefinedReasonsString, AbuseState, Account, AdminAbuse, UserAbuse, VideoComment, AbuseMessage } from '@shared/models'
 import {
+  AbuseFilter,
+  AbuseMessage,
+  AbusePredefinedReasonsString,
+  AbuseState,
+  Account,
+  AdminAbuse,
+  UserAbuse,
+  VideoComment
+} from '@shared/models'
+import {
+  addAbuseMessage,
   addVideoCommentThread,
   cleanupTests,
   createUser,
   deleteAbuse,
+  deleteAbuseMessage,
   deleteVideoComment,
   flushAndRunMultipleServers,
   generateUserAccessToken,
@@ -18,6 +29,7 @@ import {
   getVideoIdFromUUID,
   getVideosList,
   immutableAssign,
+  listAbuseMessages,
   removeUser,
   removeVideo,
   reportAbuse,
@@ -26,10 +38,7 @@ import {
   updateAbuse,
   uploadVideo,
   uploadVideoAndGetId,
-  userLogin,
-  addAbuseMessage,
-  listAbuseMessages,
-  deleteAbuseMessage
+  userLogin
 } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'

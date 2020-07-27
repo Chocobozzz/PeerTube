@@ -2,7 +2,7 @@ import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
 import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
 import { PickWith } from '@shared/core-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
-import { MAccountDefault, MAccountFormattable, MAccountLight, MAccountUrl } from '../account'
+import { MAccountDefault, MAccountFormattable, MAccountLight, MAccountUrl, MAccount } from '../account'
 import { MCommentOwner, MCommentUrl, MVideoUrl, MCommentOwnerVideo, MComment, MCommentVideo } from '../video'
 import { MVideo, MVideoAccountLightBlacklistAllFiles } from '../video/video'
 
@@ -17,6 +17,10 @@ export type MAbuse = Omit<AbuseModel, 'VideoCommentAbuse' | 'VideoAbuse' | 'Repo
 export type MVideoAbuse = Omit<VideoAbuseModel, 'Abuse' | 'Video'>
 
 export type MCommentAbuse = Omit<VideoCommentAbuseModel, 'Abuse' | 'VideoComment'>
+
+export type MAbuseReporter =
+  MAbuse &
+  Use<'ReporterAccount', MAccountDefault>
 
 // ############################################################################
 

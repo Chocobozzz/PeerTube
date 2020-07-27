@@ -3,21 +3,26 @@
 import 'mocha'
 import { AbuseCreate, AbuseState } from '@shared/models'
 import {
+  addAbuseMessage,
   cleanupTests,
   createUser,
   deleteAbuse,
+  deleteAbuseMessage,
+  doubleFollow,
   flushAndRunServer,
+  generateUserAccessToken,
+  getAdminAbusesList,
+  getVideoIdFromUUID,
+  listAbuseMessages,
   makeGetRequest,
   makePostBodyRequest,
+  reportAbuse,
   ServerInfo,
   setAccessTokensToServers,
   updateAbuse,
   uploadVideo,
   userLogin,
-  generateUserAccessToken,
-  addAbuseMessage,
-  listAbuseMessages,
-  deleteAbuseMessage
+  waitJobs
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
@@ -29,6 +34,7 @@ describe('Test abuses API validators', function () {
   const basePath = '/api/v1/abuses/'
 
   let server: ServerInfo
+
   let userAccessToken = ''
   let userAccessToken2 = ''
   let abuseId: number
@@ -321,7 +327,7 @@ describe('Test abuses API validators', function () {
     })
   })
 
-  describe('When listing abuse message', function () {
+  describe('When listing abuse messages', function () {
 
     it('Should fail with an invalid abuse id', async function () {
       await listAbuseMessages(server.url, userAccessToken, 888, 404)
@@ -382,7 +388,43 @@ describe('Test abuses API validators', function () {
     })
   })
 
+  describe('When trying to manage messages of a remote abuse', function () {
+    let remoteAbuseId: number
+    let anotherServer: ServerInfo
+
+    before(async function () {
+      this.timeout(20000)
+
+      anotherServer = await flushAndRunServer(2)
+      await setAccessTokensToServers([ anotherServer ])
+
+      await doubleFollow(anotherServer, server)
+
+      const server2VideoId = await getVideoIdFromUUID(anotherServer.url, server.video.uuid)
+      await reportAbuse({
+        url: anotherServer.url,
+        token: anotherServer.accessToken,
+        reason: 'remote server',
+        videoId: server2VideoId
+      })
+
+      await waitJobs([ server, anotherServer ])
+
+      const res = await getAdminAbusesList({ url: server.url, token: server.accessToken, sort: '-createdAt' })
+      remoteAbuseId = res.body.data[0].id
+    })
+
+    it('Should fail when listing abuse messages of a remote abuse', async function () {
+      await listAbuseMessages(server.url, server.accessToken, remoteAbuseId, 400)
+    })
+
+    it('Should fail when creating abuse message of a remote abuse', async function () {
+      await addAbuseMessage(server.url, server.accessToken, remoteAbuseId, 'message', 400)
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })
 })
+

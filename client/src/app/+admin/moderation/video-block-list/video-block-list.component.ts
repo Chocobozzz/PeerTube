@@ -11,7 +11,7 @@ import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
 @Component({
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
-  styleUrls: [ '../moderation.component.scss', './video-block-list.component.scss' ]
+  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-block-list.component.scss' ]
 })
 export class VideoBlockListComponent extends RestTable implements OnInit, AfterViewInit {
   blocklist: (VideoBlacklist & { reasonHtml?: string })[] = []

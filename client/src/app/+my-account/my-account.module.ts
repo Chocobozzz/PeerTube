@@ -3,6 +3,7 @@ import { InputSwitchModule } from 'primeng/inputswitch'
 import { TableModule } from 'primeng/table'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { NgModule } from '@angular/core'
+import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
@@ -11,6 +12,7 @@ import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-setti
 import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscription/shared-user-subscription.module'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { SharedVideoPlaylistModule } from '@app/shared/shared-video-playlist/shared-video-playlist.module'
+import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
 import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-blocklist.component'
 import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-account-server-blocklist.component'
 import { MyAccountHistoryComponent } from './my-account-history/my-account-history.component'
@@ -50,7 +52,8 @@ import { MyAccountComponent } from './my-account.component'
     SharedUserSubscriptionModule,
     SharedVideoPlaylistModule,
     SharedUserInterfaceSettingsModule,
-    SharedGlobalIconModule
+    SharedGlobalIconModule,
+    SharedAbuseListModule
   ],
 
   declarations: [
@@ -69,6 +72,7 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountDangerZoneComponent,
     MyAccountSubscriptionsComponent,
     MyAccountBlocklistComponent,
+    MyAccountAbusesListComponent,
     MyAccountServerBlocklistComponent,
     MyAccountHistoryComponent,
     MyAccountNotificationsComponent,

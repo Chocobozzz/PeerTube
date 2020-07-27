@@ -79,4 +79,4 @@ export type UserVideoAbuse = Omit<AdminVideoAbuse, 'countReports' | 'nthReport'>
 export type UserVideoCommentAbuse = AdminVideoCommentAbuse
 
 export type UserAbuse = Omit<AdminAbuse, 'reporterAccount' | 'countReportsForReportee' | 'countReportsForReporter' | 'startAt' | 'endAt'
-| 'count' | 'nth'>
+| 'count' | 'nth' | 'moderationComment'>

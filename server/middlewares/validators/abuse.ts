@@ -201,6 +201,21 @@ const getAbuseValidator = [
   }
 ]
 
+const checkAbuseValidForMessagesValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking checkAbuseValidForMessagesValidator parameters', { parameters: req.body })
+
+    const abuse = res.locals.abuse
+    if (abuse.ReporterAccount.isOwned() === false) {
+      return res.status(400).json({
+        error: 'This abuse was created by a user of your instance.',
+      })
+    }
+
+    return next()
+  }
+]
+
 const addAbuseMessageValidator = [
   body('message').custom(isAbuseMessageValid).not().isEmpty().withMessage('Should have a valid abuse message'),
 
@@ -357,6 +372,7 @@ export {
   abuseReportValidator,
   abuseGetValidator,
   addAbuseMessageValidator,
+  checkAbuseValidForMessagesValidator,
   abuseUpdateValidator,
   deleteAbuseMessageValidator,
   abuseListForUserValidator,

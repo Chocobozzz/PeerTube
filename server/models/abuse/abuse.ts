@@ -25,14 +25,14 @@ import {
   AbusePredefinedReasonsString,
   AbuseState,
   AbuseVideoIs,
-  AdminVideoAbuse,
   AdminAbuse,
+  AdminVideoAbuse,
   AdminVideoCommentAbuse,
   UserAbuse,
   UserVideoAbuse
 } from '@shared/models'
 import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { MAbuse, MAbuseAdminFormattable, MAbuseAP, MUserAccountId, MAbuseUserFormattable } from '../../types/models'
+import { MAbuse, MAbuseAdminFormattable, MAbuseAP, MAbuseReporter, MAbuseUserFormattable, MUserAccountId } from '../../types/models'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from '../video/thumbnail'
@@ -266,7 +266,7 @@ export class AbuseModel extends Model<AbuseModel> {
   VideoAbuse: VideoAbuseModel
 
   // FIXME: deprecated in 2.3. Remove these validators
-  static loadByIdAndVideoId (id: number, videoId?: number, uuid?: string): Bluebird<MAbuse> {
+  static loadByIdAndVideoId (id: number, videoId?: number, uuid?: string): Bluebird<MAbuseReporter> {
     const videoWhere: WhereOptions = {}
 
     if (videoId) videoWhere.videoId = videoId
@@ -278,6 +278,10 @@ export class AbuseModel extends Model<AbuseModel> {
           model: VideoAbuseModel,
           required: true,
           where: videoWhere
+        },
+        {
+          model: AccountModel,
+          as: 'ReporterAccount'
         }
       ],
       where: {
@@ -287,11 +291,17 @@ export class AbuseModel extends Model<AbuseModel> {
     return AbuseModel.findOne(query)
   }
 
-  static loadById (id: number): Bluebird<MAbuse> {
+  static loadByIdWithReporter (id: number): Bluebird<MAbuseReporter> {
     const query = {
       where: {
         id
-      }
+      },
+      include: [
+        {
+          model: AccountModel,
+          as: 'ReporterAccount'
+        }
+      ]
     }
 
     return AbuseModel.findOne(query)
@@ -466,8 +476,6 @@ export class AbuseModel extends Model<AbuseModel> {
         label: AbuseModel.getStateLabel(this.state)
       },
 
-      moderationComment: this.moderationComment,
-
       countMessages,
 
       createdAt: this.createdAt,
@@ -500,6 +508,8 @@ export class AbuseModel extends Model<AbuseModel> {
       video,
       comment,
 
+      moderationComment: this.moderationComment,
+
       reporterAccount: this.ReporterAccount
         ? this.ReporterAccount.toFormattedJSON()
         : null,
@@ -519,7 +529,7 @@ export class AbuseModel extends Model<AbuseModel> {
     const countMessages = this.get('countMessages') as number
 
     const video = this.buildBaseVideoAbuse()
-    const comment: AdminVideoCommentAbuse = this.buildBaseVideoCommentAbuse()
+    const comment = this.buildBaseVideoCommentAbuse()
     const abuse = this.buildBaseAbuse(countMessages || 0)
 
     return Object.assign(abuse, {

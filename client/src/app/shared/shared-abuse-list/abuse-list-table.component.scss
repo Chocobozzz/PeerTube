@@ -2,93 +2,6 @@
 @import 'mixins';
 @import 'miniature';
 
-.form-sub-title {
-  flex-grow: 0;
-  margin-right: 30px;
-}
-
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
-    flex-grow: 1;
-  }
-}
-
-.moderation-expanded {
-  font-size: 90%;
-
-  .moderation-expanded-label {
-    font-weight: $font-semibold;
-    display: inline-block;
-    vertical-align: top;
-    text-align: right;
-  }
-
-  .moderation-expanded-text {
-    display: inline-flex;
-    word-wrap: break-word;
-
-    ::ng-deep p:last-child {
-      margin-bottom: 0px !important;
-    }
-  }
-}
-
-.table-states {
-  & > :not(:first-child) {
-    margin-left: .4rem;
-  }
-}
-
-p-calendar {
-  display: block;
-
-  ::ng-deep {
-    .ui-widget-content {
-      min-width: 400px;
-    }
-
-    input {
-      @include peertube-input-text(100%);
-    }
-  }
-}
-
-.screenratio {
-  div {
-    @include miniature-thumbnail;
-
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    color: pvar(--inputPlaceholderColor);
-  }
-
-  @include large-screen-ratio($selector: 'div, ::ng-deep iframe') {
-    width: 100% !important;
-    height: 100% !important;
-    left: 0;
-  };
-}
-
-.comment-html {
-  background-color: #ececec;
-  padding: 10px;
-}
-
-.chip {
-  @include chip;
-}
-
-my-action-dropdown.show {
-  ::ng-deep .dropdown-root {
-    display: block !important;
-  }
-}
-
-
 .table-video-link {
   @include disable-outline;
 
@@ -177,5 +90,18 @@ my-action-dropdown.show {
       color: var(--greyForegroundColor);
       font-size: 11px;
     }
+  }
+}
+
+.abuse-states .glyphicon-comment {
+  margin-left: 0.5rem;
+}
+
+.abuse-messages {
+  my-global-icon {
+    width: 22px;
+    margin-left: 3px;
+    position: relative;
+    top: -2px;
   }
 }

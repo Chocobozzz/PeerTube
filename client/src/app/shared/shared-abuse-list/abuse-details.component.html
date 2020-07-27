@@ -3,11 +3,11 @@
   <div class="col-8">
 
     <!-- report metadata -->
-    <div class="d-flex" *ngIf="abuse.reporterAccount">
+    <div class="d-flex" *ngIf="isAdminView && abuse.reporterAccount">
       <span class="col-3 moderation-expanded-label" i18n>Reporter</span>
 
       <span class="col-9 moderation-expanded-text">
-        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
+        <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
           class="chip"
         >
           <img
@@ -21,7 +21,7 @@
           </div>
         </a>
 
-        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
+        <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
           class="ml-auto text-muted abuse-details-links" i18n
         >
           {abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
@@ -32,7 +32,7 @@
     <div class="d-flex" *ngIf="abuse.flaggedAccount">
       <span class="col-3 moderation-expanded-label" i18n>Reportee</span>
       <span class="col-9 moderation-expanded-text">
-        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
+        <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
           class="chip"
         >
           <img
@@ -46,7 +46,7 @@
           </div>
         </a>
 
-        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
+        <a *ngIf="isAdminView" [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
           class="ml-auto text-muted abuse-details-links" i18n
         >
           {abuse.countReportsForReportee, plural, =1 {1 report} other {{{ abuse.countReportsForReportee }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
@@ -63,7 +63,7 @@
     <div class="mt-3 d-flex">
       <span class="col-3 moderation-expanded-label">
         <ng-container i18n>Report</ng-container>
-        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': '#' + abuse.id  }" class="ml-1 text-muted">#{{ abuse.id }}</a>
+        <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': '#' + abuse.id  }" class="ml-1 text-muted">#{{ abuse.id }}</a>
       </span>
       <span class="col-9 moderation-expanded-text" [innerHTML]="abuse.reasonHtml"></span>
     </div>
@@ -71,7 +71,7 @@
     <div *ngIf="getPredefinedReasons()" class="mt-2 d-flex">
       <span class="col-3"></span>
       <span class="col-9">
-        <a *ngFor="let reason of getPredefinedReasons()"  [routerLink]="[ '/admin/moderation/abuses/list' ]"
+        <a *ngFor="let reason of getPredefinedReasons()"  [routerLink]="[ baseRoute ]"
           [queryParams]="{ 'search': 'tag:' + reason.id  }" class="chip rectangular bg-secondary text-light"
         >
           <div>{{ reason.label }}</div>
@@ -86,7 +86,7 @@
       </span>
     </div>
 
-    <div class="mt-3 d-flex" *ngIf="abuse.moderationComment">
+    <div class="mt-3 d-flex" *ngIf="isAdminView && abuse.moderationComment">
       <span class="col-3 moderation-expanded-label" i18n>Note</span>
       <span class="col-9 moderation-expanded-text d-block" [innerHTML]="abuse.moderationCommentHtml"></span>
     </div>
