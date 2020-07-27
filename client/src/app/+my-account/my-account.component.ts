@@ -95,6 +95,11 @@ export class MyAccountComponent implements OnInit {
           iconName: 'peertube-x'
         },
         {
+          label: this.i18n('My abuses'),
+          routerLink: '/my-account/abuses',
+          iconName: 'flag'
+        },
+        {
           label: this.i18n('Ownership changes'),
           routerLink: '/my-account/ownership',
           iconName: 'download'

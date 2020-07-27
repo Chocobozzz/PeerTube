@@ -1,0 +1,194 @@
+<p-table
+  [value]="abuses" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true" [lazyLoadOnInit]="false"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
+  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="ml-auto">
+        <div class="input-group has-feedback has-clear">
+          <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
+            <div class="input-group-text" ngbDropdownToggle>
+              <span class="caret" aria-haspopup="menu" role="button"></span>
+            </div>
+
+            <div role="menu" ngbDropdownMenu>
+              <h6 class="dropdown-header" i18n>Advanced report filters</h6>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'state:pending' }" class="dropdown-item" i18n>Unsolved reports</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'state:accepted' }" class="dropdown-item" i18n>Accepted reports</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'state:rejected' }" class="dropdown-item" i18n>Refused reports</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'videoIs:blacklisted' }" class="dropdown-item" i18n>Reports with blocked videos</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'videoIs:deleted' }" class="dropdown-item" i18n>Reports with deleted videos</a>
+            </div>
+          </div>
+          <input
+            type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+            (keyup)="onAbuseSearch($event)"
+          >
+          <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
+          <span class="sr-only" i18n>Clear filters</span>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr> <!-- header -->
+      <th style="width: 40px;"></th>
+      <th *ngIf="isAdminView()" style="width: 20%;" pResizableColumn i18n>Reporter</th>
+      <th i18n>Video/Comment/Account</th>
+      <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th i18n style="width: 80px;">Messages</th>
+      <th style="width: 150px;"></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
+    <tr>
+      <td class="c-hand" [pRowToggler]="abuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+        <span class="expander">
+          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
+        </span>
+      </td>
+
+      <td *ngIf="isAdminView()">
+        <a *ngIf="abuse.reporterAccount" [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+          <div class="chip two-lines">
+            <img
+              class="avatar"
+              [src]="abuse.reporterAccount.avatar?.path"
+              (error)="switchToDefaultAvatar($event)"
+              alt="Avatar"
+            >
+            <div>
+              {{ abuse.reporterAccount.displayName }}
+              <span>{{ abuse.reporterAccount.nameWithHost }}</span>
+            </div>
+          </div>
+        </a>
+
+        <span i18n *ngIf="!abuse.reporterAccount">
+          Deleted account
+        </span>
+      </td>
+
+      <ng-container *ngIf="abuse.video">
+
+        <td *ngIf="!abuse.video.deleted">
+          <a [href]="getVideoUrl(abuse)" class="table-video-link" [title]="abuse.video.name" target="_blank" rel="noopener noreferrer">
+            <div class="table-video">
+              <div class="table-video-image">
+                <img [src]="abuse.video.thumbnailPath">
+                <span
+                  class="table-video-image-label" *ngIf="abuse.count > 1"
+                  i18n-title title="This video has been reported multiple times."
+                >
+                  {{ abuse.nth }}/{{ abuse.count }}
+                </span>
+              </div>
+
+              <div class="table-video-text">
+                <div>
+                  <span *ngIf="!abuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
+                  <span *ngIf="abuse.video.blacklisted" i18n-title title="The video was blocked" class="glyphicon glyphicon-ban-circle"></span>
+                  {{ abuse.video.name }}
+                </div>
+                <div i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
+              </div>
+            </div>
+          </a>
+        </td>
+
+        <td *ngIf="abuse.video.deleted" class="c-hand" [pRowToggler]="abuse">
+          <div class="table-video" i18n-title title="Video was deleted">
+            <div class="table-video-image">
+              <span i18n>Deleted</span>
+            </div>
+
+            <div class="table-video-text">
+              <div>
+                {{ abuse.video.name }}
+                <span class="glyphicon glyphicon-trash"></span>
+              </div>
+              <div i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="abuse.comment">
+        <td>
+          <a [href]="getCommentUrl(abuse)" [innerHTML]="abuse.truncatedCommentHtml" class="table-comment-link"
+            [title]="abuse.comment.video.name" target="_blank" rel="noopener noreferrer"
+          ></a>
+
+          <div class="comment-flagged-account" *ngIf="abuse.flaggedAccount">by {{ abuse.flaggedAccount.displayName }}</div>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="!abuse.comment && !abuse.video">
+        <td *ngIf="abuse.flaggedAccount">
+          <a [href]="getAccountUrl(abuse)"  class="table-account-link" target="_blank" rel="noopener noreferrer">
+            <span>{{ abuse.flaggedAccount.displayName }}</span>
+
+            <span class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced }}</span>
+          </a>
+        </td>
+
+        <td i18n *ngIf="!abuse.flaggedAccount">
+          Account deleted
+        </td>
+
+      </ng-container>
+
+
+      <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | date: 'short'  }}</td>
+
+      <td class="c-hand abuse-states" [pRowToggler]="abuse">
+        <span *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-ok"></span>
+        <span *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-remove"></span>
+        <span *ngIf="abuse.moderationComment" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment" class="glyphicon glyphicon-comment"></span>
+      </td>
+
+      <td class="c-hand abuse-messages" (click)="openAbuseMessagesModal(abuse)">
+        <ng-container *ngIf="isLocalAbuse(abuse)">
+          {{ abuse.countMessages }}
+
+          <my-global-icon iconName="message-circle"></my-global-icon>
+        </ng-container>
+      </td>
+
+      <td class="action-cell">
+        <my-action-dropdown
+          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
+          i18n-label label="Actions" [actions]="abuseActions" [entry]="abuse"
+        ></my-action-dropdown>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-abuse>
+      <tr>
+        <td class="expand-cell" colspan="6">
+          <my-abuse-details [abuse]="abuse" [baseRoute]="baseRoute" [isAdminView]="isAdminView()"></my-abuse-details>
+        </td>
+      </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">
+        <div class="no-results">
+          <ng-container *ngIf="search" i18n>No abuses found matching current filters.</ng-container>
+          <ng-container *ngIf="!search" i18n>No abuses found.</ng-container>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<my-moderation-comment-modal #moderationCommentModal (commentUpdated)="onModerationCommentUpdated()"></my-moderation-comment-modal>
+<my-abuse-message-modal #abuseMessagesModal [isAdminView]="isAdminView()" (countMessagesUpdated)="onCountMessagesUpdated($event)"></my-abuse-message-modal>

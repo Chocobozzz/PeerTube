@@ -16,6 +16,7 @@ import { MyAccountVideoPlaylistUpdateComponent } from './my-account-video-playli
 import { MyAccountVideoPlaylistsComponent } from './my-account-video-playlists/my-account-video-playlists.component'
 import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
 import { MyAccountComponent } from './my-account.component'
+import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -160,6 +161,15 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: 'Notifications'
+          }
+        }
+      },
+      {
+        path: 'abuses',
+        component: MyAccountAbusesListComponent,
+        data: {
+          meta: {
+            title: 'My abuses'
           }
         }
       }

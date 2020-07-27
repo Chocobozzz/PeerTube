@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild, OnInit } from '@angular/core'
-import { Notifier, AuthService } from '@app/core'
-import { FormReactive, FormValidatorService, AbuseValidatorsService } from '@app/shared/shared-forms'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { AuthService, Notifier } from '@app/core'
+import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AbuseMessage, UserAbuse } from '@shared/models'
-import { AbuseService } from './abuse.service'
+import { AbuseService } from '../shared-moderation'
 
 @Component({
   selector: 'my-abuse-message-modal',
@@ -16,11 +16,14 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal
   @ViewChild('messagesBlock', { static: false }) messagesBlock: ElementRef
 
+  @Input() isAdminView: boolean
+
   @Output() countMessagesUpdated = new EventEmitter<{ abuseId: number, countMessages: number }>()
 
   abuseMessages: AbuseMessage[] = []
   textareaMessage: string
   sendingMessage = false
+  noResults = false
 
   private openedModal: NgbModalRef
   private abuse: UserAbuse
@@ -29,9 +32,9 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private abuseValidatorsService: AbuseValidatorsService,
     private modalService: NgbModal,
+    private i18n: I18n,
     private auth: AuthService,
     private notifier: Notifier,
-    private i18n: I18n,
     private abuseService: AbuseService
   ) {
     super()
@@ -94,11 +97,20 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
     return this.auth.getUser().account.id === abuseMessage.account.id
   }
 
+  getPlaceholderMessage () {
+    if (this.isAdminView) {
+      return this.i18n('Add a message to communicate with the reporter')
+    }
+
+    return this.i18n('Add a message to communicate with the moderation team')
+  }
+
   private loadMessages () {
     this.abuseService.listAbuseMessages(this.abuse)
       .subscribe(
         res => {
           this.abuseMessages = res.data
+          this.noResults = this.abuseMessages.length === 0
 
           setTimeout(() => {
             if (!this.messagesBlock) return

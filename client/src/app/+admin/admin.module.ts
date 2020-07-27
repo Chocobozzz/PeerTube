@@ -2,6 +2,7 @@ import { ChartModule } from 'primeng/chart'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
+import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
@@ -14,10 +15,9 @@ import { FollowersListComponent, FollowsComponent, VideoRedundanciesListComponen
 import { FollowingListComponent } from './follows/following-list/following-list.component'
 import { RedundancyCheckboxComponent } from './follows/shared/redundancy-checkbox.component'
 import { VideoRedundancyInformationComponent } from './follows/video-redundancies-list/video-redundancy-information.component'
-import { ModerationCommentModalComponent, AbuseListComponent, VideoBlockListComponent } from './moderation'
+import { AbuseListComponent, VideoBlockListComponent } from './moderation'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from './moderation/instance-blocklist'
 import { ModerationComponent } from './moderation/moderation.component'
-import { AbuseDetailsComponent } from './moderation/abuse-list/abuse-details.component'
 import { PluginListInstalledComponent } from './plugins/plugin-list-installed/plugin-list-installed.component'
 import { PluginSearchComponent } from './plugins/plugin-search/plugin-search.component'
 import { PluginShowInstalledComponent } from './plugins/plugin-show-installed/plugin-show-installed.component'
@@ -36,6 +36,7 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     SharedFormModule,
     SharedModerationModule,
     SharedGlobalIconModule,
+    SharedAbuseListModule,
 
     TableModule,
     SelectButtonModule,
@@ -60,11 +61,8 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
 
     ModerationComponent,
     VideoBlockListComponent,
-
     AbuseListComponent,
-    AbuseDetailsComponent,
 
-    ModerationCommentModalComponent,
     InstanceServerBlocklistComponent,
     InstanceAccountBlocklistComponent,
 

@@ -1,6 +1,9 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">Messages</h4>
+    <h4 class="modal-title">
+      <ng-container i18n *ngIf="isAdminView">Messages with the reporter</ng-container>
+      <ng-container i18n *ngIf="!isAdminView">Messages with the moderation team</ng-container>
+    </h4>
 
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
@@ -21,9 +24,16 @@
       </div>
     </div>
 
+    <div class="no-messages" *ngIf="noResults" i18n>
+      No messages for now.
+    </div>
+
     <form novalidate [formGroup]="form" (ngSubmit)="addMessage()">
       <div class="form-group">
-        <textarea formControlName="message" ngbAutofocus [ngClass]="{ 'input-error': formErrors['message'] }" class="form-control"></textarea>
+        <textarea
+          formControlName="message" ngbAutofocus [placeholder]="getPlaceholderMessage()"
+          [ngClass]="{ 'input-error': formErrors['message'] }" class="form-control"
+        ></textarea>
 
         <div *ngIf="formErrors.message" class="form-error">
           {{ formErrors.message }}
@@ -31,7 +41,7 @@
       </div>
 
       <div class="form-group inputs">
-        <input type="submit" i18n-value value="Add message" class="action-button-submit" [disabled]="!form.valid || sendingMessage">
+        <input type="submit" i18n-value value="Add a message" class="action-button-submit" [disabled]="!form.valid || sendingMessage">
       </div>
     </form>
 

@@ -41,6 +41,13 @@ export abstract class Actor implements ActorServer {
     return accountName + '@' + host
   }
 
+  static IS_LOCAL (host: string) {
+    const absoluteAPIUrl = getAbsoluteAPIUrl()
+    const thisHost = new URL(absoluteAPIUrl).host
+
+    return host.trim() === thisHost
+  }
+
   protected constructor (hash: ActorServer) {
     this.id = hash.id
     this.url = hash.url
@@ -53,10 +60,7 @@ export abstract class Actor implements ActorServer {
     if (hash.updatedAt) this.updatedAt = new Date(hash.updatedAt.toString())
 
     this.avatar = hash.avatar
-
-    const absoluteAPIUrl = getAbsoluteAPIUrl()
-    const thisHost = new URL(absoluteAPIUrl).host
-    this.isLocal = this.host.trim() === thisHost
+    this.isLocal = Actor.IS_LOCAL(this.host)
 
     this.updateComputedAttributes()
   }

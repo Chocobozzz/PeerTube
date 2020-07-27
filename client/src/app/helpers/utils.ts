@@ -36,7 +36,10 @@ function populateAsyncUserVideoChannels (authService: AuthService, channel: { id
 }
 
 function getAbsoluteAPIUrl () {
-  let absoluteAPIUrl = environment.apiUrl
+  let absoluteAPIUrl = environment.hmr === true
+    ? 'http://localhost:9000'
+    : environment.apiUrl
+
   if (!absoluteAPIUrl) {
     // The API is on the same domain
     absoluteAPIUrl = window.location.origin

@@ -1,0 +1,50 @@
+@import 'variables';
+@import 'mixins';
+@import 'miniature';
+
+.moderation-expanded {
+  font-size: 90%;
+
+  .moderation-expanded-label {
+    font-weight: $font-semibold;
+    display: inline-block;
+    vertical-align: top;
+    text-align: right;
+  }
+
+  .moderation-expanded-text {
+    display: inline-flex;
+    word-wrap: break-word;
+
+    ::ng-deep p:last-child {
+      margin-bottom: 0px !important;
+    }
+  }
+}
+
+.input-group {
+  @include peertube-input-group(300px);
+
+  .dropdown-toggle::after {
+    margin-left: 0;
+  }
+}
+
+.chip {
+  @include chip;
+}
+
+.caption {
+  justify-content: flex-end;
+
+  input {
+    @include peertube-input-text(250px);
+    flex-grow: 1;
+  }
+}
+
+my-action-dropdown.show {
+  ::ng-deep .dropdown-root {
+    display: block !important;
+  }
+}

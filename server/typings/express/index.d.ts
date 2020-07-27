@@ -9,7 +9,8 @@ import {
   MVideoFile,
   MVideoImmutable,
   MVideoPlaylistFull,
-  MVideoPlaylistFullSummary
+  MVideoPlaylistFullSummary,
+  MAbuseReporter
 } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server'
@@ -78,7 +79,7 @@ declare module 'express' {
 
       videoCaption?: MVideoCaptionVideo
 
-      abuse?: MAbuse
+      abuse?: MAbuseReporter
       abuseMessage?: MAbuseMessage
 
       videoStreamingPlaylist?: MStreamingPlaylist

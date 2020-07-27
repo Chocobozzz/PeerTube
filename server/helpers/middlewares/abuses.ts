@@ -26,7 +26,7 @@ async function doesVideoAbuseExist (abuseIdArg: number | string, videoUUID: stri
 }
 
 async function doesAbuseExist (abuseId: number | string, res: Response) {
-  const abuse = await AbuseModel.loadById(parseInt(abuseId + '', 10))
+  const abuse = await AbuseModel.loadByIdWithReporter(parseInt(abuseId + '', 10))
 
   if (!abuse) {
     res.status(404)

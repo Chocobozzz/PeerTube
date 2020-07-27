@@ -1,17 +1,19 @@
 import { Component, Input } from '@angular/core'
+import { durationToString } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AbusePredefinedReasonsString } from '@shared/models'
-import { ProcessedAbuse } from './abuse-list.component'
-import { durationToString } from '@app/helpers'
+import { ProcessedAbuse } from './processed-abuse.model'
 
 @Component({
   selector: 'my-abuse-details',
   templateUrl: './abuse-details.component.html',
-  styleUrls: [ '../moderation.component.scss' ]
+  styleUrls: [ '../shared-moderation/moderation.scss', './abuse-details.component.scss' ]
 })
 export class AbuseDetailsComponent {
   @Input() abuse: ProcessedAbuse
+  @Input() isAdminView: boolean
+  @Input() baseRoute: string
 
   private predefinedReasonsTranslations: { [key in AbusePredefinedReasonsString]: string }
 

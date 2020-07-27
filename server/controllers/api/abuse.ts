@@ -16,6 +16,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  checkAbuseValidForMessagesValidator,
   deleteAbuseMessageValidator,
   ensureUserHasRight,
   getAbuseValidator,
@@ -58,12 +59,14 @@ abuseRouter.delete('/:id',
 abuseRouter.get('/:id/messages',
   authenticate,
   asyncMiddleware(getAbuseValidator),
+  checkAbuseValidForMessagesValidator,
   asyncRetryTransactionMiddleware(listAbuseMessages)
 )
 
 abuseRouter.post('/:id/messages',
   authenticate,
   asyncMiddleware(getAbuseValidator),
+  checkAbuseValidForMessagesValidator,
   addAbuseMessageValidator,
   asyncRetryTransactionMiddleware(addAbuseMessage)
 )
@@ -71,6 +74,7 @@ abuseRouter.post('/:id/messages',
 abuseRouter.delete('/:id/messages/:messageId',
   authenticate,
   asyncMiddleware(getAbuseValidator),
+  checkAbuseValidForMessagesValidator,
   asyncMiddleware(deleteAbuseMessageValidator),
   asyncRetryTransactionMiddleware(deleteAbuseMessage)
 )

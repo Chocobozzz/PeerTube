@@ -43,6 +43,6 @@ async function listMyAbuses (req: express.Request, res: express.Response) {
 
   return res.json({
     total: resultList.total,
-    data: resultList.data.map(d => d.toFormattedAdminJSON())
+    data: resultList.data.map(d => d.toFormattedUserJSON())
   })
 }
