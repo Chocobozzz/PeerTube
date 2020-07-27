@@ -2,6 +2,7 @@
 
 import { expect } from 'chai'
 import { inspect } from 'util'
+import { AbuseState } from '@shared/models'
 import { UserNotification, UserNotificationSetting, UserNotificationSettingValue, UserNotificationType } from '../../models/users'
 import { MockSmtpServer } from '../miscs/email'
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
@@ -464,6 +465,62 @@ async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUU
   await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
+async function checkNewAbuseMessage (base: CheckerBaseParams, abuseId: number, message: string, toEmail: string, type: CheckerType) {
+  const notificationType = UserNotificationType.ABUSE_NEW_MESSAGE
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.abuse.id).to.equal(abuseId)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.type !== notificationType || n.abuse === undefined || n.abuse.id !== abuseId
+      })
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text = email['text']
+    const to = email['to'].filter(t => t.address === toEmail)
+
+    return text.indexOf(message) !== -1 && to.length !== 0
+  }
+
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
+}
+
+async function checkAbuseStateChange (base: CheckerBaseParams, abuseId: number, state: AbuseState, type: CheckerType) {
+  const notificationType = UserNotificationType.ABUSE_STATE_CHANGE
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.abuse.id).to.equal(abuseId)
+      expect(notification.abuse.state).to.equal(state)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.abuse === undefined || n.abuse.id !== abuseId
+      })
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text = email['text']
+
+    const contains = state === AbuseState.ACCEPTED
+      ? ' accepted'
+      : ' rejected'
+
+    return text.indexOf(contains) !== -1
+  }
+
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
+}
+
 async function checkNewCommentAbuseForModerators (base: CheckerBaseParams, videoUUID: string, videoName: string, type: CheckerType) {
   const notificationType = UserNotificationType.NEW_ABUSE_FOR_MODERATORS
 
@@ -579,6 +636,8 @@ function getAllNotificationsSettings () {
     newFollow: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newUserRegistration: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newInstanceFollower: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    abuseNewMessage: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    abuseStateChange: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   } as UserNotificationSetting
 }
@@ -676,6 +735,8 @@ export {
   updateMyNotificationSettings,
   checkNewVideoAbuseForModerators,
   checkVideoAutoBlacklistForModerators,
+  checkNewAbuseMessage,
+  checkAbuseStateChange,
   getUserNotifications,
   markAsReadNotifications,
   getLastNotification,

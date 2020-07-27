@@ -88,7 +88,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
       },
 
       {
-        attributes: [ 'id' ],
+        attributes: [ 'id', 'state' ],
         model: AbuseModel.unscoped(),
         required: false,
         include: [
@@ -504,6 +504,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
 
     return {
       id: abuse.id,
+      state: abuse.state,
       video: videoAbuse,
       comment: commentAbuse,
       account: accountAbuse

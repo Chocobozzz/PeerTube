@@ -12,12 +12,12 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { MNotificationSettingFormattable } from '@server/types/models'
+import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
+import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
+import { clearCacheByUserId } from '../../lib/oauth-model'
 import { throwIfNotValid } from '../utils'
 import { UserModel } from './user'
-import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
-import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
-import { clearCacheByUserId } from '../../lib/oauth-model'
-import { MNotificationSettingFormattable } from '@server/types/models'
 
 @Table({
   tableName: 'userNotificationSetting',
@@ -138,6 +138,24 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
   @Column
   commentMention: UserNotificationSettingValue
 
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingAbuseStateChange',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'abuseStateChange')
+  )
+  @Column
+  abuseStateChange: UserNotificationSettingValue
+
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingAbuseNewMessage',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'abuseNewMessage')
+  )
+  @Column
+  abuseNewMessage: UserNotificationSettingValue
+
   @ForeignKey(() => UserModel)
   @Column
   userId: number
@@ -175,7 +193,9 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
       commentMention: this.commentMention,
       newFollow: this.newFollow,
       newInstanceFollower: this.newInstanceFollower,
-      autoInstanceFollowing: this.autoInstanceFollowing
+      autoInstanceFollowing: this.autoInstanceFollowing,
+      abuseNewMessage: this.abuseNewMessage,
+      abuseStateChange: this.abuseStateChange
     }
   }
 }

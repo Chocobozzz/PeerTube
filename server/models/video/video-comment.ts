@@ -44,7 +44,7 @@ import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getCommentSort, throwIf
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 
-enum ScopeNames {
+export enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACCOUNT_FOR_API = 'WITH_ACCOUNT_FOR_API',
   WITH_IN_REPLY_TO = 'WITH_IN_REPLY_TO',

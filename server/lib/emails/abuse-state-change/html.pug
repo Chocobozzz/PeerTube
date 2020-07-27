@@ -1,0 +1,9 @@
+extends ../common/greetings
+include ../common/mixins.pug
+
+block title
+  | Abuse state changed
+
+block content
+  p
+    | #[a(href=abuseUrl) Your abuse ##{abuseId} on #{WEBSERVER.HOST}] has been #{isAccepted ? 'accepted' : 'rejected'}

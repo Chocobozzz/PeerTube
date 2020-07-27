@@ -5,6 +5,7 @@ import { AbuseModel } from '../../../models/abuse/abuse'
 import { MAccountDefault, MAccountFormattable, MAccountLight, MAccountUrl, MAccount } from '../account'
 import { MCommentOwner, MCommentUrl, MVideoUrl, MCommentOwnerVideo, MComment, MCommentVideo } from '../video'
 import { MVideo, MVideoAccountLightBlacklistAllFiles } from '../video/video'
+import { VideoCommentModel } from '@server/models/video/video-comment'
 
 type Use<K extends keyof AbuseModel, M> = PickWith<AbuseModel, K, M>
 type UseVideoAbuse<K extends keyof VideoAbuseModel, M> = PickWith<VideoAbuseModel, K, M>
@@ -34,7 +35,7 @@ export type MVideoAbuseVideoUrl =
 
 export type MVideoAbuseVideoFull =
   MVideoAbuse &
-  UseVideoAbuse<'Video', MVideoAccountLightBlacklistAllFiles>
+  UseVideoAbuse<'Video', Omit<MVideoAccountLightBlacklistAllFiles, 'VideoFiles' | 'VideoStreamingPlaylists'>>
 
 export type MVideoAbuseFormattable =
   MVideoAbuse &
@@ -49,7 +50,7 @@ export type MCommentAbuseAccount =
 
 export type MCommentAbuseAccountVideo =
   MCommentAbuse &
-  UseCommentAbuse<'VideoComment', MCommentOwnerVideo>
+  UseCommentAbuse<'VideoComment', MCommentOwner & PickWith<VideoCommentModel, 'Video', MVideo>>
 
 export type MCommentAbuseUrl =
   MCommentAbuse &
@@ -79,14 +80,6 @@ export type MAbuseAccountVideo =
   Use<'VideoAbuse', MVideoAbuseVideoFull> &
   Use<'ReporterAccount', MAccountDefault>
 
-export type MAbuseAP =
-  MAbuse &
-  Pick<AbuseModel, 'toActivityPubObject'> &
-  Use<'ReporterAccount', MAccountUrl> &
-  Use<'FlaggedAccount', MAccountUrl> &
-  Use<'VideoAbuse', MVideoAbuseVideo> &
-  Use<'VideoCommentAbuse', MCommentAbuseAccount>
-
 export type MAbuseFull =
   MAbuse &
   Pick<AbuseModel, 'toActivityPubObject'> &
@@ -111,3 +104,11 @@ export type MAbuseUserFormattable =
   Use<'FlaggedAccount', MAccountFormattable> &
   Use<'VideoAbuse', MVideoAbuseFormattable> &
   Use<'VideoCommentAbuse', MCommentAbuseFormattable>
+
+export type MAbuseAP =
+  MAbuse &
+  Pick<AbuseModel, 'toActivityPubObject'> &
+  Use<'ReporterAccount', MAccountUrl> &
+  Use<'FlaggedAccount', MAccountUrl> &
+  Use<'VideoAbuse', MVideoAbuseVideo> &
+  Use<'VideoCommentAbuse', MCommentAbuseAccount>

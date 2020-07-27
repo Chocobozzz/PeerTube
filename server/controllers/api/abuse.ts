@@ -25,6 +25,8 @@ import {
   setDefaultSort
 } from '../../middlewares'
 import { AccountModel } from '../../models/account/account'
+import { Notifier } from '@server/lib/notifier'
+import { logger } from '@server/helpers/logger'
 
 const abuseRouter = express.Router()
 
@@ -123,19 +125,28 @@ async function listAbusesForAdmins (req: express.Request, res: express.Response)
 
 async function updateAbuse (req: express.Request, res: express.Response) {
   const abuse = res.locals.abuse
+  let stateUpdated = false
 
   if (req.body.moderationComment !== undefined) abuse.moderationComment = req.body.moderationComment
-  if (req.body.state !== undefined) abuse.state = req.body.state
+
+  if (req.body.state !== undefined) {
+    abuse.state = req.body.state
+    stateUpdated = true
+  }
 
   await sequelizeTypescript.transaction(t => {
     return abuse.save({ transaction: t })
   })
 
-  // TODO: Notification
+  if (stateUpdated === true) {
+    AbuseModel.loadFull(abuse.id)
+      .then(abuseFull => Notifier.Instance.notifyOnAbuseStateChange(abuseFull))
+      .catch(err => logger.error('Cannot notify on abuse state change', { err }))
+  }
 
   // Do not send the delete to other instances, we updated OUR copy of this abuse
 
-  return res.type('json').status(204).end()
+  return res.sendStatus(204)
 }
 
 async function deleteAbuse (req: express.Request, res: express.Response) {
@@ -147,7 +158,7 @@ async function deleteAbuse (req: express.Request, res: express.Response) {
 
   // Do not send the delete to other instances, we delete OUR copy of this abuse
 
-  return res.type('json').status(204).end()
+  return res.sendStatus(204)
 }
 
 async function reportAbuse (req: express.Request, res: express.Response) {
@@ -219,7 +230,9 @@ async function addAbuseMessage (req: express.Request, res: express.Response) {
     abuseId: abuse.id
   })
 
-  // TODO: Notification
+  AbuseModel.loadFull(abuse.id)
+    .then(abuseFull => Notifier.Instance.notifyOnAbuseMessage(abuseFull, abuseMessage))
+    .catch(err => logger.error('Cannot notify on new abuse message', { err }))
 
   return res.json({
     abuseMessage: {

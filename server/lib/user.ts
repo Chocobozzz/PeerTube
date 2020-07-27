@@ -141,6 +141,8 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
     commentMention: UserNotificationSettingValue.WEB,
     newFollow: UserNotificationSettingValue.WEB,
     newInstanceFollower: UserNotificationSettingValue.WEB,
+    abuseNewMessage: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    abuseStateChange: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     autoInstanceFollowing: UserNotificationSettingValue.WEB
   }
 

@@ -1,3 +1,4 @@
+import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { getServerActor } from '@server/models/application/application'
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import {
@@ -18,7 +19,7 @@ import { CONFIG } from '../initializers/config'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { UserModel } from '../models/account/user'
 import { UserNotificationModel } from '../models/account/user-notification'
-import { MAbuseFull, MAccountServer, MActorFollowFull } from '../types/models'
+import { MAbuseFull, MAbuseMessage, MAccountServer, MActorFollowFull } from '../types/models'
 import { MCommentOwnerVideo, MVideoAccountLight, MVideoFullLight } from '../types/models/video'
 import { isBlockedByServerOrAccount } from './blocklist'
 import { Emailer } from './emailer'
@@ -127,6 +128,20 @@ class Notifier {
         .catch(err => {
           logger.error('Cannot notify administrators of auto instance following %s.', actorFollow.ActorFollowing.url, { err })
         })
+  }
+
+  notifyOnAbuseStateChange (abuse: MAbuseFull): void {
+    this.notifyReporterOfAbuseStateChange(abuse)
+      .catch(err => {
+        logger.error('Cannot notify reporter of abuse %d state change.', abuse.id, { err })
+      })
+  }
+
+  notifyOnAbuseMessage (abuse: MAbuseFull, message: AbuseMessageModel): void {
+    this.notifyOfNewAbuseMessage(abuse, message)
+      .catch(err => {
+        logger.error('Cannot notify on new abuse %d message.', abuse.id, { err })
+      })
   }
 
   private async notifySubscribersOfNewVideo (video: MVideoAccountLight) {
@@ -359,9 +374,7 @@ class Notifier {
     const moderators = await UserModel.listWithRight(UserRight.MANAGE_ABUSES)
     if (moderators.length === 0) return
 
-    const url = abuseInstance.VideoAbuse?.Video?.url ||
-                abuseInstance.VideoCommentAbuse?.VideoComment?.url ||
-                abuseInstance.FlaggedAccount.Actor.url
+    const url = this.getAbuseUrl(abuseInstance)
 
     logger.info('Notifying %s user/moderators of new abuse %s.', moderators.length, url)
 
@@ -385,6 +398,97 @@ class Notifier {
     }
 
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyReporterOfAbuseStateChange (abuse: MAbuseFull) {
+    // Only notify our users
+    if (abuse.ReporterAccount.isOwned() !== true) return
+
+    const url = this.getAbuseUrl(abuse)
+
+    logger.info('Notifying reporter of abuse % of state change.', url)
+
+    const reporter = await UserModel.loadByAccountActorId(abuse.ReporterAccount.actorId)
+
+    function settingGetter (user: MUserWithNotificationSetting) {
+      return user.NotificationSetting.abuseStateChange
+    }
+
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+        type: UserNotificationType.ABUSE_STATE_CHANGE,
+        userId: user.id,
+        abuseId: abuse.id
+      })
+      notification.Abuse = abuse
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addAbuseStateChangeNotification(emails, abuse)
+    }
+
+    return this.notify({ users: [ reporter ], settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyOfNewAbuseMessage (abuse: MAbuseFull, message: MAbuseMessage) {
+    const url = this.getAbuseUrl(abuse)
+    logger.info('Notifying reporter and moderators of new abuse message on %s.', url)
+
+    function settingGetter (user: MUserWithNotificationSetting) {
+      return user.NotificationSetting.abuseNewMessage
+    }
+
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+        type: UserNotificationType.ABUSE_NEW_MESSAGE,
+        userId: user.id,
+        abuseId: abuse.id
+      })
+      notification.Abuse = abuse
+
+      return notification
+    }
+
+    function emailSenderReporter (emails: string[]) {
+      return Emailer.Instance.addAbuseNewMessageNotification(emails, { target: 'reporter', abuse, message })
+    }
+
+    function emailSenderModerators (emails: string[]) {
+      return Emailer.Instance.addAbuseNewMessageNotification(emails, { target: 'moderator', abuse, message })
+    }
+
+    async function buildReporterOptions () {
+      // Only notify our users
+      if (abuse.ReporterAccount.isOwned() !== true) return
+
+      const reporter = await UserModel.loadByAccountActorId(abuse.ReporterAccount.actorId)
+      // Don't notify my own message
+      if (reporter.Account.id === message.accountId) return
+
+      return { users: [ reporter ], settingGetter, notificationCreator, emailSender: emailSenderReporter }
+    }
+
+    async function buildModeratorsOptions () {
+      let moderators = await UserModel.listWithRight(UserRight.MANAGE_ABUSES)
+      // Don't notify my own message
+      moderators = moderators.filter(m => m.Account.id !== message.accountId)
+
+      if (moderators.length === 0) return
+
+      return { users: moderators, settingGetter, notificationCreator, emailSender: emailSenderModerators }
+    }
+
+    const [ reporterOptions, moderatorsOptions ] = await Promise.all([
+      buildReporterOptions(),
+      buildModeratorsOptions()
+    ])
+
+    return Promise.all([
+      this.notify(reporterOptions),
+      this.notify(moderatorsOptions)
+    ])
   }
 
   private async notifyModeratorsOfVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo) {
@@ -597,6 +701,12 @@ class Notifier {
 
   private isBlockedByServerOrUser (targetAccount: MAccountServer, user?: MUserAccount) {
     return isBlockedByServerOrAccount(targetAccount, user?.Account)
+  }
+
+  private getAbuseUrl (abuse: MAbuseFull) {
+    return abuse.VideoAbuse?.Video?.url ||
+      abuse.VideoCommentAbuse?.VideoComment?.url ||
+      abuse.FlaggedAccount.Actor.url
   }
 
   static get Instance () {

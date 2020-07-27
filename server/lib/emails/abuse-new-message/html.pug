@@ -1,0 +1,11 @@
+extends ../common/greetings
+include ../common/mixins.pug
+
+block title
+  | New abuse message
+
+block content
+  p
+    | A new message was created on #[a(href=WEBSERVER.URL) abuse ##{abuseId} on #{WEBSERVER.HOST}]
+  blockquote #{messageText}
+  br(style="display: none;")
