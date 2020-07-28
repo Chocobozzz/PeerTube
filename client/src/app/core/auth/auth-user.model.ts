@@ -1,3 +1,5 @@
+import { Observable, of } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
 import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
 import {
@@ -7,7 +9,8 @@ import {
   NSFWPolicyType,
   User as ServerUserModel,
   UserRight,
-  UserRole
+  UserRole,
+  UserVideoQuota
 } from '@shared/models'
 
 export type TokenOptions = {
@@ -73,6 +76,8 @@ class Tokens {
 export class AuthUser extends User implements ServerMyUserModel {
   tokens: Tokens
   specialPlaylists: MyUserSpecialPlaylist[]
+
+  canSeeVideosLink = true
 
   static load () {
     const usernameLocalStorage = peertubeLocalStorage.getItem(this.KEYS.USERNAME)
@@ -149,5 +154,27 @@ export class AuthUser extends User implements ServerMyUserModel {
     peertubeLocalStorage.setItem(AuthUser.KEYS.WEBTORRENT_ENABLED, JSON.stringify(this.webTorrentEnabled))
     peertubeLocalStorage.setItem(AuthUser.KEYS.AUTO_PLAY_VIDEO, JSON.stringify(this.autoPlayVideo))
     this.tokens.save()
+  }
+
+  computeCanSeeVideosLink (quotaObservable: Observable<UserVideoQuota>): Observable<boolean> {
+    if (!this.isUploadDisabled()) {
+      this.canSeeVideosLink = true
+      return of(this.canSeeVideosLink)
+    }
+
+    // Check if the user has videos
+    return quotaObservable.pipe(
+      map(({ videoQuotaUsed }) => {
+        if (videoQuotaUsed !== 0) {
+          // User already uploaded videos, so it can see the link
+          this.canSeeVideosLink = true
+        } else {
+          // No videos, no upload so the user don't need to see the videos link
+          this.canSeeVideosLink = false
+        }
+
+        return this.canSeeVideosLink
+      })
+    )
   }
 }

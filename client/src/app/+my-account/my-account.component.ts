@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ServerService } from '@app/core'
+import { AuthService, ServerService, AuthUser } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
@@ -11,11 +11,13 @@ import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdo
 })
 export class MyAccountComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []
+  user: AuthUser
 
   private serverConfig: ServerConfig
 
   constructor (
     private serverService: ServerService,
+    private authService: AuthService,
     private i18n: I18n
   ) { }
 
@@ -24,6 +26,20 @@ export class MyAccountComponent implements OnInit {
     this.serverService.getConfig()
         .subscribe(config => this.serverConfig = config)
 
+    this.user = this.authService.getUser()
+
+    this.authService.userInformationLoaded.subscribe(
+      () => this.buildMenu()
+    )
+  }
+
+  isVideoImportEnabled () {
+    const importConfig = this.serverConfig.import.videos
+
+    return importConfig.http.enabled || importConfig.torrent.enabled
+  }
+
+  private buildMenu () {
     const libraryEntries: TopMenuDropdownParam = {
       label: this.i18n('My library'),
       children: [
@@ -35,7 +51,8 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('My videos'),
           routerLink: '/my-account/videos',
-          iconName: 'videos'
+          iconName: 'videos',
+          isDisplayed: () => this.user.canSeeVideosLink
         },
         {
           label: this.i18n('My playlists'),
@@ -45,7 +62,7 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('My subscriptions'),
           routerLink: '/my-account/subscriptions',
-          iconName: 'subscriptions'
+          iconName: 'inbox-full'
         },
         {
           label: this.i18n('My history'),
@@ -59,7 +76,8 @@ export class MyAccountComponent implements OnInit {
       libraryEntries.children.push({
         label: 'My imports',
         routerLink: '/my-account/video-imports',
-        iconName: 'cloud-download'
+        iconName: 'cloud-download',
+        isDisplayed: () => this.user.canSeeVideosLink
       })
     }
 
@@ -97,11 +115,4 @@ export class MyAccountComponent implements OnInit {
       miscEntries
     ]
   }
-
-  isVideoImportEnabled () {
-    const importConfig = this.serverConfig.import.videos
-
-    return importConfig.http.enabled || importConfig.torrent.enabled
-  }
-
 }

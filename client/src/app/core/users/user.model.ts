@@ -149,4 +149,8 @@ export class User implements UserServerModel {
   updateAccountAvatar (newAccountAvatar: Avatar) {
     this.account.updateAvatar(newAccountAvatar)
   }
+
+  isUploadDisabled () {
+    return this.videoQuota === 0 || this.videoQuotaDaily === 0
+  }
 }

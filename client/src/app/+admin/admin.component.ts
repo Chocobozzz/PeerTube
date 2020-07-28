@@ -74,12 +74,24 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasUsersRight()) this.menuEntries.push({ label: this.i18n('Users'), routerLink: '/admin/users' })
+    if (this.hasUsersRight()) {
+      this.menuEntries.push({ label: this.i18n('Users'), routerLink: '/admin/users' })
+    }
+
     if (this.hasServerFollowRight()) this.menuEntries.push(federationItems)
     if (this.hasAbusesRight() || this.hasVideoBlocklistRight()) this.menuEntries.push(moderationItems)
-    if (this.hasConfigRight()) this.menuEntries.push({ label: this.i18n('Configuration'), routerLink: '/admin/config' })
-    if (this.hasPluginsRight()) this.menuEntries.push({ label: this.i18n('Plugins/Themes'), routerLink: '/admin/plugins' })
-    if (this.hasJobsRight() || this.hasLogsRight() || this.hasDebugRight()) this.menuEntries.push({ label: this.i18n('System'), routerLink: '/admin/system' })
+
+    if (this.hasConfigRight()) {
+      this.menuEntries.push({ label: this.i18n('Configuration'), routerLink: '/admin/config' })
+    }
+
+    if (this.hasPluginsRight()) {
+      this.menuEntries.push({ label: this.i18n('Plugins/Themes'), routerLink: '/admin/plugins' })
+    }
+
+    if (this.hasJobsRight() || this.hasLogsRight() || this.hasDebugRight()) {
+      this.menuEntries.push({ label: this.i18n('System'), routerLink: '/admin/system' })
+    }
   }
 
   hasUsersRight () {
