@@ -1474,6 +1474,38 @@ paths:
           description: HTTP or Torrent/magnetURI import not enabled
         '400':
           description: '`magnetUri` or `targetUrl` or a torrent file missing'
+
+  /users/me/abuses:
+    get:
+      summary: List my abuses
+      security:
+        - OAuth2: []
+      tags:
+        - Abuses
+        - My User
+      parameters:
+        - name: id
+          in: query
+          description: only list the report with this id
+          schema:
+            type: integer
+        - name: state
+          in: query
+          schema:
+            $ref: '#/components/schemas/AbuseStateSet'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/abusesSort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Abuse'
+
   /abuses:
     get:
       summary: List abuses
@@ -1501,13 +1533,8 @@ paths:
             type: string
         - name: state
           in: query
-          description: 'The abuse state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
           schema:
-            type: integer
-            enum:
-              - 1
-              - 2
-              - 3
+            $ref: '#/components/schemas/AbuseStateSet'
         - name: searchReporter
           in: query
           description: only list reports of a specific reporter
@@ -1556,7 +1583,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/VideoAbuse'
+                  $ref: '#/components/schemas/Abuse'
 
     post:
       summary: Report an abuse
@@ -1653,6 +1680,61 @@ paths:
           description: successful operation
         '404':
           description: block not found
+  '/abuses/{abuseId}/messages':
+    get:
+      summary: List messages of an abuse
+      security:
+        - OAuth2: []
+      tags:
+        - Abuses
+      parameters:
+        - $ref: '#/components/parameters/abuseId'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AbuseMessage'
+
+    post:
+      summary: Add message to an abuse
+      security:
+        - OAuth2: []
+      tags:
+        - Abuses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  description: Message to send
+                  type: string
+              required:
+                - message
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: incorrect request parameters
+  '/abuses/{abuseId}/messages/{abuseMessageId}':
+    delete:
+      summary: Delete an abuse message
+      security:
+        - OAuth2: []
+      tags:
+        - Abuses
+      parameters:
+        - $ref: '#/components/parameters/abuseId'
+        - $ref: '#/components/parameters/abuseMessageId'
+      responses:
+        '204':
+          description: successful operation
 
   '/videos/{id}/blacklist':
     post:
@@ -3332,6 +3414,13 @@ components:
       description: Abuse id
       schema:
         type: integer
+    abuseMessageId:
+      name: abuseMessageId
+      in: path
+      required: true
+      description: Abuse message id
+      schema:
+        type: integer
     captionLanguage:
       name: captionLanguage
       in: path
@@ -3599,7 +3688,7 @@ components:
         - 1
         - 2
         - 3
-      description: 'The video playlist privacy (Pending = `1`, Rejected = `2`, Accepted = `3`)'
+      description: 'The abuse state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
     AbuseStateConstant:
       properties:
         id:
@@ -3960,7 +4049,7 @@ components:
           format: date-time
         video:
           $ref: '#/components/schemas/Video'
-    VideoAbuse:
+    Abuse:
       properties:
         id:
           type: integer
@@ -3991,6 +4080,19 @@ components:
         createdAt:
           type: string
           format: date-time
+    AbuseMessage:
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
+        byModerator:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        account:
+          $ref: '#/components/schemas/AccountSummary'
     VideoBlacklist:
       properties:
         id:

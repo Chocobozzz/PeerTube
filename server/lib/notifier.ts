@@ -1,4 +1,4 @@
-import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
+import { AccountModel } from '@server/models/account/account'
 import { getServerActor } from '@server/models/application/application'
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import {
@@ -24,7 +24,6 @@ import { MCommentOwnerVideo, MVideoAccountLight, MVideoFullLight } from '../type
 import { isBlockedByServerOrAccount } from './blocklist'
 import { Emailer } from './emailer'
 import { PeerTubeSocket } from './peertube-socket'
-import { AccountModel } from '@server/models/account/account'
 
 class Notifier {
 

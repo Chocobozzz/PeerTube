@@ -1,11 +1,11 @@
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
 import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
+import { VideoCommentModel } from '@server/models/video/video-comment'
 import { PickWith } from '@shared/core-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
-import { MAccountDefault, MAccountFormattable, MAccountLight, MAccountUrl, MAccount } from '../account'
-import { MCommentOwner, MCommentUrl, MVideoUrl, MCommentOwnerVideo, MComment, MCommentVideo } from '../video'
+import { MAccountDefault, MAccountFormattable, MAccountLight, MAccountUrl } from '../account'
+import { MComment, MCommentOwner, MCommentUrl, MCommentVideo, MVideoUrl } from '../video'
 import { MVideo, MVideoAccountLightBlacklistAllFiles } from '../video/video'
-import { VideoCommentModel } from '@server/models/video/video-comment'
 
 type Use<K extends keyof AbuseModel, M> = PickWith<AbuseModel, K, M>
 type UseVideoAbuse<K extends keyof VideoAbuseModel, M> = PickWith<VideoAbuseModel, K, M>

@@ -1,7 +1,7 @@
 import { RegisterServerAuthExternalOptions } from '@server/types'
 import {
-  MAbuse,
   MAbuseMessage,
+  MAbuseReporter,
   MAccountBlocklist,
   MActorUrl,
   MStreamingPlaylist,
@@ -9,8 +9,7 @@ import {
   MVideoFile,
   MVideoImmutable,
   MVideoPlaylistFull,
-  MVideoPlaylistFullSummary,
-  MAbuseReporter
+  MVideoPlaylistFullSummary
 } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server'
