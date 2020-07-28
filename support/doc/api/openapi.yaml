@@ -1371,7 +1371,7 @@ paths:
               --data password="$PASSWORD" \
               | jq -r ".access_token")
             ## VIDEO UPLOAD
-            curl -s -XPOST "$API_PATH/videos/upload" \
+            curl -s "$API_PATH/videos/upload" \
               -H "Authorization: Bearer $token" \
               --max-time 600 \
               --form videofile=@"$FILE_PATH" \
