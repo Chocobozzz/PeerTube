@@ -278,7 +278,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
         isDisplayed: abuse => this.isLocalAbuse(abuse)
       },
       {
-        label: this.i18n('Update note'),
+        label: this.i18n('Update internal note'),
         handler: abuse => this.openModerationCommentModal(abuse),
         isDisplayed: abuse => this.isAdminView() && !!abuse.moderationComment
       },

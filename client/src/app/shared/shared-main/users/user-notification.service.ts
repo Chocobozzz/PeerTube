@@ -1,7 +1,7 @@
 import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, User, UserNotificationSocket } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestService, User, UserNotificationSocket, AuthService } from '@app/core'
 import { ResultList, UserNotification as UserNotificationServer, UserNotificationSetting } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { UserNotification } from './user-notification.model'
@@ -14,6 +14,7 @@ export class UserNotificationService {
 
   constructor (
     private authHttp: HttpClient,
+    private auth: AuthService,
     private restExtractor: RestExtractor,
     private restService: RestService,
     private userNotificationSocket: UserNotificationSocket
@@ -84,6 +85,6 @@ export class UserNotificationService {
   }
 
   private formatNotification (notification: UserNotificationServer) {
-    return new UserNotification(notification)
+    return new UserNotification(notification, this.auth.getUser())
   }
 }

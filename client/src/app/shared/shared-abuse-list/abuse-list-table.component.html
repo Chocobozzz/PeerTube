@@ -42,6 +42,7 @@
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th i18n style="width: 80px;">Messages</th>
+      <th i18n *ngIf="isAdminView()" style="width: 100px;">Internal note</th>
       <th style="width: 150px;"></th>
     </tr>
   </ng-template>
@@ -144,13 +145,11 @@
 
       </ng-container>
 
-
       <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | date: 'short'  }}</td>
 
       <td class="c-hand abuse-states" [pRowToggler]="abuse">
         <span *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-ok"></span>
         <span *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-remove"></span>
-        <span *ngIf="abuse.moderationComment" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment" class="glyphicon glyphicon-comment"></span>
       </td>
 
       <td class="c-hand abuse-messages" (click)="openAbuseMessagesModal(abuse)">
@@ -159,6 +158,10 @@
 
           <my-global-icon iconName="message-circle"></my-global-icon>
         </ng-container>
+      </td>
+
+      <td *ngIf="isAdminView()" class="internal-note" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
+        {{ abuse.moderationComment }}
       </td>
 
       <td class="action-cell">

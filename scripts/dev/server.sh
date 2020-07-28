@@ -21,6 +21,7 @@ cp "./tsconfig.json" "./dist"
 
 npm run tsc -- --incremental --sourceMap
 cp -r ./server/static ./server/assets ./dist/server
+cp -r "./server/lib/emails" "./dist/server/lib"
 
 NODE_ENV=test node node_modules/.bin/concurrently -k \
   "node_modules/.bin/nodemon --delay 1 --watch ./dist dist/server" \

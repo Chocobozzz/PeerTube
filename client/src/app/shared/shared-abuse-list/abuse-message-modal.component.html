@@ -9,7 +9,7 @@
   </div>
 
   <div class="modal-body">
-    <div class="messages" #messagesBlock>
+    <div class="messages">
       <div
         *ngFor="let message of abuseMessages"
         class="message-block" [ngClass]="{ 'by-moderator': message.byModerator, 'by-me': isMessageByMe(message) }"
@@ -18,7 +18,7 @@
         <div class="author">{{ message.account.name }}</div>
 
         <div class="bubble">
-          <div class="content">{{ message.message }}</div>
+          <div class="content" [innerHTML]="message.messageHtml"></div>
           <div class="date">{{ message.createdAt | date }}</div>
         </div>
       </div>

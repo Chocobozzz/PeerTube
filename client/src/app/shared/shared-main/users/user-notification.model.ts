@@ -1,5 +1,14 @@
+import {
+  AbuseState,
+  ActorInfo,
+  FollowState,
+  UserNotification as UserNotificationServer,
+  UserNotificationType,
+  VideoInfo,
+  UserRight
+} from '@shared/models'
 import { Actor } from '../account/actor.model'
-import { ActorInfo, Avatar, FollowState, UserNotification as UserNotificationServer, UserNotificationType, VideoInfo } from '@shared/models'
+import { AuthUser } from '@app/core'
 
 export class UserNotification implements UserNotificationServer {
   id: number
@@ -27,6 +36,7 @@ export class UserNotification implements UserNotificationServer {
 
   abuse?: {
     id: number
+    state: AbuseState
 
     video?: VideoInfo
 
@@ -69,13 +79,14 @@ export class UserNotification implements UserNotificationServer {
   videoUrl?: string
   commentUrl?: any[]
   abuseUrl?: string
+  abuseQueryParams?: { [id: string]: string } = {}
   videoAutoBlacklistUrl?: string
   accountUrl?: string
   videoImportIdentifier?: string
   videoImportUrl?: string
   instanceFollowUrl?: string
 
-  constructor (hash: UserNotificationServer) {
+  constructor (hash: UserNotificationServer, user: AuthUser) {
     this.id = hash.id
     this.type = hash.type
     this.read = hash.read
@@ -122,10 +133,23 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.NEW_ABUSE_FOR_MODERATORS:
           this.abuseUrl = '/admin/moderation/abuses/list'
+          this.abuseQueryParams.search = '#' + this.abuse.id
 
           if (this.abuse.video) this.videoUrl = this.buildVideoUrl(this.abuse.video)
           else if (this.abuse.comment) this.commentUrl = this.buildCommentUrl(this.abuse.comment)
           else if (this.abuse.account) this.accountUrl = this.buildAccountUrl(this.abuse.account)
+          break
+
+        case UserNotificationType.ABUSE_STATE_CHANGE:
+          this.abuseUrl = '/my-account/abuses'
+          this.abuseQueryParams.search = '#' + this.abuse.id
+          break
+
+        case UserNotificationType.ABUSE_NEW_MESSAGE:
+          this.abuseUrl = user.hasRight(UserRight.MANAGE_ABUSES)
+            ? '/admin/moderation/abuses/list'
+            : '/my-account/abuses'
+          this.abuseQueryParams.search = '#' + this.abuse.id
           break
 
         case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:
