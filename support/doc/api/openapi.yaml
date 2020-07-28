@@ -233,8 +233,8 @@ paths:
             })
         - lang: Shell
           source: |
-            # pip install httpie
-            http -b GET https://peertube2.cpy.re/api/v1/accounts/{name}/videos
+            ## DEPENDENCIES: jq
+            curl -s https://peertube2.cpy.re/api/v1/accounts/{name}/videos | jq
         - lang: Ruby
           source: |
             require 'net/http'
@@ -1351,8 +1351,7 @@ paths:
       x-code-samples:
         - lang: Shell
           source: |
-            ## DEPENDENCIES: httpie, jq
-            # pip install httpie
+            ## DEPENDENCIES: jq
             USERNAME="<your_username>"
             PASSWORD="<your_password>"
             FILE_PATH="<your_file_path>"
@@ -1361,19 +1360,23 @@ paths:
 
             API_PATH="https://peertube2.cpy.re/api/v1"
             ## AUTH
-            client_id=$(http -b GET "$API_PATH/oauth-clients/local" | jq -r ".client_id")
-            client_secret=$(http -b GET "$API_PATH/oauth-clients/local" | jq -r ".client_secret")
-            token=$(http -b --form POST "$API_PATH/users/token" \
-              client_id="$client_id" client_secret="$client_secret" grant_type=password response_type=code \
-              username=$USERNAME \
-              password=$PASSWORD \
+            client_id=$(curl -s "$API_PATH/oauth-clients/local" | jq -r ".client_id")
+            client_secret=$(curl -s "$API_PATH/oauth-clients/local" | jq -r ".client_secret")
+            token=$(curl -s -XPOST "$API_PATH/users/token" \
+              --data client_id="$client_id" \
+              --data client_secret="$client_secret" \
+              --data grant_type=password \
+              --data response_type=code \
+              --data username="$USERNAME" \
+              --data password="$PASSWORD" \
               | jq -r ".access_token")
             ## VIDEO UPLOAD
-            http -b --form POST "$API_PATH/videos/upload" \
-              videofile@$FILE_PATH \
-              channelId=$CHANNEL_ID \
-              name=$NAME \
-              "Authorization:Bearer $token"
+            curl -s -XPOST "$API_PATH/videos/upload" \
+              -H "Authorization: Bearer $token" \
+              --max-time 600 \
+              --form videofile=@"$FILE_PATH" \
+              --form channelId=$CHANNEL_ID \
+              --form name="$NAME"
   /videos/imports:
     post:
       summary: Import a video
