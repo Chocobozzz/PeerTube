@@ -1362,7 +1362,7 @@ paths:
             ## AUTH
             client_id=$(curl -s "$API_PATH/oauth-clients/local" | jq -r ".client_id")
             client_secret=$(curl -s "$API_PATH/oauth-clients/local" | jq -r ".client_secret")
-            token=$(curl -s -XPOST "$API_PATH/users/token" \
+            token=$(curl -s "$API_PATH/users/token" \
               --data client_id="$client_id" \
               --data client_secret="$client_secret" \
               --data grant_type=password \
