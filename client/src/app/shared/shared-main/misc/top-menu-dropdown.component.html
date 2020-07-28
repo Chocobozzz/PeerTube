@@ -1,9 +1,9 @@
 <div class="sub-menu" [ngClass]="{ 'no-scroll': isModalOpened }">
   <ng-container *ngFor="let menuEntry of menuEntries; index as id">
 
-    <a *ngIf="menuEntry.routerLink && menuEntry.isDisplayed()" [routerLink]="menuEntry.routerLink" routerLinkActive="active" class="title-page title-page-settings">{{ menuEntry.label }}</a>
+    <a *ngIf="menuEntry.routerLink && isDisplayed(menuEntry)" [routerLink]="menuEntry.routerLink" routerLinkActive="active" class="title-page title-page-settings">{{ menuEntry.label }}</a>
 
-    <div *ngIf="!menuEntry.routerLink && menuEntry.isDisplayed()" ngbDropdown class="parent-entry"
+    <div *ngIf="!menuEntry.routerLink && isDisplayed(menuEntry)" ngbDropdown class="parent-entry"
       #dropdown="ngbDropdown" autoClose="outside">
       <span
         *ngIf="isInSmallView"
@@ -26,7 +26,7 @@
 
       <div ngbDropdownMenu>
         <ng-container *ngFor="let menuChild of menuEntry.children">
-          <a *ngIf="menuChild.isDisplayed()" class="dropdown-item"
+          <a *ngIf="isDisplayed(menuChild)" class="dropdown-item"
             [ngClass]="{ icon: hasIcons, active: suffixLabels[menuEntry.label] === menuChild.label }"
             [routerLink]="menuChild.routerLink">
             <my-global-icon *ngIf="menuChild.iconName" [iconName]="menuChild.iconName" aria-hidden="true"></my-global-icon>
@@ -44,7 +44,7 @@
     <ng-container *ngFor="let menuEntry of menuEntries; index as id">
       <div [ngClass]="{ hidden: id !== currentMenuEntryIndex }">
         <ng-container *ngFor="let menuChild of menuEntry.children">
-          <a *ngIf="menuChild.isDisplayed()"
+          <a *ngIf="isDisplayed(menuChild)"
             [ngClass]="{ icon: hasIcons }"
             [routerLink]="menuChild.routerLink" routerLinkActive="active" (click)="dismissOtherModals()">
             <my-global-icon *ngIf="menuChild.iconName" [iconName]="menuChild.iconName" aria-hidden="true"></my-global-icon>

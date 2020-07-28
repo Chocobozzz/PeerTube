@@ -1,15 +1,19 @@
 import { HotkeysService } from 'angular2-hotkeys'
+import * as debug from 'debug'
+import { switchMap } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { AuthService, AuthStatus, RedirectService, ScreenService, ServerService, AuthUser, UserService } from '@app/core'
+import { AuthService, AuthStatus, AuthUser, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
+const logger = debug('peertube:menu:MenuComponent')
+
 @Component({
   selector: 'my-menu',
   templateUrl: './menu.component.html',
-  styleUrls: [ './menu.component.scss' ]
+  styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
@@ -25,7 +29,7 @@ export class MenuComponent implements OnInit {
 
   private languages: VideoConstant<string>[] = []
   private serverConfig: ServerConfig
-  private routesPerRight: { [ role in UserRight ]?: string } = {
+  private routesPerRight: { [role in UserRight]?: string } = {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
     [UserRight.MANAGE_ABUSES]: '/admin/moderation/abuses',
@@ -62,21 +66,30 @@ export class MenuComponent implements OnInit {
       .subscribe(config => this.serverConfig = config)
 
     this.isLoggedIn = this.authService.isLoggedIn()
-    if (this.isLoggedIn === true) this.user = this.authService.getUser()
-    this.computeIsUserHasAdminAccess()
+    if (this.isLoggedIn === true) {
+      this.user = this.authService.getUser()
+      this.computeVideosLink()
+    }
+
+    this.computeAdminAccess()
 
     this.authService.loginChangedSource.subscribe(
       status => {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true
           this.user = this.authService.getUser()
-          this.computeIsUserHasAdminAccess()
-          console.log('Logged in.')
+
+          this.computeAdminAccess()
+          this.computeVideosLink()
+
+          logger('Logged in.')
         } else if (status === AuthStatus.LoggedOut) {
           this.isLoggedIn = false
           this.user = undefined
-          this.computeIsUserHasAdminAccess()
-          console.log('Logged out.')
+
+          this.computeAdminAccess()
+
+          logger('Logged out.')
         } else {
           console.error('Unknown auth status: ' + status)
         }
@@ -84,15 +97,15 @@ export class MenuComponent implements OnInit {
     )
 
     this.hotkeysService.cheatSheetToggle
-        .subscribe(isOpen => this.helpVisible = isOpen)
+      .subscribe(isOpen => this.helpVisible = isOpen)
 
     this.serverService.getVideoLanguages()
-        .subscribe(languages => {
-          this.languages = languages
+      .subscribe(languages => {
+        this.languages = languages
 
-          this.authService.userInformationLoaded
-              .subscribe(() => this.buildUserLanguages())
-        })
+        this.authService.userInformationLoaded
+          .subscribe(() => this.buildUserLanguages())
+      })
   }
 
   get language () {
@@ -116,7 +129,7 @@ export class MenuComponent implements OnInit {
 
   isRegistrationAllowed () {
     return this.serverConfig.signup.allowed &&
-           this.serverConfig.signup.allowedForCurrentIP
+      this.serverConfig.signup.allowedForCurrentIP
   }
 
   getFirstAdminRightAvailable () {
@@ -172,7 +185,7 @@ export class MenuComponent implements OnInit {
     this.user.webTorrentEnabled = !this.user.webTorrentEnabled
 
     this.userService.updateMyProfile({ webTorrentEnabled: this.user.webTorrentEnabled })
-        .subscribe(() => this.authService.refreshUserInformation())
+      .subscribe(() => this.authService.refreshUserInformation())
   }
 
   langForLocale (localeId: string) {
@@ -188,18 +201,28 @@ export class MenuComponent implements OnInit {
     }
 
     if (!this.user.videoLanguages) {
-      this.videoLanguages = [ this.i18n('any language') ]
+      this.videoLanguages = [this.i18n('any language')]
       return
     }
 
     this.videoLanguages = this.user.videoLanguages
-                              .map(locale => this.langForLocale(locale))
-                              .map(value => value === undefined ? '?' : value)
+      .map(locale => this.langForLocale(locale))
+      .map(value => value === undefined ? '?' : value)
   }
 
-  private computeIsUserHasAdminAccess () {
+  private computeAdminAccess () {
     const right = this.getFirstAdminRightAvailable()
 
     this.userHasAdminAccess = right !== undefined
+  }
+
+  private computeVideosLink () {
+    this.authService.userInformationLoaded
+      .pipe(
+        switchMap(() => this.user.computeCanSeeVideosLink(this.userService.getMyVideoQuotaUsed()))
+      ).subscribe(res => {
+        if (res === true) logger('User can see videos link.')
+        else logger('User cannot see videos link.')
+      })
   }
 }

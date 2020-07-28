@@ -9,13 +9,14 @@ import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 export type TopMenuDropdownParam = {
   label: string
   routerLink?: string
-  isDisplayed(): boolean
+  isDisplayed?: () => boolean // Default: () => true
 
   children?: {
     label: string
     routerLink: string
-    isDisplayed(): boolean
     iconName?: GlobalIconName
+
+    isDisplayed?: () => boolean // Default: () => true
   }[]
 }
 
@@ -91,6 +92,12 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
 
   dismissOtherModals () {
     this.modalService.dismissAll()
+  }
+
+  isDisplayed (obj: { isDisplayed?: () => boolean }) {
+    if (typeof obj.isDisplayed !== 'function') return true
+
+    return obj.isDisplayed()
   }
 
   private updateChildLabels (path: string) {

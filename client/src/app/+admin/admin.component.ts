@@ -21,85 +21,76 @@ export class AdminComponent implements OnInit {
   ngOnInit () {
     const federationItems: TopMenuDropdownParam = {
       label: this.i18n('Federation'),
-      isDisplayed: () => true,
       children: [
         {
           label: this.i18n('Instances you follow'),
           routerLink: '/admin/follows/following-list',
-          iconName: 'following',
-          isDisplayed: () => true
+          iconName: 'following'
         },
         {
           label: this.i18n('Instances following you'),
           routerLink: '/admin/follows/followers-list',
-          iconName: 'follower',
-          isDisplayed: () => true
+          iconName: 'follower'
         },
         {
           label: this.i18n('Video redundancies'),
           routerLink: '/admin/follows/video-redundancies-list',
-          iconName: 'videos',
-          isDisplayed: () => true
+          iconName: 'videos'
         }
       ]
     }
 
     const moderationItems: TopMenuDropdownParam = {
       label: this.i18n('Moderation'),
-      children: [],
-      isDisplayed: () => true
+      children: []
     }
 
     if (this.hasAbusesRight()) {
       moderationItems.children.push({
         label: this.i18n('Reports'),
         routerLink: '/admin/moderation/abuses/list',
-        iconName: 'flag',
-        isDisplayed: () => true
+        iconName: 'flag'
       })
     }
     if (this.hasVideoBlocklistRight()) {
       moderationItems.children.push({
         label: this.i18n('Video blocks'),
         routerLink: '/admin/moderation/video-blocks/list',
-        iconName: 'cross',
-        isDisplayed: () => true
+        iconName: 'cross'
       })
     }
     if (this.hasAccountsBlocklistRight()) {
       moderationItems.children.push({
         label: this.i18n('Muted accounts'),
         routerLink: '/admin/moderation/blocklist/accounts',
-        iconName: 'user-x',
-        isDisplayed: () => true
+        iconName: 'user-x'
       })
     }
     if (this.hasServersBlocklistRight()) {
       moderationItems.children.push({
         label: this.i18n('Muted servers'),
         routerLink: '/admin/moderation/blocklist/servers',
-        iconName: 'peertube-x',
-        isDisplayed: () => true
+        iconName: 'peertube-x'
       })
     }
 
     if (this.hasUsersRight()) {
-      this.menuEntries.push({ label: this.i18n('Users'), routerLink: '/admin/users', isDisplayed: () => true })
+      this.menuEntries.push({ label: this.i18n('Users'), routerLink: '/admin/users' })
     }
 
     if (this.hasServerFollowRight()) this.menuEntries.push(federationItems)
     if (this.hasAbusesRight() || this.hasVideoBlocklistRight()) this.menuEntries.push(moderationItems)
 
     if (this.hasConfigRight()) {
-      this.menuEntries.push({ label: this.i18n('Configuration'), routerLink: '/admin/config', isDisplayed: () => true })
+      this.menuEntries.push({ label: this.i18n('Configuration'), routerLink: '/admin/config' })
     }
 
     if (this.hasPluginsRight()) {
-      this.menuEntries.push({ label: this.i18n('Plugins/Themes'), routerLink: '/admin/plugins', isDisplayed: () => true })
+      this.menuEntries.push({ label: this.i18n('Plugins/Themes'), routerLink: '/admin/plugins' })
     }
 
     if (this.hasJobsRight() || this.hasLogsRight() || this.hasDebugRight()) {
-      this.menuEntries.push({ label: this.i18n('System'), routerLink: '/admin/system', isDisplayed: () => true })
+      this.menuEntries.push({ label: this.i18n('System'), routerLink: '/admin/system' })
     }
   }
 

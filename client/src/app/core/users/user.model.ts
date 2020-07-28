@@ -150,20 +150,7 @@ export class User implements UserServerModel {
     this.account.updateAvatar(newAccountAvatar)
   }
 
-  isUploadDisabled (): boolean {
-    return (this.videoQuota === 0 || this.videoQuotaDaily === 0)
-  }
-
-  canSeeVideosLink (): boolean {
-    if (!this.isUploadDisabled()) {
-      return true
-    }
-
-    // cannot upload but has already some videos
-    if (this.videosCount > 0) {
-      return true
-    }
-
-    return false
+  isUploadDisabled () {
+    return this.videoQuota === 0 || this.videoQuotaDaily === 0
   }
 }
