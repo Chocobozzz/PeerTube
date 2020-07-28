@@ -11,7 +11,7 @@ import { isTestInstance, root } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { WEBSERVER } from '../initializers/constants'
-import { MAbuseFull, MAbuseMessage, MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
+import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
 import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
 import { JobQueue } from './job-queue'
 
@@ -362,9 +362,11 @@ class Emailer {
       ? 'Report #' + abuse.id + ' has been accepted'
       : 'Report #' + abuse.id + ' has been rejected'
 
+    const abuseUrl = WEBSERVER.URL + '/my-account/abuses?search=%23' + abuse.id
+
     const action = {
       text,
-      url: WEBSERVER.URL + '/my-account/abuses?search=%23' + abuse.id
+      url: abuseUrl
     }
 
     const emailPayload: EmailPayload = {
@@ -374,6 +376,7 @@ class Emailer {
       locals: {
         action,
         abuseId: abuse.id,
+        abuseUrl,
         isAccepted: abuse.state === AbuseState.ACCEPTED
       }
     }
@@ -381,15 +384,24 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addAbuseNewMessageNotification (to: string[], options: { target: 'moderator' | 'reporter', abuse: MAbuseFull, message: MAbuseMessage }) {
-    const { abuse, target, message } = options
+  addAbuseNewMessageNotification (
+    to: string[],
+    options: {
+      target: 'moderator' | 'reporter'
+      abuse: MAbuseFull
+      message: MAbuseMessage
+      accountMessage: MAccountDefault
+    }) {
+    const { abuse, target, message, accountMessage } = options
 
-    const text = 'New message on abuse #' + abuse.id
+    const text = 'New message on report #' + abuse.id
+    const abuseUrl = target === 'moderator'
+      ? WEBSERVER.URL + '/admin/moderation/abuses/list?search=%23' + abuse.id
+      : WEBSERVER.URL + '/my-account/abuses?search=%23' + abuse.id
+
     const action = {
       text,
-      url: target === 'moderator'
-        ? WEBSERVER.URL + '/admin/moderation/abuses/list?search=%23' + abuse.id
-        : WEBSERVER.URL + '/my-account/abuses?search=%23' + abuse.id
+      url: abuseUrl
     }
 
     const emailPayload: EmailPayload = {
@@ -397,7 +409,9 @@ class Emailer {
       to,
       subject: text,
       locals: {
+        abuseId: abuse.id,
         abuseUrl: action.url,
+        messageAccountName: accountMessage.getDisplayName(),
         messageText: message.message,
         action
       }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { AuthService, Notifier } from '@app/core'
+import { AuthService, Notifier, HtmlRendererService } from '@app/core'
 import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -14,13 +14,12 @@ import { AbuseService } from '../shared-moderation'
 })
 export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal
-  @ViewChild('messagesBlock', { static: false }) messagesBlock: ElementRef
 
   @Input() isAdminView: boolean
 
   @Output() countMessagesUpdated = new EventEmitter<{ abuseId: number, countMessages: number }>()
 
-  abuseMessages: AbuseMessage[] = []
+  abuseMessages: (AbuseMessage & { messageHtml: string })[] = []
   textareaMessage: string
   sendingMessage = false
   noResults = false
@@ -33,6 +32,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
     private abuseValidatorsService: AbuseValidatorsService,
     private modalService: NgbModal,
     private i18n: I18n,
+    private htmlRenderer: HtmlRendererService,
     private auth: AuthService,
     private notifier: Notifier,
     private abuseService: AbuseService
@@ -108,15 +108,21 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   private loadMessages () {
     this.abuseService.listAbuseMessages(this.abuse)
       .subscribe(
-        res => {
-          this.abuseMessages = res.data
+        async res => {
+          this.abuseMessages = []
+
+          for (const m of res.data) {
+            this.abuseMessages.push(Object.assign(m, {
+              messageHtml: await this.htmlRenderer.convertToBr(m.message)
+            }))
+          }
+
           this.noResults = this.abuseMessages.length === 0
 
           setTimeout(() => {
-            if (!this.messagesBlock) return
-
-            const element = this.messagesBlock.nativeElement as HTMLElement
-            element.scrollIntoView({ block: 'end', inline: 'nearest' })
+            // Don't use ViewChild: it is not supported inside a ng-template
+            const messagesBlock = document.querySelector('.messages')
+            messagesBlock.scroll(0, messagesBlock.scrollHeight)
           })
         },
 

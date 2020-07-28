@@ -24,6 +24,7 @@ import { MCommentOwnerVideo, MVideoAccountLight, MVideoFullLight } from '../type
 import { isBlockedByServerOrAccount } from './blocklist'
 import { Emailer } from './emailer'
 import { PeerTubeSocket } from './peertube-socket'
+import { AccountModel } from '@server/models/account/account'
 
 class Notifier {
 
@@ -137,7 +138,7 @@ class Notifier {
       })
   }
 
-  notifyOnAbuseMessage (abuse: MAbuseFull, message: AbuseMessageModel): void {
+  notifyOnAbuseMessage (abuse: MAbuseFull, message: MAbuseMessage): void {
     this.notifyOfNewAbuseMessage(abuse, message)
       .catch(err => {
         logger.error('Cannot notify on new abuse %d message.', abuse.id, { err })
@@ -436,6 +437,8 @@ class Notifier {
     const url = this.getAbuseUrl(abuse)
     logger.info('Notifying reporter and moderators of new abuse message on %s.', url)
 
+    const accountMessage = await AccountModel.load(message.accountId)
+
     function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.abuseNewMessage
     }
@@ -452,11 +455,11 @@ class Notifier {
     }
 
     function emailSenderReporter (emails: string[]) {
-      return Emailer.Instance.addAbuseNewMessageNotification(emails, { target: 'reporter', abuse, message })
+      return Emailer.Instance.addAbuseNewMessageNotification(emails, { target: 'reporter', abuse, message, accountMessage })
     }
 
     function emailSenderModerators (emails: string[]) {
-      return Emailer.Instance.addAbuseNewMessageNotification(emails, { target: 'moderator', abuse, message })
+      return Emailer.Instance.addAbuseNewMessageNotification(emails, { target: 'moderator', abuse, message, accountMessage })
     }
 
     async function buildReporterOptions () {

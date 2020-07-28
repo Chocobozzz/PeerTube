@@ -20,6 +20,7 @@ textarea {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  max-height: 50vh;
 }
 
 .no-messages {

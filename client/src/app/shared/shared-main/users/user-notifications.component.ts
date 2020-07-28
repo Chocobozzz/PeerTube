@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
-import { UserNotificationType } from '@shared/models'
+import { UserNotificationType, AbuseState } from '@shared/models'
 import { UserNotification } from './user-notification.model'
 import { UserNotificationService } from './user-notification.service'
 
@@ -115,5 +115,9 @@ export class UserNotificationsComponent implements OnInit {
     }
     this.sortField = column
     this.loadNotifications(true)
+  }
+
+  isAccepted (notification: UserNotification) {
+    return notification.abuse.state === AbuseState.ACCEPTED
   }
 }
