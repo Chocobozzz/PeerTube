@@ -208,7 +208,7 @@ const checkAbuseValidForMessagesValidator = [
     const abuse = res.locals.abuse
     if (abuse.ReporterAccount.isOwned() === false) {
       return res.status(400).json({
-        error: 'This abuse was created by a user of your instance.',
+        error: 'This abuse was created by a user of your instance.'
       })
     }
 
