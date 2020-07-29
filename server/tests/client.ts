@@ -52,7 +52,7 @@ describe('Test a client controllers', function () {
 
     const resVideosRequest = await getVideosList(server.url)
 
-    const videos = resVideosRequest.body.data.videos
+    const videos = resVideosRequest.body.data
 
     expect(videos.length).to.equal(1)
 
