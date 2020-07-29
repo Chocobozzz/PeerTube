@@ -22,7 +22,6 @@ import {
 import { VideoPlaylistPrivacy } from '@shared/models'
 import { MVideoPlaylist, MAccount, MChannel } from '@server/types/models'
 
-
 const expect = chai.expect
 
 function checkIndexTags (html: string, title: string, description: string, css: string) {
@@ -45,7 +44,6 @@ describe('Test a client controllers', function () {
     server = await flushAndRunServer(1)
     server.accessToken = await serverLogin(server)
 
-
     // Video
 
     const videoAttributes = { name, description }
@@ -60,7 +58,6 @@ describe('Test a client controllers', function () {
 
     server.video = videos[0]
 
-
     // Playlist
 
     const playlistAttrs = {
@@ -73,15 +70,18 @@ describe('Test a client controllers', function () {
 
     videoPlaylist = resVideoPlaylistRequest.body.videoPlaylist
 
-    await addVideoInPlaylist({ url: server.url, token: server.accessToken, playlistId: videoPlaylist.id, elementAttrs: { videoId: server.video.id } })
-
+    await addVideoInPlaylist({
+      url: server.url,
+      token: server.accessToken,
+      playlistId: videoPlaylist.id,
+      elementAttrs: { videoId: server.video.id }
+    })
 
     // Account
 
     const resAccountRequest = await getAccount(server.url, `${server.user.username}@${server.host}:${server.port}`)
 
     account = resAccountRequest.body.account
-
 
     // Channel
 
