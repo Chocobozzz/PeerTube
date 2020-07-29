@@ -197,7 +197,7 @@ async function createUser (req: express.Request, res: express.Response) {
 
   const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({
     userToCreate,
-    channelNames: { name: body.channelName, displayName: body.channelName }
+    channelNames: body.channelName && { name: body.channelName, displayName: body.channelName }
   })
 
   auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
