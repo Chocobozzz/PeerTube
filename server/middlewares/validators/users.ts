@@ -56,7 +56,7 @@ const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
   body('password').custom(isUserPasswordValidOrEmpty).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
-  body('channelName').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
+  body('channelName').optional().custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role')
@@ -76,20 +76,17 @@ const usersAddValidator = [
         .json({ error: 'You can only create users (and not administrators or moderators)' })
     }
 
-    if (!req.body.channelName) {
-      return res.status(400)
-        .json({ error: 'Channel name is required.' })
-    }
+    if (req.body.channelName) {
+      if (req.body.channelName === req.body.username) {
+        return res.status(400)
+          .json({ error: 'Channel name cannot be the same as user username.' })
+      }
 
-    if (req.body.channelName === req.body.username) {
-      return res.status(400)
-        .json({ error: 'Channel name cannot be the same as user username.' })
-    }
-
-    const existing = await ActorModel.loadLocalByName(req.body.channelName)
-    if (existing) {
-      return res.status(409)
-        .json({ error: `Channel with name ${req.body.channelName} already exists.` })
+      const existing = await ActorModel.loadLocalByName(req.body.channelName)
+      if (existing) {
+        return res.status(409)
+          .json({ error: `Channel with name ${req.body.channelName} already exists.` })
+      }
     }
 
     return next()
