@@ -176,6 +176,7 @@ export {
 
 async function createUser (req: express.Request, res: express.Response) {
   const body: UserCreate = req.body
+
   const userToCreate = new UserModel({
     username: body.username,
     password: body.password,
@@ -194,7 +195,10 @@ async function createUser (req: express.Request, res: express.Response) {
     userToCreate.password = await generateRandomString(20)
   }
 
-  const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({ userToCreate: userToCreate })
+  const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({
+    userToCreate,
+    channelNames: { name: body.channelName, displayName: body.channelName }
+  })
 
   auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
