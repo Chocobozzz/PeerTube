@@ -267,7 +267,7 @@ describe('Test moderation notifications', function () {
       await addAbuseMessage(servers[0].url, servers[0].accessToken, abuseId, message)
       await waitJobs(servers)
 
-      await checkNewAbuseMessage(baseParamsAdmin, abuseId, message, 'admin1@example.com', 'absence')
+      await checkNewAbuseMessage(baseParamsAdmin, abuseId, message, 'admin' + servers[0].internalServerNumber + '@example.com', 'absence')
     })
 
     it('Should send a notification to moderators', async function () {
@@ -277,7 +277,7 @@ describe('Test moderation notifications', function () {
       await addAbuseMessage(servers[0].url, userAccessToken, abuseId2, message)
       await waitJobs(servers)
 
-      await checkNewAbuseMessage(baseParamsAdmin, abuseId2, message, 'admin1@example.com', 'presence')
+      await checkNewAbuseMessage(baseParamsAdmin, abuseId2, message, 'admin' + servers[0].internalServerNumber + '@example.com', 'presence')
     })
 
     it('Should not send a notification to reporter if sent by the reporter', async function () {
