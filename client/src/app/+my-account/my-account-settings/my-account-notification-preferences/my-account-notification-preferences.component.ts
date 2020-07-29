@@ -42,9 +42,9 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newFollow: this.i18n('You or your channel(s) has a new follower'),
       commentMention: this.i18n('Someone mentioned you in video comments'),
       newInstanceFollower: this.i18n('Your instance has a new follower'),
-      autoInstanceFollowing: this.i18n('Your instance auto followed another instance'),
-      abuseNewMessage: this.i18n('An abuse received a new message'),
-      abuseStateChange: this.i18n('One of your abuse has been accepted or rejected by moderators')
+      autoInstanceFollowing: this.i18n('Your instance automatically followed another instance'),
+      abuseNewMessage: this.i18n('An abuse report received a new message'),
+      abuseStateChange: this.i18n('One of your abuse reports has been accepted or rejected by moderators')
     }
     this.notificationSettingKeys = Object.keys(this.labelNotifications) as (keyof UserNotificationSetting)[]
 

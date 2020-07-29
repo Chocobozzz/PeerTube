@@ -169,7 +169,7 @@ const myAccountRoutes: Routes = [
         component: MyAccountAbusesListComponent,
         data: {
           meta: {
-            title: 'My abuses'
+            title: 'My abuse reports'
           }
         }
       }
