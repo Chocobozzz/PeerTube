@@ -9,5 +9,5 @@ export interface UserCreate {
   videoQuotaDaily: number
   role: UserRole
   adminFlags?: UserAdminFlag
-  channelName: string
+  channelName?: string
 }
