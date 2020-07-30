@@ -24,7 +24,7 @@ import {
   prepareNotificationsTest
 } from '../../../../shared/extra-utils/users/user-notifications'
 import { addUserSubscription, removeUserSubscription } from '../../../../shared/extra-utils/users/user-subscriptions'
-import { getBadVideoUrl, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
+import { getBadVideoUrl, getGoodVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 import { UserNotification, UserNotificationType } from '../../../../shared/models/users'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 
@@ -213,7 +213,7 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PUBLIC,
-        targetUrl: getYoutubeVideoUrl()
+        targetUrl: getGoodVideoUrl()
       }
       const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
       const uuid = res.body.video.uuid
@@ -284,7 +284,7 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PUBLIC,
-        targetUrl: getYoutubeVideoUrl(),
+        targetUrl: getGoodVideoUrl(),
         waitTranscoding: true
       }
       const res = await importVideo(servers[1].url, servers[1].accessToken, attributes)
@@ -371,13 +371,13 @@ describe('Test user notifications', function () {
         name,
         channelId,
         privacy: VideoPrivacy.PRIVATE,
-        targetUrl: getYoutubeVideoUrl()
+        targetUrl: getGoodVideoUrl()
       }
       const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
       const uuid = res.body.video.uuid
 
       await waitJobs(servers)
-      await checkMyVideoImportIsFinished(baseParams, name, uuid, getYoutubeVideoUrl(), true, 'presence')
+      await checkMyVideoImportIsFinished(baseParams, name, uuid, getGoodVideoUrl(), true, 'presence')
     })
   })
 

@@ -24,7 +24,7 @@ import {
   waitJobs
 } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunMultipleServers, ServerInfo } from '../../../shared/extra-utils/server/servers'
-import { getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../shared/extra-utils/videos/video-imports'
+import { getGoodVideoUrl, getMyVideoImports, importVideo } from '../../../shared/extra-utils/videos/video-imports'
 import { VideoDetails, VideoImport, VideoImportState, VideoPrivacy } from '../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 
@@ -92,7 +92,7 @@ describe('Test plugin filter hooks', function () {
       name: 'normal title',
       privacy: VideoPrivacy.PUBLIC,
       channelId: servers[0].videoChannel.id,
-      targetUrl: getYoutubeVideoUrl() + 'bad'
+      targetUrl: getGoodVideoUrl() + 'bad'
     }
     await importVideo(servers[0].url, servers[0].accessToken, baseAttributes, 403)
   })
@@ -117,7 +117,7 @@ describe('Test plugin filter hooks', function () {
         name: 'title with bad word',
         privacy: VideoPrivacy.PUBLIC,
         channelId: servers[0].videoChannel.id,
-        targetUrl: getYoutubeVideoUrl()
+        targetUrl: getGoodVideoUrl()
       }
       const res = await importVideo(servers[0].url, servers[0].accessToken, baseAttributes)
       videoImportId = res.body.id
@@ -220,7 +220,7 @@ describe('Test plugin filter hooks', function () {
 
       const attributes = {
         name: 'video please blacklist me',
-        targetUrl: getYoutubeVideoUrl(),
+        targetUrl: getGoodVideoUrl(),
         channelId: servers[0].videoChannel.id
       }
       const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)

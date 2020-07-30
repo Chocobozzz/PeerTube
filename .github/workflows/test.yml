@@ -22,13 +22,15 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         test_suite: [ misc, api-1, api-2, api-3, api-4, cli, lint ]
 
     env:
       PGUSER: peertube
       PGHOST: localhost
+      DISABLE_HTTP_IMPORT_TESTS: true
+      NODE_PENDING_JOB_WAIT: 2000
 
     steps:
       - uses: actions/checkout@v2
@@ -50,7 +52,9 @@ jobs:
       - name: Cache Node.js modules
         uses: actions/cache@v2
         with:
-          path: ~/.cache/yarn
+          path: |
+            **/node_modules
+            ~/fixtures
           key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.OS }}-node-
@@ -69,5 +73,5 @@ jobs:
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: test-storages
+          name: test-storages-${{ matrix.test_suite }}
           path: test*/logs

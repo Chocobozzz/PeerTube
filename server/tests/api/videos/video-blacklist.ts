@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import 'mocha'
 import * as chai from 'chai'
 import { orderBy } from 'lodash'
-import 'mocha'
 import {
   addVideoToBlacklist,
   cleanupTests,
@@ -25,10 +25,10 @@ import {
 } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { VideoBlacklist, VideoBlacklistType } from '../../../../shared/models/videos'
-import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
+import { getGoodVideoUrl, getMagnetURI, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 import { User, UserRole } from '../../../../shared/models/users'
-import { getMagnetURI, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
+import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
+import { VideoBlacklist, VideoBlacklistType } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -424,7 +424,7 @@ describe('Test video blacklist', function () {
       this.timeout(15000)
 
       const attributes = {
-        targetUrl: getYoutubeVideoUrl(),
+        targetUrl: getGoodVideoUrl(),
         name: 'URL import',
         channelId: channelOfUserWithoutFlag
       }

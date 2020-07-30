@@ -15,6 +15,10 @@ function getBadVideoUrl () {
   return 'https://download.cpy.re/peertube/bad_video.mp4'
 }
 
+function getGoodVideoUrl () {
+  return 'https://download.cpy.re/peertube/good_video.mp4'
+}
+
 function importVideo (url: string, token: string, attributes: VideoImportCreate & { torrentfile?: string }, statusCodeExpected = 200) {
   const path = '/api/v1/videos/imports'
 
@@ -53,5 +57,6 @@ export {
   getYoutubeVideoUrl,
   importVideo,
   getMagnetURI,
-  getMyVideoImports
+  getMyVideoImports,
+  getGoodVideoUrl
 }
