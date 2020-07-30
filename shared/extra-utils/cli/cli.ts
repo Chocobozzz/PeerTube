@@ -3,7 +3,7 @@ import { exec } from 'child_process'
 import { ServerInfo } from '../server/servers'
 
 function getEnvCli (server?: ServerInfo) {
-  return `NODE_ENV=test NODE_APP_INSTANCE=${server.serverNumber}`
+  return `NODE_ENV=test NODE_APP_INSTANCE=${server.internalServerNumber}`
 }
 
 async function execCLI (command: string) {

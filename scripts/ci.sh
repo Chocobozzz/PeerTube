@@ -20,7 +20,7 @@ runTest () {
 
     echo $files
 
-    MOCHA_PARALLEL=true parallel -t -j $jobs --retries $retries \
+    parallel -t -j $jobs --retries $retries \
         npm run mocha -- -c --timeout 30000 --exit --require ts-node/register --require tsconfig-paths/register --bail \
         ::: $files
 }
@@ -35,9 +35,9 @@ if [ "$1" = "misc" ]; then
     feedsFiles=$(findTestFiles server/tests/feeds)
     helperFiles=$(findTestFiles server/tests/helpers)
     pluginsFiles=$(findTestFiles server/tests/plugins)
-    miscFiles=server/tests/client.ts server/tests/misc-endpoints.ts
+    miscFiles="server/tests/client.ts server/tests/misc-endpoints.ts"
 
-    TS_NODE_FILES=true runTest 2 $feedsFiles $helperFiles $pluginsFiles $miscFiles
+    TS_NODE_FILES=true MOCHA_PARALLEL=true runTest 2 $feedsFiles $helperFiles $pluginsFiles $miscFiles
 elif [ "$1" = "cli" ]; then
     npm run build:server
     npm run setup:cli
@@ -52,14 +52,14 @@ elif [ "$1" = "api-1" ]; then
     notificationsFiles=$(findTestFiles server/tests/api/notifications)
     searchFiles=$(findTestFiles server/tests/api/search)
 
-    runTest 2 $notificationsFiles $searchFiles $checkParamFiles
+    MOCHA_PARALLEL=true runTest 2 $notificationsFiles $searchFiles $checkParamFiles
 elif [ "$1" = "api-2" ]; then
     npm run build:server
 
     serverFiles=$(findTestFiles server/tests/api/server)
     usersFiles=$(findTestFiles server/tests/api/users)
 
-    runTest 2 $serverFiles $usersFiles
+    MOCHA_PARALLEL=true runTest 2 $serverFiles $usersFiles
 elif [ "$1" = "api-3" ]; then
     npm run build:server
 
@@ -73,7 +73,7 @@ elif [ "$1" = "api-4" ]; then
     redundancyFiles=$(findTestFiles server/tests/api/redundancy)
     activitypubFiles=$(findTestFiles server/tests/api/activitypub)
 
-    TS_NODE_FILES=true runTest 2 $activitypubFiles $redundancyFiles $activitypubFiles
+    MOCHA_PARALLEL=true TS_NODE_FILES=true runTest 2 $activitypubFiles $redundancyFiles $activitypubFiles
 elif [ "$1" = "external-plugins" ]; then
     npm run build:server
 
