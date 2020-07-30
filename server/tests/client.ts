@@ -163,8 +163,10 @@ describe('Test a client controllers', function () {
       .set('Accept', 'text/html')
       .expect(200)
 
-    const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:9001/services/oembed?' +
-      `url=http%3A%2F%2Flocalhost%3A9001%2Fvideos%2Fwatch%2F${server.video.uuid}" ` +
+    const port = server.port
+
+    const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
+      `url=http%3A%2F%2Flocalhost%3A${port}%2Fvideos%2Fwatch%2F${server.video.uuid}" ` +
       `title="${server.video.name}" />`
 
     expect(res.text).to.contain(expectedLink)
