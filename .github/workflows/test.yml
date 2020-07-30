@@ -1,6 +1,10 @@
 name: Test Suite
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 1-5'
 
 jobs:
 
@@ -34,7 +38,6 @@ jobs:
     env:
       PGUSER: peertube
       PGHOST: localhost
-      DISABLE_HTTP_IMPORT_TESTS: true
       NODE_PENDING_JOB_WAIT: 2000
 
     steps:
@@ -67,6 +70,10 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Set videos import enabled env variable
+        if: github.event_name != 'schedule'
+        run: echo "::set-env name=DISABLE_HTTP_IMPORT_TESTS::true"
 
       - name: Run Test
         run: NODE_PENDING_JOB_WAIT=2000 npm run ci -- ${{ matrix.test_suite }}
