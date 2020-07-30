@@ -71,9 +71,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Set videos import enabled env variable
+      - name: Set env test variable (schedule)
         if: github.event_name != 'schedule'
-        run: echo "::set-env name=DISABLE_HTTP_IMPORT_TESTS::true"
+        run: |
+          echo "::set-env name=DISABLE_HTTP_IMPORT_TESTS::true"
+          echo "::set-env name=DISABLE_EXTERNAL_PLUGINS_TESTS::true"
 
       - name: Run Test
         run: NODE_PENDING_JOB_WAIT=2000 npm run ci -- ${{ matrix.test_suite }}

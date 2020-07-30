@@ -1,11 +1,8 @@
 image: chocobozzz/peertube-ci:10
 
 stages:
-  - build-and-lint
-  - test
   - clients
   - docker-nightly
-  - external-plugins
 
 cache:
   key: yarn
@@ -74,30 +71,3 @@ build-docker-master:
     - master
   variables:
     DOCKER_IMAGE_NAME: chocobozzz/peertube:production-buster
-
-test-external-plugins:
-  stage: external-plugins
-  only:
-    - schedules
-  services:
-    - name: postgres:9.6
-      alias: postgres
-    - name: redis:latest
-      alias: redis
-    - name: rroemhild/test-openldap
-      alias: ldap
-  variables:
-    POSTGRES_USER: peertube
-    POSTGRES_HOST_AUTH_METHOD: trust
-    REDIS_HOST: redis
-  artifacts:
-   expire_in: 1 day
-   paths:
-     - test*/logs
-   when: always
-  before_script:
-    - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
-    - 'sed -i -z "s/redis:\n  hostname: ''localhost''/redis:\n  hostname: ''redis''/" config/test.yaml'
-    - NOCLIENT=1 yarn install --pure-lockfile --cache-folder .yarn-cache
-  script:
-    - PGHOST=postgres PGUSER=peertube npm run ci -- "external-plugins"
