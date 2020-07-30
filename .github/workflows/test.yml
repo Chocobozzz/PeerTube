@@ -1,0 +1,73 @@
+name: Test Suite
+
+on: [push, pull_request]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+      postgres:
+        image: postgres:9.6
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: peertube
+          POSTGRES_HOST_AUTH_METHOD: trust
+
+    strategy:
+      fail-fast: true
+      matrix:
+        test_suite: [ misc, api-1, api-2, api-3, api-4, cli, lint ]
+
+    env:
+      PGUSER: peertube
+      PGHOST: localhost
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Setup system dependencies
+        run: |
+          sudo apt-get install postgresql-client-common redis-tools
+          wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.0.3-64bit-static.tar.xz"
+          tar xf ffmpeg-release-4.0.3-64bit-static.tar.xz
+          mkdir -p $HOME/bin
+          cp ffmpeg-*/{ffmpeg,ffprobe} $HOME/bin
+          echo "::add-path::$HOME/bin"
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Test
+        run: echo $PATH
+
+      - name: Run Test
+        run: NODE_PENDING_JOB_WAIT=2000 npm run ci -- ${{ matrix.test_suite }}
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: test-storages
+          path: test*/logs
