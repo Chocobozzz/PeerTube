@@ -42,7 +42,7 @@ jobs:
 
       - name: Setup system dependencies
         run: |
-          sudo apt-get install postgresql-client-common redis-tools
+          sudo apt-get install postgresql-client-common redis-tools parallel
           wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.0.3-64bit-static.tar.xz"
           tar xf ffmpeg-release-4.0.3-64bit-static.tar.xz
           mkdir -p $HOME/bin
