@@ -79,7 +79,7 @@ function run () {
       // Don't know why but loggerFormat does not remove splat key
       Object.assign(log, { splat: undefined })
 
-      logLevels[ log.level ](log)
+      logLevels[log.level](log)
     })
 
     stream.once('close', () => res())
@@ -90,7 +90,7 @@ function run () {
 async function getNewestFile (files: string[], basePath: string) {
   const sorted = await mtimeSortFilesDesc(files, basePath)
 
-  return (sorted.length > 0) ? sorted[ 0 ].file : ''
+  return (sorted.length > 0) ? sorted[0].file : ''
 }
 
 function toTimeFormat (time: string) {

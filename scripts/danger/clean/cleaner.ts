@@ -14,7 +14,7 @@ initDatabaseModels(true)
     console.info('Tables of %s deleted.', CONFIG.DATABASE.DBNAME)
 
     const STORAGE = CONFIG.STORAGE
-    Promise.mapSeries(Object.keys(STORAGE), storage => {
+    return Promise.mapSeries(Object.keys(STORAGE), storage => {
       const storageDir = STORAGE[storage]
 
       return new Promise((res, rej) => {
@@ -27,4 +27,8 @@ initDatabaseModels(true)
       })
     })
     .then(() => process.exit(0))
+  })
+  .catch(err => {
+    console.error(err)
+    process.exit(-1)
   })

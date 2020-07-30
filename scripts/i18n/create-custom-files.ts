@@ -50,18 +50,18 @@ values(VIDEO_CATEGORIES)
     'Sorry',
     'This video is not available because the remote instance is not responding.'
   ])
-  .forEach(v => serverKeys[v] = v)
+  .forEach(v => { serverKeys[v] = v })
 
 // More keys
 Object.assign(serverKeys, {
-  'Misc': 'Misc',
-  'Unknown': 'Unknown'
+  Misc: 'Misc',
+  Unknown: 'Unknown'
 })
 
 // ISO 639 keys
 const languageKeys: any = {}
 const languages = buildLanguages()
-Object.keys(languages).forEach(k => languageKeys[languages[k]] = languages[k])
+Object.keys(languages).forEach(k => { languageKeys[languages[k]] = languages[k] })
 
 Object.assign(serverKeys, languageKeys)
 
