@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { omit } from 'lodash'
 import 'mocha'
+import { expect } from 'chai'
+import { omit } from 'lodash'
 import { join } from 'path'
 import { User, UserRole, VideoImport, VideoImportState } from '../../../../shared'
-
 import {
   addVideoChannel,
   blockUser,
@@ -31,17 +31,16 @@ import {
   uploadVideo,
   userLogin
 } from '../../../../shared/extra-utils'
+import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
-import { VideoPrivacy } from '../../../../shared/models/videos'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { expect } from 'chai'
+import { getMagnetURI, getMyVideoImports, getGoodVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { VideoPrivacy } from '../../../../shared/models/videos'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
@@ -1047,7 +1046,7 @@ describe('Test users API validators', function () {
         channelId: 1,
         privacy: VideoPrivacy.PUBLIC
       }
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() }))
+      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { targetUrl: getGoodVideoUrl() }))
       await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { magnetUri: getMagnetURI() }))
       await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { torrentfile: 'video-720p.torrent' as any }))
 

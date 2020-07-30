@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { VideoDetails, VideoImport, VideoPrivacy, VideoCaption } from '../../../../shared/models/videos'
+import * as chai from 'chai'
 import {
   cleanupTests,
   doubleFollow,
@@ -11,15 +10,16 @@ import {
   getMyVideos,
   getVideo,
   getVideosList,
-  listVideoCaptions,
-  testCaptionFile,
   immutableAssign,
+  listVideoCaptions,
   ServerInfo,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  testCaptionFile
 } from '../../../../shared/extra-utils'
+import { areHttpImportTestsDisabled, testImage } from '../../../../shared/extra-utils/miscs/miscs'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
-import { testImage } from '../../../../shared/extra-utils/miscs/miscs'
+import { VideoCaption, VideoDetails, VideoImport, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -27,6 +27,8 @@ describe('Test video imports', function () {
   let servers: ServerInfo[] = []
   let channelIdServer1: number
   let channelIdServer2: number
+
+  if (areHttpImportTestsDisabled()) return
 
   async function checkVideosServer1 (url: string, idHttp: string, idMagnet: string, idTorrent: string) {
     const resHttp = await getVideo(url, idHttp)

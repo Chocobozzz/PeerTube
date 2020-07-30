@@ -64,17 +64,23 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
 }
 
 function buildAbsoluteFixturePath (path: string, customCIPath = false) {
-  if (isAbsolute(path)) {
-    return path
-  }
+  if (isAbsolute(path)) return path
 
   if (customCIPath) {
     if (process.env.GITLAB_CI) return join(root(), 'cached-fixtures', path)
 
-    if (process.env.TRAVIS) return join(process.env.HOME, 'fixtures', path)
+    return join(process.env.HOME, 'fixtures', path)
   }
 
   return join(root(), 'server', 'tests', 'fixtures', path)
+}
+
+function areHttpImportTestsDisabled () {
+  const disabled = process.env.DISABLE_HTTP_IMPORT_TESTS === 'true'
+
+  if (disabled) console.log('Import tests are disabled')
+
+  return disabled
 }
 
 async function generateHighBitrateVideo () {
@@ -131,6 +137,7 @@ async function generateVideoWithFramerate (fps = 60) {
 export {
   dateIsValid,
   wait,
+  areHttpImportTestsDisabled,
   buildServerDirectory,
   webtorrentAdd,
   immutableAssign,
