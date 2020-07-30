@@ -21,10 +21,15 @@ jobs:
           POSTGRES_USER: peertube
           POSTGRES_HOST_AUTH_METHOD: trust
 
+      ldap:
+        image: rroemhild/test-openldap
+        ports:
+          - 389:389
+
     strategy:
       fail-fast: false
       matrix:
-        test_suite: [ misc, api-1, api-2, api-3, api-4, cli, lint ]
+        test_suite: [ misc, api-1, api-2, api-3, api-4, cli, lint, external-plugins ]
 
     env:
       PGUSER: peertube
@@ -62,9 +67,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-
-      - name: Test
-        run: echo $PATH
 
       - name: Run Test
         run: NODE_PENDING_JOB_WAIT=2000 npm run ci -- ${{ matrix.test_suite }}
