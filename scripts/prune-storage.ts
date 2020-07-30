@@ -161,7 +161,8 @@ async function askConfirmation () {
     }
     prompt.get(schema, function (err, result) {
       if (err) return rej(err)
-      return res(result.confirm && result.confirm.match(/y/) !== null)
+
+      return res(result.confirm?.match(/y/) !== null)
     })
   })
 }
