@@ -9,7 +9,14 @@ function isWebRTCDisabled () {
 }
 
 function isIOS () {
-  return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)
+  if (/iPad|iPhone|iPod/.test(navigator.platform)) {
+    return true
+  }
+
+  // Detect iPad Desktop mode
+  return navigator.maxTouchPoints &&
+      navigator.maxTouchPoints > 2 &&
+      /MacIntel/.test(navigator.platform)
 }
 
 function isSafari () {
