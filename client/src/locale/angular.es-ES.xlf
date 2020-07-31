@@ -4445,7 +4445,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="bcf8ce898a641416913d16b5dc39385e83ca069c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Canal} otros {Canales} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Canal} other {Canales} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -4493,7 +4493,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8e29da1e7e8def288e5cf788c6f5ac6e5824259c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Comentario} otros {Comentarios} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Comentario} other {Comentarios} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -6390,7 +6390,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="f1a851fd8b39e5544e3eec438ebd7f4ccfcc34dc" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 subscriber} otros{<x id="INTERPOLATION" equiv-text="{{count}}"/> suscriptores} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> suscriptores} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
