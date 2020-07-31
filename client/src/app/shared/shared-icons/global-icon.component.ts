@@ -64,6 +64,8 @@ const icons = {
   'go': require('!!raw-loader?!../../../assets/images/feather/arrow-up-right.svg').default,
   'cross': require('!!raw-loader?!../../../assets/images/feather/x.svg').default,
   'tick': require('!!raw-loader?!../../../assets/images/feather/check.svg').default,
+  'columns': require('!!raw-loader?!../../../assets/images/feather/columns.svg').default,
+  'repeat': require('!!raw-loader?!../../../assets/images/feather/repeat.svg').default,
   'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default
 }
 
