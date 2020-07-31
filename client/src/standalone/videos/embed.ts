@@ -35,6 +35,7 @@ export class PeerTubeEmbed {
 
   title: boolean
   warningTitle: boolean
+  peertubeLink: boolean
   bigPlayBackgroundColor: string
   foregroundColor: string
 
@@ -134,6 +135,7 @@ export class PeerTubeEmbed {
       this.title = this.getParamToggle(params, 'title', true)
       this.enableApi = this.getParamToggle(params, 'api', this.enableApi)
       this.warningTitle = this.getParamToggle(params, 'warningTitle', true)
+      this.peertubeLink = this.getParamToggle(params, 'peertubeLink', true)
 
       this.scope = this.getParamString(params, 'scope', this.scope)
       this.subtitle = this.getParamString(params, 'subtitle')
@@ -209,7 +211,7 @@ export class PeerTubeEmbed {
 
         videoDuration: videoInfo.duration,
         enableHotkeys: true,
-        peertubeLink: true,
+        peertubeLink: this.peertubeLink,
         poster: window.location.origin + videoInfo.previewPath,
         theaterButton: false,
 
