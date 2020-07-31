@@ -34,8 +34,8 @@
       <div i18n class="video-channel-videos">{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</div>
 
       <div class="video-channel-buttons">
-        <my-edit-button [routerLink]="[ 'update', videoChannel.nameWithHost ]"></my-edit-button>
-        <my-delete-button (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
+        <my-edit-button label [routerLink]="[ 'update', videoChannel.nameWithHost ]"></my-edit-button>
+        <my-delete-button label (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
       </div>
 
       <div *ngIf="!isInSmallView" class="w-100 d-flex justify-content-end">

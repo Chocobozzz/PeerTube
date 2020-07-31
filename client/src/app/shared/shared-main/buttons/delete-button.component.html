@@ -1,6 +1,5 @@
-<span class="action-button action-button-delete grey-button" [title]="title" role="button" tabindex="0">
+<span class="action-button action-button-delete grey-button" [ngbTooltip]="title" role="button" tabindex="0">
   <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
 
   <span class="button-label" *ngIf="label">{{ label }}</span>
-  <span class="button-label" i18n *ngIf="!label">Delete</span>
 </span>

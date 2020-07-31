@@ -15,6 +15,7 @@
 >
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 150px;" i18n>Actions</th>
       <th style="width: 35%;" i18n>Initiator</th>
       <th style="width: 65%;" i18n>Video</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">
@@ -22,12 +23,17 @@
         <p-sortIcon field="createdAt"></p-sortIcon>
       </th>
       <th style="width: 100px;" i18n>Status</th>
-      <th style="width: 130px;" i18n>Action</th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-videoChangeOwnership>
     <tr>
+      <td class="action-cell">
+        <ng-container *ngIf="videoChangeOwnership.status === 'WAITING'">
+          <my-button i18n-title title="Accept" icon="tick" (click)="openAcceptModal(videoChangeOwnership)"></my-button>
+          <my-button i18n-title title="Refuse" icon="cross" (click)="refuse(videoChangeOwnership)"></my-button>
+        </ng-container>
+      </td>
       <td>
         <a [href]="videoChangeOwnership.initiatorAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
@@ -64,14 +70,8 @@
       <td>{{ videoChangeOwnership.createdAt | date: 'short' }}</td>
 
       <td>
-        <span class="badge" [ngClass]="getStatusClass(videoChangeOwnership.status)">{{ videoChangeOwnership.status }}</span>
-      </td>
-
-      <td class="action-cell">
-        <ng-container *ngIf="videoChangeOwnership.status === 'WAITING'">
-          <my-button i18n-label label="Accept" icon="tick" (click)="openAcceptModal(videoChangeOwnership)"></my-button>
-          <my-button i18n-label label="Refuse" icon="cross" (click)="refuse(videoChangeOwnership)"></my-button>
-        </ng-container>
+        <span class="badge"
+          [ngClass]="getStatusClass(videoChangeOwnership.status)">{{ videoChangeOwnership.status }}</span>
       </td>
     </tr>
   </ng-template>

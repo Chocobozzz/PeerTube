@@ -61,7 +61,7 @@
       <th style="width: 60px;">
         <div class="c-hand" ngbDropdown placement="bottom-right auto" container="body" autoClose="outside">
           <my-global-icon iconName="columns" ngbDropdownToggle></my-global-icon>
-  
+
           <div role="menu" class="dropdown-menu" ngbDropdownMenu>
             <div class="dropdown-header" i18n>Table parameters</div>
             <div ngbDropdownItem class="dropdown-item">
@@ -93,6 +93,12 @@
         <span *ngIf="user.blockedReason" class="expander" [pRowToggler]="user">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
+      </td>
+
+      <td class="action-cell">
+        <my-user-moderation-dropdown *ngIf="!isInSelectionMode()" [user]="user" container="body"
+          (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
+        </my-user-moderation-dropdown>
       </td>
 
       <td *ngIf="getColumn('username')">
@@ -161,14 +167,6 @@
       <td *ngIf="getColumn('createdAt')" [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
 
       <td *ngIf="getColumn('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | date: 'short' }}</td>
-
-      <td class="action-cell">
-        <my-user-moderation-dropdown
-          *ngIf="!isInSelectionMode()"
-          [user]="user" container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()"
-        >
-        </my-user-moderation-dropdown>
-      </td>
     </tr>
   </ng-template>
 
