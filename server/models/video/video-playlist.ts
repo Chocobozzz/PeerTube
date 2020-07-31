@@ -490,6 +490,10 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return join(STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
   }
 
+  getWatchUrl () {
+    return WEBSERVER.URL + '/videos/watch/playlist/' + this.uuid
+  }
+
   setAsRefreshed () {
     this.changed('updatedAt', true)
 
