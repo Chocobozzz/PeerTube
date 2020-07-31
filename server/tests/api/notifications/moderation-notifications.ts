@@ -78,7 +78,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on local video abuse', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const name = 'video for abuse ' + uuidv4()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
@@ -91,7 +91,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on remote video abuse', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const name = 'video for abuse ' + uuidv4()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
@@ -107,7 +107,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on local comment abuse', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const name = 'video for abuse ' + uuidv4()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
@@ -122,7 +122,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on remote comment abuse', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const name = 'video for abuse ' + uuidv4()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
@@ -140,7 +140,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on local account abuse', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const username = 'user' + new Date().getTime()
       const resUser = await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username, password: 'donald' })
@@ -153,7 +153,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on remote account abuse', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const username = 'user' + new Date().getTime()
       const tmpToken = await generateUserAccessToken(servers[0], username)
