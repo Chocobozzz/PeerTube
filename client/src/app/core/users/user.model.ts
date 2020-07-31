@@ -23,7 +23,8 @@ export class User implements UserServerModel {
     AUTO_PLAY_VIDEO: 'auto_play_video',
     SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO: 'auto_play_next_video',
     AUTO_PLAY_VIDEO_PLAYLIST: 'auto_play_video_playlist',
-    THEME: 'last_active_theme',
+    THEME: 'theme',
+    LAST_ACTIVE_THEME: 'last_active_theme',
     VIDEO_LANGUAGES: 'video_languages'
   }
 

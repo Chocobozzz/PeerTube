@@ -111,9 +111,9 @@ export class ThemeService {
 
       this.pluginService.reloadLoadedScopes()
 
-      this.localStorageService.setItem(User.KEYS.THEME, JSON.stringify(theme), false)
+      this.localStorageService.setItem(User.KEYS.LAST_ACTIVE_THEME, JSON.stringify(theme), false)
     } else {
-      this.localStorageService.removeItem(User.KEYS.THEME, false)
+      this.localStorageService.removeItem(User.KEYS.LAST_ACTIVE_THEME, false)
     }
 
     this.oldThemeName = currentTheme
@@ -127,7 +127,7 @@ export class ThemeService {
     if (!this.auth.isLoggedIn()) {
       this.updateCurrentTheme()
 
-      this.localStorageService.watch([User.KEYS.THEME]).subscribe(
+      this.localStorageService.watch([ User.KEYS.THEME ]).subscribe(
         () => this.updateCurrentTheme()
       )
     }
@@ -138,7 +138,7 @@ export class ThemeService {
   }
 
   private loadAndSetFromLocalStorage () {
-    const lastActiveThemeString = this.localStorageService.getItem(User.KEYS.THEME)
+    const lastActiveThemeString = this.localStorageService.getItem(User.KEYS.LAST_ACTIVE_THEME)
     if (!lastActiveThemeString) return
 
     try {
