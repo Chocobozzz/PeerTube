@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 0 * * 1-5'
+    - cron: '0 3 * * 1-5'
 
 jobs:
 
@@ -75,9 +75,10 @@ jobs:
         if: github.event_name != 'schedule'
         run: |
           echo "::set-env name=DISABLE_HTTP_IMPORT_TESTS::true"
-          echo "::set-env name=DISABLE_EXTERNAL_PLUGINS_TESTS::true"
 
       - name: Run Test
+        # external-plugins tests only run on schedule
+        if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
         run: NODE_PENDING_JOB_WAIT=2000 npm run ci -- ${{ matrix.test_suite }}
 
       - name: Upload logs
