@@ -609,3 +609,9 @@ my-video-comments {
     }
   }
 }
+
+
+// Special case for iOS, that takes into account the width for fullscreens
+#video-wrapper ::ng-deep .video-js.vjs-fullscreen {
+  max-width: unset;
+}
