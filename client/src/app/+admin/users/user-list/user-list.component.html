@@ -50,14 +50,6 @@
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th style="width: 40px"></th>
-      <th *ngIf="getColumn('username')" pResizableColumn i18n pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
-      <th *ngIf="getColumn('email')" i18n>{{ getColumn('email').label }}</th>
-      <th *ngIf="getColumn('quota')" style="width: 160px;" i18n pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
-      <th *ngIf="getColumn('quotaDaily')" style="width: 160px;" i18n>{{ getColumn('quotaDaily').label }}</th>
-      <th *ngIf="getColumn('role')" style="width: 120px;" i18n pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
-      <th *ngIf="getColumn('pluginAuth')" style="width: 140px;" pResizableColumn i18n>{{ getColumn('pluginAuth').label }}</th>
-      <th *ngIf="getColumn('createdAt')" style="width: 150px;" i18n pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th *ngIf="getColumn('lastLoginDate')" style="width: 150px;" i18n pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
       <th style="width: 60px;">
         <div class="c-hand" ngbDropdown placement="bottom-right auto" container="body" autoClose="outside">
           <my-global-icon iconName="columns" ngbDropdownToggle></my-global-icon>
@@ -79,6 +71,14 @@
           </div>
         </div>
       </th>
+      <th *ngIf="getColumn('username')" pResizableColumn i18n pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
+      <th *ngIf="getColumn('email')" i18n>{{ getColumn('email').label }}</th>
+      <th *ngIf="getColumn('quota')" style="width: 160px;" i18n pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
+      <th *ngIf="getColumn('quotaDaily')" style="width: 160px;" i18n>{{ getColumn('quotaDaily').label }}</th>
+      <th *ngIf="getColumn('role')" style="width: 120px;" i18n pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
+      <th *ngIf="getColumn('pluginAuth')" style="width: 140px;" pResizableColumn i18n>{{ getColumn('pluginAuth').label }}</th>
+      <th *ngIf="getColumn('createdAt')" style="width: 150px;" i18n pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th *ngIf="getColumn('lastLoginDate')" style="width: 150px;" i18n pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
     </tr>
   </ng-template>
 
