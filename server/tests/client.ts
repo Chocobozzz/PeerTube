@@ -3,24 +3,25 @@
 import 'mocha'
 import * as chai from 'chai'
 import * as request from 'supertest'
+import { Account, VideoPlaylistPrivacy } from '@shared/models'
 import {
+  addVideoInPlaylist,
   cleanupTests,
+  createVideoPlaylist,
   flushAndRunServer,
+  getAccount,
   getCustomConfig,
   getVideosList,
   makeHTMLRequest,
   ServerInfo,
   serverLogin,
+  setDefaultVideoChannel,
   updateCustomConfig,
   updateCustomSubConfig,
   uploadVideo,
-  createVideoPlaylist,
-  addVideoInPlaylist,
-  getAccount,
-  addVideoChannel
+  updateMyUser,
+  updateVideoChannel
 } from '../../shared/extra-utils'
-import { VideoPlaylistPrivacy } from '@shared/models'
-import { MVideoPlaylist, MAccount, MChannel } from '@server/types/models'
 
 const expect = chai.expect
 
@@ -32,28 +33,33 @@ function checkIndexTags (html: string, title: string, description: string, css: 
 
 describe('Test a client controllers', function () {
   let server: ServerInfo
-  let videoPlaylist: MVideoPlaylist
-  let account: MAccount
-  let videoChannel: MChannel
-  const name = 'my super name for server 1'
-  const description = 'my super description for server 1'
+  let account: Account
+
+  const videoName = 'my super name for server 1'
+  const videoDescription = 'my super description for server 1'
+
+  const playlistName = 'super playlist name'
+  const playlistDescription = 'super playlist description'
+  let playlistUUID: string
+
+  const channelDescription = 'my super channel description'
 
   before(async function () {
     this.timeout(120000)
 
     server = await flushAndRunServer(1)
     server.accessToken = await serverLogin(server)
+    await setDefaultVideoChannel([ server ])
+
+    await updateVideoChannel(server.url, server.accessToken, server.videoChannel.name, { description: channelDescription })
 
     // Video
 
-    const videoAttributes = { name, description }
-
+    const videoAttributes = { name: videoName, description: videoDescription }
     await uploadVideo(server.url, server.accessToken, videoAttributes)
 
     const resVideosRequest = await getVideosList(server.url)
-
     const videos = resVideosRequest.body.data
-
     expect(videos.length).to.equal(1)
 
     server.video = videos[0]
@@ -61,39 +67,31 @@ describe('Test a client controllers', function () {
     // Playlist
 
     const playlistAttrs = {
-      displayName: name,
-      description,
-      privacy: VideoPlaylistPrivacy.PUBLIC
+      displayName: playlistName,
+      description: playlistDescription,
+      privacy: VideoPlaylistPrivacy.PUBLIC,
+      videoChannelId: server.videoChannel.id
     }
 
     const resVideoPlaylistRequest = await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs })
 
-    videoPlaylist = resVideoPlaylistRequest.body.videoPlaylist
+    const playlist = resVideoPlaylistRequest.body.videoPlaylist
+    const playlistId = playlist.id
+    playlistUUID = playlist.uuid
 
     await addVideoInPlaylist({
       url: server.url,
       token: server.accessToken,
-      playlistId: videoPlaylist.id,
+      playlistId,
       elementAttrs: { videoId: server.video.id }
     })
 
     // Account
 
-    const resAccountRequest = await getAccount(server.url, `${server.user.username}@${server.host}:${server.port}`)
+    await updateMyUser({ url: server.url, accessToken: server.accessToken, description: 'my account description' })
 
-    account = resAccountRequest.body.account
-
-    // Channel
-
-    const videoChannelAttributesArg = {
-      name: `${server.user.username}_channel`,
-      displayName: name,
-      description
-    }
-
-    const resChannelRequest = await addVideoChannel(server.url, server.accessToken, videoChannelAttributesArg)
-
-    videoChannel = resChannelRequest.body.videoChannel
+    const resAccountRequest = await getAccount(server.url, `${server.user.username}@${server.host}`)
+    account = resAccountRequest.body
   })
 
   it('Should have valid Open Graph tags on the watch page with video id', async function () {
@@ -102,8 +100,8 @@ describe('Test a client controllers', function () {
       .set('Accept', 'text/html')
       .expect(200)
 
-    expect(res.text).to.contain(`<meta property="og:title" content="${name}" />`)
-    expect(res.text).to.contain(`<meta property="og:description" content="${description}" />`)
+    expect(res.text).to.contain(`<meta property="og:title" content="${videoName}" />`)
+    expect(res.text).to.contain(`<meta property="og:description" content="${videoDescription}" />`)
     expect(res.text).to.contain('<meta property="og:type" content="video" />')
     expect(res.text).to.contain(`<meta property="og:url" content="${server.url}/videos/watch/${server.video.uuid}" />`)
   })
@@ -114,22 +112,22 @@ describe('Test a client controllers', function () {
       .set('Accept', 'text/html')
       .expect(200)
 
-    expect(res.text).to.contain(`<meta property="og:title" content="${name}" />`)
-    expect(res.text).to.contain(`<meta property="og:description" content="${description}" />`)
+    expect(res.text).to.contain(`<meta property="og:title" content="${videoName}" />`)
+    expect(res.text).to.contain(`<meta property="og:description" content="${videoDescription}" />`)
     expect(res.text).to.contain('<meta property="og:type" content="video" />')
     expect(res.text).to.contain(`<meta property="og:url" content="${server.url}/videos/watch/${server.video.uuid}" />`)
   })
 
   it('Should have valid Open Graph tags on the watch playlist page', async function () {
     const res = await request(server.url)
-      .get('/videos/watch/playlist/' + videoPlaylist.uuid)
+      .get('/videos/watch/playlist/' + playlistUUID)
       .set('Accept', 'text/html')
       .expect(200)
 
-    expect(res.text).to.contain(`<meta property="og:title" content="${videoPlaylist.name}" />`)
-    expect(res.text).to.contain(`<meta property="og:description" content="${videoPlaylist.description}" />`)
+    expect(res.text).to.contain(`<meta property="og:title" content="${playlistName}" />`)
+    expect(res.text).to.contain(`<meta property="og:description" content="${playlistDescription}" />`)
     expect(res.text).to.contain('<meta property="og:type" content="video" />')
-    expect(res.text).to.contain(`<meta property="og:url" content="${server.url}/videos/watch/playlist/${videoPlaylist.uuid}" />`)
+    expect(res.text).to.contain(`<meta property="og:url" content="${server.url}/videos/watch/playlist/${playlistUUID}" />`)
   })
 
   it('Should have valid Open Graph tags on the account page', async function () {
@@ -138,7 +136,7 @@ describe('Test a client controllers', function () {
       .set('Accept', 'text/html')
       .expect(200)
 
-    expect(res.text).to.contain(`<meta property="og:title" content="${account.getDisplayName()}" />`)
+    expect(res.text).to.contain(`<meta property="og:title" content="${account.displayName}" />`)
     expect(res.text).to.contain(`<meta property="og:description" content="${account.description}" />`)
     expect(res.text).to.contain('<meta property="og:type" content="website" />')
     expect(res.text).to.contain(`<meta property="og:url" content="${server.url}/accounts/${server.user.username}" />`)
@@ -146,14 +144,14 @@ describe('Test a client controllers', function () {
 
   it('Should have valid Open Graph tags on the channel page', async function () {
     const res = await request(server.url)
-      .get('/video-channels/' + videoChannel.name)
+      .get('/video-channels/' + server.videoChannel.name)
       .set('Accept', 'text/html')
       .expect(200)
 
-    expect(res.text).to.contain(`<meta property="og:title" content="${videoChannel.getDisplayName()}" />`)
-    expect(res.text).to.contain(`<meta property="og:description" content="${videoChannel.description}" />`)
+    expect(res.text).to.contain(`<meta property="og:title" content="${server.videoChannel.displayName}" />`)
+    expect(res.text).to.contain(`<meta property="og:description" content="${channelDescription}" />`)
     expect(res.text).to.contain('<meta property="og:type" content="website" />')
-    expect(res.text).to.contain(`<meta property="og:url" content="${server.url}/video-channels/${videoChannel.name}" />`)
+    expect(res.text).to.contain(`<meta property="og:url" content="${server.url}/video-channels/${server.videoChannel.name}" />`)
   })
 
   it('Should have valid oEmbed discovery tags', async function () {
@@ -172,7 +170,7 @@ describe('Test a client controllers', function () {
     expect(res.text).to.contain(expectedLink)
   })
 
-  it('Should have valid twitter card on the whatch video page', async function () {
+  it('Should have valid twitter card on the watch video page', async function () {
     const res = await request(server.url)
       .get('/videos/watch/' + server.video.uuid)
       .set('Accept', 'text/html')
@@ -180,20 +178,20 @@ describe('Test a client controllers', function () {
 
     expect(res.text).to.contain('<meta property="twitter:card" content="summary_large_image" />')
     expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-    expect(res.text).to.contain(`<meta property="twitter:title" content="${name}" />`)
-    expect(res.text).to.contain(`<meta property="twitter:description" content="${description}" />`)
+    expect(res.text).to.contain(`<meta property="twitter:title" content="${videoName}" />`)
+    expect(res.text).to.contain(`<meta property="twitter:description" content="${videoDescription}" />`)
   })
 
   it('Should have valid twitter card on the watch playlist page', async function () {
     const res = await request(server.url)
-      .get('/videos/watch/playlist/' + videoPlaylist.uuid)
+      .get('/videos/watch/playlist/' + playlistUUID)
       .set('Accept', 'text/html')
       .expect(200)
 
     expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
     expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-    expect(res.text).to.contain(`<meta property="twitter:title" content="${videoPlaylist.name}" />`)
-    expect(res.text).to.contain(`<meta property="twitter:description" content="${videoPlaylist.description}" />`)
+    expect(res.text).to.contain(`<meta property="twitter:title" content="${playlistName}" />`)
+    expect(res.text).to.contain(`<meta property="twitter:description" content="${playlistDescription}" />`)
   })
 
   it('Should have valid twitter card on the account page', async function () {
@@ -210,14 +208,14 @@ describe('Test a client controllers', function () {
 
   it('Should have valid twitter card on the channel page', async function () {
     const res = await request(server.url)
-      .get('/video-channels/' + videoChannel.name)
+      .get('/video-channels/' + server.videoChannel.name)
       .set('Accept', 'text/html')
       .expect(200)
 
     expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
     expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-    expect(res.text).to.contain(`<meta property="twitter:title" content="${videoChannel.name}" />`)
-    expect(res.text).to.contain(`<meta property="twitter:description" content="${videoChannel.description}" />`)
+    expect(res.text).to.contain(`<meta property="twitter:title" content="${server.videoChannel.displayName}" />`)
+    expect(res.text).to.contain(`<meta property="twitter:description" content="${channelDescription}" />`)
   })
 
   it('Should have valid twitter card if Twitter is whitelisted', async function () {
@@ -238,11 +236,11 @@ describe('Test a client controllers', function () {
     expect(resVideoRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
 
     const resVideoPlaylistRequest = await request(server.url)
-      .get('/videos/watch/playlist/' + videoPlaylist.uuid)
+      .get('/videos/watch/playlist/' + playlistUUID)
       .set('Accept', 'text/html')
       .expect(200)
 
-    expect(resVideoPlaylistRequest.text).to.contain('<meta property="twitter:card" content="player" />')
+    expect(resVideoPlaylistRequest.text).to.contain('<meta property="twitter:card" content="summary" />')
     expect(resVideoPlaylistRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
 
     const resAccountRequest = await request(server.url)
@@ -250,15 +248,15 @@ describe('Test a client controllers', function () {
       .set('Accept', 'text/html')
       .expect(200)
 
-    expect(resAccountRequest.text).to.contain('<meta property="twitter:card" content="player" />')
+    expect(resAccountRequest.text).to.contain('<meta property="twitter:card" content="summary" />')
     expect(resAccountRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
 
     const resChannelRequest = await request(server.url)
-      .get('/video-channels/' + videoChannel.name)
+      .get('/video-channels/' + server.videoChannel.name)
       .set('Accept', 'text/html')
       .expect(200)
 
-    expect(resChannelRequest.text).to.contain('<meta property="twitter:card" content="player" />')
+    expect(resChannelRequest.text).to.contain('<meta property="twitter:card" content="summary" />')
     expect(resChannelRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
   })
 
