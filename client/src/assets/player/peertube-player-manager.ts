@@ -456,7 +456,8 @@ export class PeertubePlayerManager {
         enableInactiveFocus: false,
         captureDocumentHotkeys: true,
         documentHotkeysFocusElementFilter: (e: HTMLElement) => {
-          return e.id === 'content' || e.tagName.toLowerCase() === 'body'
+          const tagName = e.tagName.toLowerCase()
+          return e.id === 'content' || tagName === 'body' || tagName === 'video'
         },
 
         enableVolumeScroll: false,
