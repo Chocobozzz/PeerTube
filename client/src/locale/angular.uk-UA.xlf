@@ -620,7 +620,7 @@
       </trans-unit>
       <trans-unit id="2edccfda908b57c073dc0811eaa58818de2be2dc" datatype="html">
         <source>Edit starts/stops at</source>
-        <target state="translated">Зміна починається/закінчується на</target>
+        <target state="translated">Змінити час початку/зупинки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
@@ -982,33 +982,22 @@
       </trans-unit>
       <trans-unit id="6b6240483bee515c1e20c0c21fc6096e8cdd08e9" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-    Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-  </target>
+        <target state="translated">На жаль, виникла проблема при віддаленому вході. Будь ласка, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>зв'яжіться з адміністратором<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="17f43ee2fb343f8b60568527d105777b99ae8414" datatype="html">
         <source>If you are looking for an account…</source>
-        <target state="new">
-        If you are looking for an account…
-      </target>
+        <target state="translated">Якщо ви хочете створити обліковий запис…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-        Currently this instance doesn't allow for user registration, but you can find an instance
-        that gives you the possibility to sign up for an account and upload your videos there.
-
-        <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-
-        Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-      </target>
+        <target state="translated">Цей сервер наразі не приймає реєстрації нових облікових записів, але ви можете знайти інші сервери, які дозволяють реєструватися і завантажувати відео. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Оберіть собі сервер серед багатьох на <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453">
         <source>Request new verification email.</source>
-        <target>Запросити нове підтвердження електронною поштою.</target>
+        <target>Наново подати запит підтвердження електронною поштою.</target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
@@ -1026,7 +1015,7 @@
       </trans-unit>
       <trans-unit id="51ef29329faccb28d94369897068897d1b3d0478">
         <source>Username or email address</source>
-        <target>Ім'я користувача або E-mail</target>
+        <target>Ім'я користувача або email</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
         </context-group>
@@ -1034,9 +1023,7 @@
       </trans-unit>
       <trans-unit id="9fed9d6f57dafb967ffaaf3c63f54ad976cab926" datatype="html">
         <source>or create an account</source>
-        <target state="new">
-              or create an account
-            </target>
+        <target state="translated">або створити обліковий запис</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407">
@@ -1056,7 +1043,7 @@
       </trans-unit>
       <trans-unit id="48ff0628dcbb4d37e9687302df3023b8427b48f2" datatype="html">
         <source>Click here to reset your password</source>
-        <target state="new">Click here to reset your password</target>
+        <target state="translated">Натисніть, щоб скинути ваш пароль</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9" datatype="html">
@@ -1067,22 +1054,22 @@
       </trans-unit>
       <trans-unit id="f5d783c0613d323fdd20074ffbc519ee715a4f2b" datatype="html">
         <source>Or sign in with</source>
-        <target state="new">Or sign in with</target>
+        <target state="translated">Або увійти з допомогою</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681" datatype="html">
         <source>Forgot your password</source>
-        <target state="translated">Забув(ла) пароль</target>
+        <target state="translated">Забув(-ла) пароль</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated">Вибачте, але ви не можете відновити пароль, тому що адміністратор вашого інстанса не налаштував систему email PeerTube.</target>
+        <target state="translated">Вибачте, але ви не можете відновити пароль, тому що адміністратор вашого сервера не налаштував систему email PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc" datatype="html">
         <source>Email</source>
-        <target state="new">Email</target>
+        <target state="translated">Email</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">41</context></context-group>
@@ -1094,18 +1081,18 @@
       </trans-unit>
       <trans-unit id="69b6ac577a19acc39fc0c22342092f327fff2529" datatype="html">
         <source>Email address</source>
-        <target state="translated">Email адрес</target>
+        <target state="translated">Адреса електронної пошти</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">10</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="78be69e4d26b3b654c49962839d8545e61bf8b55" datatype="html">
         <source>Send me an email to reset my password</source>
-        <target state="translated">Відправте мені email для сбросу пароля</target>
+        <target state="translated">Надіслати мені лист для скидання пароля</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="406b08e859ab668ff07056881dcc4390109d4e1d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1113,7 +1100,7 @@
       </trans-unit>
       <trans-unit id="26b0b148ff87e083300fa9ca213f8ada7fa6211d" datatype="html">
         <source>on this instance</source>
-        <target state="new">on this instance</target>
+        <target state="translated">на цьому сервері</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1121,7 +1108,7 @@
       </trans-unit>
       <trans-unit id="cdc5b877341ff8e6009282a299f2f2d6987dbdbe" datatype="html">
         <source>on the vidiverse</source>
-        <target state="new">on the vidiverse</target>
+        <target state="translated">на відеофедіверсі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1129,7 +1116,7 @@
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa" datatype="html">
         <source>Reset my password</source>
-        <target state="translated">Сброс пароля</target>
+        <target state="translated">Скинути пароль</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="7f3bdcce4b2e8c37cd7f0f6c92ef8cff34b039b8" datatype="html">
@@ -1144,37 +1131,32 @@
       </trans-unit>
       <trans-unit id="8bdf8db5eeeaef83184b489b80c1557b516fb3c3" datatype="html">
         <source>Reset my password</source>
-        <target state="translated">Сбросити мій пароль</target>
+        <target state="translated">Скинути мій пароль</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="4c3960fb1d9b07d1db3b5bda3ee40019211830dc" datatype="html">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="new">
-          for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated">для <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="7c603b9ed878097782e2b8908f662e2344b46061" datatype="html">
         <source>Filters <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="new">
-          Filters
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated">Фільтри <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d" datatype="html">
         <source>No results found</source>
-        <target state="translated">Результати не знайдені</target>
+        <target state="translated">Немає результатів</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="10341623e991a4185990a0c3c76ac2bc3543cc4a" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> підписники</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> підписалися</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="5cf92a1d527e65908c75633e8484cdd3b6d16b9b" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target state="translated">Ласкаво просимо у PeerTube, дорогий админістратор!</target>
+        <target state="translated">Вітаємо у PeerTube, дорогий адміністраторе!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1190,7 +1172,7 @@
       </trans-unit>
       <trans-unit id="65462878ca6d04c826906432816a3df3e048ac87" datatype="html">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target state="new">Upload or import videos, parse logs, prune storage directories, reset user password...</target>
+        <target state="translated">Завантажувати або імпортувати відео, розбирати журнал, очищати теки сховища, скидати користувацькі паролі...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1198,8 +1180,7 @@
       </trans-unit>
       <trans-unit id="054dd8ba0dece8069a5a7e538efaca9f58cf81f9" datatype="html">
         <source>Administer documentation</source>
-        <target state="new">Administer
-            documentation</target>
+        <target state="translated">Адмініструвати документацію</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1207,7 +1188,7 @@
       </trans-unit>
       <trans-unit id="c38a3f5b5eff069d0097527fa40a3f8c4d9c1e4e" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="new">Managing users, following other instances, dealing with spammers...</target>
+        <target state="translated">Керувати користувацьким обліковими записами, слідкувати за іншими серверами, боротися зі спамом...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1215,7 +1196,7 @@
       </trans-unit>
       <trans-unit id="4e020f13aa4db2285047eba96e50dc716fb5f417" datatype="html">
         <source>Use documentation</source>
-        <target state="translated">Використовувати документацію</target>
+        <target state="translated">Документація використання</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">26</context>
@@ -1223,7 +1204,7 @@
       </trans-unit>
       <trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="new">Setup your account, managing video playlists, discover third-party applications...</target>
+        <target state="translated">Налаштувати ваш обліковий запис, керувати списками відтворення, переглянути додатки третіх сторін...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1236,18 +1217,17 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new">Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Офіційний вебсайт PeerTube (новини, підтримка, долучитися...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6" datatype="html">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target state="new">Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          </target>
+        <target state="translated">Додати ваш сервер до публічного списку PeerTube: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target state="translated">Час налаштувати ваш інстанс!</target>
+        <target state="translated">Час налаштувати ваш сервер!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6" datatype="html">
