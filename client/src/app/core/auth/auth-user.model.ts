@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
-import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import {
   hasUserRight,
   MyUser as ServerMyUserModel,
@@ -12,66 +12,7 @@ import {
   UserRole,
   UserVideoQuota
 } from '@shared/models'
-
-export type TokenOptions = {
-  accessToken: string
-  refreshToken: string
-  tokenType: string
-}
-
-// Private class only used by User
-class Tokens {
-  private static KEYS = {
-    ACCESS_TOKEN: 'access_token',
-    REFRESH_TOKEN: 'refresh_token',
-    TOKEN_TYPE: 'token_type'
-  }
-
-  accessToken: string
-  refreshToken: string
-  tokenType: string
-
-  static load () {
-    const accessTokenLocalStorage = peertubeLocalStorage.getItem(this.KEYS.ACCESS_TOKEN)
-    const refreshTokenLocalStorage = peertubeLocalStorage.getItem(this.KEYS.REFRESH_TOKEN)
-    const tokenTypeLocalStorage = peertubeLocalStorage.getItem(this.KEYS.TOKEN_TYPE)
-
-    if (accessTokenLocalStorage && refreshTokenLocalStorage && tokenTypeLocalStorage) {
-      return new Tokens({
-        accessToken: accessTokenLocalStorage,
-        refreshToken: refreshTokenLocalStorage,
-        tokenType: tokenTypeLocalStorage
-      })
-    }
-
-    return null
-  }
-
-  static flush () {
-    peertubeLocalStorage.removeItem(this.KEYS.ACCESS_TOKEN)
-    peertubeLocalStorage.removeItem(this.KEYS.REFRESH_TOKEN)
-    peertubeLocalStorage.removeItem(this.KEYS.TOKEN_TYPE)
-  }
-
-  constructor (hash?: TokenOptions) {
-    if (hash) {
-      this.accessToken = hash.accessToken
-      this.refreshToken = hash.refreshToken
-
-      if (hash.tokenType === 'bearer') {
-        this.tokenType = 'Bearer'
-      } else {
-        this.tokenType = hash.tokenType
-      }
-    }
-  }
-
-  save () {
-    peertubeLocalStorage.setItem(Tokens.KEYS.ACCESS_TOKEN, this.accessToken)
-    peertubeLocalStorage.setItem(Tokens.KEYS.REFRESH_TOKEN, this.refreshToken)
-    peertubeLocalStorage.setItem(Tokens.KEYS.TOKEN_TYPE, this.tokenType)
-  }
-}
+import { TokenOptions, Tokens } from '../../../root-helpers/pure-auth-user.model'
 
 export class AuthUser extends User implements ServerMyUserModel {
   tokens: Tokens

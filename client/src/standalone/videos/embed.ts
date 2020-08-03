@@ -4,7 +4,8 @@ import {
   peertubeTranslate,
   ResultList,
   ServerConfig,
-  VideoDetails
+  VideoDetails,
+  UserRefreshToken
 } from '../../../../shared'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 import {
@@ -17,7 +18,7 @@ import { PeerTubeEmbedApi } from './embed-api'
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import videojs from 'video.js'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
-import { AuthUser } from '@app/core/auth/auth-user.model'
+import { PureAuthUser, objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
 
 type Translations = { [ id: string ]: string }
 
@@ -43,8 +44,12 @@ export class PeerTubeEmbed {
   mode: PlayerMode
   scope = 'peertube'
 
-  user: AuthUser
+  user: PureAuthUser
   headers = new Headers()
+  LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
+    CLIENT_ID: 'client_id',
+    CLIENT_SECRET: 'client_secret'
+  }
 
   static async main () {
     const videoContainerId = 'video-container'
@@ -60,12 +65,62 @@ export class PeerTubeEmbed {
     return window.location.origin + '/api/v1/videos/' + id
   }
 
+  refreshFetch (url: string, options?: Object) {
+    return fetch(url, options)
+      .then((res: Response) => {
+        if (res.status !== 401) return res
+
+        // 401 unauthorized is not catch-ed, but then-ed
+        const error = res
+
+        const refreshingTokenPromise = new Promise((resolve, reject) => {
+          const clientId: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
+          const clientSecret: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
+          const headers = new Headers()
+          headers.set('Content-Type', 'application/x-www-form-urlencoded')
+          const data = {
+            refresh_token: this.user.getRefreshToken(),
+            client_id: clientId,
+            client_secret: clientSecret,
+            response_type: 'code',
+            grant_type: 'refresh_token'
+          }
+
+          fetch('/api/v1/users/token', {
+            headers,
+            method: 'POST',
+            body: objectToUrlEncoded(data)
+          })
+            .then(res => res.json())
+            .then((obj: UserRefreshToken) => {
+              this.user.refreshTokens(obj.access_token, obj.refresh_token)
+              this.user.save()
+              this.headers.set('Authorization', `${this.user.getTokenType()} ${this.user.getAccessToken()}`)
+              resolve()
+            })
+            .catch((refreshTokenError: any) => {
+              reject(refreshTokenError)
+            })
+        })
+
+        return refreshingTokenPromise
+          .catch(() => {
+            // If refreshing fails, continue with original error
+            throw error
+          })
+          .then(() => fetch(url, {
+            ...options,
+            headers: this.headers
+          }))
+      })
+  }
+
   loadVideoInfo (videoId: string): Promise<Response> {
-    return fetch(this.getVideoUrl(videoId), { headers: this.headers })
+    return this.refreshFetch(this.getVideoUrl(videoId), { headers: this.headers })
   }
 
   loadVideoCaptions (videoId: string): Promise<Response> {
-    return fetch(this.getVideoUrl(videoId) + '/captions', { headers: this.headers })
+    return fetch(this.getVideoUrl(videoId) + '/captions')
   }
 
   loadConfig (): Promise<Response> {
@@ -115,7 +170,7 @@ export class PeerTubeEmbed {
 
   async init () {
     try {
-      this.user = AuthUser.load()
+      this.user = PureAuthUser.load()
       await this.initCore()
     } catch (e) {
       console.error(e)

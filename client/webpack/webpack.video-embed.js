@@ -28,7 +28,7 @@ module.exports = function () {
 
       alias: {
         'video.js$': path.resolve('node_modules/video.js/core.js'),
-        '@app': path.resolve('src/app'),
+        '@root-helpers': path.resolve('src/root-helpers'),
         '@shared': path.resolve('../shared')
       }
     },

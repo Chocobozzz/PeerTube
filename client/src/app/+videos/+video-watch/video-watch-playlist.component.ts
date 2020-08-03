@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, ComponentPagination, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
-import { peertubeLocalStorage, peertubeSessionStorage } from '@app/helpers/peertube-web-storage'
+import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoDetails, VideoPlaylistPrivacy } from '@shared/models'

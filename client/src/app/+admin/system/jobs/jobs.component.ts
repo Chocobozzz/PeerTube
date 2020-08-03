@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Job, JobState, JobType } from '@shared/models'
 import { JobStateClient } from '../../../../types/job-state-client.type'

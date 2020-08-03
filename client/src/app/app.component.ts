@@ -15,7 +15,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { BroadcastMessageLevel, getShortLocale, is18nPath, ServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
-import { peertubeLocalStorage, POP_STATE_MODAL_DISMISS } from './helpers'
+import { POP_STATE_MODAL_DISMISS } from './helpers'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { InstanceService } from './shared/shared-instance'
 
 @Component({
