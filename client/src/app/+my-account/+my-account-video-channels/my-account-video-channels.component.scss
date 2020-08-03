@@ -64,6 +64,10 @@ input[type=text] {
   top: 1px;
 }
 
+.video-channels-header {
+  margin-bottom: 30px;
+}
+
 @media screen and (max-width: $small-view) {
   .video-channels-header {
     text-align: center;
@@ -93,6 +97,17 @@ input[type=text] {
 
     .video-channel-buttons {
       align-self: center;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .video-channels-header {
+    flex-direction: column;
+
+    input[type=text] {
+      width: 100% !important;
+      margin-bottom: 12px;
     }
   }
 }
