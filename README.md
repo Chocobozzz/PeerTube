@@ -57,8 +57,8 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
   <br />
 
-  <a href="https://travis-ci.com/github/Chocobozzz/PeerTube">
-    <img alt="pipeline status" src="https://travis-ci.com/Chocobozzz/PeerTube.svg?branch=develop" />
+  <a href="https://github.com/Chocobozzz/PeerTube/actions?query=workflow%3A%22Test+Suite%22+branch%3Adevelop">
+    <img alt="test suite status" src="https://github.com/Chocobozzz/PeerTube/workflows/Test%20Suite/badge.svg" />
   </a>
 
   <a href="https://david-dm.org/Chocobozzz/PeerTube">
