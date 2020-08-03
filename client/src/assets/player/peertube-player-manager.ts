@@ -19,6 +19,7 @@ import './videojs-components/settings-panel'
 import './videojs-components/settings-panel-child'
 import './videojs-components/theater-button'
 import videojs from 'video.js'
+
 import { isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 import { VideoFile } from '../../../../shared/models/videos'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
@@ -300,7 +301,13 @@ export class PeertubePlayerManager {
     }
     const hlsjs = {
       levelLabelHandler: (level: { height: number, width: number }) => {
-        const file = p2pMediaLoaderOptions.videoFiles.find(f => f.resolution.id === level.height)
+        const resolution = Math.min(level.height || 0, level.width || 0)
+
+        const file = p2pMediaLoaderOptions.videoFiles.find(f => f.resolution.id === resolution)
+        if (!file) {
+          console.error('Cannot find video file for level %d.', level.height)
+          return level.height
+        }
 
         let label = file.resolution.label
         if (file.fps >= 50) label += file.fps

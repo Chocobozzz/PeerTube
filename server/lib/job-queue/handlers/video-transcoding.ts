@@ -75,7 +75,7 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
   if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)
-  const { videoFileResolution } = await videoArg.getMaxQualityResolution()
+  const { videoFileResolution, isPortraitMode } = await videoArg.getMaxQualityResolution()
 
   const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
@@ -86,7 +86,7 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
     // Create transcoding jobs if there are enabled resolutions
     const resolutionsEnabled = computeResolutionsToTranscode(videoFileResolution)
     logger.info(
-      'Resolutions computed for video %s and origin file height of %d.', videoDatabase.uuid, videoFileResolution,
+      'Resolutions computed for video %s and origin file resolution of %d.', videoDatabase.uuid, videoFileResolution,
       { resolutions: resolutionsEnabled }
     )
 
@@ -104,14 +104,15 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
           dataInput = {
             type: 'new-resolution' as 'new-resolution',
             videoUUID: videoDatabase.uuid,
-            resolution
+            resolution,
+            isPortraitMode
           }
         } else if (CONFIG.TRANSCODING.HLS.ENABLED) {
           dataInput = {
             type: 'hls',
             videoUUID: videoDatabase.uuid,
             resolution,
-            isPortraitMode: false,
+            isPortraitMode,
             copyCodecs: false
           }
         }

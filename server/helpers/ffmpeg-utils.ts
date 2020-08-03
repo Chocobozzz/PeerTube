@@ -74,7 +74,7 @@ namespace audio {
   }
 }
 
-function computeResolutionsToTranscode (videoFileHeight: number) {
+function computeResolutionsToTranscode (videoFileResolution: number) {
   const resolutionsEnabled: number[] = []
   const configResolutions = CONFIG.TRANSCODING.RESOLUTIONS
 
@@ -90,7 +90,7 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   ]
 
   for (const resolution of resolutions) {
-    if (configResolutions[resolution + 'p'] === true && videoFileHeight > resolution) {
+    if (configResolutions[resolution + 'p'] === true && videoFileResolution > resolution) {
       resolutionsEnabled.push(resolution)
     }
   }
