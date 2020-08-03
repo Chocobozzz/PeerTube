@@ -153,7 +153,7 @@ label {
     z-index: #{z('header') - 1};
 
     & + .margin-content {
-      margin-top: $sub-menu-margin-bottom;
+      padding-top: $sub-menu-height + $sub-menu-margin-bottom;
     }
   }
 
