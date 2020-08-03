@@ -67,9 +67,10 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       useHash: Boolean(history.pushState) === false,
-      scrollPositionRestoration: 'disabled',
+      scrollPositionRestoration: 'enabled',
       preloadingStrategy: PreloadSelectedModulesList,
-      anchorScrolling: 'disabled'
+      anchorScrolling: 'enabled',
+      scrollOffset: [0, 81] // sub-menu-height
     })
   ],
   providers: [
