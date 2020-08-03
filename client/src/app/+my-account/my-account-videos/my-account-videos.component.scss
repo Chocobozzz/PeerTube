@@ -56,10 +56,6 @@ my-edit-button {
 }
 
 @media screen and (max-width: $small-view) {
-  .videos-header {
-    flex-direction: column;
-  }
-
   .action-button {
     flex-direction: column;
     align-self: center;
@@ -116,6 +112,16 @@ my-edit-button {
           max-width: $video-thumbnail-width;
         }
       }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .videos-header {
+    flex-direction: column;
+
+    input[type=text] {
+      width: 100% !important;
     }
   }
 }

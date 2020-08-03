@@ -1,16 +1,19 @@
-<h1 class="d-flex justify-content-between">
+<h1>
   <span>
     <my-global-icon iconName="subscriptions" aria-hidden="true"></my-global-icon>
     <ng-container i18n>My subscriptions</ng-container>
     <span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
   </span>
+</h1>
 
+<div class="video-subscriptions-header d-flex justify-content-between">
   <div class="has-feedback has-clear">
-    <input type="text" placeholder="Search your subscriptions" i18n-placeholder [(ngModel)]="subscriptionsSearch" (ngModelChange)="onSubscriptionsSearchChanged()" />
+    <input type="text" placeholder="Search your subscriptions" i18n-placeholder [(ngModel)]="subscriptionsSearch"
+      (ngModelChange)="onSubscriptionsSearchChanged()" />
     <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
     <span class="sr-only" i18n>Clear filters</span>
   </div>
-</h1>
+</div>
 
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">You don't have any subscriptions yet.</div>
 
