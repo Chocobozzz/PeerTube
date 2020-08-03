@@ -3655,7 +3655,7 @@
       </trans-unit>
       <trans-unit id="d2e7333704502d1720b353742634630b71ea8bd7" datatype="html">
         <source>Video blocks</source>
-        <target state="translated">Blocs vidéo</target>
+        <target state="translated">Vidéos bloquées</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
@@ -3686,7 +3686,7 @@
       </trans-unit>
       <trans-unit id="7d0cb3dbf192b9f3a5dbfb6d56d7609b200cbd4e" datatype="html">
         <source>Automatic blocks</source>
-        <target state="translated">Blocs automatiques</target>
+        <target state="translated">Blocages automatiques</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">19</context>
@@ -3694,7 +3694,7 @@
       </trans-unit>
       <trans-unit id="dfc11b6dc1387e59dbb79d248cf4c638fb9df3ea" datatype="html">
         <source>Manual blocks</source>
-        <target state="translated">Blocs manuels</target>
+        <target state="translated">Blocages manuels</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">20</context>
