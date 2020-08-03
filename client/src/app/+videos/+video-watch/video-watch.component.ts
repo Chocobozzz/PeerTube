@@ -28,6 +28,7 @@ import { environment } from '../../../environments/environment'
 import { VideoShareComponent } from './modal/video-share.component'
 import { VideoSupportComponent } from './modal/video-support.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
+import { VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 
 @Component({
   selector: 'my-video-watch',
@@ -41,6 +42,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
+  @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
 
   player: any
   playerElement: HTMLVideoElement
@@ -199,6 +201,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   showLessDescription () {
     this.updateVideoDescription(this.shortVideoDescription)
     this.completeDescriptionShown = false
+  }
+
+  showDownloadModal () {
+    this.videoDownloadModal.show(this.video, this.videoCaptions)
+  }
+
+  isVideoDownloadable () {
+    return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled
   }
 
   loadCompleteDescription () {

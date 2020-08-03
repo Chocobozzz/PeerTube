@@ -108,10 +108,23 @@
                     </div>
                   </div>
 
-                  <my-video-actions-dropdown
-                    placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [videoCaptions]="videoCaptions"
-                    (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
-                  ></my-video-actions-dropdown>
+                  <ng-container *ngIf="!isUserLoggedIn()">
+                    <button
+                      *ngIf="isVideoDownloadable()" class="action-button action-button-save"
+                      (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
+                    >
+                      <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>
+                      <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
+                    </button>
+                  
+                    <my-video-download #videoDownloadModal></my-video-download>
+                  </ng-container>
+                  <ng-container *ngIf="isUserLoggedIn()">
+                    <my-video-actions-dropdown
+                      placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [videoCaptions]="videoCaptions"
+                      (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
+                    ></my-video-actions-dropdown>
+                  </ng-container>
                 </div>
 
                 <div class="video-info-likes-dislikes-bar-outer-container">
