@@ -62,7 +62,7 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('My subscriptions'),
           routerLink: '/my-account/subscriptions',
-          iconName: 'inbox-full'
+          iconName: 'subscriptions'
         },
         {
           label: this.i18n('My history'),
