@@ -1,7 +1,7 @@
 import { Observable, Subject } from 'rxjs'
 import { filter } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
-import { peertubeLocalStorage, peertubeSessionStorage } from '@app/helpers'
+import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 
 abstract class StorageService {
   protected instance: Storage

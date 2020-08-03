@@ -28,6 +28,7 @@
       "video.js": [ "node_modules/video.js/core" ],
       "@app/*": [ "src/app/*" ],
       "@shared/*": [ "../shared/*" ],
+      "@root-helpers/*": [ "src/root-helpers/*" ],
       "fs": [ "src/shims/noop.ts" ],
       "http": [ "src/shims/http.ts" ],
       "https": [ "src/shims/https.ts" ],

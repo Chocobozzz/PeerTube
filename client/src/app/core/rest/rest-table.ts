@@ -1,4 +1,4 @@
-import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { LazyLoadEvent, SortMeta } from 'primeng/api'
 import { RestPagination } from './rest-pagination'
 import { Subject } from 'rxjs'

@@ -65,3 +65,88 @@ my-action-dropdown.show {
     display: block !important;
   }
 }
+
+.table-video-link {
+  @include disable-outline;
+
+  position: relative;
+  top: 3px;
+}
+
+.table-comment-link,
+.table-account-link {
+  @include disable-outline;
+
+  color: var(--mainForegroundColor);
+
+  ::ng-deep p:last-child {
+    margin: 0;
+  }
+}
+
+.table-account-link {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-video {
+  display: inline-flex;
+
+  .table-video-image {
+    @include miniature-thumbnail;
+
+    $image-height: 45px;
+
+    height: $image-height;
+    width: #{(16/9) * $image-height};
+    margin-right: 0.5rem;
+    border-radius: 2px;
+    border: none;
+    background: transparent;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    img {
+      height: 100%;
+      width: 100%;
+      border-radius: 2px;
+    }
+
+    span {
+      color: pvar(--inputPlaceholderColor);
+    }
+
+    .table-video-image-label {
+      @include static-thumbnail-overlay;
+      position: absolute;
+      border-radius: 3px;
+      font-size: 10px;
+      padding: 0 3px;
+      line-height: 1.3;
+      bottom: 2px;
+      right: 2px;
+    }
+  }
+
+  .table-video-text {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 90%;
+    color: pvar(--mainForegroundColor);
+    line-height: 1rem;
+
+    div .glyphicon {
+      font-size: 80%;
+      color: gray;
+      margin-left: 0.1rem;
+    }
+
+    div + div {
+      color: var(--greyForegroundColor);
+      font-size: 11px;
+    }
+  }
+}
