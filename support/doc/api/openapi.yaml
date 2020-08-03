@@ -5413,7 +5413,7 @@ components:
             $ref: '#/components/schemas/Plugin'
   callbacks:
     searchIndex:
-      '{%CONFIG.SEARCH.SEARCH_INDEX.URL%}/api/v1/search/videos/':
+      'https://search.example.org/api/v1/search/videos':
         post:
           summary: third-party search index MAY be used instead of the local index, if enabled by the instance admin. see `searchTarget`
           responses:
