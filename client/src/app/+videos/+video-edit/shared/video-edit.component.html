@@ -28,11 +28,10 @@
                 </ng-template>
               </my-help>
 
-              <tag-input
-                [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
-                i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a new tag"
-                formControlName="tags" [maxItems]="5" [modelAsStrings]="true"
-              ></tag-input>
+              <my-select-tags labelForId="label-tags" formControlName="tags"></my-select-tags>
+              <div *ngIf="formErrors.tags" class="form-error">
+                {{ formErrors.tags }}
+              </div>
             </div>
 
             <div class="form-group">
@@ -56,22 +55,15 @@
 
           <div class="col-video-edit">
             <div class="form-group">
-              <label i18n>Channel</label>
-              <div class="peertube-select-container">
-                <select formControlName="channelId" class="form-control">
-                  <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
-                </select>
-              </div>
+              <label i18n for="channel">Channel</label>
+              <my-select-channel labelForId="channel" [items]="userVideoChannels" formControlName="channelId"></my-select-channel>
             </div>
 
             <div class="form-group">
               <label i18n for="category">Category</label>
-              <div class="peertube-select-container">
-                <select id="category" formControlName="category" class="form-control">
-                  <option></option>
-                  <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
-                </select>
-              </div>
+              <my-select-options
+                labelForId="category" [items]="videoCategories" formControlName="category" [clearable]="true"
+              ></my-select-options>
 
               <div *ngIf="formErrors.category" class="form-error">
                 {{ formErrors.category }}
@@ -80,12 +72,9 @@
 
             <div class="form-group">
               <label i18n for="licence">Licence</label>
-              <div class="peertube-select-container">
-                <select id="licence" formControlName="licence" class="form-control">
-                  <option></option>
-                  <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
-                </select>
-              </div>
+              <my-select-options
+                labelForId="licence" [items]="videoLicences" formControlName="licence" [clearable]="true"
+              ></my-select-options>
 
               <div *ngIf="formErrors.licence" class="form-error">
                 {{ formErrors.licence }}
@@ -94,12 +83,10 @@
 
             <div class="form-group">
               <label i18n for="language">Language</label>
-              <div class="peertube-select-container">
-                <select id="language" formControlName="language" class="form-control">
-                  <option></option>
-                  <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
-                </select>
-              </div>
+              <my-select-options
+                labelForId="language" [items]="videoLanguages" formControlName="language"
+                [clearable]="true" [searchable]="true" [groupBy]="'group'"
+              ></my-select-options>
 
               <div *ngIf="formErrors.language" class="form-error">
                 {{ formErrors.language }}
@@ -108,13 +95,9 @@
 
             <div class="form-group">
               <label i18n for="privacy">Privacy</label>
-              <div class="peertube-select-container">
-                <select id="privacy" formControlName="privacy" class="form-control">
-                  <option></option>
-                  <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
-                  <option *ngIf="schedulePublicationPossible" [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
-                </select>
-              </div>
+              <my-select-options
+                labelForId="privacy" [items]="videoPrivacies" formControlName="privacy" [clearable]="false"
+              ></my-select-options>
 
               <div *ngIf="formErrors.privacy" class="form-error">
                 {{ formErrors.privacy }}
@@ -136,7 +119,7 @@
 
             <my-peertube-checkbox inputName="nsfw" formControlName="nsfw" helpPlacement="bottom-right">
               <ng-template ptTemplate="label">
-                <ng-container i18n>This video contains mature or explicit content</ng-container>
+                <ng-container i18n>Contains sensitive content</ng-container>
               </ng-template>
 
               <ng-template ptTemplate="help">
@@ -146,7 +129,7 @@
 
             <my-peertube-checkbox *ngIf="waitTranscodingEnabled" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
               <ng-template ptTemplate="label">
-                <ng-container i18n>Wait transcoding before publishing the video</ng-container>
+                <ng-container i18n>Publish after transcoding</ng-container>
               </ng-template>
 
               <ng-template ptTemplate="help">

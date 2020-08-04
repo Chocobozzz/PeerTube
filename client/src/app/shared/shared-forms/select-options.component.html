@@ -1,0 +1,18 @@
+<ng-select
+  [items]="items"
+  [groupBy]="groupBy"
+  [(ngModel)]="selectedId"
+  (ngModelChange)="onModelChange()"
+  [bindLabel]="bindLabel"
+  [bindValue]="bindValue"
+  [clearable]="clearable"
+  [searchable]="searchable"
+>
+  <ng-template ng-option-tmp let-item="item" let-index="index">
+    {{ item.label }}
+    <ng-container *ngIf="item.description">
+      <br>
+      <span [title]="item.description" class="text-muted">{{ item.description }}</span>
+    </ng-container>
+  </ng-template>
+</ng-select>

@@ -1,8 +1,9 @@
 @import '_variables';
 @import '_mixins';
 
-.peertube-select-container {
-  @include peertube-select-container(auto);
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
 }
 
 .caption-file {

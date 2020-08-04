@@ -1,5 +1,5 @@
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Validators } from '@angular/forms'
+import { Validators, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms'
 import { Injectable } from '@angular/core'
 import { BuildFormValidator } from './form-validator.service'
 
@@ -13,7 +13,8 @@ export class VideoValidatorsService {
   readonly VIDEO_IMAGE: BuildFormValidator
   readonly VIDEO_CHANNEL: BuildFormValidator
   readonly VIDEO_DESCRIPTION: BuildFormValidator
-  readonly VIDEO_TAGS: BuildFormValidator
+  readonly VIDEO_TAGS_ARRAY: BuildFormValidator
+  readonly VIDEO_TAG: BuildFormValidator
   readonly VIDEO_SUPPORT: BuildFormValidator
   readonly VIDEO_SCHEDULE_PUBLICATION_AT: BuildFormValidator
   readonly VIDEO_ORIGINALLY_PUBLISHED_AT: BuildFormValidator
@@ -71,11 +72,19 @@ export class VideoValidatorsService {
       }
     }
 
-    this.VIDEO_TAGS = {
+    this.VIDEO_TAG = {
       VALIDATORS: [ Validators.minLength(2), Validators.maxLength(30) ],
       MESSAGES: {
         'minlength': this.i18n('A tag should be more than 2 characters long.'),
         'maxlength': this.i18n('A tag should be less than 30 characters long.')
+      }
+    }
+
+    this.VIDEO_TAGS_ARRAY = {
+      VALIDATORS: [ Validators.maxLength(5), this.arrayTagLengthValidator() ],
+      MESSAGES: {
+        'maxlength': this.i18n('A maximum of 5 tags can be used on a video.'),
+        'arrayTagLength': this.i18n('A tag should be more than 2, and less than 30 characters long.')
       }
     }
 
@@ -97,6 +106,18 @@ export class VideoValidatorsService {
     this.VIDEO_ORIGINALLY_PUBLISHED_AT = {
       VALIDATORS: [ ],
       MESSAGES: {}
+    }
+  }
+
+  arrayTagLengthValidator (min = 2, max = 30): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors => {
+      const array = control.value as Array<string>
+
+      if (array.every(e => e.length > min && e.length < max)) {
+        return null
+      }
+
+      return { 'arrayTagLength': true }
     }
   }
 }

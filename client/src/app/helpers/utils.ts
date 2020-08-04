@@ -16,7 +16,10 @@ function getParameterByName (name: string, url: string) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-function populateAsyncUserVideoChannels (authService: AuthService, channel: { id: number, label: string, support?: string }[]) {
+function populateAsyncUserVideoChannels (
+  authService: AuthService,
+  channel: { id: number, label: string, support?: string, avatarPath?: string, recent?: boolean }[]
+) {
   return new Promise(res => {
     authService.userInformationLoaded
       .subscribe(
@@ -27,7 +30,12 @@ function populateAsyncUserVideoChannels (authService: AuthService, channel: { id
           const videoChannels = user.videoChannels
           if (Array.isArray(videoChannels) === false) return
 
-          videoChannels.forEach(c => channel.push({ id: c.id, label: c.displayName, support: c.support }))
+          videoChannels.forEach(c => channel.push({
+            id: c.id,
+            label: c.displayName,
+            support: c.support,
+            avatarPath: c.avatar?.path
+          }))
 
           return res()
         }

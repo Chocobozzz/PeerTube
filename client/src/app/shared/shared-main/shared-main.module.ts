@@ -17,6 +17,7 @@ import {
   NgbPopoverModule,
   NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
+import { NgSelectModule } from '@ng-select/ng-select'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, ActorAvatarInfoComponent, AvatarComponent } from './account'
@@ -54,6 +55,8 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
     NgPipesModule,
     MultiSelectModule,
     InputSwitchModule,
+
+    NgSelectModule,
 
     SharedGlobalIconModule
   ],
@@ -134,7 +137,9 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
     TopMenuDropdownComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    NgSelectModule
   ],
 
   providers: [

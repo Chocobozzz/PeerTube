@@ -28,7 +28,12 @@ export class VideoUpdateResolver implements Resolve<any> {
                          .listAccountVideoChannels(video.account)
                          .pipe(
                            map(result => result.data),
-                           map(videoChannels => videoChannels.map(c => ({ id: c.id, label: c.displayName, support: c.support })))
+                           map(videoChannels => videoChannels.map(c => ({
+                             id: c.id,
+                             label: c.displayName,
+                             support: c.support,
+                             avatarPath: c.avatar?.path
+                           })))
                          ),
 
                      this.videoCaptionService

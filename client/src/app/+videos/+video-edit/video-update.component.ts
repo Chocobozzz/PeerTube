@@ -17,7 +17,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
   isUpdatingVideo = false
-  userVideoChannels: { id: number, label: string, support: string }[] = []
+  userVideoChannels: { id: number, label: string, support: string, avatar?: string }[] = []
   schedulePublicationPossible = false
   videoCaptions: VideoCaptionEdit[] = []
   waitTranscodingEnabled = true

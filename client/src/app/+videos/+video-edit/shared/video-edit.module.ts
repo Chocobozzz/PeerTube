@@ -1,4 +1,3 @@
-import { TagInputModule } from 'ngx-chips'
 import { CalendarModule } from 'primeng/calendar'
 import { NgModule } from '@angular/core'
 import { SharedFormModule } from '@app/shared/shared-forms'
@@ -10,7 +9,6 @@ import { VideoEditComponent } from './video-edit.component'
 
 @NgModule({
   imports: [
-    TagInputModule,
     CalendarModule,
 
     SharedMainModule,
@@ -24,7 +22,6 @@ import { VideoEditComponent } from './video-edit.component'
   ],
 
   exports: [
-    TagInputModule,
     CalendarModule,
 
     SharedMainModule,

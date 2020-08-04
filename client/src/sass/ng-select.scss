@@ -1,0 +1,29 @@
+@import '_variables';
+
+$ng-select-highlight: #f2690d;
+// $ng-select-primary-text: #333 !default;
+// $ng-select-disabled-text: #f9f9f9 !default;
+// $ng-select-border: #ccc !default;
+// $ng-select-border-radius: 4px !default;
+// $ng-select-bg: #ffffff !default;
+// $ng-select-selected: lighten($ng-select-highlight, 46) !default;
+// $ng-select-marke d: lighten($ng-select-highlight, 48) !default;
+$ng-select-box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
+// $ng-select-placeholder: lighten($ng-select-primary-text, 40) !default;
+$ng-select-height: 30px;
+// $ng-select-value-padding-left: 10px !default;
+// $ng-select-value-font-size: 0.9em !default;
+
+@import "~@ng-select/ng-select/scss/default.theme.scss";
+
+.ng-input {
+  font-size: .9em;
+}
+
+.ng-select {
+  &.ng-select-focused {
+    &:not(.ng-select-opened) > .ng-select-container {
+      border-color: #ccc !important;
+    }
+  }
+}

@@ -144,12 +144,7 @@
         <button i18n class="reset-button reset-button-small" (click)="resetField('tagsAllOf')" *ngIf="advancedSearch.tagsAllOf">
           Reset
         </button>
-        <tag-input
-          [(ngModel)]="advancedSearch.tagsAllOf" name="tagsAllOf" id="tagsAllOf"
-          [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
-          i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a tag"
-          [maxItems]="5" [modelAsStrings]="true"
-        ></tag-input>
+        <my-select-tags labelForId="tagsAllOf" id="tagsAllOf" [(ngModel)]="advancedSearch.tagsAllOf"></my-select-tags>
       </div>
 
       <div class="form-group">
@@ -157,12 +152,7 @@
         <button i18n class="reset-button reset-button-small" (click)="resetField('tagsOneOf')" *ngIf="advancedSearch.tagsOneOf">
           Reset
         </button>
-        <tag-input
-          [(ngModel)]="advancedSearch.tagsOneOf" name="tagsOneOf" id="tagsOneOf"
-          [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
-          i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a tag"
-          [maxItems]="5" [modelAsStrings]="true"
-        ></tag-input>
+        <my-select-tags labelForId="tagsOneOf" id="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf"></my-select-tags>
       </div>
 
       <div class="form-group" *ngIf="isSearchTargetEnabled()">
