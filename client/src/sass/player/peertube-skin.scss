@@ -308,8 +308,10 @@ body {
       .icon {
         &.icon-next {
           mask-image: url('#{$assets-path}/player/images/next.svg');
+          -webkit-mask-image: url('#{$assets-path}/player/images/next.svg');
           background-color: white;
           mask-size: cover;
+          -webkit-mask-size: cover;
           transform: scale(2.2);
         }
       }

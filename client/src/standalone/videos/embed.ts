@@ -9,6 +9,8 @@ import {
   UserRefreshToken,
   VideoCaption,
   VideoDetails,
+  VideoPlaylist,
+  VideoPlaylistElement,
   VideoStreamingPlaylistType
 } from '../../../../shared/models'
 import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
@@ -19,9 +21,10 @@ import { PeerTubeEmbedApi } from './embed-api'
 type Translations = { [ id: string ]: string }
 
 export class PeerTubeEmbed {
-  videoElement: HTMLVideoElement
+  playerElement: HTMLVideoElement
   player: videojs.Player
   api: PeerTubeEmbedApi = null
+
   autoplay: boolean
   controls: boolean
   muted: boolean
@@ -47,14 +50,24 @@ export class PeerTubeEmbed {
     CLIENT_SECRET: 'client_secret'
   }
 
+  private translationsPromise: Promise<{ [id: string]: string }>
+  private configPromise: Promise<ServerConfig>
+  private PeertubePlayerManagerModulePromise: Promise<any>
+
+  private playlist: VideoPlaylist
+  private playlistElements: VideoPlaylistElement[]
+  private currentPlaylistElement: VideoPlaylistElement
+
+  private wrapperElement: HTMLElement
+
   static async main () {
-    const videoContainerId = 'video-container'
+    const videoContainerId = 'video-wrapper'
     const embed = new PeerTubeEmbed(videoContainerId)
     await embed.init()
   }
 
-  constructor (private videoContainerId: string) {
-    this.videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
+  constructor (private videoWrapperId: string) {
+    this.wrapperElement = document.getElementById(this.videoWrapperId)
   }
 
   getVideoUrl (id: string) {
@@ -114,6 +127,10 @@ export class PeerTubeEmbed {
       })
   }
 
+  getPlaylistUrl (id: string) {
+    return window.location.origin + '/api/v1/video-playlists/' + id
+  }
+
   loadVideoInfo (videoId: string): Promise<Response> {
     return this.refreshFetch(this.getVideoUrl(videoId), { headers: this.headers })
   }
@@ -122,8 +139,17 @@ export class PeerTubeEmbed {
     return fetch(this.getVideoUrl(videoId) + '/captions')
   }
 
-  loadConfig (): Promise<Response> {
+  loadPlaylistInfo (playlistId: string): Promise<Response> {
+    return fetch(this.getPlaylistUrl(playlistId))
+  }
+
+  loadPlaylistElements (playlistId: string): Promise<Response> {
+    return fetch(this.getPlaylistUrl(playlistId) + '/videos')
+  }
+
+  loadConfig (): Promise<ServerConfig> {
     return fetch('/api/v1/config')
+      .then(res => res.json())
   }
 
   removeElement (element: HTMLElement) {
@@ -132,7 +158,10 @@ export class PeerTubeEmbed {
 
   displayError (text: string, translations?: Translations) {
     // Remove video element
-    if (this.videoElement) this.removeElement(this.videoElement)
+    if (this.playerElement) {
+      this.removeElement(this.playerElement)
+      this.playerElement = undefined
+    }
 
     const translatedText = peertubeTranslate(text, translations)
     const translatedSorry = peertubeTranslate('Sorry', translations)
@@ -156,6 +185,16 @@ export class PeerTubeEmbed {
 
   videoFetchError (translations?: Translations) {
     const text = 'We cannot fetch the video. Please try again later.'
+    this.displayError(text, translations)
+  }
+
+  playlistNotFound (translations?: Translations) {
+    const text = 'This playlist does not exist.'
+    this.displayError(text, translations)
+  }
+
+  playlistFetchError (translations?: Translations) {
+    const text = 'We cannot fetch the playlist. Please try again later.'
     this.displayError(text, translations)
   }
 
@@ -218,34 +257,129 @@ export class PeerTubeEmbed {
     }
   }
 
-  private async initCore () {
-    const urlParts = window.location.pathname.split('/')
-    const videoId = urlParts[ urlParts.length - 1 ]
+  private async loadPlaylist (playlistId: string) {
+    const playlistPromise = this.loadPlaylistInfo(playlistId)
+    const playlistElementsPromise = this.loadPlaylistElements(playlistId)
 
-    if (this.userTokens) this.setHeadersFromTokens()
+    const playlistResponse = await playlistPromise
 
+    if (!playlistResponse.ok) {
+      const serverTranslations = await this.translationsPromise
+
+      if (playlistResponse.status === 404) {
+        this.playlistNotFound(serverTranslations)
+        return undefined
+      }
+
+      this.playlistFetchError(serverTranslations)
+      return undefined
+    }
+
+    return { playlistResponse, videosResponse: await playlistElementsPromise }
+  }
+
+  private async loadVideo (videoId: string) {
     const videoPromise = this.loadVideoInfo(videoId)
-    const captionsPromise = this.loadVideoCaptions(videoId)
-    const configPromise = this.loadConfig()
 
-    const translationsPromise = TranslationsManager.getServerTranslations(window.location.origin, navigator.language)
     const videoResponse = await videoPromise
 
     if (!videoResponse.ok) {
-      const serverTranslations = await translationsPromise
+      const serverTranslations = await this.translationsPromise
 
-      if (videoResponse.status === 404) return this.videoNotFound(serverTranslations)
+      if (videoResponse.status === 404) {
+        this.videoNotFound(serverTranslations)
+        return undefined
+      }
 
-      return this.videoFetchError(serverTranslations)
+      this.videoFetchError(serverTranslations)
+      return undefined
     }
 
-    const videoInfo: VideoDetails = await videoResponse.json()
-    this.loadPlaceholder(videoInfo)
+    const captionsPromise = this.loadVideoCaptions(videoId)
 
-    const PeertubePlayerManagerModulePromise = import('../../assets/player/peertube-player-manager')
+    return { captionsPromise, videoResponse }
+  }
 
-    const promises = [ translationsPromise, captionsPromise, configPromise, PeertubePlayerManagerModulePromise ]
-    const [ serverTranslations, captionsResponse, configResponse, PeertubePlayerManagerModule ] = await Promise.all(promises)
+  private async buildPlaylistManager () {
+    const translations = await this.translationsPromise
+
+    this.player.upnext({
+      timeout: 10000, // 10s
+      headText: peertubeTranslate('Up Next', translations),
+      cancelText: peertubeTranslate('Cancel', translations),
+      suspendedText: peertubeTranslate('Autoplay is suspended', translations),
+      getTitle: () => this.nextVideoTitle(),
+      next: () => this.autoplayNext(),
+      condition: () => !!this.getNextPlaylistElement(),
+      suspended: () => false
+    })
+  }
+
+  private async autoplayNext () {
+    const next = this.getNextPlaylistElement()
+    if (!next) {
+      console.log('Next element not found in playlist.')
+      return
+    }
+
+    this.currentPlaylistElement = next
+
+    const res = await this.loadVideo(this.currentPlaylistElement.video.uuid)
+    if (res === undefined) return
+
+    return this.buildVideoPlayer(res.videoResponse, res.captionsPromise)
+  }
+
+  private nextVideoTitle () {
+    const next = this.getNextPlaylistElement()
+    if (!next) return ''
+
+    return next.video.name
+  }
+
+  private getNextPlaylistElement (position?: number): VideoPlaylistElement {
+    if (!position) position = this.currentPlaylistElement.position + 1
+
+    if (position > this.playlist.videosLength) {
+      return undefined
+    }
+
+    const next = this.playlistElements.find(e => e.position === position)
+
+    if (!next || !next.video) {
+      return this.getNextPlaylistElement(position + 1)
+    }
+
+    return next
+  }
+
+  private async buildVideoPlayer (videoResponse: Response, captionsPromise: Promise<Response>) {
+    let alreadyHadPlayer = false
+
+    if (this.player) {
+      this.player.dispose()
+      alreadyHadPlayer = true
+    }
+
+    this.playerElement = document.createElement('video')
+    this.playerElement.className = 'video-js vjs-peertube-skin'
+    this.playerElement.setAttribute('playsinline', 'true')
+    this.wrapperElement.appendChild(this.playerElement)
+
+    const videoInfoPromise = videoResponse.json()
+      .then((videoInfo: VideoDetails) => {
+        if (!alreadyHadPlayer) this.loadPlaceholder(videoInfo)
+
+        return videoInfo
+      })
+
+    const [ videoInfo, serverTranslations, captionsResponse, config, PeertubePlayerManagerModule ] = await Promise.all([
+      videoInfoPromise,
+      this.translationsPromise,
+      captionsPromise,
+      this.configPromise,
+      this.PeertubePlayerManagerModulePromise
+    ])
 
     const PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
     const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
@@ -254,7 +388,8 @@ export class PeerTubeEmbed {
 
     const options: PeertubePlayerManagerOptions = {
       common: {
-        autoplay: this.autoplay,
+        // Autoplay in playlist mode
+        autoplay: alreadyHadPlayer ? true : this.autoplay,
         controls: this.controls,
         muted: this.muted,
         loop: this.loop,
@@ -263,12 +398,14 @@ export class PeerTubeEmbed {
         stopTime: this.stopTime,
         subtitle: this.subtitle,
 
+        nextVideo: () => this.autoplayNext(),
+
         videoCaptions,
         inactivityTimeout: 2500,
-        videoViewUrl: this.getVideoUrl(videoId) + '/views',
+        videoViewUrl: this.getVideoUrl(videoInfo.uuid) + '/views',
 
-        playerElement: this.videoElement,
-        onPlayerElementChange: (element: HTMLVideoElement) => this.videoElement = element,
+        playerElement: this.playerElement,
+        onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
 
         videoDuration: videoInfo.duration,
         enableHotkeys: true,
@@ -307,23 +444,58 @@ export class PeerTubeEmbed {
 
     this.buildCSS()
 
-    await this.buildDock(videoInfo, configResponse)
+    await this.buildDock(videoInfo, config)
 
     this.initializeApi()
 
     this.removePlaceholder()
+
+    if (this.isPlaylistEmbed()) {
+      await this.buildPlaylistManager()
+    }
+  }
+
+  private async initCore () {
+    if (this.userTokens) this.setHeadersFromTokens()
+
+    this.configPromise = this.loadConfig()
+    this.translationsPromise = TranslationsManager.getServerTranslations(window.location.origin, navigator.language)
+    this.PeertubePlayerManagerModulePromise = import('../../assets/player/peertube-player-manager')
+
+    let videoId: string
+
+    if (this.isPlaylistEmbed()) {
+      const playlistId = this.getResourceId()
+      const res = await this.loadPlaylist(playlistId)
+      if (!res) return undefined
+
+      this.playlist = await res.playlistResponse.json()
+
+      const playlistElementResult = await res.videosResponse.json()
+      this.playlistElements = playlistElementResult.data
+
+      this.currentPlaylistElement = this.playlistElements[0]
+      videoId = this.currentPlaylistElement.video.uuid
+    } else {
+      videoId = this.getResourceId()
+    }
+
+    const res = await this.loadVideo(videoId)
+    if (res === undefined) return
+
+    return this.buildVideoPlayer(res.videoResponse, res.captionsPromise)
   }
 
   private handleError (err: Error, translations?: { [ id: string ]: string }) {
     if (err.message.indexOf('from xs param') !== -1) {
       this.player.dispose()
-      this.videoElement = null
+      this.playerElement = null
       this.displayError('This video is not available because the remote instance is not responding.', translations)
       return
     }
   }
 
-  private async buildDock (videoInfo: VideoDetails, configResponse: Response) {
+  private async buildDock (videoInfo: VideoDetails, config: ServerConfig) {
     if (!this.controls) return
 
     // On webtorrent fallback, player may have been disposed
@@ -331,7 +503,6 @@ export class PeerTubeEmbed {
 
     const title = this.title ? videoInfo.name : undefined
 
-    const config: ServerConfig = await configResponse.json()
     const description = config.tracker.enabled && this.warningTitle
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
@@ -373,11 +544,12 @@ export class PeerTubeEmbed {
 
     const url = window.location.origin + video.previewPath
     placeholder.style.backgroundImage = `url("${url}")`
+    placeholder.style.display = 'block'
   }
 
   private removePlaceholder () {
     const placeholder = this.getPlaceholderElement()
-    placeholder.parentElement.removeChild(placeholder)
+    placeholder.style.display = 'none'
   }
 
   private getPlaceholderElement () {
@@ -386,6 +558,15 @@ export class PeerTubeEmbed {
 
   private setHeadersFromTokens () {
     this.headers.set('Authorization', `${this.userTokens.tokenType} ${this.userTokens.accessToken}`)
+  }
+
+  private getResourceId () {
+    const urlParts = window.location.pathname.split('/')
+    return urlParts[ urlParts.length - 1 ]
+  }
+
+  private isPlaylistEmbed () {
+    return window.location.pathname.split('/')[1] === 'video-playlists'
   }
 }
 

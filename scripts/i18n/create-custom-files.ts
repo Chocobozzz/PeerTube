@@ -48,7 +48,9 @@ values(VIDEO_CATEGORIES)
     'This video does not exist.',
     'We cannot fetch the video. Please try again later.',
     'Sorry',
-    'This video is not available because the remote instance is not responding.'
+    'This video is not available because the remote instance is not responding.',
+    'This playlist does not exist',
+    'We cannot fetch the playlist. Please try again later.'
   ])
   .forEach(v => { serverKeys[v] = v })
 

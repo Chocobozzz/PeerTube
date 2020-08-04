@@ -163,6 +163,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // Unsubscribe subscriptions
     if (this.paramsSub) this.paramsSub.unsubscribe()
     if (this.queryParamsSub) this.queryParamsSub.unsubscribe()
+    if (this.configSub) this.configSub.unsubscribe()
 
     // Unbind hotkeys
     this.hotkeysService.remove(this.hotkeys)
