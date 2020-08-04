@@ -1,4 +1,3 @@
-import { TagInputModule } from 'ngx-chips'
 import { NgModule } from '@angular/core'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedMainModule } from '@app/shared/shared-main'
@@ -14,8 +13,6 @@ import { VideoLazyLoadResolver } from './video-lazy-load.resolver'
 
 @NgModule({
   imports: [
-    TagInputModule,
-
     SearchRoutingModule,
 
     SharedMainModule,
@@ -31,7 +28,6 @@ import { VideoLazyLoadResolver } from './video-lazy-load.resolver'
   ],
 
   exports: [
-    TagInputModule,
     SearchComponent
   ],
 

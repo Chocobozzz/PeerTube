@@ -339,23 +339,25 @@ export class VideoService implements VideosProvider {
     const base = [
       {
         id: VideoPrivacy.PRIVATE,
-        label: this.i18n('Only I can see this video')
+        description: this.i18n('Only I can see this video')
       },
       {
         id: VideoPrivacy.UNLISTED,
-        label: this.i18n('Only people with the private link can see this video')
+        description: this.i18n('Only shareable via a private link')
       },
       {
         id: VideoPrivacy.PUBLIC,
-        label: this.i18n('Anyone can see this video')
+        description: this.i18n('Anyone can see this video')
       },
       {
         id: VideoPrivacy.INTERNAL,
-        label: this.i18n('Only users of this instance can see this video')
+        description: this.i18n('Only users of this instance can see this video')
       }
     ]
 
-    return base.filter(o => !!privacies.find(p => p.id === o.id))
+    return base
+      .filter(o => !!privacies.find(p => p.id === o.id)) // filter down to privacies that where in the input
+      .map(o => ({ ...privacies[o.id - 1], ...o })) // merge the input privacies that contain a label, and extend them with a description
   }
 
   nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType) {

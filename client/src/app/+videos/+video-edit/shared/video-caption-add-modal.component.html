@@ -8,11 +8,11 @@
 
     <div class="modal-body">
       <label i18n for="language">Language</label>
-      <div class="peertube-select-container">
-        <select id="language" formControlName="language" class="form-control">
-          <option></option>
-          <option *ngFor="let language of videoCaptionLanguages" [value]="language.id">{{ language.label }}</option>
-        </select>
+      <div class="peertube-ng-select-container">
+        <ng-select
+          labelForId="language" [items]="videoCaptionLanguages" formControlName="language"
+          bindLabel="label" bindValue="id"
+        ></ng-select>
       </div>
 
       <div *ngIf="formErrors.language" class="form-error">

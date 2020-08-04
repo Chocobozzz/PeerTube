@@ -28,6 +28,9 @@ import { PreviewUploadComponent } from './preview-upload.component'
 import { ReactiveFileComponent } from './reactive-file.component'
 import { TextareaAutoResizeDirective } from './textarea-autoresize.directive'
 import { TimestampInputComponent } from './timestamp-input.component'
+import { SelectChannelComponent } from './select-channel.component'
+import { SelectOptionsComponent } from './select-options.component'
+import { SelectTagsComponent } from './select-tags.component'
 
 @NgModule({
   imports: [
@@ -45,7 +48,10 @@ import { TimestampInputComponent } from './timestamp-input.component'
     PreviewUploadComponent,
     ReactiveFileComponent,
     TextareaAutoResizeDirective,
-    TimestampInputComponent
+    TimestampInputComponent,
+    SelectChannelComponent,
+    SelectOptionsComponent,
+    SelectTagsComponent
   ],
 
   exports: [
@@ -58,7 +64,10 @@ import { TimestampInputComponent } from './timestamp-input.component'
     PreviewUploadComponent,
     ReactiveFileComponent,
     TextareaAutoResizeDirective,
-    TimestampInputComponent
+    TimestampInputComponent,
+    SelectChannelComponent,
+    SelectOptionsComponent,
+    SelectTagsComponent
   ],
 
   providers: [

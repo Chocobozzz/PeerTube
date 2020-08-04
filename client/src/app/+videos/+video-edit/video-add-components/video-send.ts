@@ -10,7 +10,7 @@ import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
 export abstract class VideoSend extends FormReactive implements OnInit {
-  userVideoChannels: { id: number, label: string, support: string }[] = []
+  userVideoChannels: { id: number, label: string, support: string, avatarPath?: string }[] = []
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCaptions: VideoCaptionEdit[] = []
 
@@ -44,7 +44,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
     this.serverService.getVideoPrivacies()
         .subscribe(
           privacies => {
-            this.videoPrivacies = privacies
+            this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
 
             this.firstStepPrivacyId = this.DEFAULT_VIDEO_PRIVACY
           })

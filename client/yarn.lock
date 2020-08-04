@@ -1344,6 +1344,13 @@
   dependencies:
     tslib "^2.0.0"
 
+"@ng-select/ng-select@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-5.0.0.tgz#db021e5ca7be3fe6be346c3b63b3f2e109afa0f0"
+  integrity sha512-1mdGNh5xGriSnCLcLF/GWxqCgCehB3Stu7mxhB9K/+BxNCRE365Q1MgpzO61XQBgL0L6ktxiXRhCQWXXtFoq9w==
+  dependencies:
+    tslib "^2.0.0"
+
 "@ngtools/webpack@10.1.0-next.4":
   version "10.1.0-next.4"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-10.1.0-next.4.tgz#5397417820d110e29c7dc99db8adb538de98676e"
@@ -7865,21 +7872,6 @@ next-tick@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
-
-ng2-material-dropdown@0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/ng2-material-dropdown/-/ng2-material-dropdown-0.11.0.tgz#27a402ef3cbdcaf6791ef4cfd4b257e31db7546f"
-  integrity sha512-wptBo09qKecY0QPTProAThrc4A3ajJTcHE9LTpCG5XZZUhXLBzhnGK8OW33TN8A+K/jqcs7OB74ppYJiqs3nhQ==
-  dependencies:
-    tslib "^1.9.0"
-
-ngx-chips@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ngx-chips/-/ngx-chips-2.1.0.tgz#aa299bcf40dc3e1f6288bf1d29e2fdfe9a132ed3"
-  integrity sha512-OQV4dTfD3nXm5d2mGKUSgwOtJOaMnZ4F+lwXOtd7DWRSUne0JQWwoZNHdOpuS6saBGhqCPDAwq6KxdR5XSgZUQ==
-  dependencies:
-    ng2-material-dropdown "0.11.0"
-    tslib "^1.9.0"
 
 ngx-pipes@^2.6.0:
   version "2.7.5"

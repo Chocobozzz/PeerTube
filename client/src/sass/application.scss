@@ -13,6 +13,7 @@ $assets-path: '../../assets/';
 
 @import './bootstrap';
 @import './primeng-custom';
+@import './ng-select.scss';
 
 [hidden] {
   display: none !important;

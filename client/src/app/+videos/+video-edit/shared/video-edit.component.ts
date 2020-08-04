@@ -8,6 +8,11 @@ import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-ma
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { forkJoin } from 'rxjs'
+import { InstanceService } from '@app/shared/shared-instance'
+
+type VideoLanguages = VideoConstant<string> & { group?: string }
 
 @Component({
   selector: 'my-video-edit',
@@ -31,7 +36,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
-  videoLanguages: VideoConstant<string>[] = []
+  videoLanguages: VideoLanguages[] = []
 
   tagValidators: ValidatorFn[]
   tagValidatorsMessages: { [ name: string ]: string }
@@ -56,12 +61,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private videoValidatorsService: VideoValidatorsService,
     private videoService: VideoService,
     private serverService: ServerService,
+    private instanceService: InstanceService,
     private i18nPrimengCalendarService: I18nPrimengCalendarService,
+    private i18n: I18n,
     private ngZone: NgZone
   ) {
-    this.tagValidators = this.videoValidatorsService.VIDEO_TAGS.VALIDATORS
-    this.tagValidatorsMessages = this.videoValidatorsService.VIDEO_TAGS.MESSAGES
-
     this.calendarLocale = this.i18nPrimengCalendarService.getCalendarLocale()
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
@@ -93,7 +97,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       licence: this.videoValidatorsService.VIDEO_LICENCE,
       language: this.videoValidatorsService.VIDEO_LANGUAGE,
       description: this.videoValidatorsService.VIDEO_DESCRIPTION,
-      tags: null,
+      tags: this.videoValidatorsService.VIDEO_TAGS_ARRAY,
       previewfile: null,
       support: this.videoValidatorsService.VIDEO_SUPPORT,
       schedulePublicationAt: this.videoValidatorsService.VIDEO_SCHEDULE_PUBLICATION_AT,
@@ -126,11 +130,29 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         .subscribe(res => this.videoCategories = res)
     this.serverService.getVideoLicences()
         .subscribe(res => this.videoLicences = res)
-    this.serverService.getVideoLanguages()
-      .subscribe(res => this.videoLanguages = res)
+    forkJoin([
+      this.instanceService.getAbout(),
+      this.serverService.getVideoLanguages()
+    ]).pipe(map(([ about, languages ]) => ({ about, languages })))
+      .subscribe(res => {
+        this.videoLanguages = res.languages
+          .map(l => res.about.instance.languages.includes(l.id)
+            ? { ...l, group: this.i18n('Instance languages'), groupOrder: 0 }
+            : { ...l, group: this.i18n('All languages'), groupOrder: 1 })
+          .sort((a, b) => a.groupOrder - b.groupOrder)
+      })
 
     this.serverService.getVideoPrivacies()
-      .subscribe(privacies => this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies))
+      .subscribe(privacies => {
+        this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
+        if (this.schedulePublicationPossible) {
+          this.videoPrivacies.push({
+            id: this.SPECIAL_SCHEDULED_PRIVACY,
+            label: this.i18n('Scheduled'),
+            description: this.i18n('Hide the video until a specific date')
+          })
+        }
+      })
 
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()

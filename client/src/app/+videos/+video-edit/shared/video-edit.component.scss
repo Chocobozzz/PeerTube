@@ -161,8 +161,6 @@ p-calendar {
   }
 }
 
-@include ng2-tags;
-
 // columns for the video
 .col-video-edit {
   @include make-col-ready();

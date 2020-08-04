@@ -1,0 +1,13 @@
+<ng-select
+  [items]="items"
+  [(ngModel)]="_items"
+  (ngModelChange)="onModelChange()"
+  i18n-placeholder placeholder="Enter a new tag"
+  [maxSelectedItems]="5"
+  [clearable]="true"
+  [addTag]="true"
+  [multiple]="true"
+  [isOpen]="false"
+  [searchable]="true"
+>
+</ng-select>
