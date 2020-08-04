@@ -823,6 +823,7 @@ export {
 
 function buildVideoMimetypeExt () {
   const data = {
+    // streamable formats that warrant cross-browser compatibility
     'video/webm': '.webm',
     'video/ogg': '.ogv',
     'video/mp4': '.mp4'
@@ -831,15 +832,44 @@ function buildVideoMimetypeExt () {
   if (CONFIG.TRANSCODING.ENABLED) {
     if (CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS) {
       Object.assign(data, {
-        'video/quicktime': '.mov',
-        'video/x-msvideo': '.avi',
-        'video/x-flv': '.flv',
         'video/x-matroska': '.mkv',
-        'video/avi': '.avi',
+        'video/ogg': '.ogg',
+
+        // Developed by Apple
+        'video/quicktime': '.mov', // often used as output format by editing software
         'video/x-m4v': '.m4v',
+        'video/m4v': '.m4v',
+
+        // Developed by the Adobe Flash Platform
+        'video/x-flv': '.flv',
+        'video/x-f4v': '.f4v', // replacement for flv
+
+        // Developed by Microsoft
+        'video/x-ms-wmv': '.wmv',
+        'video/x-msvideo': '.avi',
+        'video/avi': '.avi',
+
+        // Developed by 3GPP
+        // common video formats for cell phones
+        'video/3gpp': '.3gp',
+        'video/3gpp2': '.3g2',
+
+        // Developed by FFmpeg/Mplayer
+        'application/x-nut': '.nut',
+
+        // The standard video format used by many Sony and Panasonic HD camcorders.
+        // It is also used for storing high definition video on Blu-ray discs.
+        'video/mp2t': '.mts',
+        'video/m2ts': '.m2ts',
+
+        // Old formats reliant on MPEG-1/MPEG-2
+        'video/mpv': '.mpv',
+        'video/mpeg2': '.m2v',
+        'video/mpeg': '.mpeg',
+
         // Could be anything
         'application/octet-stream': null,
-        'video/m4v': '.m4v'
+        'application/mxf': '.mxf' // often used as exchange format by editing software
       })
     }
 
@@ -869,7 +899,7 @@ function updateWebserverConfig () {
 }
 
 function buildVideosExtname () {
-  return Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE)
+  return Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE).filter(e => e !== 'null')
 }
 
 function loadLanguages () {
