@@ -1,11 +1,12 @@
-import { PeerTubePlugin } from './peertube-plugin'
-import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
-import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
-import { PlayerMode } from './peertube-player-manager'
-import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
-import { VideoFile } from '@shared/models'
-import videojs from 'video.js'
 import { Config, Level } from 'hls.js'
+import videojs from 'video.js'
+import { VideoFile } from '@shared/models'
+import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
+import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
+import { PlayerMode } from './peertube-player-manager'
+import { PeerTubePlugin } from './peertube-plugin'
+import { EndCardOptions } from './upnext/end-card'
+import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
 
 declare module 'video.js' {
 
@@ -42,6 +43,8 @@ declare module 'video.js' {
     }
 
     dock (options: { title: string, description: string }): void
+
+    upnext (options: Partial<EndCardOptions>): void
   }
 }
 

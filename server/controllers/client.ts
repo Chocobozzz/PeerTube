@@ -22,19 +22,20 @@ clientsRouter.use('/videos/watch/:id', asyncMiddleware(generateWatchHtmlPage))
 clientsRouter.use('/accounts/:nameWithHost', asyncMiddleware(generateAccountHtmlPage))
 clientsRouter.use('/video-channels/:nameWithHost', asyncMiddleware(generateVideoChannelHtmlPage))
 
-const embedCSPMiddleware = CONFIG.CSP.ENABLED
-  ? embedCSP
-  : (req: express.Request, res: express.Response, next: express.NextFunction) => next()
+const embedMiddlewares = [
+  CONFIG.CSP.ENABLED
+    ? embedCSP
+    : (req: express.Request, res: express.Response, next: express.NextFunction) => next(),
 
-clientsRouter.use(
-  '/videos/embed',
-  embedCSPMiddleware,
   (req: express.Request, res: express.Response) => {
     res.removeHeader('X-Frame-Options')
     // Don't cache HTML file since it's an index to the immutable JS/CSS files
     res.sendFile(embedPath, { maxAge: 0 })
   }
-)
+]
+
+clientsRouter.use('/videos/embed', ...embedMiddlewares)
+clientsRouter.use('/video-playlists/embed', ...embedMiddlewares)
 clientsRouter.use(
   '/videos/test-embed',
   (req: express.Request, res: express.Response) => res.sendFile(testEmbedPath)

@@ -26,7 +26,7 @@ export class PeerTubeEmbedApi {
   }
 
   private get element () {
-    return this.embed.videoElement
+    return this.embed.playerElement
   }
 
   private constructChannel () {
@@ -108,7 +108,6 @@ export class PeerTubeEmbedApi {
     setInterval(() => {
       const position = this.element.currentTime
       const volume = this.element.volume
-      const duration = this.element.duration
 
       this.channel.notify({
         method: 'playbackStatusUpdate',
