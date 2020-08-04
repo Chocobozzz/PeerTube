@@ -227,7 +227,7 @@ user:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
-  # Allow your users to upload .mkv, .mov, .avi, .flv videos
+  # Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
   allow_additional_extensions: true
   # If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
   allow_audio_files: true
