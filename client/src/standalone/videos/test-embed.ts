@@ -1,14 +1,19 @@
 import './test-embed.scss'
+import { PeerTubeResolution, PlayerEventType } from '../player/definitions'
 import { PeerTubePlayer } from '../player/player'
-import { PeerTubeResolution, PlayerEventType, PeerTubeTextTrack } from '../player/definitions'
 
 window.addEventListener('load', async () => {
   const urlParts = window.location.href.split('/')
   const lastPart = urlParts[ urlParts.length - 1 ]
-  const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
+
+  const isPlaylist = window.location.pathname.startsWith('/video-playlists/')
+
+  const elementId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
 
   const iframe = document.createElement('iframe')
-  iframe.src = `/videos/embed/${videoId}?api=1`
+  iframe.src = isPlaylist
+    ? `/videos/embed/${elementId}?api=1`
+    : `/video-playlists/embed/${elementId}?api=1`
 
   const mainElement = document.querySelector('#host')
   mainElement.appendChild(iframe)
@@ -32,6 +37,9 @@ window.addEventListener('load', async () => {
   monitoredEvents.forEach(e => {
     player.addEventListener(e as PlayerEventType, (param) => console.log(`PLAYER: event '${e}' received`, param))
     console.log(`PLAYER: now listening for event '${e}'`)
+
+    player.getCurrentPosition()
+      .then(position => document.getElementById('playlist-position').innerHTML = position + '')
   })
 
   let playbackRates: number[] = []
