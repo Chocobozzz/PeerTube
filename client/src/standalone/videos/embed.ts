@@ -143,8 +143,11 @@ export class PeerTubeEmbed {
     return fetch(this.getPlaylistUrl(playlistId))
   }
 
-  loadPlaylistElements (playlistId: string): Promise<Response> {
-    return fetch(this.getPlaylistUrl(playlistId) + '/videos')
+  loadPlaylistElements (playlistId: string, start = 0): Promise<Response> {
+    const url = new URL(this.getPlaylistUrl(playlistId) + '/videos')
+    url.search = new URLSearchParams({ start: '' + start, count: '100' }).toString()
+
+    return fetch(url.toString())
   }
 
   loadConfig (): Promise<ServerConfig> {
@@ -255,6 +258,28 @@ export class PeerTubeEmbed {
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }
+  }
+
+  private async loadAllPlaylistVideos (playlistId: string, baseResult: ResultList<VideoPlaylistElement>) {
+    let elements = baseResult.data
+    let total = baseResult.total
+    let i = 0
+
+    while (total > elements.length && i < 10) {
+      const result = await this.loadPlaylistElements(playlistId, elements.length)
+
+      const json = await result.json() as ResultList<VideoPlaylistElement>
+      total = json.total
+
+      elements = elements.concat(json.data)
+      i++
+    }
+
+    if (i === 10) {
+      console.error('Cannot fetch all playlists elements, there are too many!')
+    }
+
+    return elements
   }
 
   private async loadPlaylist (playlistId: string) {
@@ -534,7 +559,7 @@ export class PeerTubeEmbed {
       this.playlist = await res.playlistResponse.json()
 
       const playlistElementResult = await res.videosResponse.json()
-      this.playlistElements = playlistElementResult.data
+      this.playlistElements = await this.loadAllPlaylistVideos(playlistId, playlistElementResult)
 
       this.currentPlaylistElement = this.playlistElements[0]
       videoId = this.currentPlaylistElement.video.uuid
