@@ -11,8 +11,18 @@ class PlaylistMenu extends Component {
   constructor (player: videojs.Player, options?: PlaylistPluginOptions) {
     super(player, options as any)
 
-    this.player().on('userinactive', () => {
-      this.close()
+    const self = this
+
+    function userInactiveHandler () {
+      self.close()
+    }
+
+    this.el().addEventListener('mouseenter', () => {
+      this.player().off('userinactive', userInactiveHandler)
+    })
+
+    this.el().addEventListener('mouseleave', () => {
+      this.player().one('userinactive', userInactiveHandler)
     })
 
     this.player().on('click', event => {
