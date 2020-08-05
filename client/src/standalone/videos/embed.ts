@@ -309,13 +309,13 @@ export class PeerTubeEmbed {
       cancelText: peertubeTranslate('Cancel', translations),
       suspendedText: peertubeTranslate('Autoplay is suspended', translations),
       getTitle: () => this.nextVideoTitle(),
-      next: () => this.autoplayNext(),
+      next: () => this.playNextVideo(),
       condition: () => !!this.getNextPlaylistElement(),
       suspended: () => false
     })
   }
 
-  private async autoplayNext () {
+  private async playNextVideo () {
     const next = this.getNextPlaylistElement()
     if (!next) {
       console.log('Next element not found in playlist.')
@@ -323,6 +323,18 @@ export class PeerTubeEmbed {
     }
 
     this.currentPlaylistElement = next
+
+    return this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
+  }
+
+  private async playPreviousVideo () {
+    const previous = this.getPreviousPlaylistElement()
+    if (!previous) {
+      console.log('Previous element not found in playlist.')
+      return
+    }
+
+    this.currentPlaylistElement = previous
 
     return this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
   }
@@ -355,6 +367,22 @@ export class PeerTubeEmbed {
     }
 
     return next
+  }
+
+  private getPreviousPlaylistElement (position?: number): VideoPlaylistElement {
+    if (!position) position = this.currentPlaylistElement.position -1
+
+    if (position < 1) {
+      return undefined
+    }
+
+    const prev = this.playlistElements.find(e => e.position === position)
+
+    if (!prev || !prev.video) {
+      return this.getNextPlaylistElement(position - 1)
+    }
+
+    return prev
   }
 
   private async buildVideoPlayer (videoResponse: Response, captionsPromise: Promise<Response>) {
@@ -418,7 +446,12 @@ export class PeerTubeEmbed {
         stopTime: this.stopTime,
         subtitle: this.subtitle,
 
-        nextVideo: () => this.autoplayNext(),
+        nextVideo: this.playlist ? () => this.playNextVideo() : undefined,
+        hasNextVideo: this.playlist ? () => !!this.getNextPlaylistElement() : undefined,
+
+        previousVideo: this.playlist ? () => this.playPreviousVideo() : undefined,
+        hasPreviousVideo: this.playlist ? () => !!this.getPreviousPlaylistElement() : undefined,
+
         playlist: playlistPlugin,
 
         videoCaptions,

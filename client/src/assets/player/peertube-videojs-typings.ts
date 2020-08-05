@@ -118,6 +118,12 @@ type PlaylistPluginOptions = {
   onItemClicked: (element: VideoPlaylistElement) => void
 }
 
+type NextPreviousVideoButtonOptions = {
+  type: 'next' | 'previous'
+  handler: Function
+  isDisabled: () => boolean
+}
+
 type WebtorrentPluginOptions = {
   playerElement: HTMLVideoElement
 
@@ -194,6 +200,7 @@ type PlaylistItemOptions = {
 export {
   PlayerNetworkInfo,
   PlaylistItemOptions,
+  NextPreviousVideoButtonOptions,
   ResolutionUpdateData,
   AutoResolutionUpdateData,
   PlaylistPluginOptions,

@@ -147,6 +147,10 @@ body {
     box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 
+    > button:first-child {
+      margin-left: 1em;
+    }
+
     .vjs-progress-control,
     .vjs-play-control,
     .vjs-playback-rate,
@@ -230,7 +234,6 @@ body {
 
       cursor: pointer;
       font-size: $font-size;
-      margin-left: 1em;
       width: 3em;
     }
 
@@ -301,24 +304,32 @@ body {
       }
     }
 
-    .vjs-next-video {
+    .vjs-next-video,
+    .vjs-previous-video {
       line-height: $control-bar-height;
       text-align: right;
 
       .icon {
-        &.icon-next {
+        &.icon-next,
+        &.icon-previous {
           mask-image: url('#{$assets-path}/player/images/next.svg');
           -webkit-mask-image: url('#{$assets-path}/player/images/next.svg');
           background-color: white;
           mask-size: cover;
           -webkit-mask-size: cover;
-          transform: scale(2.2);
+          width: 11px;
+          height: 11px;
+          margin-top: -2px;
+          display: inline-block;
+        }
+
+        &.icon-previous {
+          transform: rotate(180deg);
         }
       }
     }
 
-    .vjs-peertube,
-    .vjs-next-video {
+    .vjs-peertube {
       .icon {
         display: inline-block;
         width: 15px;
@@ -648,5 +659,15 @@ body {
 .vjs-error.vjs-error-display-enabled {
   .vjs-error-display {
     display: block;
+  }
+}
+
+.vjs-no-next-in-playlist {
+  .vjs-next-video {
+    cursor: default;
+
+    .icon {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
   }
 }
