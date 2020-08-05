@@ -20,7 +20,7 @@ body {
   color: pvar(--embedForegroundColor);
 
   .vjs-dock-text {
-    padding-right: 10px;
+    padding: $dock-padding;
     background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
   }
 
