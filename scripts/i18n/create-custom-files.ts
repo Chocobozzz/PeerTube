@@ -52,7 +52,8 @@ values(VIDEO_CATEGORIES)
     'This playlist does not exist',
     'We cannot fetch the playlist. Please try again later.',
     'Playlist: {1}',
-    'By {1}'
+    'By {1}',
+    'Unavailable video'
   ])
   .forEach(v => { serverKeys[v] = v })
 

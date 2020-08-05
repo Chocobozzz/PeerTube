@@ -26,23 +26,46 @@ class PlaylistMenuItem extends Component {
       innerHTML: ''
     }) as HTMLElement
 
+    if (!options.element.video) {
+      li.classList.add('vjs-disabled')
+    }
+
     const positionBlock = super.createEl('div', {
       className: 'item-position-block'
-    })
+    }) as HTMLElement
 
     const position = super.createEl('div', {
       className: 'item-position',
       innerHTML: options.element.position
     })
 
+    positionBlock.appendChild(position)
+    li.appendChild(positionBlock)
+
+    if (options.element.video) {
+      this.buildAvailableVideo(li, positionBlock, options)
+    } else {
+      this.buildUnavailableVideo(li)
+    }
+
+    return li
+  }
+
+  setSelected (selected: boolean) {
+    if (selected) this.addClass('vjs-selected')
+    else this.removeClass('vjs-selected')
+  }
+
+  getElement () {
+    return this.element
+  }
+
+  private buildAvailableVideo (li: HTMLElement, positionBlock: HTMLElement, options: PlaylistItemOptions) {
     const player = super.createEl('div', {
       className: 'item-player'
     })
 
-    positionBlock.appendChild(position)
     positionBlock.appendChild(player)
-
-    li.appendChild(positionBlock)
 
     const thumbnail = super.createEl('img', {
       src: window.location.origin + options.element.video.thumbnailPath
@@ -67,17 +90,15 @@ class PlaylistMenuItem extends Component {
 
     li.append(thumbnail)
     li.append(infoBlock)
-
-    return li
   }
 
-  setSelected (selected: boolean) {
-    if (selected) this.addClass('vjs-selected')
-    else this.removeClass('vjs-selected')
-  }
+  private buildUnavailableVideo (li: HTMLElement) {
+    const block = super.createEl('div', {
+      className: 'item-unavailable',
+      innerHTML: this.player().localize('Unavailable video')
+    })
 
-  getElement () {
-    return this.element
+    li.appendChild(block)
   }
 
   private handleKeyDown (event: KeyboardEvent) {

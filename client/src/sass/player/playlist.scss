@@ -24,17 +24,17 @@ $playlist-menu-width: 350px;
     justify-content: space-between;
 
     .title {
+      @include ellipsis;
+
       font-size: 14px;
       margin-bottom: 5px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
 
     .channel {
+      @include ellipsis;
+
       font-size: 11px;
       color: #bfbfbf;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
 
     .cross {
@@ -106,9 +106,13 @@ $playlist-menu-width: 350px;
 }
 
 .vjs-playlist-menu-item {
-  cursor: pointer;
   display: flex;
   padding: 10px 0;
+  height: 60px;
+
+  &:not(.vjs-disabled) {
+    cursor: pointer;
+  }
 
   .item-position-block {
     position: relative;
@@ -116,6 +120,14 @@ $playlist-menu-width: 350px;
     align-items: center;
     justify-content: center;
     width: 30px;
+    flex-shrink: 0;
+  }
+
+  .item-unavailable {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .item-player {
@@ -136,7 +148,7 @@ $playlist-menu-width: 350px;
     }
   }
 
-  &:hover {
+  &:hover:not(.vjs-disabled) {
     background-color: rgba(150, 150, 150, 0.2);
   }
 
@@ -146,20 +158,21 @@ $playlist-menu-width: 350px;
   }
 
   .info-block {
-    margin-left: 10px;
+    margin: 0 10px;
+    min-width: 1px;
 
     .title {
+      @include ellipsis;
+
       font-size: 13px;
       margin-bottom: 5px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
 
     .channel {
+      @include ellipsis;
+
       font-size: 11px;
       color: #bfbfbf;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
   }
 }
