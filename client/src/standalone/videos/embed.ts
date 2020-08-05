@@ -179,6 +179,8 @@ export class PeerTubeEmbed {
 
     const errorText = document.getElementById('error-content')
     errorText.innerHTML = translatedText
+
+    this.wrapperElement.style.display = 'none'
   }
 
   videoNotFound (translations?: Translations) {
@@ -395,7 +397,7 @@ export class PeerTubeEmbed {
   }
 
   private getPreviousPlaylistElement (position?: number): VideoPlaylistElement {
-    if (!position) position = this.currentPlaylistElement.position -1
+    if (!position) position = this.currentPlaylistElement.position - 1
 
     if (position < 1) {
       return undefined
@@ -561,7 +563,28 @@ export class PeerTubeEmbed {
       const playlistElementResult = await res.videosResponse.json()
       this.playlistElements = await this.loadAllPlaylistVideos(playlistId, playlistElementResult)
 
-      this.currentPlaylistElement = this.playlistElements[0]
+      const params = new URL(window.location.toString()).searchParams
+      const playlistPositionParam = this.getParamString(params, 'playlistPosition')
+
+      let position = 1
+
+      if (playlistPositionParam) {
+        position = parseInt(playlistPositionParam + '', 10)
+      }
+
+      this.currentPlaylistElement = this.playlistElements.find(e => e.position === position)
+      if (!this.currentPlaylistElement || !this.currentPlaylistElement.video) {
+        console.error('Current playlist element is not valid.', this.currentPlaylistElement)
+        this.currentPlaylistElement = this.getNextPlaylistElement()
+      }
+
+      if (!this.currentPlaylistElement) {
+        console.error('This playlist does not have any valid element.')
+        const serverTranslations = await this.translationsPromise
+        this.playlistFetchError(serverTranslations)
+        return
+      }
+
       videoId = this.currentPlaylistElement.video.uuid
     } else {
       videoId = this.getResourceId()
