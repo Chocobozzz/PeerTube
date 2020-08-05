@@ -1,0 +1,165 @@
+$playlist-menu-width: 350px;
+
+.vjs-playlist-menu {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: $playlist-menu-width;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 101;
+  transition: right 0.2s;
+
+  // Hidden
+  right: -$playlist-menu-width;
+
+  ol {
+    padding: 0;
+    margin: 0;
+  }
+
+  .header {
+    border-bottom: 1px solid $header-border-color;
+    padding: 20px 10px;
+    display: flex;
+    justify-content: space-between;
+
+    .title {
+      font-size: 14px;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .channel {
+      font-size: 11px;
+      color: #bfbfbf;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .cross {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      mask-image: url('#{$assets-path}/images/feather/x.svg');
+      -webkit-mask-image: url('#{$assets-path}/images/feather/x.svg');
+      background-color: white;
+      mask-size: cover;
+      -webkit-mask-size: cover;
+    }
+  }
+}
+
+.playlist-menu-displayed {
+
+  .vjs-playlist-menu {
+    right: 0;
+    display: block;
+  }
+
+  .vjs-playlist-button {
+    display: none;
+  }
+}
+
+@media screen and (max-width: $playlist-menu-width) {
+  .vjs-playlist-menu {
+    width: 100%;
+    min-width: unset;
+    display: none;
+  }
+
+  .playlist-menu-displayed .vjs-playlist-menu {
+    display: block;
+  }
+}
+
+.vjs-playlist-button {
+  font-size: 15px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 100;
+  padding: 1em;
+  cursor: pointer;
+}
+
+.vjs-playlist-icon {
+  width: 22px;
+  height: 22px;
+  mask-image: url('#{$assets-path}/images/feather/list.svg');
+  -webkit-mask-image: url('#{$assets-path}/images/feather/list.svg');
+  background-color: white;
+  mask-size: cover;
+  -webkit-mask-size: cover;
+  margin-bottom: 3px;
+}
+
+.vjs-playing.vjs-user-inactive .vjs-playlist-button {
+  opacity: 0;
+
+  transition: opacity 1s;
+}
+
+.vjs-playing.vjs-no-flex.vjs-user-inactive .vjs-playlist-button {
+  display: none;
+}
+
+.vjs-playlist-menu-item {
+  cursor: pointer;
+  display: flex;
+  padding: 10px 0;
+
+  .item-position-block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+  }
+
+  .item-player {
+    display: none;
+
+    @include play-icon(20px, 16px);
+  }
+
+  &.vjs-selected {
+    background-color: rgba(150, 150, 150, 0.3);
+
+    .item-position {
+      display: none;
+    }
+
+    .item-player {
+      display: block;
+    }
+  }
+
+  &:hover {
+    background-color: rgba(150, 150, 150, 0.2);
+  }
+
+  img {
+    width: 80px;
+    height: 40px;
+  }
+
+  .info-block {
+    margin-left: 10px;
+
+    .title {
+      font-size: 13px;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .channel {
+      font-size: 11px;
+      color: #bfbfbf;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}

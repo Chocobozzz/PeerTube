@@ -52,18 +52,7 @@ $play-overlay-width: 18px;
     }
 
     .icon {
-      width: 0;
-      height: 0;
-
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(0.5);
-
-      border-top: ($play-overlay-height / 2) solid transparent;
-      border-bottom: ($play-overlay-height / 2) solid transparent;
-
-      border-left: $play-overlay-width solid rgba(255, 255, 255, 0.95);
+      @include play-icon($play-overlay-height, $play-overlay-width);
     }
   }
 

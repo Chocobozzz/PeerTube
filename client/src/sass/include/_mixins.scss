@@ -1019,3 +1019,18 @@
     }
   }
 }
+
+@mixin play-icon ($width, $height) {
+  width: 0;
+  height: 0;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+
+  border-top: ($height / 2) solid transparent;
+  border-bottom: ($height / 2) solid transparent;
+
+  border-left: $width solid rgba(255, 255, 255, 0.95);
+}
