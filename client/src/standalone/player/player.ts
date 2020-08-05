@@ -170,6 +170,27 @@ export class PeerTubePlayer {
     await this.sendMessage('setPlaybackRate', rate)
   }
 
+  /**
+   * Play next video in playlist
+   */
+  async playNextVideo () {
+    await this.sendMessage('playNextVideo')
+  }
+
+  /**
+   * Play previous video in playlist
+   */
+  async playPreviousVideo () {
+    await this.sendMessage('playPreviousVideo')
+  }
+
+  /**
+   * Get video position currently played (starts from 1)
+   */
+  async getCurrentPosition () {
+    return this.sendMessage<void, number>('getCurrentPosition')
+  }
+
   private constructChannel () {
     this.channel = Channel.build({
       window: this.embedElement.contentWindow,

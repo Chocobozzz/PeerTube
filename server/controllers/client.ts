@@ -36,10 +36,11 @@ const embedMiddlewares = [
 
 clientsRouter.use('/videos/embed', ...embedMiddlewares)
 clientsRouter.use('/video-playlists/embed', ...embedMiddlewares)
-clientsRouter.use(
-  '/videos/test-embed',
-  (req: express.Request, res: express.Response) => res.sendFile(testEmbedPath)
-)
+
+const testEmbedController = (req: express.Request, res: express.Response) => res.sendFile(testEmbedPath)
+
+clientsRouter.use('/videos/test-embed', testEmbedController)
+clientsRouter.use('/video-playlists/test-embed', testEmbedController)
 
 // Static HTML/CSS/JS client files
 const staticClientFiles = [

@@ -27,6 +27,8 @@
         <button onclick="player.seek(parseInt(prompt('Enter position to seek to (in seconds)')))">Seek</button>
         <button onclick="player.setVolume(0)">Mute</button>
         <button onclick="player.setVolume(1)">Unmute</button>
+        <button onclick="player.playNextVideo()">Next video</button>
+        <button onclick="player.playPreviousVideo()">Previous video</button>
       </div>
       <br/>
 
@@ -51,6 +53,11 @@
         <fieldset>
           <legend>Volume</legend>
           <div id="volume"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Playlist position</legend>
+          <div id="playlist-position"></div>
         </fieldset>
       </div>
 

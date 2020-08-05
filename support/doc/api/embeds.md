@@ -115,6 +115,18 @@ Update current caption using the caption id.
 
 Get video captions.
 
+## `playNextVideo(): Promise<void>`
+
+Play next video in playlist.
+
+## `playPreviousVideo(): Promise<void>`
+
+Play previous video in playlist.
+
+## `getCurrentPosition(): Promise<void>`
+
+Get current position in playlist (starts from 1).
+
 # Events
 
 You can subscribe to events by using `addEventListener()`. See above for details.

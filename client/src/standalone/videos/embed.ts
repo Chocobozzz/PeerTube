@@ -211,6 +211,36 @@ export class PeerTubeEmbed {
     return params.has(name) ? params.get(name) : defaultValue
   }
 
+  async playNextVideo () {
+    const next = this.getNextPlaylistElement()
+    if (!next) {
+      console.log('Next element not found in playlist.')
+      return
+    }
+
+    this.currentPlaylistElement = next
+
+    return this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
+  }
+
+  async playPreviousVideo () {
+    const previous = this.getPreviousPlaylistElement()
+    if (!previous) {
+      console.log('Previous element not found in playlist.')
+      return
+    }
+
+    this.currentPlaylistElement = previous
+
+    await this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
+  }
+
+  getCurrentPosition () {
+    if (!this.currentPlaylistElement) return -1
+
+    return this.currentPlaylistElement.position
+  }
+
   async init () {
     try {
       this.userTokens = Tokens.load()
@@ -340,30 +370,6 @@ export class PeerTubeEmbed {
       condition: () => !!this.getNextPlaylistElement(),
       suspended: () => false
     })
-  }
-
-  private async playNextVideo () {
-    const next = this.getNextPlaylistElement()
-    if (!next) {
-      console.log('Next element not found in playlist.')
-      return
-    }
-
-    this.currentPlaylistElement = next
-
-    return this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
-  }
-
-  private async playPreviousVideo () {
-    const previous = this.getPreviousPlaylistElement()
-    if (!previous) {
-      console.log('Previous element not found in playlist.')
-      return
-    }
-
-    this.currentPlaylistElement = previous
-
-    return this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
   }
 
   private async loadVideoAndBuildPlayer (uuid: string) {
