@@ -165,14 +165,20 @@ $playlist-menu-width: 350px;
       @include ellipsis;
 
       font-size: 13px;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
     }
 
-    .channel {
+    .channel,
+    .timestamps {
       @include ellipsis;
 
       font-size: 11px;
       color: #bfbfbf;
+    }
+
+    .timestamps {
+      font-size: 10px;
+      margin-top: 3px;
     }
   }
 }

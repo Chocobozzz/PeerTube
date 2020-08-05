@@ -441,10 +441,12 @@ export class PeerTubeEmbed {
         controls: this.controls,
         muted: this.muted,
         loop: this.loop,
+
         captions: videoCaptions.length !== 0,
-        startTime: this.startTime,
-        stopTime: this.stopTime,
         subtitle: this.subtitle,
+
+        startTime: this.playlist ? this.currentPlaylistElement.startTimestamp : this.startTime,
+        stopTime: this.playlist ? this.currentPlaylistElement.stopTimestamp : this.stopTime,
 
         nextVideo: this.playlist ? () => this.playNextVideo() : undefined,
         hasNextVideo: this.playlist ? () => !!this.getNextPlaylistElement() : undefined,
@@ -506,7 +508,12 @@ export class PeerTubeEmbed {
 
     if (this.isPlaylistEmbed()) {
       await this.buildPlaylistManager()
+
       this.player.playlist().updateSelected()
+
+      this.player.on('stopped', () => {
+        this.playNextVideo()
+      })
     }
   }
 
