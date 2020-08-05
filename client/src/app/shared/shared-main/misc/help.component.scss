@@ -8,10 +8,10 @@
   my-global-icon {
     width: 17px;
     position: relative;
-    top: -2px;
+    top: -1px;
     margin: 5px;
 
-    @include apply-svg-color(pvar(--mainForegroundColor))
+    @include apply-svg-color(pvar(--greyForegroundColor))
   }
 }
 
