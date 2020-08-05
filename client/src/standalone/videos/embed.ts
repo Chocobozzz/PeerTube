@@ -438,13 +438,15 @@ export class PeerTubeEmbed {
         return videoInfo
       })
 
-    const [ videoInfo, serverTranslations, captionsResponse, config, PeertubePlayerManagerModule ] = await Promise.all([
+    const [ videoInfoTmp, serverTranslations, captionsResponse, config, PeertubePlayerManagerModule ] = await Promise.all([
       videoInfoPromise,
       this.translationsPromise,
       captionsPromise,
       this.configPromise,
       this.PeertubePlayerManagerModulePromise
     ])
+
+    const videoInfo: VideoDetails = videoInfoTmp
 
     const PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
     const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)

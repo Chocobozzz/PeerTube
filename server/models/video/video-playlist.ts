@@ -494,6 +494,10 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return WEBSERVER.URL + '/videos/watch/playlist/' + this.uuid
   }
 
+  getEmbedStaticPath () {
+    return '/video-playlists/embed/' + this.uuid
+  }
+
   setAsRefreshed () {
     this.changed('updatedAt', true)
 
