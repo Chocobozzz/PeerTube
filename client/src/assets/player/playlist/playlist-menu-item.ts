@@ -1,6 +1,7 @@
 import videojs from 'video.js'
 import { VideoPlaylistElement } from '@shared/models'
 import { PlaylistItemOptions } from '../peertube-videojs-typings'
+import { secondsToTime } from '../utils'
 
 const Component = videojs.getComponent('Component')
 
@@ -61,6 +62,8 @@ class PlaylistMenuItem extends Component {
   }
 
   private buildAvailableVideo (li: HTMLElement, positionBlock: HTMLElement, options: PlaylistItemOptions) {
+    const videoElement = options.element
+
     const player = super.createEl('div', {
       className: 'item-player'
     })
@@ -68,7 +71,7 @@ class PlaylistMenuItem extends Component {
     positionBlock.appendChild(player)
 
     const thumbnail = super.createEl('img', {
-      src: window.location.origin + options.element.video.thumbnailPath
+      src: window.location.origin + videoElement.video.thumbnailPath
     })
 
     const infoBlock = super.createEl('div', {
@@ -76,17 +79,31 @@ class PlaylistMenuItem extends Component {
     })
 
     const title = super.createEl('div', {
-      innerHTML: options.element.video.name,
+      innerHTML: videoElement.video.name,
       className: 'title'
     })
 
     const channel = super.createEl('div', {
-      innerHTML: options.element.video.channel.displayName,
+      innerHTML: videoElement.video.channel.displayName,
       className: 'channel'
     })
 
     infoBlock.appendChild(title)
     infoBlock.appendChild(channel)
+
+    if (videoElement.startTimestamp || videoElement.stopTimestamp) {
+      let html = ''
+
+      if (videoElement.startTimestamp) html += secondsToTime(videoElement.startTimestamp)
+      if (videoElement.stopTimestamp) html += ' - ' + secondsToTime(videoElement.stopTimestamp)
+
+      const timestamps = super.createEl('div', {
+        innerHTML: html,
+        className: 'timestamps'
+      })
+
+      infoBlock.append(timestamps)
+    }
 
     li.append(thumbnail)
     li.append(infoBlock)
