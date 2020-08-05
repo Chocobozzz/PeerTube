@@ -218,5 +218,13 @@
   "sasslintConfig": "client/.sass-lint.yml",
   "_moduleAliases": {
     "@server": "dist/server"
+  },
+  "bundlewatch" : {
+    "files": [
+      {
+        "path": "client/dist/en-US/*-es2015.js",
+        "maxSize": "1mb"
+      }
+    ]
   }
 }
