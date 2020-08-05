@@ -6,7 +6,7 @@ import './upnext/end-card'
 import './upnext/upnext-plugin'
 import './bezels/bezels-plugin'
 import './peertube-plugin'
-import './videojs-components/next-video-button'
+import './videojs-components/next-previous-video-button'
 import './videojs-components/p2p-info-button'
 import './videojs-components/peertube-link-button'
 import './videojs-components/peertube-load-progress-bar'
@@ -27,6 +27,7 @@ import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
 import { getStoredP2PEnabled } from './peertube-player-local-storage'
 import {
+  NextPreviousVideoButtonOptions,
   P2PMediaLoaderPluginOptions,
   PlaylistPluginOptions,
   UserWatching,
@@ -77,7 +78,12 @@ export interface CommonOptions extends CustomizationOptions {
   onPlayerElementChange: (element: HTMLVideoElement) => void
 
   autoplay: boolean
-  nextVideo?: Function
+
+  nextVideo?: () => void
+  hasNextVideo?: () => boolean
+
+  previousVideo?: () => void
+  hasPreviousVideo?: () => boolean
 
   playlist?: PlaylistPluginOptions
 
@@ -259,7 +265,12 @@ export class PeertubePlayerManager {
           captions: commonOptions.captions,
           peertubeLink: commonOptions.peertubeLink,
           theaterButton: commonOptions.theaterButton,
-          nextVideo: commonOptions.nextVideo
+
+          nextVideo: commonOptions.nextVideo,
+          hasNextVideo: commonOptions.hasNextVideo,
+
+          previousVideo: commonOptions.previousVideo,
+          hasPreviousVideo: commonOptions.hasPreviousVideo
         }) as any // FIXME: typings
       }
     }
@@ -360,9 +371,14 @@ export class PeertubePlayerManager {
 
   private static getControlBarChildren (mode: PlayerMode, options: {
     peertubeLink: boolean
-    theaterButton: boolean,
-    captions: boolean,
+    theaterButton: boolean
+    captions: boolean
+
     nextVideo?: Function
+    hasNextVideo?: () => boolean
+
+    previousVideo?: Function
+    hasPreviousVideo?: () => boolean
   }) {
     const settingEntries = []
     const loadProgressBar = mode === 'webtorrent' ? 'peerTubeLoadProgressBar' : 'loadProgressBar'
@@ -372,15 +388,39 @@ export class PeertubePlayerManager {
     if (options.captions === true) settingEntries.push('captionsButton')
     settingEntries.push('resolutionMenuButton')
 
-    const children = {
-      'playToggle': {}
+    const children = {}
+
+    if (options.previousVideo) {
+      const buttonOptions: NextPreviousVideoButtonOptions = {
+        type: 'previous',
+        handler: options.previousVideo,
+        isDisabled: () => {
+          if (!options.hasPreviousVideo) return false
+
+          return !options.hasPreviousVideo()
+        }
+      }
+
+      Object.assign(children, {
+        'previousVideoButton': buttonOptions
+      })
     }
 
+    Object.assign(children, { playToggle: {} })
+
     if (options.nextVideo) {
-      Object.assign(children, {
-        'nextVideoButton': {
-          handler: options.nextVideo
+      const buttonOptions: NextPreviousVideoButtonOptions = {
+        type: 'next',
+        handler: options.nextVideo,
+        isDisabled: () => {
+          if (!options.hasNextVideo) return false
+
+          return !options.hasNextVideo()
         }
+      }
+
+      Object.assign(children, {
+        'nextVideoButton': buttonOptions
       })
     }
 
