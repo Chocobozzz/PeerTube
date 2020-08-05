@@ -23,6 +23,33 @@ import { CONFIG } from '../initializers/config'
 import { logger } from '../helpers/logger'
 import { MAccountActor, MChannelActor } from '../types/models'
 
+type Tags = {
+  ogType: string
+  twitterCard: string
+  schemaType: string
+
+  list?: {
+    numberOfItems: number
+  }
+
+  title: string
+  url: string
+  description: string
+
+  embed?: {
+    url: string
+    createdAt: string
+    duration?: string
+    views?: number
+  }
+
+  image: {
+    url: string
+    width?: number
+    height?: number
+  }
+}
+
 export class ClientHtml {
 
   private static htmlCache: { [path: string]: string } = {}
@@ -118,15 +145,20 @@ export class ClientHtml {
       url: videoPlaylist.getThumbnailUrl()
     }
 
+    const embed = {
+      url: WEBSERVER.URL + videoPlaylist.getEmbedStaticPath(),
+      createdAt: videoPlaylist.createdAt.toISOString()
+    }
+
     const list = {
-      numberOfItems: videoPlaylist.get('videosLength')
+      numberOfItems: videoPlaylist.get('videosLength') as number
     }
 
     const ogType = 'video'
-    const twitterCard = 'summary'
+    const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary'
     const schemaType = 'ItemList'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, title, description, image, list, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, { url, embed, title, description, image, list, ogType, twitterCard, schemaType })
 
     return customHtml
   }
@@ -268,7 +300,7 @@ export class ClientHtml {
     return htmlStringPage.replace('</head>', linkTag + '</head>')
   }
 
-  private static generateOpenGraphMetaTags (tags) {
+  private static generateOpenGraphMetaTags (tags: Tags) {
     const metaTags = {
       'og:type': tags.ogType,
       'og:title': tags.title,
@@ -294,7 +326,7 @@ export class ClientHtml {
     return metaTags
   }
 
-  private static generateStandardMetaTags (tags) {
+  private static generateStandardMetaTags (tags: Tags) {
     return {
       name: tags.title,
       description: tags.description,
@@ -302,7 +334,7 @@ export class ClientHtml {
     }
   }
 
-  private static generateTwitterCardMetaTags (tags) {
+  private static generateTwitterCardMetaTags (tags: Tags) {
     const metaTags = {
       'twitter:card': tags.twitterCard,
       'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
@@ -319,7 +351,7 @@ export class ClientHtml {
     return metaTags
   }
 
-  private static generateSchemaTags (tags) {
+  private static generateSchemaTags (tags: Tags) {
     const schema = {
       '@context': 'http://schema.org',
       '@type': tags.schemaType,
@@ -337,8 +369,10 @@ export class ClientHtml {
     if (tags.embed) {
       schema['embedUrl'] = tags.embed.url
       schema['uploadDate'] = tags.embed.createdAt
-      schema['duration'] = tags.embed.duration
-      schema['iterationCount'] = tags.embed.views
+
+      if (tags.embed.duration) schema['duration'] = tags.embed.duration
+      if (tags.embed.views) schema['iterationCount'] = tags.embed.views
+
       schema['thumbnailUrl'] = tags.image.url
       schema['contentUrl'] = tags.url
     }
@@ -346,7 +380,7 @@ export class ClientHtml {
     return schema
   }
 
-  private static addTags (htmlStringPage: string, tagsValues: any) {
+  private static addTags (htmlStringPage: string, tagsValues: Tags) {
     const openGraphMetaTags = this.generateOpenGraphMetaTags(tagsValues)
     const standardMetaTags = this.generateStandardMetaTags(tagsValues)
     const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
@@ -354,7 +388,7 @@ export class ClientHtml {
 
     const { url, title, embed } = tagsValues
 
-    const oembedLinkTags = []
+    const oembedLinkTags: { type: string, href: string, title: string }[] = []
 
     if (embed) {
       oembedLinkTags.push({
