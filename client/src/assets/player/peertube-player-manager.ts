@@ -18,14 +18,21 @@ import './videojs-components/settings-menu-item'
 import './videojs-components/settings-panel'
 import './videojs-components/settings-panel-child'
 import './videojs-components/theater-button'
+import './playlist/playlist-plugin'
 import videojs from 'video.js'
-import { VideoFile } from '@shared/models'
 import { isDefaultLocale } from '@shared/core-utils/i18n'
+import { VideoFile } from '@shared/models'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
 import { getStoredP2PEnabled } from './peertube-player-local-storage'
-import { P2PMediaLoaderPluginOptions, UserWatching, VideoJSCaption, VideoJSPluginOptions } from './peertube-videojs-typings'
+import {
+  P2PMediaLoaderPluginOptions,
+  PlaylistPluginOptions,
+  UserWatching,
+  VideoJSCaption,
+  VideoJSPluginOptions
+} from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig, isIOS, isSafari } from './utils'
 
@@ -71,6 +78,9 @@ export interface CommonOptions extends CustomizationOptions {
 
   autoplay: boolean
   nextVideo?: Function
+
+  playlist?: PlaylistPluginOptions
+
   videoDuration: number
   enableHotkeys: boolean
   inactivityTimeout: number
@@ -201,6 +211,10 @@ export class PeertubePlayerManager {
         videoCaptions: commonOptions.videoCaptions,
         stopTime: commonOptions.stopTime
       }
+    }
+
+    if (commonOptions.playlist) {
+      plugins.playlist = commonOptions.playlist
     }
 
     if (commonOptions.enableHotkeys === true) {

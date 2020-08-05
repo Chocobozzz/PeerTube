@@ -1,10 +1,11 @@
 import { Config, Level } from 'hls.js'
 import videojs from 'video.js'
-import { VideoFile } from '@shared/models'
+import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
 import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { PlayerMode } from './peertube-player-manager'
 import { PeerTubePlugin } from './peertube-plugin'
+import { PlaylistPlugin } from './playlist/playlist-plugin'
 import { EndCardOptions } from './upnext/end-card'
 import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
 
@@ -45,6 +46,8 @@ declare module 'video.js' {
     dock (options: { title: string, description: string }): void
 
     upnext (options: Partial<EndCardOptions>): void
+
+    playlist (): PlaylistPlugin
   }
 }
 
@@ -105,6 +108,16 @@ type PeerTubePluginOptions = {
   stopTime: number | string
 }
 
+type PlaylistPluginOptions = {
+  elements: VideoPlaylistElement[]
+
+  playlist: VideoPlaylist
+
+  getCurrentPosition: () => number
+
+  onItemClicked: (element: VideoPlaylistElement) => void
+}
+
 type WebtorrentPluginOptions = {
   playerElement: HTMLVideoElement
 
@@ -125,6 +138,8 @@ type P2PMediaLoaderPluginOptions = {
 }
 
 type VideoJSPluginOptions = {
+  playlist?: PlaylistPluginOptions
+
   peertube: PeerTubePluginOptions
 
   webtorrent?: WebtorrentPluginOptions
@@ -170,10 +185,18 @@ type PlayerNetworkInfo = {
   }
 }
 
+type PlaylistItemOptions = {
+  element: VideoPlaylistElement
+
+  onClicked: Function
+}
+
 export {
   PlayerNetworkInfo,
+  PlaylistItemOptions,
   ResolutionUpdateData,
   AutoResolutionUpdateData,
+  PlaylistPluginOptions,
   VideoJSCaption,
   UserWatching,
   PeerTubePluginOptions,

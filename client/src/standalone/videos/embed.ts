@@ -324,7 +324,11 @@ export class PeerTubeEmbed {
 
     this.currentPlaylistElement = next
 
-    const res = await this.loadVideo(this.currentPlaylistElement.video.uuid)
+    return this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
+  }
+
+  private async loadVideoAndBuildPlayer (uuid: string) {
+    const res = await this.loadVideo(uuid)
     if (res === undefined) return
 
     return this.buildVideoPlayer(res.videoResponse, res.captionsPromise)
@@ -386,6 +390,22 @@ export class PeerTubeEmbed {
 
     this.loadParams(videoInfo)
 
+    const playlistPlugin = this.currentPlaylistElement
+      ? {
+        elements: this.playlistElements,
+        playlist: this.playlist,
+
+        getCurrentPosition: () => this.currentPlaylistElement.position,
+
+        onItemClicked: (videoPlaylistElement: VideoPlaylistElement) => {
+          this.currentPlaylistElement = videoPlaylistElement
+
+          this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
+            .catch(err => console.error(err))
+        }
+      }
+      : undefined
+
     const options: PeertubePlayerManagerOptions = {
       common: {
         // Autoplay in playlist mode
@@ -399,6 +419,7 @@ export class PeerTubeEmbed {
         subtitle: this.subtitle,
 
         nextVideo: () => this.autoplayNext(),
+        playlist: playlistPlugin,
 
         videoCaptions,
         inactivityTimeout: 2500,
@@ -452,6 +473,7 @@ export class PeerTubeEmbed {
 
     if (this.isPlaylistEmbed()) {
       await this.buildPlaylistManager()
+      this.player.playlist().updateSelected()
     }
   }
 
@@ -480,10 +502,7 @@ export class PeerTubeEmbed {
       videoId = this.getResourceId()
     }
 
-    const res = await this.loadVideo(videoId)
-    if (res === undefined) return
-
-    return this.buildVideoPlayer(res.videoResponse, res.captionsPromise)
+    return this.loadVideoAndBuildPlayer(videoId)
   }
 
   private handleError (err: Error, translations?: { [ id: string ]: string }) {
