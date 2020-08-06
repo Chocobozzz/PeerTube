@@ -6,6 +6,7 @@ import { USER_ROLE_LABELS } from '@shared/core-utils/users'
 import { ServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
 
 @Directive()
+// tslint:disable-next-line: directive-class-suffix
 export abstract class UserEdit extends FormReactive implements OnInit {
   videoQuotaOptions: { value: string, label: string, disabled?: boolean }[] = []
   videoQuotaDailyOptions: { value: string, label: string, disabled?: boolean }[] = []

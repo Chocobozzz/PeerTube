@@ -71,7 +71,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
       channelId: this.firstStepChannelId
     }
 
-    this.loadingBar.start()
+    this.loadingBar.useRef().start()
 
     this.videoImportService
         .importVideoUrl(this.targetUrl, videoUpdate)
@@ -86,7 +86,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
         )
         .subscribe(
           ({ video, videoCaptions }) => {
-            this.loadingBar.complete()
+            this.loadingBar.useRef().complete()
             this.firstStepDone.emit(video.name)
             this.isImportingVideo = false
             this.hasImportedVideo = true
@@ -115,7 +115,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
           },
 
           err => {
-            this.loadingBar.complete()
+            this.loadingBar.useRef().complete()
             this.isImportingVideo = false
             this.firstStepError.emit()
             this.notifier.error(err.message)

@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs'
-import { debounceTime, flatMap } from 'rxjs/operators'
+import { debounceTime, mergeMap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, User } from '@app/core'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
@@ -95,7 +95,7 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
 
   private loadVideoPlaylists (reset = false) {
     this.authService.userInformationLoaded
-        .pipe(flatMap(() => {
+        .pipe(mergeMap(() => {
           return this.videoPlaylistService.listAccountPlaylists(this.user.account, this.pagination, '-updatedAt', this.videoPlaylistsSearch)
         }))
         .subscribe(res => {

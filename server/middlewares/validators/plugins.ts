@@ -4,7 +4,7 @@ import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { isBooleanValid, isSafePath, toBooleanOrNull, exists } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isSafePath, toBooleanOrNull, exists, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { PluginModel } from '../../models/server/plugin'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-plugin.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
@@ -75,6 +75,7 @@ const pluginStaticDirectoryValidator = [
 const listPluginsValidator = [
   query('pluginType')
     .optional()
+    .customSanitizer(toIntOrNull)
     .custom(isPluginTypeValid).withMessage('Should have a valid plugin type'),
   query('uninstalled')
     .optional()
@@ -165,6 +166,7 @@ const listAvailablePluginsValidator = [
     .exists().withMessage('Should have a valid search'),
   query('pluginType')
     .optional()
+    .customSanitizer(toIntOrNull)
     .custom(isPluginTypeValid).withMessage('Should have a valid plugin type'),
   query('currentPeerTubeEngine')
     .optional()

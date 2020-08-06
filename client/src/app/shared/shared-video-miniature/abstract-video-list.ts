@@ -1,6 +1,6 @@
 import { fromEvent, Observable, Subject, Subscription } from 'rxjs'
 import { debounceTime, switchMap, tap } from 'rxjs/operators'
-import { OnDestroy, OnInit, Directive } from '@angular/core'
+import { Directive, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import {
   AuthService,
@@ -31,6 +31,7 @@ enum GroupDate {
 }
 
 @Directive()
+// tslint:disable-next-line: directive-class-suffix
 export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableForReuseHook {
   pagination: ComponentPaginationLight = {
     currentPage: 1,
