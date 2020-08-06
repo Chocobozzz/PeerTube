@@ -141,6 +141,34 @@
             "styles": [
               "src/sass/application.scss"
             ],
+            "allowedCommonJsDependencies": [
+              "@angularclass/hmr",
+              "debug",
+              "mousetrap",
+              "chart.js",
+              "linkifyjs/html",
+              "linkifyjs",
+              "markdown-it",
+              "sanitize-html",
+              "socket.io-client",
+              "socket.io-parser",
+              "@app/+about/about-peertube/about-peertube-contributors.component",
+              "path",
+              "video.js",
+              "p2p-media-loader-hlsjs",
+              "videojs-hotkeys/videojs.hotkeys",
+              "p2p-media-loader-core",
+              "qrcode",
+              "webtorrent",
+              "cache-chunk-store",
+              "global/document",
+              "videojs-vtt.js",
+              "videojs-vtt.js",
+              "@babel/runtime/helpers/possibleConstructorReturn",
+              "@babel/runtime/helpers/inherits",
+              "@babel/runtime/helpers/construct",
+              "@videojs/xhr"
+            ],
             "scripts": []
           },
           "configurations": {
