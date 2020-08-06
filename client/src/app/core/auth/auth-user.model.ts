@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
-import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { hasUserRight } from '@shared/core-utils/users'
 import {
   MyUser as ServerMyUserModel,
@@ -12,7 +12,7 @@ import {
   UserRole,
   UserVideoQuota
 } from '@shared/models'
-import { TokenOptions, Tokens } from '../../../root-helpers/pure-auth-user.model'
+import { TokenOptions, Tokens } from '@root-helpers/pure-auth-user.model'
 
 export class AuthUser extends User implements ServerMyUserModel {
   tokens: Tokens

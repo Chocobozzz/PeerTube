@@ -101,7 +101,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
     this.video.patch(this.form.value)
 
-    this.loadingBar.start()
+    this.loadingBar.useRef().start()
     this.isUpdatingVideo = true
 
     // Update the video
@@ -114,13 +114,13 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           () => {
             this.updateDone = true
             this.isUpdatingVideo = false
-            this.loadingBar.complete()
+            this.loadingBar.useRef().complete()
             this.notifier.success(this.i18n('Video updated.'))
             this.router.navigate([ '/videos/watch', this.video.uuid ])
           },
 
           err => {
-            this.loadingBar.complete()
+            this.loadingBar.useRef().complete()
             this.isUpdatingVideo = false
             this.notifier.error(err.message)
             console.error(err)

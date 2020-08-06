@@ -421,6 +421,10 @@ describe('Test abuses API validators', function () {
     it('Should fail when creating abuse message of a remote abuse', async function () {
       await addAbuseMessage(server.url, server.accessToken, remoteAbuseId, 'message', 400)
     })
+
+    after(async function () {
+      await cleanupTests([ anotherServer ])
+    })
   })
 
   after(async function () {

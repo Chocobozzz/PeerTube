@@ -1,5 +1,5 @@
 import { catchError, switchMap, tap } from 'rxjs/operators'
-import { EventEmitter, OnInit, Directive } from '@angular/core'
+import { Directive, EventEmitter, OnInit } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
 import { populateAsyncUserVideoChannels } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
@@ -8,6 +8,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 
 @Directive()
+// tslint:disable-next-line: directive-class-suffix
 export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: { id: number, label: string, support: string }[] = []
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
@@ -56,15 +57,15 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   }
 
   protected updateVideoAndCaptions (video: VideoEdit) {
-    this.loadingBar.start()
+    this.loadingBar.useRef().start()
 
     return this.videoService.updateVideo(video)
         .pipe(
           // Then update captions
           switchMap(() => this.videoCaptionService.updateCaptions(video.id, this.videoCaptions)),
-          tap(() => this.loadingBar.complete()),
+          tap(() => this.loadingBar.useRef().complete()),
           catchError(err => {
-            this.loadingBar.complete()
+            this.loadingBar.useRef().complete()
             throw err
           })
         )

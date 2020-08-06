@@ -84,11 +84,11 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
       channelId: this.firstStepChannelId
     }
 
-    this.loadingBar.start()
+    this.loadingBar.useRef().start()
 
     this.videoImportService.importVideoTorrent(torrentfile || this.magnetUri, videoUpdate).subscribe(
       res => {
-        this.loadingBar.complete()
+        this.loadingBar.useRef().complete()
         this.firstStepDone.emit(res.video.name)
         this.isImportingVideo = false
         this.hasImportedVideo = true
@@ -105,7 +105,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
       },
 
       err => {
-        this.loadingBar.complete()
+        this.loadingBar.useRef().complete()
         this.isImportingVideo = false
         this.firstStepError.emit()
         this.notifier.error(err.message)

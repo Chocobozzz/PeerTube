@@ -7,6 +7,7 @@ import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
 @Directive()
+// tslint:disable-next-line: directive-class-suffix
 export class GenericAccountBlocklistComponent extends RestTable implements OnInit {
   // @ts-ignore: "Abstract methods can only appear within an abstract class"
   abstract mode: BlocklistComponentType
