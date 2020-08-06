@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
+import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
 import {
   AVATARS_SIZE,
   CUSTOM_HTML_TAG_COMMENTS,

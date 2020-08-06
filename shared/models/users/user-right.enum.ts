@@ -1,4 +1,4 @@
-export enum UserRight {
+export const enum UserRight {
   ALL,
 
   MANAGE_USERS,

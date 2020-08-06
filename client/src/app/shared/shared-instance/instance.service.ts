@@ -3,7 +3,8 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { MarkdownService, RestExtractor, ServerService } from '@app/core'
-import { About, peertubeTranslate } from '@shared/models'
+import { peertubeTranslate } from '@shared/core-utils/i18n'
+import { About } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()

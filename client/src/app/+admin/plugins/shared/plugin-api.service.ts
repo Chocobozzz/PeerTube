@@ -5,12 +5,12 @@ import { Injectable } from '@angular/core'
 import { ComponentPagination, RestExtractor, RestService } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   InstallOrUpdatePlugin,
   ManagePlugin,
   PeerTubePlugin,
   PeerTubePluginIndex,
-  peertubeTranslate,
   PluginType,
   RegisteredServerSettings,
   ResultList

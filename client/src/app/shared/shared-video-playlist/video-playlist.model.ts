@@ -1,8 +1,8 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main'
+import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   AccountSummary,
-  peertubeTranslate,
   VideoChannelSummary,
   VideoConstant,
   VideoPlaylist as ServerVideoPlaylist,

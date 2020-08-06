@@ -1,6 +1,6 @@
 import { Video } from '../video.model'
 
-export enum VideoBlacklistType {
+export const enum VideoBlacklistType {
   MANUAL = 1,
   AUTO_BEFORE_PUBLISHED = 2
 }

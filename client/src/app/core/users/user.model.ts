@@ -1,7 +1,7 @@
 import { Account } from '@app/shared/shared-main/account/account.model'
+import { hasUserRight } from '@shared/core-utils/users'
 import {
   Avatar,
-  hasUserRight,
   NSFWPolicyType,
   User as UserServerModel,
   UserAdminFlag,

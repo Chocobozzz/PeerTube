@@ -8,7 +8,8 @@ import { isUrlValid } from './activitypub/misc'
 const PLUGINS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.PLUGINS
 
 function isPluginTypeValid (value: any) {
-  return exists(value) && validator.isInt('' + value) && PluginType[value] !== undefined
+  return exists(value) &&
+    (value === PluginType.PLUGIN || value === PluginType.THEME)
 }
 
 function isPluginNameValid (value: string) {

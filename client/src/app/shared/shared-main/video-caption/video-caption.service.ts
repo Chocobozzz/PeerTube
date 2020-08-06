@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
 import { objectToFormData, sortBy } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main/video'
-import { peertubeTranslate, ResultList, VideoCaption } from '@shared/models'
+import { peertubeTranslate } from '@shared/core-utils/i18n'
+import { ResultList, VideoCaption } from '@shared/models'
 import { VideoCaptionEdit } from './video-caption-edit.model'
 
 @Injectable()

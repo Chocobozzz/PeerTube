@@ -9,15 +9,13 @@ import { RestExtractor } from '@app/core/rest'
 import { ServerService } from '@app/core/server/server.service'
 import { getDevLocale, importModule, isOnDevLocale } from '@app/helpers'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
+import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
 import {
   ClientHook,
   ClientHookName,
   clientHookObject,
   ClientScript,
-  getCompleteLocale,
-  isDefaultLocale,
-  peertubeTranslate,
   PluginClientScope,
   PluginTranslation,
   PluginType,

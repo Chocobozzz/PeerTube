@@ -6,7 +6,8 @@ import { Account } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { abusePredefinedReasonsMap, AbusePredefinedReasonsString } from '@shared/models'
+import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
+import { AbusePredefinedReasonsString } from '@shared/models'
 import { AbuseService } from '../abuse.service'
 
 @Component({

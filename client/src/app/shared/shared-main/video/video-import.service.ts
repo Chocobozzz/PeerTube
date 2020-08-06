@@ -5,7 +5,8 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { peertubeTranslate, ResultList, VideoImport, VideoImportCreate, VideoUpdate } from '@shared/models'
+import { peertubeTranslate } from '@shared/core-utils/i18n'
+import { ResultList, VideoImport, VideoImportCreate, VideoUpdate } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()

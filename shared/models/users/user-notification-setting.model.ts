@@ -1,4 +1,4 @@
-export enum UserNotificationSettingValue {
+export const enum UserNotificationSettingValue {
   NONE = 0,
   WEB = 1 << 0,
   EMAIL = 1 << 1

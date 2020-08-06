@@ -17,11 +17,11 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isAbuseModerationCommentValid, isAbuseReasonValid, isAbuseStateValid } from '@server/helpers/custom-validators/abuses'
+import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
 import {
   AbuseFilter,
   AbuseObject,
   AbusePredefinedReasons,
-  abusePredefinedReasonsMap,
   AbusePredefinedReasonsString,
   AbuseState,
   AbuseVideoIs,
@@ -646,8 +646,10 @@ export class AbuseModel extends Model<AbuseModel> {
   }
 
   private static getPredefinedReasonsStrings (predefinedReasons: AbusePredefinedReasons[]): AbusePredefinedReasonsString[] {
+    const invertedPredefinedReasons = invert(abusePredefinedReasonsMap)
+
     return (predefinedReasons || [])
-      .filter(r => r in AbusePredefinedReasons)
-      .map(r => invert(abusePredefinedReasonsMap)[r] as AbusePredefinedReasonsString)
+      .map(r => invertedPredefinedReasons[r] as AbusePredefinedReasonsString)
+      .filter(v => !!v)
   }
 }

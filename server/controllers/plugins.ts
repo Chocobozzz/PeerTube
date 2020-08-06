@@ -6,7 +6,7 @@ import { getPluginValidator, pluginStaticDirectoryValidator, getExternalAuthVali
 import { serveThemeCSSValidator } from '../middlewares/validators/themes'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { isTestInstance } from '../helpers/core-utils'
-import { getCompleteLocale, is18nLocale } from '../../shared/models/i18n'
+import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
 import { logger } from '@server/helpers/logger'
 
 const sendFileOptions = {
