@@ -10,11 +10,8 @@ import {
   UserRole,
   VideoChannel
 } from '@shared/models'
-import { UserKeys } from '@root-helpers/user-keys'
 
 export class User implements UserServerModel {
-  static KEYS = UserKeys
-
   id: number
   username: string
   email: string
