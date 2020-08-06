@@ -1,4 +1,4 @@
-<div class="root-comment">
+<div *ngIf="!comment.isDeleted || comment.isDeleted && comment.totalReplies !== 0" class="root-comment">
   <div class="left">
     <a *ngIf="!comment.isDeleted" [href]="comment.account.url" target="_blank" rel="noopener noreferrer">
       <img
@@ -58,7 +58,7 @@
              class="comment-date">{{ comment.createdAt | myFromNow }}</a>
         </div>
 
-        <div *ngIf="comment.isDeleted" class="comment-html comment-html-deleted">
+        <div class="comment-html comment-html-deleted">
           <i i18n>This comment has been deleted</i>
         </div>
       </ng-container>
