@@ -21,6 +21,7 @@ body {
 
   .vjs-dock-text {
     padding: $dock-padding;
+    padding-right: 60px;
     background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
   }
 
@@ -148,7 +149,7 @@ body {
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 
     > button:first-child {
-      margin-left: 1em;
+      margin-left: $first-control-bar-element-margin-left;
     }
 
     .vjs-progress-control,
@@ -583,7 +584,9 @@ body {
       }
     }
 
-    .vjs-volume-control {
+    .vjs-volume-control,
+    .vjs-next-video,
+    .vjs-previous-video {
       display: none !important;
     }
 
@@ -593,6 +596,10 @@ body {
 
     .vjs-settings {
       width: 33px;
+    }
+
+    .vjs-play-control {
+      margin-left: $first-control-bar-element-margin-left;
     }
   }
 
