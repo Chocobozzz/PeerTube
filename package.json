@@ -224,6 +224,14 @@
       {
         "path": "client/dist/en-US/*-es2015.js",
         "maxSize": "1mb"
+      },
+      {
+        "path": "client/dist/standalone/videos/video-embed.bundle.js",
+        "maxSize": "1mb"
+      },
+      {
+        "path": "client/dist/standalone/videos/video-embed.css",
+        "maxSize": "1mb"
       }
     ]
   }
