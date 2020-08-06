@@ -8,7 +8,7 @@ $playlist-menu-width: 350px;
   background: rgba(0, 0, 0, 0.8);
   z-index: 101;
   transition: right 0.2s;
-  overflow-y: auto;
+  overflow-y: scroll;
 
   // Hidden
   right: -$playlist-menu-width;
