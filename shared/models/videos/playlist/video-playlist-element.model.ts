@@ -1,6 +1,6 @@
 import { Video } from '../video.model'
 
-export enum VideoPlaylistElementType {
+export const enum VideoPlaylistElementType {
   REGULAR = 0,
   DELETED = 1,
   PRIVATE = 2,

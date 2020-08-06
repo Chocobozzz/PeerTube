@@ -1,8 +1,8 @@
 import './embed.scss'
 import videojs from 'video.js'
 import { objectToUrlEncoded, peertubeLocalStorage, PureAuthUser } from '@root-helpers/index'
+import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import {
-  peertubeTranslate,
   ResultList,
   ServerConfig,
   UserRefreshToken,

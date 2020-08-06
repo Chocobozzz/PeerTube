@@ -10,7 +10,8 @@ function isVideoBlacklistReasonValid (value: string) {
 }
 
 function isVideoBlacklistTypeValid (value: any) {
-  return exists(value) && validator.isInt('' + value) && VideoBlacklistType[value] !== undefined
+  return exists(value) &&
+    (value === VideoBlacklistType.AUTO_BEFORE_PUBLISHED || value === VideoBlacklistType.MANUAL)
 }
 
 // ---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 import { VideoTranscodingFPS } from './video-transcoding-fps.model'
 
-export enum VideoResolution {
+export const enum VideoResolution {
   H_NOVIDEO = 0,
   H_240P = 240,
   H_360P = 360,

@@ -1,9 +1,9 @@
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
+import { hasUserRight } from '@shared/core-utils/users'
 import {
-  hasUserRight,
   MyUser as ServerMyUserModel,
   MyUserSpecialPlaylist,
   NSFWPolicyType,

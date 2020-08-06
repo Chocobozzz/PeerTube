@@ -1,8 +1,9 @@
-import { OnInit, Directive } from '@angular/core'
+import { Directive, OnInit } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms'
-import { ServerConfig, USER_ROLE_LABELS, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
+import { USER_ROLE_LABELS } from '@shared/core-utils/users'
+import { ServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
 
 @Directive()
 export abstract class UserEdit extends FormReactive implements OnInit {

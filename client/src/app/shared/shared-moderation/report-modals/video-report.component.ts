@@ -7,7 +7,8 @@ import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { abusePredefinedReasonsMap, AbusePredefinedReasonsString } from '@shared/models'
+import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
+import { AbusePredefinedReasonsString } from '@shared/models'
 import { Video } from '../../shared-main'
 import { AbuseService } from '../abuse.service'
 

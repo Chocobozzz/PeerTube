@@ -1,9 +1,9 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
 import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   Avatar,
-  peertubeTranslate,
   ServerConfig,
   UserRight,
   Video as VideoServerModel,

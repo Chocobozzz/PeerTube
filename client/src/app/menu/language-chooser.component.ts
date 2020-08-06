@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { getCompleteLocale, getShortLocale, I18N_LOCALES } from '@shared/models'
+import { getCompleteLocale, getShortLocale, I18N_LOCALES } from '@shared/core-utils/i18n'
 
 @Component({
   selector: 'my-language-chooser',

@@ -10,7 +10,7 @@ export interface VideoChangeOwnership {
   createdAt: Date
 }
 
-export enum VideoChangeOwnershipStatus {
+export const enum VideoChangeOwnershipStatus {
   WAITING = 'WAITING',
   ACCEPTED = 'ACCEPTED',
   REFUSED = 'REFUSED'

@@ -1,13 +1,13 @@
-import { constants, promises as fs } from 'fs'
 import * as express from 'express'
+import { constants, promises as fs } from 'fs'
 import { join } from 'path'
-import { root } from '../helpers/core-utils'
-import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers/constants'
-import { asyncMiddleware, embedCSP } from '../middlewares'
-import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
-import { ClientHtml } from '../lib/client-html'
-import { logger } from '../helpers/logger'
 import { CONFIG } from '@server/initializers/config'
+import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@shared/core-utils/i18n'
+import { root } from '../helpers/core-utils'
+import { logger } from '../helpers/logger'
+import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers/constants'
+import { ClientHtml } from '../lib/client-html'
+import { asyncMiddleware, embedCSP } from '../middlewares'
 
 const clientsRouter = express.Router()
 

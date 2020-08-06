@@ -1,4 +1,4 @@
-export enum VideoImportState {
+export const enum VideoImportState {
   PENDING = 1,
   SUCCESS = 2,
   FAILED = 3,

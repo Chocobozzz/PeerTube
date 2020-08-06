@@ -1,9 +1,12 @@
 import * as express from 'express'
+import { logger } from '@server/helpers/logger'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation'
+import { Notifier } from '@server/lib/notifier'
 import { AbuseModel } from '@server/models/abuse/abuse'
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { getServerActor } from '@server/models/application/application'
-import { AbuseCreate, abusePredefinedReasonsMap, AbuseState, UserRight } from '../../../shared'
+import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
+import { AbuseCreate, AbuseState, UserRight } from '../../../shared'
 import { getFormattedObjects } from '../../helpers/utils'
 import { sequelizeTypescript } from '../../initializers/database'
 import {
@@ -25,8 +28,6 @@ import {
   setDefaultSort
 } from '../../middlewares'
 import { AccountModel } from '../../models/account/account'
-import { Notifier } from '@server/lib/notifier'
-import { logger } from '@server/helpers/logger'
 
 const abuseRouter = express.Router()
 

@@ -1,3 +1,5 @@
+import * as Bluebird from 'bluebird'
+import { values } from 'lodash'
 import { col, FindOptions, fn, literal, Op, QueryTypes, where, WhereOptions } from 'sequelize'
 import {
   AfterDestroy,
@@ -19,8 +21,21 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { hasUserRight, MyUser, USER_ROLE_LABELS, UserRight, AbuseState, VideoPlaylistType, VideoPrivacy } from '../../../shared'
+import {
+  MMyUserFormattable,
+  MUserDefault,
+  MUserFormattable,
+  MUserId,
+  MUserNotifSettingChannelDefault,
+  MUserWithNotificationSetting,
+  MVideoFullLight
+} from '@server/types/models'
+import { hasUserRight, USER_ROLE_LABELS } from '../../../shared/core-utils/users'
+import { AbuseState, MyUser, UserRight, VideoPlaylistType, VideoPrivacy } from '../../../shared/models'
 import { User, UserRole } from '../../../shared/models/users'
+import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
+import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
+import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isNoInstanceConfigWarningModal,
   isNoWelcomeModal,
@@ -42,33 +57,19 @@ import {
   isUserWebTorrentEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
-import { OAuthTokenModel } from '../oauth/oauth-token'
-import { getSort, throwIfNotValid } from '../utils'
-import { VideoChannelModel } from '../video/video-channel'
-import { VideoPlaylistModel } from '../video/video-playlist'
-import { AccountModel } from './account'
-import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
-import { values } from 'lodash'
 import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { clearCacheByUserId } from '../../lib/oauth-model'
-import { UserNotificationSettingModel } from './user-notification-setting'
-import { VideoModel } from '../video/video'
+import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
+import { OAuthTokenModel } from '../oauth/oauth-token'
+import { getSort, throwIfNotValid } from '../utils'
+import { VideoModel } from '../video/video'
+import { VideoChannelModel } from '../video/video-channel'
 import { VideoImportModel } from '../video/video-import'
-import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
-import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
-import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
-import * as Bluebird from 'bluebird'
-import {
-  MMyUserFormattable,
-  MUserDefault,
-  MUserFormattable,
-  MUserId,
-  MUserNotifSettingChannelDefault,
-  MUserWithNotificationSetting,
-  MVideoFullLight
-} from '@server/types/models'
+import { VideoPlaylistModel } from '../video/video-playlist'
+import { AccountModel } from './account'
+import { UserNotificationSettingModel } from './user-notification-setting'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',

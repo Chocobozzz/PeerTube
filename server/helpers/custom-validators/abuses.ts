@@ -1,5 +1,6 @@
 import validator from 'validator'
-import { AbuseFilter, abusePredefinedReasonsMap, AbusePredefinedReasonsString, AbuseVideoIs, AbuseCreate } from '@shared/models'
+import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
+import { AbuseCreate, AbuseFilter, AbusePredefinedReasonsString, AbuseVideoIs } from '@shared/models'
 import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { exists, isArray } from './misc'
 
