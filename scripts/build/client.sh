@@ -154,7 +154,9 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
     done
 fi
 
-cd ../ && npm run build:embed && cd client/
+if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then
+    cd ../ && npm run build:embed && cd client/
+fi
 
 # Copy runtime locales
 cp -r "./src/locale" "./dist/locale"

@@ -2,7 +2,11 @@ name: Test Suite
 
 on:
   push:
+    branches:
+      - develop
+      - master
   pull_request:
+    types: [synchronize, opened]
   schedule:
     - cron: '0 3 * * 1-5'
 
