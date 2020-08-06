@@ -7,6 +7,7 @@ import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { RecommendationInfo } from './recommendation-info.model'
 import { RecommendedVideosStore } from './recommended-videos.store'
+import { UserLocalStorageKeys } from '@root-helpers/users'
 
 @Component({
   selector: 'my-recommended-videos',
@@ -48,9 +49,12 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
     if (this.authService.isLoggedIn()) {
       this.autoPlayNextVideo = this.authService.getUser().autoPlayNextVideo
     } else {
-      this.autoPlayNextVideo = this.sessionStorageService.getItem(User.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true' || false
-      this.sessionStorageService.watch([User.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO]).subscribe(
-        () => this.autoPlayNextVideo = this.sessionStorageService.getItem(User.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+      this.autoPlayNextVideo = this.sessionStorageService.getItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+
+      this.sessionStorageService.watch([UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO]).subscribe(
+        () => {
+          this.autoPlayNextVideo = this.sessionStorageService.getItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+        }
       )
     }
 
@@ -73,7 +77,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
   }
 
   switchAutoPlayNextVideo () {
-    this.sessionStorageService.setItem(User.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO, this.autoPlayNextVideo.toString())
+    this.sessionStorageService.setItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO, this.autoPlayNextVideo.toString())
 
     if (this.authService.isLoggedIn()) {
       const details = {

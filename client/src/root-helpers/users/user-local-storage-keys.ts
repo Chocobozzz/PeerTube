@@ -1,4 +1,4 @@
-export const UserKeys = {
+export const UserLocalStorageKeys = {
   ID: 'id',
   ROLE: 'role',
   EMAIL: 'email',

@@ -1,18 +1,22 @@
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import {
+  flushUserInfoFromLocalStorage,
+  getUserInfoFromLocalStorage,
+  saveUserInfoIntoLocalStorage,
+  TokenOptions,
+  Tokens
+} from '@root-helpers/users'
 import { hasUserRight } from '@shared/core-utils/users'
 import {
   MyUser as ServerMyUserModel,
   MyUserSpecialPlaylist,
-  NSFWPolicyType,
   User as ServerUserModel,
   UserRight,
   UserRole,
   UserVideoQuota
 } from '@shared/models'
-import { TokenOptions, Tokens } from '@root-helpers/pure-auth-user.model'
 
 export class AuthUser extends User implements ServerMyUserModel {
   tokens: Tokens
@@ -21,31 +25,16 @@ export class AuthUser extends User implements ServerMyUserModel {
   canSeeVideosLink = true
 
   static load () {
-    const usernameLocalStorage = peertubeLocalStorage.getItem(this.KEYS.USERNAME)
-    if (usernameLocalStorage) {
-      return new AuthUser(
-        {
-          id: parseInt(peertubeLocalStorage.getItem(this.KEYS.ID), 10),
-          username: peertubeLocalStorage.getItem(this.KEYS.USERNAME),
-          email: peertubeLocalStorage.getItem(this.KEYS.EMAIL),
-          role: parseInt(peertubeLocalStorage.getItem(this.KEYS.ROLE), 10) as UserRole,
-          nsfwPolicy: peertubeLocalStorage.getItem(this.KEYS.NSFW_POLICY) as NSFWPolicyType,
-          webTorrentEnabled: peertubeLocalStorage.getItem(this.KEYS.WEBTORRENT_ENABLED) === 'true',
-          autoPlayVideo: peertubeLocalStorage.getItem(this.KEYS.AUTO_PLAY_VIDEO) === 'true',
-          videosHistoryEnabled: peertubeLocalStorage.getItem(this.KEYS.VIDEOS_HISTORY_ENABLED) === 'true'
-        },
-        Tokens.load()
-      )
-    }
+    const userInfo = getUserInfoFromLocalStorage()
 
-    return null
+    if (!userInfo) return null
+
+    return new AuthUser(userInfo, Tokens.load())
   }
 
   static flush () {
-    peertubeLocalStorage.removeItem(this.KEYS.USERNAME)
-    peertubeLocalStorage.removeItem(this.KEYS.ID)
-    peertubeLocalStorage.removeItem(this.KEYS.ROLE)
-    peertubeLocalStorage.removeItem(this.KEYS.EMAIL)
+    flushUserInfoFromLocalStorage()
+
     Tokens.flush()
   }
 
@@ -87,13 +76,16 @@ export class AuthUser extends User implements ServerMyUserModel {
   }
 
   save () {
-    peertubeLocalStorage.setItem(AuthUser.KEYS.ID, this.id.toString())
-    peertubeLocalStorage.setItem(AuthUser.KEYS.USERNAME, this.username)
-    peertubeLocalStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
-    peertubeLocalStorage.setItem(AuthUser.KEYS.ROLE, this.role.toString())
-    peertubeLocalStorage.setItem(AuthUser.KEYS.NSFW_POLICY, this.nsfwPolicy.toString())
-    peertubeLocalStorage.setItem(AuthUser.KEYS.WEBTORRENT_ENABLED, JSON.stringify(this.webTorrentEnabled))
-    peertubeLocalStorage.setItem(AuthUser.KEYS.AUTO_PLAY_VIDEO, JSON.stringify(this.autoPlayVideo))
+    saveUserInfoIntoLocalStorage({
+      id: this.id,
+      username: this.username,
+      email: this.email,
+      role: this.role,
+      nsfwPolicy: this.nsfwPolicy,
+      webTorrentEnabled: this.webTorrentEnabled,
+      autoPlayVideo: this.autoPlayVideo
+    })
+
     this.tokens.save()
   }
 

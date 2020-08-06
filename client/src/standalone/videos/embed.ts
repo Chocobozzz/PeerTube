@@ -1,6 +1,7 @@
 import './embed.scss'
 import videojs from 'video.js'
-import { objectToUrlEncoded, peertubeLocalStorage, PureAuthUser } from '@root-helpers/index'
+import { objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
+import { Tokens } from '@root-helpers/users'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import {
   ResultList,
@@ -39,7 +40,7 @@ export class PeerTubeEmbed {
   mode: PlayerMode
   scope = 'peertube'
 
-  user: PureAuthUser
+  userTokens: Tokens
   headers = new Headers()
   LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
     CLIENT_ID: 'client_id',
@@ -74,7 +75,7 @@ export class PeerTubeEmbed {
           const headers = new Headers()
           headers.set('Content-Type', 'application/x-www-form-urlencoded')
           const data = {
-            refresh_token: this.user.getRefreshToken(),
+            refresh_token: this.userTokens.refreshToken,
             client_id: clientId,
             client_secret: clientSecret,
             response_type: 'code',
@@ -88,9 +89,12 @@ export class PeerTubeEmbed {
           })
             .then(res => res.json())
             .then((obj: UserRefreshToken) => {
-              this.user.refreshTokens(obj.access_token, obj.refresh_token)
-              this.user.save()
-              this.headers.set('Authorization', `${this.user.getTokenType()} ${this.user.getAccessToken()}`)
+              this.userTokens.accessToken = obj.access_token
+              this.userTokens.refreshToken = obj.refresh_token
+              this.userTokens.save()
+
+              this.setHeadersFromTokens()
+
               resolve()
             })
             .catch((refreshTokenError: any) => {
@@ -165,7 +169,7 @@ export class PeerTubeEmbed {
 
   async init () {
     try {
-      this.user = PureAuthUser.load()
+      this.userTokens = Tokens.load()
       await this.initCore()
     } catch (e) {
       console.error(e)
@@ -218,9 +222,7 @@ export class PeerTubeEmbed {
     const urlParts = window.location.pathname.split('/')
     const videoId = urlParts[ urlParts.length - 1 ]
 
-    if (this.user) {
-      this.headers.set('Authorization', `${this.user.getTokenType()} ${this.user.getAccessToken()}`)
-    }
+    if (this.userTokens) this.setHeadersFromTokens()
 
     const videoPromise = this.loadVideoInfo(videoId)
     const captionsPromise = this.loadVideoCaptions(videoId)
@@ -380,6 +382,10 @@ export class PeerTubeEmbed {
 
   private getPlaceholderElement () {
     return document.getElementById('placeholder-preview')
+  }
+
+  private setHeadersFromTokens () {
+    this.headers.set('Authorization', `${this.userTokens.tokenType} ${this.userTokens.accessToken}`)
   }
 }
 
