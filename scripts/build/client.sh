@@ -33,6 +33,7 @@ pre_build_hook
 additionalParams=""
 if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then
     additionalParams="--namedChunks=true --outputHashing=none"
+    export ANALYZE_BUNDLE=true
 fi
 
 
@@ -154,9 +155,7 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
     done
 fi
 
-if [ ! -z ${1+x} ] || [ "$1" == "--analyze-bundle" ]; then
-    cd ../ && npm run build:embed && cd client/
-fi
+cd ../ && npm run build:embed && cd client/
 
 # Copy runtime locales
 cp -r "./src/locale" "./dist/locale"

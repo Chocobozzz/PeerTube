@@ -9,8 +9,11 @@ on:
 
 jobs:
 
-  test:
+  bundlewatch:
     runs-on: ubuntu-latest
+
+    env:
+      CI_BRANCH_BASE: develop
 
     steps:
       - uses: actions/checkout@v2

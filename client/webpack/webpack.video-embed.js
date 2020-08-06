@@ -33,9 +33,13 @@ module.exports = function () {
 
     output: {
       path: helpers.root('dist/standalone/videos'),
-      filename: '[name].[hash].bundle.js',
+
+      filename: process.env.ANALYZE_BUNDLE === 'true'
+        ? '[name].bundle.js'
+        : '[name].[hash].bundle.js',
+
       sourceMapFilename: '[file].map',
-      chunkFilename: '[id].chunk.js',
+      chunkFilename: '[id].[hash].chunk.js',
       publicPath: '/client/standalone/videos/'
     },
 
@@ -113,7 +117,9 @@ module.exports = function () {
 
     plugins: [
       new ExtractTextPlugin({
-        filename: '[name].[hash].css'
+        filename: process.env.ANALYZE_BUNDLE === 'true'
+          ? '[name].css'
+          : '[name].[hash].css'
       }),
 
       new PurifyCSSPlugin({
