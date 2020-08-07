@@ -8,8 +8,8 @@ const icons = {
   'video-lang': require('!!raw-loader?!../../../assets/images/misc/video-lang.svg').default,
   'support': require('!!raw-loader?!../../../assets/images/misc/support.svg').default,
   'peertube-x': require('!!raw-loader?!../../../assets/images/misc/peertube-x.svg').default,
-  'robot': require('!!raw-loader?!../../../assets/images/misc/miscellaneous_services.svg').default, // material ui
-  'videos': require('!!raw-loader?!../../../assets/images/misc/video_library.svg').default, // material ui
+  'robot': require('!!raw-loader?!../../../assets/images/misc/miscellaneous-services.svg').default, // material ui
+  'videos': require('!!raw-loader?!../../../assets/images/misc/video-library.svg').default, // material ui
   'history': require('!!raw-loader?!../../../assets/images/misc/history.svg').default, // material ui
   'subscriptions': require('!!raw-loader?!../../../assets/images/misc/subscriptions.svg').default, // material ui
   'playlist-add': require('!!raw-loader?!../../../assets/images/misc/playlist-add.svg').default, // material ui
