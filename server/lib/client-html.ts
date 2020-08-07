@@ -25,7 +25,7 @@ import { MAccountActor, MChannelActor } from '../types/models'
 
 type Tags = {
   ogType: string
-  twitterCard: string
+  twitterCard: 'player' | 'summary' | 'summary_large_image'
   schemaType: string
 
   list?: {
@@ -346,6 +346,12 @@ export class ClientHtml {
     if (tags.image.width && tags.image.height) {
       metaTags['twitter:image:width'] = tags.image.width
       metaTags['twitter:image:height'] = tags.image.height
+    }
+
+    if (tags.twitterCard === 'player') {
+      metaTags['twitter:player'] = tags.embed.url
+      metaTags['twitter:player:width'] = EMBED_SIZE.width
+      metaTags['twitter:player:height'] = EMBED_SIZE.height
     }
 
     return metaTags
