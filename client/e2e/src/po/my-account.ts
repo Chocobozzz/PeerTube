@@ -1,4 +1,4 @@
-import { by, element } from 'protractor'
+import { by, element, browser } from 'protractor'
 
 export class MyAccountPage {
 
@@ -50,6 +50,14 @@ export class MyAccountPage {
 
   playPlaylist () {
     return element(by.css('.playlist-info .miniature-thumbnail')).click()
+  }
+
+  async goOnAssociatedPlaylistEmbed () {
+    let url = await browser.getCurrentUrl()
+    url = url.replace('/videos/watch/playlist/', '/video-playlists/embed/')
+    url = url.replace(':3333', ':9001')
+
+    return browser.get(url)
   }
 
   // My account Videos
