@@ -28,6 +28,7 @@
       [user]="user"
       (commentCreated)="onCommentThreadCreated($event)"
       [textValue]="commentThreadRedraftValue"
+      [commentThread]="true"
     ></my-video-comment-add>
 
     <div *ngIf="componentPagination.totalItems === 0 && comments.length === 0" i18n>No comments.</div>

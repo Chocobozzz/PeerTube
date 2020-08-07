@@ -7,6 +7,7 @@ import { Video } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCommentCreate } from '@shared/models'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-comment-add',
@@ -20,6 +21,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   @Input() parentComments: VideoComment[]
   @Input() focusOnInit = false
   @Input() textValue?: string
+  @Input() commentThread?: boolean
 
   @Output() commentCreated = new EventEmitter<VideoComment>()
   @Output() cancel = new EventEmitter()
@@ -28,6 +30,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   @ViewChild('textarea', { static: true }) textareaElement: ElementRef
 
   addingComment = false
+  addingCommentButtonValue: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -35,7 +38,8 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     private notifier: Notifier,
     private videoCommentService: VideoCommentService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private i18n: I18n
   ) {
     super()
   }
@@ -46,6 +50,12 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     })
 
     if (this.user) {
+      if (this.commentThread) {
+        this.addingCommentButtonValue = this.i18n('Comment')
+      } else {
+        this.addingCommentButtonValue = this.i18n('Reply')
+      }
+
       if (this.textValue) {
         this.patchTextValue(this.textValue, this.focusOnInit)
         return
