@@ -52,7 +52,7 @@ $play-overlay-width: 18px;
     }
 
     .icon {
-      @include play-icon($play-overlay-height, $play-overlay-width);
+      @include play-icon($play-overlay-width, $play-overlay-height);
     }
   }
 
