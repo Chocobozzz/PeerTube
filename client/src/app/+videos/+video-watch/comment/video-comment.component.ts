@@ -154,21 +154,24 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
     if (this.isReportableByUser()) {
       this.prependModerationActions.push({
-        label: $localize`Report comment`,
+        label: $localize`Report`,
+        iconName: 'flag',
         handler: () => this.showReportModal()
       })
     }
 
     if (this.isRemovableByUser()) {
       this.prependModerationActions.push({
-        label: $localize`Remove comment`,
+        label: $localize`Remove`,
+        iconName: 'delete',
         handler: () => this.onWantToDelete()
       })
     }
 
     if (this.isRedraftableByUser()) {
       this.prependModerationActions.push({
-        label: $localize`Remove & re-draft comment`,
+        label: $localize`Remove & re-draft`,
+        iconName: 'edit',
         handler: () => this.onWantToRedraft()
       })
     }
