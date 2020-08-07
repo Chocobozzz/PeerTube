@@ -136,22 +136,22 @@ export class PeerTubeEmbed {
   }
 
   loadVideoCaptions (videoId: string): Promise<Response> {
-    return fetch(this.getVideoUrl(videoId) + '/captions')
+    return this.refreshFetch(this.getVideoUrl(videoId) + '/captions', { headers: this.headers })
   }
 
   loadPlaylistInfo (playlistId: string): Promise<Response> {
-    return fetch(this.getPlaylistUrl(playlistId))
+    return this.refreshFetch(this.getPlaylistUrl(playlistId), { headers: this.headers })
   }
 
   loadPlaylistElements (playlistId: string, start = 0): Promise<Response> {
     const url = new URL(this.getPlaylistUrl(playlistId) + '/videos')
     url.search = new URLSearchParams({ start: '' + start, count: '100' }).toString()
 
-    return fetch(url.toString())
+    return this.refreshFetch(url.toString(), { headers: this.headers })
   }
 
   loadConfig (): Promise<ServerConfig> {
-    return fetch('/api/v1/config')
+    return this.refreshFetch('/api/v1/config')
       .then(res => res.json())
   }
 
@@ -318,12 +318,21 @@ export class PeerTubeEmbed {
     const playlistPromise = this.loadPlaylistInfo(playlistId)
     const playlistElementsPromise = this.loadPlaylistElements(playlistId)
 
-    const playlistResponse = await playlistPromise
+    let playlistResponse: Response
+    let isResponseOk: boolean
 
-    if (!playlistResponse.ok) {
+    try {
+      playlistResponse = await playlistPromise
+      isResponseOk = true
+    } catch (err) {
+      console.error(err)
+      isResponseOk = false
+    }
+
+    if (!isResponseOk) {
       const serverTranslations = await this.translationsPromise
 
-      if (playlistResponse.status === 404) {
+      if (playlistResponse?.status === 404) {
         this.playlistNotFound(serverTranslations)
         return undefined
       }
@@ -338,12 +347,22 @@ export class PeerTubeEmbed {
   private async loadVideo (videoId: string) {
     const videoPromise = this.loadVideoInfo(videoId)
 
-    const videoResponse = await videoPromise
+    let videoResponse: Response
+    let isResponseOk: boolean
 
-    if (!videoResponse.ok) {
+    try {
+      videoResponse = await videoPromise
+      isResponseOk = true
+    } catch (err) {
+      console.error(err)
+
+      isResponseOk = false
+    }
+
+    if (!isResponseOk) {
       const serverTranslations = await this.translationsPromise
 
-      if (videoResponse.status === 404) {
+      if (videoResponse?.status === 404) {
         this.videoNotFound(serverTranslations)
         return undefined
       }
