@@ -6,18 +6,56 @@
 
 
   <div class="modal-body">
+
     <div class="playlist" *ngIf="hasPlaylist()">
       <div class="title-page title-page-single" i18n>Share the playlist</div>
 
-      <my-input-readonly-copy [value]="getPlaylistUrl()"></my-input-readonly-copy>
+      <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activePlaylistId">
+
+        <ng-container ngbNavItem="url">
+          <a ngbNavLink i18n>URL</a>
+
+          <ng-template ngbNavContent>
+            <div class="nav-content">
+
+              <my-input-readonly-copy [value]="getPlaylistUrl()"></my-input-readonly-copy>
+            </div>
+          </ng-template>
+        </ng-container>
+
+        <ng-container ngbNavItem="qrcode">
+          <a ngbNavLink i18n>QR-Code</a>
+
+          <ng-template ngbNavContent>
+            <div class="nav-content">
+              <qrcode [qrdata]="getPlaylistUrl()" [size]="256" level="Q"></qrcode>
+            </div>
+          </ng-template>
+        </ng-container>
+
+        <ng-container ngbNavItem="embed">
+          <a ngbNavLink i18n>Embed</a>
+
+          <ng-template ngbNavContent>
+            <div class="nav-content">
+              <my-input-readonly-copy [value]="getPlaylistIframeCode()"></my-input-readonly-copy>
+
+              <div i18n *ngIf="notSecure()" class="alert alert-warning">
+                The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+
+      </div>
+
+      <div [ngbNavOutlet]="nav"></div>
 
       <div class="filters">
 
         <div class="form-group">
-          <my-peertube-checkbox
-            inputName="includeVideoInPlaylist" [(ngModel)]="includeVideoInPlaylist"
-            i18n-labelText labelText="Share the playlist at this video position"
-          ></my-peertube-checkbox>
+          <my-peertube-checkbox inputName="includeVideoInPlaylist" [(ngModel)]="includeVideoInPlaylist" i18n-labelText
+            labelText="Share the playlist at this video position"></my-peertube-checkbox>
         </div>
 
       </div>
@@ -27,7 +65,7 @@
     <div class="video">
       <div class="title-page title-page-single" *ngIf="hasPlaylist()" i18n>Share the video</div>
 
-      <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeId">
+      <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeVideoId">
 
         <ng-container ngbNavItem="url">
           <a ngbNavLink i18n>URL</a>
@@ -137,7 +175,7 @@
             </div>
           </div>
 
-          <ng-container *ngIf="isInEmbedTab()">
+          <ng-container *ngIf="isVideoInEmbedTab()">
             <div class="form-group">
               <my-peertube-checkbox
                 inputName="title" [(ngModel)]="customizations.title"

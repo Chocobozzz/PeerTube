@@ -135,7 +135,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       this.comment.account = null
     }
 
-    if (this.isUserLoggedIn() && this.authService.getUser().account.id !== this.comment.account.id) {
+    if (this.isUserLoggedIn() && this.comment.isDeleted === false && this.authService.getUser().account.id !== this.comment.account.id) {
       this.prependModerationActions = [
         {
           label: this.i18n('Report comment'),

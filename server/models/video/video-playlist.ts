@@ -528,6 +528,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       },
 
       thumbnailPath: this.getThumbnailStaticPath(),
+      embedPath: this.getEmbedStaticPath(),
 
       type: {
         id: this.type,

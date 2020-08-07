@@ -43,20 +43,20 @@ function isMobile () {
 }
 
 function buildVideoLink (options: {
-  baseUrl?: string,
+  baseUrl?: string
 
-  startTime?: number,
-  stopTime?: number,
+  startTime?: number
+  stopTime?: number
 
-  subtitle?: string,
+  subtitle?: string
 
-  loop?: boolean,
-  autoplay?: boolean,
-  muted?: boolean,
+  loop?: boolean
+  autoplay?: boolean
+  muted?: boolean
 
   // Embed options
-  title?: boolean,
-  warningTitle?: boolean,
+  title?: boolean
+  warningTitle?: boolean
   controls?: boolean
   peertubeLink?: boolean
 } = {}) {
@@ -66,10 +66,7 @@ function buildVideoLink (options: {
     ? baseUrl
     : window.location.origin + window.location.pathname.replace('/embed/', '/watch/')
 
-  const params = new URLSearchParams(window.location.search)
-  // Remove these unused parameters when we are on a playlist page
-  params.delete('videoId')
-  params.delete('resume')
+  const params = generateParams(window.location.search)
 
   if (options.startTime) {
     const startTimeInt = Math.floor(options.startTime)
@@ -91,12 +88,43 @@ function buildVideoLink (options: {
   if (options.controls === false) params.set('controls', '0')
   if (options.peertubeLink === false) params.set('peertubeLink', '0')
 
+  return buildUrl(url, params)
+}
+
+function buildPlaylistLink (options: {
+  baseUrl?: string
+
+  playlistPosition: number
+}) {
+  const { baseUrl } = options
+
+  const url = baseUrl
+    ? baseUrl
+    : window.location.origin + window.location.pathname.replace('/video-playlists/embed/', '/videos/watch/playlist/')
+
+  const params = generateParams(window.location.search)
+
+  if (options.playlistPosition) params.set('playlistPosition', '' + options.playlistPosition)
+
+  return buildUrl(url, params)
+}
+
+function buildUrl (url: string, params: URLSearchParams) {
   let hasParams = false
   params.forEach(() => hasParams = true)
 
   if (hasParams) return url + '?' + params.toString()
 
   return url
+}
+
+function generateParams (url: string) {
+  const params = new URLSearchParams(window.location.search)
+  // Unused parameters in embed
+  params.delete('videoId')
+  params.delete('resume')
+
+  return params
 }
 
 function timeToInt (time: number | string) {
@@ -140,7 +168,7 @@ function secondsToTime (seconds: number, full = false, symbol?: string) {
   return time
 }
 
-function buildVideoEmbed (embedUrl: string) {
+function buildVideoOrPlaylistEmbed (embedUrl: string) {
   return '<iframe width="560" height="315" ' +
     'sandbox="allow-same-origin allow-scripts allow-popups" ' +
     'src="' + embedUrl + '" ' +
@@ -203,8 +231,9 @@ export {
   timeToInt,
   secondsToTime,
   isWebRTCDisabled,
+  buildPlaylistLink,
   buildVideoLink,
-  buildVideoEmbed,
+  buildVideoOrPlaylistEmbed,
   videoFileMaxByResolution,
   videoFileMinByResolution,
   copyToClipboard,

@@ -18,6 +18,8 @@ export interface VideoPlaylist {
 
   type: VideoConstant<VideoPlaylistType>
 
+  embedPath: string
+
   createdAt: Date | string
   updatedAt: Date | string
 

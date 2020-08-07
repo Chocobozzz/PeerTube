@@ -7,7 +7,7 @@ import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockService } from '@app/shared/shared-moderation'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
-import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
+import { buildVideoOrPlaylistEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { DomSanitizer } from '@angular/platform-browser'
 
@@ -176,7 +176,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
   }
 
   getVideoEmbed (entry: VideoBlacklist) {
-    return buildVideoEmbed(
+    return buildVideoOrPlaylistEmbed(
       buildVideoLink({
         baseUrl: `${environment.embedUrl}/videos/embed/${entry.video.uuid}`,
         title: false,

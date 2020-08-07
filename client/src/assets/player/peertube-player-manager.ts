@@ -35,7 +35,7 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig, isIOS, isSafari } from './utils'
+import { buildVideoOrPlaylistEmbed, buildVideoLink, copyToClipboard, getRtcConfig, isIOS, isSafari } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -492,7 +492,7 @@ export class PeertubePlayerManager {
       {
         label: player.localize('Copy embed code'),
         listener: () => {
-          copyToClipboard(buildVideoEmbed(videoEmbedUrl))
+          copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl))
         }
       }
     ]

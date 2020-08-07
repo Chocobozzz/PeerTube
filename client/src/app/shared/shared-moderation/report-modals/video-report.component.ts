@@ -1,5 +1,5 @@
 import { mapValues, pickBy } from 'lodash-es'
-import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
+import { buildVideoOrPlaylistEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Notifier } from '@app/core'
@@ -58,7 +58,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   getVideoEmbed () {
     return this.sanitizer.bypassSecurityTrustHtml(
-      buildVideoEmbed(
+      buildVideoOrPlaylistEmbed(
         buildVideoLink({
           baseUrl: this.video.embedUrl,
           title: false,

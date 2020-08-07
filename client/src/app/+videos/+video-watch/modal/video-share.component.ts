@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
-import { buildVideoEmbed, buildVideoLink } from '../../../../assets/player/utils'
+import { buildVideoOrPlaylistEmbed, buildVideoLink, buildPlaylistLink } from '../../../../assets/player/utils'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@shared/models'
 import { VideoDetails } from '@app/shared/shared-main'
@@ -24,6 +24,8 @@ type Customizations = {
   peertubeLink: boolean
 }
 
+type TabId = 'url' | 'qrcode' | 'embed'
+
 @Component({
   selector: 'my-video-share',
   templateUrl: './video-share.component.html',
@@ -36,14 +38,18 @@ export class VideoShareComponent {
   @Input() videoCaptions: VideoCaption[] = []
   @Input() playlist: VideoPlaylist = null
 
-  activeId: 'url' | 'qrcode' | 'embed' = 'url'
+  activeVideoId: TabId = 'url'
+  activePlaylistId: TabId = 'url'
+
   customizations: Customizations
   isAdvancedCustomizationCollapsed = true
   includeVideoInPlaylist = false
 
+  private playlistPosition: number = null
+
   constructor (private modalService: NgbModal) { }
 
-  show (currentVideoTimestamp?: number) {
+  show (currentVideoTimestamp?: number, currentPlaylistPosition?: number) {
     let subtitle: string
     if (this.videoCaptions.length !== 0) {
       subtitle = this.videoCaptions[0].language.id
@@ -70,19 +76,28 @@ export class VideoShareComponent {
       peertubeLink: true
     }
 
+    this.playlistPosition = currentPlaylistPosition
+
     this.modalService.open(this.modal, { centered: true })
   }
 
   getVideoIframeCode () {
-    const options = this.getOptions(this.video.embedUrl)
+    const options = this.getVideoOptions(this.video.embedUrl)
 
     const embedUrl = buildVideoLink(options)
-    return buildVideoEmbed(embedUrl)
+    return buildVideoOrPlaylistEmbed(embedUrl)
+  }
+
+  getPlaylistIframeCode () {
+    const options = this.getPlaylistOptions(this.playlist.embedUrl)
+
+    const embedUrl = buildPlaylistLink(options)
+    return buildVideoOrPlaylistEmbed(embedUrl)
   }
 
   getVideoUrl () {
     const baseUrl = window.location.origin + '/videos/watch/' + this.video.uuid
-    const options = this.getOptions(baseUrl)
+    const options = this.getVideoOptions(baseUrl)
 
     return buildVideoLink(options)
   }
@@ -99,15 +114,23 @@ export class VideoShareComponent {
     return window.location.protocol === 'http:'
   }
 
-  isInEmbedTab () {
-    return this.activeId === 'embed'
+  isVideoInEmbedTab () {
+    return this.activeVideoId === 'embed'
   }
 
   hasPlaylist () {
     return !!this.playlist
   }
 
-  private getOptions (baseUrl?: string) {
+  private getPlaylistOptions (baseUrl?: string) {
+    return {
+      baseUrl,
+
+      playlistPosition: this.playlistPosition || undefined
+    }
+  }
+
+  private getVideoOptions (baseUrl?: string) {
     return {
       baseUrl,
 

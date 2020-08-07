@@ -236,7 +236,7 @@ describe('Test video playlists', function () {
         const playlistFromList = res.body.data[0] as VideoPlaylist
 
         const res2 = await getVideoPlaylist(server.url, playlistFromList.uuid)
-        const playlistFromGet = res2.body
+        const playlistFromGet = res2.body as VideoPlaylist
 
         for (const playlist of [ playlistFromGet, playlistFromList ]) {
           expect(playlist.id).to.be.a('number')
@@ -250,6 +250,7 @@ describe('Test video playlists', function () {
           expect(playlist.privacy.label).to.equal('Public')
           expect(playlist.type.id).to.equal(VideoPlaylistType.REGULAR)
           expect(playlist.type.label).to.equal('Regular')
+          expect(playlist.embedPath).to.equal('/video-playlists/embed/' + playlist.uuid)
 
           expect(playlist.videosLength).to.equal(0)
 
