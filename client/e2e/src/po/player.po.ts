@@ -28,11 +28,11 @@ export class PlayerPage {
     const videojsEl = element(by.css('div.video-js'))
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
 
-    // On Android, we need to click twice on "play" (BrowserStack particularity)
     if (await isMobileDevice()) {
       await browserSleep(5000)
 
-      await videojsEl.click()
+      // On Android, we need to click twice on "play" (BrowserStack particularity)
+      if (!await isIOS()) await videojsEl.click()
     }
 
     browser.ignoreSynchronization = false

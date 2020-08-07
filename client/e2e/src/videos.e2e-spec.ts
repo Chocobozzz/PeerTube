@@ -93,8 +93,12 @@ describe('Videos workflow', () => {
   it('Should go on video watch page', async () => {
     let videoNameToExcept = videoName
 
-    if (await isMobileDevice() || await isSafari()) videoNameToExcept = await videoWatchPage.clickOnFirstVideo()
-    else await videoWatchPage.clickOnVideo(videoName)
+    if (await isMobileDevice() || await isSafari()) {
+      await browser.get('https://peertube2.cpy.re/videos/watch/122d093a-1ede-43bd-bd34-59d2931ffc5e')
+      videoNameToExcept = 'E2E tests'
+    } else {
+      await videoWatchPage.clickOnVideo(videoName)
+    }
 
     return videoWatchPage.waitWatchVideoName(videoNameToExcept, await isMobileDevice(), await isSafari())
   })

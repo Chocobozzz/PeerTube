@@ -61,6 +61,13 @@ exports.config = {
       realMobile: 'true',
       os_version: '12',
       name: 'Safari iPhone'
+    },
+    {
+      browserName: 'Safari',
+      device: 'iPad 7th',
+      realMobile: 'true',
+      os_version: '13',
+      name: 'Safari iPad'
     }
   ],
 
