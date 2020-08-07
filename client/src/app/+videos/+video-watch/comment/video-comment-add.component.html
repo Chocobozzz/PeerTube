@@ -20,8 +20,8 @@
     <button *ngIf="isAddButtonDisplayed()" class="cancel-button" (click)="cancelCommentReply()" type="button" i18n>
       Cancel
     </button>
-    <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid || addingComment }" i18n>
-      Reply
+    <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid || addingComment }">
+      {{ addingCommentButtonValue }}
     </button>
   </div>
 </form>
