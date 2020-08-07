@@ -21,6 +21,7 @@ type Customizations = {
   title: boolean
   warningTitle: boolean
   controls: boolean
+  peertubeLink: boolean
 }
 
 @Component({
@@ -65,7 +66,8 @@ export class VideoShareComponent {
       // Embed options
       title: true,
       warningTitle: true,
-      controls: true
+      controls: true,
+      peertubeLink: true
     }
 
     this.modalService.open(this.modal, { centered: true })
@@ -120,7 +122,8 @@ export class VideoShareComponent {
 
       title: this.customizations.title,
       warningTitle: this.customizations.warningTitle,
-      controls: this.customizations.controls
+      controls: this.customizations.controls,
+      peertubeLink: this.customizations.peertubeLink
     }
   }
 }

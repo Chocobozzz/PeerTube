@@ -58,6 +58,7 @@ function buildVideoLink (options: {
   title?: boolean,
   warningTitle?: boolean,
   controls?: boolean
+  peertubeLink?: boolean
 } = {}) {
   const { baseUrl } = options
 
@@ -88,6 +89,7 @@ function buildVideoLink (options: {
   if (options.title === false) params.set('title', '0')
   if (options.warningTitle === false) params.set('warningTitle', '0')
   if (options.controls === false) params.set('controls', '0')
+  if (options.peertubeLink === false) params.set('peertubeLink', '0')
 
   let hasParams = false
   params.forEach(() => hasParams = true)
