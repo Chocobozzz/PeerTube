@@ -22,9 +22,11 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   @Input() inReplyToCommentId: number
   @Input() highlightedComment = false
   @Input() firstInThread = false
+  @Input() redraftValue?: string
 
-  @Output() wantedToDelete = new EventEmitter<VideoComment>()
   @Output() wantedToReply = new EventEmitter<VideoComment>()
+  @Output() wantedToDelete = new EventEmitter<VideoComment>()
+  @Output() wantedToRedraft = new EventEmitter<VideoComment>()
   @Output() threadCreated = new EventEmitter<VideoCommentThreadTree>()
   @Output() resetReply = new EventEmitter()
   @Output() timestampClicked = new EventEmitter<number>()
@@ -70,7 +72,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       comment: createdComment,
       children: []
     })
+
     this.resetReply.emit()
+
+    delete this.redraftValue
   }
 
   onWantToReply (comment?: VideoComment) {
@@ -79,6 +84,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   onWantToDelete (comment?: VideoComment) {
     this.wantedToDelete.emit(comment || this.comment)
+  }
+
+  onWantToRedraft (comment?: VideoComment) {
+    this.wantedToRedraft.emit(comment || this.comment)
   }
 
   isUserLoggedIn () {
@@ -100,6 +109,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
         this.user.account.id === this.video.account.id ||
         this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
       )
+  }
+
+  isRedraftableByUser () {
+    return this.comment.account && this.isUserLoggedIn() && this.user.account.id === this.comment.account.id && this.comment.totalReplies === 0
   }
 
   switchToDefaultAvatar ($event: Event) {
