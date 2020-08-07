@@ -27,6 +27,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     totalItems: null
   }
   inReplyToCommentId: number
+  commentReplyRedraftValue: string
+  commentThreadRedraftValue: string
   threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
   threadLoading: { [ id: number ]: boolean } = {}
 
@@ -131,6 +133,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   onCommentThreadCreated (comment: VideoComment) {
     this.comments.unshift(comment)
+    delete this.commentThreadRedraftValue
   }
 
   onWantedToReply (comment: VideoComment) {
@@ -139,6 +142,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   onResetReply () {
     this.inReplyToCommentId = undefined
+    delete this.commentReplyRedraftValue
   }
 
   onThreadCreated (commentTree: VideoCommentThreadTree) {
@@ -156,9 +160,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.timestampClicked.emit(timestamp)
   }
 
-  async onWantedToDelete (commentToDelete: VideoComment) {
-    let message = 'Do you really want to delete this comment?'
-
+  async onWantedToDelete (commentToDelete: VideoComment, message = 'Do you really want to delete this comment?'): Promise<boolean> {
     if (commentToDelete.isLocal || this.video.isLocal) {
       message += $localize` The deletion will be sent to remote instances so they can reflect the change.`
     } else {
@@ -183,6 +185,23 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
         err => this.notifier.error(err.message)
       )
+
+    return true
+  }
+
+  async onWantedToRedraft(commentToRedraft: VideoComment) {
+    const confirm = await this.onWantedToDelete(commentToRedraft, 'Do you really want to delete and re-draft this comment?')
+
+    if (confirm) {
+      this.inReplyToCommentId = commentToRedraft.inReplyToCommentId
+
+      if (commentToRedraft.threadId === commentToRedraft.id) {
+        this.commentThreadRedraftValue = commentToRedraft.text
+      } else {
+        this.commentReplyRedraftValue = commentToRedraft.text
+      }
+
+    }
   }
 
   isUserLoggedIn () {

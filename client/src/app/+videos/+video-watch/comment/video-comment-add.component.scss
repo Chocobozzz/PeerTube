@@ -22,6 +22,7 @@ form {
 
     textarea {
       @include peertube-textarea(100%, 60px);
+      @include button-focus(pvar(--mainColorLightest));
 
       &:focus::placeholder {
         opacity: 0;

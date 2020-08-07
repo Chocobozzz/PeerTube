@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs'
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier, User } from '@app/core'
 import { FormReactive, FormValidatorService, VideoCommentValidatorsService } from '@app/shared/shared-forms'
@@ -13,12 +13,13 @@ import { VideoCommentCreate } from '@shared/models'
   templateUrl: './video-comment-add.component.html',
   styleUrls: ['./video-comment-add.component.scss']
 })
-export class VideoCommentAddComponent extends FormReactive implements OnInit {
+export class VideoCommentAddComponent extends FormReactive implements OnChanges, OnInit {
   @Input() user: User
   @Input() video: Video
   @Input() parentComment: VideoComment
   @Input() parentComments: VideoComment[]
   @Input() focusOnInit = false
+  @Input() textValue?: string
 
   @Output() commentCreated = new EventEmitter<VideoComment>()
   @Output() cancel = new EventEmitter()
@@ -45,8 +46,9 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     })
 
     if (this.user) {
-      if (this.focusOnInit === true) {
-        this.textareaElement.nativeElement.focus()
+      if (this.textValue) {
+        this.patchTextValue(this.textValue, this.focusOnInit)
+        return
       }
 
       if (this.parentComment) {
@@ -57,8 +59,14 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
         const mentionsSet = new Set(mentions)
         const mentionsText = Array.from(mentionsSet).join(' ') + ' '
 
-        this.form.patchValue({ text: mentionsText })
+        this.patchTextValue(mentionsText, this.focusOnInit)
       }
+    }
+  }
+
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes.textValue && changes.textValue.currentValue && changes.textValue.currentValue !== changes.textValue.previousValue) {
+      this.patchTextValue(changes.textValue.currentValue, true)
     }
   }
 
@@ -144,5 +152,17 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   private addCommentThread (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
       .addCommentThread(this.video.id, commentCreate)
+  }
+
+  private patchTextValue (text: string, focus: boolean) {
+    setTimeout(() => {
+      if (focus) {
+        this.textareaElement.nativeElement.focus()
+      }
+
+      this.textareaElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
+    })
+
+    this.form.patchValue({ text })
   }
 }

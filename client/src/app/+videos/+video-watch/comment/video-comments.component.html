@@ -27,6 +27,7 @@
       [video]="video"
       [user]="user"
       (commentCreated)="onCommentThreadCreated($event)"
+      [textValue]="commentThreadRedraftValue"
     ></my-video-comment-add>
 
     <div *ngIf="componentPagination.totalItems === 0 && comments.length === 0" i18n>No comments.</div>
@@ -50,9 +51,11 @@
           [firstInThread]="true"
           (wantedToReply)="onWantedToReply($event)"
           (wantedToDelete)="onWantedToDelete($event)"
+          (wantedToRedraft)="onWantedToRedraft($event)"
           (threadCreated)="onThreadCreated($event)"
           (resetReply)="onResetReply()"
           (timestampClicked)="handleTimestampClicked($event)"
+          [redraftValue]="commentReplyRedraftValue"
         ></my-video-comment>
       </div>
 
@@ -66,9 +69,11 @@
           [firstInThread]="i + 1 !== comments.length"
           (wantedToReply)="onWantedToReply($event)"
           (wantedToDelete)="onWantedToDelete($event)"
+          (wantedToRedraft)="onWantedToRedraft($event)"
           (threadCreated)="onThreadCreated($event)"
           (resetReply)="onResetReply()"
           (timestampClicked)="handleTimestampClicked($event)"
+          [redraftValue]="commentReplyRedraftValue"
         >
           <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies mb-2">
             <span class="glyphicon glyphicon-menu-down"></span>

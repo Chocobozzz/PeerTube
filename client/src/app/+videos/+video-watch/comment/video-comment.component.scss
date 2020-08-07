@@ -119,7 +119,8 @@
 
       ::ng-deep .dropdown-toggle,
       .comment-action-reply,
-      .comment-action-delete {
+      .comment-action-delete,
+      .comment-action-redraft {
         color: pvar(--greyForegroundColor);
         cursor: pointer;
         margin-right: 10px;
