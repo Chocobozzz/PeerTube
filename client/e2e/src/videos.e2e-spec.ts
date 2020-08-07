@@ -181,6 +181,20 @@ describe('Videos workflow', () => {
     await videoWatchPage.waitUntilVideoName(video2Name, 20000 * 1000)
   })
 
+  it('Should watch the webtorrent playlist in the embed', async () => {
+    if (await skipIfUploadNotSupported()) return
+
+    await browser.waitForAngularEnabled(false)
+
+    await myAccountPage.goOnAssociatedPlaylistEmbed()
+
+    await videoWatchPage.playAndPauseVideo(false)
+
+    await videoWatchPage.waitUntilVideoName(video2Name, 20000 * 1000)
+
+    await browser.waitForAngularEnabled(true)
+  })
+
   it('Should delete the video 2', async () => {
     if (await skipIfUploadNotSupported()) return
 
