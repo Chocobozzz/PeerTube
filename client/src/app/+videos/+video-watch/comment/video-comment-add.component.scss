@@ -19,10 +19,48 @@ form {
   .form-group {
     flex-grow: 1;
     margin: 0;
+    position: relative;
+
+    $peertube-textarea-height: 60px;
+    $markdown-icon-height: 18px;
+    $markdown-icon-width: 30px;
+
+    .markdown-guide {
+      position: absolute;
+      top: 5px;
+      left: 4px;
+
+      @media screen and (max-width: 600px) {
+        left: 0;
+      }
+
+      ::ng-deep .help-tooltip-button {
+        my-global-icon {
+          height: $markdown-icon-height;
+          width: $markdown-icon-width;
+
+          svg {
+            opacity: 0.5;
+          }
+        }
+
+        &:focus, &:active, &:hover {
+          my-global-icon svg {
+            opacity: 1;
+          }
+        }
+      }
+    }
 
     textarea {
-      @include peertube-textarea(100%, 60px);
+      @include peertube-textarea(100%, $peertube-textarea-height);
       @include button-focus(pvar(--mainColorLightest));
+
+      text-indent: $markdown-icon-width;
+
+      @media screen and (max-width: 600px) {
+        text-indent: $markdown-icon-width + 5px;
+      }
 
       &:focus::placeholder {
         opacity: 0;

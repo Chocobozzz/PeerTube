@@ -1,5 +1,6 @@
 import { AfterContentInit, Component, ContentChildren, Input, OnChanges, OnInit, QueryList, TemplateRef } from '@angular/core'
 import { MarkdownService } from '@app/core'
+import { GlobalIconName } from '@app/shared/shared-icons'
 import { PeerTubeTemplateDirective } from '../angular'
 
 @Component({
@@ -11,6 +12,8 @@ import { PeerTubeTemplateDirective } from '../angular'
 export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() helpType: 'custom' | 'markdownText' | 'markdownEnhanced' = 'custom'
   @Input() tooltipPlacement = 'right auto'
+  @Input() iconName: GlobalIconName = 'help'
+  @Input() title = $localize`Get help`
 
   @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'preHtml' | 'customHtml' | 'postHtml'>>
 

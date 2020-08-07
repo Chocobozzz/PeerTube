@@ -4,6 +4,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 const icons = {
   // misc icons
   'npm': require('!!raw-loader?!../../../assets/images/misc/npm.svg').default,
+  'markdown': require('!!raw-loader?!../../../assets/images/misc/markdown.svg').default,
   'language': require('!!raw-loader?!../../../assets/images/misc/language.svg').default,
   'video-lang': require('!!raw-loader?!../../../assets/images/misc/video-lang.svg').default,
   'support': require('!!raw-loader?!../../../assets/images/misc/support.svg').default,
