@@ -28,11 +28,7 @@ form {
     .markdown-guide {
       position: absolute;
       top: 5px;
-      left: 4px;
-
-      @media screen and (max-width: 600px) {
-        left: 0;
-      }
+      right: 9px;
 
       ::ng-deep .help-tooltip-button {
         my-global-icon {
@@ -40,13 +36,17 @@ form {
           width: $markdown-icon-width;
 
           svg {
-            opacity: 0.5;
+            color: #C6C6C6;
+            fill: #C6C6C6;
+            border-radius: 3px;
           }
         }
 
         &:focus, &:active, &:hover {
           my-global-icon svg {
-            opacity: 1;
+            background-color: #C6C6C6;
+            color: pvar(--mainBackgroundColor);
+            fill: pvar(--mainBackgroundColor);
           }
         }
       }
@@ -56,10 +56,11 @@ form {
       @include peertube-textarea(100%, $peertube-textarea-height);
       @include button-focus(pvar(--mainColorLightest));
 
-      text-indent: $markdown-icon-width;
+      min-height: calc(#{$peertube-textarea-height} - 15px * 2);
+      padding-right: $markdown-icon-width + 15px !important;
 
       @media screen and (max-width: 600px) {
-        text-indent: $markdown-icon-width + 5px;
+        padding-right: $markdown-icon-width + 19px  !important;
       }
 
       &:focus::placeholder {
