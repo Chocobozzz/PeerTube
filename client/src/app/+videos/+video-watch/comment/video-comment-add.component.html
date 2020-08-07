@@ -3,6 +3,20 @@
     <img [src]="getAvatarUrl()" alt="Avatar" />
 
     <div class="form-group">
+      <my-help class="markdown-guide" helpType="custom" iconName="markdown" i18n-title title="Markdown compatible">
+        <ng-template ptTemplate="customHtml">
+          <div i18n>
+            Markdown compatible that supports:
+
+            <ul>
+              <li>Emphasis: <strong>**bold**</strong>, <i>_italic_</i></li>
+              <li>Links</li>
+              <li>Break lines</li>
+              <li>Lists</li>
+            </ul>
+          </div>
+        </ng-template>
+      </my-help>
       <textarea i18n-placeholder placeholder="Add comment..." myAutoResize
                 [readonly]="(user === null) ? true : false"
                 (click)="openVisitorModal($event)"
