@@ -65,8 +65,11 @@ class PlaylistMenu extends Component {
       className: 'title'
     })
 
+    const playlistChannel = options.playlist.videoChannel
     const leftSubtitle = super.createEl('div', {
-      innerHTML: this.player().localize('By {1}', [ options.playlist.videoChannel.displayName ]),
+      innerHTML: playlistChannel
+        ? this.player().localize('By {1}', [ playlistChannel.displayName ])
+        : '',
       className: 'channel'
     })
 

@@ -1,5 +1,5 @@
 import { browser, by, element, ElementFinder, ExpectedConditions } from 'protractor'
-import { browserSleep, isIOS, isMobileDevice } from '../utils'
+import { browserSleep, isMobileDevice } from '../utils'
 
 export class VideoWatchPage {
   async goOnVideosList (isMobileDevice: boolean, isSafari: boolean) {
@@ -37,43 +37,24 @@ export class VideoWatchPage {
     return browser.wait(browser.ExpectedConditions.textToBePresentInElement(elem, videoName))
   }
 
-  getWatchVideoPlayerCurrentTime () {
-    return element(by.css('.video-js .vjs-current-time-display'))
-      .getText()
-      .then((t: string) => t.split(':')[1])
-      .then(seconds => parseInt(seconds, 10))
-  }
-
   getVideoName () {
     return this.getVideoNameElement().getText()
   }
 
-  async playAndPauseVideo (isAutoplay: boolean) {
-    // Autoplay is disabled on iOS
-    if (isAutoplay === false || await isIOS()) {
-      const playButton = element(by.css('.vjs-big-play-button'))
-      await browser.wait(browser.ExpectedConditions.elementToBeClickable(playButton))
-      await playButton.click()
-    }
+  async goOnAssociatedEmbed () {
+    let url = await browser.getCurrentUrl()
+    url = url.replace('/watch/', '/embed/')
+    url = url.replace(':3333', ':9001')
 
-    await browserSleep(2000)
-    await browser.wait(browser.ExpectedConditions.invisibilityOf(element(by.css('.vjs-loading-spinner'))))
+    return browser.get(url)
+  }
 
-    const videojsEl = element(by.css('div.video-js'))
-    await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
+  async goOnP2PMediaLoaderEmbed () {
+    return browser.get('https://peertube2.cpy.re/videos/embed/969bf103-7818-43b5-94a0-de159e13de50')
+  }
 
-    // On Android, we need to click twice on "play" (BrowserStack particularity)
-    if (await isMobileDevice()) {
-      await browserSleep(5000)
-
-      await videojsEl.click()
-    }
-
-    browser.ignoreSynchronization = false
-    await browserSleep(7000)
-    browser.ignoreSynchronization = true
-
-    await videojsEl.click()
+  async goOnP2PMediaLoaderPlaylistEmbed () {
+    return browser.get('https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
   }
 
   async clickOnVideo (videoName: string) {
@@ -99,18 +80,6 @@ export class VideoWatchPage {
 
     await browser.wait(browser.ExpectedConditions.urlContains('/watch/'))
     return textToReturn
-  }
-
-  async goOnAssociatedEmbed () {
-    let url = await browser.getCurrentUrl()
-    url = url.replace('/watch/', '/embed/')
-    url = url.replace(':3333', ':9001')
-
-    return browser.get(url)
-  }
-
-  async goOnP2PMediaLoaderEmbed () {
-    return browser.get('https://peertube2.cpy.re/videos/embed/969bf103-7818-43b5-94a0-de159e13de50')
   }
 
   async clickOnUpdate () {
