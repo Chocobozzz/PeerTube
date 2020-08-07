@@ -115,6 +115,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     return this.comment.account && this.isUserLoggedIn() && this.user.account.id === this.comment.account.id && this.comment.totalReplies === 0
   }
 
+  isReportableByUser() {
+    return this.comment.account && this.isUserLoggedIn() && this.comment.isDeleted === false && this.authService.getUser().account.id !== this.comment.account.id
+  }
+
   switchToDefaultAvatar ($event: Event) {
     ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
   }
@@ -146,14 +150,30 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       this.comment.account = null
     }
 
-    if (this.isUserLoggedIn() && this.comment.isDeleted === false && this.authService.getUser().account.id !== this.comment.account.id) {
-      this.prependModerationActions = [
-        {
-          label: $localize`Report comment`,
-          handler: () => this.showReportModal()
-        }
-      ]
-    } else {
+    this.prependModerationActions = []
+
+    if (this.isReportableByUser()) {
+      this.prependModerationActions.push({
+        label: $localize`Report comment`,
+        handler: () => this.showReportModal()
+      })
+    }
+
+    if (this.isRemovableByUser()) {
+      this.prependModerationActions.push({
+        label: $localize`Remove comment`,
+        handler: () => this.onWantToDelete()
+      })
+    }
+
+    if (this.isRedraftableByUser()) {
+      this.prependModerationActions.push({
+        label: $localize`Remove & re-draft comment`,
+        handler: () => this.onWantToRedraft()
+      })
+    }
+
+    if (this.prependModerationActions.length === 0) {
       this.prependModerationActions = undefined
     }
   }

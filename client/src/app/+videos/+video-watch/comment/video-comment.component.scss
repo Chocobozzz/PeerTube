@@ -118,14 +118,12 @@
       display: flex;
 
       ::ng-deep .dropdown-toggle,
-      .comment-action-reply,
-      .comment-action-delete,
-      .comment-action-redraft {
+      .comment-action-reply {
         color: pvar(--greyForegroundColor);
         cursor: pointer;
         margin-right: 10px;
 
-        &:hover {
+        &:hover, &:active, &:focus, &:focus-visible {
           color: pvar(--mainForegroundColor);
         }
       }

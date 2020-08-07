@@ -41,12 +41,10 @@
         ></div>
 
         <div class="comment-actions">
-          <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply" i18n>Reply</div>
-          <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete" i18n>Delete</div>
-          <div *ngIf="isRedraftableByUser()" (click)="onWantToRedraft()" class="comment-action-redraft" i18n>Delete & re-draft</div>
+          <div *ngIf="isUserLoggedIn()" tabindex=0 (click)="onWantToReply()" class="comment-action-reply" i18n>Reply</div>
 
           <my-user-moderation-dropdown
-            [prependActions]="prependModerationActions"
+            [prependActions]="prependModerationActions" tabindex=0
             buttonSize="small" [account]="commentAccount" [user]="commentUser" i18n-label label="Options" placement="bottom-left auto"
           ></my-user-moderation-dropdown>
         </div>
