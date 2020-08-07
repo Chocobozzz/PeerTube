@@ -52,6 +52,8 @@ body {
 
   --activatedActionButtonColor: #{$activated-action-button-color};
 
+  --expanded-horizontal-margin-content: $expanded-horizontal-margins;
+
   font-family: $main-fonts;
   font-weight: $font-regular;
   color: pvar(--mainForegroundColor);
@@ -162,13 +164,13 @@ label {
     width: 100%;
 
     .margin-content {
-      margin-left: $expanded-horizontal-margins;
-      margin-right: $expanded-horizontal-margins;
+      margin-left: var(--expanded-horizontal-margin-content);
+      margin-right: var(--expanded-horizontal-margin-content);
     }
 
     .sub-menu {
-      padding-left: $expanded-horizontal-margins;
-      padding-right: $expanded-horizontal-margins;
+      padding-left: var(--expanded-horizontal-margin-content);
+      padding-right: var(--expanded-horizontal-margin-content);
     }
   }
 
@@ -304,8 +306,7 @@ table {
   .main-col {
     &.expanded {
       .margin-content {
-        margin-left: $expanded-horizontal-margins/2;
-        margin-right: $expanded-horizontal-margins/2;
+        --expanded-horizontal-margin-content: $expanded-horizontal-margins/2;
       }
     }
   }
@@ -316,8 +317,7 @@ table {
   .main-col {
     &, &.expanded {
       .margin-content {
-        margin-left: $expanded-horizontal-margins/3;
-        margin-right: $expanded-horizontal-margins/3;
+        --expanded-horizontal-margin-content: $expanded-horizontal-margins/3;
       }
 
       .sub-menu {
@@ -344,8 +344,7 @@ table {
 
     &, &.expanded {
       .margin-content {
-        margin-left: 15px;
-        margin-right: 15px;
+        --expanded-horizontal-margin-content: 15px;
       }
 
       .sub-menu {

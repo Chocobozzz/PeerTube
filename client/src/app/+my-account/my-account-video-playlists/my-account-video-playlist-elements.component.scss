@@ -4,10 +4,10 @@
 
 .playlist-info {
   background-color: pvar(--submenuColor);
-  margin-left: -15px;
+  margin-left: -$not-expanded-horizontal-margins;
   margin-top: -$sub-menu-margin-bottom;
 
-  padding: $sub-menu-margin-bottom 0 -15px 0;
+  padding: 10px;
 
   display: flex;
   justify-content: center;
@@ -45,7 +45,9 @@
 
 @media screen and (max-width: $small-view) {
   .playlist-info {
-    margin-top: -$sub-menu-margin-bottom-small-view;
+    width: 100vw;
+    padding-top: 20px;
+    margin-left: calc(#{var(--expanded-horizontal-margin-content)} * -1);
   }
 }
 
