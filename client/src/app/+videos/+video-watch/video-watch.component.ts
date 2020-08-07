@@ -8,12 +8,14 @@ import { AuthService, AuthUser, ConfirmService, MarkdownService, Notifier, RestE
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { RedirectService } from '@app/core/routing/redirect.service'
 import { isXPercentInViewport, scrollToTop } from '@app/helpers'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
+import { VideoShareComponent } from '@app/shared/shared-share-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
+import { VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { MetaService } from '@ngx-meta/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { ServerConfig, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
 import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import {
@@ -26,10 +28,8 @@ import {
 } from '../../../assets/player/peertube-player-manager'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
-import { VideoShareComponent } from './modal/video-share.component'
 import { VideoSupportComponent } from './modal/video-support.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
-import { VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 
 @Component({
   selector: 'my-video-watch',

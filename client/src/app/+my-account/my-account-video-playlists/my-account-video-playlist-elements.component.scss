@@ -10,11 +10,27 @@
   padding: 10px;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   /* fix ellipsis dots background color */
   ::ng-deep .miniature-name::after {
     background-color: pvar(--submenuColor) !important;
+  }
+}
+
+.playlist-buttons {
+  display:flex;
+  margin: 30px 0 10px 0;
+
+  .share-button {
+    @include peertube-button;
+    @include button-with-icon(17px, 3px, -1px);
+    @include grey-button;
+    @include apply-svg-color(pvar(--actionButtonColor));
+
+    margin-right: 10px;
   }
 }
 

@@ -1,9 +1,9 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
-import { buildVideoOrPlaylistEmbed, buildVideoLink, buildPlaylistLink } from '../../../../assets/player/utils'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { VideoCaption } from '@shared/models'
 import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { VideoCaption } from '@shared/models'
+import { buildPlaylistLink, buildVideoLink, buildVideoOrPlaylistEmbed } from '../../../assets/player/utils'
 
 type Customizations = {
   startAtCheckbox: boolean
@@ -51,7 +51,7 @@ export class VideoShareComponent {
 
   show (currentVideoTimestamp?: number, currentPlaylistPosition?: number) {
     let subtitle: string
-    if (this.videoCaptions.length !== 0) {
+    if (this.videoCaptions && this.videoCaptions.length !== 0) {
       subtitle = this.videoCaptions[0].language.id
     }
 
@@ -60,7 +60,7 @@ export class VideoShareComponent {
       startAt: currentVideoTimestamp ? Math.floor(currentVideoTimestamp) : 0,
 
       stopAtCheckbox: false,
-      stopAt: this.video.duration,
+      stopAt: this.video?.duration,
 
       subtitleCheckbox: false,
       subtitle,
@@ -116,10 +116,6 @@ export class VideoShareComponent {
 
   isVideoInEmbedTab () {
     return this.activeVideoId === 'embed'
-  }
-
-  hasPlaylist () {
-    return !!this.playlist
   }
 
   private getPlaylistOptions (baseUrl?: string) {

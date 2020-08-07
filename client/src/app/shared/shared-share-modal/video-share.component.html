@@ -7,8 +7,8 @@
 
   <div class="modal-body">
 
-    <div class="playlist" *ngIf="hasPlaylist()">
-      <div class="title-page title-page-single" i18n>Share the playlist</div>
+    <div class="playlist" *ngIf="playlist">
+      <div class="title-page title-page-single" i18n *ngIf="video">Share the playlist</div>
 
       <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activePlaylistId">
 
@@ -53,7 +53,7 @@
 
       <div class="filters">
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="video">
           <my-peertube-checkbox inputName="includeVideoInPlaylist" [(ngModel)]="includeVideoInPlaylist" i18n-labelText
             labelText="Share the playlist at this video position"></my-peertube-checkbox>
         </div>
@@ -62,8 +62,8 @@
     </div>
 
 
-    <div class="video">
-      <div class="title-page title-page-single" *ngIf="hasPlaylist()" i18n>Share the video</div>
+    <div class="video" *ngIf="video">
+      <div class="title-page title-page-single" *ngIf="playlist" i18n>Share the video</div>
 
       <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeVideoId">
 

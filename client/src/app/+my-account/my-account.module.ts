@@ -8,6 +8,7 @@ import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
+import { SharedShareModal } from '@app/shared/shared-share-modal'
 import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-settings'
 import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscription/shared-user-subscription.module'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
@@ -53,7 +54,8 @@ import { MyAccountComponent } from './my-account.component'
     SharedVideoPlaylistModule,
     SharedUserInterfaceSettingsModule,
     SharedGlobalIconModule,
-    SharedAbuseListModule
+    SharedAbuseListModule,
+    SharedShareModal
   ],
 
   declarations: [

@@ -116,9 +116,10 @@
                       <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>
                       <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
                     </button>
-                  
+
                     <my-video-download #videoDownloadModal></my-video-download>
                   </ng-container>
+
                   <ng-container *ngIf="isUserLoggedIn()">
                     <my-video-actions-dropdown
                       placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [videoCaptions]="videoCaptions"
