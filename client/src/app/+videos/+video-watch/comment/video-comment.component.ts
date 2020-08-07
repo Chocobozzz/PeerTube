@@ -112,11 +112,21 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   isRedraftableByUser () {
-    return this.comment.account && this.isUserLoggedIn() && this.user.account.id === this.comment.account.id && this.comment.totalReplies === 0
+    return (
+      this.comment.account &&
+      this.isUserLoggedIn() &&
+      this.user.account.id === this.comment.account.id &&
+      this.comment.totalReplies === 0
+    )
   }
 
-  isReportableByUser() {
-    return this.comment.account && this.isUserLoggedIn() && this.comment.isDeleted === false && this.authService.getUser().account.id !== this.comment.account.id
+  isReportableByUser () {
+    return (
+      this.comment.account &&
+      this.isUserLoggedIn() &&
+      this.comment.isDeleted === false &&
+      this.authService.getUser().account.id !== this.comment.account.id
+    )
   }
 
   switchToDefaultAvatar ($event: Event) {
