@@ -26,6 +26,6 @@ export class VideoSupportComponent {
     this.markdownService.enhancedMarkdownToHTML(this.video.support)
       .then(r => this.videoHTMLSupport = r)
 
-    return modalRef;
+    return modalRef
   }
 }

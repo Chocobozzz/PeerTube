@@ -238,9 +238,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   showSupportModal () {
     // Check video was playing before opening support modal
     const isVideoPlaying = this.isPlaying()
-    
+
     this.pausePlayer()
-    
+
     const modalRef = this.videoSupportModal.show()
 
     modalRef.result.then(() => {
@@ -766,13 +766,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.player.pause()
   }
 
-  private resumePlayer() {
+  private resumePlayer () {
     if (!this.player) return
 
     this.player.play()
   }
 
-  private isPlaying() {
+  private isPlaying () {
     if (!this.player) return
 
     return !this.player.paused()
