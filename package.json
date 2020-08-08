@@ -202,6 +202,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "libxmljs": "0.19.7",
     "maildev": "^1.0.0-rc3",
+    "markdown-it-emoji": "^1.4.0",
     "marked": "^1.1.0",
     "marked-man": "^0.7.0",
     "mocha": "^8.0.1",
@@ -219,7 +220,7 @@
   "_moduleAliases": {
     "@server": "dist/server"
   },
-  "bundlewatch" : {
+  "bundlewatch": {
     "files": [
       {
         "path": "client/dist/en-US/*-es2015.js",
