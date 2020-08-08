@@ -149,7 +149,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   private async init () {
-    const html = await this.markdownService.textMarkdownToHTML(this.comment.text, true)
+    const html = await this.markdownService.textMarkdownToHTML(this.comment.text, true, true)
     this.sanitizedCommentHTML = await this.markdownService.processVideoTimestamps(html)
     this.newParentComments = this.parentComments.concat([ this.comment ])
 

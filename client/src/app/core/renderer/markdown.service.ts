@@ -1,4 +1,5 @@
 import * as MarkdownIt from 'markdown-it'
+import MarkdownItEmoji from 'markdown-it-emoji'
 import { buildVideoLink } from 'src/assets/player/utils'
 import { Injectable } from '@angular/core'
 import { HtmlRendererService } from './html-renderer.service'
@@ -59,20 +60,20 @@ export class MarkdownService {
 
   constructor (private htmlRenderer: HtmlRendererService) {}
 
-  textMarkdownToHTML (markdown: string, withHtml = false) {
-    if (withHtml) return this.render('textWithHTMLMarkdownIt', markdown)
+  textMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
+    if (withHtml) return this.render('textWithHTMLMarkdownIt', markdown, withEmoji)
 
-    return this.render('textMarkdownIt', markdown)
+    return this.render('textMarkdownIt', markdown, withEmoji)
   }
 
-  enhancedMarkdownToHTML (markdown: string, withHtml = false) {
-    if (withHtml) return this.render('enhancedWithHTMLMarkdownIt', markdown)
+  enhancedMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
+    if (withHtml) return this.render('enhancedWithHTMLMarkdownIt', markdown, withEmoji)
 
-    return this.render('enhancedMarkdownIt', markdown)
+    return this.render('enhancedMarkdownIt', markdown, withEmoji)
   }
 
   completeMarkdownToHTML (markdown: string) {
-    return this.render('completeMarkdownIt', markdown)
+    return this.render('completeMarkdownIt', markdown, true)
   }
 
   async processVideoTimestamps (html: string) {
@@ -83,12 +84,16 @@ export class MarkdownService {
     })
   }
 
-  private async render (name: keyof MarkdownParsers, markdown: string) {
+  private async render (name: keyof MarkdownParsers, markdown: string, withEmoji = false) {
     if (!markdown) return ''
 
     const config = this.parsersConfig[ name ]
     if (!this.markdownParsers[ name ]) {
       this.markdownParsers[ name ] = await this.createMarkdownIt(config)
+
+      if (withEmoji) {
+        this.markdownParsers[ name ].use(MarkdownItEmoji)
+      }
     }
 
     let html = this.markdownParsers[ name ].render(markdown)
