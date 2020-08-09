@@ -35,6 +35,7 @@
       font-weight: $font-bold;
 
       span {
+        color: pvar(--mainBackgroundColor);
         margin-left: 18px;
       }
     }
