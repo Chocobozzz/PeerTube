@@ -99,6 +99,16 @@ form {
   }
 }
 
+.table-emoji {
+  td {
+    &:first-child {
+      width: 20px;
+    }
+
+    vertical-align: top;
+  }
+}
+
 @media screen and (max-width: 600px) {
   textarea, .comment-buttons button {
     font-size: 14px !important;
