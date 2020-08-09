@@ -103,6 +103,16 @@ label {
   font-size: 15px;
 }
 
+code {
+  background-color: pvar(--greyBackgroundColor);
+  border-radius: 3px;
+  padding: .2em .4em;
+  margin: auto .4em;
+  font-size: 75%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .form-error {
   display: block;
   color: $red;

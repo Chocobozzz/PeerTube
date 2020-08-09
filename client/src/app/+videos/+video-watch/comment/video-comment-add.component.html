@@ -3,28 +3,34 @@
     <img [src]="getAvatarUrl()" alt="Avatar" />
 
     <div class="form-group">
-      <my-help class="markdown-guide" helpType="custom" iconName="markdown" i18n-title title="Markdown compatible">
-        <ng-template ptTemplate="customHtml">
-          <div i18n>
-            Markdown compatible that supports:
-
-            <ul>
-              <li>Emphasis: <strong>**bold**</strong>, <i>_italic_</i></li>
-              <li>Links</li>
-              <li>Break lines</li>
-              <li>Lists</li>
-              <li>Emojis</li>
-            </ul>
-          </div>
-        </ng-template>
-      </my-help>
-      <textarea i18n-placeholder placeholder="Add comment..." myAutoResize
-                [readonly]="(user === null) ? true : false"
-                (click)="openVisitorModal($event)"
-                formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
-                (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
+      <textarea i18n-placeholder placeholder="Add comment..." myAutoResize [readonly]="(user === null) ? true : false"
+        (click)="openVisitorModal($event)" formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
+        (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
 
       </textarea>
+      <my-help class="markdown-guide" helpType="custom" iconName="markdown" i18n-title title="Markdown compatible">
+        <ng-template ptTemplate="customHtml">
+          <span i18n>Markdown compatible that supports:</span>
+
+          <ul>
+            <li><span i18n>Auto generated links</span></li>
+            <li><span i18n>Break lines</span></li>
+            <li><span i18n>Lists</span></li>
+            <li>
+              <span i18n>Emphasis</span>
+              <code>**<strong i18n>bold</strong>** _<i i18n>italic</i>_</code>
+            </li>
+            <li>
+              <span i18n>Emoji shortcuts</span>
+              <code>:) &lt;3</code>
+            </li>
+            <li>
+              <span i18n>Emoji markup</span>
+              <code>:smile:</code>
+            </li>
+          </ul>
+        </ng-template>
+      </my-help>
       <div *ngIf="formErrors.text" class="form-error">
         {{ formErrors.text }}
       </div>
