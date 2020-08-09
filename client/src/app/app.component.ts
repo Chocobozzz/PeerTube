@@ -114,8 +114,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     let resetScroll = true
     const eventsObs = this.router.events
 
-    this.viewportScroller.setOffset([0, 81]) // sub-menu-height
-
     const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
 
     scrollEvent.subscribe(e => {
@@ -124,7 +122,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
 
       if (e.anchor) {
-        return this.viewportScroller.scrollToAnchor(e.anchor)
+        setTimeout(() => {
+          this.viewportScroller.scrollToAnchor(e.anchor)
+        })
+
+        return
       }
 
       if (resetScroll) {
