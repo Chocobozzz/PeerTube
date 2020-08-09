@@ -1,5 +1,4 @@
 import * as MarkdownIt from 'markdown-it'
-import MarkdownItEmoji from 'markdown-it-emoji'
 import { buildVideoLink } from 'src/assets/player/utils'
 import { Injectable } from '@angular/core'
 import { HtmlRendererService } from './html-renderer.service'
@@ -92,7 +91,9 @@ export class MarkdownService {
       this.markdownParsers[ name ] = await this.createMarkdownIt(config)
 
       if (withEmoji) {
-        this.markdownParsers[ name ].use(MarkdownItEmoji)
+        // TODO: write types
+        const emoji = require('markdown-it-emoji/light')
+        this.markdownParsers[ name ].use(emoji)
       }
     }
 
