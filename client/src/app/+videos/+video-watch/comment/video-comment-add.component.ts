@@ -27,6 +27,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   @Output() cancel = new EventEmitter()
 
   @ViewChild('visitorModal', { static: true }) visitorModal: NgbModal
+  @ViewChild('emojiModal', { static: true }) emojiModal: NgbModal
   @ViewChild('textarea', { static: true }) textareaElement: ElementRef
 
   addingComment = false
@@ -42,6 +43,12 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     private i18n: I18n
   ) {
     super()
+  }
+
+  get emojiMarkupList () {
+    const emojiMarkup = require('markdown-it-emoji/lib/data/light.json')
+
+    return emojiMarkup
   }
 
   ngOnInit () {
@@ -97,7 +104,12 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     }
   }
 
-  hideVisitorModal () {
+  openEmojiModal (event: any) {
+    event.preventDefault()
+    this.modalService.open(this.emojiModal, { backdrop: true })
+  }
+
+  hideModals () {
     this.modalService.dismissAll()
   }
 
@@ -145,7 +157,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   }
 
   gotoLogin () {
-    this.hideVisitorModal()
+    this.hideModals()
     this.router.navigate([ '/login' ])
   }
 
