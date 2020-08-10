@@ -110,6 +110,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     peertubeLocalStorage.setItem(AppComponent.BROADCAST_MESSAGE_KEY, this.serverConfig.broadcastMessage.message)
 
     this.broadcastMessage = null
+    this.screenService.isBroadcastMessageDisplayed = false
   }
 
   private initRouteEvents () {
@@ -191,6 +192,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.serverService.configReloaded
     ).subscribe(async config => {
       this.broadcastMessage = null
+      this.screenService.isBroadcastMessageDisplayed = false
 
       const messageConfig = config.broadcastMessage
 
@@ -211,6 +213,8 @@ export class AppComponent implements OnInit, AfterViewInit {
           dismissable: messageConfig.dismissable,
           class: classes[messageConfig.level]
         }
+
+        this.screenService.isBroadcastMessageDisplayed = true
       }
     })
   }

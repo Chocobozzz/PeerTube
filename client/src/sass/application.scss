@@ -138,10 +138,6 @@ label {
     flex-grow: 1;
   }
 
-  my-top-menu-dropdown + .margin-content {
-    padding-top: $sub-menu-height + $sub-menu-margin-bottom;
-  }
-
   .sub-menu {
     background-color: pvar(--submenuColor);
     width: 100%;
@@ -149,20 +145,18 @@ label {
     align-items: center;
     padding-left: $not-expanded-horizontal-margins;
     padding-right: $not-expanded-horizontal-margins;
-
-    & + .margin-content {
-      padding-top: $sub-menu-margin-bottom;
-    }
+    height: $sub-menu-height;
+    margin-bottom: $sub-menu-margin-bottom;
 
     &.sub-menu-fixed {
-      height: $sub-menu-height;
       position: fixed;
       z-index: #{z('header') - 1};
-
-      & + .margin-content {
-        padding-top: $sub-menu-height + $sub-menu-margin-bottom;
-      }
     }
+  }
+
+  // Use an appropriate offset top when sub-menu fixed
+  .margin-content.offset-content {
+    padding-top: $sub-menu-height + $sub-menu-margin-bottom;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
@@ -305,9 +299,17 @@ table {
   }
 }
 
+/* offsetTop for scrollToAnchor */
+
 .anchor {
   position: relative;
-  top: #{-($header-height + 20px)}; // offsetTop scrollToAnchor
+  top: #{-($header-height + 20px)};
+}
+
+.offset-content { // if sub-menu fixed
+  .anchor {
+    top: #{-($header-height + $sub-menu-height + 20px)};
+  }
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {
@@ -361,6 +363,11 @@ table {
         padding-right: 15px;
         margin-bottom: $sub-menu-margin-bottom-small-view;
         overflow-x: auto;
+      }
+
+      // Use an appropriate offset top when sub-menu fixed
+      .margin-content.offset-content {
+        padding-top: $sub-menu-height + $sub-menu-margin-bottom-small-view;
       }
 
       .admin-sub-header {
