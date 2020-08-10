@@ -145,16 +145,23 @@ label {
   .sub-menu {
     background-color: pvar(--submenuColor);
     width: 100%;
-    height: $sub-menu-height;
     display: flex;
     align-items: center;
     padding-left: $not-expanded-horizontal-margins;
     padding-right: $not-expanded-horizontal-margins;
-    position: fixed;
-    z-index: #{z('header') - 1};
 
     & + .margin-content {
-      padding-top: $sub-menu-height + $sub-menu-margin-bottom;
+      padding-top: $sub-menu-margin-bottom;
+    }
+
+    &.sub-menu-fixed {
+      height: $sub-menu-height;
+      position: fixed;
+      z-index: #{z('header') - 1};
+
+      & + .margin-content {
+        padding-top: $sub-menu-height + $sub-menu-margin-bottom;
+      }
     }
   }
 

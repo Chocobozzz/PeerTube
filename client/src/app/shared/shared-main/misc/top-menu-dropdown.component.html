@@ -1,4 +1,4 @@
-<div class="sub-menu" [ngClass]="{ 'no-scroll': isModalOpened }">
+<div class="sub-menu sub-menu-fixed" [ngClass]="{ 'no-scroll': isModalOpened }">
   <ng-container *ngFor="let menuEntry of menuEntries; index as id">
 
     <a *ngIf="menuEntry.routerLink && isDisplayed(menuEntry)" [routerLink]="menuEntry.routerLink" routerLinkActive="active" class="title-page title-page-settings">{{ menuEntry.label }}</a>

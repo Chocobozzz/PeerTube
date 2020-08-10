@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs'
-import { filter, take } from 'rxjs/operators'
+import { filter } from 'rxjs/operators'
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { MenuService, ScreenService } from '@app/core'

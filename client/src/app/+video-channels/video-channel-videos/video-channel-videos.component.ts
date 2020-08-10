@@ -12,8 +12,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   selector: 'my-video-channel-videos',
   templateUrl: '../../shared/shared-video-miniature/abstract-video-list.html',
   styleUrls: [
-    '../../shared/shared-video-miniature/abstract-video-list.scss',
-    './video-channel-videos.component.scss'
+    '../../shared/shared-video-miniature/abstract-video-list.scss'
   ]
 })
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
