@@ -18,6 +18,10 @@ $assets-path: '../../assets/';
   display: none !important;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   /*** theme ***/
   // now beware node-sass requires interpolation
@@ -307,7 +311,7 @@ table {
 
 .anchor {
   position: relative;
-  top: #{-($header-height + 20px)};
+  top: #{-($header-height + 20px)}; // offsetTop scrollToAnchor
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {

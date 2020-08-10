@@ -119,12 +119,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
 
     scrollEvent.subscribe(e => {
-      if (e.position) {
-        return this.viewportScroller.scrollToPosition(e.position)
+      // scrollToAnchor first to preserve anchor position when using history navigation
+      if (e.anchor) {
+        setTimeout(() => {
+          this.viewportScroller.scrollToAnchor(e.anchor)
+        })
+
+        return
       }
 
-      if (e.anchor) {
-        return this.viewportScroller.scrollToAnchor(e.anchor)
+      if (e.position) {
+        return this.viewportScroller.scrollToPosition(e.position)
       }
 
       if (resetScroll) {

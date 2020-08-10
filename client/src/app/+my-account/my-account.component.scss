@@ -11,3 +11,7 @@
 
   @include sub-menu-h1;
 }
+
+::ng-deep .anchor {
+  top: #{-($header-height + $sub-menu-height + 20px)}; // offsetTop scrollToAnchor
+}

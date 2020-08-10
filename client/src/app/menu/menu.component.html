@@ -21,7 +21,7 @@
 
             <div class="dropdown-divider"></div>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="top">
               <my-global-icon iconName="user" aria-hidden="true"></my-global-icon> <ng-container i18n>Account settings</ng-container>
             </a>
 
@@ -37,13 +37,13 @@
               <span class="ml-auto text-muted">{{ language }}</span>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-settings">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles">
               <my-global-icon iconName="video-lang" aria-hidden="true"></my-global-icon>
               <span i18n>Videos:</span>
               <span class="ml-auto text-muted">{{ videoLanguages.join(', ') }}</span>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-settings">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-sensitive-content-policy">
               <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy === 'display' }" iconName="sensitive" aria-hidden="true"></my-global-icon>
               <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy !== 'display' }" iconName="unsensitive" aria-hidden="true"></my-global-icon>
               <span i18n>Sensitive:</span>
@@ -56,7 +56,7 @@
               <input type="checkbox" [checked]="user.webTorrentEnabled"/><label class="ml-auto" for="switch">Toggle p2p</label>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="top">
               <my-global-icon iconName="more-horizontal" aria-hidden="true"></my-global-icon> <ng-container i18n>More account settings</ng-container>
             </a>
 
