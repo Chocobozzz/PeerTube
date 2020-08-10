@@ -19,72 +19,118 @@
       <div i18n *ngIf="isNSFW" class="block dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
     </div>
 
-    <h2 i18n class="middle-title" *ngIf="html.administrator || maintenanceLifetime || businessModel">
-      ADMINISTRATORS & SUSTAINABILITY
-    </h2>
+    <div class="anchor" id="administrators-and-sustainability"></div>
+    <a
+      *ngIf="html.administrator || maintenanceLifetime || businessModel"
+      class="anchor-link"
+      routerLink="/about/instance" fragment="administrators-and-sustainability"
+    >
+      <h2 i18n class="middle-title">
+        ADMINISTRATORS & SUSTAINABILITY
+      </h2>
+    </a>
 
     <div class="block administrator" *ngIf="html.administrator">
-      <h3 i18n class="section-title">Who we are</h3>
+      <div class="anchor" id="administrators"></div>
+      <a class="anchor-link" routerLink="/about/instance" fragment="administrators">
+        <h3 i18n class="section-title">Who we are</h3>
+      </a>
 
       <div [innerHTML]="html.administrator"></div>
     </div>
 
     <div class="block creation-reason" *ngIf="creationReason">
-      <h3 i18n class="section-title">Why we created this instance</h3>
+      <div class="anchor" id="creation-reason"></div>
+      <a class="anchor-link" routerLink="/about/instance" fragment="creation-reason">
+        <h3 i18n class="section-title">Why we created this instance</h3>
+      </a>
 
       <p>{{ creationReason }}</p>
     </div>
 
     <div class="block maintenance-lifetime" *ngIf="maintenanceLifetime">
-      <h3 i18n class="section-title">How long we plan to maintain this instance</h3>
+      <div class="anchor" id="maintenance-lifetime"></div>
+      <a class="anchor-link" routerLink="/about/instance" fragment="maintenance-lifetime">
+        <h3 i18n class="section-title">How long we plan to maintain this instance</h3>
+      </a>
 
       <p>{{ maintenanceLifetime }}</p>
     </div>
 
     <div class="block business-model" *ngIf="businessModel">
-      <h3 i18n class="section-title">How we will pay for this instance</h3>
+        <div class="anchor" id="buisiness-model"></div>
+        <a class="anchor-link" routerLink="/about/instance" fragment="buisiness-model">
+          <h3 i18n class="section-title">How we will pay for this instance</h3>
+        </a>
 
       <p>{{ businessModel }}</p>
     </div>
 
-    <h2 i18n class="middle-title" *ngIf="html.description">
-      INFORMATION
-    </h2>
+    <div class="anchor" id="information"></div>
+    <a *ngIf="html.description" class="anchor-link" routerLink="/about/instance" fragment="information">
+      <h2 i18n class="middle-title">
+        INFORMATION
+      </h2>
+    </a>
 
     <div class="block description">
-      <h3 i18n class="section-title">Description</h3>
+      <div class="anchor" id="description"></div>
+      <a class="anchor-link" routerLink="/about/instance" fragment="description">
+        <h3 i18n class="section-title">Description</h3>
+      </a>
 
       <div [innerHTML]="html.description"></div>
     </div>
 
-    <h2 i18n class="middle-title" *ngIf="html.moderationInformation || html.codeOfConduct || html.terms">
-      MODERATION
-    </h2>
+    <div class="anchor" id="moderation"></div>
+    <a
+      *ngIf="html.moderationInformation || html.codeOfConduct || html.terms"
+      class="anchor-link" routerLink="/about/instance" fragment="moderation"
+    >
+      <h2 i18n class="middle-title">
+        MODERATION
+      </h2>
+    </a>
 
     <div class="block moderation-information" *ngIf="html.moderationInformation">
-      <h3 i18n class="section-title">Moderation information</h3>
+      <div class="anchor" id="moderation-information"></div>
+      <a class="anchor-link" routerLink="/about/instance" fragment="moderation-information">
+        <h3 i18n class="section-title">Moderation information</h3>
+      </a>
 
       <div [innerHTML]="html.moderationInformation"></div>
     </div>
 
     <div class="block code-of-conduct" *ngIf="html.codeOfConduct">
-      <h3 i18n class="section-title">Code of conduct</h3>
+      <div class="anchor" id="code-of-conduct"></div>
+      <a class="anchor-link" routerLink="/about/instance" fragment="code-of-conduct">
+        <h3 i18n class="section-title">Code of conduct</h3>
+      </a>
 
       <div [innerHTML]="html.codeOfConduct"></div>
     </div>
 
     <div class="block terms">
-      <h3 i18n class="section-title">Terms</h3>
+      <div class="anchor" id="terms"></div>
+      <a class="anchor-link" routerLink="/about/instance" fragment="terms">
+        <h3 i18n class="section-title">Terms</h3>
+      </a>
 
       <div [innerHTML]="html.terms"></div>
     </div>
 
-    <h2 i18n class="middle-title" *ngIf="html.hardwareInformation">
-      OTHER INFORMATION
-    </h2>
+    <div class="anchor" id="other-information"></div>
+    <a *ngIf="html.hardwareInformation" class="anchor-link" routerLink="/about/instance" fragment="other-information">
+      <h2 i18n class="middle-title">
+        OTHER INFORMATION
+      </h2>
+    </a>
 
     <div class="block hardware-information" *ngIf="html.hardwareInformation">
-      <h3 i18n class="section-title">Hardware information</h3>
+      <div class="anchor" id="hardware-information"></div>
+      <a class="anchor-link" routerLink="/about/instance" fragment="hardware-information">
+        <h3 i18n class="section-title">Hardware information</h3>
+      </a>
 
       <div [innerHTML]="html.hardwareInformation"></div>
     </div>
@@ -97,7 +143,9 @@
 
   <div class="col">
     <div class="anchor" id="statistics"></div>
-    <h2 i18n class="middle-title">STATISTICS</h2>
+    <a class="anchor-link" routerLink="/about/instance" fragment="statistics">
+      <h2 i18n class="middle-title">STATISTICS</h2>
+    </a>
     <my-instance-statistics></my-instance-statistics>
   </div>
 </div>
