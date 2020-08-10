@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService } from '@app/core'
+import { AuthService, ScreenService } from '@app/core'
 import { ListOverflowItem } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRight } from '@shared/models'
@@ -15,8 +15,13 @@ export class AdminComponent implements OnInit {
 
   constructor (
     private auth: AuthService,
+    private screen: ScreenService,
     private i18n: I18n
-  ) {}
+  ) { }
+
+  get isBroadcastMessageDisplayed () {
+    return this.screen.isBroadcastMessageDisplayed
+  }
 
   ngOnInit () {
     const federationItems: TopMenuDropdownParam = {

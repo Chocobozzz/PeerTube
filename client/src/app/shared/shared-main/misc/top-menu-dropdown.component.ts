@@ -53,6 +53,10 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
     return this.screen.isInSmallView(marginLeft)
   }
 
+  get isBroadcastMessageDisplayed () {
+    return this.screen.isBroadcastMessageDisplayed
+  }
+
   ngOnInit () {
     this.updateChildLabels(window.location.pathname)
 

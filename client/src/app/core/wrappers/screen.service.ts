@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core'
 
 @Injectable()
 export class ScreenService {
+  isBroadcastMessageDisplayed = false
+
   private windowInnerWidth: number
   private lastFunctionCallTime: number
   private cacheForMs = 500

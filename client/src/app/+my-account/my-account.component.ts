@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService, ServerService, AuthUser } from '@app/core'
+import { AuthService, ScreenService, ServerService, AuthUser } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
@@ -18,8 +18,13 @@ export class MyAccountComponent implements OnInit {
   constructor (
     private serverService: ServerService,
     private authService: AuthService,
+    private screenService: ScreenService,
     private i18n: I18n
   ) { }
+
+  get isBroadcastMessageDisplayed () {
+    return this.screenService.isBroadcastMessageDisplayed
+  }
 
   ngOnInit (): void {
     this.serverConfig = this.serverService.getTmpConfig()
