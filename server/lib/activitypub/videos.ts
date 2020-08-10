@@ -1,12 +1,15 @@
 import * as Bluebird from 'bluebird'
-import * as sequelize from 'sequelize'
+import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
+import { join } from 'path'
 import * as request from 'request'
+import * as sequelize from 'sequelize'
 import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
   ActivityPlaylistSegmentHashesObject,
-  ActivityPlaylistUrlObject, ActivitypubHttpFetcherPayload,
+  ActivityPlaylistUrlObject,
+  ActivitypubHttpFetcherPayload,
   ActivityTagObject,
   ActivityUrlObject,
   ActivityVideoUrlObject,
@@ -14,11 +17,16 @@ import {
 } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
+import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
+import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
+import { buildRemoteVideoBaseUrl, checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { isAPVideoFileMetadataObject, sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
+import { isArray } from '../../helpers/custom-validators/misc'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest } from '../../helpers/requests'
+import { fetchVideoByUrl, getExtFromMimetype, VideoFetchByUrlType } from '../../helpers/video'
 import {
   ACTIVITY_PUB,
   MIMETYPES,
@@ -28,33 +36,15 @@ import {
   STATIC_PATHS,
   THUMBNAILS_SIZE
 } from '../../initializers/constants'
+import { sequelizeTypescript } from '../../initializers/database'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
-import { VideoFileModel } from '../../models/video/video-file'
-import { getOrCreateActorAndServerAndModel } from './actor'
-import { addVideoComments } from './video-comments'
-import { crawlCollectionPage } from './crawl'
-import { sendCreateVideo, sendUpdateVideo } from './send'
-import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoCaptionModel } from '../../models/video/video-caption'
-import { JobQueue } from '../job-queue'
-import { createRates } from './video-rates'
-import { addVideoShares, shareVideoByServerAndChannel } from './share'
-import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
-import { buildRemoteVideoBaseUrl, checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { Notifier } from '../notifier'
-import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
-import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
-import { AccountVideoRateModel } from '../../models/account/account-video-rate'
-import { VideoShareModel } from '../../models/video/video-share'
 import { VideoCommentModel } from '../../models/video/video-comment'
-import { sequelizeTypescript } from '../../initializers/database'
-import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '../thumbnail'
-import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
-import { join } from 'path'
-import { FilteredModelAttributes } from '../../types/sequelize'
-import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
-import { ActorFollowScoreCache } from '../files-cache'
+import { VideoFileModel } from '../../models/video/video-file'
+import { VideoShareModel } from '../../models/video/video-share'
+import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
 import {
   MAccountIdActor,
   MChannelAccountLight,
@@ -73,7 +63,18 @@ import {
   MVideoThumbnail
 } from '../../types/models'
 import { MThumbnail } from '../../types/models/video/thumbnail'
-import { maxBy, minBy } from 'lodash'
+import { FilteredModelAttributes } from '../../types/sequelize'
+import { ActorFollowScoreCache } from '../files-cache'
+import { JobQueue } from '../job-queue'
+import { Notifier } from '../notifier'
+import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '../thumbnail'
+import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
+import { getOrCreateActorAndServerAndModel } from './actor'
+import { crawlCollectionPage } from './crawl'
+import { sendCreateVideo, sendUpdateVideo } from './send'
+import { addVideoShares, shareVideoByServerAndChannel } from './share'
+import { addVideoComments } from './video-comments'
+import { createRates } from './video-rates'
 
 async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   const video = videoArg as MVideoAP
@@ -516,10 +517,9 @@ export {
 // ---------------------------------------------------------------------------
 
 function isAPVideoUrlObject (url: any): url is ActivityVideoUrlObject {
-  const mimeTypes = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
-
   const urlMediaType = url.mediaType
-  return mimeTypes.includes(urlMediaType) && urlMediaType.startsWith('video/')
+
+  return MIMETYPES.VIDEO.MIMETYPE_EXT[urlMediaType] && urlMediaType.startsWith('video/')
 }
 
 function isAPStreamingPlaylistUrlObject (url: ActivityUrlObject): url is ActivityPlaylistUrlObject {
@@ -716,7 +716,7 @@ function videoFileActivityUrlToDBAttributes (
 
     const mediaType = fileUrl.mediaType
     const attribute = {
-      extname: MIMETYPES.VIDEO.MIMETYPE_EXT[mediaType],
+      extname: getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, mediaType),
       infoHash: parsed.infoHash,
       resolution: fileUrl.height,
       size: fileUrl.size,

@@ -1,5 +1,8 @@
-import { VideoModel } from '../models/video/video'
 import * as Bluebird from 'bluebird'
+import { Response } from 'express'
+import { CONFIG } from '@server/initializers/config'
+import { DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants'
+import { JobQueue } from '@server/lib/job-queue'
 import {
   isStreamingPlaylist,
   MStreamingPlaylistVideo,
@@ -12,11 +15,8 @@ import {
   MVideoThumbnail,
   MVideoWithRights
 } from '@server/types/models'
-import { Response } from 'express'
-import { DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants'
-import { JobQueue } from '@server/lib/job-queue'
 import { VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
-import { CONFIG } from "@server/initializers/config"
+import { VideoModel } from '../models/video/video'
 
 type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
 
@@ -110,6 +110,14 @@ function getPrivaciesForFederation () {
     : [ { privacy: VideoPrivacy.PUBLIC } ]
 }
 
+function getExtFromMimetype (mimeTypes: { [id: string]: string | string[] }, mimeType: string) {
+  const value = mimeTypes[mimeType]
+
+  if (Array.isArray(value)) return value[0]
+
+  return value
+}
+
 export {
   VideoFetchType,
   VideoFetchByUrlType,
@@ -118,6 +126,7 @@ export {
   fetchVideoByUrl,
   addOptimizeOrMergeAudioJob,
   extractVideo,
+  getExtFromMimetype,
   isPrivacyForFederation,
   getPrivaciesForFederation
 }

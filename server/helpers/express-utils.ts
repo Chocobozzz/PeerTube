@@ -6,6 +6,7 @@ import { deleteFileAsync, generateRandomString } from './utils'
 import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
 import { CONFIG } from '../initializers/config'
+import { getExtFromMimetype } from './video'
 
 function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -65,7 +66,7 @@ function badRequest (req: express.Request, res: express.Response) {
 
 function createReqFiles (
   fieldNames: string[],
-  mimeTypes: { [id: string]: string },
+  mimeTypes: { [id: string]: string | string[] },
   destinations: { [fieldName: string]: string }
 ) {
   const storage = multer.diskStorage({
@@ -76,13 +77,13 @@ function createReqFiles (
     filename: async (req, file, cb) => {
       let extension: string
       const fileExtension = extname(file.originalname)
-      const extensionFromMimetype = mimeTypes[file.mimetype]
+      const extensionFromMimetype = getExtFromMimetype(mimeTypes, file.mimetype)
 
       // Take the file extension if we don't understand the mime type
-      // We have the OGG/OGV exception too because firefox sends a bad mime type when sending an OGG file
-      if (fileExtension === '.ogg' || fileExtension === '.ogv' || !extensionFromMimetype) {
+      if (!extensionFromMimetype) {
         extension = fileExtension
       } else {
+        // Take the first available extension for this mimetype
         extension = extensionFromMimetype
       }
 
