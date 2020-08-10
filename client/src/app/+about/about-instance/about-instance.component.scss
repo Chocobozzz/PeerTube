@@ -56,3 +56,25 @@
   margin-top: 20px;
   font-weight: $font-semibold;
 }
+
+.anchor-link {
+  @include disable-outline;
+
+  position: relative;
+
+  &:hover, &:active {
+    &::after {
+      content: '#';
+      display: inline-block;
+      margin-left: 0.2em;
+    }
+  }
+
+  .middle-title, .section-title {
+    display: inline-block;
+  }
+
+  .section-title {
+    color: initial;
+  }
+}
