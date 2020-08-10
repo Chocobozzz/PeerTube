@@ -124,6 +124,14 @@ body {
     }
   }
 
+  // Do not display poster when video is starting
+  &.vjs-has-autoplay:not(.vjs-has-started) {
+    .vjs-poster {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
   // Hide the big play button on autoplay
   &.vjs-has-autoplay {
     .vjs-big-play-button {
