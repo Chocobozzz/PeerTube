@@ -74,7 +74,7 @@ export class PeerTubeEmbed {
     return window.location.origin + '/api/v1/videos/' + id
   }
 
-  refreshFetch (url: string, options?: Object) {
+  refreshFetch (url: string, options?: RequestInit) {
     return fetch(url, options)
       .then((res: Response) => {
         if (res.status !== 401) return res
@@ -85,8 +85,10 @@ export class PeerTubeEmbed {
         const refreshingTokenPromise = new Promise((resolve, reject) => {
           const clientId: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
           const clientSecret: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
+
           const headers = new Headers()
           headers.set('Content-Type', 'application/x-www-form-urlencoded')
+
           const data = {
             refresh_token: this.userTokens.refreshToken,
             client_id: clientId,
@@ -99,8 +101,7 @@ export class PeerTubeEmbed {
             headers,
             method: 'POST',
             body: objectToUrlEncoded(data)
-          })
-            .then(res => res.json())
+          }).then(res => res.json())
             .then((obj: UserRefreshToken) => {
               this.userTokens.accessToken = obj.access_token
               this.userTokens.refreshToken = obj.refresh_token
@@ -116,10 +117,7 @@ export class PeerTubeEmbed {
         })
 
         return refreshingTokenPromise
-          .catch(() => {
-            // If refreshing fails, continue with original error
-            throw error
-          })
+          .catch(() => this.removeTokensFromHeaders())
           .then(() => fetch(url, {
             ...options,
             headers: this.headers
@@ -692,6 +690,10 @@ export class PeerTubeEmbed {
 
   private setHeadersFromTokens () {
     this.headers.set('Authorization', `${this.userTokens.tokenType} ${this.userTokens.accessToken}`)
+  }
+
+  private removeTokensFromHeaders () {
+    this.headers.delete('Authorization')
   }
 
   private getResourceId () {
