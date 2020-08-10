@@ -18,10 +18,6 @@ $assets-path: '../../assets/';
   display: none !important;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   /*** theme ***/
   // now beware node-sass requires interpolation
