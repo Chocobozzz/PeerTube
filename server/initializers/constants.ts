@@ -422,7 +422,8 @@ const MIMETYPES = {
     EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   VIDEO: {
-    MIMETYPE_EXT: null as { [ id: string ]: string },
+    MIMETYPE_EXT: null as { [ id: string ]: string | string[] },
+    MIMETYPES_REGEX: null as string,
     EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   IMAGE: {
@@ -825,15 +826,19 @@ function buildVideoMimetypeExt () {
   const data = {
     // streamable formats that warrant cross-browser compatibility
     'video/webm': '.webm',
-    'video/ogg': '.ogv',
+    // We'll add .ogg if additional extensions are enabled
+    // We could add .ogg here but since it could be an audio file,
+    // it would be confusing for users because PeerTube will refuse their file (based on the mimetype)
+    'video/ogg': [ '.ogv' ],
     'video/mp4': '.mp4'
   }
 
   if (CONFIG.TRANSCODING.ENABLED) {
     if (CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS) {
+      data['video/ogg'].push('.ogg')
+
       Object.assign(data, {
         'video/x-matroska': '.mkv',
-        'video/ogg': '.ogg',
 
         // Developed by Apple
         'video/quicktime': '.mov', // often used as output format by editing software
@@ -892,14 +897,36 @@ function updateWebserverUrls () {
 
 function updateWebserverConfig () {
   MIMETYPES.VIDEO.MIMETYPE_EXT = buildVideoMimetypeExt()
-  MIMETYPES.VIDEO.EXT_MIMETYPE = invert(MIMETYPES.VIDEO.MIMETYPE_EXT)
+  MIMETYPES.VIDEO.MIMETYPES_REGEX = buildMimetypesRegex(MIMETYPES.VIDEO.MIMETYPE_EXT)
+
   ACTIVITY_PUB.URL_MIME_TYPES.VIDEO = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
 
-  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = buildVideosExtname()
+  MIMETYPES.VIDEO.EXT_MIMETYPE = buildVideoExtMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT)
+
+  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE)
 }
 
-function buildVideosExtname () {
-  return Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE).filter(e => e !== 'null')
+function buildVideoExtMimetype (obj: { [ id: string ]: string | string[] }) {
+  const result: { [id: string]: string } = {}
+
+  for (const mimetype of Object.keys(obj)) {
+    const value = obj[mimetype]
+    if (!value) continue
+
+    const extensions = Array.isArray(value) ? value : [ value ]
+
+    for (const extension of extensions) {
+      result[extension] = mimetype
+    }
+  }
+
+  return result
+}
+
+function buildMimetypesRegex (obj: { [id: string]: string | string[] }) {
+  return Object.keys(obj)
+    .map(m => `(${m})`)
+    .join('|')
 }
 
 function loadLanguages () {
