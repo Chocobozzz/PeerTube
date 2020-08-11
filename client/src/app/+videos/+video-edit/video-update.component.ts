@@ -3,6 +3,7 @@ import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { SelectChannelItem } from '@app/shared/shared-forms/select-channel.component'
 import { VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -17,7 +18,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
   isUpdatingVideo = false
-  userVideoChannels: { id: number, label: string, support: string, avatar?: string }[] = []
+  userVideoChannels: SelectChannelItem[] = []
   schedulePublicationPossible = false
   videoCaptions: VideoCaptionEdit[] = []
   waitTranscodingEnabled = true

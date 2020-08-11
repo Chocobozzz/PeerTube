@@ -1,6 +1,13 @@
-import { Component, Input, forwardRef, ViewChild } from '@angular/core'
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms'
+import { Component, forwardRef, Input } from '@angular/core'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Actor } from '../shared-main'
+
+export type SelectChannelItem = {
+  id: number
+  label: string
+  support: string
+  avatarPath?: string
+}
 
 @Component({
   selector: 'my-select-channel',
@@ -15,7 +22,7 @@ import { Actor } from '../shared-main'
   ]
 })
 export class SelectChannelComponent implements ControlValueAccessor {
-  @Input() items: { id: number, label: string, support: string, avatarPath?: string }[] = []
+  @Input() items: SelectChannelItem[] = []
 
   selectedId: number
 

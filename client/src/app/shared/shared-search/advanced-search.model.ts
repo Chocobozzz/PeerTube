@@ -15,8 +15,8 @@ export class AdvancedSearch {
 
   languageOneOf: string
 
-  tagsOneOf: string
-  tagsAllOf: string
+  tagsOneOf: string[]
+  tagsAllOf: string[]
 
   durationMin: number // seconds
   durationMax: number // seconds
@@ -37,8 +37,10 @@ export class AdvancedSearch {
     categoryOneOf?: string
     licenceOneOf?: string
     languageOneOf?: string
-    tagsOneOf?: string
-    tagsAllOf?: string
+
+    tagsOneOf?: any
+    tagsAllOf?: any
+
     durationMin?: string
     durationMax?: string
     sort?: string
@@ -55,8 +57,8 @@ export class AdvancedSearch {
     this.categoryOneOf = options.categoryOneOf || undefined
     this.licenceOneOf = options.licenceOneOf || undefined
     this.languageOneOf = options.languageOneOf || undefined
-    this.tagsOneOf = options.tagsOneOf || undefined
-    this.tagsAllOf = options.tagsAllOf || undefined
+    this.tagsOneOf = this.intoArray(options.tagsOneOf)
+    this.tagsAllOf = this.intoArray(options.tagsAllOf)
     this.durationMin = parseInt(options.durationMin, 10)
     this.durationMax = parseInt(options.durationMax, 10)
 
@@ -69,13 +71,11 @@ export class AdvancedSearch {
   }
 
   containsValues () {
-    const exceptions = new Set([ 'sort', 'searchTarget' ])
-
     const obj = this.toUrlObject()
     for (const k of Object.keys(obj)) {
       if (this.silentFilters.has(k)) continue
 
-      if (obj[k] !== undefined && obj[k] !== '') return true
+      if (this.isValidValue(obj[k])) return true
     }
 
     return false
@@ -127,8 +127,8 @@ export class AdvancedSearch {
       categoryOneOf: this.intoArray(this.categoryOneOf),
       licenceOneOf: this.intoArray(this.licenceOneOf),
       languageOneOf: this.intoArray(this.languageOneOf),
-      tagsOneOf: this.intoArray(this.tagsOneOf),
-      tagsAllOf: this.intoArray(this.tagsAllOf),
+      tagsOneOf: this.tagsOneOf,
+      tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
       durationMax: this.durationMax,
       sort: this.sort,
@@ -143,10 +143,18 @@ export class AdvancedSearch {
     for (const k of Object.keys(obj)) {
       if (this.silentFilters.has(k)) continue
 
-      if (obj[k] !== undefined && obj[k] !== '') acc++
+      if (this.isValidValue(obj[k])) acc++
     }
 
     return acc
+  }
+
+  private isValidValue (val: any) {
+    if (val === undefined) return false
+    if (val === '') return false
+    if (Array.isArray(val) && val.length === 0) return false
+
+    return true
   }
 
   private intoArray (value: any) {

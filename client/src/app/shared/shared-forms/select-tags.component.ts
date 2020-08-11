@@ -14,14 +14,14 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms'
   ]
 })
 export class SelectTagsComponent implements ControlValueAccessor {
-  @Input() items: string[] = []
-  @Input() _items: string[] = []
+  @Input() availableItems: string[] = []
+  @Input() selectedItems: string[] = []
 
   propagateChange = (_: any) => { /* empty */ }
 
   writeValue (items: string[]) {
-    this._items = items
-    this.propagateChange(this._items)
+    this.selectedItems = items
+    this.propagateChange(this.selectedItems)
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -33,6 +33,8 @@ export class SelectTagsComponent implements ControlValueAccessor {
   }
 
   onModelChange () {
-    this.propagateChange(this._items)
+    console.log(this.selectedItems)
+
+    this.propagateChange(this.selectedItems)
   }
 }

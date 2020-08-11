@@ -49,7 +49,7 @@ export class RestService {
       const value = object[name]
       if (value === undefined || value === null) continue
 
-      if (Array.isArray(value) && value.length !== 0) {
+      if (Array.isArray(value)) {
         for (const v of value) params = params.append(name, v)
       } else {
         params = params.append(name, value)

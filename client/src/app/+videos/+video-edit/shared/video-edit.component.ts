@@ -1,16 +1,17 @@
+import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Component, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import { FormReactiveValidationMessages, FormValidatorService, VideoValidatorsService } from '@app/shared/shared-forms'
+import { SelectChannelItem } from '@app/shared/shared-forms/select-channel.component'
+import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { forkJoin } from 'rxjs'
-import { InstanceService } from '@app/shared/shared-instance'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 
@@ -23,7 +24,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
-  @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
+  @Input() userVideoChannels: SelectChannelItem[] = []
   @Input() schedulePublicationPossible = true
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
   @Input() waitTranscodingEnabled = true

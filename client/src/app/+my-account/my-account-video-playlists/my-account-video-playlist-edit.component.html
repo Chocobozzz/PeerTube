@@ -68,13 +68,10 @@
 
         <div class="form-group">
           <label i18n>Channel</label>
-          <div class="peertube-select-container">
-            <select formControlName="videoChannelId" class="form-control">
-              <option i18n value="undefined" disabled>Channel to bind the playlist to</option>
-              <option></option>
-              <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
-            </select>
-          </div>
+
+          <my-select-channel
+            labelForId="videoChannelIdl" [items]="userVideoChannels" formControlName="videoChannelId"
+          ></my-select-channel>
 
           <div *ngIf="formErrors['videoChannelId']" class="form-error">
             {{ formErrors['videoChannelId'] }}

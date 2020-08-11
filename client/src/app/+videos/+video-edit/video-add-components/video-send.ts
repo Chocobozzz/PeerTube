@@ -3,6 +3,7 @@ import { Directive, EventEmitter, OnInit } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
 import { populateAsyncUserVideoChannels } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
+import { SelectChannelItem } from '@app/shared/shared-forms/select-channel.component'
 import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
@@ -10,7 +11,7 @@ import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
 export abstract class VideoSend extends FormReactive implements OnInit {
-  userVideoChannels: { id: number, label: string, support: string, avatarPath?: string }[] = []
+  userVideoChannels: SelectChannelItem[] = []
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCaptions: VideoCaptionEdit[] = []
 

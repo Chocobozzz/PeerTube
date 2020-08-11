@@ -144,7 +144,7 @@
         <button i18n class="reset-button reset-button-small" (click)="resetField('tagsAllOf')" *ngIf="advancedSearch.tagsAllOf">
           Reset
         </button>
-        <my-select-tags labelForId="tagsAllOf" id="tagsAllOf" [(ngModel)]="advancedSearch.tagsAllOf"></my-select-tags>
+        <my-select-tags name="tagsAllOf" labelForId="tagsAllOf" id="tagsAllOf" [(ngModel)]="advancedSearch.tagsAllOf"></my-select-tags>
       </div>
 
       <div class="form-group">
@@ -152,7 +152,7 @@
         <button i18n class="reset-button reset-button-small" (click)="resetField('tagsOneOf')" *ngIf="advancedSearch.tagsOneOf">
           Reset
         </button>
-        <my-select-tags labelForId="tagsOneOf" id="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf"></my-select-tags>
+        <my-select-tags name="tagsOneOf" labelForId="tagsOneOf" id="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf"></my-select-tags>
       </div>
 
       <div class="form-group" *ngIf="isSearchTargetEnabled()">
