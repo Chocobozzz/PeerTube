@@ -3,7 +3,7 @@ import * as debug from 'debug'
 import { switchMap } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, AuthStatus, AuthUser, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
+import { AuthService, AuthStatus, AuthUser, MenuService, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
@@ -45,7 +45,8 @@ export class MenuComponent implements OnInit {
     private redirectService: RedirectService,
     private hotkeysService: HotkeysService,
     private screenService: ScreenService,
-    private router: Router
+    private menuService: MenuService,
+    private router: Router,
   ) { }
 
   get isInMobileView () {
@@ -196,17 +197,21 @@ export class MenuComponent implements OnInit {
 
   onSameUrlRestoreScrollPosition (link: HTMLAnchorElement) {
     const linkURL = link.getAttribute('href')
+    const linkHash = link.getAttribute('fragment')
 
     // On same url without fragment restore top scroll position
-    if (!link.getAttribute('fragment') && this.router.url.includes(linkURL)) {
+    if (!linkHash && this.router.url.includes(linkURL)) {
       window.scrollTo(0, 0)
-      return
     }
 
     // On same url with fragment restore anchor scroll position
-    if (this.router.url === linkURL) {
+    if (linkHash && this.router.url === linkURL) {
       const anchor = document.getElementById(link.getAttribute('fragment'))
       anchor.scrollIntoView(true)
+    }
+
+    if (this.screenService.isInSmallView()) {
+      this.menuService.toggleMenu()
     }
   }
 

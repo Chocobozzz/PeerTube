@@ -70,12 +70,6 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
     this.navigate.emit(link)
   }
 
-  onRouterSameUrl (link: HTMLAnchorElement) {
-    if (this.router.url === link.getAttribute('routerLink')) {
-      this.closePopover()
-    }
-  }
-
   markAllAsRead () {
     this.markAllAsReadSubject.next(true)
   }
