@@ -2,7 +2,7 @@
   <menu [ngClass]="{ 'logged-in': isLoggedIn }">
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
-        <my-avatar-notification [user]="user"></my-avatar-notification>
+        <my-avatar-notification [user]="user" (navigate)="onSameUrlRestoreScrollPosition($event)"></my-avatar-notification>
 
         <div class="logged-in-info">
           <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="logged-in-display-name">{{ user.account?.displayName }}</a>
