@@ -52,7 +52,7 @@ body {
 
   --activatedActionButtonColor: #{$activated-action-button-color};
 
-  --expanded-horizontal-margin-content: $expanded-horizontal-margins;
+  --expanded-horizontal-margin-content: #{$expanded-horizontal-margins};
 
   font-family: $main-fonts;
   font-weight: $font-regular;
@@ -316,7 +316,7 @@ table {
   .main-col {
     &.expanded {
       .margin-content {
-        --expanded-horizontal-margin-content: $expanded-horizontal-margins/2;
+        --expanded-horizontal-margin-content: #{$expanded-horizontal-margins/2};
       }
     }
   }
@@ -327,7 +327,7 @@ table {
   .main-col {
     &, &.expanded {
       .margin-content {
-        --expanded-horizontal-margin-content: $expanded-horizontal-margins/3;
+        --expanded-horizontal-margin-content: #{$expanded-horizontal-margins/3};
       }
 
       .sub-menu {
