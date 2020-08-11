@@ -1,6 +1,10 @@
 
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { InputMaskModule } from 'primeng/inputmask'
+import { InputSwitchModule } from 'primeng/inputswitch'
+import { MultiSelectModule } from 'primeng/multiselect'
+import { NgSelectModule } from '@ng-select/ng-select'
 import { BatchDomainsValidatorsService } from '@app/shared/shared-forms/form-validators/batch-domains-validators.service'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
@@ -37,6 +41,11 @@ import { SelectTagsComponent } from './select-tags.component'
     FormsModule,
     ReactiveFormsModule,
 
+    InputMaskModule,
+    InputSwitchModule,
+    MultiSelectModule,
+    NgSelectModule,
+
     SharedMainModule,
     SharedGlobalIconModule
   ],
@@ -57,6 +66,11 @@ import { SelectTagsComponent } from './select-tags.component'
   exports: [
     FormsModule,
     ReactiveFormsModule,
+
+    InputMaskModule,
+    InputSwitchModule,
+    MultiSelectModule,
+    NgSelectModule,
 
     InputReadonlyCopyComponent,
     MarkdownTextareaComponent,

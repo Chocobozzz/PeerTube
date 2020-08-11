@@ -1,8 +1,5 @@
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/api'
-import { InputMaskModule } from 'primeng/inputmask'
-import { InputSwitchModule } from 'primeng/inputswitch'
-import { MultiSelectModule } from 'primeng/multiselect'
 import { ClipboardModule } from '@angular/cdk/clipboard'
 import { CommonModule, DatePipe } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
@@ -17,11 +14,11 @@ import {
   NgbPopoverModule,
   NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
-import { NgSelectModule } from '@ng-select/ng-select'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, ActorAvatarInfoComponent, AvatarComponent } from './account'
 import { FromNowPipe, InfiniteScrollerDirective, NumberFormatterPipe, PeerTubeTemplateDirective } from './angular'
+import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditButtonComponent } from './buttons'
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
@@ -31,7 +28,6 @@ import { UserHistoryService, UserNotificationsComponent, UserNotificationService
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
-import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 
 @NgModule({
   imports: [
@@ -51,12 +47,7 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
     ClipboardModule,
 
     PrimeSharedModule,
-    InputMaskModule,
     NgPipesModule,
-    MultiSelectModule,
-    InputSwitchModule,
-
-    NgSelectModule,
 
     SharedGlobalIconModule
   ],
@@ -107,10 +98,8 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
     ClipboardModule,
 
     PrimeSharedModule,
-    InputMaskModule,
     BytesPipe,
     KeysPipe,
-    MultiSelectModule,
 
     AvatarComponent,
     ActorAvatarInfoComponent,
@@ -137,9 +126,7 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
     TopMenuDropdownComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent,
-
-    NgSelectModule
+    UserNotificationsComponent
   ],
 
   providers: [
