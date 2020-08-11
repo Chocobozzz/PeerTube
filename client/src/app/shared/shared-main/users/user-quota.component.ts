@@ -1,8 +1,8 @@
 import { Subject } from 'rxjs'
-import { BytesPipe } from 'ngx-pipes'
 import { Component, Input, OnInit } from '@angular/core'
 import { User, UserService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { BytesPipe } from '../angular'
 
 @Component({
   selector: 'my-user-quota',

@@ -1,11 +1,10 @@
 import { mapValues, pick } from 'lodash-es'
-import { BytesPipe } from 'ngx-pipes'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
-import { NumberFormatterPipe, VideoDetails, VideoService } from '../shared-main'
+import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoService } from '../shared-main'
 
 type DownloadType = 'video' | 'subtitles'
 type FileMetadata = { [key: string]: { label: string, value: string }}

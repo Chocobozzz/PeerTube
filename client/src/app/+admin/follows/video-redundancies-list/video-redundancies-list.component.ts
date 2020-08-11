@@ -1,10 +1,9 @@
-import { BytesPipe } from 'ngx-pipes'
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { RedundancyService } from '@app/shared/shared-main'
+import { BytesPipe, RedundancyService } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
 import { VideosRedundancyStats } from '@shared/models/server'
 

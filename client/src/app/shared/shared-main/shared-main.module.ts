@@ -1,4 +1,3 @@
-import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/api'
 import { ClipboardModule } from '@angular/cdk/clipboard'
 import { CommonModule, DatePipe } from '@angular/common'
@@ -17,7 +16,7 @@ import {
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, ActorAvatarInfoComponent, AvatarComponent } from './account'
-import { FromNowPipe, InfiniteScrollerDirective, NumberFormatterPipe, PeerTubeTemplateDirective } from './angular'
+import { FromNowPipe, InfiniteScrollerDirective, NumberFormatterPipe, PeerTubeTemplateDirective, BytesPipe } from './angular'
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditButtonComponent } from './buttons'
 import { DateToggleComponent } from './date'
@@ -47,7 +46,6 @@ import { VideoChannelService } from './video-channel'
     ClipboardModule,
 
     PrimeSharedModule,
-    NgPipesModule,
 
     SharedGlobalIconModule
   ],
@@ -57,8 +55,9 @@ import { VideoChannelService } from './video-channel'
     ActorAvatarInfoComponent,
 
     FromNowPipe,
-    InfiniteScrollerDirective,
     NumberFormatterPipe,
+    BytesPipe,
+    InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
 
     ActionDropdownComponent,
@@ -98,15 +97,15 @@ import { VideoChannelService } from './video-channel'
     ClipboardModule,
 
     PrimeSharedModule,
-    BytesPipe,
-    KeysPipe,
 
     AvatarComponent,
     ActorAvatarInfoComponent,
 
     FromNowPipe,
-    InfiniteScrollerDirective,
+    BytesPipe,
     NumberFormatterPipe,
+
+    InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
 
     ActionDropdownComponent,

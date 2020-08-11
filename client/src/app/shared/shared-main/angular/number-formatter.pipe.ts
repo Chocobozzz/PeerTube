@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
-// Thanks: https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
+// Thanks: https://github.com/danrevah/ngx-pipes/blob/master/src/ng-pipes/pipes/math/bytes.ts
 
 @Pipe({ name: 'myNumberFormatter' })
 export class NumberFormatterPipe implements PipeTransform {

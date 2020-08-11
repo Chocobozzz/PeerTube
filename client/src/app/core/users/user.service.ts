@@ -1,10 +1,10 @@
-import { BytesPipe } from 'ngx-pipes'
 import { SortMeta } from 'primeng/api'
 import { from, Observable, of } from 'rxjs'
 import { catchError, concatMap, filter, first, map, shareReplay, throttleTime, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService } from '@app/core/auth'
+import { BytesPipe } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import {
