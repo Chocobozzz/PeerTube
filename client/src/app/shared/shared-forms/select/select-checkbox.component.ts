@@ -1,6 +1,7 @@
-import { Component, Input, forwardRef } from '@angular/core'
+import { Component, Input, forwardRef, OnInit } from '@angular/core'
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms'
 import { SelectOptionsItem } from './select-options.component'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 export type ItemSelectCheckboxValue = { id?: string | number, group?: string } | string
 
@@ -16,12 +17,21 @@ export type ItemSelectCheckboxValue = { id?: string | number, group?: string } |
     }
   ]
 })
-export class SelectCheckboxComponent implements ControlValueAccessor {
+export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
   @Input() availableItems: SelectOptionsItem[] = []
   @Input() selectedItems: ItemSelectCheckboxValue[] = []
   @Input() selectableGroup: boolean
   @Input() selectableGroupAsModel: boolean
   @Input() maxSelectedItems: number
+  @Input() placeholder: string
+
+  constructor (
+    private i18n: I18n
+  ) {}
+
+  ngOnInit () {
+    if (!this.placeholder) this.placeholder = this.i18n('Add a new option')
+  }
 
   propagateChange = (_: any) => { /* empty */ }
 

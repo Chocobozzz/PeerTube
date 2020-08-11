@@ -2,7 +2,7 @@
   [items]="availableItems"
   [(ngModel)]="selectedItems"
   (ngModelChange)="onModelChange()"
-  i18n-placeholder placeholder="Add a new language"
+  [placeholder]="placeholder"
   [clearable]="true"
   [multiple]="true"
   [searchable]="true"
