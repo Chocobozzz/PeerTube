@@ -6,7 +6,7 @@ import {
   UserWatching,
   VideoJSCaption
 } from './peertube-videojs-typings'
-import { isMobile, timeToInt } from './utils'
+import { isMobile, timeToInt, isSafari, isIOS } from './utils'
 import {
   getStoredLastSubtitle,
   getStoredMute,
@@ -74,7 +74,14 @@ class PeerTubePlugin extends Plugin {
       if (volume !== undefined) this.player.volume(volume)
 
       const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
-      if (muted !== undefined) this.player.muted(muted)
+      this.player.muted(muted)
+
+      // Force player to set real muted value on play when iOS or Safari
+      if (isSafari() || isIOS()) {
+        this.player.on('play', () => {
+          this.player.muted(muted)
+        })
+      }
 
       this.defaultSubtitle = options.subtitle || getStoredLastSubtitle()
 

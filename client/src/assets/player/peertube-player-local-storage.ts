@@ -22,7 +22,8 @@ function getStoredMute () {
   const value = getLocalStorage('mute')
   if (value !== null && value !== undefined) return value === 'true'
 
-  return undefined
+  // By default sound is not muted
+  return false
 }
 
 function getStoredTheater () {
