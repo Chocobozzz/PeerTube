@@ -304,6 +304,17 @@
   z-index: 100;
 }
 
+
+@mixin ng-select ($width) {
+  ::ng-deep ng-select {
+    width: $width;
+
+    @media screen and (max-width: $width) {
+      width: 100%;
+    }
+  }
+}
+
 @mixin peertube-select-container ($width) {
   padding: 0;
   margin: 0;

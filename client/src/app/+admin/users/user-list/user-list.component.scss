@@ -61,6 +61,7 @@ my-global-icon {
 
 .input-group {
   @include peertube-input-group(300px);
+
   input {
     flex: 1;
   }

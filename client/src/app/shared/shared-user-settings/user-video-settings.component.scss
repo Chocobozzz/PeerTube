@@ -19,6 +19,10 @@ input[type=submit] {
   margin-bottom: 30px;
 }
 
+my-select-checkbox {
+  @include ng-select(340px);
+}
+
 .form-group-select {
   margin-bottom: 30px;
 }

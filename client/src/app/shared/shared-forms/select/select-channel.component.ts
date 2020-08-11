@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { Actor } from '../shared-main'
+import { Actor } from '@app/shared/shared-main/account/actor.model'
 
 export type SelectChannelItem = {
   id: number

@@ -1,0 +1,32 @@
+@import '_variables';
+@import '_mixins';
+
+$form-base-input-width: auto;
+
+ng-select {
+  width: $form-base-input-width;
+
+  @media screen and (max-width: $form-base-input-width) {
+    width: 100%;
+  }
+}
+
+ng-select ::ng-deep {
+  .ng-value-container {
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  // make sure the image is vertically adjusted
+  .ng-value-label img {
+    position: relative;
+    top: -1px;
+  }
+
+  img {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+  }
+}

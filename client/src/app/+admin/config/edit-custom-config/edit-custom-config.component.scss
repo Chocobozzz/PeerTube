@@ -30,6 +30,10 @@ input[type=checkbox] {
   @include peertube-select-container($form-base-input-width);
 }
 
+my-select-checkbox {
+  @include ng-select($form-base-input-width);
+}
+
 input[type=submit] {
   @include peertube-button;
   @include orange-button;

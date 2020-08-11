@@ -303,67 +303,6 @@ p-table {
   }
 }
 
-// multiselect customizations
-p-multiselect {
-  .ui-multiselect {
-    border-color: #C6C6C6;
-
-    &:not(.ui-state-disabled) {
-      &:hover {
-        border-color: #C6C6C6;
-      }
-
-      &:focus,
-      &.ui-state-focus {
-        box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
-      }
-    }
-  }
-
-  .ui-multiselect-label {
-    font-size: 15px !important;
-    padding: 4px 30px 4px 12px !important;
-
-    $width: 338px;
-    width: $width !important;
-
-    @media screen and (max-width: $width) {
-      width: 100% !important;
-    }
-  }
-
-  .pi.pi-chevron-down {
-    margin-left: 0 !important;
-
-    &::after {
-      @include select-arrow-down;
-
-      right: 0;
-      margin-top: 6px;
-    }
-  }
-
-  .ui-chkbox-icon {
-    //position: absolute !important;
-    width: 18px;
-    height: 18px;
-    //left: 0;
-
-    //&::after {
-    //  left: -2px !important;
-    //}
-  }
-
-  .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item.ui-state-highlight {
-    background-color: pvar(--mainColorLighter);
-  }
-
-  .ui-inputtext:enabled:focus:not(.ui-state-error) {
-    border-color: pvar(--mainColorLighter) !important;
-    box-shadow: none;
-  }
-}
-
 // PrimeNG calendar tweaks
 p-calendar .ui-datepicker {
   a {

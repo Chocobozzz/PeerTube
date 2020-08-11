@@ -1,0 +1,41 @@
+<ng-select
+  [items]="availableItems"
+  [(ngModel)]="selectedItems"
+  (ngModelChange)="onModelChange()"
+  i18n-placeholder placeholder="Add a new language"
+  [clearable]="true"
+  [multiple]="true"
+  [searchable]="true"
+  [closeOnSelect]="false"
+
+  bindValue="id"
+  bindLabel="label"
+
+  notFoundText="No items found" i18n-notFoundText
+
+  [selectableGroup]="selectableGroup"
+  [selectableGroupAsModel]="selectableGroupAsModel"
+
+  groupBy="group"
+  [compareWith]="compareFn"
+
+  [maxSelectedItems]="maxSelectedItems"
+>
+
+  <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+    <div class="form-group-checkbox">
+      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>
+      <span role="checkbox" [attr.aria-checked]="item$.selected"></span>
+      <span>{{ item.group }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+    <div class="form-group-checkbox">
+      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>
+      <span role="checkbox" [attr.aria-checked]="item$.selected"></span>
+      <span>{{ item.label }}</span>
+    </div>
+  </ng-template>
+
+</ng-select>

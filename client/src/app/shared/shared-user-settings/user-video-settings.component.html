@@ -30,11 +30,11 @@
     </my-help>
 
     <div>
-      <p-multiSelect
-        inputId="videoLanguages" [options]="languageItems" formControlName="videoLanguages" [showToggleAll]="true"
-        [defaultLabel]="getDefaultVideoLanguageLabel()" [selectedItemsLabel]="getSelectedVideoLanguageLabel()"
-        emptyFilterMessage="No results found" i18n-emptyFilterMessage
-      ></p-multiSelect>
+      <my-select-checkbox
+        formControlName="videoLanguages" [availableItems]="languageItems"
+        [selectableGroup]="true" [selectableGroupAsModel]="true"
+      >
+      </my-select-checkbox >
     </div>
   </div>
 

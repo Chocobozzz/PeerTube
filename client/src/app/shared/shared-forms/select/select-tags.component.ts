@@ -33,8 +33,6 @@ export class SelectTagsComponent implements ControlValueAccessor {
   }
 
   onModelChange () {
-    console.log(this.selectedItems)
-
     this.propagateChange(this.selectedItems)
   }
 }

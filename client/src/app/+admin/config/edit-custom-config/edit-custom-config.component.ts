@@ -1,11 +1,16 @@
-import { SelectItem } from 'primeng/api'
 import { forkJoin } from 'rxjs'
 import { ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { Notifier } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
-import { CustomConfigValidatorsService, FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import {
+  CustomConfigValidatorsService,
+  FormReactive,
+  FormValidatorService,
+  SelectOptionsItem,
+  UserValidatorsService
+} from '@app/shared/shared-forms'
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { CustomConfig, ServerConfig } from '@shared/models'
@@ -25,8 +30,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   resolutions: { id: string, label: string, description?: string }[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
 
-  languageItems: SelectItem[] = []
-  categoryItems: SelectItem[] = []
+  languageItems: SelectOptionsItem[] = []
+  categoryItems: SelectOptionsItem[] = []
 
   private serverConfig: ServerConfig
 
@@ -290,22 +295,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       )
   }
 
-  getSelectedLanguageLabel () {
-    return this.i18n('{{\'{0} languages selected')
-  }
-
-  getDefaultLanguageLabel () {
-    return this.i18n('No language')
-  }
-
-  getSelectedCategoryLabel () {
-    return this.i18n('{{\'{0} categories selected')
-  }
-
-  getDefaultCategoryLabel () {
-    return this.i18n('No category')
-  }
-
   gotoAnchor () {
     const hashToNav = {
       'customizations': 'advanced-configuration'
@@ -331,8 +320,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       ([ config, languages, categories ]) => {
         this.customConfig = config
 
-        this.languageItems = languages.map(l => ({ label: l.label, value: l.id }))
-        this.categoryItems = categories.map(l => ({ label: l.label, value: l.id }))
+        this.languageItems = languages.map(l => ({ label: l.label, id: l.id }))
+        this.categoryItems = categories.map(l => ({ label: l.label, id: l.id + '' }))
 
         this.updateForm()
         // Force form validation

@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common'
+import { SelectChannelItem } from '@app/shared/shared-forms'
 import { environment } from '../../environments/environment'
 import { AuthService } from '../core/auth'
-import { SelectChannelItem } from '@app/shared/shared-forms/select-channel.component'
 
 // Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 function getParameterByName (name: string, url: string) {

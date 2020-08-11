@@ -48,11 +48,12 @@
                 <label i18n for="instanceCategories">Main instance categories</label>
 
                 <div>
-                  <p-multiSelect
-                    inputId="instanceCategories" [options]="categoryItems" formControlName="categories" [showToggleAll]="false"
-                    [defaultLabel]="getDefaultCategoryLabel()" [selectedItemsLabel]="getSelectedCategoryLabel()"
-                    emptyFilterMessage="No results found" i18n-emptyFilterMessage
-                  ></p-multiSelect>
+                  <my-select-checkbox
+                    id="instanceCategories"
+                    formControlName="categories" [availableItems]="categoryItems"
+                    [selectableGroup]="false"
+                  >
+                  </my-select-checkbox>
                 </div>
               </div>
 
@@ -60,11 +61,12 @@
                 <label i18n for="instanceLanguages">Main languages you/your moderators speak</label>
 
                 <div>
-                  <p-multiSelect
-                    inputId="instanceLanguages" [options]="languageItems" formControlName="languages" [showToggleAll]="false"
-                    [defaultLabel]="getDefaultLanguageLabel()" [selectedItemsLabel]="getSelectedLanguageLabel()"
-                    emptyFilterMessage="No results found" i18n-emptyFilterMessage
-                  ></p-multiSelect>
+                  <my-select-checkbox
+                    id="instanceLanguages"
+                    formControlName="languages" [availableItems]="languageItems"
+                    [selectableGroup]="false"
+                  >
+                  </my-select-checkbox>
                 </div>
               </div>
 

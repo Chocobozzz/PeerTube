@@ -1,0 +1,18 @@
+@import '_variables';
+@import '_mixins';
+
+ng-select ::ng-deep {
+  .ng-option {
+    display: flex;
+    align-items: center;
+  }
+
+  .form-group-checkbox {
+    display: flex;
+    align-items: center;
+
+    input {
+      @include peertube-checkbox(1px);
+    }
+  }
+}

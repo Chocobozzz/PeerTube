@@ -57,12 +57,12 @@
           <div role="menu" class="dropdown-menu" ngbDropdownMenu>
             <div class="dropdown-header" i18n>Table parameters</div>
             <div ngbDropdownItem class="dropdown-item">
-              <p-multiSelect
-                [options]="columns" [showToggleAll]="true" [(ngModel)]="selectedColumns" optionLabel="label"
-                emptyFilterMessage="No matching column found" i18n-emptyFilterMessage [filter]="false"
-                selectedItemsLabel="{0} columns displayed" i18n-emptyFilterMessage [showHeader]="false"
-                [maxSelectedLabels]="4"
-              ></p-multiSelect>
+              <my-select-checkbox
+                name="columns"
+                [availableItems]="columns"
+                [selectableGroup]="false" [(ngModel)]="selectedColumns"
+              >
+              </my-select-checkbox>
             </div>
             <div ngbDropdownItem class="dropdown-item">
               <my-peertube-checkbox inputName="highlightBannedUsers" [(ngModel)]="highlightBannedUsers"
@@ -71,14 +71,14 @@
           </div>
         </div>
       </th>
-      <th *ngIf="getColumn('username')" pResizableColumn i18n pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
-      <th *ngIf="getColumn('email')" i18n>{{ getColumn('email').label }}</th>
-      <th *ngIf="getColumn('quota')" style="width: 160px;" i18n pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
-      <th *ngIf="getColumn('quotaDaily')" style="width: 160px;" i18n>{{ getColumn('quotaDaily').label }}</th>
-      <th *ngIf="getColumn('role')" style="width: 120px;" i18n pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
-      <th *ngIf="getColumn('pluginAuth')" style="width: 140px;" pResizableColumn i18n>{{ getColumn('pluginAuth').label }}</th>
-      <th *ngIf="getColumn('createdAt')" style="width: 150px;" i18n pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th *ngIf="getColumn('lastLoginDate')" style="width: 150px;" i18n pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
+      <th *ngIf="isSelected('username')" pResizableColumn i18n pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
+      <th *ngIf="isSelected('email')" i18n>{{ getColumn('email').label }}</th>
+      <th *ngIf="isSelected('quota')" style="width: 160px;" i18n pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
+      <th *ngIf="isSelected('quotaDaily')" style="width: 160px;" i18n>{{ getColumn('quotaDaily').label }}</th>
+      <th *ngIf="isSelected('role')" style="width: 120px;" i18n pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
+      <th *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn i18n>{{ getColumn('pluginAuth').label }}</th>
+      <th *ngIf="isSelected('createdAt')" style="width: 150px;" i18n pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th *ngIf="isSelected('lastLoginDate')" style="width: 150px;" i18n pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
     </tr>
   </ng-template>
 
@@ -101,7 +101,7 @@
         </my-user-moderation-dropdown>
       </td>
 
-      <td *ngIf="getColumn('username')">
+      <td *ngIf="isSelected('username')">
         <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/accounts/' + user.username ]">
           <div class="chip two-lines">
             <img
@@ -118,7 +118,7 @@
         </a>
       </td>
 
-      <td *ngIf="getColumn('email')" [title]="user.email">
+      <td *ngIf="isSelected('email')" [title]="user.email">
         <ng-container *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus">
           <a class="table-email" [href]="'mailto:' + user.email">{{ user.email }}</a>
         </ng-container>
@@ -135,7 +135,7 @@
         </ng-template>
       </ng-template>
 
-      <td *ngIf="getColumn('quota')">
+      <td *ngIf="isSelected('quota')">
         <div class="progress" i18n-title title="Total video quota">
           <div class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaPercentage(user) + '%' }"
                [attr.aria-valuenow]="user.rawVideoQuotaUsed" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuota">
@@ -145,7 +145,7 @@
         </div>
       </td>
 
-      <td *ngIf="getColumn('quotaDaily')">
+      <td *ngIf="isSelected('quotaDaily')">
         <div class="progress" i18n-title title="Total daily video quota">
           <div class="progress-bar secondary" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
                [attr.aria-valuenow]="user.rawVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuotaDaily">
@@ -155,18 +155,18 @@
         </div>
       </td>
 
-      <td *ngIf="getColumn('role')">
+      <td *ngIf="isSelected('role')">
         <span *ngIf="user.blocked" class="badge badge-banned" i18n-title title="The user was banned">{{ user.roleLabel }}</span>
         <span *ngIf="!user.blocked" class="badge" [ngClass]="getRoleClass(user.role)">{{ user.roleLabel }}</span>
       </td>
 
-      <td *ngIf="getColumn('pluginAuth')">
+      <td *ngIf="isSelected('pluginAuth')">
         <ng-container *ngIf="user.pluginAuth">{{ user.pluginAuth }}</ng-container>
       </td>
 
-      <td *ngIf="getColumn('createdAt')" [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
+      <td *ngIf="isSelected('createdAt')" [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
 
-      <td *ngIf="getColumn('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | date: 'short' }}</td>
+      <td *ngIf="isSelected('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | date: 'short' }}</td>
     </tr>
   </ng-template>
 

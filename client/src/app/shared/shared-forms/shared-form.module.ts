@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { InputMaskModule } from 'primeng/inputmask'
 import { InputSwitchModule } from 'primeng/inputswitch'
-import { MultiSelectModule } from 'primeng/multiselect'
 import { NgSelectModule } from '@ng-select/ng-select'
 import { BatchDomainsValidatorsService } from '@app/shared/shared-forms/form-validators/batch-domains-validators.service'
 import { SharedGlobalIconModule } from '../shared-icons'
@@ -32,9 +31,7 @@ import { PreviewUploadComponent } from './preview-upload.component'
 import { ReactiveFileComponent } from './reactive-file.component'
 import { TextareaAutoResizeDirective } from './textarea-autoresize.directive'
 import { TimestampInputComponent } from './timestamp-input.component'
-import { SelectChannelComponent } from './select-channel.component'
-import { SelectOptionsComponent } from './select-options.component'
-import { SelectTagsComponent } from './select-tags.component'
+import { SelectChannelComponent, SelectCheckboxComponent, SelectOptionsComponent, SelectTagsComponent } from './select'
 
 @NgModule({
   imports: [
@@ -43,7 +40,6 @@ import { SelectTagsComponent } from './select-tags.component'
 
     InputMaskModule,
     InputSwitchModule,
-    MultiSelectModule,
     NgSelectModule,
 
     SharedMainModule,
@@ -58,9 +54,11 @@ import { SelectTagsComponent } from './select-tags.component'
     ReactiveFileComponent,
     TextareaAutoResizeDirective,
     TimestampInputComponent,
+
     SelectChannelComponent,
     SelectOptionsComponent,
-    SelectTagsComponent
+    SelectTagsComponent,
+    SelectCheckboxComponent
   ],
 
   exports: [
@@ -69,7 +67,6 @@ import { SelectTagsComponent } from './select-tags.component'
 
     InputMaskModule,
     InputSwitchModule,
-    MultiSelectModule,
     NgSelectModule,
 
     InputReadonlyCopyComponent,
@@ -79,9 +76,11 @@ import { SelectTagsComponent } from './select-tags.component'
     ReactiveFileComponent,
     TextareaAutoResizeDirective,
     TimestampInputComponent,
+
     SelectChannelComponent,
     SelectOptionsComponent,
-    SelectTagsComponent
+    SelectTagsComponent,
+    SelectCheckboxComponent
   ],
 
   providers: [

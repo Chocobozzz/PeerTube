@@ -1,7 +1,13 @@
 import { Component, Input, forwardRef } from '@angular/core'
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms'
 
-export type SelectOptionsItem = { id: number | string, label: string, description?: string }
+export type SelectOptionsItem = {
+  id: string | number
+  label: string
+  description?: string
+  group?: string
+  groupLabel?: string
+}
 
 @Component({
   selector: 'my-select-options',
@@ -19,13 +25,9 @@ export class SelectOptionsComponent implements ControlValueAccessor {
   @Input() items: SelectOptionsItem[] = []
   @Input() clearable = false
   @Input() searchable = false
-  @Input() bindValue = 'id'
   @Input() groupBy: string
 
   selectedId: number | string
-
-  // ng-select options
-  bindLabel = 'label'
 
   propagateChange = (_: any) => { /* empty */ }
 

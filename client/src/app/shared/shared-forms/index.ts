@@ -1,5 +1,6 @@
 export * from './form-validators'
 export * from './form-reactive'
+export * from './select'
 export * from './input-readonly-copy.component'
 export * from './markdown-textarea.component'
 export * from './peertube-checkbox.component'

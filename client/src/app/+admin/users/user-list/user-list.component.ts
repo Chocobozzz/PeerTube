@@ -30,9 +30,9 @@ export class UserListComponent extends RestTable implements OnInit {
 
   selectedUsers: User[] = []
   bulkUserActions: DropdownAction<User[]>[][] = []
-  columns: { key: string, label: string }[]
+  columns: { id: string, label: string }[]
 
-  private _selectedColumns: { key: string, label: string }[]
+  private _selectedColumns: string[]
   private serverConfig: ServerConfig
 
   constructor (
@@ -60,7 +60,7 @@ export class UserListComponent extends RestTable implements OnInit {
     return this._selectedColumns
   }
 
-  set selectedColumns (val) {
+  set selectedColumns (val: string[]) {
     this._selectedColumns = val
   }
 
@@ -112,16 +112,18 @@ export class UserListComponent extends RestTable implements OnInit {
     ]
 
     this.columns = [
-      { key: 'username', label: 'Username' },
-      { key: 'email', label: 'Email' },
-      { key: 'quota', label: 'Video quota' },
-      { key: 'role', label: 'Role' },
-      { key: 'createdAt', label: 'Created' }
+      { id: 'username', label: 'Username' },
+      { id: 'email', label: 'Email' },
+      { id: 'quota', label: 'Video quota' },
+      { id: 'role', label: 'Role' },
+      { id: 'createdAt', label: 'Created' }
     ]
-    this.selectedColumns = [ ...this.columns ] // make a full copy of the array
-    this.columns.push({ key: 'quotaDaily', label: 'Daily quota' })
-    this.columns.push({ key: 'pluginAuth', label: 'Auth plugin' })
-    this.columns.push({ key: 'lastLoginDate', label: 'Last login' })
+
+    this.selectedColumns = this.columns.map(c => c.id)
+
+    this.columns.push({ id: 'quotaDaily', label: 'Daily quota' })
+    this.columns.push({ id: 'pluginAuth', label: 'Auth plugin' })
+    this.columns.push({ id: 'lastLoginDate', label: 'Last login' })
   }
 
   getIdentifier () {
@@ -139,8 +141,12 @@ export class UserListComponent extends RestTable implements OnInit {
     }
   }
 
-  getColumn (key: string) {
-    return this.selectedColumns.find((col: { key: string }) => col.key === key)
+  isSelected (id: string) {
+    return this.selectedColumns.find(c => c === id)
+  }
+
+  getColumn (id: string) {
+    return this.columns.find(c => c.id === id)
   }
 
   getUserVideoQuotaPercentage (user: UserForList) {

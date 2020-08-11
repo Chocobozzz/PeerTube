@@ -3,10 +3,11 @@
   [groupBy]="groupBy"
   [(ngModel)]="selectedId"
   (ngModelChange)="onModelChange()"
-  [bindLabel]="bindLabel"
-  [bindValue]="bindValue"
   [clearable]="clearable"
   [searchable]="searchable"
+
+  bindLabel="label"
+  bindValue="id"
 >
   <ng-template ng-option-tmp let-item="item" let-index="index">
     {{ item.label }}

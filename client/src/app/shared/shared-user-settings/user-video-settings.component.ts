@@ -1,10 +1,9 @@
 import { pick } from 'lodash-es'
-import { SelectItem } from 'primeng/api'
 import { forkJoin, Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService, ItemSelectCheckboxValue, SelectOptionsItem } from '@app/shared/shared-forms'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserUpdateMe } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
@@ -20,9 +19,11 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   @Input() notifyOnUpdate = true
   @Input() userInformationLoaded: Subject<any>
 
-  languageItems: SelectItem[] = []
+  languageItems: SelectOptionsItem[] = []
   defaultNSFWPolicy: NSFWPolicyType
   formValuesWatcher: Subscription
+
+  private allLanguagesGroup: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -36,6 +37,8 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   }
 
   ngOnInit () {
+    this.allLanguagesGroup = this.i18n('All languages')
+
     let oldForm: any
 
     this.buildForm({
@@ -51,13 +54,15 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
       this.serverService.getConfig(),
       this.userInformationLoaded.pipe(first())
     ]).subscribe(([ languages, config ]) => {
-      this.languageItems = [ { label: this.i18n('Unknown language'), value: '_unknown' } ]
-      this.languageItems = this.languageItems
-                               .concat(languages.map(l => ({ label: l.label, value: l.id })))
+      const group = this.allLanguagesGroup
 
-      const videoLanguages = this.user.videoLanguages
-        ? this.user.videoLanguages
-        : this.languageItems.map(l => l.value)
+      this.languageItems = [ { label: this.i18n('Unknown language'), id: '_unknown', group } ]
+      this.languageItems = this.languageItems
+                               .concat(languages.map(l => ({ label: l.label, id: l.id, group })))
+
+      const videoLanguages: ItemSelectCheckboxValue[] = this.user.videoLanguages
+        ? this.user.videoLanguages.map(l => ({ id: l }))
+        : [ { group } ]
 
       this.defaultNSFWPolicy = config.instance.defaultNSFWPolicy
 
@@ -71,10 +76,12 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
       if (this.reactiveUpdate) {
         oldForm = { ...this.form.value }
+
         this.formValuesWatcher = this.form.valueChanges.subscribe((formValue: any) => {
           const updatedKey = Object.keys(formValue).find(k => formValue[k] !== oldForm[k])
           oldForm = { ...this.form.value }
-          this.updateDetails([updatedKey])
+
+          this.updateDetails([ updatedKey ])
         })
       }
     })
@@ -91,15 +98,23 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
     const autoPlayNextVideo = this.form.value['autoPlayNextVideo']
 
     let videoLanguages: string[] = this.form.value['videoLanguages']
+
     if (Array.isArray(videoLanguages)) {
-      if (videoLanguages.length === this.languageItems.length) {
+      if (videoLanguages.length > 20) {
+        this.notifier.error(this.i18n('Too many languages are enabled. Please enable them all or stay below 20 enabled languages.'))
+        return
+      }
+
+      if (videoLanguages.length === 0) {
+        this.notifier.error(this.i18n('You need to enable at least 1 video language.'))
+        return
+      }
+
+      if (
+        videoLanguages.length === this.languageItems.length ||
+        (videoLanguages.length === 1 && videoLanguages[0] === this.allLanguagesGroup)
+      ) {
         videoLanguages = null // null means "All"
-      } else if (videoLanguages.length > 20) {
-        this.notifier.error('Too many languages are enabled. Please enable them all or stay below 20 enabled languages.')
-        return
-      } else if (videoLanguages.length === 0) {
-        this.notifier.error('You need to enabled at least 1 video language.')
-        return
       }
     }
 
