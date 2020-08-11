@@ -2,6 +2,7 @@ import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
 import { switchMap } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
+import { Router } from '@angular/router'
 import { AuthService, AuthStatus, AuthUser, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
@@ -43,8 +44,9 @@ export class MenuComponent implements OnInit {
     private serverService: ServerService,
     private redirectService: RedirectService,
     private hotkeysService: HotkeysService,
-    private screenService: ScreenService
-    ) { }
+    private screenService: ScreenService,
+    private router: Router
+  ) { }
 
   get isInMobileView () {
     return this.screenService.isInMobileView()
@@ -190,6 +192,22 @@ export class MenuComponent implements OnInit {
     if (localeId === '_unknown') return $localize`Unknown`
 
     return this.languages.find(lang => lang.id === localeId).label
+  }
+
+  onSameUrlRestoreScrollPosition (link: HTMLAnchorElement) {
+    const linkURL = link.getAttribute('href')
+
+    // On same url without fragment restore top scroll position
+    if (!link.getAttribute('fragment') && this.router.url.includes(linkURL)) {
+      window.scrollTo(0, 0)
+      return
+    }
+
+    // On same url with fragment restore anchor scroll position
+    if (this.router.url === linkURL) {
+      const anchor = document.getElementById(link.getAttribute('fragment'))
+      anchor.scrollIntoView(true)
+    }
   }
 
   private buildUserLanguages () {
