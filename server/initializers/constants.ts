@@ -953,7 +953,9 @@ function buildLanguages () {
     jsl: true, // Japanese sign language
     sfs: true, // South African sign language
     swl: true, // Swedish sign language
-    rsl: true, // Russian sign language: true
+    rsl: true, // Russian sign language
+
+    kab: true, // Kabyle
 
     epo: true, // Esperanto
     tlh: true, // Klingon
