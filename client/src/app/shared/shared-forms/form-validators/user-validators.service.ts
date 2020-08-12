@@ -1,7 +1,6 @@
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Injectable } from '@angular/core'
 import { Validators } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.service'
-import { Injectable } from '@angular/core'
 
 @Injectable()
 export class UserValidatorsService {
@@ -20,7 +19,7 @@ export class UserValidatorsService {
 
   readonly USER_BAN_REASON: BuildFormValidator
 
-  constructor (private i18n: I18n) {
+  constructor () {
 
     this.USER_USERNAME = {
       VALIDATORS: [
@@ -30,10 +29,10 @@ export class UserValidatorsService {
         Validators.pattern(/^[a-z0-9][a-z0-9._]*$/)
       ],
       MESSAGES: {
-        'required': this.i18n('Username is required.'),
-        'minlength': this.i18n('Username must be at least 1 character long.'),
-        'maxlength': this.i18n('Username cannot be more than 50 characters long.'),
-        'pattern': this.i18n('Username should be lowercase alphanumeric; dots and underscores are allowed.')
+        'required': $localize`Username is required.`,
+        'minlength': $localize`Username must be at least 1 character long.`,
+        'maxlength': $localize`Username cannot be more than 50 characters long.`,
+        'pattern': $localize`Username should be lowercase alphanumeric; dots and underscores are allowed.`
       }
     }
 
@@ -45,18 +44,18 @@ export class UserValidatorsService {
         Validators.pattern(/^[a-z0-9][a-z0-9._]*$/)
       ],
       MESSAGES: {
-        'required': this.i18n('Channel name is required.'),
-        'minlength': this.i18n('Channel name must be at least 1 character long.'),
-        'maxlength': this.i18n('Channel name cannot be more than 50 characters long.'),
-        'pattern': this.i18n('Channel name should be lowercase alphanumeric; dots and underscores are allowed.')
+        'required': $localize`Channel name is required.`,
+        'minlength': $localize`Channel name must be at least 1 character long.`,
+        'maxlength': $localize`Channel name cannot be more than 50 characters long.`,
+        'pattern': $localize`Channel name should be lowercase alphanumeric; dots and underscores are allowed.`
       }
     }
 
     this.USER_EMAIL = {
       VALIDATORS: [ Validators.required, Validators.email ],
       MESSAGES: {
-        'required': this.i18n('Email is required.'),
-        'email': this.i18n('Email must be valid.')
+        'required': $localize`Email is required.`,
+        'email': $localize`Email must be valid.`
       }
     }
 
@@ -67,9 +66,9 @@ export class UserValidatorsService {
         Validators.maxLength(255)
       ],
       MESSAGES: {
-        'required': this.i18n('Password is required.'),
-        'minlength': this.i18n('Password must be at least 6 characters long.'),
-        'maxlength': this.i18n('Password cannot be more than 255 characters long.')
+        'required': $localize`Password is required.`,
+        'minlength': $localize`Password must be at least 6 characters long.`,
+        'maxlength': $localize`Password cannot be more than 255 characters long.`
       }
     }
 
@@ -79,37 +78,37 @@ export class UserValidatorsService {
         Validators.maxLength(255)
       ],
       MESSAGES: {
-        'minlength': this.i18n('Password must be at least 6 characters long.'),
-        'maxlength': this.i18n('Password cannot be more than 255 characters long.')
+        'minlength': $localize`Password must be at least 6 characters long.`,
+        'maxlength': $localize`Password cannot be more than 255 characters long.`
       }
     }
 
     this.USER_CONFIRM_PASSWORD = {
       VALIDATORS: [],
       MESSAGES: {
-        'matchPassword': this.i18n('The new password and the confirmed password do not correspond.')
+        'matchPassword': $localize`The new password and the confirmed password do not correspond.`
       }
     }
 
     this.USER_VIDEO_QUOTA = {
       VALIDATORS: [ Validators.required, Validators.min(-1) ],
       MESSAGES: {
-        'required': this.i18n('Video quota is required.'),
-        'min': this.i18n('Quota must be greater than -1.')
+        'required': $localize`Video quota is required.`,
+        'min': $localize`Quota must be greater than -1.`
       }
     }
     this.USER_VIDEO_QUOTA_DAILY = {
       VALIDATORS: [ Validators.required, Validators.min(-1) ],
       MESSAGES: {
-        'required': this.i18n('Daily upload limit is required.'),
-        'min': this.i18n('Daily upload limit must be greater than -1.')
+        'required': $localize`Daily upload limit is required.`,
+        'min': $localize`Daily upload limit must be greater than -1.`
       }
     }
 
     this.USER_ROLE = {
       VALIDATORS: [ Validators.required ],
       MESSAGES: {
-        'required': this.i18n('User role is required.')
+        'required': $localize`User role is required.`
       }
     }
 
@@ -121,8 +120,8 @@ export class UserValidatorsService {
         Validators.maxLength(1000)
       ],
       MESSAGES: {
-        'minlength': this.i18n('Description must be at least 3 characters long.'),
-        'maxlength': this.i18n('Description cannot be more than 1000 characters long.')
+        'minlength': $localize`Description must be at least 3 characters long.`,
+        'maxlength': $localize`Description cannot be more than 1000 characters long.`
       }
     }
 
@@ -131,7 +130,7 @@ export class UserValidatorsService {
         Validators.requiredTrue
       ],
       MESSAGES: {
-        'required': this.i18n('You must agree with the instance terms in order to register on it.')
+        'required': $localize`You must agree with the instance terms in order to register on it.`
       }
     }
 
@@ -141,8 +140,8 @@ export class UserValidatorsService {
         Validators.maxLength(250)
       ],
       MESSAGES: {
-        'minlength': this.i18n('Ban reason must be at least 3 characters long.'),
-        'maxlength': this.i18n('Ban reason cannot be more than 250 characters long.')
+        'minlength': $localize`Ban reason must be at least 3 characters long.`,
+        'maxlength': $localize`Ban reason cannot be more than 250 characters long.`
       }
     }
   }
@@ -154,9 +153,9 @@ export class UserValidatorsService {
         Validators.maxLength(120)
       ],
       MESSAGES: {
-        'required': this.i18n('Display name is required.'),
-        'minlength': this.i18n('Display name must be at least 1 character long.'),
-        'maxlength': this.i18n('Display name cannot be more than 50 characters long.')
+        'required': $localize`Display name is required.`,
+        'minlength': $localize`Display name must be at least 1 character long.`,
+        'maxlength': $localize`Display name cannot be more than 50 characters long.`
       }
     }
 

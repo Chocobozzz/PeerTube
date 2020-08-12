@@ -1,30 +1,26 @@
-import { Injectable } from '@angular/core'
 import { MessageService } from 'primeng/api'
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Injectable } from '@angular/core'
 
 @Injectable()
 export class Notifier {
   readonly TIMEOUT = 5000
 
-  constructor (
-    private i18n: I18n,
-    private messageService: MessageService) {
-  }
+  constructor (private messageService: MessageService) { }
 
   info (text: string, title?: string, timeout?: number) {
-    if (!title) title = this.i18n('Info')
+    if (!title) title = $localize`Info`
 
     return this.notify('info', text, title, timeout)
   }
 
   error (text: string, title?: string, timeout?: number) {
-    if (!title) title = this.i18n('Error')
+    if (!title) title = $localize`Error`
 
     return this.notify('error', text, title, timeout)
   }
 
   success (text: string, title?: string, timeout?: number) {
-    if (!title) title = this.i18n('Success')
+    if (!title) title = $localize`Success`
 
     return this.notify('success', text, title, timeout)
   }

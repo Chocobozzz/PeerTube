@@ -7,7 +7,6 @@ import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { BytesPipe, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
 
@@ -59,9 +58,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
     private userService: UserService,
-    private router: Router,
-    private i18n: I18n
-  ) {
+    private router: Router
+    ) {
     super()
   }
 
@@ -88,10 +86,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
     if (this.videoUploaded === true) {
       // FIXME: cannot concatenate strings inside i18n service :/
-      text = this.i18n('Your video was uploaded to your account and is private.') + ' ' +
-        this.i18n('But associated data (tags, description...) will be lost, are you sure you want to leave this page?')
+      text = $localize`Your video was uploaded to your account and is private.` + ' ' +
+        $localize`But associated data (tags, description...) will be lost, are you sure you want to leave this page?`
     } else {
-      text = this.i18n('Your video is not uploaded yet, are you sure you want to leave this page?')
+      text = $localize`Your video is not uploaded yet, are you sure you want to leave this page?`
     }
 
     return {
@@ -111,9 +109,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   getAudioUploadLabel () {
     const videofile = this.getVideoFile()
-    if (!videofile) return this.i18n('Upload')
+    if (!videofile) return $localize`Upload`
 
-    return this.i18n('Upload {{videofileName}}', { videofileName: videofile.name })
+    return $localize`Upload ${videofile.name}`
   }
 
   fileChange () {
@@ -130,7 +128,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
       this.firstStepError.emit()
 
-      this.notifier.info(this.i18n('Upload cancelled'))
+      this.notifier.info($localize`Upload cancelled`)
     }
   }
 
@@ -242,7 +240,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.isUpdatingVideo = false
             this.isUploadingVideo = false
 
-            this.notifier.success(this.i18n('Video published.'))
+            this.notifier.success($localize`Video published.`)
             this.router.navigate([ '/videos/watch', video.uuid ])
           },
 
@@ -260,14 +258,12 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     // Check global user quota
     const videoQuota = this.authService.getUser().videoQuota
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
-      const msg = this.i18n(
-        'Your video quota is exceeded with this video (video size: {{videoSize}}, used: {{videoQuotaUsed}}, quota: {{videoQuota}})',
-        {
-          videoSize: bytePipes.transform(videofile.size, 0),
-          videoQuotaUsed: bytePipes.transform(this.userVideoQuotaUsed, 0),
-          videoQuota: bytePipes.transform(videoQuota, 0)
-        }
-      )
+      const videoSizeBytes = bytePipes.transform(videofile.size, 0)
+      const videoQuotaUsedBytes = bytePipes.transform(this.userVideoQuotaUsed, 0)
+      const videoQuotaBytes = bytePipes.transform(videoQuota, 0)
+
+      const msg = $localize`Your video quota is exceeded with this video (
+video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuotaBytes})`
       this.notifier.error(msg)
 
       return false
@@ -282,14 +278,12 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     // Check daily user quota
     const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
     if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
-      const msg = this.i18n(
-        'Your daily video quota is exceeded with this video (video size: {{videoSize}}, used: {{quotaUsedDaily}}, quota: {{quotaDaily}})',
-        {
-          videoSize: bytePipes.transform(videofile.size, 0),
-          quotaUsedDaily: bytePipes.transform(this.userVideoQuotaUsedDaily, 0),
-          quotaDaily: bytePipes.transform(videoQuotaDaily, 0)
-        }
-      )
+      const videoSizeBytes = bytePipes.transform(videofile.size, 0)
+      const quotaUsedDailyBytes = bytePipes.transform(this.userVideoQuotaUsedDaily, 0)
+      const quotaDailyBytes = bytePipes.transform(videoQuotaDaily, 0)
+
+      const msg = $localize`Your daily video quota is exceeded with this video (
+video size: ${videoSizeBytes}, used: ${quotaUsedDailyBytes}, quota: ${quotaDailyBytes})`
       this.notifier.error(msg)
 
       return false

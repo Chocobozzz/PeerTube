@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { ScreenService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Video } from '../shared-main'
 
 @Component({
@@ -25,12 +24,9 @@ export class VideoThumbnailComponent {
   addToWatchLaterText: string
   addedToWatchLaterText: string
 
-  constructor (
-    private screenService: ScreenService,
-    private i18n: I18n
-  ) {
-    this.addToWatchLaterText = this.i18n('Add to watch later')
-    this.addedToWatchLaterText = this.i18n('Remove from watch later')
+  constructor (private screenService: ScreenService) {
+    this.addToWatchLaterText = $localize`Add to watch later`
+    this.addedToWatchLaterText = $localize`Remove from watch later`
   }
 
   getImageUrl () {

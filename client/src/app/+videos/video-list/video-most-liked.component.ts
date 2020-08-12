@@ -5,7 +5,6 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoSortField } from '@shared/models'
 
 @Component({
@@ -20,7 +19,6 @@ export class VideoMostLikedComponent extends AbstractVideoList implements OnInit
   useUserVideoPreferences = true
 
   constructor (
-    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -40,8 +38,8 @@ export class VideoMostLikedComponent extends AbstractVideoList implements OnInit
 
     this.generateSyndicationList()
 
-    this.titlePage = this.i18n('Most liked videos')
-    this.titleTooltip = this.i18n('Videos that have the higher number of likes.')
+    this.titlePage = $localize`Most liked videos`
+    this.titleTooltip = $localize`Videos that have the higher number of likes.`
   }
 
   getVideosObservable (page: number) {

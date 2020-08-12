@@ -2,7 +2,6 @@ import { SortMeta } from 'primeng/api'
 import { Directive, OnInit, ViewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { BatchDomainsModalComponent } from '@app/shared/shared-moderation/batch-domains-modal.component'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerBlock } from '@shared/models'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
@@ -21,8 +20,7 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
 
   constructor (
     protected notifier: Notifier,
-    protected blocklistService: BlocklistService,
-    protected i18n: I18n
+    protected blocklistService: BlocklistService
   ) {
     super()
   }
@@ -44,8 +42,8 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
       () => {
         this.notifier.success(
           this.mode === BlocklistComponentType.Account
-            ? this.i18n('Instance {{host}} unmuted.', { host })
-            : this.i18n('Instance {{host}} unmuted by your instance.', { host })
+            ? $localize`Instance ${host} unmuted.`
+            : $localize`Instance ${host} unmuted by your instance.`
         )
 
         this.loadData()
@@ -67,8 +65,8 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
         () => {
           this.notifier.success(
             this.mode === BlocklistComponentType.Account
-              ? this.i18n('Instance {{domain}} muted.', { domain })
-              : this.i18n('Instance {{domain}} muted by your instance.', { domain })
+              ? $localize`Instance ${domain} muted.`
+              : $localize`Instance ${domain} muted by your instance.`
           )
 
           this.loadData()

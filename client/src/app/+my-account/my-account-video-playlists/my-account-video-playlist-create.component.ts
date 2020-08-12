@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
+import { populateAsyncUserVideoChannels } from '@app/helpers'
 import { FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/shared-forms'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoPlaylistCreate } from '@shared/models/videos/playlist/video-playlist-create.model'
 import { VideoPlaylistPrivacy } from '@shared/models/videos/playlist/video-playlist-privacy.model'
 import { MyAccountVideoPlaylistEdit } from './my-account-video-playlist-edit'
-import { populateAsyncUserVideoChannels } from '@app/helpers'
 
 @Component({
   selector: 'my-account-video-playlist-create',
@@ -24,9 +23,8 @@ export class MyAccountVideoPlaylistCreateComponent extends MyAccountVideoPlaylis
     private notifier: Notifier,
     private router: Router,
     private videoPlaylistService: VideoPlaylistService,
-    private serverService: ServerService,
-    private i18n: I18n
-  ) {
+    private serverService: ServerService
+    ) {
     super()
   }
 
@@ -70,9 +68,7 @@ export class MyAccountVideoPlaylistCreateComponent extends MyAccountVideoPlaylis
 
     this.videoPlaylistService.createVideoPlaylist(videoPlaylistCreate).subscribe(
       () => {
-        this.notifier.success(
-          this.i18n('Playlist {{playlistName}} created.', { playlistName: videoPlaylistCreate.displayName })
-        )
+        this.notifier.success($localize`Playlist ${videoPlaylistCreate.displayName} created.`)
         this.router.navigate([ '/my-account', 'video-playlists' ])
       },
 
@@ -85,6 +81,6 @@ export class MyAccountVideoPlaylistCreateComponent extends MyAccountVideoPlaylis
   }
 
   getFormButtonTitle () {
-    return this.i18n('Create')
+    return $localize`Create`
   }
 }

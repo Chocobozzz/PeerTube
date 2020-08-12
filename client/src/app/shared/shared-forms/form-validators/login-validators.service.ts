@@ -1,6 +1,5 @@
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Validators } from '@angular/forms'
 import { Injectable } from '@angular/core'
+import { Validators } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.service'
 
 @Injectable()
@@ -8,13 +7,13 @@ export class LoginValidatorsService {
   readonly LOGIN_USERNAME: BuildFormValidator
   readonly LOGIN_PASSWORD: BuildFormValidator
 
-  constructor (private i18n: I18n) {
+  constructor () {
     this.LOGIN_USERNAME = {
       VALIDATORS: [
         Validators.required
       ],
       MESSAGES: {
-        'required': this.i18n('Username is required.')
+        'required': $localize`Username is required.`
       }
     }
 
@@ -23,7 +22,7 @@ export class LoginValidatorsService {
         Validators.required
       ],
       MESSAGES: {
-        'required': this.i18n('Password is required.')
+        'required': $localize`Password is required.`
       }
     }
   }

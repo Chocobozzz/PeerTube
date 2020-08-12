@@ -5,7 +5,6 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoSortField } from '@shared/models'
 
 @Component({
@@ -21,7 +20,6 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   useUserVideoPreferences = true
 
   constructor (
-    protected i18n: I18n,
     protected route: ActivatedRoute,
     protected serverService: ServerService,
     protected router: Router,
@@ -35,7 +33,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   ) {
     super()
 
-    this.titlePage = i18n('Recently added')
+    this.titlePage = $localize`Recently added`
   }
 
   ngOnInit () {

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Video } from '../video/video.model'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'avatar-channel',
@@ -15,19 +14,9 @@ export class AvatarComponent implements OnInit {
   channelLinkTitle = ''
   accountLinkTitle = ''
 
-  constructor (
-    private i18n: I18n
-  ) {}
-
   ngOnInit () {
-    this.channelLinkTitle = this.i18n(
-      '{{name}} (channel page)',
-      { name: this.video.channel.name, handle: this.video.byVideoChannel }
-    )
-    this.accountLinkTitle = this.i18n(
-      '{{name}} (account page)',
-      { name: this.video.account.name, handle: this.video.byAccount }
-    )
+    this.channelLinkTitle = $localize`${this.video.account.name} (channel page)`
+    this.accountLinkTitle = $localize`${this.video.byAccount} (account page)`
   }
 
   isChannelAvatarNull () {

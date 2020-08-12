@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { compareSemVer } from '@shared/core-utils/miscs/miscs'
 import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { PluginType } from '@shared/models/plugins/plugin.type'
@@ -37,7 +36,6 @@ export class PluginListInstalledComponent implements OnInit {
   onDataSubject = new Subject<any[]>()
 
   constructor (
-    private i18n: I18n,
     private pluginService: PluginService,
     private pluginApiService: PluginApiService,
     private notifier: Notifier,
@@ -88,10 +86,10 @@ export class PluginListInstalledComponent implements OnInit {
 
   getNoResultMessage () {
     if (this.pluginType === PluginType.PLUGIN) {
-      return this.i18n("You don't have plugins installed yet.")
+      return $localize`You don't have plugins installed yet.`
     }
 
-    return this.i18n("You don't have themes installed yet.")
+    return $localize`You don't have themes installed yet.`
   }
 
   isUpdateAvailable (plugin: PeerTubePlugin) {
@@ -99,7 +97,7 @@ export class PluginListInstalledComponent implements OnInit {
   }
 
   getUpdateLabel (plugin: PeerTubePlugin) {
-    return this.i18n('Update to {{version}}', { version: plugin.latestVersion })
+    return $localize`Update to ${plugin.latestVersion}`
   }
 
   isUpdating (plugin: PeerTubePlugin) {
@@ -108,15 +106,15 @@ export class PluginListInstalledComponent implements OnInit {
 
   async uninstall (plugin: PeerTubePlugin) {
     const res = await this.confirmService.confirm(
-      this.i18n('Do you really want to uninstall {{pluginName}}?', { pluginName: plugin.name }),
-      this.i18n('Uninstall')
+      $localize`Do you really want to uninstall ${plugin.name}?`,
+      $localize`Uninstall`
     )
     if (res === false) return
 
     this.pluginApiService.uninstall(plugin.name, plugin.type)
       .subscribe(
         () => {
-          this.notifier.success(this.i18n('{{pluginName}} uninstalled.', { pluginName: plugin.name }))
+          this.notifier.success($localize`${plugin.name} uninstalled.`)
 
           this.plugins = this.plugins.filter(p => p.name !== plugin.name)
           this.pagination.totalItems--
@@ -138,7 +136,7 @@ export class PluginListInstalledComponent implements OnInit {
           res => {
             this.updating[updatingKey] = false
 
-            this.notifier.success(this.i18n('{{pluginName}} updated.', { pluginName: plugin.name }))
+            this.notifier.success($localize`${plugin.name} updated.`)
 
             Object.assign(plugin, res)
           },

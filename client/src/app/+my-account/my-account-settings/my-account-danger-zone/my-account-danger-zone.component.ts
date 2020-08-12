@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, RedirectService, User, UserService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-danger-zone',
@@ -15,23 +14,22 @@ export class MyAccountDangerZoneComponent {
     private notifier: Notifier,
     private userService: UserService,
     private confirmService: ConfirmService,
-    private redirectService: RedirectService,
-    private i18n: I18n
-  ) { }
+    private redirectService: RedirectService
+    ) { }
 
   async deleteMe () {
     const res = await this.confirmService.confirmWithInput(
-      this.i18n('Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.'),
-      this.i18n('Type your username to confirm'),
+      $localize`Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.`,
+      $localize`Type your username to confirm`,
       this.user.username,
-      this.i18n('Delete your account'),
-      this.i18n('Delete my account')
+      $localize`Delete your account`,
+      $localize`Delete my account`
     )
     if (res === false) return
 
     this.userService.deleteMe().subscribe(
       () => {
-        this.notifier.success(this.i18n('Your account is deleted.'))
+        this.notifier.success($localize`Your account is deleted.`)
 
         this.authService.logout()
         this.redirectService.redirectToHomepage()

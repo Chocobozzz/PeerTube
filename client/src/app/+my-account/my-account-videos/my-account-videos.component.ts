@@ -7,7 +7,6 @@ import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign } from '@app/helpers'
 import { Video, VideoService } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions, OwnerDisplayType, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './video-change-ownership/video-change-ownership.component'
 
@@ -50,11 +49,10 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
     protected authService: AuthService,
     protected notifier: Notifier,
     protected screenService: ScreenService,
-    private i18n: I18n,
     private confirmService: ConfirmService,
     private videoService: VideoService
   ) {
-    this.titlePage = this.i18n('My videos')
+    this.titlePage = $localize`My videos`
   }
 
   ngOnInit () {
@@ -97,8 +95,8 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
                                     .map(k => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
-      this.i18n('Do you really want to delete {{deleteLength}} videos?', { deleteLength: toDeleteVideosIds.length }),
-      this.i18n('Delete')
+      $localize`Do you really want to delete ${toDeleteVideosIds.length} videos?`,
+      $localize`Delete`
     )
     if (res === false) return
 
@@ -114,8 +112,7 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
       .pipe(toArray())
       .subscribe(
         () => {
-          this.notifier.success(this.i18n('{{deleteLength}} videos deleted.', { deleteLength: toDeleteVideosIds.length }))
-
+          this.notifier.success($localize`${toDeleteVideosIds.length} videos deleted.`)
           this.selection = {}
         },
 
@@ -125,15 +122,15 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
 
   async deleteVideo (video: Video) {
     const res = await this.confirmService.confirm(
-      this.i18n('Do you really want to delete {{videoName}}?', { videoName: video.name }),
-      this.i18n('Delete')
+      $localize`Do you really want to delete ${video.name}?`,
+      $localize`Delete`
     )
     if (res === false) return
 
     this.videoService.removeVideo(video.id)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Video {{videoName}} deleted.', { videoName: video.name }))
+            this.notifier.success($localize`Video ${video.name} deleted.`)
             this.removeVideoFromArray(video.id)
           },
 

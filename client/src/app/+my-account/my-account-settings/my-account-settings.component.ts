@@ -1,7 +1,6 @@
 import { ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-settings',
@@ -17,9 +16,8 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
     private viewportScroller: ViewportScroller,
     private userService: UserService,
     private authService: AuthService,
-    private notifier: Notifier,
-    private i18n: I18n
-  ) {}
+    private notifier: Notifier
+    ) {}
 
   get userInformationLoaded () {
     return this.authService.userInformationLoaded
@@ -41,7 +39,7 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
     this.userService.changeAvatar(formData)
       .subscribe(
         data => {
-          this.notifier.success(this.i18n('Avatar changed.'))
+          this.notifier.success($localize`Avatar changed.`)
 
           this.user.updateAccountAvatar(data.avatar)
         },

@@ -3,7 +3,6 @@ import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
 import { FormValidatorService, VideoChannelValidatorsService } from '@app/shared/shared-forms'
 import { VideoChannelService } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoChannelCreate } from '@shared/models'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
 
@@ -21,9 +20,8 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
     private videoChannelValidatorsService: VideoChannelValidatorsService,
     private notifier: Notifier,
     private router: Router,
-    private videoChannelService: VideoChannelService,
-    private i18n: I18n
-  ) {
+    private videoChannelService: VideoChannelService
+    ) {
     super()
   }
 
@@ -55,15 +53,13 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
       () => {
         this.authService.refreshUserInformation()
 
-        this.notifier.success(
-          this.i18n('Video channel {{videoChannelName}} created.', { videoChannelName: videoChannelCreate.displayName })
-        )
+        this.notifier.success($localize`Video channel ${videoChannelCreate.displayName} created.`)
         this.router.navigate([ '/my-account', 'video-channels' ])
       },
 
       err => {
         if (err.status === 409) {
-          this.error = this.i18n('This name already exists on this instance.')
+          this.error = $localize`This name already exists on this instance.`
           return
         }
 
@@ -77,6 +73,6 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
   }
 
   getFormButtonTitle () {
-    return this.i18n('Create')
+    return $localize`Create`
   }
 }

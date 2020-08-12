@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { Notifier } from '@app/core'
 import { RedundancyService } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-redundancy-checkbox',
@@ -14,17 +13,16 @@ export class RedundancyCheckboxComponent {
 
   constructor (
     private notifier: Notifier,
-    private redundancyService: RedundancyService,
-    private i18n: I18n
-  ) { }
+    private redundancyService: RedundancyService
+    ) { }
 
   updateRedundancyState () {
     this.redundancyService.updateRedundancy(this.host, this.redundancyAllowed)
         .subscribe(
           () => {
-            const stateLabel = this.redundancyAllowed ? this.i18n('enabled') : this.i18n('disabled')
+            const stateLabel = this.redundancyAllowed ? $localize`enabled` : $localize`disabled`
 
-            this.notifier.success(this.i18n('Redundancy for {{host}} is {{stateLabel}}', { host: this.host, stateLabel }))
+            this.notifier.success($localize`Redundancy for ${this.host} is ${stateLabel}`)
           },
 
           err => this.notifier.error(err.message)

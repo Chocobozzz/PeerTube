@@ -5,7 +5,6 @@ import { AuthService } from '@app/core/auth'
 import { Account, Actor, DropdownAction, Video } from '@app/shared/shared-main'
 import { CommentReportComponent } from '@app/shared/shared-moderation/report-modals/comment-report.component'
 import { VideoComment, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User, UserRight } from '@shared/models'
 
 @Component({
@@ -39,7 +38,6 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   commentUser: User
 
   constructor (
-    private i18n: I18n,
     private markdownService: MarkdownService,
     private authService: AuthService,
     private userService: UserService,
@@ -138,7 +136,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     if (this.isUserLoggedIn() && this.comment.isDeleted === false && this.authService.getUser().account.id !== this.comment.account.id) {
       this.prependModerationActions = [
         {
-          label: this.i18n('Report comment'),
+          label: $localize`Report comment`,
           handler: () => this.showReportModal()
         }
       ]

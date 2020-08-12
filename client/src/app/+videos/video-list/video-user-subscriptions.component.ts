@@ -3,10 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
-import { VideoService } from '@app/shared/shared-main'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
 import { AbstractVideoList, OwnerDisplayType } from '@app/shared/shared-video-miniature'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoSortField } from '@shared/models'
 
 @Component({
@@ -21,7 +19,6 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
   groupByDate = true
 
   constructor (
-    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -31,15 +28,14 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
     private userSubscription: UserSubscriptionService,
-    private videoService: VideoService,
     private hooks: HooksService
   ) {
     super()
 
-    this.titlePage = i18n('Videos from your subscriptions')
+    this.titlePage = $localize`Videos from your subscriptions`
     this.actions.push({
       routerLink: '/my-account/subscriptions',
-      label: i18n('Subscriptions'),
+      label: $localize`Subscriptions`,
       iconName: 'cog'
     })
   }

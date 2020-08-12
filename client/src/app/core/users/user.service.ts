@@ -5,7 +5,6 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService } from '@app/core/auth'
 import { BytesPipe } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import {
   Avatar,
@@ -38,9 +37,8 @@ export class UserService {
     private restExtractor: RestExtractor,
     private restService: RestService,
     private localStorageService: LocalStorageService,
-    private sessionStorageService: SessionStorageService,
-    private i18n: I18n
-  ) { }
+    private sessionStorageService: SessionStorageService
+    ) { }
 
   changePassword (currentPassword: string, newPassword: string) {
     const url = UserService.BASE_USERS_URL + 'me'
@@ -383,9 +381,9 @@ export class UserService {
     }
 
     const roleLabels: { [ id in UserRole ]: string } = {
-      [UserRole.USER]: this.i18n('User'),
-      [UserRole.ADMINISTRATOR]: this.i18n('Administrator'),
-      [UserRole.MODERATOR]: this.i18n('Moderator')
+      [UserRole.USER]: $localize`User`,
+      [UserRole.ADMINISTRATOR]: $localize`Administrator`,
+      [UserRole.MODERATOR]: $localize`Moderator`
     }
 
     return Object.assign(user, {

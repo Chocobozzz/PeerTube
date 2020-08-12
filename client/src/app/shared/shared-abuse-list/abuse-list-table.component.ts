@@ -1,16 +1,15 @@
 import * as debug from 'debug'
 import truncate from 'lodash-es/truncate'
 import { SortMeta } from 'primeng/api'
-import { buildVideoOrPlaylistEmbed, buildVideoLink } from 'src/assets/player/utils'
+import { buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
-import { AfterViewInit, Component, OnInit, ViewChild, Input } from '@angular/core'
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoCommentService } from '@app/shared/shared-video-comment'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AbuseState, AdminAbuse } from '@shared/models'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
@@ -45,7 +44,6 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
     private videoService: VideoService,
     private videoBlocklistService: VideoBlockService,
     private confirmService: ConfirmService,
-    private i18n: I18n,
     private markdownRenderer: MarkdownService,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
@@ -157,12 +155,12 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   }
 
   async removeAbuse (abuse: AdminAbuse) {
-    const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this abuse report?'), this.i18n('Delete'))
+    const res = await this.confirmService.confirm($localize`Do you really want to delete this abuse report?`, $localize`Delete`)
     if (res === false) return
 
     this.abuseService.removeAbuse(abuse).subscribe(
       () => {
-        this.notifier.success(this.i18n('Abuse deleted.'))
+        this.notifier.success($localize`Abuse deleted.`)
         this.loadData()
       },
 
@@ -238,7 +236,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
 
             if (abuse.comment) {
               if (abuse.comment.deleted) {
-                abuse.truncatedCommentHtml = abuse.commentHtml = this.i18n('Deleted comment')
+                abuse.truncatedCommentHtml = abuse.commentHtml = $localize`Deleted comment`
               } else {
                 const truncated = truncate(abuse.comment.text, { length: 100 })
                 abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML(truncated, true)
@@ -267,38 +265,38 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {
     return [
       {
-        label: this.i18n('Internal actions'),
+        label: $localize`Internal actions`,
         isHeader: true
       },
       {
         label: this.isAdminView()
-          ? this.i18n('Messages with reporter')
-          : this.i18n('Messages with moderators'),
+          ? $localize`Messages with reporter`
+          : $localize`Messages with moderators`,
         handler: abuse => this.openAbuseMessagesModal(abuse),
         isDisplayed: abuse => this.isLocalAbuse(abuse)
       },
       {
-        label: this.i18n('Update internal note'),
+        label: $localize`Update internal note`,
         handler: abuse => this.openModerationCommentModal(abuse),
         isDisplayed: abuse => this.isAdminView() && !!abuse.moderationComment
       },
       {
-        label: this.i18n('Mark as accepted'),
+        label: $localize`Mark as accepted`,
         handler: abuse => this.updateAbuseState(abuse, AbuseState.ACCEPTED),
         isDisplayed: abuse => this.isAdminView() && !this.isAbuseAccepted(abuse)
       },
       {
-        label: this.i18n('Mark as rejected'),
+        label: $localize`Mark as rejected`,
         handler: abuse => this.updateAbuseState(abuse, AbuseState.REJECTED),
         isDisplayed: abuse => this.isAdminView() && !this.isAbuseRejected(abuse)
       },
       {
-        label: this.i18n('Add internal note'),
+        label: $localize`Add internal note`,
         handler: abuse => this.openModerationCommentModal(abuse),
         isDisplayed: abuse => this.isAdminView() && !abuse.moderationComment
       },
       {
-        label: this.i18n('Delete report'),
+        label: $localize`Delete report`,
         handler: abuse => this.isAdminView() && this.removeAbuse(abuse)
       }
     ]
@@ -309,19 +307,19 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
 
     return [
       {
-        label: this.i18n('Actions for the flagged account'),
+        label: $localize`Actions for the flagged account`,
         isHeader: true,
         isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video
       },
 
       {
-        label: this.i18n('Mute account'),
+        label: $localize`Mute account`,
         isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
         handler: abuse => this.muteAccountHelper(abuse.flaggedAccount)
       },
 
       {
-        label: this.i18n('Mute server account'),
+        label: $localize`Mute server account`,
         isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
         handler: abuse => this.muteServerHelper(abuse.flaggedAccount.host)
       }
@@ -333,19 +331,19 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
 
     return [
       {
-        label: this.i18n('Actions for the reporter'),
+        label: $localize`Actions for the reporter`,
         isHeader: true,
         isDisplayed: abuse => !!abuse.reporterAccount
       },
 
       {
-        label: this.i18n('Mute reporter'),
+        label: $localize`Mute reporter`,
         isDisplayed: abuse => !!abuse.reporterAccount,
         handler: abuse => this.muteAccountHelper(abuse.reporterAccount)
       },
 
       {
-        label: this.i18n('Mute server'),
+        label: $localize`Mute server`,
         isDisplayed: abuse => abuse.reporterAccount && !abuse.reporterAccount.userId,
         handler: abuse => this.muteServerHelper(abuse.reporterAccount.host)
       }
@@ -357,18 +355,18 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
 
     return [
       {
-        label: this.i18n('Actions for the video'),
+        label: $localize`Actions for the video`,
         isHeader: true,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted
       },
       {
-        label: this.i18n('Block video'),
+        label: $localize`Block video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
         handler: abuse => {
           this.videoBlocklistService.blockVideo(abuse.video.id, undefined, true)
             .subscribe(
               () => {
-                this.notifier.success(this.i18n('Video blocked.'))
+                this.notifier.success($localize`Video blocked.`)
 
                 this.updateAbuseState(abuse, AbuseState.ACCEPTED)
               },
@@ -378,13 +376,13 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
         }
       },
       {
-        label: this.i18n('Unblock video'),
+        label: $localize`Unblock video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted,
         handler: abuse => {
           this.videoBlocklistService.unblockVideo(abuse.video.id)
             .subscribe(
               () => {
-                this.notifier.success(this.i18n('Video unblocked.'))
+                this.notifier.success($localize`Video unblocked.`)
 
                 this.updateAbuseState(abuse, AbuseState.ACCEPTED)
               },
@@ -394,19 +392,19 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
         }
       },
       {
-        label: this.i18n('Delete video'),
+        label: $localize`Delete video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted,
         handler: async abuse => {
           const res = await this.confirmService.confirm(
-            this.i18n('Do you really want to delete this video?'),
-            this.i18n('Delete')
+            $localize`Do you really want to delete this video?`,
+            $localize`Delete`
           )
           if (res === false) return
 
           this.videoService.removeVideo(abuse.video.id)
             .subscribe(
               () => {
-                this.notifier.success(this.i18n('Video deleted.'))
+                this.notifier.success($localize`Video deleted.`)
 
                 this.updateAbuseState(abuse, AbuseState.ACCEPTED)
               },
@@ -423,25 +421,25 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
 
     return [
       {
-        label: this.i18n('Actions for the comment'),
+        label: $localize`Actions for the comment`,
         isHeader: true,
         isDisplayed: abuse => abuse.comment && !abuse.comment.deleted
       },
 
       {
-        label: this.i18n('Delete comment'),
+        label: $localize`Delete comment`,
         isDisplayed: abuse => abuse.comment && !abuse.comment.deleted,
         handler: async abuse => {
           const res = await this.confirmService.confirm(
-            this.i18n('Do you really want to delete this comment?'),
-            this.i18n('Delete')
+            $localize`Do you really want to delete this comment?`,
+            $localize`Delete`
           )
           if (res === false) return
 
           this.commentService.deleteVideoComment(abuse.comment.video.id, abuse.comment.id)
             .subscribe(
               () => {
-                this.notifier.success(this.i18n('Comment deleted.'))
+                this.notifier.success($localize`Comment deleted.`)
 
                 this.updateAbuseState(abuse, AbuseState.ACCEPTED)
               },
@@ -457,10 +455,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
     this.blocklistService.blockAccountByInstance(account)
       .subscribe(
         () => {
-          this.notifier.success(
-            this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost })
-          )
-
+          this.notifier.success($localize`Account ${account.nameWithHost} muted by the instance.`)
           account.mutedByInstance = true
         },
 
@@ -472,9 +467,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
     this.blocklistService.blockServerByInstance(host)
       .subscribe(
         () => {
-          this.notifier.success(
-            this.i18n('Server {{host}} muted by the instance.', { host: host })
-          )
+          this.notifier.success($localize`Server ${host} muted by the instance.`)
         },
 
         err => this.notifier.error(err.message)

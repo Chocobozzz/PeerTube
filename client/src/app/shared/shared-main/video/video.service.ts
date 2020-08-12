@@ -4,7 +4,6 @@ import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import {
   FeedFormat,
   NSFWPolicyType,
@@ -15,11 +14,11 @@ import {
   Video as VideoServerModel,
   VideoConstant,
   VideoDetails as VideoDetailsServerModel,
+  VideoFileMetadata,
   VideoFilter,
   VideoPrivacy,
   VideoSortField,
-  VideoUpdate,
-  VideoFileMetadata
+  VideoUpdate
 } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { Account, AccountService } from '../account'
@@ -48,8 +47,7 @@ export class VideoService implements VideosProvider {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private serverService: ServerService,
-    private i18n: I18n
+    private serverService: ServerService
   ) {}
 
   getVideoViewUrl (uuid: string) {
@@ -339,19 +337,19 @@ export class VideoService implements VideosProvider {
     const base = [
       {
         id: VideoPrivacy.PRIVATE,
-        description: this.i18n('Only I can see this video')
+        description: $localize`Only I can see this video`
       },
       {
         id: VideoPrivacy.UNLISTED,
-        description: this.i18n('Only shareable via a private link')
+        description: $localize`Only shareable via a private link`
       },
       {
         id: VideoPrivacy.PUBLIC,
-        description: this.i18n('Anyone can see this video')
+        description: $localize`Anyone can see this video`
       },
       {
         id: VideoPrivacy.INTERNAL,
-        description: this.i18n('Only users of this instance can see this video')
+        description: $localize`Only users of this instance can see this video`
       }
     ]
 

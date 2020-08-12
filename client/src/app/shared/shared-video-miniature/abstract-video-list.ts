@@ -14,7 +14,6 @@ import {
 } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { GlobalIconName } from '@app/shared/shared-icons'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
 import { ServerConfig, VideoSortField } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
@@ -89,7 +88,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   protected abstract screenService: ScreenService
   protected abstract storageService: LocalStorageService
   protected abstract router: Router
-  protected abstract i18n: I18n
   abstract titlePage: string
 
   private resizeSubscription: Subscription
@@ -111,11 +109,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
     this.groupedDateLabels = {
       [GroupDate.UNKNOWN]: null,
-      [GroupDate.TODAY]: this.i18n('Today'),
-      [GroupDate.YESTERDAY]: this.i18n('Yesterday'),
-      [GroupDate.LAST_WEEK]: this.i18n('Last week'),
-      [GroupDate.LAST_MONTH]: this.i18n('Last month'),
-      [GroupDate.OLDER]: this.i18n('Older')
+      [GroupDate.TODAY]: $localize`Today`,
+      [GroupDate.YESTERDAY]: $localize`Yesterday`,
+      [GroupDate.LAST_WEEK]: $localize`Last week`,
+      [GroupDate.LAST_MONTH]: $localize`Last month`,
+      [GroupDate.OLDER]: $localize`Older`
     }
 
     // Subscribe to route changes
@@ -192,7 +190,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       },
 
       error => {
-        const message = this.i18n('Cannot load more videos. Try again later.')
+        const message = $localize`Cannot load more videos. Try again later.`
 
         console.error(message, { error })
         this.notifier.error(message)

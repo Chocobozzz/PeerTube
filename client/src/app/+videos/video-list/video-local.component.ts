@@ -5,7 +5,6 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRight, VideoFilter, VideoSortField } from '@shared/models'
 
 @Component({
@@ -21,7 +20,6 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   useUserVideoPreferences = true
 
   constructor (
-    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -35,7 +33,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   ) {
     super()
 
-    this.titlePage = i18n('Local videos')
+    this.titlePage = $localize`Local videos`
   }
 
   ngOnInit () {

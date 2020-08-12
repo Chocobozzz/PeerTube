@@ -2,7 +2,6 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 import { BytesPipe } from '../shared-main'
 
@@ -34,11 +33,10 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
 
   constructor (
     private sanitizer: DomSanitizer,
-    private serverService: ServerService,
-    private i18n: I18n
+    private serverService: ServerService
   ) {
     this.bytesPipe = new BytesPipe()
-    this.maxSizeText = this.i18n('max size')
+    this.maxSizeText = $localize`max size`
   }
 
   get videoImageExtensions () {

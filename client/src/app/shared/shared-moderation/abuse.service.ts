@@ -5,7 +5,6 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import {
   AbuseCreate,
   AbuseFilter,
@@ -25,7 +24,6 @@ export class AbuseService {
   private static BASE_MY_ABUSE_URL = environment.apiUrl + '/api/v1/users/me/abuses'
 
   constructor (
-    private i18n: I18n,
     private authHttp: HttpClient,
     private restService: RestService,
     private restExtractor: RestExtractor
@@ -138,33 +136,33 @@ export class AbuseService {
     let reasons: { id: AbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = [
       {
         id: 'violentOrRepulsive',
-        label: this.i18n('Violent or repulsive'),
-        help: this.i18n('Contains offensive, violent, or coarse language or iconography.')
+        label: $localize`Violent or repulsive`,
+        help: $localize`Contains offensive, violent, or coarse language or iconography.`
       },
       {
         id: 'hatefulOrAbusive',
-        label: this.i18n('Hateful or abusive'),
-        help: this.i18n('Contains abusive, racist or sexist language or iconography.')
+        label: $localize`Hateful or abusive`,
+        help: $localize`Contains abusive, racist or sexist language or iconography.`
       },
       {
         id: 'spamOrMisleading',
-        label: this.i18n('Spam, ad or false news'),
-        help: this.i18n('Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.')
+        label: $localize`Spam, ad or false news`,
+        help: $localize`Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.`
       },
       {
         id: 'privacy',
-        label: this.i18n('Privacy breach or doxxing'),
-        help: this.i18n('Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).')
+        label: $localize`Privacy breach or doxxing`,
+        help: $localize`Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).`
       },
       {
         id: 'rights',
-        label: this.i18n('Copyright'),
-        help: this.i18n('Infringes your copyright wrt. the regional laws with which the server must comply.')
+        label: $localize`Copyright`,
+        help: $localize`Infringes your copyright wrt. the regional laws with which the server must comply.`
       },
       {
         id: 'serverRules',
-        label: this.i18n('Breaks server rules'),
-        description: this.i18n('Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.')
+        label: $localize`Breaks server rules`,
+        description: $localize`Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.`
       }
     ]
 
@@ -172,13 +170,13 @@ export class AbuseService {
       reasons = reasons.concat([
         {
           id: 'thumbnails',
-          label: this.i18n('Thumbnails'),
-          help: this.i18n('The above can only be seen in thumbnails.')
+          label: $localize`Thumbnails`,
+          help: $localize`The above can only be seen in thumbnails.`
         },
         {
           id: 'captions',
-          label: this.i18n('Captions'),
-          help: this.i18n('The above can only be seen in captions (please describe which).')
+          label: $localize`Captions`,
+          help: $localize`The above can only be seen in captions (please describe which).`
         }
       ])
     }

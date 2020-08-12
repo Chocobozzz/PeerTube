@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 
 @Component({
@@ -12,11 +11,7 @@ export class InstanceFeaturesTableComponent implements OnInit {
   quotaHelpIndication = ''
   serverConfig: ServerConfig
 
-  constructor (
-    private i18n: I18n,
-    private serverService: ServerService
-  ) {
-  }
+  constructor (private serverService: ServerService) { }
 
   get initialUserVideoQuota () {
     return this.serverConfig.user.videoQuota
@@ -38,9 +33,9 @@ export class InstanceFeaturesTableComponent implements OnInit {
   buildNSFWLabel () {
     const policy = this.serverConfig.instance.defaultNSFWPolicy
 
-    if (policy === 'do_not_list') return this.i18n('Hidden')
-    if (policy === 'blur') return this.i18n('Blurred with confirmation request')
-    if (policy === 'display') return this.i18n('Displayed')
+    if (policy === 'do_not_list') return $localize`Hidden`
+    if (policy === 'blur') return $localize`Blurred with confirmation request`
+    if (policy === 'display') return $localize`Displayed`
   }
 
   getServerVersionAndCommit () {
@@ -55,7 +50,9 @@ export class InstanceFeaturesTableComponent implements OnInit {
 
     const minutes = Math.floor(seconds % 3600 / 60)
 
-    return this.i18n('~ {{minutes}} {minutes, plural, =1 {minute} other {minutes}}', { minutes })
+    if (minutes === 1) return $localize`~ 1 minute`
+
+    return $localize`~ ${minutes} minutes`
   }
 
   private buildQuotaHelpIndication () {
@@ -71,9 +68,9 @@ export class InstanceFeaturesTableComponent implements OnInit {
     const normalSeconds = initialUserVideoQuotaBit / (1.5 * 1000 * 1000)
 
     const lines = [
-      this.i18n('{{seconds}} of full HD videos', { seconds: this.getApproximateTime(fullHdSeconds) }),
-      this.i18n('{{seconds}} of HD videos', { seconds: this.getApproximateTime(hdSeconds) }),
-      this.i18n('{{seconds}} of average quality videos', { seconds: this.getApproximateTime(normalSeconds) })
+      $localize`${this.getApproximateTime(fullHdSeconds)} of full HD videos`,
+      $localize`${this.getApproximateTime(hdSeconds)} of HD videos`,
+      $localize`${this.getApproximateTime(normalSeconds)} of average quality videos`
     ]
 
     this.quotaHelpIndication = lines.join('<br />')

@@ -2,7 +2,6 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ActorFollow } from '@shared/models'
 
 @Component({
@@ -19,7 +18,6 @@ export class FollowersListComponent extends RestTable implements OnInit {
   constructor (
     private confirmService: ConfirmService,
     private notifier: Notifier,
-    private i18n: I18n,
     private followService: InstanceFollowService
   ) {
     super()
@@ -40,7 +38,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
       .subscribe(
         () => {
           const handle = follow.follower.name + '@' + follow.follower.host
-          this.notifier.success(this.i18n('{{handle}} accepted in instance followers', { handle }))
+          this.notifier.success($localize`${handle} accepted in instance followers`)
         },
 
         err => {
@@ -51,15 +49,15 @@ export class FollowersListComponent extends RestTable implements OnInit {
   }
 
   async rejectFollower (follow: ActorFollow) {
-    const message = this.i18n('Do you really want to reject this follower?')
-    const res = await this.confirmService.confirm(message, this.i18n('Reject'))
+    const message = $localize`Do you really want to reject this follower?`
+    const res = await this.confirmService.confirm(message, $localize`Reject`)
     if (res === false) return
 
     this.followService.rejectFollower(follow)
         .subscribe(
           () => {
             const handle = follow.follower.name + '@' + follow.follower.host
-            this.notifier.success(this.i18n('{{handle}} rejected from instance followers', { handle }))
+            this.notifier.success($localize`${handle} rejected from instance followers`)
 
             this.loadData()
           },
@@ -72,15 +70,15 @@ export class FollowersListComponent extends RestTable implements OnInit {
   }
 
   async deleteFollower (follow: ActorFollow) {
-    const message = this.i18n('Do you really want to delete this follower?')
-    const res = await this.confirmService.confirm(message, this.i18n('Delete'))
+    const message = $localize`Do you really want to delete this follower?`
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
     this.followService.removeFollower(follow)
         .subscribe(
           () => {
             const handle = follow.follower.name + '@' + follow.follower.host
-            this.notifier.success(this.i18n('{{handle}} removed from instance followers', { handle }))
+            this.notifier.success($localize`${handle} removed from instance followers`)
 
             this.loadData()
           },

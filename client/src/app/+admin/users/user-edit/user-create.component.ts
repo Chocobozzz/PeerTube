@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserCreate, UserRole } from '@shared/models'
 import { UserEdit } from './user-edit'
 
@@ -25,9 +24,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private notifier: Notifier,
-    private userService: UserService,
-    private i18n: I18n
-  ) {
+    private userService: UserService
+    ) {
     super()
 
     this.buildQuotaOptions()
@@ -67,7 +65,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
     this.userService.addUser(userCreate).subscribe(
       () => {
-        this.notifier.success(this.i18n('User {{username}} created.', { username: userCreate.username }))
+        this.notifier.success($localize`User ${userCreate.username} created.`)
         this.router.navigate([ '/admin/users/list' ])
       },
 
@@ -85,6 +83,6 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   }
 
   getFormButtonTitle () {
-    return this.i18n('Create user')
+    return $localize`Create user`
   }
 }

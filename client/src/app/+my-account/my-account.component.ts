@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService, ScreenService, ServerService, AuthUser } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { AuthService, AuthUser, ScreenService, ServerService } from '@app/core'
 import { ServerConfig } from '@shared/models'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
@@ -18,9 +17,8 @@ export class MyAccountComponent implements OnInit {
   constructor (
     private serverService: ServerService,
     private authService: AuthService,
-    private screenService: ScreenService,
-    private i18n: I18n
-  ) { }
+    private screenService: ScreenService
+    ) { }
 
   get isBroadcastMessageDisplayed () {
     return this.screenService.isBroadcastMessageDisplayed
@@ -46,31 +44,31 @@ export class MyAccountComponent implements OnInit {
 
   private buildMenu () {
     const libraryEntries: TopMenuDropdownParam = {
-      label: this.i18n('My library'),
+      label: $localize`My library`,
       children: [
         {
-          label: this.i18n('My channels'),
+          label: $localize`My channels`,
           routerLink: '/my-account/video-channels',
           iconName: 'channel'
         },
         {
-          label: this.i18n('My videos'),
+          label: $localize`My videos`,
           routerLink: '/my-account/videos',
           iconName: 'videos',
           isDisplayed: () => this.user.canSeeVideosLink
         },
         {
-          label: this.i18n('My playlists'),
+          label: $localize`My playlists`,
           routerLink: '/my-account/video-playlists',
           iconName: 'playlists'
         },
         {
-          label: this.i18n('My subscriptions'),
+          label: $localize`My subscriptions`,
           routerLink: '/my-account/subscriptions',
           iconName: 'subscriptions'
         },
         {
-          label: this.i18n('My history'),
+          label: $localize`My history`,
           routerLink: '/my-account/history/videos',
           iconName: 'history'
         }
@@ -87,25 +85,25 @@ export class MyAccountComponent implements OnInit {
     }
 
     const miscEntries: TopMenuDropdownParam = {
-      label: this.i18n('Misc'),
+      label: $localize`Misc`,
       children: [
         {
-          label: this.i18n('Muted accounts'),
+          label: $localize`Muted accounts`,
           routerLink: '/my-account/blocklist/accounts',
           iconName: 'user-x'
         },
         {
-          label: this.i18n('Muted servers'),
+          label: $localize`Muted servers`,
           routerLink: '/my-account/blocklist/servers',
           iconName: 'peertube-x'
         },
         {
-          label: this.i18n('My abuse reports'),
+          label: $localize`My abuse reports`,
           routerLink: '/my-account/abuses',
           iconName: 'flag'
         },
         {
-          label: this.i18n('Ownership changes'),
+          label: $localize`Ownership changes`,
           routerLink: '/my-account/ownership',
           iconName: 'download'
         }
@@ -114,11 +112,11 @@ export class MyAccountComponent implements OnInit {
 
     this.menuEntries = [
       {
-        label: this.i18n('My settings'),
+        label: $localize`My settings`,
         routerLink: '/my-account/settings'
       },
       {
-        label: this.i18n('My notifications'),
+        label: $localize`My notifications`,
         routerLink: '/my-account/notifications'
       },
       libraryEntries,

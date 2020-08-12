@@ -2,7 +2,6 @@ import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@ang
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-reactive-file',
@@ -31,10 +30,7 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
 
   private file: File
 
-  constructor (
-    private notifier: Notifier,
-    private i18n: I18n
-  ) {}
+  constructor (private notifier: Notifier) { }
 
   get filename () {
     if (!this.file) return ''
@@ -51,16 +47,13 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
       const [ file ] = event.target.files
 
       if (file.size > this.maxFileSize) {
-        this.notifier.error(this.i18n('This file is too large.'))
+        this.notifier.error($localize`This file is too large.`)
         return
       }
 
       const extension = '.' + file.name.split('.').pop()
       if (this.extensions.includes(extension) === false) {
-        const message = this.i18n(
-          'PeerTube cannot handle this kind of file. Accepted extensions are {{extensions}}.',
-          { extensions: this.allowedExtensionsMessage }
-        )
+        const message = $localize`PeerTube cannot handle this kind of file. Accepted extensions are ${this.allowedExtensionsMessage}}.`
         this.notifier.error(message)
 
         return

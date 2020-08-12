@@ -2,7 +2,6 @@ import { Subject, Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, User, UserUpdateMe } from '@shared/models'
 
 @Component({
@@ -25,8 +24,7 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
     private authService: AuthService,
     private notifier: Notifier,
     private userService: UserService,
-    private serverService: ServerService,
-    private i18n: I18n
+    private serverService: ServerService
   ) {
     super()
   }
@@ -73,14 +71,14 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
         () => {
           this.authService.refreshUserInformation()
 
-          if (this.notifyOnUpdate) this.notifier.success(this.i18n('Interface settings updated.'))
+          if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
         },
 
         err => this.notifier.error(err.message)
       )
     } else {
       this.userService.updateMyAnonymousProfile(details)
-      if (this.notifyOnUpdate) this.notifier.success(this.i18n('Interface settings updated.'))
+      if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
     }
   }
 }

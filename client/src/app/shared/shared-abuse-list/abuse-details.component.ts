@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { durationToString } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AbusePredefinedReasonsString } from '@shared/models'
 import { ProcessedAbuse } from './processed-abuse.model'
 
@@ -17,18 +16,16 @@ export class AbuseDetailsComponent {
 
   private predefinedReasonsTranslations: { [key in AbusePredefinedReasonsString]: string }
 
-  constructor (
-    private i18n: I18n
-  ) {
+  constructor () {
     this.predefinedReasonsTranslations = {
-      violentOrRepulsive: this.i18n('Violent or Repulsive'),
-      hatefulOrAbusive: this.i18n('Hateful or Abusive'),
-      spamOrMisleading: this.i18n('Spam or Misleading'),
-      privacy: this.i18n('Privacy'),
-      rights: this.i18n('Copyright'),
-      serverRules: this.i18n('Server rules'),
-      thumbnails: this.i18n('Thumbnails'),
-      captions: this.i18n('Captions')
+      violentOrRepulsive: $localize`Violent or Repulsive`,
+      hatefulOrAbusive: $localize`Hateful or Abusive`,
+      spamOrMisleading: $localize`Spam or Misleading`,
+      privacy: $localize`Privacy`,
+      rights: $localize`Copyright`,
+      serverRules: $localize`Server rules`,
+      thumbnails: $localize`Thumbnails`,
+      captions: $localize`Captions`
     }
   }
 

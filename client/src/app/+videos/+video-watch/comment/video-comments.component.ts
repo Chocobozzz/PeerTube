@@ -5,7 +5,6 @@ import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifie
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication, VideoDetails } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-comments',
@@ -43,7 +42,6 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private activatedRoute: ActivatedRoute,
-    private i18n: I18n,
     private hooks: HooksService
   ) {}
 
@@ -162,12 +160,12 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     let message = 'Do you really want to delete this comment?'
 
     if (commentToDelete.isLocal || this.video.isLocal) {
-      message += this.i18n(' The deletion will be sent to remote instances so they can reflect the change.')
+      message += $localize` The deletion will be sent to remote instances so they can reflect the change.`
     } else {
-      message += this.i18n(' It is a remote comment, so the deletion will only be effective on your instance.')
+      message += $localize` It is a remote comment, so the deletion will only be effective on your instance.`
     }
 
-    const res = await this.confirmService.confirm(message, this.i18n('Delete'))
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
     this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)

@@ -12,7 +12,6 @@ import {
   UserValidatorsService
 } from '@app/shared/shared-forms'
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { CustomConfig, ServerConfig } from '@shared/models'
 
 @Component({
@@ -42,45 +41,44 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
     private userValidatorsService: UserValidatorsService,
     private notifier: Notifier,
     private configService: ConfigService,
-    private serverService: ServerService,
-    private i18n: I18n
+    private serverService: ServerService
   ) {
     super()
 
     this.resolutions = [
       {
         id: '0p',
-        label: this.i18n('Audio-only'),
-        description: this.i18n('A <code>.mp4</code> that keeps the original audio track, with no video')
+        label: $localize`Audio-only`,
+        description: $localize`A <code>.mp4</code> that keeps the original audio track, with no video`
       },
       {
         id: '240p',
-        label: this.i18n('240p')
+        label: $localize`240p`
       },
       {
         id: '360p',
-        label: this.i18n('360p')
+        label: $localize`360p`
       },
       {
         id: '480p',
-        label: this.i18n('480p')
+        label: $localize`480p`
       },
       {
         id: '720p',
-        label: this.i18n('720p')
+        label: $localize`720p`
       },
       {
         id: '1080p',
-        label: this.i18n('1080p')
+        label: $localize`1080p`
       },
       {
         id: '2160p',
-        label: this.i18n('2160p')
+        label: $localize`2160p`
       }
     ]
 
     this.transcodingThreadOptions = [
-      { value: 0, label: this.i18n('Auto (via ffmpeg)') },
+      { value: 0, label: $localize`Auto (via ffmpeg)` },
       { value: 1, label: '1' },
       { value: 2, label: '2' },
       { value: 4, label: '4' },
@@ -288,7 +286,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
           this.updateForm()
 
-          this.notifier.success(this.i18n('Configuration updated.'))
+          this.notifier.success($localize`Configuration updated.`)
         },
 
         err => this.notifier.error(err.message)

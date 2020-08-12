@@ -4,10 +4,9 @@ import { AuthService, Notifier, SessionStorageService, User, UserService } from 
 import { Video } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { UserLocalStorageKeys } from '@root-helpers/users'
 import { RecommendationInfo } from './recommendation-info.model'
 import { RecommendedVideosStore } from './recommended-videos.store'
-import { UserLocalStorageKeys } from '@root-helpers/users'
 
 @Component({
   selector: 'my-recommended-videos',
@@ -38,7 +37,6 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
     private userService: UserService,
     private authService: AuthService,
     private notifier: Notifier,
-    private i18n: I18n,
     private store: RecommendedVideosStore,
     private sessionStorageService: SessionStorageService
   ) {
@@ -58,7 +56,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
       )
     }
 
-    this.autoPlayNextVideoTooltip = this.i18n('When active, the next video is automatically played after the current one.')
+    this.autoPlayNextVideoTooltip = $localize`When active, the next video is automatically played after the current one.`
   }
 
   ngOnInit () {

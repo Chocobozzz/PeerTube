@@ -3,7 +3,6 @@ import { Notifier, UserService } from '@app/core'
 import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User } from '@shared/models'
 
 @Component({
@@ -23,8 +22,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     private modalService: NgbModal,
     private notifier: Notifier,
     private userService: UserService,
-    private userValidatorsService: UserValidatorsService,
-    private i18n: I18n
+    private userValidatorsService: UserValidatorsService
   ) {
     super()
   }
@@ -52,8 +50,8 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
       .subscribe(
         () => {
           const message = Array.isArray(this.usersToBan)
-            ? this.i18n('{{num}} users banned.', { num: this.usersToBan.length })
-            : this.i18n('User {{username}} banned.', { username: this.usersToBan.username })
+            ? $localize`${this.usersToBan.length} users banned.`
+            : $localize`User ${this.usersToBan.username} banned.`
 
           this.notifier.success(message)
 

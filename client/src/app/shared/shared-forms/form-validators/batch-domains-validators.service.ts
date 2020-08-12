@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { ValidatorFn, Validators } from '@angular/forms'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { BuildFormValidator } from './form-validator.service'
 import { validateHost } from './host'
 
@@ -8,13 +7,13 @@ import { validateHost } from './host'
 export class BatchDomainsValidatorsService {
   readonly DOMAINS: BuildFormValidator
 
-  constructor (private i18n: I18n) {
+  constructor () {
     this.DOMAINS = {
       VALIDATORS: [ Validators.required, this.validDomains, this.isHostsUnique ],
       MESSAGES: {
-        'required': this.i18n('Domain is required.'),
-        'validDomains': this.i18n('Domains entered are invalid.'),
-        'uniqueDomains': this.i18n('Domains entered contain duplicates.')
+        'required': $localize`Domain is required.`,
+        'validDomains': $localize`Domains entered are invalid.`,
+        'uniqueDomains': $localize`Domains entered contain duplicates.`
       }
     }
   }
@@ -33,7 +32,7 @@ export class BatchDomainsValidatorsService {
 
     for (const host of hosts) {
       if (validateHost(host) === false) {
-        newHostsErrors.push(this.i18n('{{host}} is not valid', { host }))
+        newHostsErrors.push($localize`${host} is not valid`)
       }
     }
 

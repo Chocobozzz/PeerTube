@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core'
 import { Notifier } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-input-readonly-copy',
@@ -10,12 +9,9 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class InputReadonlyCopyComponent {
   @Input() value = ''
 
-  constructor (
-    private notifier: Notifier,
-    private i18n: I18n
-  ) { }
+  constructor (private notifier: Notifier) { }
 
   activateCopiedMessage () {
-    this.notifier.success(this.i18n('Copied'))
+    this.notifier.success($localize`Copied`)
   }
 }

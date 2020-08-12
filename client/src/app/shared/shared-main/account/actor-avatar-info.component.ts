@@ -1,7 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
 import { Account, BytesPipe, VideoChannel } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 
 @Component({
@@ -23,11 +22,10 @@ export class ActorAvatarInfoComponent implements OnInit {
 
   constructor (
     private serverService: ServerService,
-    private notifier: Notifier,
-    private i18n: I18n
+    private notifier: Notifier
   ) {
     this.bytesPipe = new BytesPipe()
-    this.maxSizeText = this.i18n('max size')
+    this.maxSizeText = $localize`max size`
   }
 
   ngOnInit (): void {

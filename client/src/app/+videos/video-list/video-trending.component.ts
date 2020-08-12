@@ -5,7 +5,6 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoSortField } from '@shared/models'
 
 @Component({
@@ -20,7 +19,6 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   useUserVideoPreferences = true
 
   constructor (
-    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -45,14 +43,11 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
         const trendingDays = config.trending.videos.intervalDays
 
         if (trendingDays === 1) {
-          this.titlePage = this.i18n('Trending for the last 24 hours')
-          this.titleTooltip = this.i18n('Trending videos are those totalizing the greatest number of views during the last 24 hours')
+          this.titlePage = $localize`Trending for the last 24 hours`
+          this.titleTooltip = $localize`Trending videos are those totalizing the greatest number of views during the last 24 hours`
         } else {
-          this.titlePage = this.i18n('Trending for the last {{days}} days', { days: trendingDays })
-          this.titleTooltip = this.i18n(
-            'Trending videos are those totalizing the greatest number of views during the last {{days}} days',
-            { days: trendingDays }
-          )
+          this.titlePage = `Trending for the last ${trendingDays} days`
+          this.titleTooltip = `Trending videos are those totalizing the greatest number of views during the last ${trendingDays} days`
         }
       })
   }

@@ -3,7 +3,6 @@ import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, ServerService, User } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserNotificationSetting, UserNotificationSettingValue, UserRight } from '@shared/models'
 
 @Component({
@@ -25,26 +24,25 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   private savePreferences = debounce(this.savePreferencesImpl.bind(this), 500)
 
   constructor (
-    private i18n: I18n,
     private userNotificationService: UserNotificationService,
     private serverService: ServerService,
     private notifier: Notifier
   ) {
     this.labelNotifications = {
-      newVideoFromSubscription: this.i18n('New video from your subscriptions'),
-      newCommentOnMyVideo: this.i18n('New comment on your video'),
-      abuseAsModerator: this.i18n('New abuse'),
-      videoAutoBlacklistAsModerator: this.i18n('Video blocked automatically waiting review'),
-      blacklistOnMyVideo: this.i18n('One of your video is blocked/unblocked'),
-      myVideoPublished: this.i18n('Video published (after transcoding/scheduled update)'),
-      myVideoImportFinished: this.i18n('Video import finished'),
-      newUserRegistration: this.i18n('A new user registered on your instance'),
-      newFollow: this.i18n('You or your channel(s) has a new follower'),
-      commentMention: this.i18n('Someone mentioned you in video comments'),
-      newInstanceFollower: this.i18n('Your instance has a new follower'),
-      autoInstanceFollowing: this.i18n('Your instance automatically followed another instance'),
-      abuseNewMessage: this.i18n('An abuse report received a new message'),
-      abuseStateChange: this.i18n('One of your abuse reports has been accepted or rejected by moderators')
+      newVideoFromSubscription: $localize`New video from your subscriptions`,
+      newCommentOnMyVideo: $localize`New comment on your video`,
+      abuseAsModerator: $localize`New abuse`,
+      videoAutoBlacklistAsModerator: $localize`Video blocked automatically waiting review`,
+      blacklistOnMyVideo: $localize`One of your video is blocked/unblocked`,
+      myVideoPublished: $localize`Video published (after transcoding/scheduled update)`,
+      myVideoImportFinished: $localize`Video import finished`,
+      newUserRegistration: $localize`A new user registered on your instance`,
+      newFollow: $localize`You or your channel(s) has a new follower`,
+      commentMention: $localize`Someone mentioned you in video comments`,
+      newInstanceFollower: $localize`Your instance has a new follower`,
+      autoInstanceFollowing: $localize`Your instance automatically followed another instance`,
+      abuseNewMessage: $localize`An abuse report received a new message`,
+      abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`
     }
     this.notificationSettingKeys = Object.keys(this.labelNotifications) as (keyof UserNotificationSetting)[]
 
@@ -91,7 +89,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     this.userNotificationService.updateNotificationSettings(this.user, this.user.notificationSettings)
       .subscribe(
         () => {
-          this.notifier.success(this.i18n('Preferences saved'), undefined, 2000)
+          this.notifier.success($localize`Preferences saved`, undefined, 2000)
         },
 
         err => this.notifier.error(err.message)

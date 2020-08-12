@@ -13,7 +13,6 @@ import {
   NgbPopoverModule,
   NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, ActorAvatarInfoComponent, AvatarComponent } from './account'
 import { FromNowPipe, InfiniteScrollerDirective, NumberFormatterPipe, PeerTubeTemplateDirective, BytesPipe } from './angular'
@@ -129,8 +128,6 @@ import { VideoChannelService } from './video-channel'
   ],
 
   providers: [
-    I18n,
-
     DatePipe,
 
     FromNowPipe,

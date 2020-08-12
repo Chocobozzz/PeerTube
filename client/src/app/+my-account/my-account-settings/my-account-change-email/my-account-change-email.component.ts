@@ -3,7 +3,6 @@ import { tap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, ServerService, UserService } from '@app/core'
 import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User } from '@shared/models'
 
 @Component({
@@ -21,9 +20,8 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
     private userValidatorsService: UserValidatorsService,
     private authService: AuthService,
     private userService: UserService,
-    private serverService: ServerService,
-    private i18n: I18n
-  ) {
+    private serverService: ServerService
+    ) {
     super()
   }
 
@@ -52,15 +50,15 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
           this.form.reset()
 
           if (config.signup.requiresEmailVerification) {
-            this.success = this.i18n('Please check your emails to verify your new email.')
+            this.success = $localize`Please check your emails to verify your new email.`
           } else {
-            this.success = this.i18n('Email updated.')
+            this.success = $localize`Email updated.`
           }
         },
 
         err => {
           if (err.status === 401) {
-            this.error = this.i18n('You current password is invalid.')
+            this.error = $localize`You current password is invalid.`
             return
           }
 

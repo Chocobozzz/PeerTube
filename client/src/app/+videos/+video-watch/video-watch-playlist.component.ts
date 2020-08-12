@@ -1,9 +1,8 @@
 import { Component, Input } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, ComponentPagination, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
-import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { VideoDetails, VideoPlaylistPrivacy } from '@shared/models'
 
 @Component({
@@ -36,7 +35,6 @@ export class VideoWatchPlaylistComponent {
     private userService: UserService,
     private auth: AuthService,
     private notifier: Notifier,
-    private i18n: I18n,
     private videoPlaylist: VideoPlaylistService,
     private localStorageService: LocalStorageService,
     private sessionStorageService: SessionStorageService,
@@ -189,13 +187,13 @@ export class VideoWatchPlaylistComponent {
 
   private setAutoPlayNextVideoPlaylistSwitchText () {
     this.autoPlayNextVideoPlaylistSwitchText = this.autoPlayNextVideoPlaylist
-      ? this.i18n('Stop autoplaying next video')
-      : this.i18n('Autoplay next video')
+      ? $localize`Stop autoplaying next video`
+      : $localize`Autoplay next video`
   }
 
   private setLoopPlaylistSwitchText () {
     this.loopPlaylistSwitchText = this.loopPlaylist
-      ? this.i18n('Stop looping playlist videos')
-      : this.i18n('Loop playlist videos')
+      ? $localize`Stop looping playlist videos`
+      : $localize`Loop playlist videos`
   }
 }

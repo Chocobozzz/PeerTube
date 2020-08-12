@@ -12,12 +12,11 @@ import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getShortLocale, is18nPath } from '@shared/core-utils/i18n'
 import { BroadcastMessageLevel, ServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { InstanceService } from './shared/shared-instance'
 
 @Component({
@@ -40,7 +39,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor (
     @Inject(DOCUMENT) private document: Document,
     @Inject(LOCALE_ID) private localeId: string,
-    private i18n: I18n,
     private viewportScroller: ViewportScroller,
     private router: Router,
     private authService: AuthService,
@@ -288,37 +286,37 @@ export class AppComponent implements OnInit, AfterViewInit {
       new Hotkey(['/', 's'], (event: KeyboardEvent): boolean => {
         document.getElementById('search-video').focus()
         return false
-      }, undefined, this.i18n('Focus the search bar')),
+      }, undefined, $localize`Focus the search bar`),
 
       new Hotkey('b', (event: KeyboardEvent): boolean => {
         this.menu.toggleMenu()
         return false
-      }, undefined, this.i18n('Toggle the left menu')),
+      }, undefined, $localize`Toggle the left menu`),
 
       new Hotkey('g o', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/overview' ])
         return false
-      }, undefined, this.i18n('Go to the discover videos page')),
+      }, undefined, $localize`Go to the discover videos page`),
 
       new Hotkey('g t', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/trending' ])
         return false
-      }, undefined, this.i18n('Go to the trending videos page')),
+      }, undefined, $localize`Go to the trending videos page`),
 
       new Hotkey('g r', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/recently-added' ])
         return false
-      }, undefined, this.i18n('Go to the recently added videos page')),
+      }, undefined, $localize`Go to the recently added videos page`),
 
       new Hotkey('g l', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/local' ])
         return false
-      }, undefined, this.i18n('Go to the local videos page')),
+      }, undefined, $localize`Go to the local videos page`),
 
       new Hotkey('g u', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/upload' ])
         return false
-      }, undefined, this.i18n('Go to the videos upload page'))
+      }, undefined, $localize`Go to the videos upload page`)
     ])
   }
 }

@@ -6,7 +6,6 @@ import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenServi
 import { immutableAssign } from '@app/helpers'
 import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -23,7 +22,6 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
   private videoChannelSub: Subscription
 
   constructor (
-    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -38,7 +36,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
   ) {
     super()
 
-    this.titlePage = this.i18n('Published videos')
+    this.titlePage = $localize`Published videos`
     this.displayOptions = {
       ...this.displayOptions,
       avatar: false
@@ -72,7 +70,9 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
                .getVideoChannelVideos(this.videoChannel, newPagination, this.sort, this.nsfwPolicy)
                .pipe(
                  tap(({ total }) => {
-                   this.titlePage = this.i18n(`{total, plural, =1 {Published 1 video} other {Published {{total}} videos}}`, { total })
+                   this.titlePage = total === 1
+                    ? $localize`Published 1 video`
+                    : $localize`Published ${total} videos`
                  })
                )
   }

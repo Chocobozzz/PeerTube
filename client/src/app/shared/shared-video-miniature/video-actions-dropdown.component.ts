@@ -1,10 +1,18 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
-import { VideoBlockComponent, VideoBlockService, VideoReportComponent, BlocklistService } from '@app/shared/shared-moderation'
+import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoCaption } from '@shared/models'
-import { DropdownAction, DropdownButtonSize, DropdownDirection, RedundancyService, Video, VideoDetails, VideoService, Actor } from '../shared-main'
+import {
+  Actor,
+  DropdownAction,
+  DropdownButtonSize,
+  DropdownDirection,
+  RedundancyService,
+  Video,
+  VideoDetails,
+  VideoService
+} from '../shared-main'
 import { VideoAddToPlaylistComponent } from '../shared-video-playlist'
 import { VideoDownloadComponent } from './video-download.component'
 
@@ -71,8 +79,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     private videoBlocklistService: VideoBlockService,
     private screenService: ScreenService,
     private videoService: VideoService,
-    private redundancyService: RedundancyService,
-    private i18n: I18n
+    private redundancyService: RedundancyService
   ) { }
 
   get user () {
@@ -153,17 +160,15 @@ export class VideoActionsDropdownComponent implements OnChanges {
   /* Action handlers */
 
   async unblockVideo () {
-    const confirmMessage = this.i18n(
-      'Do you really want to unblock this video? It will be available again in the videos list.'
-    )
+    const confirmMessage = $localize`Do you really want to unblock this video? It will be available again in the videos list.`
 
-    const res = await this.confirmService.confirm(confirmMessage, this.i18n('Unblock'))
+    const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock`)
     if (res === false) return
 
     this.videoBlocklistService.unblockVideo(this.video.id)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Video {{name}} unblocked.', { name: this.video.name }))
+            this.notifier.success($localize`Video ${this.video.name} unblocked.`)
 
             this.video.blacklisted = false
             this.video.blockedReason = null
@@ -178,14 +183,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
   async removeVideo () {
     this.modalOpened.emit()
 
-    const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this video?'), this.i18n('Delete'))
+    const res = await this.confirmService.confirm($localize`Do you really want to delete this video?`, $localize`Delete`)
     if (res === false) return
 
     this.videoService.removeVideo(this.video.id)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Video {{videoName}} deleted.', { videoName: this.video.name }))
-
+            this.notifier.success($localize`Video ${this.video.name} deleted.`)
             this.videoRemoved.emit()
           },
 
@@ -197,7 +201,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.redundancyService.addVideoRedundancy(this.video)
         .subscribe(
           () => {
-            const message = this.i18n('This video will be duplicated by your instance.')
+            const message = $localize`This video will be duplicated by your instance.`
             this.notifier.success(message)
           },
 
@@ -211,8 +215,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.blocklistService.blockAccountByUser(params)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Account {{nameWithHost}} muted.', params))
-
+            this.notifier.success($localize`Account ${params.nameWithHost} muted.`)
             this.videoAccountMuted.emit()
           },
 
@@ -236,7 +239,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.videoActions = [
       [
         {
-          label: this.i18n('Save to playlist'),
+          label: $localize`Save to playlist`,
           handler: () => this.playlistDropdown.toggle(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.playlist,
           iconName: 'playlist-add'
@@ -244,43 +247,43 @@ export class VideoActionsDropdownComponent implements OnChanges {
       ],
       [ // actions regarding the video
         {
-          label: this.i18n('Download'),
+          label: $localize`Download`,
           handler: () => this.showDownloadModal(),
           isDisplayed: () => this.displayOptions.download && this.isVideoDownloadable(),
           iconName: 'download'
         },
         {
-          label: this.i18n('Update'),
+          label: $localize`Update`,
           linkBuilder: ({ video }) => [ '/videos/update', video.uuid ],
           iconName: 'edit',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.update && this.isVideoUpdatable()
         },
         {
-          label: this.i18n('Block'),
+          label: $localize`Block`,
           handler: () => this.showBlockModal(),
           iconName: 'no',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoBlockable()
         },
         {
-          label: this.i18n('Unblock'),
+          label: $localize`Unblock`,
           handler: () => this.unblockVideo(),
           iconName: 'undo',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoUnblockable()
         },
         {
-          label: this.i18n('Mirror'),
+          label: $localize`Mirror`,
           handler: () => this.duplicateVideo(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.duplicate && this.canVideoBeDuplicated(),
           iconName: 'cloud-download'
         },
         {
-          label: this.i18n('Delete'),
+          label: $localize`Delete`,
           handler: () => this.removeVideo(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.delete && this.isVideoRemovable(),
           iconName: 'delete'
         },
         {
-          label: this.i18n('Report'),
+          label: $localize`Report`,
           handler: () => this.showReportModal(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.report,
           iconName: 'flag'
@@ -288,7 +291,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
       ],
       [ // actions regarding the account/its server
         {
-          label: this.i18n('Mute account'),
+          label: $localize`Mute account`,
           handler: () => this.muteVideoAccount(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.mute && this.isVideoAccountMutable(),
           iconName: 'no'

@@ -2,7 +2,6 @@ import { filter } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, UserService } from '@app/core'
 import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User } from '@shared/models'
 
 @Component({
@@ -19,9 +18,8 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
     private userValidatorsService: UserValidatorsService,
     private notifier: Notifier,
     private authService: AuthService,
-    private userService: UserService,
-    private i18n: I18n
-  ) {
+    private userService: UserService
+    ) {
     super()
   }
 
@@ -47,7 +45,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
     this.userService.changePassword(currentPassword, newPassword).subscribe(
       () => {
-        this.notifier.success(this.i18n('Password updated.'))
+        this.notifier.success($localize`Password updated.`)
 
         this.form.reset()
         this.error = null
@@ -55,7 +53,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
       err => {
         if (err.status === 401) {
-          this.error = this.i18n('You current password is invalid.')
+          this.error = $localize`You current password is invalid.`
           return
         }
 

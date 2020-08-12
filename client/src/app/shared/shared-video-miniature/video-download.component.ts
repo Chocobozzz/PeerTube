@@ -2,7 +2,6 @@ import { mapValues, pick } from 'lodash-es'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
 import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoService } from '../shared-main'
 
@@ -38,8 +37,7 @@ export class VideoDownloadComponent {
     private notifier: Notifier,
     private modalService: NgbModal,
     private videoService: VideoService,
-    private auth: AuthService,
-    private i18n: I18n
+    private auth: AuthService
   ) {
     this.bytesPipe = new BytesPipe()
     this.numbersPipe = new NumberFormatterPipe()
@@ -47,8 +45,8 @@ export class VideoDownloadComponent {
 
   get typeText () {
     return this.type === 'video'
-      ? this.i18n('video')
-      : this.i18n('subtitles')
+      ? $localize`video`
+      : $localize`subtitles`
   }
 
   getVideoFiles () {
@@ -135,7 +133,7 @@ export class VideoDownloadComponent {
   }
 
   activateCopiedMessage () {
-    this.notifier.success(this.i18n('Copied'))
+    this.notifier.success($localize`Copied`)
   }
 
   switchToType (type: DownloadType) {
@@ -144,11 +142,11 @@ export class VideoDownloadComponent {
 
   getMetadataFormat (format: any) {
     const keyToTranslateFunction = {
-      'encoder': (value: string) => ({ label: this.i18n('Encoder'), value }),
-      'format_long_name': (value: string) => ({ label: this.i18n('Format name'), value }),
-      'size': (value: number) => ({ label: this.i18n('Size'), value: this.bytesPipe.transform(value, 2) }),
+      'encoder': (value: string) => ({ label: $localize`Encoder`, value }),
+      'format_long_name': (value: string) => ({ label: $localize`Format name`, value }),
+      'size': (value: number) => ({ label: $localize`Size`, value: this.bytesPipe.transform(value, 2) }),
       'bit_rate': (value: number) => ({
-        label: this.i18n('Bitrate'),
+        label: $localize`Bitrate`,
         value: `${this.numbersPipe.transform(value)}bps`
       })
     }
@@ -168,25 +166,25 @@ export class VideoDownloadComponent {
     if (!stream) return undefined
 
     let keyToTranslateFunction = {
-      'codec_long_name': (value: string) => ({ label: this.i18n('Codec'), value }),
-      'profile': (value: string) => ({ label: this.i18n('Profile'), value }),
+      'codec_long_name': (value: string) => ({ label: $localize`Codec`, value }),
+      'profile': (value: string) => ({ label: $localize`Profile`, value }),
       'bit_rate': (value: number) => ({
-        label: this.i18n('Bitrate'),
+        label: $localize`Bitrate`,
         value: `${this.numbersPipe.transform(value)}bps`
       })
     }
 
     if (type === 'video') {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        'width': (value: number) => ({ label: this.i18n('Resolution'), value: `${value}x${stream.height}` }),
-        'display_aspect_ratio': (value: string) => ({ label: this.i18n('Aspect ratio'), value }),
-        'avg_frame_rate': (value: string) => ({ label: this.i18n('Average frame rate'), value }),
-        'pix_fmt': (value: string) => ({ label: this.i18n('Pixel format'), value })
+        'width': (value: number) => ({ label: $localize`Resolution`, value: `${value}x${stream.height}` }),
+        'display_aspect_ratio': (value: string) => ({ label: $localize`Aspect ratio`, value }),
+        'avg_frame_rate': (value: string) => ({ label: $localize`Average frame rate`, value }),
+        'pix_fmt': (value: string) => ({ label: $localize`Pixel format`, value })
       })
     } else {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        'sample_rate': (value: number) => ({ label: this.i18n('Sample rate'), value }),
-        'channel_layout': (value: number) => ({ label: this.i18n('Channel Layout'), value })
+        'sample_rate': (value: number) => ({ label: $localize`Sample rate`, value }),
+        'channel_layout': (value: number) => ({ label: $localize`Channel Layout`, value })
       })
     }
 

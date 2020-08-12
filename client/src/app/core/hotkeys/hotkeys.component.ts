@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core'
+import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { Subscription } from 'rxjs'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { HotkeysService, Hotkey } from 'angular2-hotkeys'
+import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 
 @Component({
   selector : 'my-hotkeys-cheatsheet',
@@ -9,16 +8,15 @@ import { HotkeysService, Hotkey } from 'angular2-hotkeys'
   styleUrls: [ './hotkeys.component.scss' ]
 })
 export class CheatSheetComponent implements OnInit, OnDestroy {
-  @Input() title = this.i18n('Keyboard Shortcuts:')
+  @Input() title = $localize`Keyboard Shortcuts:`
   helpVisible = false
   subscription: Subscription
 
   hotkeys: Hotkey[]
 
   constructor (
-    private hotkeysService: HotkeysService,
-    private i18n: I18n
-  ) {}
+    private hotkeysService: HotkeysService
+    ) {}
 
   public ngOnInit (): void {
     this.subscription = this.hotkeysService.cheatSheetToggle.subscribe((isOpen) => {

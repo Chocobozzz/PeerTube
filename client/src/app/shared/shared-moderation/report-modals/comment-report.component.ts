@@ -5,7 +5,6 @@ import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app
 import { VideoComment } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
 import { AbusePredefinedReasonsString } from '@shared/models'
 import { AbuseService } from '../abuse.service'
@@ -31,8 +30,7 @@ export class CommentReportComponent extends FormReactive implements OnInit {
     private modalService: NgbModal,
     private abuseValidatorsService: AbuseValidatorsService,
     private abuseService: AbuseService,
-    private notifier: Notifier,
-    private i18n: I18n
+    private notifier: Notifier
   ) {
     super()
   }
@@ -50,7 +48,7 @@ export class CommentReportComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.modalTitle = this.i18n('Report comment')
+    this.modalTitle = $localize`Report comment`
 
     this.buildForm({
       reason: this.abuseValidatorsService.ABUSE_REASON,
@@ -81,7 +79,7 @@ export class CommentReportComponent extends FormReactive implements OnInit {
       }
     }).subscribe(
       () => {
-        this.notifier.success(this.i18n('Comment reported.'))
+        this.notifier.success($localize`Comment reported.`)
         this.hide()
       },
 

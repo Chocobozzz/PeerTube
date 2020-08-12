@@ -1,9 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { AuthService, Notifier, HtmlRendererService } from '@app/core'
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { AuthService, HtmlRendererService, Notifier } from '@app/core'
 import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AbuseMessage, UserAbuse } from '@shared/models'
 import { AbuseService } from '../shared-moderation'
 
@@ -31,7 +30,6 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private abuseValidatorsService: AbuseValidatorsService,
     private modalService: NgbModal,
-    private i18n: I18n,
     private htmlRenderer: HtmlRendererService,
     private auth: AuthService,
     private notifier: Notifier,
@@ -99,10 +97,10 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
 
   getPlaceholderMessage () {
     if (this.isAdminView) {
-      return this.i18n('Add a message to communicate with the reporter')
+      return $localize`Add a message to communicate with the reporter`
     }
 
-    return this.i18n('Add a message to communicate with the moderation team')
+    return $localize`Add a message to communicate with the moderation team`
   }
 
   private loadMessages () {

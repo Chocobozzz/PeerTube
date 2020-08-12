@@ -1,39 +1,36 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 // Thanks: https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
 @Pipe({ name: 'myFromNow' })
 export class FromNowPipe implements PipeTransform {
-
-  constructor (private i18n: I18n) { }
 
   transform (arg: number | Date | string) {
     const argDate = new Date(arg)
     const seconds = Math.floor((Date.now() - argDate.getTime()) / 1000)
 
     let interval = Math.floor(seconds / 31536000)
-    if (interval > 1) return this.i18n('{{interval}} years ago', { interval })
-    if (interval === 1) return this.i18n('{{interval}} year ago', { interval })
+    if (interval > 1) return $localize`${interval} years ago`
+    if (interval === 1) return $localize`${interval} year ago`
 
     interval = Math.floor(seconds / 2592000)
-    if (interval > 1) return this.i18n('{{interval}} months ago', { interval })
-    if (interval === 1) return this.i18n('{{interval}} month ago', { interval })
+    if (interval > 1) return $localize`${interval} months ago`
+    if (interval === 1) return $localize`${interval} month ago`
 
     interval = Math.floor(seconds / 604800)
-    if (interval > 1) return this.i18n('{{interval}} weeks ago', { interval })
-    if (interval === 1) return this.i18n('{{interval}} week ago', { interval })
+    if (interval > 1) return $localize`${interval} weeks ago`
+    if (interval === 1) return $localize`${interval} week ago`
 
     interval = Math.floor(seconds / 86400)
-    if (interval > 1) return this.i18n('{{interval}} days ago', { interval })
-    if (interval === 1) return this.i18n('{{interval}} day ago', { interval })
+    if (interval > 1) return $localize`${interval} days ago`
+    if (interval === 1) return $localize`${interval} day ago`
 
     interval = Math.floor(seconds / 3600)
-    if (interval > 1) return this.i18n('{{interval}} hours ago', { interval })
-    if (interval === 1) return this.i18n('{{interval}} hour ago', { interval })
+    if (interval > 1) return $localize`${interval} hours ago`
+    if (interval === 1) return $localize`${interval} hour ago`
 
     interval = Math.floor(seconds / 60)
-    if (interval >= 1) return this.i18n('{{interval}} min ago', { interval })
+    if (interval >= 1) return $localize`${interval} min ago`
 
-    return this.i18n('just now')
+    return $localize`just now`
   }
 }

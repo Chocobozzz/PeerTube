@@ -13,7 +13,6 @@ import {
 } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ComponentPagination, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ResultList, VideoSortField } from '@shared/models'
 import { PeerTubeTemplateDirective, Video } from '../shared-main'
 import { AbstractVideoList } from './abstract-video-list'
@@ -45,7 +44,6 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   globalButtonsTemplate: TemplateRef<any>
 
   constructor (
-    protected i18n: I18n,
     protected router: Router,
     protected route: ActivatedRoute,
     protected notifier: Notifier,

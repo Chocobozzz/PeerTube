@@ -1,8 +1,7 @@
 import { SortMeta } from 'primeng/api'
-import { OnInit, Directive } from '@angular/core'
+import { Directive, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { Actor } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
@@ -19,8 +18,7 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
 
   constructor (
     private notifier: Notifier,
-    private blocklistService: BlocklistService,
-    private i18n: I18n
+    private blocklistService: BlocklistService
   ) {
     super()
   }
@@ -46,8 +44,8 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
       () => {
         this.notifier.success(
           this.mode === BlocklistComponentType.Account
-            ? this.i18n('Account {{nameWithHost}} unmuted.', { nameWithHost: blockedAccount.nameWithHost })
-            : this.i18n('Account {{nameWithHost}} unmuted by your instance.', { nameWithHost: blockedAccount.nameWithHost })
+            ? $localize`Account ${blockedAccount.nameWithHost} unmuted.`
+            : $localize`Account ${blockedAccount.nameWithHost} unmuted by your instance.`
         )
 
         this.loadData()

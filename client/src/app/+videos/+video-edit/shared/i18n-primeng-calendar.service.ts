@@ -1,76 +1,75 @@
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Injectable } from '@angular/core'
 
 @Injectable()
 export class I18nPrimengCalendarService {
   private readonly calendarLocale: any = {}
 
-  constructor (private i18n: I18n) {
+  constructor () {
     this.calendarLocale = {
       firstDayOfWeek: 0,
       dayNames: [
-        this.i18n('Sunday'),
-        this.i18n('Monday'),
-        this.i18n('Tuesday'),
-        this.i18n('Wednesday'),
-        this.i18n('Thursday'),
-        this.i18n('Friday'),
-        this.i18n('Saturday')
+        $localize`Sunday`,
+        $localize`Monday`,
+        $localize`Tuesday`,
+        $localize`Wednesday`,
+        $localize`Thursday`,
+        $localize`Friday`,
+        $localize`Saturday`
       ],
 
       dayNamesShort: [
-        this.i18n({ value: 'Sun', description: 'Day name short' }),
-        this.i18n({ value: 'Mon', description: 'Day name short' }),
-        this.i18n({ value: 'Tue', description: 'Day name short' }),
-        this.i18n({ value: 'Wed', description: 'Day name short' }),
-        this.i18n({ value: 'Thu', description: 'Day name short' }),
-        this.i18n({ value: 'Fri', description: 'Day name short' }),
-        this.i18n({ value: 'Sat', description: 'Day name short' })
+        $localize`:Day name short:Sun`,
+        $localize`:Day name short:Mon`,
+        $localize`:Day name short:Tue`,
+        $localize`:Day name short:Wed`,
+        $localize`:Day name short:Thu`,
+        $localize`:Day name short:Fri`,
+        $localize`:Day name short:Sat`
       ],
 
       dayNamesMin: [
-        this.i18n({ value: 'Su', description: 'Day name min' }),
-        this.i18n({ value: 'Mo', description: 'Day name min' }),
-        this.i18n({ value: 'Tu', description: 'Day name min' }),
-        this.i18n({ value: 'We', description: 'Day name min' }),
-        this.i18n({ value: 'Th', description: 'Day name min' }),
-        this.i18n({ value: 'Fr', description: 'Day name min' }),
-        this.i18n({ value: 'Sa', description: 'Day name min' })
+        $localize`:Day name min:Su`,
+        $localize`:Day name min:Mo`,
+        $localize`:Day name min:Tu`,
+        $localize`:Day name min:We`,
+        $localize`:Day name min:Th`,
+        $localize`:Day name min:Fr`,
+        $localize`:Day name min:Sa`
       ],
 
       monthNames: [
-        this.i18n('January'),
-        this.i18n('February'),
-        this.i18n('March'),
-        this.i18n('April'),
-        this.i18n('May'),
-        this.i18n('June'),
-        this.i18n('July'),
-        this.i18n('August'),
-        this.i18n('September'),
-        this.i18n('October'),
-        this.i18n('November'),
-        this.i18n('December')
+        $localize`January`,
+        $localize`February`,
+        $localize`March`,
+        $localize`April`,
+        $localize`May`,
+        $localize`June`,
+        $localize`July`,
+        $localize`August`,
+        $localize`September`,
+        $localize`October`,
+        $localize`November`,
+        $localize`December`
       ],
 
       monthNamesShort: [
-        this.i18n({ value: 'Jan', description: 'Month name short' }),
-        this.i18n({ value: 'Feb', description: 'Month name short' }),
-        this.i18n({ value: 'Mar', description: 'Month name short' }),
-        this.i18n({ value: 'Apr', description: 'Month name short' }),
-        this.i18n({ value: 'May', description: 'Month name short' }),
-        this.i18n({ value: 'Jun', description: 'Month name short' }),
-        this.i18n({ value: 'Jul', description: 'Month name short' }),
-        this.i18n({ value: 'Aug', description: 'Month name short' }),
-        this.i18n({ value: 'Sep', description: 'Month name short' }),
-        this.i18n({ value: 'Oct', description: 'Month name short' }),
-        this.i18n({ value: 'Nov', description: 'Month name short' }),
-        this.i18n({ value: 'Dec', description: 'Month name short' })
+        $localize`:Month name short:Jan`,
+        $localize`:Month name short:Feb`,
+        $localize`:Month name short:Mar`,
+        $localize`:Month name short:Apr`,
+        $localize`:Month name short:May`,
+        $localize`:Month name short:Jun`,
+        $localize`:Month name short:Jul`,
+        $localize`:Month name short:Aug`,
+        $localize`:Month name short:Sep`,
+        $localize`:Month name short:Oct`,
+        $localize`:Month name short:Nov`,
+        $localize`:Month name short:Dec`
       ],
 
-      today: this.i18n('Today'),
+      today: $localize`Today`,
 
-      clear: this.i18n('Clear')
+      clear: $localize`Clear`
     }
   }
 
@@ -86,9 +85,6 @@ export class I18nPrimengCalendarService {
   }
 
   getDateFormat () {
-    return this.i18n({
-      value: 'yy-mm-dd ',
-      description: 'Date format in this locale.'
-    })
+    return $localize`:Date format in this locale.:yy-mm-dd`
   }
 }

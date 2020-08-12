@@ -7,7 +7,6 @@ import { removeElementFromArray } from '@app/helpers'
 import { FormReactiveValidationMessages, FormValidatorService, SelectChannelItem, VideoValidatorsService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
@@ -63,7 +62,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private serverService: ServerService,
     private instanceService: InstanceService,
     private i18nPrimengCalendarService: I18nPrimengCalendarService,
-    private i18n: I18n,
     private ngZone: NgZone
   ) {
     this.calendarLocale = this.i18nPrimengCalendarService.getCalendarLocale()
@@ -137,8 +135,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.videoLanguages = res.languages
           .map(l => res.about.instance.languages.includes(l.id)
-            ? { ...l, group: this.i18n('Instance languages'), groupOrder: 0 }
-            : { ...l, group: this.i18n('All languages'), groupOrder: 1 })
+            ? { ...l, group: $localize`Instance languages`, groupOrder: 0 }
+            : { ...l, group: $localize`All languages`, groupOrder: 1 })
           .sort((a, b) => a.groupOrder - b.groupOrder)
       })
 
@@ -148,8 +146,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         if (this.schedulePublicationPossible) {
           this.videoPrivacies.push({
             id: this.SPECIAL_SCHEDULED_PRIVACY,
-            label: this.i18n('Scheduled'),
-            description: this.i18n('Hide the video until a specific date')
+            label: $localize`Scheduled`,
+            description: $localize`Hide the video until a specific date`
           })
         }
       })

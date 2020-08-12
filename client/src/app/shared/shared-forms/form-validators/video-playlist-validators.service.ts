@@ -1,8 +1,7 @@
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { AbstractControl, FormControl, Validators } from '@angular/forms'
 import { Injectable } from '@angular/core'
-import { BuildFormValidator } from './form-validator.service'
+import { AbstractControl, Validators } from '@angular/forms'
 import { VideoPlaylistPrivacy } from '@shared/models'
+import { BuildFormValidator } from './form-validator.service'
 
 @Injectable()
 export class VideoPlaylistValidatorsService {
@@ -11,7 +10,7 @@ export class VideoPlaylistValidatorsService {
   readonly VIDEO_PLAYLIST_DESCRIPTION: BuildFormValidator
   readonly VIDEO_PLAYLIST_CHANNEL_ID: BuildFormValidator
 
-  constructor (private i18n: I18n) {
+  constructor () {
     this.VIDEO_PLAYLIST_DISPLAY_NAME = {
       VALIDATORS: [
         Validators.required,
@@ -19,9 +18,9 @@ export class VideoPlaylistValidatorsService {
         Validators.maxLength(120)
       ],
       MESSAGES: {
-        'required': this.i18n('Display name is required.'),
-        'minlength': this.i18n('Display name must be at least 1 character long.'),
-        'maxlength': this.i18n('Display name cannot be more than 120 characters long.')
+        'required': $localize`Display name is required.`,
+        'minlength': $localize`Display name must be at least 1 character long.`,
+        'maxlength': $localize`Display name cannot be more than 120 characters long.`
       }
     }
 
@@ -30,7 +29,7 @@ export class VideoPlaylistValidatorsService {
         Validators.required
       ],
       MESSAGES: {
-        'required': this.i18n('Privacy is required.')
+        'required': $localize`Privacy is required.`
       }
     }
 
@@ -40,15 +39,15 @@ export class VideoPlaylistValidatorsService {
         Validators.maxLength(1000)
       ],
       MESSAGES: {
-        'minlength': i18n('Description must be at least 3 characters long.'),
-        'maxlength': i18n('Description cannot be more than 1000 characters long.')
+        'minlength': $localize`Description must be at least 3 characters long.`,
+        'maxlength': $localize`Description cannot be more than 1000 characters long.`
       }
     }
 
     this.VIDEO_PLAYLIST_CHANNEL_ID = {
       VALIDATORS: [ ],
       MESSAGES: {
-        'required': this.i18n('The channel is required when the playlist is public.')
+        'required': $localize`The channel is required when the playlist is public.`
       }
     }
   }

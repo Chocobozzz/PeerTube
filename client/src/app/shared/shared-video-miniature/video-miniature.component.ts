@@ -11,7 +11,6 @@ import {
   Output
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
 import { Video } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
@@ -95,7 +94,6 @@ export class VideoMiniatureComponent implements OnInit {
   constructor (
     private screenService: ScreenService,
     private serverService: ServerService,
-    private i18n: I18n,
     private authService: AuthService,
     private videoPlaylistService: VideoPlaylistService,
     private cd: ChangeDetectorRef,
@@ -116,10 +114,7 @@ export class VideoMiniatureComponent implements OnInit {
 
     this.setUpBy()
 
-    this.channelLinkTitle = this.i18n(
-      '{{name}} (channel page)',
-      { name: this.video.channel.name, handle: this.video.byVideoChannel }
-    )
+    this.channelLinkTitle = $localize`${this.video.channel.name} (channel page)`
 
     // We rely on mouseenter to lazy load actions
     if (this.screenService.isInTouchScreen()) {
@@ -164,24 +159,24 @@ export class VideoMiniatureComponent implements OnInit {
     if (!video.state) return ''
 
     if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
-      return this.i18n('Published')
+      return $localize`Published`
     }
 
     if (video.scheduledUpdate) {
       const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
-      return this.i18n('Publication scheduled on ') + updateAt
+      return $localize`Publication scheduled on ` + updateAt
     }
 
     if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
-      return this.i18n('Waiting transcoding')
+      return $localize`Waiting transcoding`
     }
 
     if (video.state.id === VideoState.TO_TRANSCODE) {
-      return this.i18n('To transcode')
+      return $localize`To transcode`
     }
 
     if (video.state.id === VideoState.TO_IMPORT) {
-      return this.i18n('To import')
+      return $localize`To import`
     }
 
     return ''

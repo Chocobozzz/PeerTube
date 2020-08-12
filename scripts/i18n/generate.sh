@@ -2,9 +2,13 @@
 
 set -eu
 
+npm run build -- --i18n
+
 cd client
-npm run ng -- xi18n --i18n-locale "en-US" --output-path src/locale --out-file angular.xlf
-npm run ngx-extractor -- --locale "en-US" -i 'src/**/*.ts' -f xlf -o src/locale/angular.xlf
+./node_modules/.bin/localize-extract -r . -f xliff --locale "en-US" -s 'dist/en-US/*.js' -o src/locale/angular.xlf
+
+# Workaround of https://github.com/angular/angular/issues/38437
+sed -i 's/other {{INTERPOLATION}/other {<x id="INTERPOLATION"\/>/g' src/locale/angular.xlf
 
 # Merge new translations in other language files
 npm run ng run -- PeerTube:xliffmerge

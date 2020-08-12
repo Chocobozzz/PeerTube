@@ -1,7 +1,6 @@
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Injectable } from '@angular/core'
 import { Validators } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.service'
-import { Injectable } from '@angular/core'
 
 @Injectable()
 export class InstanceValidatorsService {
@@ -10,13 +9,13 @@ export class InstanceValidatorsService {
   readonly SUBJECT: BuildFormValidator
   readonly BODY: BuildFormValidator
 
-  constructor (private i18n: I18n) {
+  constructor () {
 
     this.FROM_EMAIL = {
       VALIDATORS: [ Validators.required, Validators.email ],
       MESSAGES: {
-        'required': this.i18n('Email is required.'),
-        'email': this.i18n('Email must be valid.')
+        'required': $localize`Email is required.`,
+        'email': $localize`Email must be valid.`
       }
     }
 
@@ -27,9 +26,9 @@ export class InstanceValidatorsService {
         Validators.maxLength(120)
       ],
       MESSAGES: {
-        'required': this.i18n('Your name is required.'),
-        'minlength': this.i18n('Your name must be at least 1 character long.'),
-        'maxlength': this.i18n('Your name cannot be more than 120 characters long.')
+        'required': $localize`Your name is required.`,
+        'minlength': $localize`Your name must be at least 1 character long.`,
+        'maxlength': $localize`Your name cannot be more than 120 characters long.`
       }
     }
 
@@ -40,9 +39,9 @@ export class InstanceValidatorsService {
         Validators.maxLength(120)
       ],
       MESSAGES: {
-        'required': this.i18n('A subject is required.'),
-        'minlength': this.i18n('The subject must be at least 1 character long.'),
-        'maxlength': this.i18n('The subject cannot be more than 120 characters long.')
+        'required': $localize`A subject is required.`,
+        'minlength': $localize`The subject must be at least 1 character long.`,
+        'maxlength': $localize`The subject cannot be more than 120 characters long.`
       }
     }
 
@@ -53,9 +52,9 @@ export class InstanceValidatorsService {
         Validators.maxLength(5000)
       ],
       MESSAGES: {
-        'required': this.i18n('A message is required.'),
-        'minlength': this.i18n('The message must be at least 3 characters long.'),
-        'maxlength': this.i18n('The message cannot be more than 5000 characters long.')
+        'required': $localize`A message is required.`,
+        'minlength': $localize`The message must be at least 3 characters long.`,
+        'maxlength': $localize`The message cannot be more than 5000 characters long.`
       }
     }
   }

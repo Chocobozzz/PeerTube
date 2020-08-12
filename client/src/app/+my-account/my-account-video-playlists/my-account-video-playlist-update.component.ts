@@ -6,7 +6,6 @@ import { AuthService, Notifier, ServerService } from '@app/core'
 import { populateAsyncUserVideoChannels } from '@app/helpers'
 import { FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/shared-forms'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoPlaylistUpdate } from '@shared/models'
 import { MyAccountVideoPlaylistEdit } from './my-account-video-playlist-edit'
 
@@ -29,7 +28,6 @@ export class MyAccountVideoPlaylistUpdateComponent extends MyAccountVideoPlaylis
     private router: Router,
     private route: ActivatedRoute,
     private videoPlaylistService: VideoPlaylistService,
-    private i18n: I18n,
     private serverService: ServerService
   ) {
     super()
@@ -91,10 +89,7 @@ export class MyAccountVideoPlaylistUpdateComponent extends MyAccountVideoPlaylis
 
     this.videoPlaylistService.updateVideoPlaylist(this.videoPlaylistToUpdate, videoPlaylistUpdate).subscribe(
       () => {
-        this.notifier.success(
-          this.i18n('Playlist {{videoPlaylistName}} updated.', { videoPlaylistName: videoPlaylistUpdate.displayName })
-        )
-
+        this.notifier.success($localize`Playlist ${videoPlaylistUpdate.displayName} updated.`)
         this.router.navigate([ '/my-account', 'video-playlists' ])
       },
 
@@ -107,7 +102,7 @@ export class MyAccountVideoPlaylistUpdateComponent extends MyAccountVideoPlaylis
   }
 
   getFormButtonTitle () {
-    return this.i18n('Update')
+    return $localize`Update`
   }
 
   private hydrateFormFromPlaylist () {

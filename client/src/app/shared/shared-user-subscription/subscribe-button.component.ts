@@ -3,7 +3,6 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
 import { Account, VideoChannel, VideoService } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FeedFormat } from '@shared/models'
 import { UserSubscriptionService } from './user-subscription.service'
 
@@ -31,7 +30,6 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
     private router: Router,
     private notifier: Notifier,
     private userSubscriptionService: UserSubscriptionService,
-    private i18n: I18n,
     private videoService: VideoService
   ) { }
 
@@ -108,20 +106,14 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
         () => {
           this.notifier.success(
             this.account
-              ? this.i18n(
-                  'Subscribed to all current channels of {{nameWithHost}}. You will be notified of all their new videos.',
-                  { nameWithHost: this.account.displayName }
-                )
-              : this.i18n(
-                  'Subscribed to {{nameWithHost}}. You will be notified of all their new videos.',
-                  { nameWithHost: this.videoChannels[0].displayName }
-                )
-            ,
-            this.i18n('Subscribed')
+              ? $localize`Subscribed to all current channels of ${this.account.displayName}. You will be notified of all their new videos.`
+              : $localize`Subscribed to ${this.videoChannels[0].displayName}. You will be notified of all their new videos.`,
+
+            $localize`Subscribed`
           )
         },
 
-          err => this.notifier.error(err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -144,10 +136,10 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
         complete: () => {
           this.notifier.success(
             this.account
-              ? this.i18n('Unsubscribed from all channels of {{nameWithHost}}', { nameWithHost: this.account.nameWithHost })
-              : this.i18n('Unsubscribed from {{nameWithHost}}', { nameWithHost: this.videoChannels[ 0 ].nameWithHost })
-            ,
-            this.i18n('Unsubscribed')
+              ? $localize`Unsubscribed from all channels of ${this.account.nameWithHost}`
+              : $localize`Unsubscribed from ${this.videoChannels[ 0 ].nameWithHost}`,
+
+            $localize`Unsubscribed`
           )
         },
 

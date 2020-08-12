@@ -14,7 +14,6 @@ import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { MetaService } from '@ngx-meta/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { ServerConfig, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
 import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
@@ -97,16 +96,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private redirectService: RedirectService,
     private videoCaptionService: VideoCaptionService,
-    private i18n: I18n,
     private hotkeysService: HotkeysService,
     private hooks: HooksService,
     private location: PlatformLocation,
     @Inject(LOCALE_ID) private localeId: string
   ) {
-    this.tooltipLike = this.i18n('Like this video')
-    this.tooltipDislike = this.i18n('Dislike this video')
-    this.tooltipSupport = this.i18n('Support options for this video')
-    this.tooltipSaveToPlaylist = this.i18n('Save to playlist')
+    this.tooltipLike = $localize`Like this video`
+    this.tooltipDislike = $localize`Dislike this video`
+    this.tooltipSupport = $localize`Support options for this video`
+    this.tooltipSaveToPlaylist = $localize`Save to playlist`
   }
 
   get user () {
@@ -188,7 +186,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   getRatePopoverText () {
     if (this.isUserLoggedIn()) return undefined
 
-    return this.i18n('You need to be connected to rate this content.')
+    return $localize`You need to be connected to rate this content.`
   }
 
   showMoreDescription () {
@@ -409,10 +407,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setVideoLikesBarTooltipText () {
-    this.likesBarTooltipText = this.i18n('{{likesNumber}} likes / {{dislikesNumber}} dislikes', {
-      likesNumber: this.video.likes,
-      dislikesNumber: this.video.dislikes
-    })
+    this.likesBarTooltipText = `${this.video.likes} likes / ${this.video.dislikes} dislikes`
   }
 
   private handleError (err: any) {
@@ -465,8 +460,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     if (this.isVideoBlur(this.video)) {
       const res = await this.confirmService.confirm(
-        this.i18n('This video contains mature or explicit content. Are you sure you want to watch it?'),
-        this.i18n('Mature or explicit content')
+        $localize`This video contains mature or explicit content. Are you sure you want to watch it?`,
+        $localize`Mature or explicit content`
       )
       if (res === false) return this.location.back()
     }
@@ -515,9 +510,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
        */
       this.player.upnext({
         timeout: 10000, // 10s
-        headText: this.i18n('Up Next'),
-        cancelText: this.i18n('Cancel'),
-        suspendedText: this.i18n('Autoplay is suspended'),
+        headText: $localize`Up Next`,
+        cancelText: $localize`Cancel`,
+        suspendedText: $localize`Autoplay is suspended`,
         getTitle: () => this.nextVideoTitle,
         next: () => this.zone.run(() => this.autoplayNext()),
         condition: () => {
@@ -781,22 +776,22 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private initHotkeys () {
     this.hotkeys = [
       // These hotkeys are managed by the player
-      new Hotkey('f', e => e, undefined, this.i18n('Enter/exit fullscreen (requires player focus)')),
-      new Hotkey('space', e => e, undefined, this.i18n('Play/Pause the video (requires player focus)')),
-      new Hotkey('m', e => e, undefined, this.i18n('Mute/unmute the video (requires player focus)')),
+      new Hotkey('f', e => e, undefined, $localize`Enter/exit fullscreen (requires player focus)`),
+      new Hotkey('space', e => e, undefined, $localize`Play/Pause the video (requires player focus)`),
+      new Hotkey('m', e => e, undefined, $localize`Mute/unmute the video (requires player focus)`),
 
-      new Hotkey('0-9', e => e, undefined, this.i18n('Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)')),
+      new Hotkey('0-9', e => e, undefined, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)`),
 
-      new Hotkey('up', e => e, undefined, this.i18n('Increase the volume (requires player focus)')),
-      new Hotkey('down', e => e, undefined, this.i18n('Decrease the volume (requires player focus)')),
+      new Hotkey('up', e => e, undefined, $localize`Increase the volume (requires player focus)`),
+      new Hotkey('down', e => e, undefined, $localize`Decrease the volume (requires player focus)`),
 
-      new Hotkey('right', e => e, undefined, this.i18n('Seek the video forward (requires player focus)')),
-      new Hotkey('left', e => e, undefined, this.i18n('Seek the video backward (requires player focus)')),
+      new Hotkey('right', e => e, undefined, $localize`Seek the video forward (requires player focus)`),
+      new Hotkey('left', e => e, undefined, $localize`Seek the video backward (requires player focus)`),
 
-      new Hotkey('>', e => e, undefined, this.i18n('Increase playback rate (requires player focus)')),
-      new Hotkey('<', e => e, undefined, this.i18n('Decrease playback rate (requires player focus)')),
+      new Hotkey('>', e => e, undefined, $localize`Increase playback rate (requires player focus)`),
+      new Hotkey('<', e => e, undefined, $localize`Decrease playback rate (requires player focus)`),
 
-      new Hotkey('.', e => e, undefined, this.i18n('Navigate in the video frame by frame (requires player focus)'))
+      new Hotkey('.', e => e, undefined, $localize`Navigate in the video frame by frame (requires player focus)`)
     ]
 
     if (this.isUserLoggedIn()) {
@@ -804,17 +799,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         new Hotkey('shift+l', () => {
           this.setLike()
           return false
-        }, undefined, this.i18n('Like the video')),
+        }, undefined, $localize`Like the video`),
 
         new Hotkey('shift+d', () => {
           this.setDislike()
           return false
-        }, undefined, this.i18n('Dislike the video')),
+        }, undefined, $localize`Dislike the video`),
 
         new Hotkey('shift+s', () => {
           this.subscribeButton.subscribed ? this.subscribeButton.unsubscribe() : this.subscribeButton.subscribe()
           return false
-        }, undefined, this.i18n('Subscribe to the account'))
+        }, undefined, $localize`Subscribe to the account`)
       ])
     }
 

@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { Video } from '@app/shared/shared-main'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, VideoPlaylistElementType, VideoPlaylistElementUpdate } from '@shared/models'
 import { secondsToTime } from '../../../assets/player/utils'
 import { VideoPlaylistElement } from './video-playlist-element.model'
@@ -44,7 +43,6 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     private authService: AuthService,
     private serverService: ServerService,
     private notifier: Notifier,
-    private i18n: I18n,
     private videoPlaylistService: VideoPlaylistService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -97,8 +95,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     this.videoPlaylistService.removeVideoFromPlaylist(this.playlist.id, playlistElement.id, videoId)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Video removed from {{name}}', { name: this.playlist.displayName }))
-
+            this.notifier.success($localize`Video removed from ${this.playlist.displayName}`)
             this.elementRemoved.emit(playlistElement)
           },
 
@@ -117,7 +114,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     this.videoPlaylistService.updateVideoOfPlaylist(this.playlist.id, playlistElement.id, body, this.playlistElement.video.id)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Timestamps updated'))
+            this.notifier.success($localize`Timestamps updated`)
 
             playlistElement.startTimestamp = body.startTimestamp
             playlistElement.stopTimestamp = body.stopTimestamp
@@ -140,10 +137,10 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
 
     if (start === null && stop === null) return ''
 
-    if (start !== null && stop === null) return this.i18n('Starts at ') + startFormatted
-    if (start === null && stop !== null) return this.i18n('Stops at ') + stopFormatted
+    if (start !== null && stop === null) return $localize`Starts at ` + startFormatted
+    if (start === null && stop !== null) return $localize`Stops at ` + stopFormatted
 
-    return this.i18n('Starts at ') + startFormatted + this.i18n(' and stops at ') + stopFormatted
+    return $localize`Starts at ` + startFormatted + $localize` and stops at ` + stopFormatted
   }
 
   onDropdownOpenChange () {

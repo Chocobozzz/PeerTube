@@ -1,10 +1,9 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { FormReactive, FormValidatorService, AbuseValidatorsService } from '@app/shared/shared-forms'
+import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { AbuseService } from '@app/shared/shared-moderation'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AdminAbuse } from '@shared/models'
 
 @Component({
@@ -24,8 +23,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     private modalService: NgbModal,
     private notifier: Notifier,
     private abuseService: AbuseService,
-    private abuseValidatorsService: AbuseValidatorsService,
-    private i18n: I18n
+    private abuseValidatorsService: AbuseValidatorsService
   ) {
     super()
   }
@@ -57,7 +55,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     this.abuseService.updateAbuse(this.abuseToComment, { moderationComment })
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Comment updated.'))
+            this.notifier.success($localize`Comment updated.`)
 
             this.commentUpdated.emit(moderationComment)
             this.hide()

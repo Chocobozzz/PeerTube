@@ -4,7 +4,6 @@ import { FormReactive, FormValidatorService, VideoBlockValidatorsService } from 
 import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoBlockService } from './video-block.service'
 
 @Component({
@@ -28,8 +27,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
     private modalService: NgbModal,
     private videoBlockValidatorsService: VideoBlockValidatorsService,
     private videoBlocklistService: VideoBlockService,
-    private notifier: Notifier,
-    private i18n: I18n
+    private notifier: Notifier
   ) {
     super()
   }
@@ -59,7 +57,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
     this.videoBlocklistService.blockVideo(this.video.id, reason, unfederate)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Video blocked.'))
+            this.notifier.success($localize`Video blocked.`)
             this.hide()
 
             this.video.blacklisted = true

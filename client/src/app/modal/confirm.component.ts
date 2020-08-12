@@ -3,7 +3,6 @@ import { ConfirmService } from '@app/core/confirm/confirm.service'
 import { POP_STATE_MODAL_DISMISS } from '@app/helpers'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-confirm',
@@ -25,8 +24,7 @@ export class ConfirmComponent implements OnInit {
 
   constructor (
     private modalService: NgbModal,
-    private confirmService: ConfirmService,
-    private i18n: I18n
+    private confirmService: ConfirmService
   ) { }
 
   ngOnInit () {
@@ -38,7 +36,7 @@ export class ConfirmComponent implements OnInit {
         this.inputLabel = inputLabel
         this.expectedInputValue = expectedInputValue
 
-        this.confirmButtonText = confirmButtonText || this.i18n('Confirm')
+        this.confirmButtonText = confirmButtonText || $localize`Confirm`
 
         this.showModal()
       }

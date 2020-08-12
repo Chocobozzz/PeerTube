@@ -3,7 +3,6 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
 import { BatchDomainsModalComponent } from '@app/shared/shared-moderation'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ActorFollow } from '@shared/models'
 
 @Component({
@@ -22,9 +21,8 @@ export class FollowingListComponent extends RestTable implements OnInit {
   constructor (
     private notifier: Notifier,
     private confirmService: ConfirmService,
-    private followService: InstanceFollowService,
-    private i18n: I18n
-  ) {
+    private followService: InstanceFollowService
+    ) {
     super()
   }
 
@@ -47,7 +45,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
   async addFollowing (hosts: string[]) {
     this.followService.follow(hosts).subscribe(
       () => {
-        this.notifier.success(this.i18n('Follow request(s) sent!'))
+        this.notifier.success($localize`Follow request(s) sent!`)
         this.loadData()
       },
 
@@ -57,14 +55,14 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
   async removeFollowing (follow: ActorFollow) {
     const res = await this.confirmService.confirm(
-      this.i18n('Do you really want to unfollow {{host}}?', { host: follow.following.host }),
-      this.i18n('Unfollow')
+      $localize`Do you really want to unfollow ${follow.following.host}?`,
+      $localize`Unfollow`
     )
     if (res === false) return
 
     this.followService.unfollow(follow).subscribe(
       () => {
-        this.notifier.success(this.i18n('You are not following {{host}} anymore.', { host: follow.following.host }))
+        this.notifier.success($localize`You are not following ${follow.following.host} anymore.`)
         this.loadData()
       },
 

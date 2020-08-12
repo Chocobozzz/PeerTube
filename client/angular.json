@@ -124,6 +124,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
+            "localize": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -214,6 +215,7 @@
               "budgets": []
             },
             "hmr": {
+              "localize": false,
               "budgets": [
                 {
                   "type": "anyComponentStyle",
@@ -228,6 +230,7 @@
               ]
             },
             "e2e": {
+              "localize": false,
               "budgets": [
                 {
                   "type": "anyComponentStyle",
@@ -240,84 +243,6 @@
                   "with": "src/environments/environment.e2e.ts"
                 }
               ]
-            },
-            "ar": {
-              "localize": [ "ar" ]
-            },
-            "hu-HU": {
-              "localize": [ "hu" ]
-            },
-            "th-TH": {
-              "localize":  [ "th" ]
-            },
-            "fi-FI": {
-              "localize":  [ "fi" ]
-            },
-            "nl-NL": {
-              "localize":  [ "nl" ]
-            },
-            "gd": {
-              "localize":  [ "gd" ]
-            },
-            "el-GR": {
-              "localize":  [ "el" ]
-            },
-            "es-ES": {
-              "localize":  [ "es" ]
-            },
-            "oc": {
-              "localize":  [ "oc" ]
-            },
-            "pt-BR": {
-              "localize":  [ "pt" ]
-            },
-            "pt-PT": {
-              "localize":  [ "pt-PT" ]
-            },
-            "sv-SE": {
-              "localize":  [ "sv" ]
-            },
-            "pl-PL": {
-              "localize":  [ "pl" ]
-            },
-            "ru-RU": {
-              "localize":  [ "ru" ]
-            },
-            "zh-Hans-CN": {
-              "localize":  [ "zh-Hans" ]
-            },
-            "zh-Hant-TW": {
-              "localize":  [ "zh-Hant" ]
-            },
-            "fr-FR": {
-              "localize":  [ "fr" ]
-            },
-            "ja-JP": {
-              "localize":  [ "ja" ]
-            },
-            "eu-ES": {
-              "localize":  [ "eu" ]
-            },
-            "ca-ES": {
-              "localize":  [ "ca" ]
-            },
-            "cs-CZ": {
-              "localize":  [ "cs" ]
-            },
-            "eo": {
-              "localize":  [ "eo" ]
-            },
-            "de-DE": {
-              "localize":  [ "de" ]
-            },
-            "it-IT": {
-              "localize":  [ "it" ]
-            },
-            "vi-VN": {
-              "localize":  [ "vi" ]
-            },
-            "kab": {
-              "localize":  [ "kab" ]
             }
           }
         },

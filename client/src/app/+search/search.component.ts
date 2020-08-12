@@ -7,7 +7,6 @@ import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions, VideoLinkType } from '@app/shared/shared-video-miniature'
 import { MetaService } from '@ngx-meta/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { SearchTargetType, ServerConfig } from '@shared/models'
 
 @Component({
@@ -52,7 +51,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   private lastSearchTarget: SearchTargetType
 
   constructor (
-    private i18n: I18n,
     private route: ActivatedRoute,
     private router: Router,
     private metaService: MetaService,
@@ -170,8 +168,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
 
         this.notifier.error(
-          this.i18n('Search index is unavailable. Retrying with instance results instead.'),
-          this.i18n('Search error')
+          $localize`Search index is unavailable. Retrying with instance results instead.`,
+          $localize`Search error`
         )
         this.advancedSearch.searchTarget = 'local'
         this.search()
@@ -229,7 +227,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private updateTitle () {
     const suffix = this.currentSearch ? ' ' + this.currentSearch : ''
-    this.metaService.setTitle(this.i18n('Search') + suffix)
+    this.metaService.setTitle($localize`Search` + suffix)
   }
 
   private updateUrlFromAdvancedSearch () {

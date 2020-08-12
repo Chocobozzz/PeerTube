@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { FormValidatorService, VideoChannelValidatorsService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, VideoChannelUpdate } from '@shared/models'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
 
@@ -29,7 +28,6 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     private router: Router,
     private route: ActivatedRoute,
     private videoChannelService: VideoChannelService,
-    private i18n: I18n,
     private serverService: ServerService
   ) {
     super()
@@ -87,9 +85,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
       () => {
         this.authService.refreshUserInformation()
 
-        this.notifier.success(
-          this.i18n('Video channel {{videoChannelName}} updated.', { videoChannelName: videoChannelUpdate.displayName })
-        )
+        this.notifier.success($localize`Video channel ${videoChannelUpdate.displayName} updated.`)
 
         this.router.navigate([ '/my-account', 'video-channels' ])
       },
@@ -102,7 +98,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     this.videoChannelService.changeVideoChannelAvatar(this.videoChannelToUpdate.name, formData)
         .subscribe(
           data => {
-            this.notifier.success(this.i18n('Avatar changed.'))
+            this.notifier.success($localize`Avatar changed.`)
 
             this.videoChannelToUpdate.updateAvatar(data.avatar)
           },
@@ -124,7 +120,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
   }
 
   getFormButtonTitle () {
-    return this.i18n('Update')
+    return $localize`Update`
   }
 
   isBulkUpdateVideosDisplayed () {

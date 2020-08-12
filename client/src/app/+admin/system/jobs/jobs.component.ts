@@ -2,7 +2,6 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Job, JobState, JobType } from '@shared/models'
 import { JobStateClient } from '../../../../types/job-state-client.type'
 import { JobTypeClient } from '../../../../types/job-type-client.type'
@@ -43,9 +42,8 @@ export class JobsComponent extends RestTable implements OnInit {
 
   constructor (
     private notifier: Notifier,
-    private jobsService: JobService,
-    private i18n: I18n
-  ) {
+    private jobsService: JobService
+    ) {
     super()
   }
 

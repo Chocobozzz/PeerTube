@@ -4,7 +4,6 @@ import { debounceTime, filter } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
 import { FormReactive, FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/shared-forms'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Video, VideoExistInPlaylist, VideoPlaylistCreate, VideoPlaylistElementCreate, VideoPlaylistPrivacy } from '@shared/models'
 import { secondsToTime } from '../../../assets/player/utils'
 import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
@@ -53,7 +52,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
     private notifier: Notifier,
-    private i18n: I18n,
     private videoPlaylistService: VideoPlaylistService,
     private videoPlaylistValidatorsService: VideoPlaylistValidatorsService,
     private cd: ChangeDetectorRef
@@ -204,7 +202,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, playlist.playlistElementId, this.video.id)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Video removed from {{name}}', { name: playlist.displayName }))
+            this.notifier.success($localize`Video removed from ${playlist.displayName}`)
           },
 
           err => {
@@ -262,8 +260,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
       .subscribe(
         () => {
           const message = body.startTimestamp || body.stopTimestamp
-            ? this.i18n('Video added in {{n}} at timestamps {{t}}', { n: playlist.displayName, t: this.formatTimestamp(playlist) })
-            : this.i18n('Video added in {{n}}', { n: playlist.displayName })
+            ? $localize`Video added in ${playlist.displayName} at timestamps ${this.formatTimestamp(playlist)}`
+            : $localize`Video added in ${playlist.displayName}`
 
           this.notifier.success(message)
         },

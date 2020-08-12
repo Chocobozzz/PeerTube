@@ -1,12 +1,11 @@
 import { mapValues, pickBy } from 'lodash-es'
-import { buildVideoOrPlaylistEmbed, buildVideoLink } from 'src/assets/player/utils'
+import { buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Notifier } from '@app/core'
 import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
 import { AbusePredefinedReasonsString } from '@shared/models'
 import { Video } from '../../shared-main'
@@ -34,8 +33,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     private abuseValidatorsService: AbuseValidatorsService,
     private abuseService: AbuseService,
     private notifier: Notifier,
-    private sanitizer: DomSanitizer,
-    private i18n: I18n
+    private sanitizer: DomSanitizer
   ) {
     super()
   }
@@ -109,7 +107,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
       }
     }).subscribe(
       () => {
-        this.notifier.success(this.i18n('Video reported.'))
+        this.notifier.success($localize`Video reported.`)
         this.hide()
       },
 

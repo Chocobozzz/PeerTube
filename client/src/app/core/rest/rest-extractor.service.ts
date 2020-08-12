@@ -2,16 +2,12 @@ import { throwError as observableThrowError } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { dateToHuman } from '@app/helpers'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ResultList } from '@shared/models'
 
 @Injectable()
 export class RestExtractor {
 
-  constructor (
-    private router: Router,
-    private i18n: I18n
-  ) { }
+  constructor (private router: Router) { }
 
   extractDataBool () {
     return true
@@ -62,19 +58,18 @@ export class RestExtractor {
       } else if (err.error && err.error.error) {
         errorMessage = err.error.error
       } else if (err.status === 413) {
-        errorMessage = this.i18n(
-          'Request is too large for the server. Please contact you administrator if you want to increase the limit size.'
-        )
+        errorMessage = $localize`Request is too large for the server.
+ Please contact you administrator if you want to increase the limit size.`
       } else if (err.status === 429) {
         const secondsLeft = err.headers.get('retry-after')
         if (secondsLeft) {
           const minutesLeft = Math.floor(parseInt(secondsLeft, 10) / 60)
-          errorMessage = this.i18n('Too many attempts, please try again after {{minutesLeft}} minutes.', { minutesLeft })
+          errorMessage = $localize`Too many attempts, please try again after ${minutesLeft} minutes.`
         } else {
-          errorMessage = this.i18n('Too many attempts, please try again later.')
+          errorMessage = $localize`Too many attempts, please try again later.`
         }
       } else if (err.status === 500) {
-        errorMessage = this.i18n('Server error. Please retry later.')
+        errorMessage = $localize`Server error. Please retry later.`
       }
 
       errorMessage = errorMessage ? errorMessage : 'Unknown error.'

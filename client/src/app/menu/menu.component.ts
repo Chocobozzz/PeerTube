@@ -5,7 +5,6 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { AuthService, AuthStatus, AuthUser, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
 const logger = debug('peertube:menu:MenuComponent')
@@ -44,9 +43,8 @@ export class MenuComponent implements OnInit {
     private serverService: ServerService,
     private redirectService: RedirectService,
     private hotkeysService: HotkeysService,
-    private screenService: ScreenService,
-    private i18n: I18n
-  ) { }
+    private screenService: ScreenService
+    ) { }
 
   get isInMobileView () {
     return this.screenService.isInMobileView()
@@ -117,13 +115,13 @@ export class MenuComponent implements OnInit {
 
     switch (this.user.nsfwPolicy) {
       case 'do_not_list':
-        return this.i18n('hide')
+        return $localize`hide`
 
       case 'blur':
-        return this.i18n('blur')
+        return $localize`blur`
 
       case 'display':
-        return this.i18n('display')
+        return $localize`display`
     }
   }
 
@@ -189,7 +187,7 @@ export class MenuComponent implements OnInit {
   }
 
   langForLocale (localeId: string) {
-    if (localeId === '_unknown') return this.i18n('Unknown')
+    if (localeId === '_unknown') return $localize`Unknown`
 
     return this.languages.find(lang => lang.id === localeId).label
   }
@@ -201,7 +199,7 @@ export class MenuComponent implements OnInit {
     }
 
     if (!this.user.videoLanguages) {
-      this.videoLanguages = [this.i18n('any language')]
+      this.videoLanguages = [$localize`any language`]
       return
     }
 

@@ -3,8 +3,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, ServerService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
 import { PeerTubePluginIndex } from '@shared/models/plugins/peertube-plugin-index.model'
 import { PluginType } from '@shared/models/plugins/plugin.type'
 
@@ -40,8 +39,6 @@ export class PluginSearchComponent implements OnInit {
   private searchSubject = new Subject<string>()
 
   constructor (
-    private server: ServerService,
-    private i18n: I18n,
     private pluginService: PluginApiService,
     private notifier: Notifier,
     private confirmService: ConfirmService,
@@ -100,7 +97,7 @@ export class PluginSearchComponent implements OnInit {
           err => {
             console.error(err)
 
-            const message = this.i18n('The plugin index is not available. Please retry later.')
+            const message = $localize`The plugin index is not available. Please retry later.`
             this.notifier.error(message)
           }
         )
@@ -122,8 +119,8 @@ export class PluginSearchComponent implements OnInit {
     if (this.installing[plugin.npmName]) return
 
     const res = await this.confirmService.confirm(
-      this.i18n('Please only install plugins or themes you trust, since they can execute any code on your instance.'),
-      this.i18n('Install {{pluginName}}?', { pluginName: plugin.name })
+      $localize`Please only install plugins or themes you trust, since they can execute any code on your instance.`,
+      $localize`Install ${plugin.name}?`
     )
     if (res === false) return
 
@@ -135,7 +132,7 @@ export class PluginSearchComponent implements OnInit {
             this.installing[plugin.npmName] = false
             this.pluginInstalled = true
 
-            this.notifier.success(this.i18n('{{pluginName}} installed.', { pluginName: plugin.name }))
+            this.notifier.success($localize`${plugin.name} installed.`)
 
             plugin.installed = true
           },

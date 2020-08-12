@@ -5,7 +5,6 @@ import { AuthService, Notifier, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { InstanceService } from '@app/shared/shared-instance'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRegister } from '@shared/models'
 import { About, ServerConfig } from '@shared/models/server'
 
@@ -42,9 +41,8 @@ export class RegisterComponent implements OnInit {
     private notifier: Notifier,
     private userService: UserService,
     private instanceService: InstanceService,
-    private hooks: HooksService,
-    private i18n: I18n
-  ) {
+    private hooks: HooksService
+    ) {
   }
 
   get requiresEmailVerification () {
@@ -114,7 +112,7 @@ export class RegisterComponent implements OnInit {
         this.signupDone = true
 
         if (this.requiresEmailVerification) {
-          this.info = this.i18n('Now please check your emails to verify your account and complete signup.')
+          this.info = $localize`Now please check your emails to verify your account and complete signup.`
           return
         }
 
@@ -122,7 +120,7 @@ export class RegisterComponent implements OnInit {
         this.authService.login(body.username, body.password)
             .subscribe(
               () => {
-                this.success = this.i18n('You are now logged in as {{username}}!', { username: body.username })
+                this.success = $localize`You are now logged in as ${body.username}!`
               },
 
               err => this.error = err.message

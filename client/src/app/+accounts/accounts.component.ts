@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router'
 import { AuthService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
 import { Account, AccountService, DropdownAction, ListOverflowItem, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { AccountReportComponent } from '@app/shared/shared-moderation'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User, UserRight } from '@shared/models'
 
 @Component({
@@ -36,8 +35,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private restExtractor: RestExtractor,
     private redirectService: RedirectService,
     private authService: AuthService,
-    private screenService: ScreenService,
-    private i18n: I18n
+    private screenService: ScreenService
   ) {
   }
 
@@ -58,9 +56,9 @@ export class AccountsComponent implements OnInit, OnDestroy {
                         )
 
     this.links = [
-      { label: this.i18n('VIDEO CHANNELS'), routerLink: 'video-channels' },
-      { label: this.i18n('VIDEOS'), routerLink: 'videos' },
-      { label: this.i18n('ABOUT'), routerLink: 'about' }
+      { label: $localize`VIDEO CHANNELS`, routerLink: 'video-channels' },
+      { label: $localize`VIDEOS`, routerLink: 'videos' },
+      { label: $localize`ABOUT`, routerLink: 'about' }
     ]
   }
 
@@ -88,11 +86,13 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   activateCopiedMessage () {
-    this.notifier.success(this.i18n('Username copied'))
+    this.notifier.success($localize`Username copied`)
   }
 
   subscribersDisplayFor (count: number) {
-    return this.i18n('{count, plural, =1 {1 subscriber} other {{{count}} subscribers}}', { count })
+    if (count === 1) return $localize`1 subscriber`
+
+    return $localize`${count} subscribers`
   }
 
   private onAccount (account: Account) {
@@ -105,16 +105,14 @@ export class AccountsComponent implements OnInit, OnDestroy {
         () => {
           this.isAccountManageable = this.account.userId && this.account.userId === this.authService.getUser().id
 
-          this.accountFollowerTitle = this.i18n(
-            '{{followers}} direct account followers',
-            { followers: this.subscribersDisplayFor(account.followersCount) }
-          )
+          const followers = this.subscribersDisplayFor(account.followersCount)
+          this.accountFollowerTitle = $localize`${followers} direct account followers`
 
           // It's not our account, we can report it
           if (!this.isAccountManageable) {
             this.prependModerationActions = [
               {
-                label: this.i18n('Report account'),
+                label: $localize`Report account`,
                 handler: () => this.showReportModal()
               }
             ]

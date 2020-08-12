@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { BatchDomainsValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-batch-domains-modal',
@@ -20,14 +19,13 @@ export class BatchDomainsModalComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private batchDomainsValidatorsService: BatchDomainsValidatorsService,
-    private i18n: I18n
+    private batchDomainsValidatorsService: BatchDomainsValidatorsService
   ) {
     super()
   }
 
   ngOnInit () {
-    if (!this.action) this.action = this.i18n('Process domains')
+    if (!this.action) this.action = $localize`Process domains`
 
     this.buildForm({
       domains: this.batchDomainsValidatorsService.DOMAINS

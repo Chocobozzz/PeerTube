@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier, UserService } from '@app/core'
 import { FormReactive, FormValidatorService, ResetPasswordValidatorsService, UserValidatorsService } from '@app/shared/shared-forms'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-login',
@@ -21,9 +20,8 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     private userService: UserService,
     private notifier: Notifier,
     private router: Router,
-    private route: ActivatedRoute,
-    private i18n: I18n
-  ) {
+    private route: ActivatedRoute
+    ) {
     super()
   }
 
@@ -37,7 +35,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     this.verificationString = this.route.snapshot.queryParams['verificationString']
 
     if (!this.userId || !this.verificationString) {
-      this.notifier.error(this.i18n('Unable to find user id or verification string.'))
+      this.notifier.error($localize`Unable to find user id or verification string.`)
       this.router.navigate([ '/' ])
     }
   }
@@ -46,7 +44,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     this.userService.resetPassword(this.userId, this.verificationString, this.form.value.password)
       .subscribe(
         () => {
-          this.notifier.success(this.i18n('Your password has been successfully reset!'))
+          this.notifier.success($localize`Your password has been successfully reset!`)
           this.router.navigate([ '/login' ])
         },
 

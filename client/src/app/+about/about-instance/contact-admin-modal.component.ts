@@ -4,7 +4,6 @@ import { FormReactive, FormValidatorService, InstanceValidatorsService } from '@
 import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 
 @Component({
@@ -26,8 +25,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
     private instanceValidatorsService: InstanceValidatorsService,
     private instanceService: InstanceService,
     private serverService: ServerService,
-    private notifier: Notifier,
-    private i18n: I18n
+    private notifier: Notifier
   ) {
     super()
   }
@@ -70,13 +68,13 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
     this.instanceService.contactAdministrator(fromEmail, fromName, subject, body)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Your message has been sent.'))
+            this.notifier.success($localize`Your message has been sent.`)
             this.hide()
           },
 
           err => {
             this.error = err.status === 403
-              ? this.i18n('You already sent this form recently')
+              ? $localize`You already sent this form recently`
               : err.message
           }
         )

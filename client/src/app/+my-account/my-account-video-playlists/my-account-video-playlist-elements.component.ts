@@ -6,7 +6,6 @@ import { ComponentPagination, ConfirmService, Notifier, ScreenService } from '@a
 import { DropdownAction } from '@app/shared/shared-main'
 import { VideoShareComponent } from '@app/shared/shared-share-modal'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoPlaylistType } from '@shared/models'
 
 @Component({
@@ -35,7 +34,6 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
   constructor (
     private notifier: Notifier,
-    private i18n: I18n,
     private router: Router,
     private confirmService: ConfirmService,
     private route: ActivatedRoute,
@@ -47,12 +45,12 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
     this.playlistActions = [
       [
         {
-          label: this.i18n('Update playlist'),
+          label: $localize`Update playlist`,
           iconName: 'edit',
           linkBuilder: playlist => [ '/my-account', 'video-playlists', 'update', playlist.uuid ]
         },
         {
-          label: this.i18n('Delete playlist'),
+          label: $localize`Delete playlist`,
           iconName: 'delete',
           handler: playlist => this.deleteVideoPlaylist(playlist)
         }
@@ -126,11 +124,8 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
   async deleteVideoPlaylist (videoPlaylist: VideoPlaylist) {
     const res = await this.confirmService.confirm(
-      this.i18n(
-        'Do you really want to delete {{playlistDisplayName}}?',
-        { playlistDisplayName: videoPlaylist.displayName }
-      ),
-      this.i18n('Delete')
+      $localize`Do you really want to delete ${videoPlaylist.displayName}?`,
+      $localize`Delete`
     )
     if (res === false) return
 
@@ -138,10 +133,7 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
       .subscribe(
         () => {
           this.router.navigate([ '/my-account', 'video-playlists' ])
-
-          this.notifier.success(
-            this.i18n('Playlist {{playlistDisplayName}} deleted.', { playlistDisplayName: videoPlaylist.displayName })
-          )
+          this.notifier.success($localize`Playlist ${videoPlaylist.displayName} deleted.`)
         },
 
         error => this.notifier.error(error.message)

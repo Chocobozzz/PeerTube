@@ -1,6 +1,5 @@
 import { AfterContentInit, Component, ContentChildren, Input, OnChanges, OnInit, QueryList, TemplateRef } from '@angular/core'
 import { MarkdownService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { PeerTubeTemplateDirective } from '../angular'
 
 @Component({
@@ -21,8 +20,6 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   preHtmlTemplate: TemplateRef<any>
   customHtmlTemplate: TemplateRef<any>
   postHtmlTemplate: TemplateRef<any>
-
-  constructor (private i18n: I18n) { }
 
   ngOnInit () {
     this.init()
@@ -71,17 +68,17 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
 
   private formatMarkdownSupport (rules: string[]) {
     // tslint:disable:max-line-length
-    return this.i18n('<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown</a> compatible that supports:') +
+    return $localize`<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown</a> compatible that supports:` +
       this.createMarkdownList(rules)
   }
 
   private createMarkdownList (rules: string[]) {
     const rulesToText = {
-      'emphasis': this.i18n('Emphasis'),
-      'link': this.i18n('Links'),
-      'newline': this.i18n('New lines'),
-      'list': this.i18n('Lists'),
-      'image': this.i18n('Images')
+      'emphasis': $localize`Emphasis`,
+      'link': $localize`Links`,
+      'newline': $localize`New lines`,
+      'list': $localize`Lists`,
+      'image': $localize`Images`
     }
 
     const bullets = rules.map(r => rulesToText[r])

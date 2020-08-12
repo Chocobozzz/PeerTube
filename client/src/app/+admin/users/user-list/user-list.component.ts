@@ -1,11 +1,10 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService, UserService } from '@app/core'
 import { Actor, DropdownAction } from '@app/shared/shared-main'
 import { UserBanModalComponent } from '@app/shared/shared-moderation'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, User, UserRole } from '@shared/models'
-import { Params, Router, ActivatedRoute } from '@angular/router'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -42,9 +41,8 @@ export class UserListComponent extends RestTable implements OnInit {
     private userService: UserService,
     private auth: AuthService,
     private route: ActivatedRoute,
-    private router: Router,
-    private i18n: I18n
-  ) {
+    private router: Router
+    ) {
     super()
   }
 
@@ -82,26 +80,26 @@ export class UserListComponent extends RestTable implements OnInit {
     this.bulkUserActions = [
       [
         {
-          label: this.i18n('Delete'),
-          description: this.i18n('Videos will be deleted, comments will be tombstoned.'),
+          label: $localize`Delete`,
+          description: $localize`Videos will be deleted, comments will be tombstoned.`,
           handler: users => this.removeUsers(users),
           isDisplayed: users => users.every(u => this.authUser.canManage(u))
         },
         {
-          label: this.i18n('Ban'),
-          description: this.i18n('User won\'t be able to login anymore, but videos and comments will be kept as is.'),
+          label: $localize`Ban`,
+          description: $localize`User won't be able to login anymore, but videos and comments will be kept as is.`,
           handler: users => this.openBanUserModal(users),
           isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === false)
         },
         {
-          label: this.i18n('Unban'),
+          label: $localize`Unban`,
           handler: users => this.unbanUsers(users),
           isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === true)
         }
       ],
       [
         {
-          label: this.i18n('Set Email as Verified'),
+          label: $localize`Set Email as Verified`,
           handler: users => this.setEmailsAsVerified(users),
           isDisplayed: users => {
             return this.requiresEmailVerification &&
@@ -160,7 +158,7 @@ export class UserListComponent extends RestTable implements OnInit {
   openBanUserModal (users: User[]) {
     for (const user of users) {
       if (user.username === 'root') {
-        this.notifier.error(this.i18n('You cannot ban root.'))
+        this.notifier.error($localize`You cannot ban root.`)
         return
       }
     }
@@ -197,17 +195,13 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   async unbanUsers (users: User[]) {
-    const message = this.i18n('Do you really want to unban {{num}} users?', { num: users.length })
-
-    const res = await this.confirmService.confirm(message, this.i18n('Unban'))
+    const res = await this.confirmService.confirm($localize`Do you really want to unban ${users.length} users?`, $localize`Unban`)
     if (res === false) return
 
     this.userService.unbanUsers(users)
         .subscribe(
           () => {
-            const message = this.i18n('{{num}} users unbanned.', { num: users.length })
-
-            this.notifier.success(message)
+            this.notifier.success($localize`${users.length} users unbanned.`)
             this.loadData()
           },
 
@@ -218,18 +212,18 @@ export class UserListComponent extends RestTable implements OnInit {
   async removeUsers (users: User[]) {
     for (const user of users) {
       if (user.username === 'root') {
-        this.notifier.error(this.i18n('You cannot delete root.'))
+        this.notifier.error($localize`You cannot delete root.`)
         return
       }
     }
 
-    const message = this.i18n('If you remove these users, you will not be able to create others with the same username!')
-    const res = await this.confirmService.confirm(message, this.i18n('Delete'))
+    const message = $localize`If you remove these users, you will not be able to create others with the same username!`
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
     this.userService.removeUser(users).subscribe(
       () => {
-        this.notifier.success(this.i18n('{{num}} users deleted.', { num: users.length }))
+        this.notifier.success($localize`${users.length} users deleted.`)
         this.loadData()
       },
 
@@ -240,7 +234,7 @@ export class UserListComponent extends RestTable implements OnInit {
   async setEmailsAsVerified (users: User[]) {
     this.userService.updateUsers(users, { emailVerified: true }).subscribe(
       () => {
-        this.notifier.success(this.i18n('{{num}} users email set as verified.', { num: users.length }))
+        this.notifier.success($localize`${users.length} users email set as verified.`)
         this.loadData()
       },
 

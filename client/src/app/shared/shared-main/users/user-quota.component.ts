@@ -1,7 +1,6 @@
 import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { User, UserService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { BytesPipe } from '../angular'
 
 @Component({
@@ -22,10 +21,7 @@ export class UserQuotaComponent implements OnInit {
   userVideoQuotaUsedDaily = 0
   userVideoQuotaDailyPercentage = 15
 
-  constructor (
-    private userService: UserService,
-    private i18n: I18n
-  ) { }
+  constructor (private userService: UserService) { }
 
   ngOnInit () {
     this.userInformationLoaded.subscribe(
@@ -33,13 +29,13 @@ export class UserQuotaComponent implements OnInit {
         if (this.user.videoQuota !== -1) {
           this.userVideoQuota = new BytesPipe().transform(this.user.videoQuota, 0).toString()
         } else {
-          this.userVideoQuota = this.i18n('Unlimited')
+          this.userVideoQuota = $localize`Unlimited`
         }
 
         if (this.user.videoQuotaDaily !== -1) {
           this.userVideoQuotaDaily = new BytesPipe().transform(this.user.videoQuotaDaily, 0).toString()
         } else {
-          this.userVideoQuotaDaily = this.i18n('Unlimited')
+          this.userVideoQuotaDaily = $localize`Unlimited`
         }
       }
     )
