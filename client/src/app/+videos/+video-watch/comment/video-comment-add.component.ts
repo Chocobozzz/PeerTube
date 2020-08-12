@@ -17,11 +17,10 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class VideoCommentAddComponent extends FormReactive implements OnChanges, OnInit {
   @Input() user: User
   @Input() video: Video
-  @Input() parentComment: VideoComment
-  @Input() parentComments: VideoComment[]
+  @Input() parentComment?: VideoComment
+  @Input() parentComments?: VideoComment[]
   @Input() focusOnInit = false
   @Input() textValue?: string
-  @Input() commentThread?: boolean
 
   @Output() commentCreated = new EventEmitter<VideoComment>()
   @Output() cancel = new EventEmitter()
@@ -57,27 +56,13 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     })
 
     if (this.user) {
-      if (this.commentThread) {
+      if (!this.parentComment) {
         this.addingCommentButtonValue = this.i18n('Comment')
       } else {
         this.addingCommentButtonValue = this.i18n('Reply')
       }
 
-      if (this.textValue) {
-        this.patchTextValue(this.textValue, this.focusOnInit)
-        return
-      }
-
-      if (this.parentComment) {
-        const mentions = this.parentComments
-          .filter(c => c.account && c.account.id !== this.user.account.id) // Don't add mention of ourselves
-          .map(c => '@' + c.by)
-
-        const mentionsSet = new Set(mentions)
-        const mentionsText = Array.from(mentionsSet).join(' ') + ' '
-
-        this.patchTextValue(mentionsText, this.focusOnInit)
-      }
+      this.initTextValue()
     }
   }
 
@@ -174,6 +159,24 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   private addCommentThread (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
       .addCommentThread(this.video.id, commentCreate)
+  }
+
+  private initTextValue () {
+    if (this.textValue) {
+      this.patchTextValue(this.textValue, this.focusOnInit)
+      return
+    }
+
+    if (this.parentComment) {
+      const mentions = this.parentComments
+        .filter(c => c.account && c.account.id !== this.user.account.id) // Don't add mention of ourselves
+        .map(c => '@' + c.by)
+
+      const mentionsSet = new Set(mentions)
+      const mentionsText = Array.from(mentionsSet).join(' ') + ' '
+
+      this.patchTextValue(mentionsText, this.focusOnInit)
+    }
   }
 
   private patchTextValue (text: string, focus: boolean) {

@@ -133,7 +133,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   onCommentThreadCreated (comment: VideoComment) {
     this.comments.unshift(comment)
-    delete this.commentThreadRedraftValue
+    this.commentThreadRedraftValue = undefined
   }
 
   onWantedToReply (comment: VideoComment) {
@@ -142,7 +142,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   onResetReply () {
     this.inReplyToCommentId = undefined
-    delete this.commentReplyRedraftValue
+    this.commentReplyRedraftValue = undefined
   }
 
   onThreadCreated (commentTree: VideoCommentThreadTree) {
