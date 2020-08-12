@@ -123,6 +123,10 @@ describe('Test emails', function () {
       await resetPassword(server.url, userId, verificationString, 'super_password2')
     })
 
+    it('Should not reset the password with the same verification string', async function () {
+      await resetPassword(server.url, userId, verificationString, 'super_password3', 403)
+    })
+
     it('Should login with this new password', async function () {
       user.password = 'super_password2'
 

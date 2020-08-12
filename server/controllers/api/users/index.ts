@@ -356,6 +356,7 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
   user.password = req.body.password
 
   await user.save()
+  await Redis.Instance.removePasswordVerificationString(user.id)
 
   return res.status(204).end()
 }
