@@ -75,7 +75,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
     this.resetReply.emit()
 
-    delete this.redraftValue
+    this.redraftValue = undefined
   }
 
   onWantToReply (comment?: VideoComment) {
@@ -131,6 +131,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   switchToDefaultAvatar ($event: Event) {
     ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
+  }
+
+  isNotDeletedOrDeletedWithReplies () {
+    return !this.comment.isDeleted || this.comment.isDeleted && this.comment.totalReplies !== 0
   }
 
   private getUserIfNeeded (account: Account) {
