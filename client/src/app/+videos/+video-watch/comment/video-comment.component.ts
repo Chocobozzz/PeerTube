@@ -125,7 +125,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       this.comment.account &&
       this.isUserLoggedIn() &&
       this.comment.isDeleted === false &&
-      this.authService.getUser().account.id !== this.comment.account.id
+      this.user.account.id !== this.comment.account.id
     )
   }
 
