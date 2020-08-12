@@ -36,6 +36,10 @@ if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then
     export ANALYZE_BUNDLE=true
 fi
 
+if [ ! -z ${1+x} ] && [ "$1" == "--i18n" ]; then
+    additionalParams="--configuration=i18n"
+    export ANALYZE_BUNDLE=true
+fi
 
 defaultLanguage="en-US"
 npm run ng build -- --output-path "dist/$defaultLanguage/" --deploy-url "/client/$defaultLanguage/" --prod --stats-json $additionalParams
@@ -45,7 +49,7 @@ mv "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 post_build_hook
 
 # Don't build other languages if --light arg is provided
-if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
+if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ] && [ "$1" != "--i18n" ]); then
     if [ ! -z ${1+x} ] && [ "$1" == "--light-hu" ]; then
         languages=(["hu"]="hu-HU")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-ar" ]; then

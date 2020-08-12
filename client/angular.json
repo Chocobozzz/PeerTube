@@ -203,6 +203,16 @@
                 }
               ]
             },
+            "i18n": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": true,
+              "aot": true,
+              "buildOptimizer": false,
+              "budgets": []
+            },
             "hmr": {
               "budgets": [
                 {
