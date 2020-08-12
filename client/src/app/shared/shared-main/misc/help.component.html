@@ -32,7 +32,7 @@
   [attr.aria-pressed]="isPopoverOpened"
   [ngbPopover]="tooltipTemplate"
   [placement]="tooltipPlacement"
-  autoClose="outside"
+  [autoClose]="autoClose"
   (onHidden)="onPopoverHidden()"
   (onShown)="onPopoverShown()"
 >

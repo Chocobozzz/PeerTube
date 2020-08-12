@@ -14,6 +14,7 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() tooltipPlacement = 'right auto'
   @Input() iconName: GlobalIconName = 'help'
   @Input() title = $localize`Get help`
+  @Input() autoClose = 'outside'
 
   @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'preHtml' | 'customHtml' | 'postHtml'>>
 
