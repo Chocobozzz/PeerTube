@@ -95,7 +95,7 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
   }
 
   onActiveLinkScrollToTop (link: HTMLAnchorElement) {
-    if (!this.isBroadcastMessageDisplayed && this.router.url.replace(/#.+$/, '').includes(link.getAttribute('href'))) {
+    if (!this.isBroadcastMessageDisplayed && this.router.url.includes(link.getAttribute('href'))) {
       window.scrollTo({
         left: 0,
         top: 0,

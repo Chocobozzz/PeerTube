@@ -46,7 +46,7 @@ export class MenuComponent implements OnInit {
     private hotkeysService: HotkeysService,
     private screenService: ScreenService,
     private menuService: MenuService,
-    private router: Router,
+    private router: Router
   ) { }
 
   get isInMobileView () {
@@ -201,13 +201,17 @@ export class MenuComponent implements OnInit {
 
     // On same url without fragment restore top scroll position
     if (!linkHash && this.router.url.includes(linkURL)) {
-      window.scrollTo(0, 0)
+      window.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: 'smooth'
+      })
     }
 
     // On same url with fragment restore anchor scroll position
     if (linkHash && this.router.url === linkURL) {
       const anchor = document.getElementById(link.getAttribute('fragment'))
-      anchor.scrollIntoView(true)
+      anchor.scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
     }
 
     if (this.screenService.isInSmallView()) {
