@@ -195,6 +195,12 @@ If you just want to run 1 test (which is what you want to debug a specific test 
 $ TS_NODE_FILES=true npm run mocha -- --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/single-server.ts
 ```
 
+While testing, you might want to display a server's logs:
+
+```
+NODE_APP_INSTANCE=1 NODE_ENV=test npm run parse-log -- --level debug | less +GF
+```
+
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
 Note that only instance 2 has transcoding enabled.
 

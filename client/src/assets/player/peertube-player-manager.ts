@@ -35,7 +35,8 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoOrPlaylistEmbed, buildVideoLink, copyToClipboard, getRtcConfig, isSafari, isIOS } from './utils'
+import { buildVideoOrPlaylistEmbed, buildVideoLink, getRtcConfig, isSafari, isIOS } from './utils'
+import { copyToClipboard } from '../../root-helpers/utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'

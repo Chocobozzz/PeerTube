@@ -8,6 +8,7 @@ import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-acc
 import { MyAccountNotificationsComponent } from './my-account-notifications/my-account-notifications.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountComponent } from './my-account.component'
+import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -115,6 +116,15 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: $localize`My abuse reports`
+          }
+        }
+      },
+      {
+        path: 'applications',
+        component: MyAccountApplicationsComponent,
+        data: {
+          meta: {
+            title: 'Applications'
           }
         }
       }

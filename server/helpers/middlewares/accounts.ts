@@ -2,6 +2,7 @@ import { Response } from 'express'
 import { AccountModel } from '../../models/account/account'
 import * as Bluebird from 'bluebird'
 import { MAccountDefault } from '../../types/models'
+import { UserModel } from '@server/models/account/user'
 
 function doesAccountIdExist (id: number | string, res: Response, sendNotFound = true) {
   const promise = AccountModel.load(parseInt(id + '', 10))
@@ -39,11 +40,28 @@ async function doesAccountExist (p: Bluebird<MAccountDefault>, res: Response, se
   return true
 }
 
+async function doesUserFeedTokenCorrespond (id: number | string, token: string, res: Response) {
+  const user = await UserModel.loadById(parseInt(id + '', 10))
+
+  if (token !== user.feedToken) {
+    res.status(401)
+       .send({ error: 'User and token mismatch' })
+       .end()
+
+    return false
+  }
+
+  res.locals.user = user
+
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   doesAccountIdExist,
   doesLocalAccountNameExist,
   doesAccountNameWithHostExist,
-  doesAccountExist
+  doesAccountExist,
+  doesUserFeedTokenCorrespond
 }

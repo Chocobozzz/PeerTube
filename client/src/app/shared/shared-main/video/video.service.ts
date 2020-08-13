@@ -2,7 +2,7 @@ import { Observable } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService, AuthService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import {
   FeedFormat,
@@ -49,7 +49,8 @@ export class VideoService implements VideosProvider {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private authService: AuthService
   ) {}
 
   getVideoViewUrl (uuid: string) {
@@ -289,6 +290,16 @@ export class VideoService implements VideosProvider {
   getVideoChannelFeedUrls (videoChannelId: number) {
     let params = this.restService.addRestGetParams(new HttpParams())
     params = params.set('videoChannelId', videoChannelId.toString())
+
+    return this.buildBaseFeedUrls(params)
+  }
+
+  async getVideoSubscriptionFeedUrls (accountId: number) {
+    let params = this.restService.addRestGetParams(new HttpParams())
+    params = params.set('accountId', accountId.toString())
+
+    const { feedToken } = await this.authService.getScopedTokens()
+    params = params.set('token', feedToken)
 
     return this.buildBaseFeedUrls(params)
   }
