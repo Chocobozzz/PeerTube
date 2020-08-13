@@ -6,7 +6,7 @@ import {
   UserWatching,
   VideoJSCaption
 } from './peertube-videojs-typings'
-import { isMobile, timeToInt, isSafari, isIOS } from './utils'
+import { isMobile, timeToInt, isIOS, isSafari } from './utils'
 import {
   getStoredLastSubtitle,
   getStoredMute,
@@ -45,7 +45,8 @@ class PeerTubePlugin extends Plugin {
 
     this.savedInactivityTimeout = player.options_.inactivityTimeout
 
-    if (options.autoplay) this.player.addClass('vjs-has-autoplay')
+    // Do not set autoplay for iOS
+    if (options.autoplay && !isIOS()) this.player.addClass('vjs-has-autoplay')
 
     this.player.on('autoplay-failure', () => {
       this.player.removeClass('vjs-has-autoplay')
@@ -74,11 +75,10 @@ class PeerTubePlugin extends Plugin {
       if (volume !== undefined) this.player.volume(volume)
 
       const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
-      this.player.muted(muted)
-
-      // Force player to set real muted value on play when iOS or Safari
-      if (isSafari() || isIOS()) {
-        this.player.on('play', () => {
+      if (!isIOS() && !isSafari()) {
+        this.player.muted(muted)
+      } else {
+        this.player.on('play', () => { // Set muted value on play for iOS or Safari
           this.player.muted(muted)
         })
       }
@@ -125,6 +125,11 @@ class PeerTubePlugin extends Plugin {
       this.runViewAdd()
 
       if (options.userWatching) this.runUserWatchVideo(options.userWatching)
+
+      // Autoplay here for iOS
+      if (options.autoplay && isIOS()) {
+        this.player.play()
+      }
     })
   }
 
