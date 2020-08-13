@@ -4,6 +4,8 @@ import { CONFIG } from '@server/initializers/config'
 import * as express from 'express'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { asyncMiddleware, authenticate } from '@server/middlewares'
+import { ScopedToken } from '@shared/models/users/user-scoped-token'
+import { v4 as uuidv4 } from 'uuid'
 
 const tokensRouter = express.Router()
 
@@ -23,6 +25,16 @@ tokensRouter.post('/revoke-token',
   asyncMiddleware(handleTokenRevocation)
 )
 
+tokensRouter.get('/scoped-tokens',
+  authenticate,
+  getScopedTokens
+)
+
+tokensRouter.post('/scoped-tokens',
+  authenticate,
+  asyncMiddleware(renewScopedTokens)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -34,4 +46,23 @@ function tokenSuccess (req: express.Request) {
   const username = req.body.username
 
   Hooks.runAction('action:api.user.oauth2-got-token', { username, ip: req.ip })
+}
+
+function getScopedTokens (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.user
+
+  return res.json({
+    feedToken: user.feedToken
+  } as ScopedToken)
+}
+
+async function renewScopedTokens (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.user
+
+  user.feedToken = uuidv4()
+  await user.save()
+
+  return res.json({
+    feedToken: user.feedToken
+  } as ScopedToken)
 }

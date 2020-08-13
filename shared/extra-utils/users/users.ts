@@ -109,6 +109,17 @@ function getMyUserInformation (url: string, accessToken: string, specialStatus =
           .expect('Content-Type', /json/)
 }
 
+function getUserScopedTokens (url: string, accessToken: string, specialStatus = 200) {
+  const path = '/api/v1/users/scoped-tokens'
+
+  return request(url)
+          .get(path)
+          .set('Accept', 'application/json')
+          .set('Authorization', 'Bearer ' + accessToken)
+          .expect(specialStatus)
+          .expect('Content-Type', /json/)
+}
+
 function deleteMe (url: string, accessToken: string, specialStatus = 204) {
   const path = '/api/v1/users/me'
 
@@ -351,5 +362,6 @@ export {
   updateMyAvatar,
   askSendVerifyEmail,
   generateUserAccessToken,
-  verifyEmail
+  verifyEmail,
+  getUserScopedTokens
 }

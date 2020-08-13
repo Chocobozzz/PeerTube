@@ -9,7 +9,8 @@ import {
   doesAccountIdExist,
   doesAccountNameWithHostExist,
   doesVideoChannelIdExist,
-  doesVideoChannelNameWithHostExist
+  doesVideoChannelNameWithHostExist,
+  doesUserFeedTokenCorrespond
 } from '../../helpers/middlewares'
 
 const feedsFormatValidator = [
@@ -62,6 +63,23 @@ const videoFeedsValidator = [
   }
 ]
 
+const videoSubscriptonFeedsValidator = [
+  query('accountId').optional().custom(isIdValid),
+  query('token').optional(),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking feeds parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    // a token alone is erroneous
+    if (req.query.token && !req.query.accountId) return
+    if (req.query.token && !await doesUserFeedTokenCorrespond(res.locals.account.userId, req.query.token, res)) return
+
+    return next()
+  }
+]
+
 const videoCommentsFeedsValidator = [
   query('videoId').optional().custom(isIdOrUUIDValid),
 
@@ -88,5 +106,6 @@ export {
   feedsFormatValidator,
   setFeedFormatContentType,
   videoFeedsValidator,
+  videoSubscriptonFeedsValidator,
   videoCommentsFeedsValidator
 }

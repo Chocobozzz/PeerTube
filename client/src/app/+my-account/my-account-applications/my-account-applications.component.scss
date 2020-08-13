@@ -1,0 +1,28 @@
+@import '_variables';
+@import '_mixins';
+
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
+.applications-title {
+  @include settings-big-title;
+}
+
+.form-group {
+  max-width: 500px;
+}
+
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+
+  display: flex;
+  margin-left: auto;
+
+  & + .form-error {
+    display: inline;
+    margin-left: 5px;
+  }
+}

@@ -22,11 +22,14 @@ import {
   uploadVideo,
   uploadVideoAndGetId,
   userLogin,
-  flushAndRunServer
+  flushAndRunServer,
+  getUserScopedTokens
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
 import { User } from '../../../shared/models/users'
+import { ScopedToken } from '@shared/models/users/user-scoped-token'
+import { listUserSubscriptionVideos, addUserSubscription } from '@shared/extra-utils/users/user-subscriptions'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -41,6 +44,7 @@ describe('Test syndication feeds', () => {
   let rootChannelId: number
   let userAccountId: number
   let userChannelId: number
+  let userFeedToken: string
 
   before(async function () {
     this.timeout(120000)
@@ -74,6 +78,10 @@ describe('Test syndication feeds', () => {
       const user: User = res.body
       userAccountId = user.account.id
       userChannelId = user.videoChannels[0].id
+
+      const res2 = await getUserScopedTokens(servers[0].url, userAccessToken)
+      const token: ScopedToken = res2.body
+      userFeedToken = token.feedToken
     }
 
     {
@@ -287,6 +295,87 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items.length).to.be.equal(2)
       }
     })
+  })
+
+  describe('Video feed from my subscriptions', function () {
+    /**
+     * use the 'version' query parameter to bust cache between tests
+     */
+
+    it('Should list no videos for a user with no videos and no subscriptions', async function () {
+      let feeduserAccountId: number
+      let feeduserFeedToken: string
+
+      const attr = { username: 'feeduser', password: 'password' }
+      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: attr.username, password: attr.password })
+      const feeduserAccessToken = await userLogin(servers[0], attr)
+
+      {
+        const res = await getMyUserInformation(servers[0].url, feeduserAccessToken)
+        const user: User = res.body
+        feeduserAccountId = user.account.id
+      }
+
+      {
+        const res = await getUserScopedTokens(servers[0].url, feeduserAccessToken)
+        const token: ScopedToken = res.body
+        feeduserFeedToken = token.feedToken
+      }
+
+      {
+        const res = await listUserSubscriptionVideos(servers[0].url, feeduserAccessToken)
+        expect(res.body.total).to.equal(0)
+
+        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: feeduserAccountId, token: feeduserFeedToken })
+        const jsonObj = JSON.parse(json.text)
+        expect(jsonObj.items.length).to.be.equal(0) // no subscription, it should not list the instance's videos but list 0 videos
+      }
+    })
+
+    it('Should list no videos for a user with videos but no subscriptions', async function () {
+      {
+        const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
+        expect(res.body.total).to.equal(0)
+
+        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: userAccountId, token: userFeedToken })
+        const jsonObj = JSON.parse(json.text)
+        expect(jsonObj.items.length).to.be.equal(0) // no subscription, it should not list the instance's videos but list 0 videos
+      }
+    })
+
+    it('Should list self videos for a user with a subscription to themselves', async function () {
+      this.timeout(30000)
+
+      await addUserSubscription(servers[0].url, userAccessToken, 'john_channel@localhost:' + servers[0].port)
+      await waitJobs(servers)
+
+      {
+        const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
+        expect(res.body.total).to.equal(1)
+        expect(res.body.data[0].name).to.equal('user video')
+
+        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: userAccountId, token: userFeedToken, version: 1 })
+        const jsonObj = JSON.parse(json.text)
+        expect(jsonObj.items.length).to.be.equal(1) // subscribed to self, it should not list the instance's videos but list john's
+      }
+    })
+
+    it('Should list videos of a user\'s subscription', async function () {
+      this.timeout(30000)
+
+      await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[0].port)
+      await waitJobs(servers)
+
+      {
+        const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
+        expect(res.body.total).to.equal(2, "there should be 2 videos part of the subscription")
+
+        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: userAccountId, token: userFeedToken, version: 2 })
+        const jsonObj = JSON.parse(json.text)
+        expect(jsonObj.items.length).to.be.equal(2) // subscribed to root, it should not list the instance's videos but list root/john's
+      }
+    })
+
   })
 
   after(async function () {

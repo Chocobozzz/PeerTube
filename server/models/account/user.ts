@@ -19,7 +19,8 @@ import {
   Model,
   Scopes,
   Table,
-  UpdatedAt
+  UpdatedAt,
+  IsUUID
 } from 'sequelize-typescript'
 import {
   MMyUserFormattable,
@@ -352,6 +353,12 @@ export class UserModel extends Model<UserModel> {
   @Default(null)
   @Column
   pluginAuth: string
+
+  @AllowNull(false)
+  @Default(DataType.UUIDV4)
+  @IsUUID(4)
+  @Column(DataType.UUID)
+  feedToken: string
 
   @AllowNull(true)
   @Default(null)

@@ -11,11 +11,14 @@ import {
   setFeedFormatContentType,
   videoCommentsFeedsValidator,
   videoFeedsValidator,
-  videosSortValidator
+  videosSortValidator,
+  videoSubscriptonFeedsValidator
 } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
+import { VideoFilter } from '../../shared/models/videos/video-query.type'
+import { logger } from '../helpers/logger'
 
 const feedsRouter = express.Router()
 
@@ -44,6 +47,7 @@ feedsRouter.get('/feeds/videos.:format',
   })(ROUTE_CACHE_LIFETIME.FEEDS)),
   commonVideosFiltersValidator,
   asyncMiddleware(videoFeedsValidator),
+  asyncMiddleware(videoSubscriptonFeedsValidator),
   asyncMiddleware(generateVideoFeed)
 )
 
@@ -124,6 +128,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
 
   const account = res.locals.account
   const videoChannel = res.locals.videoChannel
+  const token = req.query.token
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
 
   let name: string
@@ -147,19 +152,36 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
 
+  /**
+   * We have two ways to query video results:
+   * - one with account and token -> get subscription videos
+   * - one with either account, channel, or nothing: just videos with these filters
+   */
+  const options = token && token !== '' && res.locals.user
+    ? {
+      followerActorId: res.locals.user.Account.Actor.id,
+      user: res.locals.user,
+      includeLocalVideos: false
+    }
+    : {
+      accountId: account ? account.id : null,
+      videoChannelId: videoChannel ? videoChannel.id : null
+    }
+
   const resultList = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
     includeLocalVideos: true,
     nsfw,
-    filter: req.query.filter,
+    filter: req.query.filter as VideoFilter,
     withFiles: true,
-    accountId: account ? account.id : null,
-    videoChannelId: videoChannel ? videoChannel.id : null
+    ...options
   })
 
-  // Adding video items to the feed, one at a time
+  /**
+   * Adding video items to the feed object, one at a time
+   */
   resultList.data.forEach(video => {
     const formattedVideoFiles = video.getFormattedVideoFilesJSON()
 
