@@ -3351,46 +3351,14 @@ Iniciar sesión</target>
         <target state="translated">Destacar a los usuarios prohibidos</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">70</context></context-group></trans-unit>
-      <trans-unit id="4e54cc9c19b45ab633c8a4ff4080fcc27ad07b16" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('username').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('username').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">75</context></context-group></trans-unit>
-      <trans-unit id="d1f5f2222bbc833132a4e0a1fe514f080a3f6bd5" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('email').label }}"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('email').label }}"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">76</context></context-group></trans-unit>
-      <trans-unit id="9cc9fd966ff06f760cdc1f9bb644d90a4a5d0cb5" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('quota').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('quota').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">77</context></context-group></trans-unit>
-      <trans-unit id="7ca81a0721c16dbe0a3e6cd8ea19b6feb5e541cb" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('quotaDaily').label }}"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('quotaDaily').label }}"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">78</context></context-group></trans-unit>
-      <trans-unit id="08f7d5b13f5920e7ed395162827677efb693b81a" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('role').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('role').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">79</context></context-group></trans-unit>
-      <trans-unit id="8c6fbf037008ced295ca343f913572dc2ee44bbe" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('pluginAuth').label }}"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('pluginAuth').label }}"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">80</context></context-group></trans-unit>
-      <trans-unit id="1dcea846966aa6efb42221e9af931bfe574fd5ed" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('createdAt').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('createdAt').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">81</context></context-group></trans-unit>
-      <trans-unit id="7b2ba6295cd9b86a9ce3534075f0c910a499119d" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('lastLoginDate').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('lastLoginDate').label }}"/> <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">82</context></context-group></trans-unit>
+      
+      
+      
+      
+      
+      
+      
+      
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
         <source>Username</source>
         <target>Nombre de usuario</target>
