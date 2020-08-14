@@ -160,7 +160,11 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.timestampClicked.emit(timestamp)
   }
 
-  async onWantedToDelete(commentToDelete: VideoComment, title = $localize`Delete`, message = $localize`Do you really want to delete this comment?`): Promise<boolean> {
+  async onWantedToDelete (
+    commentToDelete: VideoComment,
+    title = $localize`Delete`,
+    message = $localize`Do you really want to delete this comment?`
+  ): Promise<boolean> {
     if (commentToDelete.isLocal || this.video.isLocal) {
       message += $localize` The deletion will be sent to remote instances so they can reflect the change.`
     } else {

@@ -37,7 +37,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     private notifier: Notifier,
     private videoCommentService: VideoCommentService,
     private modalService: NgbModal,
-    private router: Router,
+    private router: Router
   ) {
     super()
   }
