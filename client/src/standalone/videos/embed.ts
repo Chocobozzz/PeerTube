@@ -79,9 +79,6 @@ export class PeerTubeEmbed {
       .then((res: Response) => {
         if (res.status !== 401) return res
 
-        // 401 unauthorized is not catch-ed, but then-ed
-        const error = res
-
         const refreshingTokenPromise = new Promise((resolve, reject) => {
           const clientId: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
           const clientSecret: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
@@ -101,24 +98,37 @@ export class PeerTubeEmbed {
             headers,
             method: 'POST',
             body: objectToUrlEncoded(data)
-          }).then(res => res.json())
-            .then((obj: UserRefreshToken) => {
-              this.userTokens.accessToken = obj.access_token
-              this.userTokens.refreshToken = obj.refresh_token
-              this.userTokens.save()
+          }).then(res => {
+            if (res.status === 401) return undefined
 
-              this.setHeadersFromTokens()
+            return res.json()
+          }).then((obj: UserRefreshToken & { code: 'invalid_grant'}) => {
+            if (!obj || obj.code === 'invalid_grant') {
+              Tokens.flush()
+              this.removeTokensFromHeaders()
 
-              resolve()
-            })
+              return resolve()
+            }
+
+            this.userTokens.accessToken = obj.access_token
+            this.userTokens.refreshToken = obj.refresh_token
+            this.userTokens.save()
+
+            this.setHeadersFromTokens()
+
+            resolve()
+          })
             .catch((refreshTokenError: any) => {
               reject(refreshTokenError)
             })
         })
 
         return refreshingTokenPromise
-          .catch(() => this.removeTokensFromHeaders())
-          .then(() => fetch(url, {
+          .catch(() => {
+            Tokens.flush()
+
+            this.removeTokensFromHeaders()
+          }).then(() => fetch(url, {
             ...options,
             headers: this.headers
           }))
