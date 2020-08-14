@@ -4,7 +4,7 @@ import { catchError, concatMap, filter, first, map, shareReplay, throttleTime, t
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService } from '@app/core/auth'
-import { BytesPipe } from '@app/shared/shared-main'
+import { getBytes } from '@root-helpers/bytes'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import {
   Avatar,
@@ -26,8 +26,6 @@ import { User } from './user.model'
 @Injectable()
 export class UserService {
   static BASE_USERS_URL = environment.apiUrl + '/api/v1/users/'
-
-  private bytesPipe = new BytesPipe()
 
   private userCache: { [ id: number ]: Observable<UserServerModel> } = {}
 
@@ -365,19 +363,19 @@ export class UserService {
     if (user.videoQuota === -1) {
       videoQuota = '∞'
     } else {
-      videoQuota = this.bytesPipe.transform(user.videoQuota, 0)
+      videoQuota = getBytes(user.videoQuota, 0)
     }
 
-    const videoQuotaUsed = this.bytesPipe.transform(user.videoQuotaUsed, 0)
+    const videoQuotaUsed = getBytes(user.videoQuotaUsed, 0)
 
     let videoQuotaDaily: string
     let videoQuotaUsedDaily: string
     if (user.videoQuotaDaily === -1) {
       videoQuotaDaily = '∞'
-      videoQuotaUsedDaily = this.bytesPipe.transform(0, 0) + ''
+      videoQuotaUsedDaily = getBytes(0, 0) + ''
     } else {
-      videoQuotaDaily = this.bytesPipe.transform(user.videoQuotaDaily, 0) + ''
-      videoQuotaUsedDaily = this.bytesPipe.transform(user.videoQuotaUsedDaily || 0, 0) + ''
+      videoQuotaDaily = getBytes(user.videoQuotaDaily, 0) + ''
+      videoQuotaUsedDaily = getBytes(user.videoQuotaUsedDaily || 0, 0) + ''
     }
 
     const roleLabels: { [ id in UserRole ]: string } = {

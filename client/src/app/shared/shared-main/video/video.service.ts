@@ -21,7 +21,8 @@ import {
   VideoUpdate
 } from '@shared/models'
 import { environment } from '../../../../environments/environment'
-import { Account, AccountService } from '../account'
+import { Account } from '../account/account.model'
+import { AccountService } from '../account/account.service'
 import { VideoChannel, VideoChannelService } from '../video-channel'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
