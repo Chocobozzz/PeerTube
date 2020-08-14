@@ -7,7 +7,7 @@
     "peer": "peer",
     "Go to the video page": "Ga naar de videopagina",
     "Settings": "Instellingen",
-    "Uses P2P, others may know you are watching this video.": "Maakt gebruik van P2P, anderen kunnen mogelijk zien dat je deze video bekijkt.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Kopieer de video-URL",
     "Copy the video URL at the current time": "Kopieer de video-URL op de huidige afspeelpositie",
     "Copy embed code": "Kopieer insluitcode",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "Bijschrift Instellingen",
     "Beginning of dialog window. Escape will cancel and close the window.": "Begin van dialoogvenster. Escape verwerpt de wijzigingen en sluit het venster.",
     "End of dialog window.": "Einde van dialoogvenster.",
-    "{1} is loading.": "{1} wordt geladen."
+    "{1} is loading.": "{1} wordt geladen.",
+    "Uses P2P, others may know you are watching this video.": "Maakt gebruik van P2P, anderen kunnen mogelijk zien dat je deze video bekijkt."
 }

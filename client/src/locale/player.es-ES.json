@@ -7,7 +7,7 @@
     "peer": "par",
     "Go to the video page": "Ir a la página del vídeo",
     "Settings": "Configuración",
-    "Uses P2P, others may know you are watching this video.": "Utiliza P2P, otros pueden saber que estás viendo este vídeo.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Copiar la URL del vídeo",
     "Copy the video URL at the current time": "Copiar la URL del vídeo en el tiempo actual",
     "Copy embed code": "Copiar código de inserción",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "Diálogo de configuración de subtítulos",
     "Beginning of dialog window. Escape will cancel and close the window.": "Comienzo de la ventana de diálogo. Escape cancelará y cerrará la ventana.",
     "End of dialog window.": "Fin de la ventana de diálogo.",
-    "{1} is loading.": "{1} está cargándose."
+    "{1} is loading.": "{1} está cargándose.",
+    "Uses P2P, others may know you are watching this video.": "Utiliza P2P, otros pueden saber que estás viendo este vídeo."
 }

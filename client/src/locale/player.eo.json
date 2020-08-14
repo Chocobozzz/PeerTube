@@ -7,7 +7,7 @@
     "peer": "samtavolano",
     "Go to the video page": "Iri al paĝo de la filmo",
     "Settings": "Agordoj",
-    "Uses P2P, others may know you are watching this video.": "Uzas samtavolan teĥnikaron; aliuloj eble scios, ke vi spektas la filmon.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Kopii ligilon al la filmo",
     "Copy the video URL at the current time": "Kopii ligilon al nuna tempo en la filmo",
     "Copy embed code": "Kopii enkorpigitan kodon",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "Interagujo kun agordoj pri transskriboj",
     "Beginning of dialog window. Escape will cancel and close the window.": "Komenco de interaga fenestro. Nuliga klavo nuligos kaj fermos la fenestron.",
     "End of dialog window.": "Fino de interaga fenestro.",
-    "{1} is loading.": "{1} estas enlegata."
+    "{1} is loading.": "{1} estas enlegata.",
+    "Uses P2P, others may know you are watching this video.": "Uzas samtavolan teĥnikaron; aliuloj eble scios, ke vi spektas la filmon."
 }

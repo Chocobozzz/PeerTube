@@ -7,7 +7,7 @@
     "peer": "servent",
     "Go to the video page": "Gå till videosidan",
     "Settings": "Inställningar",
-    "Uses P2P, others may know you are watching this video.": "Använder P2P, andra kan veta att du tittar på den här videon.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Kopiera videons URL",
     "Copy the video URL at the current time": "Kopiera videons URL vid den här tidpunkten",
     "Copy embed code": "Kopiera inbäddningskod",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "Dialogruta för textningsinställningar",
     "Beginning of dialog window. Escape will cancel and close the window.": "Början av dialogruta. Tryck Escape för att avbryta och stänga fönstret.",
     "End of dialog window.": "Slut på dialogruta.",
-    "{1} is loading.": "{1} laddar."
+    "{1} is loading.": "{1} laddar.",
+    "Uses P2P, others may know you are watching this video.": "Använder P2P, andra kan veta att du tittar på den här videon."
 }

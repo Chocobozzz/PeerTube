@@ -7,7 +7,7 @@
     "peer": "",
     "Go to the video page": "Joan bideoaren orrira",
     "Settings": "Ezarpenak",
-    "Uses P2P, others may know you are watching this video.": "P2P darabil, beste batzuk bideo hau ikusten ari zarela jakin dezakete.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Kopiatu bideoaren URL-a",
     "Copy the video URL at the current time": "Kopiatu bideoaren URL-a uneko denboran",
     "Copy embed code": "Kopiatu txertatzeko kodea",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "Oharren ezarpenen elkarrizketa-koadroa",
     "Beginning of dialog window. Escape will cancel and close the window.": "Elkarrizketa koadroaren hasiera. Esc teklak ezeztatu eta leihoa itxiko du.",
     "End of dialog window.": "Elkarrizketa koadroaren amaiera.",
-    "{1} is loading.": "{1} kargatzen ari da."
+    "{1} is loading.": "{1} kargatzen ari da.",
+    "Uses P2P, others may know you are watching this video.": "P2P darabil, beste batzuk bideo hau ikusten ari zarela jakin dezakete."
 }

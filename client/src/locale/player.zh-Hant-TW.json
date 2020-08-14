@@ -7,7 +7,7 @@
     "peer": "端點",
     "Go to the video page": "前往視頻頁面",
     "Settings": "設定",
-    "Uses P2P, others may know you are watching this video.": "使用 P2P，其他人可能會知道您正在觀看這部視頻。",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "複製視頻 URL",
     "Copy the video URL at the current time": "複製目前視頻時間的 URL",
     "Copy embed code": "複製嵌入程式碼",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "字幕設定對話框",
     "Beginning of dialog window. Escape will cancel and close the window.": "對話框視窗開始。Esc 將會取消並關閉視窗。",
     "End of dialog window.": "對話框視窗結束。",
-    "{1} is loading.": "{1} 正在載入。"
+    "{1} is loading.": "{1} 正在載入。",
+    "Uses P2P, others may know you are watching this video.": "使用 P2P，其他人可能會知道您正在觀看這部視頻。"
 }

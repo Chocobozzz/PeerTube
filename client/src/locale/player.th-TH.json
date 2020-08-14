@@ -7,7 +7,7 @@
     "peer": "เพียร์",
     "Go to the video page": "ไปที่หน้าวิดีโอ",
     "Settings": "การตั้งค่า",
-    "Uses P2P, others may know you are watching this video.": "ใช้เทคโนโลยี P2P ผู้อื่นอาจทราบว่าคุณกำลังรับชมวิดีโอนี้อยู่",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "คัดลอก URL วิดีโอ",
     "Copy the video URL at the current time": "คัดลอก URL วิดีโอ ณ เวลาปัจจุบัน",
     "Copy embed code": "คัดลอกโค้ดฝัง",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "",
     "Beginning of dialog window. Escape will cancel and close the window.": "",
     "End of dialog window.": "",
-    "{1} is loading.": "{1} กำลังโหลดอยู่"
+    "{1} is loading.": "{1} กำลังโหลดอยู่",
+    "Uses P2P, others may know you are watching this video.": "ใช้เทคโนโลยี P2P ผู้อื่นอาจทราบว่าคุณกำลังรับชมวิดีโอนี้อยู่"
 }

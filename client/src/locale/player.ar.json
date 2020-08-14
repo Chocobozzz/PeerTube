@@ -7,7 +7,7 @@
     "peer": "نظير",
     "Go to the video page": "الإنتقال إلى صفحة الفيديو",
     "Settings": "الإعدادات",
-    "Uses P2P, others may know you are watching this video.": "يستخدم P2P، يمكن للآخرين معرفة إن كنت تشاهد هذا الفيديو.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "نسخ رابط الفيديو",
     "Copy the video URL at the current time": "نسخ رابط الفيديو بالوقت الحالي",
     "Copy embed code": "نسخ الرمز المدمج",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "إعدادات التعليقات",
     "Beginning of dialog window. Escape will cancel and close the window.": "الضغط على زر Esc في بداية نافذة الحوار سيلغي ويقفل النافذة.",
     "End of dialog window.": "نهاية نافذة الحوار.",
-    "{1} is loading.": "جارٍ تحميل {1}."
+    "{1} is loading.": "جارٍ تحميل {1}.",
+    "Uses P2P, others may know you are watching this video.": "يستخدم P2P، يمكن للآخرين معرفة إن كنت تشاهد هذا الفيديو."
 }

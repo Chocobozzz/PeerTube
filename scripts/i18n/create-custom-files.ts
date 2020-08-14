@@ -1,6 +1,7 @@
-import { registerTSPaths } from '../../server/helpers/register-ts-paths'
 import { writeJSON } from 'fs-extra'
+import { values } from 'lodash'
 import { join } from 'path'
+import { registerTSPaths } from '../../server/helpers/register-ts-paths'
 import {
   buildLanguages,
   VIDEO_CATEGORIES,
@@ -11,7 +12,7 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_STATES
 } from '../../server/initializers/constants'
-import { values } from 'lodash'
+import { I18N_LOCALES } from '../../shared/core-utils/i18n'
 
 registerTSPaths()
 
@@ -70,10 +71,28 @@ Object.keys(languages).forEach(k => { languageKeys[languages[k]] = languages[k] 
 
 Object.assign(serverKeys, languageKeys)
 
-Promise.all([
-  writeJSON(join(__dirname, '../../../client/src/locale/player.en-US.json'), playerKeys),
-  writeJSON(join(__dirname, '../../../client/src/locale/server.en-US.json'), serverKeys)
-]).catch(err => {
+writeAll().catch(err => {
   console.error(err)
   process.exit(-1)
 })
+
+async function writeAll () {
+  const localePath = join(__dirname, '../../../client/src/locale')
+
+  await writeJSON(join(localePath, 'player.en-US.json'), playerKeys, { spaces: 4 })
+  await writeJSON(join(localePath, 'server.en-US.json'), serverKeys, { spaces: 4 })
+
+  for (const key of Object.keys(I18N_LOCALES)) {
+    const playerJsonPath = join(localePath, `player.${key}.json`)
+    const translatedPlayer = require(playerJsonPath)
+
+    const newTranslatedPlayer = Object.assign({}, playerKeys, translatedPlayer)
+    await writeJSON(playerJsonPath, newTranslatedPlayer, { spaces: 4 })
+
+    const serverJsonPath = join(localePath, `server.${key}.json`)
+    const translatedServer = require(serverJsonPath)
+
+    const newTranslatedServer = Object.assign({}, serverKeys, translatedServer)
+    await writeJSON(serverJsonPath, newTranslatedServer, { spaces: 4 })
+  }
+}

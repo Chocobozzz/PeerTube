@@ -7,7 +7,7 @@
     "peer": "пир",
     "Go to the video page": "Перейти на страницу с видео",
     "Settings": "Настройки",
-    "Uses P2P, others may know you are watching this video.": "Использует P2P, другие могут знать, что вы просматриваете это видео.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Скопировать URL видео",
     "Copy the video URL at the current time": "Скопировать URL видео с привязкой ко времени",
     "Copy embed code": "Скопировать HTML-код",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "Окно настроек заголовок",
     "Beginning of dialog window. Escape will cancel and close the window.": "Начало диалогового окна. Клавиша Escape отменит действие и закроет окно.",
     "End of dialog window.": "Конец диалогового окна.",
-    "{1} is loading.": "{1} загружается."
+    "{1} is loading.": "{1} загружается.",
+    "Uses P2P, others may know you are watching this video.": "Использует P2P, другие могут знать, что вы просматриваете это видео."
 }

@@ -7,7 +7,7 @@
     "peer": "peer",
     "Go to the video page": "Anar a la pàgina del vídeo",
     "Settings": "Ajustos",
-    "Uses P2P, others may know you are watching this video.": "Utilitza P2P, d'altres poden saber que esteu veient aquest vídeo.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Copia l'URL del vídeo",
     "Copy the video URL at the current time": "Copia l'URL del vídeo a l'hora actual",
     "Copy embed code": "Copia el codi d'incrustació",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "Diàleg de configuració de llegenda",
     "Beginning of dialog window. Escape will cancel and close the window.": "Inici de finestra de diàleg. Escape cancel·larà i tancarà la finestra.",
     "End of dialog window.": "Fi de la finestra de diàleg.",
-    "{1} is loading.": "{1} s''està carregant."
+    "{1} is loading.": "{1} s''està carregant.",
+    "Uses P2P, others may know you are watching this video.": "Utilitza P2P, d'altres poden saber que esteu veient aquest vídeo."
 }

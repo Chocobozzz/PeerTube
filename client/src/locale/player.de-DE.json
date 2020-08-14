@@ -7,7 +7,7 @@
     "peer": "Peer",
     "Go to the video page": "Zur Video-Seite gehen",
     "Settings": "Einstellungen",
-    "Uses P2P, others may know you are watching this video.": "Nutzt Peer-to-Peer-Technologie, daher könnten andere wissen, dass Du dieses Video ansiehst.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Video-URL kopieren",
     "Copy the video URL at the current time": "Video-URL an dieser Stelle kopieren",
     "Copy embed code": "Einbettungscode kopieren",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "Dialogfenster für Einstellungen für Untertitel für Gehörlose und Schwerhörige",
     "Beginning of dialog window. Escape will cancel and close the window.": "Anfang des Dialogfensters. Mit der Escape-Taste wird das Fenster ohne Speichern geschlossen.",
     "End of dialog window.": "Ende des Dialogfensters.",
-    "{1} is loading.": "{1} lädt."
+    "{1} is loading.": "{1} lädt.",
+    "Uses P2P, others may know you are watching this video.": "Nutzt Peer-to-Peer-Technologie, daher könnten andere wissen, dass Du dieses Video ansiehst."
 }

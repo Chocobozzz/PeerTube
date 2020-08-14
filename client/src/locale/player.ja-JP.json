@@ -7,7 +7,7 @@
     "peer": "ピア",
     "Go to the video page": "動画ページへ移動",
     "Settings": "設定",
-    "Uses P2P, others may know you are watching this video.": "P2Pを使用すると、この動画を観覧していることを誰かに特定されるかも知れません。",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "動画のURLをコピーする",
     "Copy the video URL at the current time": "現時点の動画のURLをコピー",
     "Copy embed code": "埋め込みコードをコピー",
@@ -96,5 +96,6 @@
     "Caption Settings Dialog": "字幕設定ダイアログ",
     "Beginning of dialog window. Escape will cancel and close the window.": "最初のダイアログウィンドウ エスケープをキャンセルしてウィンドウを閉じます。",
     "End of dialog window.": "ダイアログウィンドウの終了。",
-    "{1} is loading.": "{1} が読み込み中。"
+    "{1} is loading.": "{1} が読み込み中。",
+    "Uses P2P, others may know you are watching this video.": "P2Pを使用すると、この動画を観覧していることを誰かに特定されるかも知れません。"
 }
