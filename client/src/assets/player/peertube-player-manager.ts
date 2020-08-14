@@ -35,7 +35,7 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoOrPlaylistEmbed, buildVideoLink, copyToClipboard, getRtcConfig, isSafari } from './utils'
+import { buildVideoOrPlaylistEmbed, buildVideoLink, copyToClipboard, getRtcConfig, isSafari, isIOS } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -581,7 +581,7 @@ export class PeertubePlayerManager {
 
     // We have issues with autoplay and Safari.
     // any that tries to play using auto mute seems to work
-    if (isSafari()) return 'any'
+    if (isSafari() && !isIOS()) return 'any'
 
     return 'play'
   }
