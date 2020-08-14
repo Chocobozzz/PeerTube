@@ -7,7 +7,6 @@ import { Video } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCommentCreate } from '@shared/models'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-comment-add',
@@ -39,7 +38,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     private videoCommentService: VideoCommentService,
     private modalService: NgbModal,
     private router: Router,
-    private i18n: I18n
   ) {
     super()
   }
@@ -57,9 +55,9 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
     if (this.user) {
       if (!this.parentComment) {
-        this.addingCommentButtonValue = this.i18n('Comment')
+        this.addingCommentButtonValue = $localize`Comment`
       } else {
-        this.addingCommentButtonValue = this.i18n('Reply')
+        this.addingCommentButtonValue = $localize`Reply`
       }
 
       this.initTextValue()
