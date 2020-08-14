@@ -369,11 +369,10 @@ class WebTorrentPlugin extends Plugin {
     if (files.length === 0) return undefined
     if (files.length === 1) return files[0]
 
-    // Don't change the torrent is the play was ended
+    // Don't change the torrent if the player ended
     if (this.torrent && this.torrent.progress === 1 && this.player.ended()) return this.currentVideoFile
 
     if (!averageDownloadSpeed) averageDownloadSpeed = this.getAndSaveActualDownloadSpeed()
-    averageDownloadSpeed = 0
 
     // Limit resolution according to player height
     const playerHeight = this.playerElement.offsetHeight
