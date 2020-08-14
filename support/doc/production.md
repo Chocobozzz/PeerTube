@@ -96,8 +96,8 @@ Copy the nginx configuration template:
 $ sudo cp /var/www/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-available/peertube
 ```
 
-Then set the domain for the webserver configuration file. 
-Replace `[peertube-domain]` with the domain for the peertube server. 
+Then set the domain for the webserver configuration file.
+Replace `[peertube-domain]` with the domain for the peertube server.
 
 ```
 $ sudo sed -i 's/peertube.example.com/[peertube-domain]/g' /etc/nginx/sites-available/peertube
@@ -120,9 +120,7 @@ To generate the certificate for your domain as required to make https work you c
 
 ```
 $ sudo systemctl stop nginx
-$ sudo vim /etc/nginx/sites-available/peertube # Comment ssl_certificate and ssl_certificate_key lines
-$ sudo certbot --authenticator standalone --installer nginx --post-hook "systemctl start nginx"
-$ sudo vim /etc/nginx/sites-available/peertube # Uncomment ssl_certificate and ssl_certificate_key lines
+$ sudo certbot certonly --standalone --post-hook "systemctl start nginx"
 $ sudo systemctl reload nginx
 ```
 
@@ -238,7 +236,7 @@ to your own administrator password, although it must be 6 characters or more.
 ### What now?
 
 Now your instance is up you can:
- 
+
  * Subscribe to the mailing list for PeerTube administrators: https://framalistes.org/sympa/subscribe/peertube-admin
  * Add you instance to the public PeerTube instances index if you want to: https://instances.peertu.be/
  * Check [available CLI tools](/support/doc/tools.md)
