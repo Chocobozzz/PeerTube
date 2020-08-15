@@ -17,9 +17,7 @@ export class MenuService {
       this.setMenuDisplay(false)
     }
 
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(200))
-      .subscribe(() => this.onResize())
+    this.handleWindowResize()
   }
 
   toggleMenu () {
@@ -29,9 +27,29 @@ export class MenuService {
 
   setMenuDisplay (display: boolean) {
     this.isMenuDisplayed = display
+
+    // On touch screens, lock body scroll and display content overlay when memu is opened
+    if (this.screenService.isInTouchScreen()) {
+      if (this.isMenuDisplayed) {
+        document.body.classList.add('menu-open')
+      } else {
+        document.body.classList.remove('menu-open')
+      }
+    }
   }
 
   onResize () {
-    this.isMenuDisplayed = window.innerWidth >= 800 && !this.screenService.isInTouchScreen() && !this.isMenuChangedByUser
+    this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
+  }
+
+  private handleWindowResize () {
+    // On touch screens, do not handle window resize event since opened menu is handled with a content overlay
+    if (this.screenService.isInTouchScreen()) {
+      return
+    }
+
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(200))
+      .subscribe(() => this.onResize())
   }
 }

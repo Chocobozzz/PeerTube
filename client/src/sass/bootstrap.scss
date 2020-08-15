@@ -152,8 +152,24 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 // On touchscreen devices, simply overflow: hidden to avoid detached overlay on scroll
 @media (hover: none) and (pointer: coarse) {
-  .modal-open {
+  .modal-open, .menu-open {
     overflow: hidden !important;
+  }
+
+  // On touchscreen devices display content overlay when opened menu
+  .menu-open {
+    .main-col {
+      &::before {
+        background-color: black;
+        width: 100vw;
+        height: 100vh;
+        opacity: 0.75;
+        content: '';
+        display: block;
+        position: fixed;
+        z-index: z('header');
+      }
+    }
   }
 }
 
