@@ -32,6 +32,7 @@ export class MenuService {
     if (this.screenService.isInTouchScreen()) {
       if (this.isMenuDisplayed) {
         document.body.classList.add('menu-open')
+        this.screenService.onFingerSwipe('left', () => { this.setMenuDisplay(false) })
       } else {
         document.body.classList.remove('menu-open')
       }
