@@ -150,6 +150,13 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   width: 100vw; // Make sure the content fits all the available width
 }
 
+// On touchscreen devices, simply overflow: hidden to avoid detached overlay on scroll
+@media (hover: none) and (pointer: coarse) {
+  .modal-open {
+    overflow: hidden !important;
+  }
+}
+
 // Nav customizations
 .nav .nav-link {
   display: flex !important;
