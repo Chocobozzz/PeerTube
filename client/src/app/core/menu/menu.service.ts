@@ -13,7 +13,7 @@ export class MenuService {
     private screenService: ScreenService
   ) {
     // Do not display menu on small or touch screens
-    if (this.screenService.isInSmallView() || !!this.screenService.isInTouchScreen()) {
+    if (this.screenService.isInSmallView() || this.screenService.isInTouchScreen()) {
       this.setMenuDisplay(false)
     }
 
