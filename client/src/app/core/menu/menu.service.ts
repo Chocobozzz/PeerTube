@@ -12,9 +12,9 @@ export class MenuService {
   constructor (
     private screenService: ScreenService
   ) {
-    // Do not display menu on small screens
-    if (this.screenService.isInSmallView()) {
-      this.isMenuDisplayed = false
+    // Do not display menu on small or touch screens
+    if (this.screenService.isInSmallView() || !!this.screenService.isInTouchScreen()) {
+      this.setMenuDisplay(false)
     }
 
     fromEvent(window, 'resize')
@@ -23,11 +23,15 @@ export class MenuService {
   }
 
   toggleMenu () {
-    this.isMenuDisplayed = !this.isMenuDisplayed
+    this.setMenuDisplay(!this.isMenuDisplayed)
     this.isMenuChangedByUser = true
   }
 
+  setMenuDisplay (display: boolean) {
+    this.isMenuDisplayed = display
+  }
+
   onResize () {
-    this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
+    this.isMenuDisplayed = window.innerWidth >= 800 && !this.screenService.isInTouchScreen() && !this.isMenuChangedByUser
   }
 }
