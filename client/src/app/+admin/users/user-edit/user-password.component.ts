@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, UserService } from '@app/core'
-import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { UserUpdate } from '@shared/models'
 
 @Component({
@@ -17,7 +18,6 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private userValidatorsService: UserValidatorsService,
     private notifier: Notifier,
     private userService: UserService
     ) {
@@ -26,7 +26,7 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      password: this.userValidatorsService.USER_PASSWORD
+      password: USER_PASSWORD_VALIDATOR
     })
   }
 

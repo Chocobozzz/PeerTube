@@ -1,7 +1,8 @@
 import { filter } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, UserService } from '@app/core'
-import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { USER_CONFIRM_PASSWORD_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { User } from '@shared/models'
 
 @Component({
@@ -15,7 +16,6 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private userValidatorsService: UserValidatorsService,
     private notifier: Notifier,
     private authService: AuthService,
     private userService: UserService
@@ -25,9 +25,9 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   ngOnInit () {
     this.buildForm({
-      'current-password': this.userValidatorsService.USER_PASSWORD,
-      'new-password': this.userValidatorsService.USER_PASSWORD,
-      'new-confirmed-password': this.userValidatorsService.USER_CONFIRM_PASSWORD
+      'current-password': USER_PASSWORD_VALIDATOR,
+      'new-password': USER_PASSWORD_VALIDATOR,
+      'new-confirmed-password': USER_CONFIRM_PASSWORD_VALIDATOR
     })
 
     this.user = this.authService.getUser()

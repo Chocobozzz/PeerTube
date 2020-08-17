@@ -4,7 +4,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { populateAsyncUserVideoChannels } from '@app/helpers'
-import { FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/shared-forms'
+import {
+  setPlaylistChannelValidator,
+  VIDEO_PLAYLIST_CHANNEL_ID_VALIDATOR,
+  VIDEO_PLAYLIST_DESCRIPTION_VALIDATOR,
+  VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR,
+  VIDEO_PLAYLIST_PRIVACY_VALIDATOR
+} from '@app/shared/form-validators/video-playlist-validators'
+import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { VideoPlaylistUpdate } from '@shared/models'
 import { MyAccountVideoPlaylistEdit } from './my-account-video-playlist-edit'
@@ -23,7 +30,6 @@ export class MyAccountVideoPlaylistUpdateComponent extends MyAccountVideoPlaylis
   constructor (
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
-    private videoPlaylistValidatorsService: VideoPlaylistValidatorsService,
     private notifier: Notifier,
     private router: Router,
     private route: ActivatedRoute,
@@ -35,15 +41,15 @@ export class MyAccountVideoPlaylistUpdateComponent extends MyAccountVideoPlaylis
 
   ngOnInit () {
     this.buildForm({
-      displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME,
-      privacy: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_PRIVACY,
-      description: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DESCRIPTION,
-      videoChannelId: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_CHANNEL_ID,
+      displayName: VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR,
+      privacy: VIDEO_PLAYLIST_PRIVACY_VALIDATOR,
+      description: VIDEO_PLAYLIST_DESCRIPTION_VALIDATOR,
+      videoChannelId: VIDEO_PLAYLIST_CHANNEL_ID_VALIDATOR,
       thumbnailfile: null
     })
 
     this.form.get('privacy').valueChanges.subscribe(privacy => {
-      this.videoPlaylistValidatorsService.setChannelValidator(this.form.get('videoChannelId'), privacy)
+      setPlaylistChannelValidator(this.form.get('videoChannelId'), privacy)
     })
 
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)

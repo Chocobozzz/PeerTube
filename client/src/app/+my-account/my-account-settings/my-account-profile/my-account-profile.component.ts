@@ -1,7 +1,8 @@
 import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
-import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 
 @Component({
   selector: 'my-account-profile',
@@ -16,17 +17,16 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private userValidatorsService: UserValidatorsService,
     private notifier: Notifier,
     private userService: UserService
-    ) {
+  ) {
     super()
   }
 
   ngOnInit () {
     this.buildForm({
-      'display-name': this.userValidatorsService.USER_DISPLAY_NAME_REQUIRED,
-      description: this.userValidatorsService.USER_DESCRIPTION
+      'display-name': USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
+      description: USER_DESCRIPTION_VALIDATOR
     })
 
     this.userInformationLoaded.subscribe(() => {

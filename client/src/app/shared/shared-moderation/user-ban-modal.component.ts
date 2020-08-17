@@ -1,9 +1,10 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier, UserService } from '@app/core'
-import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { User } from '@shared/models'
+import { USER_BAN_REASON_VALIDATOR } from '../form-validators/user-validators'
 
 @Component({
   selector: 'my-user-ban-modal',
@@ -21,15 +22,14 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
     private notifier: Notifier,
-    private userService: UserService,
-    private userValidatorsService: UserValidatorsService
+    private userService: UserService
   ) {
     super()
   }
 
   ngOnInit () {
     this.buildForm({
-      reason: this.userValidatorsService.USER_BAN_REASON
+      reason: USER_BAN_REASON_VALIDATOR
     })
   }
 

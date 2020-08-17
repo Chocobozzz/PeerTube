@@ -1,5 +1,6 @@
 import { FormGroup } from '@angular/forms'
-import { BuildFormArgument, BuildFormDefaultValues, FormValidatorService } from './form-validators'
+import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
+import { FormValidatorService } from './form-validator.service'
 
 export type FormReactiveErrors = { [ id: string ]: string | FormReactiveErrors }
 export type FormReactiveValidationMessages = {

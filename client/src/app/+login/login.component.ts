@@ -3,7 +3,8 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, Notifier, RedirectService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { FormReactive, FormValidatorService, LoginValidatorsService } from '@app/shared/shared-forms'
+import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 
@@ -31,7 +32,6 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     protected formValidatorService: FormValidatorService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
-    private loginValidatorsService: LoginValidatorsService,
     private authService: AuthService,
     private userService: UserService,
     private redirectService: RedirectService,
@@ -65,8 +65,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     }
 
     this.buildForm({
-      username: this.loginValidatorsService.LOGIN_USERNAME,
-      password: this.loginValidatorsService.LOGIN_PASSWORD
+      username: LOGIN_USERNAME_VALIDATOR,
+      password: LOGIN_PASSWORD_VALIDATOR
     })
   }
 

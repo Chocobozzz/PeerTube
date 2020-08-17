@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { ServerService } from '@app/core'
-import { FormReactive, FormValidatorService, VideoCaptionsValidatorsService } from '@app/shared/shared-forms'
+import { VIDEO_CAPTION_FILE_VALIDATOR, VIDEO_CAPTION_LANGUAGE_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit } from '@app/shared/shared-main'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { ServerConfig, VideoConstant } from '@shared/models'
@@ -27,8 +28,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private serverService: ServerService,
-    private videoCaptionsValidatorsService: VideoCaptionsValidatorsService
+    private serverService: ServerService
   ) {
     super()
   }
@@ -46,8 +46,8 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
         .subscribe(languages => this.videoCaptionLanguages = languages)
 
     this.buildForm({
-      language: this.videoCaptionsValidatorsService.VIDEO_CAPTION_LANGUAGE,
-      captionfile: this.videoCaptionsValidatorsService.VIDEO_CAPTION_FILE
+      language: VIDEO_CAPTION_LANGUAGE_VALIDATOR,
+      captionfile: VIDEO_CAPTION_FILE_VALIDATOR
     })
   }
 

@@ -4,7 +4,20 @@ import { Component, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
-import { FormReactiveValidationMessages, FormValidatorService, SelectChannelItem, VideoValidatorsService } from '@app/shared/shared-forms'
+import {
+  VIDEO_CATEGORY_VALIDATOR,
+  VIDEO_CHANNEL_VALIDATOR,
+  VIDEO_DESCRIPTION_VALIDATOR,
+  VIDEO_LANGUAGE_VALIDATOR,
+  VIDEO_LICENCE_VALIDATOR,
+  VIDEO_NAME_VALIDATOR,
+  VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
+  VIDEO_PRIVACY_VALIDATOR,
+  VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR,
+  VIDEO_SUPPORT_VALIDATOR,
+  VIDEO_TAGS_ARRAY_VALIDATOR
+} from '@app/shared/form-validators/video-validators'
+import { FormReactiveValidationMessages, FormValidatorService, SelectChannelItem } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
@@ -57,7 +70,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   constructor (
     private formValidatorService: FormValidatorService,
-    private videoValidatorsService: VideoValidatorsService,
     private videoService: VideoService,
     private serverService: ServerService,
     private instanceService: InstanceService,
@@ -84,22 +96,22 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       tags: []
     }
     const obj: any = {
-      name: this.videoValidatorsService.VIDEO_NAME,
-      privacy: this.videoValidatorsService.VIDEO_PRIVACY,
-      channelId: this.videoValidatorsService.VIDEO_CHANNEL,
+      name: VIDEO_NAME_VALIDATOR,
+      privacy: VIDEO_PRIVACY_VALIDATOR,
+      channelId: VIDEO_CHANNEL_VALIDATOR,
       nsfw: null,
       commentsEnabled: null,
       downloadEnabled: null,
       waitTranscoding: null,
-      category: this.videoValidatorsService.VIDEO_CATEGORY,
-      licence: this.videoValidatorsService.VIDEO_LICENCE,
-      language: this.videoValidatorsService.VIDEO_LANGUAGE,
-      description: this.videoValidatorsService.VIDEO_DESCRIPTION,
-      tags: this.videoValidatorsService.VIDEO_TAGS_ARRAY,
+      category: VIDEO_CATEGORY_VALIDATOR,
+      licence: VIDEO_LICENCE_VALIDATOR,
+      language: VIDEO_LANGUAGE_VALIDATOR,
+      description: VIDEO_DESCRIPTION_VALIDATOR,
+      tags: VIDEO_TAGS_ARRAY_VALIDATOR,
       previewfile: null,
-      support: this.videoValidatorsService.VIDEO_SUPPORT,
-      schedulePublicationAt: this.videoValidatorsService.VIDEO_SCHEDULE_PUBLICATION_AT,
-      originallyPublishedAt: this.videoValidatorsService.VIDEO_ORIGINALLY_PUBLISHED_AT
+      support: VIDEO_SUPPORT_VALIDATOR,
+      schedulePublicationAt: VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR,
+      originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR
     }
 
     this.formValidatorService.updateForm(

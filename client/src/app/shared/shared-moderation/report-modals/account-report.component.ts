@@ -1,7 +1,8 @@
 import { mapValues, pickBy } from 'lodash-es'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { Account } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -28,7 +29,6 @@ export class AccountReportComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private abuseValidatorsService: AbuseValidatorsService,
     private abuseService: AbuseService,
     private notifier: Notifier
   ) {
@@ -51,7 +51,7 @@ export class AccountReportComponent extends FormReactive implements OnInit {
     this.modalTitle = $localize`Report ${this.account.displayName}`
 
     this.buildForm({
-      reason: this.abuseValidatorsService.ABUSE_REASON,
+      reason: ABUSE_REASON_VALIDATOR,
       predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null)
     })
 

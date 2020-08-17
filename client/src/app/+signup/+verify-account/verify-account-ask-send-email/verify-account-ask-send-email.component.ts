@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RedirectService, ServerService, UserService } from '@app/core'
-import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { ServerConfig } from '@shared/models'
 
 @Component({
@@ -14,7 +15,6 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private userValidatorsService: UserValidatorsService,
     private userService: UserService,
     private serverService: ServerService,
     private notifier: Notifier,
@@ -33,7 +33,7 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
         .subscribe(config => this.serverConfig = config)
 
     this.buildForm({
-      'verify-email-email': this.userValidatorsService.USER_EMAIL
+      'verify-email-email': USER_EMAIL_VALIDATOR
     })
   }
 

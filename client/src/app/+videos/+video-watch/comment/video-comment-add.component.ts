@@ -2,7 +2,8 @@ import { Observable } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier, User } from '@app/core'
-import { FormReactive, FormValidatorService, VideoCommentValidatorsService } from '@app/shared/shared-forms'
+import { VIDEO_COMMENT_TEXT_VALIDATOR } from '@app/shared/form-validators/video-comment-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { Video } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -33,7 +34,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private videoCommentValidatorsService: VideoCommentValidatorsService,
     private notifier: Notifier,
     private videoCommentService: VideoCommentService,
     private modalService: NgbModal,
@@ -50,7 +50,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   ngOnInit () {
     this.buildForm({
-      text: this.videoCommentValidatorsService.VIDEO_COMMENT_TEXT
+      text: VIDEO_COMMENT_TEXT_VALIDATOR
     })
 
     if (this.user) {

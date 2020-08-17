@@ -1,10 +1,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { AbuseService } from '@app/shared/shared-moderation'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { AdminAbuse } from '@shared/models'
+import { ABUSE_MODERATION_COMMENT_VALIDATOR } from '../form-validators/abuse-validators'
 
 @Component({
   selector: 'my-moderation-comment-modal',
@@ -22,15 +23,14 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
     private notifier: Notifier,
-    private abuseService: AbuseService,
-    private abuseValidatorsService: AbuseValidatorsService
+    private abuseService: AbuseService
   ) {
     super()
   }
 
   ngOnInit () {
     this.buildForm({
-      moderationComment: this.abuseValidatorsService.ABUSE_MODERATION_COMMENT
+      moderationComment: ABUSE_MODERATION_COMMENT_VALIDATOR
     })
   }
 

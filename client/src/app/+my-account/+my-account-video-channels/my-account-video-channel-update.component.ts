@@ -2,7 +2,12 @@ import { Subscription } from 'rxjs'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { FormValidatorService, VideoChannelValidatorsService } from '@app/shared/shared-forms'
+import {
+  VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
+  VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
+  VIDEO_CHANNEL_SUPPORT_VALIDATOR
+} from '@app/shared/form-validators/video-channel-validators'
+import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { ServerConfig, VideoChannelUpdate } from '@shared/models'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
@@ -23,7 +28,6 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
   constructor (
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
-    private videoChannelValidatorsService: VideoChannelValidatorsService,
     private notifier: Notifier,
     private router: Router,
     private route: ActivatedRoute,
@@ -39,9 +43,9 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
         .subscribe(config => this.serverConfig = config)
 
     this.buildForm({
-      'display-name': this.videoChannelValidatorsService.VIDEO_CHANNEL_DISPLAY_NAME,
-      description: this.videoChannelValidatorsService.VIDEO_CHANNEL_DESCRIPTION,
-      support: this.videoChannelValidatorsService.VIDEO_CHANNEL_SUPPORT,
+      'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
+      description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
+      support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
       bulkVideosSupportUpdate: null
     })
 

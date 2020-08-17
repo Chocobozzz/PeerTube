@@ -1,17 +1,7 @@
-import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
 import { Injectable } from '@angular/core'
-import { FormReactiveErrors, FormReactiveValidationMessages } from '../form-reactive'
-
-export type BuildFormValidator = {
-  VALIDATORS: ValidatorFn[],
-  MESSAGES: { [ name: string ]: string }
-}
-export type BuildFormArgument = {
-  [ id: string ]: BuildFormValidator | BuildFormArgument
-}
-export type BuildFormDefaultValues = {
-  [ name: string ]: string | string[] | BuildFormDefaultValues
-}
+import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
+import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
+import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive'
 
 @Injectable()
 export class FormValidatorService {

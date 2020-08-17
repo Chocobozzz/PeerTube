@@ -3,9 +3,10 @@ import { Subject, Subscription } from 'rxjs'
 import { debounceTime, filter } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
-import { FormReactive, FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { Video, VideoExistInPlaylist, VideoPlaylistCreate, VideoPlaylistElementCreate, VideoPlaylistPrivacy } from '@shared/models'
 import { secondsToTime } from '../../../assets/player/utils'
+import { VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR } from '../form-validators/video-playlist-validators'
 import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
 
 const logger = debug('peertube:playlists:VideoAddToPlaylistComponent')
@@ -53,7 +54,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     private authService: AuthService,
     private notifier: Notifier,
     private videoPlaylistService: VideoPlaylistService,
-    private videoPlaylistValidatorsService: VideoPlaylistValidatorsService,
     private cd: ChangeDetectorRef
   ) {
     super()
@@ -65,7 +65,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   ngOnInit () {
     this.buildForm({
-      displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
+      displayName: VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR
     })
 
     this.videoPlaylistService.listenToMyAccountPlaylistsChange()
