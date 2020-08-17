@@ -233,7 +233,11 @@ export class VideoPlaylistService {
                  tap(() => {
                    if (!videoId) return
 
-                   this.videoExistsCache[videoId] = this.videoExistsCache[videoId].filter(e => e.playlistElementId !== playlistElementId)
+                   if (this.videoExistsCache[videoId]) {
+                     this.videoExistsCache[videoId] = this.videoExistsCache[videoId]
+                       .filter(e => e.playlistElementId !== playlistElementId)
+                   }
+
                    this.runPlaylistCheck(videoId)
                  }),
                  catchError(err => this.restExtractor.handleError(err))
