@@ -417,7 +417,9 @@ const MIMETYPES = {
       'audio/x-ms-wma': '.wma',
       'audio/wav': '.wav',
       'audio/x-flac': '.flac',
-      'audio/flac': '.flac'
+      'audio/flac': '.flac',
+      '‎audio/aac': '.aac',
+      'audio/ac3': '.ac3'
     },
     EXT_MIMETYPE: null as { [ id: string ]: string }
   },
@@ -841,7 +843,7 @@ function buildVideoMimetypeExt () {
         'video/x-matroska': '.mkv',
 
         // Developed by Apple
-        'video/quicktime': '.mov', // often used as output format by editing software
+        'video/quicktime': [ '.mov', '.qt', '.mqv' ], // often used as output format by editing software
         'video/x-m4v': '.m4v',
         'video/m4v': '.m4v',
 
@@ -856,8 +858,8 @@ function buildVideoMimetypeExt () {
 
         // Developed by 3GPP
         // common video formats for cell phones
-        'video/3gpp': '.3gp',
-        'video/3gpp2': '.3g2',
+        'video/3gpp': [ '.3gp', '.3gpp' ],
+        'video/3gpp2': [ '.3g2', '.3gpp2' ],
 
         // Developed by FFmpeg/Mplayer
         'application/x-nut': '.nut',
@@ -870,7 +872,8 @@ function buildVideoMimetypeExt () {
         // Old formats reliant on MPEG-1/MPEG-2
         'video/mpv': '.mpv',
         'video/mpeg2': '.m2v',
-        'video/mpeg': '.mpeg',
+        'video/mpeg': [ '.m1v', '.mpg', '.mpe', '.mpeg', '.vob' ],
+        'video/dvd': '.vob',
 
         // Could be anything
         'application/octet-stream': null,
