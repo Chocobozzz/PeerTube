@@ -7,6 +7,10 @@
   padding: 8px 24px;
 }
 
+.dropdown-item:active {
+  color: inherit;
+}
+
 .header {
   min-width: 240px;
   margin-bottom: 10px;
