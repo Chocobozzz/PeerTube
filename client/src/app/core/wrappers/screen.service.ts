@@ -30,7 +30,7 @@ export class ScreenService {
   }
 
   isInTouchScreen () {
-    return 'ontouchstart' in window || navigator.msMaxTouchPoints
+    return !!('ontouchstart' in window || navigator.msMaxTouchPoints)
   }
 
   getNumberOfAvailableMiniatures () {

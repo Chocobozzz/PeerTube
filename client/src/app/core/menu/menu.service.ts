@@ -28,15 +28,16 @@ export class MenuService {
   setMenuDisplay (display: boolean) {
     this.isMenuDisplayed = display
 
+    if (!this.screenService.isInTouchScreen()) return
+
     // On touch screens, lock body scroll and display content overlay when memu is opened
-    if (this.screenService.isInTouchScreen()) {
-      if (this.isMenuDisplayed) {
-        document.body.classList.add('menu-open')
-        this.screenService.onFingerSwipe('left', () => { this.setMenuDisplay(false) })
-      } else {
-        document.body.classList.remove('menu-open')
-      }
+    if (this.isMenuDisplayed) {
+      document.body.classList.add('menu-open')
+      this.screenService.onFingerSwipe('left', () => { this.setMenuDisplay(false) })
+      return
     }
+
+    document.body.classList.remove('menu-open')
   }
 
   onResize () {
@@ -45,9 +46,7 @@ export class MenuService {
 
   private handleWindowResize () {
     // On touch screens, do not handle window resize event since opened menu is handled with a content overlay
-    if (this.screenService.isInTouchScreen()) {
-      return
-    }
+    if (this.screenService.isInTouchScreen()) return
 
     fromEvent(window, 'resize')
       .pipe(debounceTime(200))
