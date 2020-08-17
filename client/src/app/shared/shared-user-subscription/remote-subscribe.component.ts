@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { USER_EMAIL_VALIDATOR } from '../form-validators/user-validators'
 
 @Component({
   selector: 'my-remote-subscribe',
@@ -12,15 +13,14 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
   @Input() showHelp = false
 
   constructor (
-    protected formValidatorService: FormValidatorService,
-    private userValidatorsService: UserValidatorsService
+    protected formValidatorService: FormValidatorService
   ) {
     super()
   }
 
   ngOnInit () {
     this.buildForm({
-      text: this.userValidatorsService.USER_EMAIL
+      text: USER_EMAIL_VALIDATOR
     })
   }
 

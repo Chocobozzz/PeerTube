@@ -5,12 +5,19 @@ import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { Notifier } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import {
-  CustomConfigValidatorsService,
-  FormReactive,
-  FormValidatorService,
-  SelectOptionsItem,
-  UserValidatorsService
-} from '@app/shared/shared-forms'
+  ADMIN_EMAIL_VALIDATOR,
+  CACHE_CAPTIONS_SIZE_VALIDATOR,
+  CACHE_PREVIEWS_SIZE_VALIDATOR,
+  INDEX_URL_VALIDATOR,
+  INSTANCE_NAME_VALIDATOR,
+  INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
+  SEARCH_INDEX_URL_VALIDATOR,
+  SERVICES_TWITTER_USERNAME_VALIDATOR,
+  SIGNUP_LIMIT_VALIDATOR,
+  TRANSCODING_THREADS_VALIDATOR
+} from '@app/shared/form-validators/custom-config-validators'
+import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive, FormValidatorService, SelectOptionsItem } from '@app/shared/shared-forms'
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
 import { CustomConfig, ServerConfig } from '@shared/models'
 
@@ -37,8 +44,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   constructor (
     private viewportScroller: ViewportScroller,
     protected formValidatorService: FormValidatorService,
-    private customConfigValidatorsService: CustomConfigValidatorsService,
-    private userValidatorsService: UserValidatorsService,
     private notifier: Notifier,
     private configService: ConfigService,
     private serverService: ServerService
@@ -110,8 +115,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
     const formGroupData: { [key in keyof CustomConfig ]: any } = {
       instance: {
-        name: this.customConfigValidatorsService.INSTANCE_NAME,
-        shortDescription: this.customConfigValidatorsService.INSTANCE_SHORT_DESCRIPTION,
+        name: INSTANCE_NAME_VALIDATOR,
+        shortDescription: INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
         description: null,
 
         isNSFW: false,
@@ -143,21 +148,21 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       },
       services: {
         twitter: {
-          username: this.customConfigValidatorsService.SERVICES_TWITTER_USERNAME,
+          username: SERVICES_TWITTER_USERNAME_VALIDATOR,
           whitelisted: null
         }
       },
       cache: {
         previews: {
-          size: this.customConfigValidatorsService.CACHE_PREVIEWS_SIZE
+          size: CACHE_PREVIEWS_SIZE_VALIDATOR
         },
         captions: {
-          size: this.customConfigValidatorsService.CACHE_CAPTIONS_SIZE
+          size: CACHE_CAPTIONS_SIZE_VALIDATOR
         }
       },
       signup: {
         enabled: null,
-        limit: this.customConfigValidatorsService.SIGNUP_LIMIT,
+        limit: SIGNUP_LIMIT_VALIDATOR,
         requiresEmailVerification: null
       },
       import: {
@@ -171,18 +176,18 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         }
       },
       admin: {
-        email: this.customConfigValidatorsService.ADMIN_EMAIL
+        email: ADMIN_EMAIL_VALIDATOR
       },
       contactForm: {
         enabled: null
       },
       user: {
-        videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
-        videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY
+        videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
+        videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR
       },
       transcoding: {
         enabled: null,
-        threads: this.customConfigValidatorsService.TRANSCODING_THREADS,
+        threads: TRANSCODING_THREADS_VALIDATOR,
         allowAdditionalExtensions: null,
         allowAudioFiles: null,
         resolutions: {},
@@ -213,7 +218,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
           },
           autoFollowIndex: {
             enabled: null,
-            indexUrl: this.customConfigValidatorsService.INDEX_URL
+            indexUrl: INDEX_URL_VALIDATOR
           }
         }
       },
@@ -230,7 +235,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         },
         searchIndex: {
           enabled: null,
-          url: this.customConfigValidatorsService.SEARCH_INDEX_URL,
+          url: SEARCH_INDEX_URL_VALIDATOR,
           disableLocalSearch: null,
           isDefaultSearch: null
         }

@@ -1,6 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
-import { FormReactive, FormValidatorService, InstanceValidatorsService } from '@app/shared/shared-forms'
+import {
+  BODY_VALIDATOR,
+  FROM_EMAIL_VALIDATOR,
+  FROM_NAME_VALIDATOR,
+  SUBJECT_VALIDATOR
+} from '@app/shared/form-validators/instance-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -22,7 +28,6 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private instanceValidatorsService: InstanceValidatorsService,
     private instanceService: InstanceService,
     private serverService: ServerService,
     private notifier: Notifier
@@ -40,10 +45,10 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
         .subscribe(config => this.serverConfig = config)
 
     this.buildForm({
-      fromName: this.instanceValidatorsService.FROM_NAME,
-      fromEmail: this.instanceValidatorsService.FROM_EMAIL,
-      subject: this.instanceValidatorsService.SUBJECT,
-      body: this.instanceValidatorsService.BODY
+      fromName: FROM_NAME_VALIDATOR,
+      fromEmail: FROM_EMAIL_VALIDATOR,
+      subject: SUBJECT_VALIDATOR,
+      body: BODY_VALIDATOR
     })
   }
 

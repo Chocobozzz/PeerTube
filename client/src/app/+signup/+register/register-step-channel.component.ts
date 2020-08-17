@@ -3,7 +3,8 @@ import { pairwise } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { UserService } from '@app/core'
-import { FormReactive, FormValidatorService, VideoChannelValidatorsService } from '@app/shared/shared-forms'
+import { VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR, VIDEO_CHANNEL_NAME_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 
 @Component({
   selector: 'my-register-step-channel',
@@ -16,8 +17,7 @@ export class RegisterStepChannelComponent extends FormReactive implements OnInit
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private userService: UserService,
-    private videoChannelValidatorsService: VideoChannelValidatorsService
+    private userService: UserService
   ) {
     super()
   }
@@ -28,8 +28,8 @@ export class RegisterStepChannelComponent extends FormReactive implements OnInit
 
   ngOnInit () {
     this.buildForm({
-      displayName: this.videoChannelValidatorsService.VIDEO_CHANNEL_DISPLAY_NAME,
-      name: this.videoChannelValidatorsService.VIDEO_CHANNEL_NAME
+      displayName: VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
+      name: VIDEO_CHANNEL_NAME_VALIDATOR
     })
 
     setTimeout(() => this.formBuilt.emit(this.form))

@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { FormReactive, FormValidatorService, VideoBlockValidatorsService } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { VIDEO_BLOCK_REASON_VALIDATOR } from '../form-validators/video-block-validators'
 import { VideoBlockService } from './video-block.service'
 
 @Component({
@@ -25,7 +26,6 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private videoBlockValidatorsService: VideoBlockValidatorsService,
     private videoBlocklistService: VideoBlockService,
     private notifier: Notifier
   ) {
@@ -36,7 +36,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
     const defaultValues = { unfederate: 'true' }
 
     this.buildForm({
-      reason: this.videoBlockValidatorsService.VIDEO_BLOCK_REASON,
+      reason: VIDEO_BLOCK_REASON_VALIDATOR,
       unfederate: null
     }, defaultValues)
   }

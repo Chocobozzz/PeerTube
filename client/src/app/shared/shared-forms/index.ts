@@ -1,4 +1,4 @@
-export * from './form-validators'
+export * from './form-validator.service'
 export * from './form-reactive'
 export * from './select'
 export * from './input-readonly-copy.component'

@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { BatchDomainsValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { DOMAINS_VALIDATOR, getNotEmptyHosts } from '../form-validators/batch-domains-validators'
 
 @Component({
   selector: 'my-batch-domains-modal',
@@ -18,8 +19,7 @@ export class BatchDomainsModalComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private modalService: NgbModal,
-    private batchDomainsValidatorsService: BatchDomainsValidatorsService
+    private modalService: NgbModal
   ) {
     super()
   }
@@ -28,7 +28,7 @@ export class BatchDomainsModalComponent extends FormReactive implements OnInit {
     if (!this.action) this.action = $localize`Process domains`
 
     this.buildForm({
-      domains: this.batchDomainsValidatorsService.DOMAINS
+      domains: DOMAINS_VALIDATOR
     })
   }
 
@@ -42,7 +42,7 @@ export class BatchDomainsModalComponent extends FormReactive implements OnInit {
 
   submit () {
     this.domains.emit(
-      this.batchDomainsValidatorsService.getNotEmptyHosts(this.form.controls['domains'].value)
+      getNotEmptyHosts(this.form.controls['domains'].value)
     )
     this.form.reset()
     this.hide()

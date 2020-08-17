@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, HtmlRendererService, Notifier } from '@app/core'
-import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { AbuseMessage, UserAbuse } from '@shared/models'
+import { ABUSE_MESSAGE_VALIDATOR } from '../form-validators/abuse-validators'
 import { AbuseService } from '../shared-moderation'
 
 @Component({
@@ -28,7 +29,6 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private abuseValidatorsService: AbuseValidatorsService,
     private modalService: NgbModal,
     private htmlRenderer: HtmlRendererService,
     private auth: AuthService,
@@ -40,7 +40,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      message: this.abuseValidatorsService.ABUSE_MESSAGE
+      message: ABUSE_MESSAGE_VALIDATOR
     })
   }
 
