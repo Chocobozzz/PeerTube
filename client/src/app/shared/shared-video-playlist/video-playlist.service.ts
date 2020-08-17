@@ -215,10 +215,13 @@ export class VideoPlaylistService {
                  map(this.restExtractor.extractDataBool),
                  tap(() => {
                    const existsResult = this.videoExistsCache[videoId]
-                   const elem = existsResult.find(e => e.playlistElementId === playlistElementId)
 
-                   elem.startTimestamp = body.startTimestamp
-                   elem.stopTimestamp = body.stopTimestamp
+                   if (existsResult) {
+                     const elem = existsResult.find(e => e.playlistElementId === playlistElementId)
+
+                     elem.startTimestamp = body.startTimestamp
+                     elem.stopTimestamp = body.stopTimestamp
+                   }
 
                    this.runPlaylistCheck(videoId)
                  }),
