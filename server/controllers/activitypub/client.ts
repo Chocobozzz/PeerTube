@@ -159,7 +159,7 @@ activityPubClientRouter.get('/video-playlists/:playlistId',
   asyncMiddleware(videoPlaylistsGetValidator('all')),
   asyncMiddleware(videoPlaylistController)
 )
-activityPubClientRouter.get('/video-playlists/:playlistId/:videoId',
+activityPubClientRouter.get('/video-playlists/:playlistId/videos/:playlistElementId',
   executeIfActivityPub,
   asyncMiddleware(videoPlaylistElementAPGetValidator),
   videoPlaylistElementController

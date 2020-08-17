@@ -297,13 +297,15 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
     const position = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id, t)
 
     const playlistElement = await VideoPlaylistElementModel.create({
-      url: getVideoPlaylistElementActivityPubUrl(videoPlaylist, video),
       position,
       startTimestamp: body.startTimestamp || null,
       stopTimestamp: body.stopTimestamp || null,
       videoPlaylistId: videoPlaylist.id,
       videoId: video.id
     }, { transaction: t })
+
+    playlistElement.url = getVideoPlaylistElementActivityPubUrl(videoPlaylist, playlistElement)
+    await playlistElement.save({ transaction: t })
 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })

@@ -8,7 +8,8 @@ import {
   MVideoId,
   MVideoUrl,
   MVideoUUID,
-  MAbuseId
+  MAbuseId,
+  MVideoPlaylistElement
 } from '../../types/models'
 import { MVideoPlaylist, MVideoPlaylistUUID } from '../../types/models/video/video-playlist'
 import { MVideoFileVideoUUID } from '../../types/models/video/video-file'
@@ -22,8 +23,8 @@ function getVideoPlaylistActivityPubUrl (videoPlaylist: MVideoPlaylist) {
   return WEBSERVER.URL + '/video-playlists/' + videoPlaylist.uuid
 }
 
-function getVideoPlaylistElementActivityPubUrl (videoPlaylist: MVideoPlaylistUUID, video: MVideoUUID) {
-  return WEBSERVER.URL + '/video-playlists/' + videoPlaylist.uuid + '/' + video.uuid
+function getVideoPlaylistElementActivityPubUrl (videoPlaylist: MVideoPlaylistUUID, videoPlaylistElement: MVideoPlaylistElement) {
+  return WEBSERVER.URL + '/video-playlists/' + videoPlaylist.uuid + '/videos/' + videoPlaylistElement.id
 }
 
 function getVideoCacheFileActivityPubUrl (videoFile: MVideoFileVideoUUID) {

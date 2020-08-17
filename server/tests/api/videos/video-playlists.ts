@@ -552,6 +552,9 @@ describe('Test video playlists', function () {
       {
         const res = await addVideo({ videoId: nsfwVideoServer1, startTimestamp: 5 })
         playlistElementNSFW = res.body.videoPlaylistElement.id
+
+        await addVideo({ videoId: nsfwVideoServer1, startTimestamp: 4 })
+        await addVideo({ videoId: nsfwVideoServer1 })
       }
 
       await waitJobs(servers)
@@ -563,10 +566,10 @@ describe('Test video playlists', function () {
       for (const server of servers) {
         const res = await getPlaylistVideos(server.url, server.accessToken, playlistServer1UUID, 0, 10)
 
-        expect(res.body.total).to.equal(6)
+        expect(res.body.total).to.equal(8)
 
         const videoElements: VideoPlaylistElement[] = res.body.data
-        expect(videoElements).to.have.lengthOf(6)
+        expect(videoElements).to.have.lengthOf(8)
 
         expect(videoElements[0].video.name).to.equal('video 0 server 1')
         expect(videoElements[0].position).to.equal(1)
@@ -597,6 +600,16 @@ describe('Test video playlists', function () {
         expect(videoElements[5].position).to.equal(6)
         expect(videoElements[5].startTimestamp).to.equal(5)
         expect(videoElements[5].stopTimestamp).to.be.null
+
+        expect(videoElements[6].video.name).to.equal('NSFW video')
+        expect(videoElements[6].position).to.equal(7)
+        expect(videoElements[6].startTimestamp).to.equal(4)
+        expect(videoElements[6].stopTimestamp).to.be.null
+
+        expect(videoElements[7].video.name).to.equal('NSFW video')
+        expect(videoElements[7].position).to.equal(8)
+        expect(videoElements[7].startTimestamp).to.be.null
+        expect(videoElements[7].stopTimestamp).to.be.null
 
         const res3 = await getPlaylistVideos(server.url, server.accessToken, playlistServer1UUID, 0, 2)
         expect(res3.body.data).to.have.lengthOf(2)
@@ -807,6 +820,8 @@ describe('Test video playlists', function () {
             'video 1 server 3',
             'video 3 server 1',
             'video 4 server 1',
+            'NSFW video',
+            'NSFW video',
             'NSFW video'
           ])
         }
@@ -836,6 +851,8 @@ describe('Test video playlists', function () {
             'video 2 server 3',
             'video 1 server 3',
             'video 4 server 1',
+            'NSFW video',
+            'NSFW video',
             'NSFW video'
           ])
         }
@@ -865,7 +882,9 @@ describe('Test video playlists', function () {
             'video 2 server 3',
             'NSFW video',
             'video 1 server 3',
-            'video 4 server 1'
+            'video 4 server 1',
+            'NSFW video',
+            'NSFW video'
           ])
 
           for (let i = 1; i <= elements.length; i++) {
@@ -1023,10 +1042,10 @@ describe('Test video playlists', function () {
       for (const server of servers) {
         const res = await getPlaylistVideos(server.url, server.accessToken, playlistServer1UUID, 0, 10)
 
-        expect(res.body.total).to.equal(4)
+        expect(res.body.total).to.equal(6)
 
         const elements: VideoPlaylistElement[] = res.body.data
-        expect(elements).to.have.lengthOf(4)
+        expect(elements).to.have.lengthOf(6)
 
         expect(elements[0].video.name).to.equal('video 0 server 1')
         expect(elements[0].position).to.equal(1)
@@ -1039,6 +1058,12 @@ describe('Test video playlists', function () {
 
         expect(elements[3].video.name).to.equal('video 4 server 1')
         expect(elements[3].position).to.equal(4)
+
+        expect(elements[4].video.name).to.equal('NSFW video')
+        expect(elements[4].position).to.equal(5)
+
+        expect(elements[5].video.name).to.equal('NSFW video')
+        expect(elements[5].position).to.equal(6)
       }
     })
 
