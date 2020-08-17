@@ -346,11 +346,6 @@ describe('Test video playlists API validator', function () {
       const res = await addVideoInPlaylist(params)
       playlistElementId = res.body.videoPlaylistElement.id
     })
-
-    it('Should fail if the video was already added in the playlist', async function () {
-      const params = getBase({}, { expectedStatus: 409 })
-      await addVideoInPlaylist(params)
-    })
   })
 
   describe('When updating an element in a playlist', function () {

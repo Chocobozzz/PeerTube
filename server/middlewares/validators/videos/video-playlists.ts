@@ -199,16 +199,6 @@ const videoPlaylistsAddVideoValidator = [
     if (!await doesVideoExist(req.body.videoId, res, 'only-video')) return
 
     const videoPlaylist = getPlaylist(res)
-    const video = res.locals.onlyVideo
-
-    const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndVideo(videoPlaylist.id, video.id)
-    if (videoPlaylistElement) {
-      res.status(409)
-         .json({ error: 'This video in this playlist already exists' })
-         .end()
-
-      return
-    }
 
     if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) {
       return
@@ -258,15 +248,18 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
 const videoPlaylistElementAPGetValidator = [
   param('playlistId')
     .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
-  param('videoId')
-    .custom(isIdOrUUIDValid).withMessage('Should have an video id/uuid'),
+  param('playlistElementId')
+    .custom(isIdValid).withMessage('Should have an playlist element id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistElementAPGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
-    const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndVideoForAP(req.params.playlistId, req.params.videoId)
+    const playlistElementId = parseInt(req.params.playlistElementId + '', 10)
+    const playlistId = req.params.playlistId
+
+    const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndElementIdForAP(playlistId, playlistElementId)
     if (!videoPlaylistElement) {
       res.status(404)
          .json({ error: 'Video playlist element not found' })

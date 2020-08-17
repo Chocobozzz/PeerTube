@@ -44,10 +44,6 @@ import { MUserAccountId } from '@server/types/models'
       fields: [ 'videoId' ]
     },
     {
-      fields: [ 'videoPlaylistId', 'videoId' ],
-      unique: true
-    },
-    {
       fields: [ 'url' ],
       unique: true
     }
@@ -60,8 +56,8 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
   @UpdatedAt
   updatedAt: Date
 
-  @AllowNull(false)
-  @Is('VideoPlaylistUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
+  @AllowNull(true)
+  @Is('VideoPlaylistUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.URL.max))
   url: string
 
@@ -185,12 +181,11 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.findByPk(playlistElementId)
   }
 
-  static loadByPlaylistAndVideoForAP (
+  static loadByPlaylistAndElementIdForAP (
     playlistId: number | string,
-    videoId: number | string
+    playlistElementId: number
   ): Bluebird<MVideoPlaylistElementVideoUrlPlaylistPrivacy> {
     const playlistWhere = validator.isUUID('' + playlistId) ? { uuid: playlistId } : { id: playlistId }
-    const videoWhere = validator.isUUID('' + videoId) ? { uuid: videoId } : { id: videoId }
 
     const query = {
       include: [
@@ -201,10 +196,12 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
         },
         {
           attributes: [ 'url' ],
-          model: VideoModel.unscoped(),
-          where: videoWhere
+          model: VideoModel.unscoped()
         }
-      ]
+      ],
+      where: {
+        id: playlistElementId
+      }
     }
 
     return VideoPlaylistElementModel.findOne(query)
