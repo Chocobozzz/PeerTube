@@ -21,6 +21,7 @@
         <a
           i18n-title title="Update your notification preferences" class="glyphicon glyphicon-cog"
           routerLink="/my-account/settings" fragment="notifications"
+          #settingsNotifications (click)="onNavigate(settingsNotifications)"
         ></a>
       </div>
     </div>
@@ -34,7 +35,7 @@
       [markAllAsReadSubject]="markAllAsReadSubject" (notificationsLoaded)="onNotificationLoaded()"
     ></my-user-notifications>
 
-    <a *ngIf="loaded" class="all-notifications" routerLink="/my-account/notifications">
+    <a *ngIf="loaded" class="all-notifications" routerLink="/my-account/notifications" #notifications (click)="onNavigate(notifications)">
       <my-global-icon class="mr-1" iconName="inbox-full" aria-hidden="true"></my-global-icon>
       <span i18n>See all your notifications</span>
     </a>

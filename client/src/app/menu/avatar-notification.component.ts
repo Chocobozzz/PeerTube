@@ -1,6 +1,6 @@
 import { Subject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { Notifier, User, UserNotificationSocket } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main'
@@ -15,6 +15,7 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
   @ViewChild('popover', { static: true }) popover: NgbPopover
 
   @Input() user: User
+  @Output() navigate = new EventEmitter<HTMLAnchorElement>()
 
   unreadNotifications = 0
   loaded = false
@@ -63,6 +64,10 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
 
   onNotificationLoaded () {
     this.loaded = true
+  }
+
+  onNavigate (link: HTMLAnchorElement) {
+    this.navigate.emit(link)
   }
 
   markAllAsRead () {

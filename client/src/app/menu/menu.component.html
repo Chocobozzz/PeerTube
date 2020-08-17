@@ -2,7 +2,7 @@
   <menu [ngClass]="{ 'logged-in': isLoggedIn }">
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
-        <my-avatar-notification [user]="user"></my-avatar-notification>
+        <my-avatar-notification [user]="user" (navigate)="onSameUrlRestoreScrollPosition($event)"></my-avatar-notification>
 
         <div class="logged-in-info">
           <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="logged-in-display-name">{{ user.account?.displayName }}</a>
@@ -21,11 +21,13 @@
 
             <div class="dropdown-divider"></div>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="top">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings"
+              #settingsLink (click)="onSameUrlRestoreScrollPosition(settingsLink)">
               <my-global-icon iconName="user" aria-hidden="true"></my-global-icon> <ng-container i18n>Account settings</ng-container>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/video-channels">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/video-channels"
+              #channelsLink (click)="onSameUrlRestoreScrollPosition(channelsLink)">
               <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon> <ng-container i18n>Channels settings</ng-container>
             </a>
 
@@ -37,13 +39,16 @@
               <span class="ml-auto text-muted">{{ language }}</span>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
+              #settingsLanguagesSubtitles (click)="onSameUrlRestoreScrollPosition(settingsLanguagesSubtitles)">
               <my-global-icon iconName="video-lang" aria-hidden="true"></my-global-icon>
               <span i18n>Videos:</span>
               <span class="ml-auto text-muted">{{ videoLanguages.join(', ') }}</span>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-sensitive-content-policy">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings"
+              fragment="video-sensitive-content-policy" #settingsSensitiveContentPolicy
+              (click)="onSameUrlRestoreScrollPosition(settingsSensitiveContentPolicy)">
               <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy === 'display' }" iconName="sensitive" aria-hidden="true"></my-global-icon>
               <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy !== 'display' }" iconName="unsensitive" aria-hidden="true"></my-global-icon>
               <span i18n>Sensitive:</span>
@@ -56,7 +61,8 @@
               <input type="checkbox" [checked]="user.webTorrentEnabled"/><label class="ml-auto" for="switch">Toggle p2p</label>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="top">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings"
+              #settingsMoreLink (click)="onSameUrlRestoreScrollPosition(settingsMoreLink)">
               <my-global-icon iconName="more-horizontal" aria-hidden="true"></my-global-icon> <ng-container i18n>More account settings</ng-container>
             </a>
 
