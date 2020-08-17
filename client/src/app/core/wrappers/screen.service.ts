@@ -54,6 +54,64 @@ export class ScreenService {
     return this.windowInnerWidth
   }
 
+  // https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
+  onFingerSwipe (direction: 'left' | 'right' | 'up' | 'down', action: () => void, removeEventOnEnd = true) {
+    let touchDownClientX: number
+    let touchDownClientY: number
+
+    const onTouchStart = (event: TouchEvent) => {
+      const firstTouch = event.touches[0]
+      touchDownClientX = firstTouch.clientX
+      touchDownClientY = firstTouch.clientY
+    }
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!touchDownClientX || !touchDownClientY) {
+        return
+      }
+
+      const touchUpClientX = event.touches[0].clientX
+      const touchUpClientY = event.touches[0].clientY
+
+      const touchClientX = Math.abs(touchDownClientX - touchUpClientX)
+      const touchClientY = Math.abs(touchDownClientY - touchUpClientY)
+
+      if (touchClientX > touchClientY) {
+        if (touchClientX > 0) {
+          if (direction === 'left') {
+            if (removeEventOnEnd) this.removeFingerSwipeEventListener(onTouchStart, onTouchMove)
+            action()
+          }
+        } else {
+          if (direction === 'right') {
+            if (removeEventOnEnd) this.removeFingerSwipeEventListener(onTouchStart, onTouchMove)
+            action()
+          }
+        }
+      } else {
+        if (touchClientY > 0) {
+          if (direction === 'up') {
+            if (removeEventOnEnd) this.removeFingerSwipeEventListener(onTouchStart, onTouchMove)
+            action()
+          }
+        } else {
+          if (direction === 'down') {
+            if (removeEventOnEnd) this.removeFingerSwipeEventListener(onTouchStart, onTouchMove)
+            action()
+          }
+        }
+      }
+    }
+
+    document.addEventListener('touchstart', onTouchStart, false)
+    document.addEventListener('touchmove', onTouchMove, false)
+  }
+
+  private removeFingerSwipeEventListener (onTouchStart: (event: TouchEvent) => void, onTouchMove: (event: TouchEvent) => void) {
+    document.removeEventListener('touchstart', onTouchStart)
+    document.removeEventListener('touchmove', onTouchMove)
+  }
+
   private refreshWindowInnerWidth () {
     this.lastFunctionCallTime = new Date().getTime()
 

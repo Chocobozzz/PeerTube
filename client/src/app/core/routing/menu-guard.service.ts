@@ -15,7 +15,7 @@ abstract class MenuGuard implements CanActivate, CanDeactivate<any> {
     // small screens already have the site-wide onResize from screenService
     // > medium screens have enough space to fit the administrative menus
     if (!this.screen.isInMobileView() && this.screen.isInMediumView()) {
-      this.menu.isMenuDisplayed = this.display
+      this.menu.setMenuDisplay(this.display)
     }
     return true
   }

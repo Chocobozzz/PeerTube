@@ -12,22 +12,45 @@ export class MenuService {
   constructor (
     private screenService: ScreenService
   ) {
-    // Do not display menu on small screens
-    if (this.screenService.isInSmallView()) {
-      this.isMenuDisplayed = false
+    // Do not display menu on small or touch screens
+    if (this.screenService.isInSmallView() || this.screenService.isInTouchScreen()) {
+      this.setMenuDisplay(false)
+    }
+
+    this.handleWindowResize()
+  }
+
+  toggleMenu () {
+    this.setMenuDisplay(!this.isMenuDisplayed)
+    this.isMenuChangedByUser = true
+  }
+
+  setMenuDisplay (display: boolean) {
+    this.isMenuDisplayed = display
+
+    // On touch screens, lock body scroll and display content overlay when memu is opened
+    if (this.screenService.isInTouchScreen()) {
+      if (this.isMenuDisplayed) {
+        document.body.classList.add('menu-open')
+        this.screenService.onFingerSwipe('left', () => { this.setMenuDisplay(false) })
+      } else {
+        document.body.classList.remove('menu-open')
+      }
+    }
+  }
+
+  onResize () {
+    this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
+  }
+
+  private handleWindowResize () {
+    // On touch screens, do not handle window resize event since opened menu is handled with a content overlay
+    if (this.screenService.isInTouchScreen()) {
+      return
     }
 
     fromEvent(window, 'resize')
       .pipe(debounceTime(200))
       .subscribe(() => this.onResize())
-  }
-
-  toggleMenu () {
-    this.isMenuDisplayed = !this.isMenuDisplayed
-    this.isMenuChangedByUser = true
-  }
-
-  onResize () {
-    this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
   }
 }
