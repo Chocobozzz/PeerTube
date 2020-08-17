@@ -12,7 +12,7 @@ const searchRoutes: Routes = [
     canActivate: [ MetaGuard ],
     data: {
       meta: {
-        title: 'Search'
+        title: $localize`Search`
       }
     }
   },

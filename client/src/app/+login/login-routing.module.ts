@@ -11,7 +11,7 @@ const loginRoutes: Routes = [
     canActivate: [ MetaGuard ],
     data: {
       meta: {
-        title: 'Login'
+        title: $localize`Login`
       }
     },
     resolve: {

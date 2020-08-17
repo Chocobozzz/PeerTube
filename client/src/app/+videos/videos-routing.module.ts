@@ -20,7 +20,7 @@ const videosRoutes: Routes = [
         component: VideoOverviewComponent,
         data: {
           meta: {
-            title: 'Discover videos'
+            title: $localize`Discover videos`
           }
         }
       },
@@ -29,7 +29,7 @@ const videosRoutes: Routes = [
         component: VideoTrendingComponent,
         data: {
           meta: {
-            title: 'Trending videos'
+            title: $localize`Trending videos`
           },
           reuse: {
             enabled: true,
@@ -42,7 +42,7 @@ const videosRoutes: Routes = [
         component: VideoMostLikedComponent,
         data: {
           meta: {
-            title: 'Most liked videos'
+            title: $localize`Most liked videos`
           },
           reuse: {
             enabled: true,
@@ -55,7 +55,7 @@ const videosRoutes: Routes = [
         component: VideoRecentlyAddedComponent,
         data: {
           meta: {
-            title: 'Recently added videos'
+            title: $localize`Recently added videos`
           },
           reuse: {
             enabled: true,
@@ -68,7 +68,7 @@ const videosRoutes: Routes = [
         component: VideoUserSubscriptionsComponent,
         data: {
           meta: {
-            title: 'Subscriptions'
+            title: $localize`Subscriptions`
           },
           reuse: {
             enabled: true,
@@ -81,7 +81,7 @@ const videosRoutes: Routes = [
         component: VideoLocalComponent,
         data: {
           meta: {
-            title: 'Local videos'
+            title: $localize`Local videos`
           },
           reuse: {
             enabled: true,
@@ -94,7 +94,7 @@ const videosRoutes: Routes = [
         loadChildren: () => import('@app/+videos/+video-edit/video-add.module').then(m => m.VideoAddModule),
         data: {
           meta: {
-            title: 'Upload a video'
+            title: $localize`Upload a video`
           }
         }
       },
@@ -103,7 +103,7 @@ const videosRoutes: Routes = [
         loadChildren: () => import('@app/+videos/+video-edit/video-update.module').then(m => m.VideoUpdateModule),
         data: {
           meta: {
-            title: 'Edit a video'
+            title: $localize`Edit a video`
           }
         }
       },

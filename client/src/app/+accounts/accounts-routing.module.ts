@@ -26,7 +26,7 @@ const accountsRoutes: Routes = [
         component: AccountVideosComponent,
         data: {
           meta: {
-            title: 'Account videos'
+            title: $localize`Account videos`
           },
           reuse: {
             enabled: true,
@@ -39,7 +39,7 @@ const accountsRoutes: Routes = [
         component: AccountVideoChannelsComponent,
         data: {
           meta: {
-            title: 'Account video channels'
+            title: $localize`Account video channels`
           }
         }
       },
@@ -48,7 +48,7 @@ const accountsRoutes: Routes = [
         component: AccountAboutComponent,
         data: {
           meta: {
-            title: 'About account'
+            title: $localize`About account`
           }
         }
       }

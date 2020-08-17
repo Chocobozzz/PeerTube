@@ -22,7 +22,7 @@ const videoChannelsRoutes: Routes = [
         component: VideoChannelVideosComponent,
         data: {
           meta: {
-            title: 'Video channel videos'
+            title: $localize`Video channel videos`
           },
           reuse: {
             enabled: true,
@@ -35,7 +35,7 @@ const videoChannelsRoutes: Routes = [
         component: VideoChannelPlaylistsComponent,
         data: {
           meta: {
-            title: 'Video channel playlists'
+            title: $localize`Video channel playlists`
           }
         }
       },
@@ -44,7 +44,7 @@ const videoChannelsRoutes: Routes = [
         component: VideoChannelAboutComponent,
         data: {
           meta: {
-            title: 'About video channel'
+            title: $localize`About video channel`
           }
         }
       }

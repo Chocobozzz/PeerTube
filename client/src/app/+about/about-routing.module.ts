@@ -23,7 +23,7 @@ const aboutRoutes: Routes = [
         component: AboutInstanceComponent,
         data: {
           meta: {
-            title: 'About this instance'
+            title: $localize`About this instance`
           }
         },
         resolve: {
@@ -35,7 +35,7 @@ const aboutRoutes: Routes = [
         component: AboutPeertubeComponent,
         data: {
           meta: {
-            title: 'About PeerTube'
+            title: $localize`About PeerTube`
           }
         }
       },
@@ -44,7 +44,7 @@ const aboutRoutes: Routes = [
         component: AboutFollowsComponent,
         data: {
           meta: {
-            title: 'About follows'
+            title: $localize`About follows`
           }
         }
       }

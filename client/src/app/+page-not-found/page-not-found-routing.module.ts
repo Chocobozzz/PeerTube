@@ -10,7 +10,7 @@ const pageNotFoundRoutes: Routes = [
     canActivate: [ MetaGuard ],
     data: {
       meta: {
-        title: 'Not found'
+        title: $localize`Not found`
       }
     }
   }

@@ -10,7 +10,7 @@ const myAccountVideoChannelsRoutes: Routes = [
     component: MyAccountVideoChannelsComponent,
     data: {
       meta: {
-        title: 'Account video channels'
+        title: $localize`Account video channels`
       }
     }
   },
@@ -19,7 +19,7 @@ const myAccountVideoChannelsRoutes: Routes = [
     component: MyAccountVideoChannelCreateComponent,
     data: {
       meta: {
-        title: 'Create new video channel'
+        title: $localize`Create new video channel`
       }
     }
   },
@@ -28,7 +28,7 @@ const myAccountVideoChannelsRoutes: Routes = [
     component: MyAccountVideoChannelUpdateComponent,
     data: {
       meta: {
-        title: 'Update video channel'
+        title: $localize`Update video channel`
       }
     }
   }

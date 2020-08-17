@@ -33,7 +33,7 @@ export const ModerationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_ABUSES,
           meta: {
-            title: 'Reports'
+            title: $localize`Reports`
           }
         }
       },
@@ -64,7 +64,7 @@ export const ModerationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_VIDEO_BLACKLIST,
           meta: {
-            title: 'Videos blocked'
+            title: $localize`Videos blocked`
           }
         }
       },
@@ -75,7 +75,7 @@ export const ModerationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_ACCOUNTS_BLOCKLIST,
           meta: {
-            title: 'Muted accounts'
+            title: $localize`Muted accounts`
           }
         }
       },
@@ -86,7 +86,7 @@ export const ModerationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_SERVERS_BLOCKLIST,
           meta: {
-            title: 'Muted instances'
+            title: $localize`Muted instances`
           }
         }
       }

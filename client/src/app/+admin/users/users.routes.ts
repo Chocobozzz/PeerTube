@@ -24,7 +24,7 @@ export const UsersRoutes: Routes = [
         component: UserListComponent,
         data: {
           meta: {
-            title: 'Users list'
+            title: $localize`Users list`
           }
         }
       },
@@ -33,7 +33,7 @@ export const UsersRoutes: Routes = [
         component: UserCreateComponent,
         data: {
           meta: {
-            title: 'Create a user'
+            title: $localize`Create a user`
           }
         },
         resolve: {
@@ -45,7 +45,7 @@ export const UsersRoutes: Routes = [
         component: UserUpdateComponent,
         data: {
           meta: {
-            title: 'Update a user'
+            title: $localize`Update a user`
           }
         }
       }

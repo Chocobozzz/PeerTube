@@ -10,7 +10,7 @@ const resetPasswordRoutes: Routes = [
     canActivate: [ MetaGuard ],
     data: {
       meta: {
-        title: 'Reset password'
+        title: `Reset password`
       }
     }
   }

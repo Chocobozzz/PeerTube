@@ -14,7 +14,7 @@ const verifyAccountRoutes: Routes = [
         component: VerifyAccountEmailComponent,
         data: {
           meta: {
-            title: 'Verify account email'
+            title: $localize`Verify account email`
           }
         }
       },
@@ -23,7 +23,7 @@ const verifyAccountRoutes: Routes = [
         component: VerifyAccountAskSendEmailComponent,
         data: {
           meta: {
-            title: 'Verify account ask send email'
+            title: $localize`Verify account ask send email`
           }
         }
       }

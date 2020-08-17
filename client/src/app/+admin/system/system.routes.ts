@@ -10,8 +10,6 @@ export const SystemRoutes: Routes = [
   {
     path: 'system',
     component: SystemComponent,
-    data: {
-    },
     children: [
       {
         path: '',
@@ -25,7 +23,7 @@ export const SystemRoutes: Routes = [
         data: {
           meta: {
             userRight: UserRight.MANAGE_JOBS,
-            title: 'Jobs'
+            title: $localize`Jobs`
           }
         }
       },
@@ -36,7 +34,7 @@ export const SystemRoutes: Routes = [
         data: {
           meta: {
             userRight: UserRight.MANAGE_LOGS,
-            title: 'Logs'
+            title: $localize`Logs`
           }
         }
       },
@@ -47,7 +45,7 @@ export const SystemRoutes: Routes = [
         data: {
           meta: {
             userRight: UserRight.MANAGE_DEBUG,
-            title: 'Debug'
+            title: $localize`Debug`
           }
         }
       }

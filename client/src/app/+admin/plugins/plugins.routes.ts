@@ -25,7 +25,7 @@ export const PluginsRoutes: Routes = [
         component: PluginListInstalledComponent,
         data: {
           meta: {
-            title: 'List installed plugins'
+            title: $localize`List installed plugins`
           }
         }
       },
@@ -34,7 +34,7 @@ export const PluginsRoutes: Routes = [
         component: PluginSearchComponent,
         data: {
           meta: {
-            title: 'Search plugins'
+            title: $localize`Search plugins`
           }
         }
       },
@@ -43,7 +43,7 @@ export const PluginsRoutes: Routes = [
         component: PluginShowInstalledComponent,
         data: {
           meta: {
-            title: 'Show plugin'
+            title: $localize`Show plugin`
           }
         }
       }

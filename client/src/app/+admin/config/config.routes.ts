@@ -23,7 +23,7 @@ export const ConfigRoutes: Routes = [
         component: EditCustomConfigComponent,
         data: {
           meta: {
-            title: 'Edit custom configuration'
+            title: $localize`Edit custom configuration`
           }
         }
       }

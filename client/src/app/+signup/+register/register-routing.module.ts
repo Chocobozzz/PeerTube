@@ -11,7 +11,7 @@ const registerRoutes: Routes = [
     canActivate: [ MetaGuard, UnloggedGuard ],
     data: {
       meta: {
-        title: 'Register'
+        title: $localize`Register`
       }
     },
     resolve: {
