@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, forwardRef, Input, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { secondsToTime, timeToInt } from '../../../assets/player/utils'
 
@@ -18,6 +18,8 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
   @Input() maxTimestamp: number
   @Input() timestamp: number
   @Input() disabled = false
+
+  @Output() inputBlur = new EventEmitter()
 
   timestampString: string
 
@@ -57,5 +59,7 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
 
       this.propagateChange(this.timestamp)
     }
+
+    this.inputBlur.emit()
   }
 }

@@ -4,21 +4,27 @@ import { debounceTime, filter } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { Video, VideoExistInPlaylist, VideoPlaylistCreate, VideoPlaylistElementCreate, VideoPlaylistPrivacy } from '@shared/models'
+import { Video, VideoExistInPlaylist, VideoPlaylistCreate, VideoPlaylistElementCreate, VideoPlaylistPrivacy, VideoPlaylistElementUpdate } from '@shared/models'
 import { secondsToTime } from '../../../assets/player/utils'
 import { VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR } from '../form-validators/video-playlist-validators'
 import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
+import { invoke, last } from 'lodash'
 
 const logger = debug('peertube:playlists:VideoAddToPlaylistComponent')
 
-type PlaylistSummary = {
-  id: number
-  inPlaylist: boolean
-  displayName: string
-
+type PlaylistElement = {
+  enabled: boolean
   playlistElementId?: number
   startTimestamp?: number
   stopTimestamp?: number
+}
+
+type PlaylistSummary = {
+  id: number
+  displayName: string
+  optionalRowDisplayed: boolean
+
+  elements: PlaylistElement[]
 }
 
 @Component({
@@ -33,16 +39,11 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   @Input() lazyLoad = false
 
   isNewPlaylistBlockOpened = false
+
   videoPlaylistSearch: string
   videoPlaylistSearchChanged = new Subject<string>()
+
   videoPlaylists: PlaylistSummary[] = []
-  timestampOptions: {
-    startTimestampEnabled: boolean
-    startTimestamp: number
-    stopTimestampEnabled: boolean
-    stopTimestamp: number
-  }
-  displayOptions = false
 
   private disabled = false
 
@@ -106,7 +107,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.videoPlaylists = []
     this.videoPlaylistSearch = undefined
 
-    this.resetOptions(true)
     this.load()
 
     this.cd.markForCheck()
@@ -115,7 +115,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   load () {
     logger('Loading component')
 
-    this.listenToPlaylistChanges()
+    this.listenToVideoPlaylistChange()
 
     this.videoPlaylistService.listMyPlaylistWithCache(this.user, this.videoPlaylistSearch)
         .subscribe(playlistsResult => {
@@ -128,7 +128,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   openChange (opened: boolean) {
     if (opened === false) {
       this.isNewPlaylistBlockOpened = false
-      this.displayOptions = false
     }
   }
 
@@ -138,17 +137,49 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.isNewPlaylistBlockOpened = true
   }
 
-  togglePlaylist (event: Event, playlist: PlaylistSummary) {
-    event.preventDefault()
+  toggleMainPlaylist (e: Event, playlist: PlaylistSummary) {
+    e.preventDefault()
 
-    if (playlist.inPlaylist === true) {
-      this.removeVideoFromPlaylist(playlist)
+    if (this.isPresentMultipleTimes(playlist) || playlist.optionalRowDisplayed) return
+
+    if (playlist.elements.length === 0) {
+      const element: PlaylistElement = {
+        enabled: true,
+        playlistElementId: undefined,
+        startTimestamp: 0,
+        stopTimestamp: this.video.duration
+      }
+
+      this.addVideoInPlaylist(playlist, element)
     } else {
-      this.addVideoInPlaylist(playlist)
+      this.removeVideoFromPlaylist(playlist, playlist.elements[0].playlistElementId)
+      playlist.elements = []
     }
 
-    playlist.inPlaylist = !playlist.inPlaylist
-    this.resetOptions()
+    this.cd.markForCheck()
+  }
+
+  toggleOptionalPlaylist (e: Event, playlist: PlaylistSummary, element: PlaylistElement, startTimestamp: number, stopTimestamp: number) {
+    e.preventDefault()
+
+    if (element.enabled) {
+      this.removeVideoFromPlaylist(playlist, element.playlistElementId)
+      element.enabled = false
+
+      // Hide optional rows pane when the user unchecked all the playlists
+      if (this.isPrimaryCheckboxChecked(playlist) === false) {
+        playlist.optionalRowDisplayed = false
+      }
+    } else {
+      const element: PlaylistElement = {
+        enabled: true,
+        playlistElementId: undefined,
+        startTimestamp,
+        stopTimestamp
+      }
+
+      this.addVideoInPlaylist(playlist, element)
+    }
 
     this.cd.markForCheck()
   }
@@ -172,34 +203,99 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     )
   }
 
-  resetOptions (resetTimestamp = false) {
-    this.displayOptions = false
-
-    this.timestampOptions = {} as any
-    this.timestampOptions.startTimestampEnabled = false
-    this.timestampOptions.stopTimestampEnabled = false
-
-    if (resetTimestamp) {
-      this.timestampOptions.startTimestamp = 0
-      this.timestampOptions.stopTimestamp = this.video.duration
-    }
-  }
-
-  formatTimestamp (playlist: PlaylistSummary) {
-    const start = playlist.startTimestamp ? secondsToTime(playlist.startTimestamp) : ''
-    const stop = playlist.stopTimestamp ? secondsToTime(playlist.stopTimestamp) : ''
-
-    return `(${start}-${stop})`
-  }
-
   onVideoPlaylistSearchChanged () {
     this.videoPlaylistSearchChanged.next()
   }
 
-  private removeVideoFromPlaylist (playlist: PlaylistSummary) {
-    if (!playlist.playlistElementId) return
+  isPrimaryCheckboxChecked (playlist: PlaylistSummary) {
+    return playlist.elements.filter(e => e.enabled)
+                            .length !== 0
+  }
 
-    this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, playlist.playlistElementId, this.video.id)
+  toggleOptionalRow (playlist: PlaylistSummary) {
+    playlist.optionalRowDisplayed = !playlist.optionalRowDisplayed
+
+    this.cd.markForCheck()
+  }
+
+  getPrimaryInputName (playlist: PlaylistSummary) {
+    return 'in-playlist-primary-' + playlist.id
+  }
+
+  getOptionalInputName (playlist: PlaylistSummary, element?: PlaylistElement) {
+    const suffix = element
+      ? '-' + element.playlistElementId
+      : ''
+
+    return 'in-playlist-optional-' + playlist.id + suffix
+  }
+
+  buildOptionalRowElements (playlist: PlaylistSummary) {
+    const elements = playlist.elements
+
+    const lastElement = elements.length === 0
+      ? undefined
+      : elements[elements.length - 1]
+
+    // Build an empty last element
+    if (!lastElement || lastElement.enabled === true) {
+      elements.push({
+        enabled: false,
+        startTimestamp: 0,
+        stopTimestamp: this.video.duration
+      })
+    }
+
+    return elements
+  }
+
+  isPresentMultipleTimes (playlist: PlaylistSummary) {
+    return playlist.elements.filter(e => e.enabled === true).length > 1
+  }
+
+  onElementTimestampUpdate (playlist: PlaylistSummary, element: PlaylistElement) {
+    if (!element.playlistElementId || element.enabled === false) return
+
+    const body: VideoPlaylistElementUpdate = {
+      startTimestamp: element.startTimestamp,
+      stopTimestamp: element.stopTimestamp
+    }
+
+    this.videoPlaylistService.updateVideoOfPlaylist(playlist.id, element.playlistElementId, body, this.video.id)
+        .subscribe(
+          () => {
+            this.notifier.success($localize`Timestamps updated`)
+          },
+
+          err => {
+            this.notifier.error(err.message)
+          },
+
+          () => this.cd.markForCheck()
+        )
+  }
+
+  private isOptionalRowDisplayed (playlist: PlaylistSummary) {
+    const elements = playlist.elements.filter(e => e.enabled)
+
+    if (elements.length > 1) return true
+
+    if (elements.length === 1) {
+      const element = elements[0]
+
+      if (
+        (element.startTimestamp && element.startTimestamp !== 0) ||
+        (element.stopTimestamp && element.stopTimestamp !== this.video.duration)
+      ) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  private removeVideoFromPlaylist (playlist: PlaylistSummary, elementId: number) {
+    this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, elementId, this.video.id)
         .subscribe(
           () => {
             this.notifier.success($localize`Video removed from ${playlist.displayName}`)
@@ -213,7 +309,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
         )
   }
 
-  private listenToPlaylistChanges () {
+  private listenToVideoPlaylistChange () {
     this.unsubscribePlaylistChanges()
 
     this.listenToPlaylistChangeSub = this.videoPlaylistService.listenToVideoPlaylistChange(this.video.id)
@@ -231,18 +327,30 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   private rebuildPlaylists (existResult: VideoExistInPlaylist[]) {
     logger('Got existing results for %d.', this.video.id, existResult)
 
+    const oldPlaylists = this.videoPlaylists
+
     this.videoPlaylists = []
     for (const playlist of this.playlistsData) {
-      const existingPlaylist = existResult.find(p => p.playlistId === playlist.id)
+      const existingPlaylists = existResult.filter(p => p.playlistId === playlist.id)
 
-      this.videoPlaylists.push({
+      const playlistSummary = {
         id: playlist.id,
+        optionalRowDisplayed: false,
         displayName: playlist.displayName,
-        inPlaylist: !!existingPlaylist,
-        playlistElementId: existingPlaylist ? existingPlaylist.playlistElementId : undefined,
-        startTimestamp: existingPlaylist ? existingPlaylist.startTimestamp : undefined,
-        stopTimestamp: existingPlaylist ? existingPlaylist.stopTimestamp : undefined
-      })
+        elements: existingPlaylists.map(e => ({
+          enabled: true,
+          playlistElementId: e.playlistElementId,
+          startTimestamp: e.startTimestamp || 0,
+          stopTimestamp: e.stopTimestamp || this.video.duration
+        }))
+      }
+
+      const oldPlaylist = oldPlaylists.find(p => p.id === playlist.id)
+      playlistSummary.optionalRowDisplayed = oldPlaylist
+        ? oldPlaylist.optionalRowDisplayed
+        : this.isOptionalRowDisplayed(playlistSummary)
+
+      this.videoPlaylists.push(playlistSummary)
     }
 
     logger('Rebuilt playlist state for video %d.', this.video.id, this.videoPlaylists)
@@ -250,20 +358,22 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.cd.markForCheck()
   }
 
-  private addVideoInPlaylist (playlist: PlaylistSummary) {
+  private addVideoInPlaylist (playlist: PlaylistSummary, element: PlaylistElement) {
     const body: VideoPlaylistElementCreate = { videoId: this.video.id }
 
-    if (this.timestampOptions.startTimestampEnabled) body.startTimestamp = this.timestampOptions.startTimestamp
-    if (this.timestampOptions.stopTimestampEnabled) body.stopTimestamp = this.timestampOptions.stopTimestamp
+    if (element.startTimestamp) body.startTimestamp = element.startTimestamp
+    if (element.stopTimestamp && element.stopTimestamp !== this.video.duration) body.stopTimestamp = element.stopTimestamp
 
     this.videoPlaylistService.addVideoInPlaylist(playlist.id, body)
       .subscribe(
-        () => {
+        res => {
           const message = body.startTimestamp || body.stopTimestamp
-            ? $localize`Video added in ${playlist.displayName} at timestamps ${this.formatTimestamp(playlist)}`
+            ? $localize`Video added in ${playlist.displayName} at timestamps ${this.formatTimestamp(element)}`
             : $localize`Video added in ${playlist.displayName}`
 
           this.notifier.success(message)
+
+          if (element) element.playlistElementId = res.videoPlaylistElement.id
         },
 
         err => {
@@ -272,5 +382,12 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
         () => this.cd.markForCheck()
       )
+  }
+
+  private formatTimestamp (element: PlaylistElement) {
+    const start = element.startTimestamp ? secondsToTime(element.startTimestamp) : ''
+    const stop = element.stopTimestamp ? secondsToTime(element.stopTimestamp) : ''
+
+    return `(${start}-${stop})`
   }
 }
