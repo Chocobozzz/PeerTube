@@ -362,6 +362,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         const queryParams = this.route.snapshot.queryParams
 
         const urlOptions = {
+          resume: queryParams.resume,
+
           startTime: queryParams.start,
           stopTime: queryParams.stop,
 
@@ -657,16 +659,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       const byUrl = urlOptions.startTime !== undefined
       const byHistory = video.userHistory && (!this.playlist || urlOptions.resume !== undefined)
 
-      if (byUrl) {
-        return timeToInt(urlOptions.startTime)
-      } else if (byHistory) {
-        return video.userHistory.currentTime
-      } else {
-        return 0
-      }
+      if (byUrl) return timeToInt(urlOptions.startTime)
+      if (byHistory) return video.userHistory.currentTime
+
+      return 0
     }
 
     let startTime = getStartTime()
+
     // If we are at the end of the video, reset the timer
     if (video.duration - startTime <= 1) startTime = 0
 
