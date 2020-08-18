@@ -1,7 +1,7 @@
 import * as debug from 'debug'
 import { uniq } from 'lodash-es'
 import { asyncScheduler, merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
-import { bufferTime, catchError, filter, map, observeOn, share, switchMap, tap } from 'rxjs/operators'
+import { bufferTime, catchError, filter, map, observeOn, share, switchMap, tap, distinctUntilChanged } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, NgZone } from '@angular/core'
 import { AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
@@ -53,6 +53,7 @@ export class VideoPlaylistService {
   ) {
     this.videoExistsInPlaylistObservable = merge(
       this.videoExistsInPlaylistNotifier.pipe(
+        distinctUntilChanged(),
         // We leave Angular zone so Protractor does not get stuck
         bufferTime(500, leaveZone(this.ngZone, asyncScheduler)),
         filter(videoIds => videoIds.length !== 0),

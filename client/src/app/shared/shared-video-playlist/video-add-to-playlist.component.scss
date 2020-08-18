@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+$optional-rows-checkbox-width: 34px;
+$timestamp-width: 50px;
+$timestamp-margin-right: 10px;
+
 .header,
 .dropdown-item,
 .input-container {
@@ -24,31 +28,6 @@
       font-size: 18px;
       flex-grow: 1;
     }
-
-    .options {
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      cursor: pointer;
-
-      my-global-icon {
-        @include apply-svg-color(#333);
-
-        width: 16px;
-        height: 23px;
-        margin-right: 3px;
-      }
-    }
-  }
-
-  .options-row {
-    margin-top: 10px;
-    padding-left: 10px;
-
-    > div {
-      display: flex;
-      align-items: center;
-    }
   }
 }
 
@@ -58,8 +37,16 @@
 }
 
 .playlist {
-  display: inline-flex;
-  cursor: pointer;
+  padding: 8px 10px 8px 24px;
+
+  &.has-optional-row:hover {
+    background-color: inherit;
+  }
+}
+
+.primary-row,
+.optional-rows > div {
+  display: flex;
 
   my-peertube-checkbox {
     margin-right: 10px;
@@ -69,11 +56,58 @@
   .display-name {
     display: flex;
     align-items: flex-end;
+    flex-grow: 1;
+    margin: 0;
+    font-weight: $font-regular;
+    cursor: pointer;
+  }
 
-    .timestamp-info {
-      font-size: 0.9em;
-      color: pvar(--greyForegroundColor);
-      margin-left: 5px;
+  .optional-row-icon {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+
+    my-global-icon {
+      @include apply-svg-color(#333);
+
+      width: 19px;
+      height: 19px;
+      margin-right: 0;
+    }
+  }
+
+  my-timestamp-input {
+    margin-right: $timestamp-margin-right;
+
+    ::ng-deep .ui-inputtext {
+      padding: 0;
+      width: $timestamp-width;
+    }
+  }
+}
+
+.optional-rows {
+  > div {
+    padding: 8px 5px 5px 10px;
+  }
+
+  my-peertube-checkbox {
+    display: block;
+    width: $optional-rows-checkbox-width;
+    margin-right: 0 !important;
+  }
+
+  .labels {
+    margin-left: $optional-rows-checkbox-width;
+    font-size: 13px;
+    color: pvar(--greyForegroundColor);
+    padding-top: 5px;
+    padding-bottom: 0;
+
+    div {
+      margin-right: $timestamp-margin-right;
+      width: $timestamp-width;
     }
   }
 }

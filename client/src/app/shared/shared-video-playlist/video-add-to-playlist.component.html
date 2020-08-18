@@ -2,42 +2,6 @@
   <div class="header">
     <div class="first-row">
       <div i18n class="title">Save to</div>
-
-      <div class="options" (click)="displayOptions = !displayOptions">
-        <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-
-        <span i18n>Options</span>
-      </div>
-    </div>
-
-    <div class="options-row" *ngIf="displayOptions">
-      <div>
-        <my-peertube-checkbox
-          inputName="startAt" [(ngModel)]="timestampOptions.startTimestampEnabled"
-          i18n-labelText labelText="Start at"
-        ></my-peertube-checkbox>
-
-        <my-timestamp-input
-          [timestamp]="timestampOptions.startTimestamp"
-          [maxTimestamp]="video.duration"
-          [disabled]="!timestampOptions.startTimestampEnabled"
-          [(ngModel)]="timestampOptions.startTimestamp"
-        ></my-timestamp-input>
-      </div>
-
-      <div>
-        <my-peertube-checkbox
-          inputName="stopAt" [(ngModel)]="timestampOptions.stopTimestampEnabled"
-          i18n-labelText labelText="Stop at"
-        ></my-peertube-checkbox>
-
-        <my-timestamp-input
-          [timestamp]="timestampOptions.stopTimestamp"
-          [maxTimestamp]="video.duration"
-          [disabled]="!timestampOptions.stopTimestampEnabled"
-          [(ngModel)]="timestampOptions.stopTimestamp"
-        ></my-timestamp-input>
-      </div>
     </div>
   </div>
 
@@ -46,14 +10,52 @@
   </div>
 
   <div class="playlists">
-    <div class="playlist dropdown-item" *ngFor="let playlist of videoPlaylists" (click)="togglePlaylist($event, playlist)">
-      <my-peertube-checkbox [inputName]="'in-playlist-' + playlist.id" [(ngModel)]="playlist.inPlaylist" [onPushWorkaround]="true"></my-peertube-checkbox>
+    <div
+      *ngFor="let playlist of videoPlaylists"
+      class="playlist dropdown-item" [ngClass]="{ 'has-optional-row': playlist.optionalRowDisplayed }"
+    >
+      <div class="primary-row">
+        <my-peertube-checkbox
+          [disabled]="isPresentMultipleTimes(playlist) || playlist.optionalRowDisplayed" [inputName]="getPrimaryInputName(playlist)"
+          [ngModel]="isPrimaryCheckboxChecked(playlist)" [onPushWorkaround]="true"
+          (click)="toggleMainPlaylist($event, playlist)"
+        ></my-peertube-checkbox>
 
-      <div class="display-name">
-        {{ playlist.displayName }}
+        <label class="display-name" (click)="toggleMainPlaylist($event, playlist)">
+          {{ playlist.displayName }}
+        </label>
 
-        <div *ngIf="playlist.inPlaylist && (playlist.startTimestamp || playlist.stopTimestamp)" class="timestamp-info">
-          {{ formatTimestamp(playlist) }}
+        <div class="optional-row-icon" *ngIf="isPrimaryCheckboxChecked(playlist)" (click)="toggleOptionalRow(playlist)">
+          <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+        </div>
+      </div>
+
+      <div class="optional-rows" *ngIf="playlist.optionalRowDisplayed">
+        <div class="labels">
+          <div i18n>Start at</div>
+          <div i18n>Stop at</div>
+        </div>
+
+        <div *ngFor="let element of buildOptionalRowElements(playlist)">
+          <my-peertube-checkbox
+            [inputName]="getOptionalInputName(playlist, element)"
+            [ngModel]="element.enabled" [onPushWorkaround]="true"
+            (click)="toggleOptionalPlaylist($event, playlist, element, startAt.timestamp, stopAt.timestamp)"
+          ></my-peertube-checkbox>
+
+          <my-timestamp-input
+            [maxTimestamp]="video.duration"
+            [(ngModel)]="element.startTimestamp"
+            (inputBlur)="onElementTimestampUpdate(playlist, element)"
+            #startAt
+          ></my-timestamp-input>
+
+          <my-timestamp-input
+            [maxTimestamp]="video.duration"
+            [(ngModel)]="element.stopTimestamp"
+            (inputBlur)="onElementTimestampUpdate(playlist, element)"
+            #stopAt
+          ></my-timestamp-input>
         </div>
       </div>
     </div>
