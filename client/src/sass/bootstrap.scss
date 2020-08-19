@@ -27,14 +27,23 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 /* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
-.dropdown:not(.btn-group):not(.dropdown-root):not(.action-dropdown):not(.input-group-prepend):not(.column-toggle) {
+.dropdown {
   z-index: z(dropdown) !important;
-
-  &.list-overflow-menu,
-  &.parent-entry {
-    z-index: z(header) - 1 !important;
-  }
 }
+
+.list-overflow-menu,
+.parent-entry {
+  z-index: z(header) - 1 !important;
+}
+
+.btn-group,
+.dropdown-root,
+.action-dropdown,
+.input-group-prepend,
+.column-toggle {
+  z-index: inherit !important;
+}
+
 
 .dropdown-menu {
   z-index: z(dropdown) + 1 !important;

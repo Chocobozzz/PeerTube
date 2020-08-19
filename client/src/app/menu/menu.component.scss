@@ -241,6 +241,10 @@ menu {
   }
 }
 
+.dropdown {
+  z-index: #{z('menu') + 1} !important;
+}
+
 .dropdown-menu {
   width: calc(100% + 40px);
 }
