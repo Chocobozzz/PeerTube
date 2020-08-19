@@ -6,9 +6,9 @@
     <div class="playlist-display-name">
       {{ playlist.displayName }}
 
-      <span *ngIf="isUnlistedPlaylist()" class="badge badge-warning" i18n>Unlisted</span>
-      <span *ngIf="isPrivatePlaylist()" class="badge badge-danger" i18n>Private</span>
-      <span *ngIf="isPublicPlaylist()" class="badge badge-info" i18n>Public</span>
+      <span *ngIf="isUnlistedPlaylist()" class="badge badge-warning" i18n>Unlisted- People with a Private Link</span>
+      <span *ngIf="isPrivatePlaylist()" class="badge badge-danger" i18n>Private- Only me</span>
+      <span *ngIf="isPublicPlaylist()" class="badge badge-info" i18n>Public- Anyone</span>
     </div>
 
     <div class="playlist-by-index">
