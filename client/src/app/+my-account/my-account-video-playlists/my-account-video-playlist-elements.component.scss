@@ -65,4 +65,19 @@
     padding-top: 20px;
     margin-left: calc(#{var(--expanded-horizontal-margin-content)} * -1);
   }
+
+  .playlist-elements {
+    padding: 0 !important;
+  }
+
+  ::ng-deep my-video-playlist-element-miniature {
+
+    .video {
+      padding: 5px !important;
+    }
+
+    .position {
+      margin-right: 5px !important;
+    }
+  }
 }
