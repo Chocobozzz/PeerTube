@@ -78,7 +78,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     if (!this.playlistElement || !this.playlistElement.video) return {}
 
     return {
-      videoId: this.playlistElement.video.uuid,
+      playlistPosition: this.playlistElement.position,
       start: this.playlistElement.startTimestamp,
       stop: this.playlistElement.stopTimestamp,
       resume: true
