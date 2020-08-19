@@ -124,19 +124,20 @@ $variables: (
 /*** z-index groups ***/
 
 $zindex: (
-  miniature    :    10,
-  privacymsg   :    20,
-  typeahead    :    30,
-  dropdown     : 12000,
-  header       : 12500,
-  menu         : 12600,
-  popover      : 13000,
-  tooltip      : 14000,
-  loadbar      : 15000,
-  modal        : 16000,
-  help-popover : 17000,
-  notification : 18000,
-  hotkeys      : 19000
+  miniature       :    10,
+  privacymsg      :    20,
+  dropdown        : 12000,
+  sub-menu        : 12500,
+  menu            : 12600,
+  search-typeahead: 12650,
+  header          : 12700,
+  popover         : 13000,
+  tooltip         : 14000,
+  loadbar         : 15000,
+  modal           : 16000,
+  help-popover    : 17000,
+  notification    : 18000,
+  hotkeys         : 19000
 );
 
 @function z($label) {

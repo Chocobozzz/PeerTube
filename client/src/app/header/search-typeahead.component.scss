@@ -28,7 +28,7 @@
 .jump-to-suggestions {
   top: 100%;
   left: 0;
-  z-index: z(typeahead);
+  z-index: z('search-typeahead');
   width: 100%;
 }
 

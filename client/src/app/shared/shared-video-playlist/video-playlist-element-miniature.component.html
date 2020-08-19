@@ -38,7 +38,7 @@
 
   <my-edit-button *ngIf="owned && touchScreenEditButton" [routerLink]="[ '/my-account', 'video-playlists', playlist.uuid ]"></my-edit-button>
 
-  <div *ngIf="owned" class="more" ngbDropdown #moreDropdown="ngbDropdown" placement="bottom auto"
+  <div *ngIf="owned" class="more" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
        (openChange)="onDropdownOpenChange()" autoClose="outside"
   >
     <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button" class="icon-more" (click)="$event.preventDefault()"></my-global-icon>
