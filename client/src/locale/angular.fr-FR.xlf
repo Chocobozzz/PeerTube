@@ -514,7 +514,7 @@
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="new">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</target>
+        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible qui supporte :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -4722,9 +4722,7 @@
       </trans-unit>
       <trans-unit id="5e595f291985655929e0348cf68ead712a081061" datatype="html">
         <source>ADMINISTRATORS &amp; SUSTAINABILITY</source>
-        <target state="new">
-        ADMINISTRATORS &amp; SUSTAINABILITY
-      </target>
+        <target state="translated">ADMINISTRATEURS &amp; DURABILITÉ</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="f6a8cb2287c0c738d3d02ca36e145830c9734db5">
@@ -5263,7 +5261,7 @@
       </trans-unit>
       <trans-unit id="4ddf54b5beec24b3fe074bfb9cbbc175613634ab" datatype="html">
         <source>john_channel</source>
-        <target state="new">john_channel</target>
+        <target state="translated">chaîne_de_jean</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="cb4c2c5a4f4b34d3158f2344a3e625d0dc321f4d">
