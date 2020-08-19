@@ -66,11 +66,3 @@
     margin-left: calc(#{var(--expanded-horizontal-margin-content)} * -1);
   }
 }
-
-@media not all and (hover: hover) and (pointer: fine) {
-  .video {
-    .more {
-      opacity: 1;
-    }
-  }
-}
