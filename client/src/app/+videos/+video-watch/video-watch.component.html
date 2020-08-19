@@ -11,7 +11,8 @@
 
     <my-video-watch-playlist
       #videoWatchPlaylist
-      [video]="video" [playlist]="playlist" class="playlist"
+      [playlist]="playlist" class="playlist"
+      (videoFound)="onPlaylistVideoFound($event)"
     ></my-video-watch-playlist>
   </div>
 

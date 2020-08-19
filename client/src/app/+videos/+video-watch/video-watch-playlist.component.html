@@ -1,4 +1,7 @@
-<div *ngIf="playlist && video" class="playlist" myInfiniteScroller [autoInit]="true" [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()">
+<div
+  *ngIf="playlist && currentPlaylistPosition" class="playlist"
+  myInfiniteScroller [autoInit]="true" [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()"
+>
   <div class="playlist-info">
     <div class="playlist-display-name">
       {{ playlist.displayName }}
@@ -36,7 +39,7 @@
     </div>
   </div>
 
-  <div *ngFor="let playlistElement of playlistElements">
+  <div *ngFor="let playlistElement of playlistElements" [ngClass]="'element-' + playlistElement.position">
     <my-video-playlist-element-miniature
       [playlistElement]="playlistElement" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
       [playing]="currentPlaylistPosition === playlistElement.position" [accountLink]="false" [position]="playlistElement.position"

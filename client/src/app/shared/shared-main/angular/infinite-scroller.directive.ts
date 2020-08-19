@@ -1,6 +1,6 @@
+import { fromEvent, Observable, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
 import { AfterContentChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { fromEvent, Observable, Subscription } from 'rxjs'
 
 @Directive({
   selector: '[myInfiniteScroller]'
@@ -80,7 +80,9 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterConten
   }
 
   private getMaximumScroll () {
-    return this.container.scrollHeight - window.innerHeight
+    const elementHeight = this.onItself ? this.container.clientHeight : window.innerHeight
+
+    return this.container.scrollHeight - elementHeight
   }
 
   private hasScroll () {

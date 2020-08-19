@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core'
+
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, ComponentPagination, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
-import { VideoDetails, VideoPlaylistPrivacy } from '@shared/models'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 @Component({
   selector: 'my-video-watch-playlist',
@@ -14,8 +15,9 @@ export class VideoWatchPlaylistComponent {
   static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST = 'auto_play_video_playlist'
   static SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST = 'loop_playlist'
 
-  @Input() video: VideoDetails
   @Input() playlist: VideoPlaylist
+
+  @Output() videoFound = new EventEmitter<string>()
 
   playlistElements: VideoPlaylistElement[] = []
   playlistPagination: ComponentPagination = {
@@ -29,7 +31,8 @@ export class VideoWatchPlaylistComponent {
   loopPlaylist: boolean
   loopPlaylistSwitchText = ''
   noPlaylistVideos = false
-  currentPlaylistPosition = 1
+
+  currentPlaylistPosition: number
 
   constructor (
     private userService: UserService,
@@ -44,6 +47,7 @@ export class VideoWatchPlaylistComponent {
     this.autoPlayNextVideoPlaylist = this.auth.isLoggedIn()
       ? this.auth.getUser().autoPlayNextVideoPlaylist
       : this.localStorageService.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) !== 'false'
+
     this.setAutoPlayNextVideoPlaylistSwitchText()
 
     // defaults to false
@@ -51,12 +55,12 @@ export class VideoWatchPlaylistComponent {
     this.setLoopPlaylistSwitchText()
   }
 
-  onPlaylistVideosNearOfBottom () {
+  onPlaylistVideosNearOfBottom (position?: number) {
     // Last page
     if (this.playlistPagination.totalItems <= (this.playlistPagination.currentPage * this.playlistPagination.itemsPerPage)) return
 
     this.playlistPagination.currentPage += 1
-    this.loadPlaylistElements(this.playlist,false)
+    this.loadPlaylistElements(this.playlist, false, position)
   }
 
   onElementRemoved (playlistElement: VideoPlaylistElement) {
@@ -83,26 +87,26 @@ export class VideoWatchPlaylistComponent {
     return this.playlist.privacy.id === VideoPlaylistPrivacy.PUBLIC
   }
 
-  loadPlaylistElements (playlist: VideoPlaylist, redirectToFirst = false) {
+  loadPlaylistElements (playlist: VideoPlaylist, redirectToFirst = false, position?: number) {
     this.videoPlaylist.getPlaylistVideos(playlist.uuid, this.playlistPagination)
         .subscribe(({ total, data }) => {
           this.playlistElements = this.playlistElements.concat(data)
           this.playlistPagination.totalItems = total
 
-          const firstAvailableVideos = this.playlistElements.find(e => !!e.video)
-          if (!firstAvailableVideos) {
+          const firstAvailableVideo = this.playlistElements.find(e => !!e.video)
+          if (!firstAvailableVideo) {
             this.noPlaylistVideos = true
             return
           }
 
-          this.updatePlaylistIndex(this.video)
+          if (position) this.updatePlaylistIndex(position)
 
           if (redirectToFirst) {
             const extras = {
               queryParams: {
-                start: firstAvailableVideos.startTimestamp,
-                stop: firstAvailableVideos.stopTimestamp,
-                videoId: firstAvailableVideos.video.uuid
+                start: firstAvailableVideo.startTimestamp,
+                stop: firstAvailableVideo.stopTimestamp,
+                playlistPosition: firstAvailableVideo.position
               },
               replaceUrl: true
             }
@@ -111,18 +115,26 @@ export class VideoWatchPlaylistComponent {
         })
   }
 
-  updatePlaylistIndex (video: VideoDetails) {
-    if (this.playlistElements.length === 0 || !video) return
+  updatePlaylistIndex (position: number) {
+    if (this.playlistElements.length === 0 || !position) return
 
     for (const playlistElement of this.playlistElements) {
-      if (playlistElement.video && playlistElement.video.id === video.id) {
+      // >= if the previous videos were not valid
+      if (playlistElement.video && playlistElement.position >= position) {
         this.currentPlaylistPosition = playlistElement.position
+
+        this.videoFound.emit(playlistElement.video.uuid)
+
+        setTimeout(() => {
+          document.querySelector('.element-' + this.currentPlaylistPosition).scrollIntoView(false)
+        }, 0)
+
         return
       }
     }
 
     // Load more videos to find our video
-    this.onPlaylistVideosNearOfBottom()
+    this.onPlaylistVideosNearOfBottom(position)
   }
 
   findNextPlaylistVideo (position = this.currentPlaylistPosition): VideoPlaylistElement {
@@ -147,9 +159,10 @@ export class VideoWatchPlaylistComponent {
   navigateToNextPlaylistVideo () {
     const next = this.findNextPlaylistVideo(this.currentPlaylistPosition + 1)
     if (!next) return
+
     const start = next.startTimestamp
     const stop = next.stopTimestamp
-    this.router.navigate([],{ queryParams: { videoId: next.video.uuid, start, stop } })
+    this.router.navigate([],{ queryParams: { playlistPosition: next.position, start, stop } })
   }
 
   switchAutoPlayNextVideoPlaylist () {

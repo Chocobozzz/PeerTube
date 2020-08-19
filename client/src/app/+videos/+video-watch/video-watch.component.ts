@@ -53,6 +53,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   video: VideoDetails = null
   videoCaptions: VideoCaption[] = []
 
+  playlistPosition: number
   playlist: VideoPlaylist = null
 
   completeDescriptionShown = false
@@ -140,9 +141,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (playlistId) this.loadPlaylist(playlistId)
     })
 
-    this.queryParamsSub = this.route.queryParams.subscribe(async queryParams => {
-      const videoId = queryParams[ 'videoId' ]
-      if (videoId) this.loadVideo(videoId)
+    this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
+      this.playlistPosition = queryParams[ 'playlistPosition' ]
+      this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
 
       const start = queryParams[ 'start' ]
       if (this.player && start) this.player.currentTime(parseInt(start, 10))
@@ -335,6 +336,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return genericChannelDisplayName.includes(this.video.channel.displayName)
   }
 
+  onPlaylistVideoFound (videoId: string) {
+    this.loadVideo(videoId)
+  }
+
   private loadVideo (videoId: string) {
     // Video did not change
     if (this.video && this.video.uuid === videoId) return
@@ -392,8 +397,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       .subscribe(playlist => {
         this.playlist = playlist
 
-        const videoId = this.route.snapshot.queryParams['videoId']
-        this.videoWatchPlaylist.loadPlaylistElements(playlist, !videoId)
+        this.videoWatchPlaylist.loadPlaylistElements(playlist, !this.playlistPosition, this.playlistPosition)
       })
   }
 
@@ -457,8 +461,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.completeDescriptionShown = false
     this.remoteServerDown = false
     this.currentTime = undefined
-
-    this.videoWatchPlaylist.updatePlaylistIndex(video)
 
     if (this.isVideoBlur(this.video)) {
       const res = await this.confirmService.confirm(

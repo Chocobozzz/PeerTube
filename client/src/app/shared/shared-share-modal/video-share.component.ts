@@ -37,6 +37,7 @@ export class VideoShareComponent {
   @Input() video: VideoDetails = null
   @Input() videoCaptions: VideoCaption[] = []
   @Input() playlist: VideoPlaylist = null
+  @Input() playlistPosition: number = null
 
   activeVideoId: TabId = 'url'
   activePlaylistId: TabId = 'url'
@@ -44,8 +45,6 @@ export class VideoShareComponent {
   customizations: Customizations
   isAdvancedCustomizationCollapsed = true
   includeVideoInPlaylist = false
-
-  private playlistPosition: number = null
 
   constructor (private modalService: NgbModal) { }
 
@@ -107,7 +106,7 @@ export class VideoShareComponent {
 
     if (!this.includeVideoInPlaylist) return base
 
-    return base + '?videoId=' + this.video.uuid
+    return base + '?playlistPosition=' + this.playlistPosition
   }
 
   notSecure () {
