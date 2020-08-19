@@ -338,19 +338,19 @@ export class VideoService implements VideosProvider {
     const base = [
       {
         id: VideoPrivacy.PRIVATE,
-        description: $localize`Only I can see this video`
+        description: $localize`Private- Only me`
       },
       {
         id: VideoPrivacy.UNLISTED,
-        description: $localize`Only shareable via a private link`
+        description: $localize`Unlisted- People with a Private Link`
       },
       {
         id: VideoPrivacy.PUBLIC,
-        description: $localize`Anyone can see this video`
+        description: $localize`Public- Anyone`
       },
       {
         id: VideoPrivacy.INTERNAL,
-        description: $localize`Only users of this instance can see this video`
+        description: $localize`Internal- Only users of this instance`
       }
     ]
 
