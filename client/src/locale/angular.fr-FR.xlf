@@ -20,12 +20,7 @@
       </trans-unit>
       <trans-unit id="1cff8e38c81055fa0ae7dbc80a7a0c5c39bbc263" datatype="html">
         <source><x id="INTERPOLATION"/> published a new video: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> a publié une nouvelle vidéo : 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> a publié une nouvelle vidéo : <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="5f61f85f3c9e196f7044fec4dfe165b081e14a3f" datatype="html">
@@ -53,35 +48,17 @@
       </trans-unit>
       <trans-unit id="552e90b955a7121d58f6e5a38b68c7e90f5ed90c" datatype="html">
         <source><x id="START_LINK"/>A new video abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Un nouvel abus vidéo
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été créé sur la vidéo 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Un nouvel abus vidéo <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été créé sur la vidéo <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.abuse.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="c039b9ff89810152d8c0006979d3542a122cd286" datatype="html">
         <source><x id="START_LINK"/>A new comment abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Un nouveau commentaire abusif
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été créé sur la vidéo 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.comment.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Un nouveau commentaire abusif <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été créé sur la vidéo <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.abuse.comment.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="bfe60e77cfae17a8719a5fb422fb7e4b2bcc83c2" datatype="html">
         <source><x id="START_LINK"/>A new account abuse<x id="CLOSE_LINK"/> has been created on account <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Un nouvel compte abusif
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été créé sur le compte 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.account.displayName }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Un nouvel compte abusif <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été créé sur le compte <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.abuse.account.displayName }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="285ef550cb17086e949266777312a1884bd7d739" datatype="html">
@@ -94,15 +71,7 @@
       </trans-unit>
       <trans-unit id="680ba11d9548df295024d7f8ab7b816580725d5d" datatype="html">
         <source><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Votre abus 
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été 
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>accepté
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-          <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>rejected
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Votre abus <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>accepté <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>rejected <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="3f8e1a007a869471c5ab6e9b6149165ecc26e4ad" datatype="html">
@@ -116,25 +85,12 @@
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="translated">La vidéo 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ajoutée récemment a été 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>bloquée automatiquement
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">La vidéo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ajoutée récemment a été <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>bloquée automatiquement <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> commented your video <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a commenté votre vidéo 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a commenté votre vidéo <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="4d2311a5156bd322cc7e2ebafcf6063ba8232e63" datatype="html">
@@ -180,28 +136,12 @@
       </trans-unit>
       <trans-unit id="0f146c0a4152eb93ec2ad119e1dec613864d64c6" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> is following <x id="START_TAG_NG_CONTAINER"/>your channel <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>your account<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> suit 
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your channel 
-          <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/>
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-          <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>votre compte
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> suit <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your channel <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/> <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>votre compte <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> mentioned you on <x id="START_LINK_1"/>video <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> vous a mentionné sur 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>la vidéo 
-          <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> vous a mentionné sur <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>la vidéo <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
@@ -639,11 +579,7 @@
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> per day)<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(
-          <x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> illimité par jour)
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>( <x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> illimité par jour) <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
@@ -3253,9 +3189,7 @@
       </trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
         <source>By <x id="INTERPOLATION"/> -&gt;</source>
-        <target state="translated">Par 
-          <x id="INTERPOLATION" equiv-text="{{ log.by }}"/> -&gt;
-        </target>
+        <target state="translated">Par <x id="INTERPOLATION" equiv-text="{{ log.by }}"/> -&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
@@ -3970,22 +3904,7 @@
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
-        <target state="translated">Ecrivez directement du code CSS. Exemple : 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css 
-          <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; 
-          <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-          <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Simuler avec 
-          <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css
-          <x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pour passer outre les styles. Exemple : 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email 
-          <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red ; 
-          <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-          <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/>
-        </target>
+        <target state="translated">Ecrivez directement du code CSS. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Simuler avec <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css <x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pour passer outre les styles. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color : red ; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">911</context></context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -4571,7 +4490,7 @@
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH"/>? It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2"/>)!</source>
-        <target state="translated">Voulez-vous vraiment supprimer <x id="PH"/>?Cela supprimera <x id="PH_1"/> vidéos mises en ligne sur cette chaîne, et vous ne pourrez pas créer une autre chaine avec le même nom (<x id="PH_2"/>)!</target>
+        <target state="translated">Voulez-vous vraiment supprimer <x id="PH"/>? Cela supprimera <x id="PH_1"/> vidéos mises en ligne sur cette chaîne, et vous ne pourrez pas créer une autre chaine avec le même nom (<x id="PH_2"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">111,113</context>
@@ -4747,9 +4666,7 @@
       </trans-unit>
       <trans-unit id="2a422d9f181480a3199d18e7d5d616ad4e75530a" datatype="html">
         <source>INFORMATION</source>
-        <target state="new">
-        INFORMATION
-      </target>
+        <target state="translated">INFORMATION</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="c47227276184c2145c8ca1161ce08075df573568" datatype="html">
@@ -5027,7 +4944,7 @@
       </trans-unit>
       <trans-unit id="656506dfd46380956a655f919f1498d018f75ca0" datatype="html">
         <source>««</source>
-        <target state="new">««</target>
+        <target state="translated">««</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5035,7 +4952,7 @@
       </trans-unit>
       <trans-unit id="6e52b6ee77a4848d899dd21b591c6fd499e3aef3" datatype="html">
         <source>«</source>
-        <target state="new">«</target>
+        <target state="translated">«</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5043,7 +4960,7 @@
       </trans-unit>
       <trans-unit id="ba9cbb4ff311464308a3627e4f1c3345d9fe6d7d" datatype="html">
         <source>»</source>
-        <target state="new">»</target>
+        <target state="translated">»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5051,7 +4968,7 @@
       </trans-unit>
       <trans-unit id="49f27a460bc97e7e00be5b37098bfa79884fc7d9" datatype="html">
         <source>»»</source>
-        <target state="new">»»</target>
+        <target state="translated">»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5075,7 +4992,7 @@
       </trans-unit>
       <trans-unit id="f8e9a947b9db4252c0e9905765338712f2fd032f" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5083,7 +5000,7 @@
       </trans-unit>
       <trans-unit id="ce676ab1d6d98f85c836381cf100a4a91ef95a1f" datatype="html">
         <source>HH</source>
-        <target state="new">HH</target>
+        <target state="translated">HH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5099,7 +5016,7 @@
       </trans-unit>
       <trans-unit id="72c8edf6a50068a05bde70991e36b1e881f4ca54" datatype="html">
         <source>MM</source>
-        <target state="new">MM</target>
+        <target state="translated">MM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5107,7 +5024,7 @@
       </trans-unit>
       <trans-unit id="41e62daa962947c0d23ded0981975d1bddf0bf38" datatype="html">
         <source>Minutes</source>
-        <target state="new">Minutes</target>
+        <target state="translated">Minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5147,7 +5064,7 @@
       </trans-unit>
       <trans-unit id="ebe38d36a40a2383c5fefa9b4608ffbda08bd4a3" datatype="html">
         <source>SS</source>
-        <target state="new">SS</target>
+        <target state="translated">SS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5179,7 +5096,7 @@
       </trans-unit>
       <trans-unit id="8d6e691e10306c1b34c6b26805151aaea320ef7f" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5187,7 +5104,7 @@
       </trans-unit>
       <trans-unit id="69a1f176a93998876952adac57c3bc3863b6105e" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -5590,9 +5507,7 @@
       </trans-unit>
       <trans-unit id="4245720728052819482">
         <source>Do you really want to unfollow <x id="PH"/>?</source>
-        <target>Voulez-vous vraiment vous désabonner de 
-          <x id="PH"/> ?
-        </target>
+        <target>Voulez-vous vraiment vous désabonner de <x id="PH"/> ?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="9160510009013134726">
@@ -5864,9 +5779,7 @@
       </trans-unit>
       <trans-unit id="9107383323119159110">
         <source>Do you really want to uninstall <x id="PH"/>?</source>
-        <target>Voulez-vous vraiment désinstaller 
-          <x id="PH"/> ?
-        </target>
+        <target>Voulez-vous vraiment désinstaller <x id="PH"/> ?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="4474510732215437338" datatype="html">
@@ -5903,9 +5816,7 @@
       </trans-unit>
       <trans-unit id="2994182849694226596">
         <source>Install <x id="PH"/>?</source>
-        <target>Installer 
-          <x id="PH"/> ?
-        </target>
+        <target>Installer <x id="PH"/> ?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="6703720397495603345">
@@ -6093,9 +6004,7 @@
       </trans-unit>
       <trans-unit id="4884272193574287483">
         <source>Do you really want to unban <x id="PH"/> users?</source>
-        <target>Voulez-vous vraiment rétablir 
-          <x id="PH"/> utilisateur·ices ?
-        </target>
+        <target>Voulez-vous vraiment rétablir <x id="PH"/> utilisateur·ices ?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">198</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385">
@@ -6413,9 +6322,7 @@
       </trans-unit>
       <trans-unit id="2027805873922338635">
         <source>Do you really want to delete <x id="PH"/>?</source>
-        <target>Souhaitez-vous vraiment supprimer 
-          <x id="PH"/> ?
-        </target>
+        <target>Souhaitez-vous vraiment supprimer <x id="PH"/> ?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="3380608219513805292">
@@ -6432,9 +6339,7 @@
       </trans-unit>
       <trans-unit id="8197117721861453263">
         <source>Do you really want to delete <x id="PH"/> videos?</source>
-        <target>Souhaitez-vous vraiment supprimer 
-          <x id="PH"/> vidéos ?
-        </target>
+        <target>Souhaitez-vous vraiment supprimer <x id="PH"/> vidéos ?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="2728855911908920537">
@@ -6533,9 +6438,7 @@
       </trans-unit>
       <trans-unit id="2847376451647729886">
         <source>You are now logged in as <x id="PH"/>!</source>
-        <target>Vous êtes maintenant connecté en tant que 
-          <x id="PH"/> !
-        </target>
+        <target>Vous êtes maintenant connecté en tant que <x id="PH"/> !</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="2687679787442328897">
@@ -7709,7 +7612,7 @@
       </trans-unit>
       <trans-unit id="6291055174438137560" datatype="html">
         <source>~ 1 minute</source>
-        <target state="new">~ 1 minute</target>
+        <target state="translated">~ 1 minute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -7717,7 +7620,7 @@
       </trans-unit>
       <trans-unit id="189524047518780716" datatype="html">
         <source>~ <x id="PH"/> minutes</source>
-        <target state="new">~ <x id="PH"/> minutes</target>
+        <target state="translated">~ <x id="PH"/> minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -7799,9 +7702,7 @@
       </trans-unit>
       <trans-unit id="8269144351796756896">
         <source>Do you really want to unban <x id="PH"/>?</source>
-        <target>Voulez-vous réellement rétablir 
-          <x id="PH"/> ?
-        </target>
+        <target>Voulez-vous réellement rétablir <x id="PH"/> ?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="1794219875546376069">
@@ -8248,7 +8149,7 @@
       </trans-unit>
       <trans-unit id="346270517625845962" datatype="html">
         <source>Encoder</source>
-        <target state="translated">Encoder</target>
+        <target state="translated">Encodeur</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="2331557444464201331" datatype="html">
@@ -8529,7 +8430,7 @@
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
         <source>Your daily video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
-        <target state="translated">Votre quota vidéo journalier est dépassé avec cette vidéo ( taille de la vidéo : <x id="PH"/>, utilisé : <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
+        <target state="translated">Votre quota vidéo journalier est dépassé avec cette vidéo ( taille de la vidéo : <x id="PH"/>, utilisé : <x id="PH_1"/>, quota : <x id="PH_2"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">285,286</context>
