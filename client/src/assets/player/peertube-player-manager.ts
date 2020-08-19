@@ -365,8 +365,12 @@ export class PeertubePlayerManager {
     const commonOptions = options.common
     const webtorrentOptions = options.webtorrent
 
+    const autoplay = this.getAutoPlayValue(commonOptions.autoplay) === 'play'
+      ? true
+      : false
+
     const webtorrent = {
-      autoplay: commonOptions.autoplay,
+      autoplay,
       videoDuration: commonOptions.videoDuration,
       playerElement: commonOptions.playerElement,
       videoFiles: webtorrentOptions.videoFiles,
@@ -586,13 +590,9 @@ export class PeertubePlayerManager {
   private static getAutoPlayValue (autoplay: any) {
     if (autoplay !== true) return autoplay
 
-    // We have issues with autoplay and Safari with webtorrent
-    if (isIOS()) {
-      // On first play, disable autoplay to avoid issues
-      // But if the player already played videos, we can safely autoplay next ones
-      return PeertubePlayerManager.alreadyPlayed ? 'play' : false
-    } else if (isSafari()) {
-      // Issues with Safari and webtorrent on first play
+    // On first play, disable autoplay to avoid issues
+    // But if the player already played videos, we can safely autoplay next ones
+    if (isIOS() || isSafari()) {
       return PeertubePlayerManager.alreadyPlayed ? 'play' : false
     }
 
