@@ -176,7 +176,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
         content: '';
         display: block;
         position: fixed;
-        z-index: z('header') - 1;
+        z-index: z('menu') - 1;
       }
     }
   }

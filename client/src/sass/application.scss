@@ -161,7 +161,7 @@ code {
 
     &.sub-menu-fixed {
       position: fixed;
-      z-index: #{z('header') - 1};
+      z-index: #{z('sub-menu') - 1};
     }
   }
 
