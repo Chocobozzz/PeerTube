@@ -22,11 +22,15 @@ my-video-thumbnail,
 }
 
 .video {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr auto;
   background-color: pvar(--mainBackgroundColor);
   padding: 10px;
   border-bottom: 1px solid $separator-border-color;
+
+  .more {
+    display: flex;
+  }
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
@@ -164,6 +168,7 @@ my-video-thumbnail,
       my-edit-button {
         display: inline-flex;
         height: max-content;
+        margin: auto;
       }
     }
 
