@@ -74,7 +74,7 @@ class WebTorrentPlugin extends Plugin {
     this.startTime = timeToInt(options.startTime)
 
     // Disable auto play on iOS
-    this.autoplay = options.autoplay && isIOS() === false
+    this.autoplay = options.autoplay
     this.playerRefusedP2P = !getStoredP2PEnabled()
 
     this.videoFiles = options.videoFiles
@@ -328,11 +328,6 @@ class WebTorrentPlugin extends Plugin {
 
   private tryToPlay (done?: (err?: Error) => void) {
     if (!done) done = function () { /* empty */ }
-
-    // Try in mute mode because we have issues with Safari
-    if (isSafari() && this.player.muted() === false) {
-      this.player.muted(true)
-    }
 
     const playPromise = this.player.play()
     if (playPromise !== undefined) {
