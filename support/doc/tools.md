@@ -256,6 +256,7 @@ Or to transcode to a specific resolution:
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
 ```
+The resolution should be an integer (`1080`, `720`, `480`, etc.)
 
 To generate an HLS playlist for a video:
 
