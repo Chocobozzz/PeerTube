@@ -129,6 +129,30 @@ function buildBlockedAccountSQL (blockerIds: number[]) {
     'WHERE "serverBlocklist"."accountId" IN (' + blockerIdsString + ')'
 }
 
+function buildBlockedAccountSQLOptimized (columnNameJoin: string, blockerIds: number[]) {
+  const blockerIdsString = blockerIds.join(', ')
+
+  return [
+    literal(
+      `NOT EXISTS (` +
+      `  SELECT 1 FROM "accountBlocklist" ` +
+      `  WHERE "targetAccountId" = ${columnNameJoin} ` +
+      `  AND "accountId" IN (${blockerIdsString})` +
+      `)`
+    ),
+
+    literal(
+      `NOT EXISTS (` +
+      `  SELECT 1 FROM "account" ` +
+      `  INNER JOIN "actor" ON account."actorId" = actor.id ` +
+      `  INNER JOIN "serverBlocklist" ON "actor"."serverId" = "serverBlocklist"."targetServerId" ` +
+      `  WHERE "account"."id" = ${columnNameJoin} ` +
+      `  AND "serverBlocklist"."accountId" IN (${blockerIdsString})` +
+      `)`
+    )
+  ]
+}
+
 function buildServerIdsFollowedBy (actorId: any) {
   const actorIdNumber = parseInt(actorId + '', 10)
 
@@ -201,6 +225,7 @@ function searchAttribute (sourceField?: string, targetField?: string) {
 
 export {
   buildBlockedAccountSQL,
+  buildBlockedAccountSQLOptimized,
   buildLocalActorIdsIn,
   SortType,
   buildLocalAccountIdsIn,

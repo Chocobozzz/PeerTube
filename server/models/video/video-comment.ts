@@ -1,6 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { uniq } from 'lodash'
-import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
+import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -40,7 +40,7 @@ import {
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { AccountModel } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, buildBlockedAccountSQLOptimized, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 
@@ -460,19 +460,20 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const serverActor = await getServerActor()
     const { start, count, videoId, accountId, videoChannelId } = parameters
 
-    const accountExclusion = {
-      [Op.notIn]: Sequelize.literal(
-        '(' + buildBlockedAccountSQL([ serverActor.Account.id, '"Video->VideoChannel"."accountId"' ]) + ')'
-      )
+    const whereAnd: WhereOptions[] = buildBlockedAccountSQLOptimized(
+      '"VideoCommentModel"."accountId"',
+      [ serverActor.Account.id, '"Video->VideoChannel"."accountId"' ]
+    )
+
+    if (accountId) {
+      whereAnd.push({
+        [Op.eq]: accountId
+      })
     }
-    const accountWhere = accountId
-      ? {
-        [Op.and]: {
-          ...accountExclusion,
-          [Op.eq]: accountId
-        }
-      }
-      : accountExclusion
+
+    const accountWhere = {
+      [Op.and]: whereAnd
+    }
 
     const videoChannelWhere = videoChannelId ? { id: videoChannelId } : undefined
 
