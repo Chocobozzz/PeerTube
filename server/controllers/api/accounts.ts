@@ -1,5 +1,8 @@
 import * as express from 'express'
+import { getServerActor } from '@server/models/application/application'
+import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
+import { JobQueue } from '../../lib/job-queue'
 import {
   asyncMiddleware,
   authenticate,
@@ -8,6 +11,7 @@ import {
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
+  setDefaultVideosSort,
   videoPlaylistsSortValidator,
   videoRatesSortValidator,
   videoRatingValidator
@@ -17,18 +21,15 @@ import {
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
   videoChannelsSortValidator,
-  videosSortValidator,
-  videoChannelStatsValidator
+  videoChannelStatsValidator,
+  videosSortValidator
 } from '../../middlewares/validators'
+import { commonVideoPlaylistFiltersValidator, videoPlaylistsSearchValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoModel } from '../../models/video/video'
-import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { JobQueue } from '../../lib/job-queue'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { commonVideoPlaylistFiltersValidator, videoPlaylistsSearchValidator } from '../../middlewares/validators/videos/video-playlists'
-import { getServerActor } from '@server/models/application/application'
 
 const accountsRouter = express.Router()
 
@@ -49,7 +50,7 @@ accountsRouter.get('/:accountName/videos',
   asyncMiddleware(accountNameWithHostGetValidator),
   paginationValidator,
   videosSortValidator,
-  setDefaultSort,
+  setDefaultVideosSort,
   setDefaultPagination,
   optionalAuthenticate,
   commonVideosFiltersValidator,

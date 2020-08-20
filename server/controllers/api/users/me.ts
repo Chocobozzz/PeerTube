@@ -17,6 +17,7 @@ import {
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
+  setDefaultVideosSort,
   usersUpdateMeValidator,
   usersVideoRatingValidator
 } from '../../../middlewares'
@@ -60,7 +61,7 @@ meRouter.get('/me/videos',
   authenticate,
   paginationValidator,
   videosSortValidator,
-  setDefaultSort,
+  setDefaultVideosSort,
   setDefaultPagination,
   asyncMiddleware(getUserVideos)
 )

@@ -1,5 +1,20 @@
 import * as express from 'express'
+import { getServerActor } from '@server/models/application/application'
+import { MChannelAccountDefault } from '@server/types/models'
+import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
+import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
+import { resetSequelizeInstance } from '../../helpers/database-utils'
+import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
+import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
+import { CONFIG } from '../../initializers/config'
+import { MIMETYPES } from '../../initializers/constants'
+import { sequelizeTypescript } from '../../initializers/database'
+import { setAsyncActorKeys } from '../../lib/activitypub/actor'
+import { sendUpdateActor } from '../../lib/activitypub/send'
+import { updateActorAvatarFile } from '../../lib/avatar'
+import { JobQueue } from '../../lib/job-queue'
+import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -9,34 +24,20 @@ import {
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
+  setDefaultVideosSort,
   videoChannelsAddValidator,
   videoChannelsRemoveValidator,
   videoChannelsSortValidator,
   videoChannelsUpdateValidator,
   videoPlaylistsSortValidator
 } from '../../middlewares'
-import { VideoChannelModel } from '../../models/video/video-channel'
-import { videoChannelsNameWithHostValidator, videosSortValidator, videoChannelsOwnSearchValidator } from '../../middlewares/validators'
-import { sendUpdateActor } from '../../lib/activitypub/send'
-import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
-import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
-import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
-import { setAsyncActorKeys } from '../../lib/activitypub/actor'
-import { AccountModel } from '../../models/account/account'
-import { MIMETYPES } from '../../initializers/constants'
-import { logger } from '../../helpers/logger'
-import { VideoModel } from '../../models/video/video'
+import { videoChannelsNameWithHostValidator, videoChannelsOwnSearchValidator, videosSortValidator } from '../../middlewares/validators'
 import { updateAvatarValidator } from '../../middlewares/validators/avatar'
-import { updateActorAvatarFile } from '../../lib/avatar'
-import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
-import { resetSequelizeInstance } from '../../helpers/database-utils'
-import { JobQueue } from '../../lib/job-queue'
-import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
-import { CONFIG } from '../../initializers/config'
-import { sequelizeTypescript } from '../../initializers/database'
-import { MChannelAccountDefault } from '@server/types/models'
-import { getServerActor } from '@server/models/application/application'
+import { AccountModel } from '../../models/account/account'
+import { VideoModel } from '../../models/video/video'
+import { VideoChannelModel } from '../../models/video/video-channel'
+import { VideoPlaylistModel } from '../../models/video/video-playlist'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
@@ -98,7 +99,7 @@ videoChannelRouter.get('/:nameWithHost/videos',
   asyncMiddleware(videoChannelsNameWithHostValidator),
   paginationValidator,
   videosSortValidator,
-  setDefaultSort,
+  setDefaultVideosSort,
   setDefaultPagination,
   optionalAuthenticate,
   commonVideosFiltersValidator,

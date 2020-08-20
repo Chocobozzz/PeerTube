@@ -2,6 +2,7 @@ import * as express from 'express'
 import { SortType } from '../models/utils'
 
 const setDefaultSort = setDefaultSortFactory('-createdAt')
+const setDefaultVideosSort = setDefaultSortFactory('-publishedAt')
 
 const setDefaultVideoRedundanciesSort = setDefaultSortFactory('name')
 
@@ -33,6 +34,7 @@ function setBlacklistSort (req: express.Request, res: express.Response, next: ex
 export {
   setDefaultSort,
   setDefaultSearchSort,
+  setDefaultVideosSort,
   setDefaultVideoRedundanciesSort,
   setBlacklistSort
 }

@@ -1,21 +1,21 @@
 import * as express from 'express'
+import * as Feed from 'pfeed'
+import { buildNSFWFilter } from '../helpers/express-utils'
+import { CONFIG } from '../initializers/config'
 import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
-  setDefaultSort,
+  feedsFormatValidator,
+  setDefaultVideosSort,
+  setFeedFormatContentType,
   videoCommentsFeedsValidator,
   videoFeedsValidator,
-  videosSortValidator,
-  feedsFormatValidator,
-  setFeedFormatContentType
+  videosSortValidator
 } from '../middlewares'
-import { VideoModel } from '../models/video/video'
-import * as Feed from 'pfeed'
 import { cacheRoute } from '../middlewares/cache'
+import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { buildNSFWFilter } from '../helpers/express-utils'
-import { CONFIG } from '../initializers/config'
 
 const feedsRouter = express.Router()
 
@@ -34,7 +34,7 @@ feedsRouter.get('/feeds/video-comments.:format',
 
 feedsRouter.get('/feeds/videos.:format',
   videosSortValidator,
-  setDefaultSort,
+  setDefaultVideosSort,
   feedsFormatValidator,
   setFeedFormatContentType,
   asyncMiddleware(cacheRoute({
