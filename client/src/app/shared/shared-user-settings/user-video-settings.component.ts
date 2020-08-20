@@ -95,26 +95,21 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
     const autoPlayVideo = this.form.value['autoPlayVideo']
     const autoPlayNextVideo = this.form.value['autoPlayNextVideo']
 
-    let videoLanguages: string[] = this.form.value['videoLanguages']
+    const videoLanguagesForm = this.form.value['videoLanguages']
 
-    if (Array.isArray(videoLanguages)) {
-      if (videoLanguages.length > 20) {
+    if (Array.isArray(videoLanguagesForm)) {
+      if (videoLanguagesForm.length > 20) {
         this.notifier.error($localize`Too many languages are enabled. Please enable them all or stay below 20 enabled languages.`)
         return
       }
 
-      if (videoLanguages.length === 0) {
+      if (videoLanguagesForm.length === 0) {
         this.notifier.error($localize`You need to enable at least 1 video language.`)
         return
       }
-
-      if (
-        videoLanguages.length === this.languageItems.length ||
-        (videoLanguages.length === 1 && videoLanguages[0] === this.allLanguagesGroup)
-      ) {
-        videoLanguages = null // null means "All"
-      }
     }
+
+    const videoLanguages = this.getVideoLanguages(videoLanguagesForm)
 
     let details: UserUpdateMe = {
       nsfwPolicy,
@@ -122,6 +117,10 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
       autoPlayVideo,
       autoPlayNextVideo,
       videoLanguages
+    }
+
+    if (videoLanguages) {
+      details = Object.assign(details, videoLanguages)
     }
 
     if (onlyKeys) details = pick(details, onlyKeys)
@@ -140,5 +139,30 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
       this.userService.updateMyAnonymousProfile(details)
       if (this.notifyOnUpdate) this.notifier.success($localize`Display/Video settings updated.`)
     }
+  }
+
+  private getVideoLanguages (videoLanguages: ItemSelectCheckboxValue[]) {
+    if (!Array.isArray(videoLanguages)) return undefined
+
+    // null means "All"
+    if (videoLanguages.length === this.languageItems.length) return null
+
+    if (videoLanguages.length === 1) {
+      const videoLanguage = videoLanguages[0]
+
+      if (typeof videoLanguage === 'string') {
+        if (videoLanguage === this.allLanguagesGroup) return null
+      } else {
+        if (videoLanguage.group === this.allLanguagesGroup) return null
+      }
+    }
+
+    return videoLanguages.map(l => {
+      if (typeof l === 'string') return l
+
+      if (l.group) return l.group
+
+      return l.id + ''
+    })
   }
 }
