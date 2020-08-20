@@ -80,7 +80,13 @@ export const clientActionHookObject = {
   'action:router.navigation-end': true,
 
   // Fired when the registration page is being initialized
-  'action:signup.register.init': true
+  'action:signup.register.init': true,
+
+  // ####### Embed hooks #######
+  // In embed scope, peertube helpers are not available
+
+  // Fired when the embed loaded the player
+  'action:embed.player.loaded': true
 }
 
 export type ClientActionHookName = keyof typeof clientActionHookObject
