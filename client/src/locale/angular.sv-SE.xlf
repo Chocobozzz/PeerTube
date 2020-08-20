@@ -242,7 +242,7 @@
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
-        <target state="new">subtitles</target>
+        <target state="translated">undertexter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -398,7 +398,7 @@
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="new">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</target>
+        <target state="translated">&lt;a href="https://sv.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt;-formatering med stöd för:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -702,8 +702,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
-        <target state="new">An email with the reset password instructions will be sent to <x id="PH"/>.
-The link will expire within 1 hour.</target>
+        <target state="translated">Ett meddelande med instruktioner för att återställa lösenordet kommer skickas per e-post till <x id="PH"/>. Länken är giltig i en timme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
           <context context-type="linenumber">106,107</context>
@@ -835,10 +834,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK"/></source>
-        <target>Lägg till din instans i PeerTubes offentliga register: 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target>Lägg till din instans i PeerTubes offentliga register: <x id="START_LINK"/>instances.joinpeertube.org<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859">
@@ -848,36 +844,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target>
-          Att välja ett 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>namn för instansen
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>författa en beskrivning
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, beskriva 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>vem du är
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>,
-          varför 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>du har startat instansen
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> och 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>hur länge
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> du tänker 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>underhålla den
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          är mycket viktig information för att dina användare ska kunna skapa sig en bild av instansen.
-        
-        </target>
+        <target>Att välja ett <x id="START_TAG_STRONG"/>namn för instansen<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>författa en beskrivning<x id="CLOSE_TAG_STRONG"/>, beskriva <x id="START_TAG_STRONG"/>vem du är<x id="CLOSE_TAG_STRONG"/>, varför <x id="START_TAG_STRONG"/>du har startat instansen<x id="CLOSE_TAG_STRONG"/> och <x id="START_TAG_STRONG"/>hur länge<x id="CLOSE_TAG_STRONG"/> du tänker <x id="START_TAG_STRONG"/>underhålla den<x id="CLOSE_TAG_STRONG"/> är mycket viktig information för att dina användare ska kunna skapa sig en bild av instansen. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="bd6c91a86a18f512ade62e216efcfb5d2520711c" datatype="html">
         <source>If you want to open registrations, please decide what are <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/>, fill your <x id="START_TAG_STRONG"/>instance terms<x id="CLOSE_TAG_STRONG"/> and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Om du vill öppna för kontoregistrering, ber vi dig fundera över 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>dina riktlinjer för moderering
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, skriva ner 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>villkor för instansen
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> samt ange vilka språk du talar och kategorier som stöds. På så vis kan du hjälpa användare att skapa sina konton på 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>en passande
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube-instans. 
-        </target>
+        <target state="translated">Om du vill öppna för kontoregistrering, ber vi dig fundera över <x id="START_TAG_STRONG"/>dina riktlinjer för moderering<x id="CLOSE_TAG_STRONG"/>, skriva ner <x id="START_TAG_STRONG"/>villkor för instansen<x id="CLOSE_TAG_STRONG"/> samt ange vilka språk du talar och kategorier som stöds. På så vis kan du hjälpa användare att skapa sina konton på <x id="START_TAG_STRONG"/>en passande<x id="CLOSE_TAG_STRONG"/> PeerTube-instans. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd">
@@ -939,12 +911,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="565e31173ab0ea2c00c311c9051c15d8896a0b80" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Fyll gärna i de här uppgifterna för att hjälpa andra att välja en 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>passande instans
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Utan den här informationen kommer din instans eventuellt inte listas på 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube-webbplatsen
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Fyll gärna i de här uppgifterna för att hjälpa andra att välja en <x id="START_TAG_STRONG"/>passande instans<x id="CLOSE_TAG_STRONG"/>. Utan den här informationen kommer din instans eventuellt inte listas på <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7d438f72f9985c4d06ed4fe80c90afc2e1df34d2">
@@ -959,7 +926,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="680d5c75b7fd8d37961083608b9fcdc4167b4c43" datatype="html">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Föregående</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
           <context context-type="linenumber">1</context>
@@ -1014,9 +981,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5a69be913ebcc70f300060cf1be0c7f8827159d6" datatype="html">
         <source>Interface: <x id="INTERPOLATION"/></source>
-        <target state="translated">Gränssnitt: 
-          <x id="INTERPOLATION" equiv-text="{{ language }}"/>
-        </target>
+        <target state="translated">Gränssnitt: <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
@@ -1081,7 +1046,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3245220240937722814" datatype="html">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">Mina kanaler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -1089,7 +1054,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
         <source>My videos</source>
-        <target state="new">My videos</target>
+        <target state="translated">Mina videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -1097,7 +1062,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
         <source>My playlists</source>
-        <target state="new">My playlists</target>
+        <target state="translated">Mina spellistor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -1105,7 +1070,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
         <source>My subscriptions</source>
-        <target state="new">My subscriptions</target>
+        <target state="translated">Mina prenumerationer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -1113,7 +1078,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
         <source>My history</source>
-        <target state="new">My history</target>
+        <target state="translated">Min historik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -1216,9 +1181,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="b2f3e08a790518414d240fbe2c3c116c6f83c275" datatype="html">
         <source>using <x id="INTERPOLATION"/></source>
-        <target state="translated">med 
-          <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/>
-        </target>
+        <target state="translated">med <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
@@ -1440,16 +1403,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="554a78c6ac043b4a9058c39d63e4475a454e4dc2" datatype="html">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK"/> There is a maximum of 5 tags. <x id="LINE_BREAK"/> Press <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/> to add a new tag. </source>
-        <target state="new">
-                    Tags could be used to suggest relevant recommendations. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    There is a maximum of 5 tags. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    Press 
-          <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter
-          <x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/> to add a new tag.
-                  
-        </target>
+        <target state="translated">Taggar kan användas för att föreslå relevanta rekommendationer. <x id="LINE_BREAK"/> Du kan använda upp till fem taggar. <x id="LINE_BREAK"/> Tryck <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/> för att lägga till en ny tagg. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
@@ -1459,7 +1413,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="be24dae69c0d0605237d6dd638b172a42a88851e" datatype="html">
         <source>No items found</source>
-        <target state="new">No items found</target>
+        <target state="translated">Inga objekt hittades</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/select/select-checkbox.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
@@ -1506,14 +1460,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
         <source>Schedule publication (<x id="INTERPOLATION"/>)</source>
-        <target>Schemalägg publicering (
-          <x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)
-        </target>
+        <target>Schemalägg publicering (<x id="INTERPOLATION"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="ea504765b49242bfcaefec84a9cf2f6f179c2ea5" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="new">Contains sensitive content</target>
+        <target state="translated">Innehåller känsligt material</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
@@ -1523,7 +1475,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ec396d3c2e26cbe4a1b3d6747c732419c6dcc3bb" datatype="html">
         <source>Publish after transcoding</source>
-        <target state="new">Publish after transcoding</target>
+        <target state="translated">Publicera efter omkodning</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
@@ -1630,14 +1582,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="d49ca01a7d3c689add2eb58a469a3919c7ee9af7">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target>
-           Du kan importera vilken URL som helst som 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>stöds av youtube-dl
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-            eller en URL som pekar mot en MP4-fil.
-            Dubbelkolla att du har rätt att sprida materialet vidare för att inte orsaka upphovsrättsliga problem för dig och din instans.
-          
-        </target>
+        <target>Du kan importera vilken URL som helst som <x id="START_LINK"/>stöds av youtube-dl <x id="CLOSE_LINK"/> eller en URL som pekar mot en MP4-fil. Dubbelkolla att du har rätt att sprida materialet vidare för att inte orsaka rättsliga problem för dig och din instans. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7">
@@ -1647,11 +1592,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
         <source>Congratulations, the video behind <x id="INTERPOLATION"/> will be imported! You can already add information about this video. </source>
-        <target>
-  Grattis, video bakom 
-          <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> kommer importeras! Du kan redan nu lägga till information om videon.
-
-        </target>
+        <target>Grattis, video <x id="INTERPOLATION"/> kommer importeras! Du kan redan nu lägga till information om videon. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
@@ -1671,7 +1612,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
-        <target state="new">Hide the video until a specific date</target>
+        <target state="translated">Dölj videon fram till ett datum</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d">
@@ -1681,13 +1622,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1860b3f71e0b82e9c10e1eaf0ff073216ed896cc">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK"/> The chosen image will be definitive and cannot be modified. </source>
-        <target>
-          Bilden kommer slås ihop med din ljudfil.
-          
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          Den valda bilden är slutgiltig och kommer inte kunna ändras.
-        
-        </target>
+        <target>Bilden kommer slås ihop med din ljudfil. <x id="LINE_BREAK"/> Den valda bilden är slutgiltig och kommer inte kunna ändras. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="dfd046dad933ba0a50926b9ab3c1b579c802312e" datatype="html">
@@ -1759,27 +1694,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ebe5234338205e30a59cf703e2a2b6ef49fb75f8" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="translated">Vi rekommenderar att du inte använder användaren 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> för att ladda upp dina videor eftersom det är din instans administrationskonto. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Du kan istället 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>skapa ett separat konto
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> att ladda upp dina videor med. 
-        </target>
+        <target state="translated">Vi rekommenderar att du inte använder användarkontot <x id="START_TAG_STRONG"/>root <x id="CLOSE_TAG_STRONG"/> för att ladda upp videor eftersom det är din instans administrationskonto. <x id="LINE_BREAK"/> Du kan istället <x id="START_LINK"/>skapa ett nytt konto <x id="CLOSE_LINK"/> att ladda upp dina videor från. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
         <source>Import <x id="INTERPOLATION"/></source>
-        <target>Importera 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target>Importera <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5">
         <source>Upload <x id="INTERPOLATION"/></source>
-        <target>Ladda upp 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target>Ladda upp <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
@@ -1864,9 +1789,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="71b6e75eb1d54bcd9a64b9af9b99121785a065d0" datatype="html">
         <source>Support <x id="INTERPOLATION"/></source>
-        <target state="translated">Stöd 
-          <x id="INTERPOLATION" equiv-text="{{ video.account.displayName }}"/>
-        </target>
+        <target state="translated">Stöd <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/modal/video-support.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="cb66498f1a530d9b29ee5bc6605628add658dd87" datatype="html">
@@ -1925,11 +1848,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a">
         <source>This video will be published on <x id="INTERPOLATION"/>. </source>
-        <target>
-      Den här videon kommer publiceras den 
-          <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>.
-    
-        </target>
+        <target>Den här videon kommer publiceras den <x id="INTERPOLATION"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="bbb57efb2edd572de832c8fff03bc85d7723abd3" datatype="html">
@@ -1939,24 +1858,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="82bf4d36722689b7c0058ed18e50d7b550d6d8b6" datatype="html">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/><x id="START_TAG_SPAN"/> • <x id="INTERPOLATION"/> views<x id="CLOSE_TAG_SPAN"/></source>
-        <target state="translated">Publicerad 
-          <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/>
-          <x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • 
-          <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> visningar
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated">Publicerad <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/><x id="START_TAG_SPAN"/> • <x id="INTERPOLATION"/> visningar<x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="04aabb1507157d38b070f1a7ed5271bcea041404" datatype="html">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/><x id="START_TAG_SPAN"/> • <x id="INTERPOLATION"/> views<x id="CLOSE_TAG_SPAN"/></source>
-        <target state="translated">Publicerad 
-          <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/>
-          <x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • 
-          <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> visningar
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated">Publicerad <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/><x id="START_TAG_SPAN"/> • <x id="INTERPOLATION"/> visningar<x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="74059c5dce671d464259e3ce37a5d408c3fd7720" datatype="html">
@@ -1996,9 +1903,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="0b7f242da10ece3f2995095c455b9a92ebcdd3b4">
         <source>By <x id="INTERPOLATION"/></source>
-        <target>Av 
-          <x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/>
-        </target>
+        <target>Av <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="d0336848b0c375a1c25ba369b3481ee383217a4f" datatype="html">
@@ -2110,25 +2015,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ce6445567d33993fced14aae3456db909121d12e" datatype="html">
         <source>View <x id="INTERPOLATION"/> replies from <x id="INTERPOLATION_1"/> and others </source>
-        <target state="translated">Visa 
-          <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> svar från bland andra 
-          <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/>
-        </target>
+        <target state="translated">Visa <x id="INTERPOLATION"/> svar från bland andra <x id="INTERPOLATION_1"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="8487d97def3c5336b1cde21c7da14e61a9633061" datatype="html">
         <source>View <x id="INTERPOLATION"/> replies from <x id="INTERPOLATION_1"/> </source>
-        <target state="translated">Visa 
-          <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> svar från 
-          <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/>
-        </target>
+        <target state="translated">Visa <x id="INTERPOLATION"/> svar från <x id="INTERPOLATION_1"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="dce85627dad907cb2013d06f97f82ad7bf87b0a6" datatype="html">
         <source>View <x id="INTERPOLATION"/> replies</source>
-        <target state="translated">Visa 
-          <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> svar
-        </target>
+        <target state="translated">Visa <x id="INTERPOLATION"/> svar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
@@ -2213,12 +2110,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="b56702ff10875710f111634cc315cd3ef01b206f" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">Din anmälan kommer skickas till moderatorerna på 
-          <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> och även vidarebefordras till kommentarens heminstans (
-          <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>)
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. 
-        </target>
+        <target state="translated">Din anmälan kommer skickas till moderatorerna på <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> och även vidarebefordras till kommentarens heminstans (<x id="INTERPOLATION_1"/>)<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3a23875897fb8099f85410700fcca415626621a3" datatype="html">
@@ -2283,10 +2175,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Skapad 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target>Skapad <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="9c9e0eb0ce8abea8b4c7c5dbb6e80a9a5f5b4193" datatype="html">
@@ -2326,11 +2215,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> followers</source>
-        <target state="translated">Visar följare 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> till 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> av 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/>
-        </target>
+        <target state="translated">Visar följare <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="270a185f179774aa3cee3120ed4f5650e8816b9f" datatype="html">
@@ -2347,10 +2232,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="107f0fef40ba00a1a183a03eba85054ed8413f92" datatype="html">
         <source>Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Redundans tillåten 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Redundans tillåten <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="8cffa679dff97a096d44fca9348eeaa1867d40aa" datatype="html">
@@ -2370,11 +2252,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="b2ddee45fe4c3ebc20f39ed10ef70505c9eb65ce" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> hosts</source>
-        <target state="translated">Visar värd 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> till 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> av 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/>
-        </target>
+        <target state="translated">Visar värd <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
@@ -2409,7 +2287,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="48c6910585f5bef4f725104287ec904c7cb8c6e9" datatype="html">
         <source>Select columns</source>
-        <target state="new">Select columns</target>
+        <target state="translated">Markera kolumner</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="ed66036cb394f49f63cb5fb5632f483613b790f6" datatype="html">
@@ -2444,12 +2322,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG"/>original<x id="CLOSE_TAG_STRONG"/> video size. <x id="LINE_BREAK"/> At most, this user could upload ~ <x id="INTERPOLATION"/>. </source>
-        <target state="translated">Omkodning har aktiverats. Videokvoten omfattar endast 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>originalfilens
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> storlek. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Den här användaren kan ladda upp ungefär 
-          <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. 
-        </target>
+        <target state="translated">Omkodning har aktiverats. Videokvoten omfattar endast <x id="START_TAG_STRONG"/>originalfilens<x id="CLOSE_TAG_STRONG"/> storlek. <x id="LINE_BREAK"/> Den här användaren kan ladda upp ungefär <x id="INTERPOLATION"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496">
@@ -2494,12 +2367,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="715d36ab50d156b744ffedc975ffb97cae75ff7b" datatype="html">
         <source>Advanced user filters</source>
-        <target state="new">Advanced user filters</target>
+        <target state="translated">Avancerade användarfilter</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="765fcd9017ea1e180bbd266673d7cf11535d8c4a" datatype="html">
         <source>Banned users</source>
-        <target state="new">Banned users</target>
+        <target state="translated">Blockerade användare</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="7d88bb14f4ef7eaea7ca41c1832c66451410047a" datatype="html">
@@ -2514,9 +2387,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="d9e38d58225f58cb64126e4d5ec58f39dcb326df" datatype="html">
         <source>Deleted account</source>
-        <target state="new">
-          Deleted account
-        </target>
+        <target state="translated">Raderat konto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5">
@@ -2541,11 +2412,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> users</source>
-        <target state="translated">Visar användare 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> till 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> av 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/>
-        </target>
+        <target state="translated">Visar användare <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="2049290282534091182">
@@ -2633,10 +2500,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="91bd2d52b840951d3b1f5830b023bee8bca91293" datatype="html">
         <source>Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Video 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="b7237eade678ae47485fbd27ec7f8c1079a8c6b7" datatype="html">
@@ -2681,10 +2545,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="a7f42da3bb4eea0b71b0a20a2aff6612a82cab99">
         <source>Date <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Datum 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target>Datum <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
@@ -2719,11 +2580,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="9f5c75bd513580d630817cd39179fd41e5ec36f6" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> blocked videos</source>
-        <target state="translated">Visar blockerad video 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> till 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> av 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/>
-        </target>
+        <target state="translated">Visar blockerad video <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="24968c3b9f7cb940df7e5bf46f61a11710481829" datatype="html">
@@ -2785,18 +2642,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="fd7b8e728c25b616934661747224b1b2e7d9ea5c" datatype="html">
         <source><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></source>
-        <target state="new">
-          <x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {...} other {...}}"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated"><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="fe8634bd713368d7971877c0e09d1869f09c924d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 report} other {
-          <x id="INTERPOLATION" equiv-text="{{ abuse.countReportsForReporter }}"/> reports} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 anmälan} other {<x id="INTERPOLATION"/> anmälningar}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4">
@@ -2816,10 +2667,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="e186aa4dc511ff4347ec5304691000e3e0a4a048" datatype="html">
         <source>by <x id="INTERPOLATION"/> on <x id="INTERPOLATION_1"/> </source>
-        <target state="new">by 
-          <x id="INTERPOLATION" equiv-text="{{ abuse.video.channel?.displayName }}"/> on 
-          <x id="INTERPOLATION_1" equiv-text="{{ abuse.video.channel?.host }}"/>
-        </target>
+        <target state="translated">av <x id="INTERPOLATION"/> på <x id="INTERPOLATION_1"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="b0a337363ec610cf41744167b12f020e141a4617" datatype="html">
@@ -2841,10 +2689,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7e7ad19f1bcc2c33cdba4c1ad25e2b398ad453d9">
         <source>State <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Status 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target>Status <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="ea965d544a7dfd8185064c52cdfff553cf94d585" datatype="html">
@@ -2859,19 +2704,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="9a7b523cbbebabeb9b10482291b58c52825a4b05" datatype="html">
         <source>Score <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Betyg 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Betyg <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="8d1011bd5b502c857858a97d074118377d8fe714" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> reports</source>
-        <target state="translated">Visar anmälning 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> till 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> av 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/>
-        </target>
+        <target state="translated">Visar anmälning <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="4dbabcc6e79125d4b798ba8139a40202db712475" datatype="html">
@@ -2881,18 +2719,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="da3ebfaee320ad7a8a41c75d6ee19e687f9b484d" datatype="html">
         <source><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></source>
-        <target state="new">
-          <x id="ICU" equiv-text="{abuse.countReportsForReportee, plural, =1 {...} other {...}}"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated"><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="bdd37f55632abc18fb1fbf95d4b3f5f89ce3237b" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 report} other {
-          <x id="INTERPOLATION" equiv-text="{{ abuse.countReportsForReportee }}"/> reports} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 anmälan} other {<x id="INTERPOLATION"/> anmälningar}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc" datatype="html">
@@ -2912,10 +2744,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="079e99cce11c87b142e80fdd14dae98a61012fc4">
         <source>Muted at <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Ignorerad på 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target>Ignorerad på <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8">
@@ -2935,11 +2764,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted instances</source>
-        <target state="translated">Visar nummer 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> till 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> av 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> ignorerade instanser
-        </target>
+        <target state="translated">Visar nummer <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/> ignorerade instanser</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="2aebea85561b74dd33ae2481bb942b8c4beb5524" datatype="html">
@@ -2969,11 +2794,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted accounts</source>
-        <target state="translated">Visar nummer 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> till 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> av 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> ignorerade konton
-        </target>
+        <target state="translated">Visar nummer <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/> ignorerade konton</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8259696070728377358">
@@ -3035,12 +2856,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005">
         <source><x id="INTERPOLATION"/> <x id="ICU"/> for "<x id="INTERPOLATION_1"/>" </source>
-        <target>
-          <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {…} other {…}}"/> för ”
-          <x id="INTERPOLATION_1" equiv-text="{{ search }}"/>”
-      
-        </target>
+        <target><x id="INTERPOLATION"/> <x id="ICU"/> för "<x id="INTERPOLATION_1"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494">
@@ -3062,11 +2878,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ba504ef7da4384f035fc148de2d121322aaa7407">
         <source>This <x id="INTERPOLATION"/> does not have settings. </source>
-        <target>
-    Detta 
-          <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> har inga inställningar.
-  
-        </target>
+        <target>Detta <x id="INTERPOLATION"/> har inga inställningar. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="29832309535656200">
@@ -3186,10 +2998,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="f0716b4964f9dc6437aaed3ae0c78e94fd259fb9" datatype="html">
         <source>Manage <x id="START_LINK"/>users<x id="CLOSE_LINK"/> to build a moderation team. </source>
-        <target state="translated">Hantera 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>användare
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för att bygga ett moderationsteam. 
-        </target>
+        <target state="translated">Hantera <x id="START_LINK"/>användare <x id="CLOSE_LINK"/> för att bygga ett moderationsteam. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="aad49456e42847e2ea95fbaeb2f49387199e5634">
@@ -3199,10 +3008,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="55c4d3cc288701854147f69ccf3d86d316589968" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">Du kan låta andra administratörer veta att du huvudsakligen federerar känsligt material.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Dessutom kommer rutan för känsligt och oförbehållsamt innehåll vara ifylld som standard. 
-        </target>
+        <target state="translated">Du kan låta andra administratörer veta att du huvudsakligen federerar känsligt material. <x id="LINE_BREAK"/> <x id="LINE_BREAK"/> Dessutom kommer rutan för känsligt och oförbehållsamt innehåll vara ifylld som standard. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
@@ -3212,12 +3018,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="8dccab3d8cadb847889ff89644d3f08ffee0d76e" datatype="html">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target state="translated">Med 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Lista inte
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> eller 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Gör miniatyrer suddiga
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> kommer användaren bli tillfrågad om han eller hon vill titta på videon. 
-        </target>
+        <target state="translated">Med <x id="START_TAG_STRONG"/>Lista inte<x id="CLOSE_TAG_STRONG"/> eller <x id="START_TAG_STRONG"/>Gör miniatyrer suddiga<x id="CLOSE_TAG_STRONG"/> kommer användaren bli tillfrågad om han eller hon vill titta på videon. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
@@ -3332,12 +3133,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="0aa2ad4efb780f946dd9a821fe7471dde20014c3" datatype="html">
         <source>Use <x id="START_LINK"/>plugins &amp; themes<x id="CLOSE_LINK"/> for more involved changes, or <x id="START_LINK_1"/>add slight customizations<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Använd 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>tillägg och teman
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för mer avancerade ändringar, eller för att 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>lägga till mindre anpassningar
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Använd <x id="START_LINK"/>tillägg och teman<x id="CLOSE_LINK"/> för mer avancerade ändringar, eller för att <x id="START_LINK_1"/>lägga till mindre anpassningar<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">247</context></context-group>
       </trans-unit>
       <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb">
@@ -3412,10 +3208,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="eb55f6a974ace4bade90b976dba651c9545c979d" datatype="html">
         <source>Manage <x id="START_LINK"/>users<x id="CLOSE_LINK"/> to set their quota individually. </source>
-        <target state="translated">Hantera 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>användare
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för att ange deras kvot individuellt. 
-        </target>
+        <target state="translated">Hantera <x id="START_LINK"/>användare<x id="CLOSE_LINK"/> för att ange deras kvot individuellt. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="90f449b1f4787e6c9731198a96d35399c1b340a7">
@@ -3515,10 +3308,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="a97062f0bfb585b28058981d53fb047a2f2288c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="translated">Låt 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>dina användare
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> använda en länk för att söka efter videor eller användare, även om fjärrinstansen inte är federerad med din instans
-        </target>
+        <target state="translated">Låt <x id="START_TAG_STRONG"/>dina användare<x id="CLOSE_TAG_STRONG"/> använda en länk för att söka efter videor eller användare, även om fjärrinstansen inte är federerad med din instans</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">469</context></context-group>
       </trans-unit>
       <trans-unit id="273341057700e25fb8a19896b5039dcf3f14b9ba" datatype="html">
@@ -3528,10 +3318,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ffe92ff41a38a4407b1e1da41a015292497324c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="translated">Låt 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonyma användare
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> använda en länk för att söka efter videor eller användare, även om fjärrinstansen inte är federerad med din instans
-        </target>
+        <target state="translated">Låt <x id="START_TAG_STRONG"/>anonyma användare<x id="CLOSE_TAG_STRONG"/> använda en länk för att söka efter videor eller användare, även om fjärrinstansen inte är federerad med din instans</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">480</context></context-group>
       </trans-unit>
       <trans-unit id="1a1dd78b1169f98fb2120c6af13e136aec2daf69" datatype="html">
@@ -3546,10 +3333,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="0c43b766533e99e88f65a9f1c8d63fb1926ab5cc" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK"/>host your own<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Du bör endast använda modererade sökregister i produktionsmiljön, alternativt 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>starta ett eget register
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Du bör endast använda modererade sökregister i produktionsmiljön, alternativt <x id="START_LINK"/>starta ett eget register <x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">497</context></context-group>
       </trans-unit>
       <trans-unit id="e5cd21a49e6eefd0610106b6afcd4ed56baab566" datatype="html">
@@ -3584,10 +3368,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2cc42a6b77d06f99a195ef8f3324d49267eedf87" datatype="html">
         <source>Manage <x id="START_LINK"/>relations<x id="CLOSE_LINK"/> with other instances. </source>
-        <target state="translated">Hantera 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>relationer
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> till andra instanser. 
-        </target>
+        <target state="translated">Hantera <x id="START_LINK"/>relationer<x id="CLOSE_LINK"/> till andra instanser. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">544</context></context-group>
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
@@ -3607,10 +3388,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="f183764323fcffd1b3ba4d13cdc21ec8971472cc" datatype="html">
         <source>You should only follow moderated indexes in production, or <x id="START_LINK"/>host your own<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Du bör endast använda modererade register i produktionsmiljön, alternativt 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>starta ett eget register
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Du bör endast använda modererade register i produktionsmiljön, alternativt <x id="START_LINK"/>starta ett eget register<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">595</context></context-group>
       </trans-unit>
       <trans-unit id="9bef6fc7194e11d18fdcac6aaccc816fe9ffc5a7" datatype="html">
@@ -3675,13 +3453,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="f0d14f556321dbae66c765d6a3b0062f3a150931" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect on your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </source>
-        <target state="translated">När du delar en videolänk och instansen är godkänd av Twitter kommer en spelare bäddas in i Twitterflödet.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Om instansen inte är godkänd kommer vi använda ett bildkort som länkar till din PeerTube-instans.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Kryssa i den här rutan, spara inställningarna och testa med en videolänk från din instans (https://example.com/videos/watch/blabla) på 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för att se om din instans är godkänd. 
-        </target>
+        <target state="translated">När du delar en videolänk och instansen är godkänd av Twitter kommer en spelare bäddas in i Twitterflödet. <x id="LINE_BREAK"/> Om instansen inte är godkänd kommer vi använda ett bildkort som länkar till din PeerTube-instans. <x id="LINE_BREAK"/> <x id="LINE_BREAK"/> Kryssa i den här rutan, spara inställningarna och testa med en videolänk från din instans (https://example.com/videos/watch/blabla) på <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> för att se om din instans är godkänd. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">684</context></context-group>
       </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
@@ -3731,15 +3503,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1f83d0ff227c35b5631a2b2f78067b3e915cdb59" datatype="html">
         <source><x id="START_TAG_STRONG"/>Experimental, we suggest you to not disable webtorrent support for now<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/><x id="LINE_BREAK"/><x id="START_TAG_STRONG"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG"/></source>
-        <target state="translated">
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Experimentellt, vi råder dig att behålla webtorrent-stödet ett tag till
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Om du även har HLS aktiverat kommer videorna kräva dubbelt så mycket lagringsutrymme
-          <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Utan webtorrent kan du inte federera med PeerTube-instanser med lägre versionsnummer än 2.1
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-        </target>
+        <target state="translated"><x id="START_TAG_STRONG"/>Experimentellt, vi råder dig att behålla webtorrent-stödet ett tag till<x id="CLOSE_TAG_STRONG"/> <x id="START_PARAGRAPH"/>Om du även har HLS aktiverat kommer videorna kräva dubbelt så mycket lagringsutrymme<x id="CLOSE_PARAGRAPH"/> <x id="LINE_BREAK"/> <x id="START_TAG_STRONG"/>Utan webtorrent kan du inte federera med PeerTube-instanser med lägre versionsnummer än 2.1<x id="CLOSE_TAG_STRONG"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">762</context></context-group>
       </trans-unit>
       <trans-unit id="ff852c5a22beaff7a8c62447b0a96f9ced7c3ed6" datatype="html">
@@ -3749,22 +3513,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
         <source><x id="START_TAG_STRONG"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
-        <target state="translated">
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Kräver minst version &gt;= 4.1
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> av ffmpeg 
-          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Skapa en HLS-spellista och fragmenterade mp4-filer för bättre uppspelning än med den nuvarande standardspelaren:
-          <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-          <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/>
-          <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Mjukare byten mellan upplösningar
-          <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-          <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Snabbare uppspelningar, särskilt för långa videor
-          <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-          <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Stabilare uppspelning (färre buggar samt obegränsad buffert)
-          <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-          <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/>
-          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Om du även stöder WebTorrent kommer varje video kräva dubbelt så mycket lagringsutryme
-          <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-        </target>
+        <target state="translated"><x id="START_TAG_STRONG"/>Kräver minst version 4.1<x id="CLOSE_TAG_STRONG"/> av ffmpeg <x id="START_PARAGRAPH"/>Skapa en HLS-spellista och fragmenterade mp4-filer för bättre uppspelning än med den nuvarande standardspelaren:<x id="CLOSE_PARAGRAPH"/> <x id="START_UNORDERED_LIST"/> <x id="START_LIST_ITEM"/>Mjukare byten mellan upplösningar<x id="CLOSE_LIST_ITEM"/> <x id="START_LIST_ITEM"/>Snabbare uppspelningar, särskilt för långa videor<x id="CLOSE_LIST_ITEM"/> <x id="START_LIST_ITEM"/>Stabilare uppspelning (färre buggar samt obegränsad buffert)<x id="CLOSE_LIST_ITEM"/> <x id="CLOSE_UNORDERED_LIST"/> <x id="START_PARAGRAPH"/>Om du även stöder WebTorrent kommer varje video kräva dubbelt så mycket lagringsutryme<x id="CLOSE_PARAGRAPH"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">783</context></context-group>
       </trans-unit>
       <trans-unit id="5ac527cc856e9fa02927ccb0a6172688e07c1d7a" datatype="html">
@@ -3819,11 +3568,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="782afa7c58d912592d73fce888ffce8542a4acf3" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK"/>Example: <x id="START_TAG_PRE"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE"/></source>
-        <target state="translated">Skriv ditt JavaScript här.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Example: 
-          <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('min instans är fantastisk');
-          <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/>
-        </target>
+        <target state="translated">Skriv ditt JavaScript här. <x id="LINE_BREAK"/>Exempel: <x id="START_TAG_PRE"/>console.log('min instans är fantastisk'); <x id="CLOSE_TAG_PRE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">892</context></context-group>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
@@ -4764,12 +4509,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
         <source>Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK"/>with the WebTorrent library<x id="CLOSE_LINK"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK_1"/>this document<x id="CLOSE_LINK"/> for more information </source>
-        <target state="translated">Webbserventer är inte åtkomliga offentligt. Eftersom vi använder WebRTC i webbläsaren (med 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>WebTorrent-biblioteket
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>) är protokollet inte detsamma som vanlig BitTorrent. När du använder webbläsaren skickar du en signal till hanteraren som slumpmässigt utser andra serventer att skicka informationen till. Se 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>det här dokumentet
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för mer information 
-        </target>
+        <target state="translated">Webbserventer är inte åtkomliga offentligt. Eftersom vi använder WebRTC i webbläsaren (med <x id="START_LINK"/>WebTorrent-biblioteket<x id="CLOSE_LINK"/>) är protokollet inte detsamma som vanlig BitTorrent. När du använder webbläsaren skickar du en signal till hanteraren som slumpmässigt utser andra serventer att skicka informationen till. Se <x id="START_LINK_1"/>det här dokumentet<x id="CLOSE_LINK"/> för mer information </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
