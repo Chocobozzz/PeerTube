@@ -7,7 +7,8 @@
 @import 'variables';
 @import 'mixins';
 
-label {
+label,
+my-dynamic-form-field ::ng-deep label {
   font-weight: $font-regular;
   font-size: 100%;
 }

@@ -5,22 +5,6 @@ h2 {
   margin-bottom: 20px;
 }
 
-input:not([type=submit]) {
-  @include peertube-input-text(340px);
-
-  display: block;
-}
-
-textarea {
-  @include peertube-textarea(340px, 200px);
-
-  display: block;
-}
-
-.peertube-select-container {
-  @include peertube-select-container(340px);
-}
-
 input[type=submit], button {
   @include peertube-button;
   @include orange-button;

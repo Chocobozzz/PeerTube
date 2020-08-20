@@ -1,0 +1,18 @@
+@import '_variables';
+@import '_mixins';
+
+input:not([type=submit]) {
+  @include peertube-input-text(340px);
+
+  display: block;
+}
+
+textarea {
+  @include peertube-textarea(340px, 200px);
+
+  display: block;
+}
+
+.peertube-select-container {
+  @include peertube-select-container(340px);
+}

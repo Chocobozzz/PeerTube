@@ -10,11 +10,12 @@
       [form]="form" [formErrors]="formErrors" [schedulePublicationPossible]="schedulePublicationPossible"
       [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
       [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="waitTranscodingEnabled"
+      type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"
     ></my-video-edit>
 
     <div class="submit-container">
       <my-button className="orange-button" i18n-label label="Update" icon="circle-tick"
-                 (click)="update()" (keydown.enter)="update()" 
+                 (click)="update()" (keydown.enter)="update()"
                  [disabled]="!form.valid || isUpdatingVideo === true"
       ></my-button>
     </div>

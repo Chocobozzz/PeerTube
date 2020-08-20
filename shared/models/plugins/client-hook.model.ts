@@ -70,6 +70,9 @@ export const clientActionHookObject = {
   // Fired when a user click on 'View x replies' and they're loaded
   'action:video-watch.video-thread-replies.loaded': true,
 
+  // Fired when the video edit page (upload, URL/torrent import, update) is being initialized
+  'action:video-edit.init': true,
+
   // Fired when the login page is being initialized
   'action:login.init': true,
 

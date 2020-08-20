@@ -84,6 +84,8 @@ export class Video implements VideoServerModel {
     currentTime: number
   }
 
+  pluginData?: any
+
   static buildClientUrl (videoUUID: string) {
     return '/videos/watch/' + videoUUID
   }
@@ -152,6 +154,8 @@ export class Video implements VideoServerModel {
 
     this.originInstanceHost = this.account.host
     this.originInstanceUrl = 'https://' + this.originInstanceHost
+
+    this.pluginData = hash.pluginData
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

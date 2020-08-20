@@ -126,6 +126,14 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
         )
   }
 
+  hydratePluginFieldsFromVideo () {
+    if (!this.video.pluginData) return
+
+    this.form.patchValue({
+      pluginData: this.video.pluginData
+    })
+  }
+
   private hydrateFormFromVideo () {
     this.form.patchValue(this.video.toFormPatch())
 

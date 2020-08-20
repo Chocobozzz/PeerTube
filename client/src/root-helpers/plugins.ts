@@ -1,6 +1,14 @@
-import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
-import { ClientHookName, ClientScript, RegisterClientHookOptions, ServerConfigPlugin, PluginType, clientHookObject } from '../../../shared/models'
 import { RegisterClientHelpers } from 'src/types/register-client-option.model'
+import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
+import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
+import {
+  ClientHookName,
+  clientHookObject,
+  ClientScript,
+  PluginType,
+  RegisterClientHookOptions,
+  ServerConfigPlugin
+} from '../../../shared/models'
 import { ClientScript as ClientScriptModule } from '../types/client-script.model'
 import { importModule } from './utils'
 
@@ -16,6 +24,13 @@ type PluginInfo = {
   clientScript: ClientScript
   pluginType: PluginType
   isTheme: boolean
+}
+
+type FormFields = {
+  video: {
+    commonOptions: RegisterClientFormFieldOptions
+    videoFormOptions: RegisterClientVideoFieldOptions
+  }[]
 }
 
 async function runHook<T> (hooks: Hooks, hookName: ClientHookName, result?: T, params?: any) {
@@ -34,7 +49,13 @@ async function runHook<T> (hooks: Hooks, hookName: ClientHookName, result?: T, p
   return result
 }
 
-function loadPlugin (hooks: Hooks, pluginInfo: PluginInfo, peertubeHelpersFactory: (pluginInfo: PluginInfo) => RegisterClientHelpers) {
+function loadPlugin (options: {
+  hooks: Hooks
+  pluginInfo: PluginInfo
+  peertubeHelpersFactory: (pluginInfo: PluginInfo) => RegisterClientHelpers
+  formFields?: FormFields
+}) {
+  const { hooks, pluginInfo, peertubeHelpersFactory, formFields } = options
   const { plugin, clientScript } = pluginInfo
 
   const registerHook = (options: RegisterClientHookOptions) => {
@@ -54,12 +75,23 @@ function loadPlugin (hooks: Hooks, pluginInfo: PluginInfo, peertubeHelpersFactor
     })
   }
 
+  const registerVideoField = (commonOptions: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) => {
+    if (!formFields) {
+      throw new Error('Video field registration is not supported')
+    }
+
+    formFields.video.push({
+      commonOptions,
+      videoFormOptions
+    })
+  }
+
   const peertubeHelpers = peertubeHelpersFactory(pluginInfo)
 
   console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
   return importModule(clientScript.script)
-    .then((script: ClientScriptModule) => script.register({ registerHook, peertubeHelpers }))
+    .then((script: ClientScriptModule) => script.register({ registerHook, registerVideoField, peertubeHelpers }))
     .then(() => sortHooksByPriority(hooks))
     .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
 }
@@ -68,6 +100,7 @@ export {
   HookStructValue,
   Hooks,
   PluginInfo,
+  FormFields,
   loadPlugin,
   runHook
 }

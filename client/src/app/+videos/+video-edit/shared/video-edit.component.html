@@ -265,6 +265,21 @@
       </ng-template>
     </ng-container>
 
+    <ng-container ngbNavItem *ngIf="pluginFields.length !== 0">
+      <a ngbNavLink i18n>Plugin settings</a>
+
+      <ng-template ngbNavContent>
+        <div class="row plugin-settings">
+
+          <div class="col-md-12 col-xl-8">
+            <div *ngFor="let pluginSetting of pluginFields" class="form-group">
+              <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
+            </div>
+          </div>
+
+        </div>
+      </ng-template>
+    </ng-container>
   </div>
 
   <div [ngbNavOutlet]="nav"></div>

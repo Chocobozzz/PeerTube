@@ -9,7 +9,7 @@ import { RestExtractor } from '@app/core/rest'
 import { ServerService } from '@app/core/server/server.service'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
-import { Hooks, loadPlugin, PluginInfo, runHook } from '@root-helpers/plugins'
+import { FormFields, Hooks, loadPlugin, PluginInfo, runHook } from '@root-helpers/plugins'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   ClientHook,
@@ -36,6 +36,7 @@ export class PluginService implements ClientHook {
     'video-watch': new ReplaySubject<boolean>(1),
     signup: new ReplaySubject<boolean>(1),
     login: new ReplaySubject<boolean>(1),
+    'video-edit': new ReplaySubject<boolean>(1),
     embed: new ReplaySubject<boolean>(1)
   }
 
@@ -50,6 +51,9 @@ export class PluginService implements ClientHook {
   private loadingScopes: { [id in PluginClientScope]?: boolean } = {}
 
   private hooks: Hooks = {}
+  private formFields: FormFields = {
+    video: []
+  }
 
   constructor (
     private authService: AuthService,
@@ -188,9 +192,18 @@ export class PluginService implements ClientHook {
       : PluginType.THEME
   }
 
+  getRegisteredVideoFormFields (type: 'import-url' | 'import-torrent' | 'upload' | 'update') {
+    return this.formFields.video.filter(f => f.videoFormOptions.type === type)
+  }
+
   private loadPlugin (pluginInfo: PluginInfo) {
     return this.zone.runOutsideAngular(() => {
-      return loadPlugin(this.hooks, pluginInfo, pluginInfo => this.buildPeerTubeHelpers(pluginInfo))
+      return loadPlugin({
+        hooks: this.hooks,
+        formFields: this.formFields,
+        pluginInfo,
+        peertubeHelpersFactory: pluginInfo => this.buildPeerTubeHelpers(pluginInfo)
+      })
     })
   }
 
