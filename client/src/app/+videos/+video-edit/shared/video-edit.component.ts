@@ -1,8 +1,8 @@
 import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Component, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
-import { ServerService } from '@app/core'
+import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import {
   VIDEO_CATEGORY_VALIDATOR,
@@ -21,6 +21,7 @@ import { FormReactiveValidationMessages, FormValidatorService, SelectChannelItem
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
+import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 
@@ -39,8 +40,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() schedulePublicationPossible = true
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
   @Input() waitTranscodingEnabled = true
+  @Input() type: 'import-url' | 'import-torrent' | 'upload' | 'update'
 
   @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
+
+  @Output() pluginFieldsAdded = new EventEmitter<void>()
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
@@ -53,6 +57,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   tagValidators: ValidatorFn[]
   tagValidatorsMessages: { [ name: string ]: string }
 
+  pluginDataFormGroup: FormGroup
+
   schedulePublicationEnabled = false
 
   calendarLocale: any = {}
@@ -64,6 +70,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   serverConfig: ServerConfig
 
+  pluginFields: {
+    commonOptions: RegisterClientFormFieldOptions
+    videoFormOptions: RegisterClientVideoFieldOptions
+  }[] = []
+
   private schedulerInterval: any
   private firstPatchDone = false
   private initialVideoCaptions: string[] = []
@@ -72,9 +83,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private formValidatorService: FormValidatorService,
     private videoService: VideoService,
     private serverService: ServerService,
+    private pluginService: PluginService,
     private instanceService: InstanceService,
     private i18nPrimengCalendarService: I18nPrimengCalendarService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private hooks: HooksService
   ) {
     this.calendarLocale = this.i18nPrimengCalendarService.getCalendarLocale()
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
@@ -136,19 +149,26 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.updateForm()
 
+    this.pluginService.ensurePluginsAreLoaded('video-edit')
+      .then(() => this.updatePluginFields())
+
     this.serverService.getVideoCategories()
         .subscribe(res => this.videoCategories = res)
+
     this.serverService.getVideoLicences()
         .subscribe(res => this.videoLicences = res)
+
     forkJoin([
       this.instanceService.getAbout(),
       this.serverService.getVideoLanguages()
     ]).pipe(map(([ about, languages ]) => ({ about, languages })))
       .subscribe(res => {
         this.videoLanguages = res.languages
-          .map(l => res.about.instance.languages.includes(l.id)
-            ? { ...l, group: $localize`Instance languages`, groupOrder: 0 }
-            : { ...l, group: $localize`All languages`, groupOrder: 1 })
+          .map(l => {
+            return res.about.instance.languages.includes(l.id)
+              ? { ...l, group: $localize`Instance languages`, groupOrder: 0 }
+              : { ...l, group: $localize`All languages`, groupOrder: 1 }
+          })
           .sort((a, b) => a.groupOrder - b.groupOrder)
       })
 
@@ -173,6 +193,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.ngZone.runOutsideAngular(() => {
       this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
     })
+
+    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type })
   }
 
   ngOnDestroy () {
@@ -221,6 +243,23 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
       return 1
     })
+  }
+
+  private updatePluginFields () {
+    this.pluginFields = this.pluginService.getRegisteredVideoFormFields(this.type)
+
+    if (this.pluginFields.length === 0) return
+
+    const obj: any = {}
+
+    for (const setting of this.pluginFields) {
+      obj[setting.commonOptions.name] = new FormControl(setting.commonOptions.default)
+    }
+
+    this.pluginDataFormGroup = new FormGroup(obj)
+    this.form.addControl('pluginData', this.pluginDataFormGroup)
+
+    this.pluginFieldsAdded.emit()
   }
 
   private trackPrivacyChange () {

@@ -25,6 +25,8 @@ export class VideoEdit implements VideoUpdate {
   scheduleUpdate?: VideoScheduleUpdate
   originallyPublishedAt?: Date | string
 
+  pluginData?: any
+
   constructor (
     video?: Video & {
       tags: string[],
@@ -55,10 +57,12 @@ export class VideoEdit implements VideoUpdate {
 
       this.scheduleUpdate = video.scheduledUpdate
       this.originallyPublishedAt = video.originallyPublishedAt ? new Date(video.originallyPublishedAt) : null
+
+      this.pluginData = video.pluginData
     }
   }
 
-  patch (values: { [ id: string ]: string }) {
+  patch (values: { [ id: string ]: any }) {
     Object.keys(values).forEach((key) => {
       this[ key ] = values[ key ]
     })

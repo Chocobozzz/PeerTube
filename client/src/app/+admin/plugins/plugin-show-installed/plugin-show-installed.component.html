@@ -7,38 +7,7 @@
 
   <form *ngIf="hasRegisteredSettings()" role="form" (ngSubmit)="formValidated()" [formGroup]="form">
     <div class="form-group" *ngFor="let setting of registeredSettings">
-      <label *ngIf="setting.type !== 'input-checkbox'" [attr.for]="setting.name" [innerHTML]="setting.label"></label>
-
-      <input *ngIf="setting.type === 'input'" type="text" [id]="setting.name" [formControlName]="setting.name" />
-
-      <textarea *ngIf="setting.type === 'input-textarea'" type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
-
-      <my-help *ngIf="setting.type === 'markdown-text'" helpType="markdownText"></my-help>
-
-      <my-help *ngIf="setting.type === 'markdown-enhanced'" helpType="markdownEnhanced"></my-help>
-
-      <my-markdown-textarea
-        *ngIf="setting.type === 'markdown-text'"
-        markdownType="text" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
-        [classes]="{ 'input-error': formErrors['settings.name'] }"
-      ></my-markdown-textarea>
-
-      <my-markdown-textarea
-        *ngIf="setting.type === 'markdown-enhanced'"
-        markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
-        [classes]="{ 'input-error': formErrors['settings.name'] }"
-      ></my-markdown-textarea>
-
-      <my-peertube-checkbox
-        *ngIf="setting.type === 'input-checkbox'"
-        [id]="setting.name"
-        [formControlName]="setting.name"
-        [labelInnerHTML]="setting.label"
-      ></my-peertube-checkbox>
-
-      <div *ngIf="formErrors[setting.name]" class="form-error">
-        {{ formErrors[setting.name] }}
-      </div>
+      <my-dynamic-form-field [form]="form" [setting]="setting" [formErrors]="formErrors"></my-dynamic-form-field>
     </div>
 
     <input type="submit" i18n value="Update plugin settings" [disabled]="!form.valid">

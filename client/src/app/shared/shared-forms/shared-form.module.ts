@@ -15,6 +15,7 @@ import { ReactiveFileComponent } from './reactive-file.component'
 import { SelectChannelComponent, SelectCheckboxComponent, SelectOptionsComponent, SelectTagsComponent } from './select'
 import { TextareaAutoResizeDirective } from './textarea-autoresize.directive'
 import { TimestampInputComponent } from './timestamp-input.component'
+import { DynamicFormFieldComponent } from './dynamic-form-field.component'
 
 @NgModule({
   imports: [
@@ -41,7 +42,9 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectChannelComponent,
     SelectOptionsComponent,
     SelectTagsComponent,
-    SelectCheckboxComponent
+    SelectCheckboxComponent,
+
+    DynamicFormFieldComponent
   ],
 
   exports: [
@@ -63,7 +66,9 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectChannelComponent,
     SelectOptionsComponent,
     SelectTagsComponent,
-    SelectCheckboxComponent
+    SelectCheckboxComponent,
+
+    DynamicFormFieldComponent
   ],
 
   providers: [

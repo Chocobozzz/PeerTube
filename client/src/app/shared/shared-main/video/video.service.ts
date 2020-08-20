@@ -96,6 +96,7 @@ export class VideoService implements VideosProvider {
       downloadEnabled: video.downloadEnabled,
       thumbnailfile: video.thumbnailfile,
       previewfile: video.previewfile,
+      pluginData: video.pluginData,
       scheduleUpdate,
       originallyPublishedAt
     }

@@ -750,7 +750,11 @@ export class PeerTubeEmbed {
           isTheme: false
         }
 
-        await loadPlugin(this.peertubeHooks, pluginInfo, _ => this.buildPeerTubeHelpers(translations))
+        await loadPlugin({
+          hooks: this.peertubeHooks,
+          pluginInfo,
+          peertubeHelpersFactory: _ => this.buildPeerTubeHelpers(translations)
+        })
       }
     }
   }

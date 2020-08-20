@@ -53,6 +53,8 @@ export interface Video {
   userHistory?: {
     currentTime: number
   }
+
+  pluginData?: any
 }
 
 export interface VideoDetails extends Video {
