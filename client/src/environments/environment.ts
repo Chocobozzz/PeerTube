@@ -9,8 +9,8 @@
 import 'core-js/features/reflect'
 
 export const environment = {
-  production: false,
+  production: true,
   hmr: false,
-  apiUrl: 'http://localhost:9000',
-  embedUrl: 'http://localhost:9000'
+  apiUrl: '',
+  embedUrl: ''
 }

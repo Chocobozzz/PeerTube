@@ -1,7 +1,5 @@
 import './embed.scss'
 import videojs from 'video.js'
-import { objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
-import { Tokens } from '@root-helpers/users'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import {
   ResultList,
@@ -11,12 +9,19 @@ import {
   VideoDetails,
   VideoPlaylist,
   VideoPlaylistElement,
-  VideoStreamingPlaylistType
+  VideoStreamingPlaylistType,
+  PluginType,
+  ClientHookName
 } from '../../../../shared/models'
 import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { TranslationsManager } from '../../assets/player/translations-manager'
+import { Hooks, loadPlugin, runHook } from '../../root-helpers/plugins'
+import { Tokens } from '../../root-helpers/users'
+import { peertubeLocalStorage } from '../../root-helpers/peertube-web-storage'
+import { objectToUrlEncoded } from '../../root-helpers/utils'
 import { PeerTubeEmbedApi } from './embed-api'
+import { RegisterClientHelpers } from '../../types/register-client-option.model'
 
 type Translations = { [ id: string ]: string }
 
@@ -59,6 +64,9 @@ export class PeerTubeEmbed {
   private currentPlaylistElement: VideoPlaylistElement
 
   private wrapperElement: HTMLElement
+
+  private peertubeHooks: Hooks = {}
+  private loadedScripts = new Set<string>()
 
   static async main () {
     const videoContainerId = 'video-wrapper'
@@ -473,6 +481,8 @@ export class PeerTubeEmbed {
       this.PeertubePlayerManagerModulePromise
     ])
 
+    await this.ensurePluginsAreLoaded(config, serverTranslations)
+
     const videoInfo: VideoDetails = videoInfoTmp
 
     const PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
@@ -577,6 +587,8 @@ export class PeerTubeEmbed {
         this.playNextVideo()
       })
     }
+
+    this.runHook('action:embed.player.loaded', undefined, { player: this.player })
   }
 
   private async initCore () {
@@ -713,6 +725,69 @@ export class PeerTubeEmbed {
 
   private isPlaylistEmbed () {
     return window.location.pathname.split('/')[1] === 'video-playlists'
+  }
+
+  private async ensurePluginsAreLoaded (config: ServerConfig, translations?: { [ id: string ]: string }) {
+    if (config.plugin.registered.length === 0) return
+
+    for (const plugin of config.plugin.registered) {
+      for (const key of Object.keys(plugin.clientScripts)) {
+        const clientScript = plugin.clientScripts[key]
+
+        if (clientScript.scopes.includes('embed') === false) continue
+
+        const script = `/plugins/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`
+
+        if (this.loadedScripts.has(script)) continue
+
+        const pluginInfo = {
+          plugin,
+          clientScript: {
+            script,
+            scopes: clientScript.scopes
+          },
+          pluginType: PluginType.PLUGIN,
+          isTheme: false
+        }
+
+        await loadPlugin(this.peertubeHooks, pluginInfo, _ => this.buildPeerTubeHelpers(translations))
+      }
+    }
+  }
+
+  private buildPeerTubeHelpers (translations?: { [ id: string ]: string }): RegisterClientHelpers {
+    function unimplemented (): any {
+      throw new Error('This helper is not implemented in embed.')
+    }
+
+    return {
+      getBaseStaticRoute: unimplemented,
+
+      getSettings: unimplemented,
+
+      isLoggedIn: unimplemented,
+
+      notifier: {
+        info: unimplemented,
+        error: unimplemented,
+        success: unimplemented
+      },
+
+      showModal: unimplemented,
+
+      markdownRenderer: {
+        textMarkdownToHTML: unimplemented,
+        enhancedMarkdownToHTML: unimplemented
+      },
+
+      translate: (value: string) => {
+        return Promise.resolve(peertubeTranslate(value, translations))
+      }
+    }
+  }
+
+  private runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T> {
+    return runHook(this.peertubeHooks, hookName, result, params)
   }
 }
 
