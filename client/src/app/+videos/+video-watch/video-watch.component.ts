@@ -548,7 +548,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.zone.run(() => this.theaterEnabled = enabled)
       })
 
-      this.hooks.runAction('action:video-watch.player.loaded', 'video-watch', { player: this.player, videojs })
+      this.hooks.runAction('action:video-watch.player.loaded', 'video-watch', { player: this.player, videojs, video: this.video })
     })
 
     this.setVideoDescriptionHTML()
