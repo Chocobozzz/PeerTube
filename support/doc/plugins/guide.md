@@ -498,6 +498,31 @@ Translation files are just objects, with the english sentence as the key and the
 }
 ```
 
+### Build your plugin
+
+If you added client scripts, you'll need to build them using webpack.
+
+Install webpack:
+
+```
+$ npm install
+```
+
+Add/update your files in the `clientFiles` array of `webpack.config.js`:
+
+```
+$ $EDITOR ./webpack.config.js
+```
+
+Build your client files:
+
+```
+$ npm run build
+```
+
+You built files are in the `dist/` directory. Check `package.json` to correctly point to them.
+
+
 ### Test your plugin/theme
 
 You'll need to have a local PeerTube instance:
