@@ -16,3 +16,9 @@ textarea {
 .peertube-select-container {
   @include peertube-select-container(340px);
 }
+
+.label-small-info {
+  font-style: italic;
+  margin-bottom: 10px;
+  font-size: 13px;
+}

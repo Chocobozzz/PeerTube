@@ -1,6 +1,8 @@
 <div [formGroup]="form">
   <label *ngIf="setting.type !== 'input-checkbox'" [attr.for]="setting.name" [innerHTML]="setting.label"></label>
 
+  <div *ngIf="setting.descriptionHTML" class="label-small-info" [innerHTML]="setting.descriptionHTML"></div>
+
   <input *ngIf="setting.type === 'input'" type="text" [id]="setting.name" [formControlName]="setting.name" />
 
   <textarea *ngIf="setting.type === 'input-textarea'" type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
