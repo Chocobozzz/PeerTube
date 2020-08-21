@@ -21,6 +21,7 @@
     - [Custom Modal](#custom-modal)
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
+    - [Add custom fields to video form](#add-custom-fields-to-video-form)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
   - [Clone the quickstart repository](#clone-the-quickstart-repository)
@@ -29,6 +30,7 @@
   - [Update package.json](#update-packagejson)
   - [Write code](#write-code)
   - [Add translations](#add-translations)
+  - [Build your plugin](#build-your-plugin)
   - [Test your plugin/theme](#test-your-plugintheme)
   - [Publish](#publish)
 - [Plugin & Theme hooks/helpers API](#plugin--theme-hookshelpers-api)
@@ -379,11 +381,11 @@ peertubeHelpers.getSettings()
   })
 ```
 
-### Add custom fields to video form
+#### Add custom fields to video form
 
 To add custom fields in the video form (in *Plugin settings* tab):
 
-```
+```js
 async function register ({ registerVideoField, peertubeHelpers }) {
   const descriptionHTML = await peertubeHelpers.translate(descriptionSource)
   const commonOptions = {
@@ -404,7 +406,7 @@ PeerTube will send this field value in `body.pluginData['my-field-name']` and fe
 
 So for example, if you want to store an additional metadata for videos, register the following hooks in **server**:
 
-```
+```js
 async function register ({
   registerHook,
   storageManager
