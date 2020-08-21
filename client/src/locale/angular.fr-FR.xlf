@@ -5241,9 +5241,7 @@
       </trans-unit>
       <trans-unit id="3755500631176893489">
         <source>Published <x id="PH"/> videos</source>
-        <target>A publié 
-          <x id="PH"/> vidéos
-        </target>
+        <target>A publié <x id="PH"/> vidéos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
