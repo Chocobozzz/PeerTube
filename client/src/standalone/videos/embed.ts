@@ -588,7 +588,7 @@ export class PeerTubeEmbed {
       })
     }
 
-    this.runHook('action:embed.player.loaded', undefined, { player: this.player })
+    this.runHook('action:embed.player.loaded', undefined, { player: this.player, videojs })
   }
 
   private async initCore () {
