@@ -379,6 +379,68 @@ peertubeHelpers.getSettings()
   })
 ```
 
+### Add custom fields to video form
+
+To add custom fields in the video form (in *Plugin settings* tab):
+
+```
+async function register ({ registerVideoField, peertubeHelpers }) {
+  const descriptionHTML = await peertubeHelpers.translate(descriptionSource)
+  const commonOptions = {
+    name: 'my-field-name,
+    label: 'My added field',
+    descriptionHTML: 'Optional description',
+    type: 'input-textarea',
+    default: ''
+  }
+
+  for (const type of [ 'upload', 'import-url', 'import-torrent', 'update' ]) {
+    registerVideoField(commonOptions, { type })
+  }
+}
+```
+
+PeerTube will send this field value in `body.pluginData['my-field-name']` and fetch it from `video.pluginData['my-field-name']`.
+
+So for example, if you want to store an additional metadata for videos, register the following hooks in **server**:
+
+```
+async function register ({
+  registerHook,
+  storageManager
+}) {
+  const fieldName = 'my-field-name'
+
+  // Store data associated to this video
+  registerHook({
+    target: 'action:api.video.updated',
+    handler: ({ video, body }) => {
+      if (!body.pluginData) return
+
+      const value = body.pluginData[fieldName]
+      if (!value) return
+
+      storageManager.storeData(fieldName + '-' + video.id, value)
+    }
+  })
+
+  // Add your custom value to the video, so the client autofill your field using the previously stored value
+  registerHook({
+    target: 'filter:api.video.get.result',
+    handler: async (video) => {
+      if (!video) return video
+      if (!video.pluginData) video.pluginData = {}
+
+      const result = await storageManager.getData(fieldName + '-' + video.id)
+      video.pluginData[fieldName] = result
+
+      return video
+    }
+  })
+}
+
+```
+
 
 ### Publishing
 
