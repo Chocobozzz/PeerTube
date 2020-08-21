@@ -25,11 +25,13 @@ export class AuthUser extends User implements ServerMyUserModel {
   canSeeVideosLink = true
 
   static load () {
-    const userInfo = getUserInfoFromLocalStorage()
+    const tokens = Tokens.load()
+    if (!tokens) return null
 
+    const userInfo = getUserInfoFromLocalStorage()
     if (!userInfo) return null
 
-    return new AuthUser(userInfo, Tokens.load())
+    return new AuthUser(userInfo, tokens)
   }
 
   static flush () {
