@@ -70,7 +70,9 @@ if (CONFIG.CSP.ENABLED) {
 // ----------- Database -----------
 
 // Initialize database and models
-import { initDatabaseModels } from './server/initializers/database'
+import { initDatabaseModels, checkDatabaseConnectionOrDie } from './server/initializers/database'
+checkDatabaseConnectionOrDie()
+
 import { migrate } from './server/initializers/migrator'
 migrate()
   .then(() => initDatabaseModels(false))

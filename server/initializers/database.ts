@@ -77,13 +77,15 @@ const sequelizeTypescript = new SequelizeTypescript({
   }
 })
 
-sequelizeTypescript.authenticate()
-  .then(() => logger.debug('Connection to PostgreSQL has been established successfully.'))
-  .catch(err => {
+function checkDatabaseConnectionOrDie () {
+  sequelizeTypescript.authenticate()
+    .then(() => logger.debug('Connection to PostgreSQL has been established successfully.'))
+    .catch(err => {
 
-    logger.error('Unable to connect to PostgreSQL database.', { err })
-    process.exit(-1)
-  })
+      logger.error('Unable to connect to PostgreSQL database.', { err })
+      process.exit(-1)
+    })
+}
 
 async function initDatabaseModels (silent: boolean) {
   sequelizeTypescript.addModels([
@@ -140,6 +142,7 @@ async function initDatabaseModels (silent: boolean) {
 
 export {
   initDatabaseModels,
+  checkDatabaseConnectionOrDie,
   sequelizeTypescript
 }
 
