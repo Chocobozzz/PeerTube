@@ -95,7 +95,7 @@ import {
   MVideoWithRights
 } from '../../types/models'
 import { MThumbnail } from '../../types/models/video/thumbnail'
-import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
+import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileRedundanciesOpt } from '../../types/models/video/video-file'
 import { VideoAbuseModel } from '../abuse/video-abuse'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
@@ -127,6 +127,7 @@ import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
+import { stream } from 'winston'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -1472,11 +1473,13 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   private static buildAPIResult (rows: any[]) {
-    const memo: { [ id: number ]: VideoModel } = {}
+    const videosMemo: { [ id: number ]: VideoModel } = {}
+    const videoStreamingPlaylistMemo: { [ id: number ]: VideoStreamingPlaylistModel } = {}
 
     const thumbnailsDone = new Set<number>()
     const historyDone = new Set<number>()
     const videoFilesDone = new Set<number>()
+    const videoStreamingPlaylistsDone = new Set<number>()
 
     const videos: VideoModel[] = []
 
@@ -1484,6 +1487,7 @@ export class VideoModel extends Model<VideoModel> {
     const actorKeys = [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ]
     const serverKeys = [ 'id', 'host' ]
     const videoFileKeys = [ 'id', 'createdAt', 'updatedAt', 'resolution', 'size', 'extname', 'infoHash', 'fps', 'videoId' ]
+    const videoStreamingPlaylistKeys = [ 'id' ]
     const videoKeys = [
       'id',
       'uuid',
@@ -1529,7 +1533,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     for (const row of rows) {
-      if (!memo[row.id]) {
+      if (!videosMemo[row.id]) {
         // Build Channel
         const channel = row.VideoChannel
         const channelModel = new VideoChannelModel(pick(channel, [ 'id', 'name', 'description', 'actorId' ]))
@@ -1547,13 +1551,14 @@ export class VideoModel extends Model<VideoModel> {
         videoModel.UserVideoHistories = []
         videoModel.Thumbnails = []
         videoModel.VideoFiles = []
+        videoModel.VideoStreamingPlaylists = []
 
-        memo[row.id] = videoModel
+        videosMemo[row.id] = videoModel
         // Don't take object value to have a sorted array
         videos.push(videoModel)
       }
 
-      const videoModel = memo[row.id]
+      const videoModel = videosMemo[row.id]
 
       if (row.userVideoHistory?.id && !historyDone.has(row.userVideoHistory.id)) {
         const historyModel = new UserVideoHistoryModel(pick(row.userVideoHistory, [ 'id', 'currentTime' ]))
@@ -1574,6 +1579,31 @@ export class VideoModel extends Model<VideoModel> {
         videoModel.VideoFiles.push(videoFileModel)
 
         videoFilesDone.add(row.VideoFiles.id)
+      }
+
+      if (row.VideoFiles?.id && !videoFilesDone.has(row.VideoFiles.id)) {
+        const videoFileModel = new VideoFileModel(pick(row.VideoFiles, videoFileKeys))
+        videoModel.VideoFiles.push(videoFileModel)
+
+        videoFilesDone.add(row.VideoFiles.id)
+      }
+
+      if (row.VideoStreamingPlaylists?.id && !videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id]) {
+        const streamingPlaylist = new VideoStreamingPlaylistModel(pick(row.VideoStreamingPlaylists, videoStreamingPlaylistKeys))
+        streamingPlaylist.VideoFiles = []
+
+        videoModel.VideoStreamingPlaylists.push(streamingPlaylist)
+
+        videoStreamingPlaylistMemo[streamingPlaylist.id] = streamingPlaylist
+      }
+
+      if (row.VideoStreamingPlaylists?.VideoFiles?.id && !videoFilesDone.has(row.VideoStreamingPlaylists.VideoFiles.id)) {
+        const streamingPlaylist = videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id]
+
+        const videoFileModel = new VideoFileModel(pick(row.VideoStreamingPlaylists.VideoFiles, videoFileKeys))
+        streamingPlaylist.VideoFiles.push(videoFileModel)
+
+        videoFilesDone.add(row.VideoStreamingPlaylists.VideoFiles.id)
       }
     }
 
@@ -1717,7 +1747,21 @@ export class VideoModel extends Model<VideoModel> {
 
   getFormattedVideoFilesJSON (): VideoFile[] {
     const { baseUrlHttp, baseUrlWs } = this.getBaseUrls()
-    return videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, this.VideoFiles)
+    let files: MVideoFileRedundanciesOpt[] = []
+
+    logger.info('coucou', { files })
+
+    if (Array.isArray(this.VideoFiles)) {
+      files = files.concat(this.VideoFiles)
+    }
+
+    for (const p of (this.VideoStreamingPlaylists || [])) {
+      files = files.concat(p.VideoFiles || [])
+    }
+
+    logger.info('coucou', { files, video: this.VideoStreamingPlaylists })
+
+    return videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, files)
   }
 
   toActivityPubObject (this: MVideoAP): VideoTorrentObject {

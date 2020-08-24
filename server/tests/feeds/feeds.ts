@@ -21,7 +21,8 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   uploadVideoAndGetId,
-  userLogin
+  userLogin,
+  flushAndRunServer
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
@@ -34,6 +35,7 @@ const expect = chai.expect
 
 describe('Test syndication feeds', () => {
   let servers: ServerInfo[] = []
+  let serverHLSOnly: ServerInfo
   let userAccessToken: string
   let rootAccountId: number
   let rootChannelId: number
@@ -45,8 +47,15 @@ describe('Test syndication feeds', () => {
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
+    serverHLSOnly = await flushAndRunServer(3, {
+      transcoding: {
+        enabled: true,
+        webtorrent: { enabled: false },
+        hls: { enabled: true }
+      }
+    })
 
-    await setAccessTokensToServers(servers)
+    await setAccessTokensToServers([ ...servers, serverHLSOnly ])
     await doubleFollow(servers[0], servers[1])
 
     {
@@ -116,6 +125,7 @@ describe('Test syndication feeds', () => {
   })
 
   describe('Videos feed', function () {
+
     it('Should contain a valid enclosure (covers RSS 2.0 endpoint)', async function () {
       for (const server of servers) {
         const rss = await getXMLfeed(server.url, 'videos')
@@ -208,6 +218,26 @@ describe('Test syndication feeds', () => {
         }
       }
     })
+
+    it('Should correctly have videos feed with HLS only', async function () {
+      this.timeout(120000)
+
+      await uploadVideo(serverHLSOnly.url, serverHLSOnly.accessToken, { name: 'hls only video' })
+
+      await waitJobs([ serverHLSOnly ])
+
+      const json = await getJSONfeed(serverHLSOnly.url, 'videos')
+      const jsonObj = JSON.parse(json.text)
+      expect(jsonObj.items.length).to.be.equal(1)
+      expect(jsonObj.items[0].attachments).to.exist
+      expect(jsonObj.items[0].attachments.length).to.be.eq(4)
+
+      for (let i = 0; i < 4; i++) {
+        expect(jsonObj.items[0].attachments[i].mime_type).to.be.eq('application/x-bittorrent')
+        expect(jsonObj.items[0].attachments[i].size_in_bytes).to.be.greaterThan(0)
+        expect(jsonObj.items[0].attachments[i].url).to.exist
+      }
+    })
   })
 
   describe('Video comments feed', function () {
@@ -260,6 +290,6 @@ describe('Test syndication feeds', () => {
   })
 
   after(async function () {
-    await cleanupTests(servers)
+    await cleanupTests([ ...servers, serverHLSOnly ])
   })
 })
