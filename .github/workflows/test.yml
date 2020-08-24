@@ -66,10 +66,20 @@ jobs:
         with:
           path: |
             **/node_modules
-            ~/fixtures
           key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+
+      - name: Cache fixtures
+        uses: actions/cache@v2
+        with:
+          path: |
+            fixtures
+          key: ${{ runner.OS }}-fixtures-${{ matrix.test_suite }}-${{ hashFiles('fixtures/*') }}
+          restore-keys: |
+            ${{ runner.OS }}-fixtures-${{ matrix.test_suite }}-
+            ${{ runner.OS }}-fixtures-
             ${{ runner.OS }}-
 
       - name: Install dependencies
