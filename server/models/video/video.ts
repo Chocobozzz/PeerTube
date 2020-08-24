@@ -95,7 +95,7 @@ import {
   MVideoWithRights
 } from '../../types/models'
 import { MThumbnail } from '../../types/models/video/thumbnail'
-import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileRedundanciesOpt } from '../../types/models/video/video-file'
+import { MVideoFile, MVideoFileRedundanciesOpt, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
 import { VideoAbuseModel } from '../abuse/video-abuse'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
@@ -127,7 +127,6 @@ import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
-import { stream } from 'winston'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -1479,7 +1478,6 @@ export class VideoModel extends Model<VideoModel> {
     const thumbnailsDone = new Set<number>()
     const historyDone = new Set<number>()
     const videoFilesDone = new Set<number>()
-    const videoStreamingPlaylistsDone = new Set<number>()
 
     const videos: VideoModel[] = []
 
