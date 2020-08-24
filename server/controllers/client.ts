@@ -12,7 +12,6 @@ import { asyncMiddleware, embedCSP } from '../middlewares'
 const clientsRouter = express.Router()
 
 const distPath = join(root(), 'client', 'dist')
-const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
 // Special route that add OpenGraph and oEmbed tags
@@ -27,11 +26,16 @@ const embedMiddlewares = [
     ? embedCSP
     : (req: express.Request, res: express.Response, next: express.NextFunction) => next(),
 
-  (req: express.Request, res: express.Response) => {
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.removeHeader('X-Frame-Options')
+
     // Don't cache HTML file since it's an index to the immutable JS/CSS files
-    res.sendFile(embedPath, { maxAge: 0 })
-  }
+    res.setHeader('Cache-Control', 'public, max-age=0')
+
+    next()
+  },
+
+  asyncMiddleware(generateEmbedHtmlPage)
 ]
 
 clientsRouter.use('/videos/embed', ...embedMiddlewares)
@@ -123,6 +127,12 @@ async function serveIndexHTML (req: express.Request, res: express.Response) {
   }
 
   return res.status(404).end()
+}
+
+async function generateEmbedHtmlPage (req: express.Request, res: express.Response) {
+  const html = await ClientHtml.getEmbedHTML()
+
+  return sendHTML(html, res)
 }
 
 async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {

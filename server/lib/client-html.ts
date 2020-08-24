@@ -171,6 +171,23 @@ export class ClientHtml {
     return this.getAccountOrChannelHTMLPage(() => VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost), req, res)
   }
 
+  static async getEmbedHTML () {
+    const path = ClientHtml.getEmbedPath()
+    console.log('coucu')
+    console.log(path)
+
+    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+
+    const buffer = await readFile(path)
+
+    let html = buffer.toString()
+    html = await ClientHtml.addAsyncPluginCSS(html)
+
+    ClientHtml.htmlCache[path] = html
+
+    return html
+  }
+
   private static async getAccountOrChannelHTMLPage (
     loader: () => Bluebird<MAccountActor | MChannelActor>,
     req: express.Request,
@@ -250,6 +267,10 @@ export class ClientHtml {
     }
 
     return join(__dirname, '../../../client/dist/' + buildFileLocale(lang) + '/index.html')
+  }
+
+  private static getEmbedPath () {
+    return join(__dirname, '../../../client/dist/standalone/videos/embed.html')
   }
 
   private static addHtmlLang (htmlStringPage: string, paramLang: string) {

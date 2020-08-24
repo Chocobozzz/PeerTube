@@ -28,7 +28,8 @@ import {
   updatePluginPackageJSON,
   updatePluginSettings,
   wait,
-  waitUntilLog
+  waitUntilLog,
+  makeHTMLRequest
 } from '../../../../shared/extra-utils'
 import { PluginType } from '../../../../shared/models/plugins/plugin.type'
 import { PeerTubePluginIndex } from '../../../../shared/models/plugins/peertube-plugin-index.model'
@@ -119,9 +120,15 @@ describe('Test plugins', function () {
   })
 
   it('Should have an empty global css', async function () {
-    const res = await getPluginsCSS(server.url)
+    {
+      const res = await getPluginsCSS(server.url)
+      expect(res.text).to.be.empty
+    }
 
-    expect(res.text).to.be.empty
+    for (const path of [ '/', '/videos/embed/1', '/video-playlists/embed/1' ]) {
+      const res = await makeHTMLRequest(server.url, path)
+      expect(res.text).to.not.include('link rel="stylesheet" href="/plugins/global.css')
+    }
   })
 
   it('Should install a plugin and a theme', async function () {
@@ -141,9 +148,15 @@ describe('Test plugins', function () {
   })
 
   it('Should have the correct global css', async function () {
-    const res = await getPluginsCSS(server.url)
+    {
+      const res = await getPluginsCSS(server.url)
+      expect(res.text).to.contain('background-color: red')
+    }
 
-    expect(res.text).to.contain('background-color: red')
+    for (const path of [ '/', '/videos/embed/1', '/video-playlists/embed/1' ]) {
+      const res = await makeHTMLRequest(server.url, path)
+      expect(res.text).to.include('link rel="stylesheet" href="/plugins/global.css')
+    }
   })
 
   it('Should have the plugin loaded in the configuration', async function () {
@@ -388,9 +401,15 @@ describe('Test plugins', function () {
   })
 
   it('Should have an empty global css', async function () {
-    const res = await getPluginsCSS(server.url)
+    {
+      const res = await getPluginsCSS(server.url)
+      expect(res.text).to.be.empty
+    }
 
-    expect(res.text).to.be.empty
+    for (const path of [ '/', '/videos/embed/1', '/video-playlists/embed/1' ]) {
+      const res = await makeHTMLRequest(server.url, path)
+      expect(res.text).to.not.include('link rel="stylesheet" href="/plugins/global.css')
+    }
   })
 
   it('Should list uninstalled plugins', async function () {
