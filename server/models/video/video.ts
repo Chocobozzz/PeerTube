@@ -1749,8 +1749,6 @@ export class VideoModel extends Model<VideoModel> {
     const { baseUrlHttp, baseUrlWs } = this.getBaseUrls()
     let files: MVideoFileRedundanciesOpt[] = []
 
-    logger.info('coucou', { files })
-
     if (Array.isArray(this.VideoFiles)) {
       files = files.concat(this.VideoFiles)
     }
@@ -1758,8 +1756,6 @@ export class VideoModel extends Model<VideoModel> {
     for (const p of (this.VideoStreamingPlaylists || [])) {
       files = files.concat(p.VideoFiles || [])
     }
-
-    logger.info('coucou', { files, video: this.VideoStreamingPlaylists })
 
     return videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, files)
   }
