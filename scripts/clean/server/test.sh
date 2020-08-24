@@ -20,10 +20,6 @@ dropRedis () {
   port=$((9000+$1))
   host="localhost"
 
-  if [ ! -z ${GITLAB_CI+x} ]; then
-    host="redis"
-  fi
-
   redis-cli -h "$host" KEYS "bull-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
   redis-cli -h "$host" KEYS "redis-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
   redis-cli -h "$host" KEYS "*redis-localhost:$port-" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
