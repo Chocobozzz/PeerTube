@@ -1,4 +1,5 @@
 import './action-hooks'
+import './html-injection'
 import './id-and-pass-auth'
 import './external-auth'
 import './filter-hooks'
