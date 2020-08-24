@@ -66,8 +66,8 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
 function buildAbsoluteFixturePath (path: string, customCIPath = false) {
   if (isAbsolute(path)) return path
 
-  if (customCIPath) {
-    return join(process.env.HOME, 'fixtures', path)
+  if (customCIPath && process.env.GITHUB_WORKSPACE) {
+    return join(process.env.GITHUB_WORKSPACE, 'fixtures', path)
   }
 
   return join(root(), 'server', 'tests', 'fixtures', path)

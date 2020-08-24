@@ -242,7 +242,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should wait for transcoding before publishing the video', async function () {
-    this.timeout(80000)
+    this.timeout(160000)
 
     {
       // Upload the video, but wait transcoding
