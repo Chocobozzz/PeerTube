@@ -8,10 +8,8 @@ Source files are in `client/src/locale` and translated files merged from [Weblat
 Will generate XLIFF base files for Angular (`angular.xlf`) and JSON files for the player (`player.en-US.json`) and the server (`server.en-US.json`).
 Then, it will merge new translation keys into localized Angular files (`angular.fr-FR.xlf` etc).
 
-**Only generate new translations after a Weblate pull to avoid conflicts**
-
 ```
-$ npm run i18n:generate
+$ npm run i18n:update
 ```
 
 

@@ -2,6 +2,8 @@
 
 set -eu
 
+git fetch weblate && git merge weblate/develop
+
 npm run build -- --i18n
 
 cd client
