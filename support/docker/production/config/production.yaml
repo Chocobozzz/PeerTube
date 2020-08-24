@@ -30,6 +30,7 @@ trust_proxy:
 database:
   hostname: 'postgres'
   port: 5432
+  ssl: false
   suffix: ''
   username: 'postgres'
   password: 'postgres'

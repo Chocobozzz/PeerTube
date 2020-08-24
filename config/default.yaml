@@ -37,6 +37,7 @@ trust_proxy:
 database:
   hostname: 'localhost'
   port: 5432
+  ssl: false
   suffix: '_dev'
   username: 'peertube'
   password: 'peertube'
