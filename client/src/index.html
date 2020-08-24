@@ -49,11 +49,19 @@
     </div>
 
     <script type="text/javascript">
-      window.onerror = function () {
+      function displayIncompatibleBrowser () {
         var elem = document.getElementById('incompatible-browser')
         if (elem.className.indexOf('browser-ok') === -1) {
           elem.style.display = 'block'
         }
+      }
+
+      window.onerror = function () {
+        displayIncompatibleBrowser()
+      }
+
+      if (/MSIE|Trident/.test(window.navigator.userAgent) ) {
+        displayIncompatibleBrowser()
       }
     </script>
 
