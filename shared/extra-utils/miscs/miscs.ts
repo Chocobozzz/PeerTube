@@ -67,8 +67,6 @@ function buildAbsoluteFixturePath (path: string, customCIPath = false) {
   if (isAbsolute(path)) return path
 
   if (customCIPath) {
-    if (process.env.GITLAB_CI) return join(root(), 'cached-fixtures', path)
-
     return join(process.env.HOME, 'fixtures', path)
   }
 
