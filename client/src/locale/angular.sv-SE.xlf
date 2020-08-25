@@ -2108,7 +2108,7 @@
       </trans-unit>
       <trans-unit id="ab4426b60f13c00b61d6b714d390dc629f314980" datatype="html">
         <source>Emphasis</source>
-        <target state="translated">Kursiv stil</target>
+        <target state="translated">Betoning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2132,7 +2132,7 @@
       </trans-unit>
       <trans-unit id="adb4bbdcb961b8aac8298d6cac554d9b25636b7a" datatype="html">
         <source>Emoji shortcuts</source>
-        <target state="new">Emoji shortcuts</target>
+        <target state="translated">Emoji-förkortningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2148,7 +2148,7 @@
       </trans-unit>
       <trans-unit id="f37feb427aaa551edd1f22616be6464bc0d492de" datatype="html">
         <source>See complete list</source>
-        <target state="new">See complete list</target>
+        <target state="translated">Se den fullständiga listan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">32</context>
@@ -2186,7 +2186,7 @@
       </trans-unit>
       <trans-unit id="2662644497259948010" datatype="html">
         <source>Comment</source>
-        <target state="new">Comment</target>
+        <target state="translated">Kommentera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -2194,7 +2194,7 @@
       </trans-unit>
       <trans-unit id="4502286564339177240" datatype="html">
         <source>Reply</source>
-        <target state="new">Reply</target>
+        <target state="translated">Svara</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -2519,7 +2519,7 @@
       </trans-unit>
       <trans-unit id="12289e981bf1acd36d74ee0e50d6fb43ba29ca6a" datatype="html">
         <source>Total daily video quota</source>
-        <target state="new">Total daily video quota</target>
+        <target state="translated">Total videokvot per dag</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
@@ -2539,7 +2539,7 @@
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
-        <target state="new">Reports</target>
+        <target state="translated">Anmälningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -2547,7 +2547,7 @@
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
-        <target state="new">Video blocks</target>
+        <target state="translated">Blockerade videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -2555,7 +2555,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887" datatype="html">
         <source>Muted accounts</source>
-        <target state="new">Muted accounts</target>
+        <target state="translated">Ignorerade konton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -2563,7 +2563,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853" datatype="html">
         <source>Muted servers</source>
-        <target state="new">Muted servers</target>
+        <target state="translated">Ignorerade servrar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -2571,7 +2571,7 @@
       </trans-unit>
       <trans-unit id="4555457172864212828" datatype="html">
         <source>Users</source>
-        <target state="new">Users</target>
+        <target state="translated">Användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -2579,7 +2579,7 @@
       </trans-unit>
       <trans-unit id="3008420115644088420" datatype="html">
         <source>Configuration</source>
-        <target state="new">Configuration</target>
+        <target state="translated">Inställningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -2672,12 +2672,12 @@
       </trans-unit>
       <trans-unit id="c5cc399a82eb7993156daf2d6c1d9e071cde47ad" datatype="html">
         <source>No abuses found matching current filters.</source>
-        <target state="new">No abuses found matching current filters.</target>
+        <target state="translated">Det finns inga anmälningar som matchar den här sökningen.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="5d9dd64c1974b18918db7f24051bb385bd5558e1" datatype="html">
         <source>No abuses found.</source>
-        <target state="new">No abuses found.</target>
+        <target state="translated">Inga anmälningar hittade.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="d2a65fafac0e4e0a3289ec54627bd7f691d8020d" datatype="html">
@@ -2702,7 +2702,7 @@
       </trans-unit>
       <trans-unit id="24968c3b9f7cb940df7e5bf46f61a11710481829" datatype="html">
         <source>Reports</source>
-        <target state="new">Reports</target>
+        <target state="translated">Anmälningar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/abuse-list/abuse-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f">
@@ -2794,9 +2794,7 @@
       </trans-unit>
       <trans-unit id="c45d28b67fd917b804defbf9e465ec1abe0c67da" datatype="html">
         <source>Account deleted</source>
-        <target state="new">
-          Account deleted
-        </target>
+        <target state="translated">Konto raderat</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="c1074e8c49b3cdfaeb7fcaf8cb27e44139389e29" datatype="html">
@@ -2811,12 +2809,12 @@
       </trans-unit>
       <trans-unit id="ea965d544a7dfd8185064c52cdfff553cf94d585" datatype="html">
         <source>Messages</source>
-        <target state="new">Messages</target>
+        <target state="translated">Meddelanden</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="31b1d714a41f00a1347b78884eee465b1d90f7e1" datatype="html">
         <source>Internal note</source>
-        <target state="new">Internal note</target>
+        <target state="translated">Intern anteckning</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="9a7b523cbbebabeb9b10482291b58c52825a4b05" datatype="html">
@@ -2911,7 +2909,7 @@
       </trans-unit>
       <trans-unit id="2338185419645468935" datatype="html">
         <source>List installed plugins</source>
-        <target state="new">List installed plugins</target>
+        <target state="translated">Visa installerade tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">28</context>
@@ -2919,7 +2917,7 @@
       </trans-unit>
       <trans-unit id="8897412584195581488" datatype="html">
         <source>Search plugins</source>
-        <target state="new">Search plugins</target>
+        <target state="translated">Sök efter tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -2927,7 +2925,7 @@
       </trans-unit>
       <trans-unit id="4994333937800672218" datatype="html">
         <source>Show plugin</source>
-        <target state="new">Show plugin</target>
+        <target state="translated">Visa tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">46</context>
@@ -3094,7 +3092,7 @@
       </trans-unit>
       <trans-unit id="27ea89c8d39a59d9ff6c761fbad00d57b7863849" datatype="html">
         <source>Add a new category</source>
-        <target state="new">Add a new category</target>
+        <target state="translated">Lägg till en ny kategori</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
@@ -3624,7 +3622,7 @@
       </trans-unit>
       <trans-unit id="89b449293480a19f931439c5064d53879176fc17" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos.</source>
-        <target state="new">Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos.</target>
+        <target state="translated">Låt användare ladda upp videor i följande format: mkv, mov, avi, wmv, flv, f4v, 3g2, 3gp, mts, m2ts, mxf och nut.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">738</context></context-group>
       </trans-unit>
       <trans-unit id="0050a55afb9c565df1f9b3f750c2d4adb697698f">
@@ -3714,22 +3712,7 @@
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
-        <target state="translated">Skriv din CSS-kod här. Exempel:
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css 
-          <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; 
-          <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-          <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Föregå med 
-          <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css
-          <x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> för att skriva över standardutseendet. Exempel:
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email 
-          <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; 
-          <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-          <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/>
-        </target>
+        <target state="translated">Skriv din CSS-kod här. Exempel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Föregå med <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> för att skriva över standardutseendet. Exempel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">911</context></context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -3849,14 +3832,7 @@
       </trans-unit>
       <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target>
-          Med 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Lista inte
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> eller 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Gör miniatyrbilden suddig
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, kommer en bekräftelse krävas innan videon visas.
-        
-        </target>
+        <target>Med <x id="START_TAG_STRONG"/>Lista inte<x id="CLOSE_TAG_STRONG"/> eller <x id="START_TAG_STRONG"/>Gör miniatyrbilden suddig<x id="CLOSE_TAG_STRONG"/>, kommer en bekräftelse krävas innan videon visas. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
@@ -3876,27 +3852,17 @@
       </trans-unit>
       <trans-unit id="984be691d289644c6d40fa2cc858093be31ab58e" datatype="html">
         <source>Add a new language</source>
-        <target state="new">Add a new language</target>
+        <target state="translated">Lägg till ett nytt språk</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="dbcc539bd3ca0b962b87ea26855ca9d5d3c5cdf1">
         <source>Your current email is <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></source>
-        <target>
-  Din nuvarande e-postadress är 
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ user.email }}"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target>Din nuvarande e-postadress är <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="03d1a9c026074c12ea3f2fb39a34bc6a18fedf05">
         <source><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> is awaiting email verification </source>
-        <target>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> inväntar verifikation via e-post
-
-        </target>
+        <target><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> inväntar verifikation via e-post </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="d20a2fa4a3360caa8825e49a31b5fd3a442ac219">
@@ -3981,12 +3947,7 @@
       </trans-unit>
       <trans-unit id="b08d67fe4e192ea8352bebdc6aabbd1bb7abed02">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>
-        Skapad
-        
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target>Skapad <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="81b97b8ea996ad1e4f9fca8415021850214884b1">
@@ -4001,9 +3962,7 @@
       </trans-unit>
       <trans-unit id="e8a34c00da7e95d407a66f33f28943a480dbba82" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/> </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="cee3f34700944cc5786627e1b23073d946644620" datatype="html">
@@ -4013,7 +3972,7 @@
       </trans-unit>
       <trans-unit id="4247400351982331798" datatype="html">
         <source>Account settings</source>
-        <target state="new">Account settings</target>
+        <target state="translated">Kontoinställningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">37</context>
@@ -4021,7 +3980,7 @@
       </trans-unit>
       <trans-unit id="154062590416726309" datatype="html">
         <source>Account playlists</source>
-        <target state="new">Account playlists</target>
+        <target state="translated">Kontots spellistor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">55</context>
@@ -4029,7 +3988,7 @@
       </trans-unit>
       <trans-unit id="6550287183367517925" datatype="html">
         <source>Create new playlist</source>
-        <target state="new">Create new playlist</target>
+        <target state="translated">Skapa en ny spellista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">64</context>
@@ -4045,7 +4004,7 @@
       </trans-unit>
       <trans-unit id="bd751145ec934c2839fd6acffee05fbf439782ed" datatype="html">
         <source>My imports</source>
-        <target state="new">My imports</target>
+        <target state="translated">Mina importer</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="574cce019fb31925d11095591d4321847ff1c7a5" datatype="html">
@@ -4104,11 +4063,7 @@
       </trans-unit>
       <trans-unit id="a86239658c3cf042e7c987bb0df7473a53d7517e" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> imports</source>
-        <target state="translated">Visar import 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> till 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> av 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/>
-        </target>
+        <target state="translated">Visar import <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="0b68f86015522b0dbd374822caefe74a62e3470f" datatype="html">
@@ -4133,9 +4088,7 @@
       </trans-unit>
       <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add">
         <source>Created by <x id="INTERPOLATION"/></source>
-        <target>Skapad av 
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/>
-        </target>
+        <target>Skapad av <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="cd2d9bfd5a5f7bdc1d4f1242e8a35d74830b6ffe" datatype="html">
@@ -4155,12 +4108,7 @@
       </trans-unit>
       <trans-unit id="29c45bf49891748f930ef78b2e09857498b15131">
         <source><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> Delete history </source>
-        <target>
-          <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/>
-          <x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
-    Radera historik
-  
-        </target>
+        <target><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> Radera historik </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="355c9f9d50ed1c6f12729332a44c1fd0f7576638" datatype="html">
@@ -4170,22 +4118,17 @@
       </trans-unit>
       <trans-unit id="9d2d802fa417a5a3f230cb5bcc975551a252c59c">
         <source><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> Notification preferences </source>
-        <target>
-          <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/>
-          <x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
-    Notifikationsinställningar
-  
-        </target>
+        <target><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> Notifikationsinställningar </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="e7f88c481ecdda90467acd3f4dbe934465cee30f" datatype="html">
         <source>Newest first</source>
-        <target state="new">Newest first</target>
+        <target state="translated">Senaste först</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="a05dac5ded54ab304817a823693e2af2ad1cffef" datatype="html">
         <source>Unread first</source>
-        <target state="new">Unread first</target>
+        <target state="translated">Olästa först</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="58479ebfcc980e1ee37a8102bc4f9a35eca2f680" datatype="html">
@@ -4225,7 +4168,7 @@
       </trans-unit>
       <trans-unit id="8828123061564507501" datatype="html">
         <source>Playlist <x id="PH"/>} deleted.</source>
-        <target state="new">Playlist <x id="PH"/>} deleted.</target>
+        <target state="translated">Spellistan <x id="PH"/> har raderats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlists.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -4248,19 +4191,12 @@
       </trans-unit>
       <trans-unit id="25837d28a88f93b1fe278ca11099d7489ca0ac4b" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="new">
-        Browse videos on PeerTube to add them in your playlist.
-      </target>
+        <target state="translated">Utforska videorna på PeerTube och lägg till dem i din spellista.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="28c9f2a23ea8f12710a011a965939a5af6980dd1" datatype="html">
         <source>See the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/> for more information. </source>
-        <target state="new">
-        See the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentation
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information.
-      
-        </target>
+        <target state="translated">Se <x id="START_LINK"/>dokumentationen<x id="CLOSE_LINK"/> för mer information. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="3346d8a0bf3dd8c25ddc561ccd5fafb6ee9fadc8">
@@ -4270,17 +4206,12 @@
       </trans-unit>
       <trans-unit id="19886846ed573d0a74c61c4e8df073eb4f64acd0">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/>. </source>
-        <target>
-    Om du behöver hjälp att använda PeerTube, kan du ta en titt på 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>dokumentationen
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-  
-        </target>
+        <target>Om du behöver hjälp att använda PeerTube, kan du ta en titt på <x id="START_LINK"/>dokumentationen<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target state="new">Login</target>
+        <target state="translated">Logga in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login-routing.module.ts</context>
           <context context-type="linenumber">14</context>
@@ -4307,7 +4238,7 @@
       </trans-unit>
       <trans-unit id="9128669621822125729" datatype="html">
         <source>Video channel videos</source>
-        <target state="new">Video channel videos</target>
+        <target state="translated">Kanalens videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">25</context>
@@ -4315,7 +4246,7 @@
       </trans-unit>
       <trans-unit id="3193822049276963401" datatype="html">
         <source>Video channel playlists</source>
-        <target state="new">Video channel playlists</target>
+        <target state="translated">Kanalens spellistor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">38</context>
@@ -4323,7 +4254,7 @@
       </trans-unit>
       <trans-unit id="4723526509708949088" datatype="html">
         <source>About video channel</source>
-        <target state="new">About video channel</target>
+        <target state="translated">Om kanalen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -4378,16 +4309,12 @@
       </trans-unit>
       <trans-unit id="f15780bbd2d7fa777071975f7445e98a33065e38" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 prenumerant} other {
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> prenumeranter} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 prenumerant} other {<x id="INTERPOLATION"/> prenumeranter}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Inga videor} =1 {1 video} other {
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videor} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Inga videor} =1 {1 video} other { <x id="INTERPOLATION"/> videor}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
@@ -4442,9 +4369,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8bc634cd9d8c9b684dbfaaf17a522f894bedbffc">
         <source>Joined <x id="INTERPOLATION"/></source>
-        <target>Gick med 
-          <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/>
-        </target>
+        <target>Gick med <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-about/account-about.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="f696d5719a2a79916d44a175743591dc0d5629fe" datatype="html">
@@ -4472,16 +4397,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5523952d0300c96cfba2ec5a693c95f923e90c40">
         <source>Created <x id="INTERPOLATION"/></source>
-        <target>Skapades 
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.createdAt | date }}"/>
-        </target>
+        <target>Skapades <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+video-channels/video-channel-about/video-channel-about.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="5ebd76e736e1c58a1850234d1d26f1ab8c9ad11f" datatype="html">
         <source>Created <x id="INTERPOLATION"/> playlists </source>
-        <target state="translated">Skapade 
-          <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> spellistor 
-        </target>
+        <target state="translated">Skapade <x id="INTERPOLATION"/> spellistor </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="fbbe62dee434f0521e0dfb8e3957d92fc5fcd76f">
@@ -4501,9 +4422,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5fea66be16da46ed7a0775e9a62b7b5e94b77473">
         <source>Contact <x id="INTERPOLATION"/> administrator</source>
-        <target>Kontakta administratör för 
-          <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>
-        </target>
+        <target>Kontakta administratören för <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="533b2b9a76ee1335cb44c01f0bfd50d43e9400b0">
@@ -4528,9 +4447,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="ce301bc59085d13cf569fb7a97f073148435ec27" datatype="html">
         <source>About <x id="INTERPOLATION"/></source>
-        <target state="translated">Om 
-          <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>
-        </target>
+        <target state="translated">Om <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="3c1aff50472b313c70a72ee02c081b8eeb1c616c">
@@ -4623,18 +4540,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6469b375536342370eefd959bb72a06dc3d5884b" datatype="html">
         <source>It is a free and open-source software, under the <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Det är fri mjukvara med öppen källkod, publicerad under licensen 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Det är en fri mjukvara med öppen källkod, publicerad under licensen <x id="START_LINK"/>AGPLv3<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7b85d0debc419e6c9c390ce02686b57d256cd139" datatype="html">
         <source>For more information, please visit <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Besök gärna 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för mer information. 
-        </target>
+        <target state="translated">Besök gärna <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/> för mer information. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="0f972eed0e4c81f8006cf8061a400304b2c62b21" datatype="html">
@@ -4823,10 +4734,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3d2fb0ff92d3dd1e6040cd79b2a60edac6dea2da" datatype="html">
         <source>Developed with ❤ by <x id="START_LINK"/>Framasoft<x id="CLOSE_LINK"/></source>
-        <target state="translated">Utvecklat med ❤ av 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Framasoft
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Utvecklat med ❤ av <x id="START_LINK"/>Framasoft<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube-contributors.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
@@ -5093,12 +5001,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target>
-      En kanal är en entitet till vilken du laddar upp dina videor. Du kan organisera och dela upp ditt material genom att skapa flera kanaler.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-      Du kan till exempel ha en kanal för att publicera dina pianoframträdanden och en annan där du pratar om ekologi.
-    
-        </target>
+        <target>En kanal är en entitet till vilken du laddar upp dina videor. Du kan organisera och dela upp ditt material genom att skapa flera kanaler. <x id="LINE_BREAK"/> Du kan till exempel ha en kanal för att publicera dina pianoframträdanden och en annan där du pratar om ekologi. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="df3021e29cbce57c12151ae6e1e0bf8c640e87da">
@@ -5152,16 +5055,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="d315d635144b1104f1c1e9ef80ff3d07fcfa571c">
         <source>I am at least 16 years old and agree to the <x id="START_LINK"/>Terms<x id="CLOSE_LINK"/><x id="START_TAG_NG_CONTAINER"/> and to the <x id="START_LINK_1"/>Code of Conduct<x id="CLOSE_LINK"/><x id="CLOSE_TAG_NG_CONTAINER"/> of this instance </source>
-        <target>
-          Jag är minst 16 år gammal och godkänner
-          den här instansens 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>användarvillkor
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> och 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>uppförandekod
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target>Jag är minst 16 år gammal och godkänner den här instansens <x id="START_LINK"/>användarvillkor<x id="CLOSE_LINK"/><x id="START_TAG_NG_CONTAINER"/> och <x id="START_LINK_1"/>uppförandekod<x id="CLOSE_LINK"/><x id="CLOSE_TAG_NG_CONTAINER"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="3301086086650990787" datatype="html">
@@ -5220,9 +5114,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3755500631176893489">
         <source>Published <x id="PH"/> videos</source>
-        <target>Publicerade 
-          <x id="PH"/> videor
-        </target>
+        <target>Publicerade <x id="PH"/> videor</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
@@ -5519,10 +5411,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="135214224090612796">
         <source>Redundancy for <x id="PH"/> is <x id="PH_1"/></source>
-        <target>Redundans för 
-          <x id="PH"/> är 
-          <x id="PH_1"/>
-        </target>
+        <target>Redundans för <x id="PH"/> är <x id="PH_1"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="81585474102700882" datatype="html">
@@ -6297,9 +6186,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="2575302837003821736">
         <source>Please type the display name of the video channel (<x id="PH"/>) to confirm</source>
-        <target>Uppge kanalens visningsnamn (
-          <x id="PH"/>) för att bekräfta
-        </target>
+        <target>Uppge kanalens visningsnamn (<x id="PH"/>) för att bekräfta</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="624066830180032195">
@@ -6867,19 +6754,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6784913005965759008" datatype="html">
         <source><x id="PH"/> h <x id="PH_1"/> min <x id="PH_2"/> sec</source>
-        <target state="translated">
-          <x id="PH"/> tim 
-          <x id="PH_1"/> min 
-          <x id="PH_2"/> s
-        </target>
+        <target state="translated"><x id="PH"/> tim <x id="PH_1"/> min <x id="PH_2"/> s</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-duration-formatter.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="2068773941062585163" datatype="html">
         <source><x id="PH"/> min <x id="PH_1"/> sec</source>
-        <target state="translated">
-          <x id="PH"/> min 
-          <x id="PH_1"/> s
-        </target>
+        <target state="translated"><x id="PH"/> min <x id="PH_1"/> s</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-duration-formatter.pipe.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
@@ -7802,9 +7682,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3896582359861826661">
         <source>User <x id="PH"/> email set as verified</source>
-        <target>Användaren 
-          <x id="PH"/>s e-post har markerats som verifierad
-        </target>
+        <target>E-postadressen som tillhör användaren <x id="PH"/> har markerats som verifierad</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528">
@@ -8138,10 +8016,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1056145626640340519">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
-        <target>En video lades till i 
-          <x id="PH"/> vid tiderna 
-          <x id="PH_1"/>
-        </target>
+        <target>En video lades till i <x id="PH"/> vid tiderna <x id="PH_1"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">377</context></context-group>
       </trans-unit>
       <trans-unit id="7754186870520534716">
