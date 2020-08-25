@@ -1104,16 +1104,9 @@ The link will expire within 1 hour.</target>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
         <source>Close</source>
         <target>Fechar</target>
-        <context-group purpose="location"><context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context><context context-type="linenumber">1</context></context-group>
-      </trans-unit>
-      <trans-unit id="680d5c75b7fd8d37961083608b9fcdc4167b4c43" datatype="html">
-        <source>Previous</source>
-        <target state="new">Previous</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">38</context></context-group></trans-unit>
+      
       <trans-unit id="c2fe7580753ac7c1442df31eb97f8acc6fa250e6" datatype="html">
         <source>Configure</source>
         <target state="new">
@@ -5223,208 +5216,33 @@ channel with the same name (<x id="PH_2"/>)!</target>
       <trans-unit id="f732c304c7433e5a83ffcd862c3dce709a0f4982" datatype="html">
         <source>Next</source>
         <target state="translated">próximo</target>
-        <context-group purpose="location"><context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context><context context-type="linenumber">1</context></context-group>
-      </trans-unit>
-      <trans-unit id="c3b08b07b5ab98e7cdcf18df39355690ab7d3884" datatype="html">
-        <source>Previous month</source>
-        <target state="new">Previous month</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4bd046985cfe13040d5ef0cd881edce0968a111a" datatype="html">
-        <source>Next month</source>
-        <target state="new">Next month</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1dbc84807f35518112f62e5775d1daebd3d8462b" datatype="html">
-        <source>Select month</source>
-        <target state="new">Select month</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8ceb09d002bf0c5d1cac171dfbffe1805d2b3962" datatype="html">
-        <source>Select year</source>
-        <target state="new">Select year</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="656506dfd46380956a655f919f1498d018f75ca0" datatype="html">
-        <source>««</source>
-        <target state="new">««</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6e52b6ee77a4848d899dd21b591c6fd499e3aef3" datatype="html">
-        <source>«</source>
-        <target state="new">«</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ba9cbb4ff311464308a3627e4f1c3345d9fe6d7d" datatype="html">
-        <source>»</source>
-        <target state="new">»</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="49f27a460bc97e7e00be5b37098bfa79884fc7d9" datatype="html">
-        <source>»»</source>
-        <target state="new">»»</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f2f852318759c6396b5d3d17031d53817d7b38cc" datatype="html">
-        <source>First</source>
-        <target state="new">First</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5c729788ba138508aca1bec050b610f7bf81db3e" datatype="html">
-        <source>Last</source>
-        <target state="new">Last</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f8e9a947b9db4252c0e9905765338712f2fd032f" datatype="html">
-        <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ce676ab1d6d98f85c836381cf100a4a91ef95a1f" datatype="html">
-        <source>HH</source>
-        <target state="new">HH</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3bbce5fef7e1151da052a4e529453edb340e3912" datatype="html">
-        <source>Hours</source>
-        <target state="new">Hours</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="72c8edf6a50068a05bde70991e36b1e881f4ca54" datatype="html">
-        <source>MM</source>
-        <target state="new">MM</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="41e62daa962947c0d23ded0981975d1bddf0bf38" datatype="html">
-        <source>Minutes</source>
-        <target state="new">Minutes</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cb74bc1d625a6c1742f0d7d47306cf495780c218" datatype="html">
-        <source>Increment hours</source>
-        <target state="new">Increment hours</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="147c7a19429da7d999e247d22e33fee370b1691b" datatype="html">
-        <source>Decrement hours</source>
-        <target state="new">Decrement hours</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f5a4a3bc05e053f6732475d0e74875ec01c3a348" datatype="html">
-        <source>Increment minutes</source>
-        <target state="new">Increment minutes</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="c1a6899e529c096da5b660385d4e77fe1f7ad271" datatype="html">
-        <source>Decrement minutes</source>
-        <target state="new">Decrement minutes</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ebe38d36a40a2383c5fefa9b4608ffbda08bd4a3" datatype="html">
-        <source>SS</source>
-        <target state="new">SS</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4f2ed9e71a7c981db3e50ae2fedb28aff2ec4e6c" datatype="html">
-        <source>Seconds</source>
-        <target state="new">Seconds</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="912322ecee7d659d04dcf494a70e22e49d334b26" datatype="html">
-        <source>Increment seconds</source>
-        <target state="new">Increment seconds</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5db47ac104294243a70eb9124fbea9d0004ddf69" datatype="html">
-        <source>Decrement seconds</source>
-        <target state="new">Decrement seconds</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8d6e691e10306c1b34c6b26805151aaea320ef7f" datatype="html">
-        <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="69a1f176a93998876952adac57c3bc3863b6105e" datatype="html">
-        <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../assets/images/misc/account-arrow-left.svg</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit><trans-unit id="9082008222523034483" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">20</context></context-group></trans-unit>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <trans-unit id="9082008222523034483" datatype="html">
         <source>Get help</source><target state="new">Get help</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context>
@@ -8832,7 +8650,193 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Only users of this instance can see this video</source>
         <target state="translated">Apenas utilizadores desta instância podem ver este vídeo</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">354</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">354</context></context-group></trans-unit><trans-unit id="ngb.alert.close" datatype="html">
+        <source>Close</source><target state="new">Close</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/alert/alert.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.carousel.previous" datatype="html">
+        <source>Previous</source><target state="new">Previous</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts</context>
+          <context context-type="linenumber">349</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.carousel.next" datatype="html">
+        <source>Next</source><target state="new">Next</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/carousel/carousel.ts</context>
+          <context context-type="linenumber">349</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.datepicker.previous-month" datatype="html">
+        <source>Previous month</source><target state="new">Previous month</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.datepicker.next-month" datatype="html">
+        <source>Next month</source><target state="new">Next month</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-month.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.datepicker.select-month" datatype="html">
+        <source>Select month</source><target state="new">Select month</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.datepicker.select-year" datatype="html">
+        <source>Select year</source><target state="new">Select year</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.pagination.first" datatype="html">
+        <source>««</source><target state="new">««</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.pagination.previous" datatype="html">
+        <source>«</source><target state="new">«</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.pagination.next" datatype="html">
+        <source>»</source><target state="new">»</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.pagination.last" datatype="html">
+        <source>»»</source><target state="new">»»</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.pagination.first-aria" datatype="html">
+        <source>First</source><target state="new">First</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.pagination.previous-aria" datatype="html">
+        <source>Previous</source><target state="new">Previous</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.pagination.next-aria" datatype="html">
+        <source>Next</source><target state="new">Next</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.pagination.last-aria" datatype="html">
+        <source>Last</source><target state="new">Last</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/pagination/pagination.ts</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.progressbar.value" datatype="html">
+        <source><x id="INTERPOLATION"/></source><target state="new"><x id="INTERPOLATION"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.HH" datatype="html">
+        <source>HH</source><target state="new">HH</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.hours" datatype="html">
+        <source>Hours</source><target state="new">Hours</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.MM" datatype="html">
+        <source>MM</source><target state="new">MM</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.minutes" datatype="html">
+        <source>Minutes</source><target state="new">Minutes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.increment-hours" datatype="html">
+        <source>Increment hours</source><target state="new">Increment hours</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
+        <source>Decrement hours</source><target state="new">Decrement hours</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
+        <source>Increment minutes</source><target state="new">Increment minutes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
+        <source>Decrement minutes</source><target state="new">Decrement minutes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.SS" datatype="html">
+        <source>SS</source><target state="new">SS</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.seconds" datatype="html">
+        <source>Seconds</source><target state="new">Seconds</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
+        <source>Increment seconds</source><target state="new">Increment seconds</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
+        <source>Decrement seconds</source><target state="new">Decrement seconds</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.PM" datatype="html">
+        <source><x id="INTERPOLATION"/></source><target state="new"><x id="INTERPOLATION"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.timepicker.AM" datatype="html">
+        <source><x id="INTERPOLATION"/></source><target state="new"><x id="INTERPOLATION"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit><trans-unit id="ngb.toast.close-aria" datatype="html">
+        <source>Close</source><target state="new">Close</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/toast/toast.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5210096066382592800">
         <source>Video to import updated.</source>
         <target>Vídeo para importar atualizado.</target>
