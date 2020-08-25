@@ -3,34 +3,36 @@
  * Chocobozzz
  * Rigel Kent
  * Filip Bengtsson
+ * kimsible
  * Kim
  * Felix Ableitner
  * Gérald Niel
+ * Jeff Huang
  * Phongpanot
- * kimsible
  * Julien Maulny
  * Jorropo
  * Josh Morel
  * Александр
  * BO41
+ * Berto Te
  * Francesc
  * Tirifto
  * mando laress
- * Jeff Huang
  * Frank Sträter
  * John Livingston
- * Berto Te
  * ButterflyOfFire
  * Xabi
  * buoyantair
  * josé m
+ * Balázs Úr
  * Quentin PAGÈS
  * Vodoyo Kamal
  * Attila F
- * Balázs Úr
  * Caroline Chuong
+ * Laurent Ettouati
  * Benjamin Bouvier
  * Jan Keromnes
+ * Kemal Oktay Aktoğan
  * Lucas Declercq
  * Slimane Selyan AMIRI
  * knuxify
@@ -41,6 +43,7 @@
  * Luc Didry
  * Nassim Bounouas
  * NorbiPeti
+ * Rafael Fontenelle
  * Viorel-Cătălin Răpițeanu
  * Ahmed ABERWAG
  * Anne-Gaelle Moulun
@@ -63,7 +66,6 @@
  * Chris Sakura 佐倉くりす on Youtube
  * DontUseGithub
  * GunChleoc
- * Laurent Ettouati
  * Marcin Mikołajczak
  * Okhin
  * Pierre-Alain TORET
@@ -80,12 +82,10 @@
  * Iñigo A
  * Jefferson Hernandez
  * Joan Montané
- * Kemal Oktay Aktoğan
  * Kiro
  * LecygneNoir
  * Leopere
  * Manuela Silva
- * Rafael Fontenelle
  * Ugaitz
  * Yohan Boniface
  * am97
@@ -93,8 +93,10 @@
  * dada
  * frankdelange
  * jonathanraes
+ * test2a
  * Al-Hassan Abdel-Raouf
  * Andrew Morgan
+ * Antimidia
  * Arne Uplegger
  * Aurélien Béranger
  * Average Dude
@@ -123,6 +125,7 @@
  * SerCom_KC
  * Tzafrir Cohen
  * Valvin
+ * Waazdakka
  * ahmadsharifian
  * bopol
  * framail
@@ -140,6 +143,7 @@
  * Adnane Belmadiaf
  * Alexander F. Rødseth
  * Ali Alim
+ * Aman Sharma
  * Antoine Millet
  * Anton Latukha
  * Armando Lüscher
@@ -171,6 +175,7 @@
  * Florian CUNY
  * Girish Ramakrishnan
  * Glandos
+ * Guillaume Pérution-Kihli
  * Gérald CHATAGNON
  * Haelwenn (lanodan) Monnier
  * HesioZ
@@ -234,10 +239,13 @@
  * Simon Gilliot
  * Simounet
  * Stefan Schüller
+ * Sumit Khanna
+ * Timothée Grégoire
  * Tomás Sebastián Romero
  * TrashMacNugget
  * Vagelis F
  * Vincent Stakenburg
+ * WhiredPlanck
  * Yann Sionneau
  * Yorwba
  * Yun

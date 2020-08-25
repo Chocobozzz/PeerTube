@@ -62,9 +62,9 @@
  * Add channel name to create-user admin form [@Kimsible in #2984](https://github.com/Chocobozzz/PeerTube/pull/2984)
  * Support Kabile for video languages/captions
  * Translate page titles
- * Add `.ac3`, `.aac`, `.qt`, `.mqv`, `.3gpp`, `.3gpp2`, `.m1v`, `.mpg`, `.mpe`, `.vob` extensions support on upload if transcoding is enabled
+ * Add `.ac3`, `.aac`, `.qt`, `.mqv`, `.3gpp`, `.3gpp2`, `.m1v`, `.mpg`, `.mpe`, `.vob` extensions support on upload if transcoding is enabled **@rigelk**
  * Performance:
-   * Improved front-end performance by reducing localized bundle sizes (~ 2MB instead of 3MB for the homepage))
+   * Improved front-end performance by reducing localized bundle sizes (~ 2MB instead of 3MB for the homepage)
    * Optimize comments RSS feed SQL query
    * Optimize default sort SQL query when listing videos
 
