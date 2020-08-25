@@ -2061,7 +2061,7 @@
       </trans-unit>
       <trans-unit id="4739ffad85f09defefdb6e51b45f43b2ef7c4388" datatype="html">
         <source>Markdown compatible that supports:</source>
-        <target state="translated">Markdown compatible that supports :</target>
+        <target state="translated">Compatible Markdown qui supporte :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2077,7 +2077,7 @@
       </trans-unit>
       <trans-unit id="664f99b8919d6dd2faa1c1f7c378aa86d1be5e8a" datatype="html">
         <source>Break lines</source>
-        <target state="new">Break lines</target>
+        <target state="translated">Saut de lignes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2109,7 +2109,7 @@
       </trans-unit>
       <trans-unit id="3c12190421fbb2756e6bbead923df9ec5de8ede2" datatype="html">
         <source>italic</source>
-        <target state="new">italic</target>
+        <target state="translated">italique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">23</context>
@@ -2163,7 +2163,7 @@
       </trans-unit>
       <trans-unit id="974170f455ff5a9034d5737e84b4194c0046fc6b" datatype="html">
         <source>Markdown Emoji List</source>
-        <target state="new">Markdown Emoji List</target>
+        <target state="translated">Markdown Emoji Liste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">84</context>
@@ -3697,7 +3697,7 @@
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
-        <target state="translated">Ecrivez directement du code CSS. Exemple :<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Simuler avec <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> pour passer outre les styles. Exemple :<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
+        <target state="translated">Écrivez directement du code CSS. Exemple :<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Simuler avec <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> pour passer outre les styles. Exemple :<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">911</context></context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -3959,7 +3959,7 @@
       </trans-unit>
       <trans-unit id="4247400351982331798" datatype="html">
         <source>Account settings</source>
-        <target state="new">Account settings</target>
+        <target state="translated">Paramètres du compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">37</context>
@@ -3967,7 +3967,7 @@
       </trans-unit>
       <trans-unit id="154062590416726309" datatype="html">
         <source>Account playlists</source>
-        <target state="new">Account playlists</target>
+        <target state="translated">Listes de lecture personnelles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">55</context>
@@ -3975,7 +3975,7 @@
       </trans-unit>
       <trans-unit id="6550287183367517925" datatype="html">
         <source>Create new playlist</source>
-        <target state="new">Create new playlist</target>
+        <target state="translated">Créer une nouvelle liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">64</context>
@@ -3983,7 +3983,7 @@
       </trans-unit>
       <trans-unit id="2864486939135008600" datatype="html">
         <source>Playlist elements</source>
-        <target state="new">Playlist elements</target>
+        <target state="translated">Détail de la liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">73</context>
@@ -4198,7 +4198,7 @@
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target state="new">Login</target>
+        <target state="translated">Connexion</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login-routing.module.ts</context>
           <context context-type="linenumber">14</context>
@@ -4223,7 +4223,7 @@
       </trans-unit>
       <trans-unit id="9128669621822125729" datatype="html">
         <source>Video channel videos</source>
-        <target state="new">Video channel videos</target>
+        <target state="translated">Contenus d'une chaîne de vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">25</context>
@@ -4231,7 +4231,7 @@
       </trans-unit>
       <trans-unit id="3193822049276963401" datatype="html">
         <source>Video channel playlists</source>
-        <target state="new">Video channel playlists</target>
+        <target state="translated">Listes de lecture d'une chaîne de vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">38</context>
@@ -4239,7 +4239,7 @@
       </trans-unit>
       <trans-unit id="4723526509708949088" datatype="html">
         <source>About video channel</source>
-        <target state="new">About video channel</target>
+        <target state="translated">À propos d'une chaîne vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -4685,7 +4685,7 @@
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target state="new">About this instance</target>
+        <target state="translated">À propos de cette instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">26</context>
@@ -4693,7 +4693,7 @@
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
         <source>About PeerTube</source>
-        <target state="new">About PeerTube</target>
+        <target state="translated">À propos de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">38</context>
@@ -4701,7 +4701,7 @@
       </trans-unit>
       <trans-unit id="5782088737558028158" datatype="html">
         <source>About follows</source>
-        <target state="new">About follows</target>
+        <target state="translated">À propos des abonnements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -4926,7 +4926,7 @@
       </trans-unit>
       <trans-unit id="9082008222523034483" datatype="html">
         <source>Get help</source>
-        <target state="new">Get help</target>
+        <target state="translated">Obtenir de l'aide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">16</context>
@@ -5034,7 +5034,7 @@
       </trans-unit>
       <trans-unit id="3301086086650990787" datatype="html">
         <source>Register</source>
-        <target state="new">Register</target>
+        <target state="translated">Inscription</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+register/register-routing.module.ts</context>
           <context context-type="linenumber">14</context>
@@ -5062,7 +5062,7 @@
       </trans-unit>
       <trans-unit id="819067926858619041" datatype="html">
         <source>Account videos</source>
-        <target state="new">Account videos</target>
+        <target state="translated">Vidéos du compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">29</context>
@@ -5070,7 +5070,7 @@
       </trans-unit>
       <trans-unit id="6823616469362610020" datatype="html">
         <source>Account video channels</source>
-        <target state="new">Account video channels</target>
+        <target state="translated">Chaînes vidéos du compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">42</context>
@@ -5078,7 +5078,7 @@
       </trans-unit>
       <trans-unit id="7678273613459026643" datatype="html">
         <source>About account</source>
-        <target state="new">About account</target>
+        <target state="translated">À propos du compte utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">51</context>
@@ -5202,7 +5202,7 @@
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
         <source>Edit custom configuration</source>
-        <target state="new">Edit custom configuration</target>
+        <target state="translated">Modifier la configuration de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">26</context>
@@ -5640,7 +5640,7 @@
       </trans-unit>
       <trans-unit id="3229595422546554334" datatype="html">
         <source>Jobs</source>
-        <target state="new">Jobs</target>
+        <target state="translated">Travaux</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">26</context>
@@ -5648,7 +5648,7 @@
       </trans-unit>
       <trans-unit id="4804785061014590286" datatype="html">
         <source>Logs</source>
-        <target state="new">Logs</target>
+        <target state="translated">Journaux</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -5761,7 +5761,7 @@
       </trans-unit>
       <trans-unit id="2903648076838460070" datatype="html">
         <source>Videos blocked</source>
-        <target state="new">Videos blocked</target>
+        <target state="translated">Vidéos bloquées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">67</context>
@@ -5769,7 +5769,7 @@
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
         <source>Muted instances</source>
-        <target state="new">Muted instances</target>
+        <target state="translated">Instances muettes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">89</context>
@@ -5787,7 +5787,7 @@
       </trans-unit>
       <trans-unit id="177544274549739411" datatype="html">
         <source>Following list</source>
-        <target state="new">Following list</target>
+        <target state="translated">Instances suivies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/follows/follows.routes.ts</context>
           <context context-type="linenumber">28</context>
@@ -5795,7 +5795,7 @@
       </trans-unit>
       <trans-unit id="8092429110007204784" datatype="html">
         <source>Followers list</source>
-        <target state="new">Followers list</target>
+        <target state="translated">Instances qui nous suivent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/follows/follows.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -5818,7 +5818,7 @@
       </trans-unit>
       <trans-unit id="7483807629538115183" datatype="html">
         <source>Users list</source>
-        <target state="new">Users list</target>
+        <target state="translated">Liste des utilisateurs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -5826,7 +5826,7 @@
       </trans-unit>
       <trans-unit id="1525334987774465166" datatype="html">
         <source>Create a user</source>
-        <target state="new">Create a user</target>
+        <target state="translated">Créer un utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">36</context>
@@ -5834,7 +5834,7 @@
       </trans-unit>
       <trans-unit id="5552039423287890133" datatype="html">
         <source>Update a user</source>
-        <target state="new">Update a user</target>
+        <target state="translated">Mettre à jour un utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">48</context>
@@ -6173,7 +6173,7 @@
       </trans-unit>
       <trans-unit id="4707367314920217630" datatype="html">
         <source>Create new video channel</source>
-        <target state="new">Create new video channel</target>
+        <target state="translated">Créer une nouvelle chaîne vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels-routing.module.ts</context>
           <context context-type="linenumber">22</context>
@@ -6181,7 +6181,7 @@
       </trans-unit>
       <trans-unit id="6059091237492573541" datatype="html">
         <source>Update video channel</source>
-        <target state="new">Update video channel</target>
+        <target state="translated">Mettre à jour une chaîne de vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels-routing.module.ts</context>
           <context context-type="linenumber">31</context>
@@ -6189,7 +6189,7 @@
       </trans-unit>
       <trans-unit id="6595008830732269870" datatype="html">
         <source>Not found</source>
-        <target state="new">Not found</target>
+        <target state="translated">Page non trouvée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+page-not-found/page-not-found-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -6212,7 +6212,7 @@
       </trans-unit>
       <trans-unit id="3410331549417637431" datatype="html">
         <source>Account video imports</source>
-        <target state="new">Account video imports</target>
+        <target state="translated">Imports des vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">105</context>
@@ -6220,7 +6220,7 @@
       </trans-unit>
       <trans-unit id="4434998055872154420" datatype="html">
         <source>Account subscriptions</source>
-        <target state="new">Account subscriptions</target>
+        <target state="translated">Abonnements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">114</context>
@@ -6228,7 +6228,7 @@
       </trans-unit>
       <trans-unit id="6019411775996586321" datatype="html">
         <source>Videos history</source>
-        <target state="new">Videos history</target>
+        <target state="translated">Historique des vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">150</context>
@@ -6236,7 +6236,7 @@
       </trans-unit>
       <trans-unit id="5851560788527570644" datatype="html">
         <source>Notifications</source>
-        <target state="new">Notifications</target>
+        <target state="translated">Notifications</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">163</context>
@@ -6376,7 +6376,7 @@
       </trans-unit>
       <trans-unit id="8231550792139699065" datatype="html">
         <source>Verify account email</source>
-        <target state="new">Verify account email</target>
+        <target state="translated">Vérification du courriel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">17</context>
@@ -6384,7 +6384,7 @@
       </trans-unit>
       <trans-unit id="4997281272800290390" datatype="html">
         <source>Verify account ask send email</source>
-        <target state="new">Verify account ask send email</target>
+        <target state="translated">Vérification de la demande envoyée par courriel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">26</context>
@@ -8164,7 +8164,7 @@
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
         <source>Remove</source>
-        <target state="new">Remove</target>
+        <target state="translated">Suppression</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -8172,7 +8172,7 @@
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
         <source>Remove &amp; re-draft</source>
-        <target state="new">Remove &amp; re-draft</target>
+        <target state="translated">Suppression &amp; réécriture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context>
           <context context-type="linenumber">187</context>
@@ -8533,7 +8533,7 @@
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
         <source>Discover videos</source>
-        <target state="new">Discover videos</target>
+        <target state="translated">Découvrir des vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">23</context>
@@ -8541,7 +8541,7 @@
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
-        <target state="new">Trending videos</target>
+        <target state="translated">Vidéos en tendances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">32</context>
@@ -8549,7 +8549,7 @@
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
         <source>Recently added videos</source>
-        <target state="new">Recently added videos</target>
+        <target state="translated">Vidéos récemment ajoutées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">58</context>
@@ -8557,7 +8557,7 @@
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
         <source>Upload a video</source>
-        <target state="new">Upload a video</target>
+        <target state="translated">Envoyer une vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">97</context>
@@ -8565,7 +8565,7 @@
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
-        <target state="new">Edit a video</target>
+        <target state="translated">Mise à jour d'une vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">106</context>
