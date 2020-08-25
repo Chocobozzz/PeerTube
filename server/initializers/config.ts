@@ -125,7 +125,7 @@ const CONFIG = {
   CSP: {
     ENABLED: config.get<boolean>('csp.enabled'),
     REPORT_ONLY: config.get<boolean>('csp.report_only'),
-    REPORT_URI: config.get<boolean>('csp.report_uri')
+    REPORT_URI: config.get<string>('csp.report_uri')
   },
   TRACKER: {
     ENABLED: config.get<boolean>('tracker.enabled'),
