@@ -1,5 +1,96 @@
 # Changelog
 
+## v2.4.0-rc.1
+
+### IMPORTANT NOTES
+
+ * The minimum ffmpeg version required is now 4.1
+ * Use `playlistPosition` URL parameter for playlists instead of `videoId` to set the current playlist position
+
+### Maintenance
+
+ * Better error message on PostgreSQL connection error
+ * Add `ssl` option support for PostgreSQL connection
+
+### Official PeerTube plugins
+
+ * [Player video annotation (alpha)](https://framagit.org/framasoft/peertube/official-plugins/-/tree/master/peertube-plugin-video-annotation)
+
+### Plugins/Themes/Embed API
+
+ * Add embed API (https://docs.joinpeertube.org/#/api-embed-player):
+   * `playNextVideo` method
+   * `playPreviousVideo` method
+   * `getCurrentPosition` method
+ * Embed URL parameters
+   * Add ability to disable PeerTube link in embed using an URL param (`peertubeLink=0`)
+ * Add plugins support in embed
+ * Add client plugin hooks (https://docs.joinpeertube.org/#/api-plugins):
+   * `action:embed.player.loaded` (for embed)
+ * Add custom fields in video update/upload form using `registerVideoField` (https://docs.joinpeertube.org/#/contribute-plugins?id=add-custom-fields-to-video-form)
+
+### Features
+
+ * Moderation:
+   * :tada: Add ability to report comments and accounts
+   * :tada: Add messaging system between local reporter of an abuse and moderators so they can easily communicate
+   * :tada: Users can now see their abuse reports, and have notifications when an abuse state changed (accepted/rejected) or when moderators added a new message
+   * Add embed to block list details [@rigelk in #2926](https://github.com/Chocobozzz/PeerTube/pull/2926)
+ * Video playlists:
+   * :tada: Add ability to embed playlists
+   * :tada: Add ability to put a video multiple times in a playlist (with different startAt/stopAt parameters or not)
+ * Video comments:
+   * Add uni-code emojis native display in comments [@Kimsible in #3046](https://github.com/Chocobozzz/PeerTube/pull/3046)
+   * Add delete and re-draft action on a comment that doesn't have replies [@Kimsible in #3046](https://github.com/Chocobozzz/PeerTube/pull/3046)
+   * Hide deleted comments when there aren't replies [@Kimsible in #3046](https://github.com/Chocobozzz/PeerTube/pull/3046)
+ * Accessibility/UI:
+   * Disable vertical scroll instead of hide on desktop browsers [@Kimsible in #2962](https://github.com/Chocobozzz/PeerTube/pull/2962)
+   * Update my-account sub-menus icons [@Kimsible in #2977](https://github.com/Chocobozzz/PeerTube/pull/2977)
+   * Improve navigation sub-menu and tabs effects [@Kimsible in #2971](https://github.com/Chocobozzz/PeerTube/pull/2971)
+   * Hide generic channel display name and avatar on watch view [@Kimsible in #2988](https://github.com/Chocobozzz/PeerTube/pull/2988)
+   * Display user quota progress bars above upload form [@Kimsible in #2981](https://github.com/Chocobozzz/PeerTube/pull/2981)
+   * Improve mobile accessibility by moving table action cells on the left [@Kimsible in #2980](https://github.com/Chocobozzz/PeerTube/pull/2980)
+   * Directly display download button in watch page on logged-out users [@rigelk in #2919](https://github.com/Chocobozzz/PeerTube/pull/2919)
+   * Improve users list table display in admin (add badge, progress bar) [@rigelk in #2991](https://github.com/Chocobozzz/PeerTube/pull/2991)
+   * Add dynamic column display for users list table in admin [@rigelk in #2991](https://github.com/Chocobozzz/PeerTube/pull/2991)
+   * Add anchor links to about/instance [@Kimsible in #3064](https://github.com/Chocobozzz/PeerTube/pull/3064)
+   * Improve select components [@rigelk in #3035](https://github.com/Chocobozzz/PeerTube/pull/3035)
+   * Add content overlay for opened menu on touchscreens [@Kimsible in #3088](https://github.com/Chocobozzz/PeerTube/pull/3088)
+ * Add alert and hide upload view when no upload is possible [@Kimsible in #2966](https://github.com/Chocobozzz/PeerTube/pull/2966)
+ * Allow sorting notifications by unread/newest **@rigelk**
+ * Add open-graph and twitter-card metas for accounts, video-channels and playlists urls [@Kimsible in #2996](https://github.com/Chocobozzz/PeerTube/pull/2996)
+ * Add channel name to create-user admin form [@Kimsible in #2984](https://github.com/Chocobozzz/PeerTube/pull/2984)
+ * Support Kabile for video languages/captions
+ * Translate page titles
+ * Add `.ac3`, `.aac`, `.qt`, `.mqv`, `.3gpp`, `.3gpp2`, `.m1v`, `.mpg`, `.mpe`, `.vob` extensions support on upload if transcoding is enabled
+ * Performance:
+   * Improved front-end performance by reducing localized bundle sizes (~ 2MB instead of 3MB for the homepage))
+   * Optimize comments RSS feed SQL query
+   * Optimize default sort SQL query when listing videos
+
+
+### Bug fixes
+
+ * Handle webp images from youtube-dl
+ * Fix embed p2p warning localization
+ * iOS fixes:
+   * Fix HLS only videos playback
+   * Fix fullscreen
+   * Fix iPad desktop mode playback
+   * Try to fix autoplay with iOS/Safari
+ * Fix anonymous user theme
+ * Fix player hotkeys after mouse interaction
+ * Fix resolution transcoding for portrait videos
+ * Do not display videojs poster when video is starting to avoid blinking effect [@Kimsible in #3056](https://github.com/Chocobozzz/PeerTube/pull/3056)
+ * Correctly scroll to anchors in my-settings [@Kimsible in #3032](https://github.com/Chocobozzz/PeerTube/pull/3032)
+ * Forbid reset password links reuse
+ * Fix low default resolution on webtorrent videos
+ * Fix instance features table responsive in about page [@test2a in #3090](https://github.com/Chocobozzz/PeerTube/pull/3090)
+ * Fix playlist element deletion/edition in my account
+ * Fix video playlist playback resuming
+ * Correctly display error message for Internet Explorer
+ * Fix videos RSS feed when HLS only is enabled
+
 ## v2.3.0
 
 **Since v2.2.0**
