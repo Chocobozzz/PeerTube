@@ -15,7 +15,7 @@ import { VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { MetaService } from '@ngx-meta/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { ServerConfig, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
+import { ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
 import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import {
   CustomizationOptions,
@@ -361,7 +361,24 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         // If 401, the video is private or blocked so redirect to 404
-        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ]))
+        catchError(err => {
+          if (err.body.errorCode === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && err.body.originUrl) {
+            const search = window.location.search
+            let originUrl = err.body.originUrl
+            if (search) originUrl += search
+
+            this.confirmService.confirm(
+              $localize`This video is not available on this instance. Do you want to be redirected on the origin instance: <a href="${originUrl}">${originUrl}</a>?`,
+              $localize`Redirection`
+            ).then(res => {
+              if (res === false) return this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ])
+
+              return window.location.href = originUrl
+            })
+          }
+
+          return this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ])
+        })
       )
       .subscribe(([ video, captionsResult ]) => {
         const queryParams = this.route.snapshot.queryParams

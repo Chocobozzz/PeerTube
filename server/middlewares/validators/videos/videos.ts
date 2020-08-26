@@ -1,6 +1,9 @@
 import * as express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
-import { UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
+import { getServerActor } from '@server/models/application/application'
+import { MVideoFullLight } from '@server/types/models'
+import { ServerErrorCode, UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
+import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
 import {
   isBooleanValid,
   isDateValid,
@@ -12,6 +15,8 @@ import {
   toIntOrNull,
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
+import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
+import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
 import {
   isScheduleVideoUpdatePrivacyValid,
   isVideoCategoryValid,
@@ -27,29 +32,24 @@ import {
   isVideoSupportValid,
   isVideoTagsValid
 } from '../../../helpers/custom-validators/videos'
+import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
-import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
-import { authenticatePromiseIfNeeded } from '../../oauth'
-import { areValidationErrors } from '../utils'
-import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { VideoModel } from '../../../models/video/video'
-import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
-import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
-import { AccountModel } from '../../../models/account/account'
-import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
-import { CONFIG } from '../../../initializers/config'
-import { isLocalVideoAccepted } from '../../../lib/moderation'
-import { Hooks } from '../../../lib/plugins/hooks'
 import {
   checkUserCanManageVideo,
   doesVideoChannelOfAccountExist,
   doesVideoExist,
   doesVideoFileOfVideoExist
 } from '../../../helpers/middlewares'
-import { MVideoFullLight } from '@server/types/models'
 import { getVideoWithAttributes } from '../../../helpers/video'
-import { getServerActor } from '@server/models/application/application'
+import { CONFIG } from '../../../initializers/config'
+import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
+import { isLocalVideoAccepted } from '../../../lib/moderation'
+import { Hooks } from '../../../lib/plugins/hooks'
+import { AccountModel } from '../../../models/account/account'
+import { VideoModel } from '../../../models/video/video'
+import { authenticatePromiseIfNeeded } from '../../oauth'
+import { areValidationErrors } from '../utils'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -148,7 +148,9 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
 
   return res.status(403)
             .json({
-              error: 'Cannot get this video regarding follow constraints.'
+              errorCode: ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS,
+              error: 'Cannot get this video regarding follow constraints.',
+              originUrl: video.url
             })
 }
 
