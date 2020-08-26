@@ -545,8 +545,8 @@ const STATIC_DOWNLOAD_PATHS = {
 }
 const LAZY_STATIC_PATHS = {
   AVATARS: '/lazy-static/avatars/',
-  PREVIEWS: '/static/previews/',
-  VIDEO_CAPTIONS: '/static/video-captions/'
+  PREVIEWS: '/lazy-static/previews/',
+  VIDEO_CAPTIONS: '/lazy-static/video-captions/'
 }
 
 // Cache control

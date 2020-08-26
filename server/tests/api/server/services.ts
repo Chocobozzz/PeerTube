@@ -70,7 +70,7 @@ describe('Test services', function () {
     const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
       `src="http://localhost:${server.port}/videos/embed/${server.video.uuid}" ` +
       'frameborder="0" allowfullscreen></iframe>'
-    const expectedThumbnailUrl = 'http://localhost:' + server.port + '/static/previews/' + server.video.uuid + '.jpg'
+    const expectedThumbnailUrl = 'http://localhost:' + server.port + '/lazy-static/previews/' + server.video.uuid + '.jpg'
 
     expect(res.body.html).to.equal(expectedHtml)
     expect(res.body.title).to.equal(server.video.name)

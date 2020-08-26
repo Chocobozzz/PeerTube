@@ -5,6 +5,10 @@
 ### IMPORTANT NOTES
 
  * The minimum ffmpeg version required is now 4.1
+ * Deprecate static routes that will be removed in 3.0 (you may not have to do anything if you used paths returned by the video REST API):
+   * `/static/avatars/`: use `/lazy-static/avatars/` instead
+   * `/static/previews/`: use `/lazy-static/previews/` instead
+   * `/static/video-captions/`: use `/lazy-static/video-captions/` instead
  * Use `playlistPosition` URL parameter for playlists instead of `videoId` to set the current playlist position
 
 ### Maintenance

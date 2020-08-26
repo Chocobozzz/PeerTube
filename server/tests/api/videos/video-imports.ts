@@ -123,7 +123,7 @@ describe('Test video imports', function () {
       const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
       expect(res.body.video.name).to.equal('small video - youtube')
       expect(res.body.video.thumbnailPath).to.equal(`/static/thumbnails/${res.body.video.uuid}.jpg`)
-      expect(res.body.video.previewPath).to.equal(`/static/previews/${res.body.video.uuid}.jpg`)
+      expect(res.body.video.previewPath).to.equal(`/lazy-static/previews/${res.body.video.uuid}.jpg`)
       await testImage(servers[0].url, 'video_import_thumbnail', res.body.video.thumbnailPath)
       await testImage(servers[0].url, 'video_import_preview', res.body.video.previewPath)
 

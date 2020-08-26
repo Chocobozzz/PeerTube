@@ -3887,7 +3887,7 @@ components:
           example: /static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
         previewPath:
           type: string
-          example: /static/previews/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
+          example: /lazy-static/previews/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
         embedPath:
           type: string
           example: /videos/embed/a65bc12f-9383-462e-81ae-8207e8b434ee
