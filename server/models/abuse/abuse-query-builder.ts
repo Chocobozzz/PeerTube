@@ -42,7 +42,7 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
     'LEFT JOIN "videoBlacklist" ON "videoBlacklist"."videoId" = "video"."id"',
     'LEFT JOIN "videoChannel" ON "video"."channelId" = "videoChannel"."id"',
     'LEFT JOIN "account" "reporterAccount" ON "reporterAccount"."id" = "abuse"."reporterAccountId"',
-    'LEFT JOIN "account" "flaggedAccount" ON "flaggedAccount"."id" = "abuse"."reporterAccountId"',
+    'LEFT JOIN "account" "flaggedAccount" ON "flaggedAccount"."id" = "abuse"."flaggedAccountId"',
     'LEFT JOIN "commentAbuse" ON "commentAbuse"."abuseId" = "abuse"."id"',
     'LEFT JOIN "videoComment" ON "commentAbuse"."videoCommentId" = "videoComment"."id"'
   ]
