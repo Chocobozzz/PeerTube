@@ -3822,6 +3822,7 @@ components:
           format: url
         files:
           type: array
+          description: 'Video files associated to this playlist. The difference with the root "files" property is that these files are fragmented, so they can be used in this streaming playlist (HLS etc)'
           items:
             $ref: '#/components/schemas/VideoFile'
         redundancies:
@@ -3948,6 +3949,7 @@ components:
               example: [flowers, gardening]
             files:
               type: array
+              description: 'WebTorrent/raw video files. Can be empty if WebTorrent is disabled on the server. In this case, video files will be in the "streamingPlaylists[].files" property'
               items:
                 $ref: '#/components/schemas/VideoFile'
             commentsEnabled:
