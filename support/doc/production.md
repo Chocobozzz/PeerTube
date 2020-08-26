@@ -160,7 +160,7 @@ If your OS uses systemd, copy the configuration template:
 $ sudo cp /var/www/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
 ```
 
-Update the service file:
+Check the service file (PeerTube paths and security directives):
 
 ```
 $ sudo vim /etc/systemd/system/peertube.service
