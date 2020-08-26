@@ -134,7 +134,7 @@ describe('Test video imports', function () {
       const enCaption = videoCaptions.find(caption => caption.language.id === 'en')
       expect(enCaption).to.exist
       expect(enCaption.language.label).to.equal('English')
-      expect(enCaption.captionPath).to.equal(`/static/video-captions/${res.body.video.uuid}-en.vtt`)
+      expect(enCaption.captionPath).to.equal(`/lazy-static/video-captions/${res.body.video.uuid}-en.vtt`)
       await testCaptionFile(servers[0].url, enCaption.captionPath, `WEBVTT
 Kind: captions
 Language: en
@@ -151,7 +151,7 @@ Adding subtitles is very easy to do`)
       const frCaption = videoCaptions.find(caption => caption.language.id === 'fr')
       expect(frCaption).to.exist
       expect(frCaption.language.label).to.equal('French')
-      expect(frCaption.captionPath).to.equal(`/static/video-captions/${res.body.video.uuid}-fr.vtt`)
+      expect(frCaption.captionPath).to.equal(`/lazy-static/video-captions/${res.body.video.uuid}-fr.vtt`)
       await testCaptionFile(servers[0].url, frCaption.captionPath, `WEBVTT
 Kind: captions
 Language: fr
