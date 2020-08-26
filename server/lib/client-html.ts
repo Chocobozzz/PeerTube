@@ -173,8 +173,6 @@ export class ClientHtml {
 
   static async getEmbedHTML () {
     const path = ClientHtml.getEmbedPath()
-    console.log('coucu')
-    console.log(path)
 
     if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
