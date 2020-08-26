@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core'
 import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
-import { AppComponent } from '@app/app.component'
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 import { MenuGuards } from '@app/core/routing/menu-guard.service'
 import { PreloadSelectedModulesList } from './core'
 import { EmptyComponent } from './empty.component'
+import { POSSIBLE_LOCALES } from '@shared/core-utils/i18n'
 
 const routes: Routes = [
   {
@@ -56,12 +56,21 @@ const routes: Routes = [
   {
     path: '',
     component: EmptyComponent // Avoid 404, app component will redirect dynamically
-  },
-  {
-    path: '**',
-    loadChildren: () => import('./+page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
   }
 ]
+
+// Avoid 404 when changing language
+for (const locale of POSSIBLE_LOCALES) {
+  routes.push({
+    path: locale,
+    component: EmptyComponent
+  })
+}
+
+routes.push({
+  path: '**',
+  loadChildren: () => import('./+page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
+})
 
 @NgModule({
   imports: [
