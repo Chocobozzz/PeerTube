@@ -43,7 +43,7 @@ describe('Videos workflow', () => {
     if (await isIOS()) {
       // iOS does not seem to work with protractor
       // https://github.com/angular/protractor/issues/2840
-      browser.ignoreSynchronization = true
+      browser.waitForAngularEnabled(false)
 
       console.log('iOS detected')
     } else if (await isMobileDevice()) {
@@ -111,6 +111,7 @@ describe('Videos workflow', () => {
   })
 
   it('Should watch the associated embed video', async () => {
+    const oldValue = await browser.waitForAngularEnabled()
     await browser.waitForAngularEnabled(false)
 
     await videoWatchPage.goOnAssociatedEmbed()
@@ -118,10 +119,11 @@ describe('Videos workflow', () => {
     await playerPage.playAndPauseVideo(false)
     expect(playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
 
-    await browser.waitForAngularEnabled(true)
+    await browser.waitForAngularEnabled(oldValue)
   })
 
   it('Should watch the p2p media loader embed video', async () => {
+    const oldValue = await browser.waitForAngularEnabled()
     await browser.waitForAngularEnabled(false)
 
     await videoWatchPage.goOnP2PMediaLoaderEmbed()
@@ -129,7 +131,7 @@ describe('Videos workflow', () => {
     await playerPage.playAndPauseVideo(false)
     expect(playerPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
 
-    await browser.waitForAngularEnabled(true)
+    await browser.waitForAngularEnabled(oldValue)
   })
 
   it('Should update the video', async () => {
@@ -185,11 +187,12 @@ describe('Videos workflow', () => {
 
     await myAccountPage.playPlaylist()
 
+    const oldValue = await browser.waitForAngularEnabled()
     await browser.waitForAngularEnabled(false)
 
     await videoWatchPage.waitUntilVideoName(video2Name, 20000 * 1000)
 
-    await browser.waitForAngularEnabled(true)
+    await browser.waitForAngularEnabled(oldValue)
   })
 
   it('Should watch the webtorrent playlist in the embed', async () => {
@@ -198,6 +201,7 @@ describe('Videos workflow', () => {
     const accessToken = await browser.executeScript(`return window.localStorage.getItem('access_token');`)
     const refreshToken = await browser.executeScript(`return window.localStorage.getItem('refresh_token');`)
 
+    const oldValue = await browser.waitForAngularEnabled()
     await browser.waitForAngularEnabled(false)
 
     await myAccountPage.goOnAssociatedPlaylistEmbed()
@@ -212,10 +216,11 @@ describe('Videos workflow', () => {
 
     await playerPage.waitUntilPlaylistInfo('2/2')
 
-    await browser.waitForAngularEnabled(true)
+    await browser.waitForAngularEnabled(oldValue)
   })
 
   it('Should watch the HLS playlist in the embed', async () => {
+    const oldValue = await browser.waitForAngularEnabled()
     await browser.waitForAngularEnabled(false)
 
     await videoWatchPage.goOnP2PMediaLoaderPlaylistEmbed()
@@ -224,7 +229,7 @@ describe('Videos workflow', () => {
 
     await playerPage.waitUntilPlaylistInfo('2/2')
 
-    await browser.waitForAngularEnabled(true)
+    await browser.waitForAngularEnabled(oldValue)
   })
 
   it('Should delete the video 2', async () => {

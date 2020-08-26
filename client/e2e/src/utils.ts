@@ -1,11 +1,15 @@
 import { browser } from 'protractor'
 
 async function browserSleep (amount: number) {
-  if (await isIOS()) browser.ignoreSynchronization = false
+  const oldValue = await browser.waitForAngularEnabled()
+
+  // iOS does not seem to work with protractor
+  // https://github.com/angular/protractor/issues/2840
+  if (await isIOS()) browser.waitForAngularEnabled(true)
 
   await browser.sleep(amount)
 
-  if (await isIOS()) browser.ignoreSynchronization = true
+  if (await isIOS()) browser.waitForAngularEnabled(oldValue)
 }
 
 async function isMobileDevice () {

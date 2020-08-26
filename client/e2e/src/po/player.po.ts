@@ -1,5 +1,5 @@
-import { browser, by, element, ExpectedConditions } from 'protractor'
-import { browserSleep, isIOS, isMobileDevice } from '../utils'
+import { browser, by, element } from 'protractor'
+import { browserSleep, isIOS, isMobileDevice, isSafari } from '../utils'
 
 export class PlayerPage {
 
@@ -17,27 +17,22 @@ export class PlayerPage {
   }
 
   async playAndPauseVideo (isAutoplay: boolean) {
-    // Autoplay is disabled on iOS
-    if (isAutoplay === false || await isIOS()) {
+    const videojsEl = element(by.css('div.video-js'))
+    await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
+
+    // Autoplay is disabled on iOS and Safari
+    if (await isIOS() || await isSafari() || await isMobileDevice()) {
+      // We can't play the video using protractor if it is not muted
+      await browser.executeScript(`document.querySelector('video').muted = true`)
+      await this.clickOnPlayButton()
+    } else if (isAutoplay === false) {
       await this.clickOnPlayButton()
     }
 
     await browserSleep(2000)
     await browser.wait(browser.ExpectedConditions.invisibilityOf(element(by.css('.vjs-loading-spinner'))))
 
-    const videojsEl = element(by.css('div.video-js'))
-    await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
-
-    if (await isMobileDevice()) {
-      await browserSleep(5000)
-
-      // On Android, we need to click twice on "play" (BrowserStack particularity)
-      if (!await isIOS()) await videojsEl.click()
-    }
-
-    browser.ignoreSynchronization = false
-    await browserSleep(7000)
-    browser.ignoreSynchronization = true
+    await browserSleep(2000)
 
     await videojsEl.click()
   }
