@@ -4,7 +4,7 @@ import { UserRole } from './user-role'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { UserNotificationSetting } from './user-notification-setting.model'
 import { UserAdminFlag } from './user-flag.model'
-import { VideoPlaylistType } from '@shared/models'
+import { VideoPlaylistType } from '../videos/playlist/video-playlist-type.model'
 
 export interface User {
   id: number

@@ -1,6 +1,6 @@
-import { SendEmailOptions } from './emailer.model'
-import { VideoResolution } from '@shared/models'
 import { ContextType } from '../activitypub/context'
+import { VideoResolution } from '../videos/video-resolution.enum'
+import { SendEmailOptions } from './emailer.model'
 
 export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed'
 

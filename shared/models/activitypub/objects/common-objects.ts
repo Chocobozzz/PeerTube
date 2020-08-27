@@ -1,4 +1,4 @@
-import { AbusePredefinedReasonsString } from '@shared/models'
+import { AbusePredefinedReasonsString } from '../../moderation/abuse/abuse-reason.model'
 
 export interface ActivityIdentifierObject {
   identifier: string

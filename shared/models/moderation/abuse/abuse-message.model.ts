@@ -1,4 +1,4 @@
-import { AccountSummary } from '@shared/models'
+import { AccountSummary } from '../../actors/account.model'
 
 export interface AbuseMessage {
   id: number
