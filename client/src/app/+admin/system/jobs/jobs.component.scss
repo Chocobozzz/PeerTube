@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+.select-job-state {
+  min-width: 120px;
+}
+
 .job-id {
   max-width: 30vw !important;
 }
@@ -11,10 +15,6 @@
 
 .job-date {
   width: 170px !important;
-}
-
-.job-state {
-  max-width: 60px;
 }
 
 .admin-sub-header {
@@ -46,4 +46,8 @@ pre {
 
 .job-error {
   color: red;
+}
+
+.badge {
+  @include table-badge;
 }

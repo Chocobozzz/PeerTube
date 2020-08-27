@@ -5,17 +5,30 @@
     </select>
   </div>
 
-  <div class="peertube-select-container">
-    <select [(ngModel)]="startDate" (ngModelChange)="refresh()" class="form-control">
-      <option *ngFor="let timeChoice of timeChoices" [value]="timeChoice.id">{{ timeChoice.label }}</option>
-    </select>
-  </div>
+  <ng-select
+    [(ngModel)]="startDate"
+    (ngModelChange)="refresh()"
+    [clearable]="false"
+    [searchable]="false"
+  >
+    <ng-option *ngFor="let time of timeChoices" [value]="time.id">
+      {{ time.label }} ({{ time.id | date: time.dateFormat }} - <span i18n>now</span>)
+    </ng-option>
+  </ng-select>
 
-  <div class="peertube-select-container" *ngIf="!isAuditLog()">
-    <select [(ngModel)]="level" (ngModelChange)="refresh()" class="form-control">
-      <option *ngFor="let levelChoice of levelChoices" [value]="levelChoice.id">{{ levelChoice.label }}</option>
-    </select>
-  </div>
+  <ng-select
+    [(ngModel)]="level"
+    (ngModelChange)="refresh()"
+    [clearable]="false"
+    [searchable]="false"
+  >
+    <ng-option *ngFor="let levelChoice of levelChoices" [value]="levelChoice.id">
+      <ng-container *ngIf="levelChoice.id === 'debug'"><span style="font-size:80%;color:lightgray;vertical-align:text-top;">&#11044;</span> {{ levelChoice.label }}</ng-container>
+      <ng-container *ngIf="levelChoice.id === 'info'"><span style="font-size:80%;color:lightskyblue;vertical-align:text-top;">&#11044;</span> {{ levelChoice.label }}</ng-container>
+      <ng-container *ngIf="levelChoice.id === 'warn'"><span style="font-size:80%;color:orange;vertical-align:text-top;">&#11044;</span> {{ levelChoice.label }}</ng-container>
+      <ng-container *ngIf="levelChoice.id === 'error'"><span style="font-size:80%;color:red;vertical-align:text-top;">&#11044;</span> {{ levelChoice.label }}</ng-container>
+    </ng-option>
+  </ng-select>
 
   <my-button i18n-label label="Refresh" icon="refresh" (click)="refresh()"></my-button>
 </div>

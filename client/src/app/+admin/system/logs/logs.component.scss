@@ -52,7 +52,8 @@
   }
 
   my-button,
-  .peertube-select-container {
+  .peertube-select-container,
+  ng-select {
     margin-left: 10px;
   }
 }
@@ -62,6 +63,7 @@
     flex-direction: column;
 
     .peertube-select-container,
+    ng-select,
     my-button {
       width: 100% !important;
       margin-left: 0px !important;
@@ -80,6 +82,7 @@
       flex-direction: column;
 
       .peertube-select-container,
+      ng-select,
       my-button {
         width: 100% !important;
         margin-left: 0px !important;
