@@ -119,6 +119,10 @@ export class PeertubePlayerManager {
 
   private static alreadyPlayed = false
 
+  static initState () {
+    PeertubePlayerManager.alreadyPlayed = false
+  }
+
   static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: videojs.Player) => void) {
     let p2pMediaLoader: any
 

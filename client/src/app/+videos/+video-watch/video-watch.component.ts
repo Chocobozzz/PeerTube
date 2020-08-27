@@ -117,6 +117,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit () {
+    PeertubePlayerManager.initState()
+
     this.serverConfig = this.serverService.getTmpConfig()
 
     this.configSub = this.serverService.getConfig()
