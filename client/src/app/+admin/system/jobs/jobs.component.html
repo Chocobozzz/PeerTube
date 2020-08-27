@@ -10,45 +10,48 @@
 
   <div class="select-filter-block">
     <label for="jobState" i18n>Job state</label>
-    <div class="peertube-select-container">
-      <select id="jobState" name="jobState" [(ngModel)]="jobState" (ngModelChange)="onJobStateOrTypeChanged()" class="form-control">
-        <option *ngFor="let state of jobStates" [value]="state">{{ state }}</option>
-      </select>
-    </div>
+    <ng-select
+      class="select-job-state"
+      [(ngModel)]="jobState"
+      (ngModelChange)="onJobStateOrTypeChanged()"
+      [clearable]="false"
+      [searchable]="false"
+    >
+      <ng-option *ngFor="let state of jobStates" [value]="state">
+        <span class="badge" [ngClass]="getJobStateClass(state)">{{ state }}</span>
+      </ng-option>
+    </ng-select>
   </div>
 </div>
 
 <p-table
-  [value]="jobs" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" dataKey="uniqId"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" [first]="pagination.start"
-  [tableStyle]="{'table-layout':'auto'}" (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [value]="jobs" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"  [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="uniqId" [first]="pagination.start"
+  [tableStyle]="{'table-layout':'auto'}" (onPage)="onPage($event)"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} jobs"
+  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px"></th>
-      <th style="width: 100%" class="job-id" i18n>ID</th>
+      <th style="width: calc(100% - 390px)" class="job-id" i18n>ID</th>
       <th style="width: 200px" class="job-type" i18n>Type</th>
       <th style="width: 150px" class="job-date" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 150px" class="job-state" i18n>State</th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-job>
     <tr>
-      <td class="expand-cell">
-        <span class="expander" [pRowToggler]="job" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+      <td class="expand-cell" [pRowToggler]="job" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+        <span class="expander">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>
 
-      <td class="job-id" [title]="job.id">{{ job.id }}</td>
-      <td class="job-type">{{ job.type }}</td>
-      <td class="job-date">{{ job.createdAt | date: 'short' }}</td>
-      <td class="job-state" *ngIf="job.state === 'delayed'" class="text-muted"><span class="glyphicon glyphicon-repeat"></span> <span i18n>Delayed</span></td>
-      <td class="job-state" *ngIf="job.state === 'waiting'" class="text-warning"><span class="glyphicon glyphicon-hourglass"></span> <span i18n>Will start soon...</span></td>
-      <td class="job-state" *ngIf="job.state === 'active'" class="text-warning"><span class="glyphicon glyphicon-cog"></span> <span i18n>Running...</span></td>
-      <td class="job-state" *ngIf="job.state === 'completed'" class="text-success"><span class="glyphicon glyphicon-ok"></span> <span i18n>Finished</span></td>
-      <td class="job-state" *ngIf="job.state === 'failed'" class="text-danger"><span class="glyphicon glyphicon-remove"></span> <span i18n>Failed</span></td>
+      <td class="job-id" [pRowToggler]="job" [title]="job.id">{{ job.id }}</td>
+      <td class="job-type" [pRowToggler]="job">{{ job.type }}</td>
+      <td class="job-date" [pRowToggler]="job">{{ job.createdAt | date: 'short' }}</td>
     </tr>
   </ng-template>
 
@@ -71,6 +74,19 @@
     <tr class="job-error" *ngIf="job.error">
       <td colspan="4">
         <pre>{{ job.error }}</pre>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="4">
+        <div class="no-results">
+          <div class="d-block">
+            <ng-container *ngIf="jobType === 'all'" i18n>No <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
+            <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
+          </div>
+        </div>
       </td>
     </tr>
   </ng-template>

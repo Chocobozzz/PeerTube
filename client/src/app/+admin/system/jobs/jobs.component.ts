@@ -56,6 +56,21 @@ export class JobsComponent extends RestTable implements OnInit {
     return 'JobsComponent'
   }
 
+  getJobStateClass (state: JobStateClient) {
+    switch (state) {
+      case 'active':
+        return 'badge-blue'
+      case 'completed':
+        return 'badge-green'
+      case 'delayed':
+        return 'badge-brown'
+      case 'failed':
+        return 'badge-red'
+      case 'waiting':
+        return 'badge-yellow'
+    }
+  }
+
   onJobStateOrTypeChanged () {
     this.pagination.start = 0
 

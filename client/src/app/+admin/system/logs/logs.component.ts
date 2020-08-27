@@ -14,7 +14,7 @@ export class LogsComponent implements OnInit {
   loading = false
 
   logs: LogRow[] = []
-  timeChoices: { id: string, label: string }[] = []
+  timeChoices: { id: string, label: string, dateFormat: string }[] = []
   levelChoices: { id: LogLevel, label: string }[] = []
   logTypeChoices: { id: 'audit' | 'standard', label: string }[] = []
 
@@ -76,15 +76,18 @@ export class LogsComponent implements OnInit {
     this.timeChoices = [
       {
         id: lastWeek.toISOString(),
-        label: $localize`Last week`
+        label: $localize`Last week`,
+        dateFormat: 'shortDate'
       },
       {
         id: lastDay.toISOString(),
-        label: $localize`Last day`
+        label: $localize`Last day`,
+        dateFormat: 'short'
       },
       {
         id: lastHour.toISOString(),
-        label: $localize`Last hour`
+        label: $localize`Last hour`,
+        dateFormat: 'mediumTime'
       }
     ]
 
@@ -95,19 +98,19 @@ export class LogsComponent implements OnInit {
     this.levelChoices = [
       {
         id: 'debug',
-        label: $localize`Debug`
+        label: $localize`debug`
       },
       {
         id: 'info',
-        label: $localize`Info`
+        label: $localize`info`
       },
       {
         id: 'warn',
-        label: $localize`Warning`
+        label: $localize`warning`
       },
       {
         id: 'error',
-        label: $localize`Error`
+        label: $localize`error`
       }
     ]
 
