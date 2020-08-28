@@ -23,7 +23,7 @@ describe('Test videos search', function () {
   let videoUUID: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     server = await flushAndRunServer(1)
 
