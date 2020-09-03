@@ -463,7 +463,7 @@
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
         <source>User registration allowed</source>
-        <target>Enregistrement d'utilisateur·rice autorisé.e</target>
+        <target>Enregistrement d'utilisateur·rice autorisé·e</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2">
@@ -4890,7 +4890,7 @@
       </trans-unit>
       <trans-unit id="2381839025353444784" datatype="html">
         <source>Report account</source>
-        <target state="translated">Signaler un compte</target>
+        <target state="translated">Signaler ce compte</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
@@ -5593,7 +5593,7 @@
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
         <source>User <x id="PH"/> updated.</source>
-        <target state="translated">Utilisateur.rice <x id="PH"/> mis.e à jour.</target>
+        <target state="translated">Utilisateur·rice <x id="PH"/> mis·e à jour.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1349763489797682899">
@@ -5701,7 +5701,7 @@
       </trans-unit>
       <trans-unit id="5325873477837320044">
         <source>You cannot delete root.</source>
-        <target>Vous ne pouvez pas supprimer l'utilisateur.rice root.</target>
+        <target>Vous ne pouvez pas supprimer l'utilisateur·rice root.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="4086135983283545219">
@@ -6126,7 +6126,7 @@
       </trans-unit>
       <trans-unit id="1991904494976135035" datatype="html">
         <source>My abuse reports</source>
-        <target state="translated">Mes rapports d'abus</target>
+        <target state="translated">Mes signalements</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="5752861278140673787">
@@ -7417,7 +7417,7 @@
       </trans-unit>
       <trans-unit id="2448281151916042849">
         <source>User <x id="PH"/> banned.</source>
-        <target>Utilisateur.rice <x id="PH"/> banni.e.</target>
+        <target>Utilisateur·rice <x id="PH"/> banni·e.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8269144351796756896">
@@ -7427,7 +7427,7 @@
       </trans-unit>
       <trans-unit id="1794219875546376069">
         <source>User <x id="PH"/> unbanned.</source>
-        <target>L'utilisateur.ice <x id="PH"/> est rétabli.e.</target>
+        <target>L'utilisateur·ice <x id="PH"/> est rétabli·e.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4885683604826993045">
@@ -7437,7 +7437,7 @@
       </trans-unit>
       <trans-unit id="6301381219225831298">
         <source>User <x id="PH"/> deleted.</source>
-        <target>Utilisateur.ice <x id="PH"/> supprimé.e.</target>
+        <target>Utilisateur·ice <x id="PH"/> supprimé·e.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="3896582359861826661">
@@ -7517,7 +7517,7 @@
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
         <source>Edit user</source>
-        <target state="translated">Modifier l’utilisateur.ice</target>
+        <target state="translated">Modifier l’utilisateur·ice</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">263</context></context-group>
       </trans-unit>
       <trans-unit id="4728427543536046034" datatype="html">
@@ -7527,12 +7527,12 @@
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
         <source>Delete user</source>
-        <target state="translated">Supprimer l’utilisateur.ice</target>
+        <target state="translated">Supprimer l’utilisateur·ice</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="7577876364431026966" datatype="html">
         <source>Unban user</source>
-        <target state="translated">Lever l'interdiction pour l’utilisateur.ice</target>
+        <target state="translated">Lever l'interdiction pour l’utilisateur·ice</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="3508163549683020253" datatype="html">
@@ -7949,7 +7949,7 @@
       </trans-unit>
       <trans-unit id="7008439939460403347" datatype="html">
         <source>Report</source>
-        <target state="translated">Compte rendu</target>
+        <target state="translated">Signaler</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
