@@ -4890,7 +4890,7 @@
       </trans-unit>
       <trans-unit id="2381839025353444784" datatype="html">
         <source>Report account</source>
-        <target state="translated">Signaler un compte</target>
+        <target state="translated">Signaler ce compte</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
@@ -6126,7 +6126,7 @@
       </trans-unit>
       <trans-unit id="1991904494976135035" datatype="html">
         <source>My abuse reports</source>
-        <target state="translated">Mes rapports d'abus</target>
+        <target state="translated">Mes signalements</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="5752861278140673787">
@@ -7949,7 +7949,7 @@
       </trans-unit>
       <trans-unit id="7008439939460403347" datatype="html">
         <source>Report</source>
-        <target state="translated">Compte rendu</target>
+        <target state="translated">Signaler</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
