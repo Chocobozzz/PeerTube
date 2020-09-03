@@ -168,7 +168,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
     if (this.isReportableByUser()) {
       this.prependModerationActions.push({
-        label: $localize`Report`,
+        label: $localize`Report this comment`,
         iconName: 'flag',
         handler: () => this.showReportModal()
       })

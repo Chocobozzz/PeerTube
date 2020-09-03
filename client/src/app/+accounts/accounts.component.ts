@@ -112,7 +112,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
           if (!this.isAccountManageable) {
             this.prependModerationActions = [
               {
-                label: $localize`Report account`,
+                label: $localize`Report this account`,
                 handler: () => this.showReportModal()
               }
             ]
