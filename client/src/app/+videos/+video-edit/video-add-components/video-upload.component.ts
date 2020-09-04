@@ -185,9 +185,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
     this.form.patchValue({
       name,
-      privacy,
+      privacy: this.firstStepPrivacyId,
       nsfw,
-      channelId,
+      channelId: this.firstStepChannelId,
       previewfile: this.previewfileUpload
     })
 

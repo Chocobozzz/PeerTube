@@ -1,5 +1,5 @@
-import { Component, Input, forwardRef } from '@angular/core'
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms'
+import { Component, forwardRef, Input } from '@angular/core'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
 export type SelectOptionsItem = {
   id: string | number
@@ -26,6 +26,7 @@ export class SelectOptionsComponent implements ControlValueAccessor {
   @Input() clearable = false
   @Input() searchable = false
   @Input() groupBy: string
+  @Input() labelForId: string
 
   selectedId: number | string
 
