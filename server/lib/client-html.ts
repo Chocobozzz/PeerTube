@@ -32,6 +32,7 @@ type Tags = {
     numberOfItems: number
   }
 
+  siteName: string
   title: string
   url: string
   description: string
@@ -94,6 +95,7 @@ export class ClientHtml {
 
     const url = WEBSERVER.URL + video.getWatchStaticPath()
     const title = escapeHTML(video.name)
+    const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const description = escapeHTML(video.description)
 
     const image = {
@@ -111,7 +113,7 @@ export class ClientHtml {
     const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary_large_image'
     const schemaType = 'VideoObject'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, title, description, image, embed, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, { url, siteName, title, description, image, embed, ogType, twitterCard, schemaType })
 
     return customHtml
   }
@@ -139,6 +141,7 @@ export class ClientHtml {
 
     const url = videoPlaylist.getWatchUrl()
     const title = escapeHTML(videoPlaylist.name)
+    const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const description = escapeHTML(videoPlaylist.description)
 
     const image = {
@@ -158,7 +161,7 @@ export class ClientHtml {
     const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary'
     const schemaType = 'ItemList'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, embed, title, description, image, list, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, { url, siteName, embed, title, description, image, list, ogType, twitterCard, schemaType })
 
     return customHtml
   }
@@ -206,6 +209,7 @@ export class ClientHtml {
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(entity.description))
 
     const url = entity.Actor.url
+    const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const title = escapeHTML(entity.getDisplayName())
     const description = escapeHTML(entity.description)
 
@@ -219,7 +223,7 @@ export class ClientHtml {
     const twitterCard = 'summary'
     const schemaType = 'ProfilePage'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, title, description, image, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, { url, title, siteName, description, image, ogType, twitterCard, schemaType })
 
     return customHtml
   }
@@ -322,6 +326,7 @@ export class ClientHtml {
   private static generateOpenGraphMetaTags (tags: Tags) {
     const metaTags = {
       'og:type': tags.ogType,
+      'og:site_name': tags.siteName,
       'og:title': tags.title,
       'og:image': tags.image.url
     }
