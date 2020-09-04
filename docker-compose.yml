@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  client:
+    command: bash -c "cd client && node node_modules/.bin/ng serve --proxy-config docker-proxy.config.json --hmr --configuration hmr --host 0.0.0.0 --disable-host-check --port 3000"
+    build:
+      context: .
+      args:
+        - SERVICE_PORT=3000
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - 3001:3000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/client/node_modules
+    working_dir: /app
+
+  backend:
+    command: bash -c "npm run dev:server -- --skip-client"
+    build:
+      context: .
+      args:
+        - NODE_ENV=test
+        - NOCLIENT=true
+        - SERVICE_PORT=9000
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - 9000:9000
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+
+  postgres:
+    image: postgres:10-alpine
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker-volume/db:/var/lib/postgresql/data
+    restart: 'always'
+
+  redis:
+    image: redis:4-alpine
+    volumes:
+      - ./docker-volume/redis:/data
+    ports:
+      - 6379:6379
+    restart: 'always'

@@ -1,0 +1,37 @@
+{
+  "/api": {
+    "target": "http://backend:9000",
+    "secure": false
+  },
+  "/plugins": {
+    "target": "http://backend:9000",
+    "secure": false
+  },
+  "/themes": {
+    "target": "http://backend:9000",
+    "secure": false
+  },
+  "/static": {
+    "target": "http://backend:9000",
+    "secure": false
+  },
+  "/lazy-static": {
+    "target": "http://backend:9000",
+    "secure": false
+  },
+  "/socket.io": {
+    "target": "ws://backend:9000",
+    "secure": false,
+    "ws": true
+  },
+  "/!(client)**": {
+    "target": "http://backend:3001/client/index.html",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/!(client)**/**": {
+    "target": "http://backend:3001/client/index.html",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}
