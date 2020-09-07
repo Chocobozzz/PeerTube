@@ -2036,7 +2036,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target state="new">Login</target>
+        <target state="translated">Авторизация</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login-routing.module.ts</context>
           <context context-type="linenumber">14</context>
@@ -2463,7 +2463,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="413bcc4a4c824366e17673f38cb2af4619e940e2" datatype="html">
         <source>Login to comment</source>
-        <target state="new">Login to comment</target>
+        <target state="translated">Авторизуйтесь, что бы добавить комментарий</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="974170f455ff5a9034d5737e84b4194c0046fc6b" datatype="html">
