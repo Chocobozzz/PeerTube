@@ -1,6 +1,8 @@
 # Changelog
 
-## v2.4.0-rc.1
+## v2.4.0
+
+**Since v2.3.0**
 
 ### IMPORTANT NOTES
 
@@ -94,6 +96,16 @@
  * Fix video playlist playback resuming
  * Correctly display error message for Internet Explorer
  * Fix videos RSS feed when HLS only is enabled
+ * Add site_name to opengraph tags
+
+
+**Since v2.4.0-rc.1**
+
+### Bug fixes
+
+ * Add site_name to opengraph tags
+ * Fix privacy/channel select on upload
+
 
 ## v2.3.0
 
