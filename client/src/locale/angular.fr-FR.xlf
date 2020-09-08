@@ -338,7 +338,7 @@
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4">
         <source>Updated <x id="INTERPOLATION"/></source>
-        <target>Mise à jour <x id="INTERPOLATION"/></target>
+        <target>Mettre à jour <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="15c02cb6b6c3be53477e502d3e1ee26955b23af0">
@@ -1858,7 +1858,7 @@
       </trans-unit>
       <trans-unit id="83ea0f7a6f84393af198d48193e01a96f3fcbc9a" datatype="html">
         <source>SHARE</source>
-        <target state="translated">PARTAGEZ</target>
+        <target state="translated">PARTAGER</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="cf272d006ff8c0b60e61b14e17fa6a39b30d614a" datatype="html">
@@ -7945,7 +7945,7 @@
       </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
-        <target state="translated">Bloque</target>
+        <target state="translated">Bloquer</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">262</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309">
@@ -8553,7 +8553,7 @@
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
         <source>Recently added</source>
-        <target state="translated">Ajouté récemment</target>
+        <target state="translated">Ajoutées récemment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/video-list/video-recently-added.component.ts</context>
           <context context-type="linenumber">36</context>
