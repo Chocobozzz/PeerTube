@@ -5556,24 +5556,22 @@
       </trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
-        <target state="new">Audit logs</target>
+        <target state="translated">Protokolo de kontrolo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="1886888801485703107">
         <source>User <x id="PH"/> created.</source>
-        <target>Uzanto 
-          <x id="PH"/> kreita.
-        </target>
+        <target>Uzanto <x id="PH"/> kreita.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
         <source>Create user</source>
-        <target state="new">Create user</target>
+        <target state="translated">Krei uzanton</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-create.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="2903648076838460070" datatype="html">
         <source>Videos blocked</source>
-        <target state="new">Videos blocked</target>
+        <target state="translated">Filmoj blokitaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">67</context>
@@ -5581,7 +5579,7 @@
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
         <source>Muted instances</source>
-        <target state="new">Muted instances</target>
+        <target state="translated">Silentigitaj nodoj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">89</context>
@@ -5589,9 +5587,7 @@
       </trans-unit>
       <trans-unit id="5974506725502681113">
         <source>Password changed for user <x id="PH"/>.</source>
-        <target>Pasvorto ŝanĝiĝis por uzanto 
-          <x id="PH"/>.
-        </target>
+        <target>Pasvorto ŝanĝiĝis por uzanto <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-password.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="149953821752893163">
@@ -5629,14 +5625,12 @@
       </trans-unit>
       <trans-unit id="8819563010322372715">
         <source>An email asking for password reset has been sent to <x id="PH"/>.</source>
-        <target>Retletero petanta restarigon de pasvorto sendiĝis al 
-          <x id="PH"/>.
-        </target>
+        <target>Retletero petanta restarigon de pasvorto sendiĝis al <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="7483807629538115183" datatype="html">
         <source>Users list</source>
-        <target state="new">Users list</target>
+        <target state="translated">Listo de uzantoj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -5644,7 +5638,7 @@
       </trans-unit>
       <trans-unit id="1525334987774465166" datatype="html">
         <source>Create a user</source>
-        <target state="new">Create a user</target>
+        <target state="translated">Krei uzanton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">36</context>
@@ -5652,7 +5646,7 @@
       </trans-unit>
       <trans-unit id="5552039423287890133" datatype="html">
         <source>Update a user</source>
-        <target state="new">Update a user</target>
+        <target state="translated">Ĝisdatigi uzanton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">48</context>
@@ -5660,7 +5654,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target state="new">Federation</target>
+        <target state="translated">Federaĵo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -5668,7 +5662,7 @@
       </trans-unit>
       <trans-unit id="4682675125751819107" datatype="html">
         <source>Instances you follow</source>
-        <target state="new">Instances you follow</target>
+        <target state="translated">Abonataj nodoj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -5676,7 +5670,7 @@
       </trans-unit>
       <trans-unit id="8899833753704589712" datatype="html">
         <source>Instances following you</source>
-        <target state="new">Instances following you</target>
+        <target state="translated">Abonantaj nodoj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -5689,7 +5683,7 @@
       </trans-unit>
       <trans-unit id="4209525355702493436" datatype="html">
         <source>Ban</source>
-        <target state="new">Ban</target>
+        <target state="translated">Forbari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -5707,7 +5701,7 @@
       </trans-unit>
       <trans-unit id="7210277223053877333">
         <source>Set Email as Verified</source>
-        <target>Agordi retpoŝtadreson kiel konfirmitan</target>
+        <target>Agordi retpoŝtadreson konfirmita</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="3403978719736970622">
@@ -5717,9 +5711,7 @@
       </trans-unit>
       <trans-unit id="4884272193574287483">
         <source>Do you really want to unban <x id="PH"/> users?</source>
-        <target>Ĉu vi certe volas malforbari 
-          <x id="PH"/> uzantojn?
-        </target>
+        <target>Ĉu vi certe volas malforbari <x id="PH"/> uzantojn?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">198</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385">
@@ -5755,16 +5747,12 @@
       </trans-unit>
       <trans-unit id="7390990800435887351">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target>Konto 
-          <x id="PH"/> malsilentigita.
-        </target>
+        <target>Konto <x id="PH"/> malsilentigita.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="7246356397085094208">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target>Nodo 
-          <x id="PH"/> malsilentigita.
-        </target>
+        <target>Nodo <x id="PH"/> malsilentigita.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="7163720856202695008">
@@ -5794,7 +5782,7 @@
       </trans-unit>
       <trans-unit id="4051606152827088952">
         <source>Videos history deleted</source>
-        <target>Historio de filmoj foriĝis</target>
+        <target>Historio de filmoj forigita</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="3183245287221165928">
@@ -5834,7 +5822,7 @@
       </trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
         <source>Delete your account</source>
-        <target state="new">Delete your account</target>
+        <target state="translated">Forigi vian konton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
