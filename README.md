@@ -196,7 +196,7 @@ Learn how to import/upload videos from CLI or admin your PeerTube instance with 
 See the [architecture blueprint](https://docs.joinpeertube.org/#/contribute-architecture) for a more detailed explanation of the architectural choices.
 
 See our REST API documentation:
-  * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](https://github.com/Chocobozzz/PeerTube/blob/support/doc/api/openapi.yaml)
+  * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml)
   * Spec explorer: [docs.joinpeertube.org/api-rest-reference.html](https://docs.joinpeertube.org/api-rest-reference.html)
 
 See our [ActivityPub documentation](https://docs.joinpeertube.org/#/api-activitypub).
