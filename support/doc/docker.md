@@ -40,13 +40,13 @@ touch ./docker-volume/traefik/acme.json
 ```
 Needs to have file mode 600:
 ```shell
-chmod 600 ./docker-volume/traefik/acme.json 
+chmod 600 ./docker-volume/traefik/acme.json
 ```
 
 #### Get the latest Compose file
 
 ```shell
-curl https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml > docker-compose.yml 
+curl https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml > docker-compose.yml
 ```
 
 View the source of the file you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/docker-compose.yml)
@@ -93,7 +93,7 @@ intuited from usage.
 
 #### Testing local Docker setup
 
-To test locally your Docker setup, you must add your domain (`<MY DOMAIN>`) in `/etc/hosts`: 
+To test locally your Docker setup, you must add your domain (`<MY DOMAIN>`) in `/etc/hosts`:
 ```
 127.0.0.1       localhost   mydomain.tld
 ```
@@ -115,7 +115,7 @@ peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abc
 
 ### Obtaining Your Automatically Generated DKIM DNS TXT Record
 [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) signature sending and RSA keys generation are enabled by the default Postfix image `mwader/postfix-relay` with [OpenDKIM](http://www.opendkim.org/).
-Run `cat ./docker-volume/opendkim/keys/*/*.txt` to display your DKIM DNS TXT Record containing the public key to configure to your domain : 
+Run `cat ./docker-volume/opendkim/keys/*/*.txt` to display your DKIM DNS TXT Record containing the public key to configure to your domain :
 ```BASH
 user@s:~/peertube|master⚡ ⇒  cat ./docker-volume/opendkim/keys/*/*.txt
 
@@ -124,13 +124,17 @@ peertube._domainkey.mydomain.tld.	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
 	  "j5joTnYwat4387VEUyGUnZ0aZxCERi+ndXv2/wMJ0tizq+a9+EgqIb+7lkUc2XciQPNuTujM25GhrQBEKznvHyPA6fHsFheymOuB763QpkmnQQLCxyLygAY9mE/5RY+5Q6J9oDOQIDAQAB" )  ; ----- DKIM key peertube for mydomain.tld
 ```
 
+### Administrator password
+
+See the production guide ["Administrator" section](https://docs.joinpeertube.org/#/install-any-os?id=administrator)
+
 ### What now?
 
-See the production guide ["What now" section](/support/doc/production.md#what-now). 
+See the production guide ["What now" section](https://docs.joinpeertube.org/#/install-any-os?id=what-now).
 
 ### Upgrade
 
-**Important:** Before upgrading, check you have all the `storage` fields in your [production.yaml file](/support/docker/production/config/production.yaml). 
+**Important:** Before upgrading, check you have all the `storage` fields in your [production.yaml file](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/production.yaml).
 
 Pull the latest images and rerun PeerTube:
 
