@@ -731,7 +731,7 @@
       </trans-unit>
       <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
         <source>Ban</source>
-        <target>Заблокировано</target>
+        <target>Заблокировать</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-ban-modal.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251">
@@ -1223,7 +1223,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="d3381fff430c3687ae1c6302af99d88baa4f480b" datatype="html">
         <source>Shortcuts</source>
-        <target state="translated">Ярлык</target>
+        <target state="translated">Клавиши</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="f8e6eaa974acec3b80e5c77ec0dc4ff80939964d" datatype="html">
@@ -1688,7 +1688,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ea504765b49242bfcaefec84a9cf2f6f179c2ea5" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="new">Contains sensitive content</target>
+        <target state="translated">Содержит конфиденциальный контент</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
@@ -1698,7 +1698,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ec396d3c2e26cbe4a1b3d6747c732419c6dcc3bb" datatype="html">
         <source>Publish after transcoding</source>
-        <target state="new">Publish after transcoding</target>
+        <target state="translated">Публиковать после обработки</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
@@ -1869,7 +1869,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="dfd046dad933ba0a50926b9ab3c1b579c802312e" datatype="html">
         <source>Processing…</source>
-        <target state="new">Processing…</target>
+        <target state="translated">Загрузка…</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="a81bfce50be151484f8e59b34829ab07ef97982b" datatype="html">
@@ -2720,7 +2720,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ed66036cb394f49f63cb5fb5632f483613b790f6" datatype="html">
         <source>Highlight banned users</source>
-        <target state="new">Highlight banned users</target>
+        <target state="translated">Выбрать заблокированных пользователей</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
@@ -2815,7 +2815,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7d88bb14f4ef7eaea7ca41c1832c66451410047a" datatype="html">
         <source>The user was banned</source>
-        <target state="new">The user was banned</target>
+        <target state="translated">Пользователь был заблокирован</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="ed64ec2b14251cfbe9ab28abde51d3f052fde1e7" datatype="html">
@@ -5151,7 +5151,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1">
         <source>P2P &amp; Privacy</source>
-        <target>P2P и приватность</target>
+        <target>P2P &amp; Приватность</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="d0a97e9255fb49b92504d36516f902f440bc8878" datatype="html">
@@ -5913,7 +5913,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8440128775129354214" datatype="html">
         <source>Privacy</source>
-        <target state="new">Privacy</target>
+        <target state="translated">Приватность</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -6347,7 +6347,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4209525355702493436" datatype="html">
         <source>Ban</source>
-        <target state="new">Ban</target>
+        <target state="translated">Заблокировать</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -6370,7 +6370,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3403978719736970622">
         <source>You cannot ban root.</source>
-        <target state="translated">Вы не можете запретить root.</target>
+        <target state="translated">Вы не можете заблокировать root.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="4884272193574287483">
@@ -7511,12 +7511,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7803960725351649605">
         <source>Ban reason must be at least 3 characters long.</source>
-        <target>Причина блокировки должно содержать более 3 символов.</target>
+        <target>Причина блокировки должна содержать более 3 символов.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="3851609012243698179">
         <source>Ban reason cannot be more than 250 characters long.</source>
-        <target>Причина блокировки не должно содержать более 250 символов.</target>
+        <target>Причина блокировки не должна содержать более 250 символов.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="6632896893630378443">
@@ -7700,7 +7700,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="9115337161597088460" datatype="html">
         <source>Video privacy is required.</source>
-        <target state="new">Video privacy is required.</target>
+        <target state="translated">Требуется выбрать приватность.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="7309902991450450996">
@@ -8129,30 +8129,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5708680277917691451" datatype="html">
         <source><x id="PH"/> users banned. </source>
-        <target state="new">
-          <x id="PH"/> users banned.
-        </target>
+        <target state="translated"><x id="PH"/> пользователи заблокированы. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="2448281151916042849" datatype="html">
         <source>User <x id="PH"/> banned.</source>
-        <target state="new">User 
-          <x id="PH"/> banned.
-        </target>
+        <target state="translated">Пользователь <x id="PH"/> заблокирован.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html">
         <source>Do you really want to unban <x id="PH"/>?</source>
-        <target state="new">Do you really want to unban 
-          <x id="PH"/>?
-        </target>
+        <target state="translated">Вы действительно хотите разблокировать <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="1794219875546376069" datatype="html">
         <source>User <x id="PH"/> unbanned.</source>
-        <target state="new">User 
-          <x id="PH"/> unbanned.
-        </target>
+        <target state="translated">Пользователь <x id="PH"/> разблокирован.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4885683604826993045" datatype="html">
@@ -8162,9 +8154,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6301381219225831298" datatype="html">
         <source>User <x id="PH"/> deleted.</source>
-        <target state="new">User 
-          <x id="PH"/> deleted.
-        </target>
+        <target state="translated">Пользовтель <x id="PH"/> удален.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
@@ -8258,7 +8248,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
         <source>Edit user</source>
-        <target state="new">Edit user</target>
+        <target state="translated">Редактировать пользователя</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">263</context></context-group>
       </trans-unit>
       <trans-unit id="4728427543536046034" datatype="html">
@@ -8268,12 +8258,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
         <source>Delete user</source>
-        <target state="new">Delete user</target>
+        <target state="translated">Удалить пользователя</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="7577876364431026966" datatype="html">
         <source>Unban user</source>
-        <target state="new">Unban user</target>
+        <target state="translated">Разблокировать пользователя</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="3508163549683020253" datatype="html">
@@ -8413,7 +8403,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target state="new">Privacy breach or doxxing</target>
+        <target state="translated">Нарушение конфиденциальности или доксинг</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
@@ -8790,7 +8780,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4887724548587271148">
         <source>Waiting transcoding</source>
-        <target>Ожидается транскодирование</target>
+        <target>Ожидается обработка</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="4517785179607945981">
@@ -8800,7 +8790,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3299576663551440736">
         <source>To import</source>
-        <target state="new">To import</target>
+        <target state="translated">Импорт файла</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="1795705931707209785" datatype="html">
