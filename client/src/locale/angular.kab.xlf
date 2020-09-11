@@ -670,7 +670,7 @@
       </trans-unit>
       <trans-unit id="d11fe88f08e43bfe4dec7d16fe469aa65d1e3d84" datatype="html">
         <source>video comments</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="0bedca44bfc0ef579be6053ffe0e8cdee9aba07d" datatype="html">
@@ -685,12 +685,12 @@
       </trans-unit>
       <trans-unit id="8de9d3173fafc2c7a94352dec3de899b6cedf9c5" datatype="html">
         <source>followers</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1ec99ffe83830affef834fd7beeda8ee313203fe" datatype="html">
         <source>following</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729" datatype="html">
@@ -705,12 +705,12 @@
       </trans-unit>
       <trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251" datatype="html">
         <source>A banned user will no longer be able to login.</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-ban-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020" datatype="html">
         <source>Ban this user</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-ban-modal.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="dbabcb47dc77c29275d0f836280ef1dcd924fdb9" datatype="html">
@@ -720,7 +720,7 @@
       </trans-unit>
       <trans-unit id="dc3bdad5421d0ee7ddd76ae62b699d72dd9f61b4" datatype="html">
         <source>Please describe the reason...</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="c078d4901a5fac169665947cc7a6108b94dd80c7" datatype="html">
@@ -730,7 +730,7 @@
       </trans-unit>
       <trans-unit id="20f62f24170d57b1efeb2387a0949f482cd4d129" datatype="html">
         <source>Default policy on videos containing sensitive content</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737" datatype="html">
@@ -740,7 +740,7 @@
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe" datatype="html">
@@ -750,7 +750,7 @@
       </trans-unit>
       <trans-unit id="aaa900149c2ca1575ac1918d1ded33fb69830ab2" datatype="html">
         <source>Blur thumbnails</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="010d24ef3c43b2d8f45a4d6cba7d73e12ee1557e" datatype="html">
@@ -760,17 +760,17 @@
       </trans-unit>
       <trans-unit id="ea8e7b15807cce2fea74798db2396a4de016e5c7" datatype="html">
         <source>Only display videos in the following languages/subtitles</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="db930d0e3dbcb12963bec15cfec67fac6534542d" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="984be691d289644c6d40fa2cc858093be31ab58e" datatype="html">
         <source>Add a new language</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
@@ -780,27 +780,27 @@
       </trans-unit>
       <trans-unit id="0f9a16c167ea4f043577304b13046c143692cb99" datatype="html">
         <source>Help share videos being played</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
@@ -810,7 +810,7 @@
       </trans-unit>
       <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808" datatype="html">
         <source>instance default</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="2aad0303b66062ca5fb031b72df15b2cbce6e35d" datatype="html">
@@ -820,7 +820,7 @@
       </trans-unit>
       <trans-unit id="4b50f2ef2e8b9a24e674d12012ee310f378a5503" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers </source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/account/actor-avatar-info.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea" datatype="html">
@@ -845,7 +845,7 @@
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453" datatype="html">
         <source>Request new verification email.</source>
-        <target state="translated">Request new verification email.</target>
+        <target state="translated">Suter imayl n usentem amaynut.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="e08a77594f3d89311cdf6da5090044270909c194" datatype="html">
@@ -860,7 +860,7 @@
       </trans-unit>
       <trans-unit id="9fed9d6f57dafb967ffaaf3c63f54ad976cab926" datatype="html">
         <source>or create an account</source>
-        <target state="translated">or create an account</target>
+        <target state="translated">neɣ snulfu-d amiḍan</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407" datatype="html">
@@ -870,7 +870,7 @@
       </trans-unit>
       <trans-unit id="48ff0628dcbb4d37e9687302df3023b8427b48f2" datatype="html">
         <source>Click here to reset your password</source>
-        <target state="translated">Click here to reset your password</target>
+        <target state="translated">Si da akken ad twenzeḍ awal uffir</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9" datatype="html">
@@ -890,7 +890,7 @@
       </trans-unit>
       <trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated">We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</target>
+        <target state="translated"></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
