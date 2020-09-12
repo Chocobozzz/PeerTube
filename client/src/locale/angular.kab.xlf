@@ -890,12 +890,12 @@
       </trans-unit>
       <trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated"></target>
+        <target state="translated"/>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
-        <target state="translated">An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</target>
+        <target state="translated"></target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
           <context context-type="linenumber">106,107</context>
@@ -923,7 +923,7 @@
       </trans-unit>
       <trans-unit id="26b0b148ff87e083300fa9ca213f8ada7fa6211d" datatype="html">
         <source>on this instance</source>
-        <target state="translated">on this instance</target>
+        <target state="translated"></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="cdc5b877341ff8e6009282a299f2f2d6987dbdbe" datatype="html">
