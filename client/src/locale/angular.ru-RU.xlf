@@ -1748,14 +1748,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0">
         <source>No captions for now.</source>
-        <target>
-            Нет заголовок.
-          </target>
+        <target>Нет субтитров.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">191</context></context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
         <source>Captions</source>
-        <target>Заголовки</target>
+        <target>Субтитры</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430" datatype="html">
@@ -1946,9 +1944,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5">
         <source>Upload <x id="INTERPOLATION"/></source>
-        <target>Загрузить 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target>Загрузка <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
@@ -4167,7 +4163,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="478d017e2701ae21cefab20e7226702d77f15727" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="new">Number of video captions to keep in cache</target>
+        <target state="translated">Размер субтитров к видео для хранения в кеше</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">862</context></context-group>
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
@@ -7291,17 +7287,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6941976540222684735">
         <source>Captions cache size is required.</source>
-        <target>Требуется размер кэша заголовок.</target>
+        <target>Требуется размер кэша субтитров.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="780869536819343075">
         <source>Captions cache size must be greater than 1.</source>
-        <target>Размер кэша заголовок должен быть более 1.</target>
+        <target>Размер кэша субтитров должен быть более 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2498218540197718478">
         <source>Captions cache size must be a number.</source>
-        <target>Размер кэша заголовок должен быть числом.</target>
+        <target>Размер кэша субтитров должен быть числом.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="818392297325723982">
@@ -8433,7 +8429,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
         <source>Captions</source>
-        <target state="new">Captions</target>
+        <target state="translated">Субтитры</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">178</context>
