@@ -7645,7 +7645,7 @@
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="new">Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</target>
+        <target state="translated">Содержит личную информацию, которая может быть использована для отслеживания, идентификации, связи или выдачи себя за другое лицо (например, имя, адрес, номер телефона, адрес электронной почты или данные кредитной карты).</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
