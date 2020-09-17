@@ -699,6 +699,87 @@
       </ng-template>
     </ng-container>
 
+    <ng-container ngbNavItem="live">
+      <a ngbNavLink i18n>Live streaming</a>
+
+      <ng-template ngbNavContent>
+
+        <div class="form-row mt-5">
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">LIVE</div>
+            <div i18n class="inner-form-description">
+              Add ability for your users to do live streaming on your instance.
+            </div>
+          </div>
+
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+            <ng-container formGroupName="live">
+
+              <div class="form-group">
+                <my-peertube-checkbox inputName="liveEnabled" formControlName="enabled">
+                  <ng-template ptTemplate="label">
+                    <ng-container i18n>Allow live streaming</ng-container>
+                  </ng-template>
+
+                  <ng-template ptTemplate="help">
+                    <ng-container i18n>Enabling live streaming requires trust in your users and extra moderation work</ng-container>
+                  </ng-template>
+
+                  <ng-container ngProjectAs="extra" formGroupName="transcoding">
+
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() }">
+                      <my-peertube-checkbox
+                        inputName="liveTranscodingEnabled" formControlName="enabled"
+                        i18n-labelText labelText="Enable live transcoding"
+                      >
+                        <ng-container ngProjectAs="description">
+                          Requires a lot of CPU!
+                        </ng-container>
+                      </my-peertube-checkbox>
+                    </div>
+
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() || !isLiveTranscodingEnabled() }">
+                      <label i18n for="liveTranscodingThreads">Live transcoding threads</label>
+                      <div class="peertube-select-container">
+                        <select id="liveTranscodingThreads" formControlName="threads" class="form-control">
+                          <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
+                            {{ transcodingThreadOption.label }}
+                          </option>
+                        </select>
+                      </div>
+                      <div *ngIf="formErrors.live.transcoding.threads" class="form-error">{{ formErrors.live.transcoding.threads }}</div>
+                    </div>
+
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() || !isLiveTranscodingEnabled() }">
+
+                      <label i18n for="liveTranscodingThreads">Live resolutions to generate</label>
+
+                      <div class="ml-2 mt-2 d-flex flex-column">
+                        <ng-container formGroupName="resolutions">
+                          <div class="form-group" *ngFor="let resolution of liveResolutions">
+                            <my-peertube-checkbox
+                              [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                              labelText="{{resolution.label}}"
+                            >
+                              <ng-template *ngIf="resolution.description" ptTemplate="help">
+                                <div [innerHTML]="resolution.description"></div>
+                              </ng-template>
+                            </my-peertube-checkbox>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </my-peertube-checkbox>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+      </ng-template>
+    </ng-container>
+
     <ng-container ngbNavItem="advanced-configuration">
       <a ngbNavLink i18n>Advanced configuration</a>
 
@@ -814,7 +895,7 @@
 
               <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
 
-                <label i18n for="transcodingThreads">Resolutions to generate</label>
+                <label i18n>Resolutions to generate</label>
 
                 <div class="ml-2 mt-2 d-flex flex-column">
                   <ng-container formGroupName="resolutions">

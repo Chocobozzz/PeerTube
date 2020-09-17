@@ -18,7 +18,8 @@ import {
   VideoFilter,
   VideoPrivacy,
   VideoSortField,
-  VideoUpdate
+  VideoUpdate,
+  VideoCreate
 } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'

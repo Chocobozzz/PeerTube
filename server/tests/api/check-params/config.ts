@@ -100,6 +100,22 @@ describe('Test config API validators', function () {
         enabled: false
       }
     },
+    live: {
+      enabled: true,
+
+      transcoding: {
+        enabled: true,
+        threads: 4,
+        resolutions: {
+          '240p': true,
+          '360p': true,
+          '480p': true,
+          '720p': true,
+          '1080p': true,
+          '2160p': true
+        }
+      }
+    },
     import: {
       videos: {
         http: {

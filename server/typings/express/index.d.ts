@@ -9,7 +9,8 @@ import {
   MVideoFile,
   MVideoImmutable,
   MVideoPlaylistFull,
-  MVideoPlaylistFullSummary
+  MVideoPlaylistFullSummary,
+  MVideoLive
 } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server'
@@ -67,6 +68,8 @@ declare module 'express' {
       onlyVideo?: MVideoThumbnail
       onlyVideoWithRights?: MVideoWithRights
       videoId?: MVideoIdThumbnail
+
+      videoLive?: MVideoLive
 
       videoShare?: MVideoShareActor
 

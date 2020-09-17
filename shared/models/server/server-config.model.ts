@@ -98,6 +98,16 @@ export interface ServerConfig {
     enabledResolutions: number[]
   }
 
+  live: {
+    enabled: boolean
+
+    transcoding: {
+      enabled: boolean
+
+      enabledResolutions: number[]
+    }
+  }
+
   import: {
     videos: {
       http: {

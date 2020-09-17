@@ -243,6 +243,24 @@ transcoding:
   hls:
     enabled: false
 
+live:
+  enabled: false
+
+  rtmp:
+    port: 1935
+
+  transcoding:
+    enabled: false
+    threads: 2
+
+    resolutions:
+      240p: false
+      360p: false
+      480p: false
+      720p: false
+      1080p: false
+      2160p: false
+
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
   videos:

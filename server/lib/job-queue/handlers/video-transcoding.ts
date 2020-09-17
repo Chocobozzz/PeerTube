@@ -84,7 +84,7 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
     if (!videoDatabase) return undefined
 
     // Create transcoding jobs if there are enabled resolutions
-    const resolutionsEnabled = computeResolutionsToTranscode(videoFileResolution)
+    const resolutionsEnabled = computeResolutionsToTranscode(videoFileResolution, 'vod')
     logger.info(
       'Resolutions computed for video %s and origin file resolution of %d.', videoDatabase.uuid, videoFileResolution,
       { resolutions: resolutionsEnabled }

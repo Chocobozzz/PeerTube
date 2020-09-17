@@ -325,7 +325,7 @@ export class PeertubePlayerManager {
         trackerAnnounce,
         segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url),
         rtcConfig: getRtcConfig(),
-        requiredSegmentsPriority: 5,
+        requiredSegmentsPriority: 1,
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
         useP2P: getStoredP2PEnabled(),
         consumeOnly
@@ -353,7 +353,7 @@ export class PeertubePlayerManager {
         hlsjsConfig: {
           capLevelToPlayerSize: true,
           autoStartLoad: false,
-          liveSyncDurationCount: 7,
+          liveSyncDurationCount: 5,
           loader: new p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
         }
       }

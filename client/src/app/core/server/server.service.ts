@@ -74,6 +74,13 @@ export class ServerService {
         enabled: true
       }
     },
+    live: {
+      enabled: false,
+      transcoding: {
+        enabled: false,
+        enabledResolutions: []
+      }
+    },
     avatar: {
       file: {
         size: { max: 0 },

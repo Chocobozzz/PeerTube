@@ -1,0 +1,47 @@
+<div *ngIf="!isInUpdateForm" class="upload-video-container">
+  <div class="first-step-block">
+    <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
+
+    <div class="form-group">
+      <label i18n for="first-step-channel">Channel</label>
+      <my-select-channel
+        labelForId="first-step-channel" [items]="userVideoChannels" [(ngModel)]="firstStepChannelId"
+      ></my-select-channel>
+    </div>
+
+    <div class="form-group">
+      <label i18n for="first-step-privacy">Privacy</label>
+      <my-select-options
+        labelForId="first-step-privacy" [items]="videoPrivacies" [(ngModel)]="firstStepPrivacyId"
+      ></my-select-options>
+    </div>
+
+    <input
+      type="button" i18n-value value="Go Live" (click)="goLive()"
+    />
+  </div>
+</div>
+
+<div *ngIf="error" class="alert alert-danger">
+  <div i18n>Sorry, but something went wrong</div>
+  {{ error }}
+</div>
+
+<!-- Hidden because we want to load the component -->
+<form [hidden]="!isInUpdateForm" novalidate [formGroup]="form">
+  <my-video-edit
+    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [schedulePublicationPossible]="false"
+    [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels" [videoLive]="videoLive"
+    type="go-live"
+  ></my-video-edit>
+
+  <div class="submit-container">
+    <div class="submit-button"
+       (click)="updateSecondStep()"
+       [ngClass]="{ disabled: !form.valid }"
+    >
+      <my-global-icon iconName="circle-tick" aria-hidden="true"></my-global-icon>
+      <input type="button" i18n-value value="Update" />
+    </div>
+  </div>
+</form>

@@ -1,17 +1,42 @@
 import { Segment } from 'p2p-media-loader-core'
 import { basename } from 'path'
 
+type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
+
 function segmentValidatorFactory (segmentsSha256Url: string) {
-  const segmentsJSON = fetchSha256Segments(segmentsSha256Url)
+  let segmentsJSON = fetchSha256Segments(segmentsSha256Url)
   const regex = /bytes=(\d+)-(\d+)/
 
-  return async function segmentValidator (segment: Segment) {
+  return async function segmentValidator (segment: Segment, canRefetchSegmentHashes = true) {
     const filename = basename(segment.url)
-    const captured = regex.exec(segment.range)
 
-    const range = captured[1] + '-' + captured[2]
+    const segmentValue = (await segmentsJSON)[filename]
 
-    const hashShouldBe = (await segmentsJSON)[filename][range]
+    if (!segmentValue && !canRefetchSegmentHashes) {
+      throw new Error(`Unknown segment name ${filename} in segment validator`)
+    }
+
+    if (!segmentValue) {
+      console.log('Refetching sha segments.')
+
+      // Refetch
+      segmentsJSON = fetchSha256Segments(segmentsSha256Url)
+      segmentValidator(segment, false)
+      return
+    }
+
+    let hashShouldBe: string
+    let range = ''
+
+    if (typeof segmentValue === 'string') {
+      hashShouldBe = segmentValue
+    } else {
+      const captured = regex.exec(segment.range)
+      range = captured[1] + '-' + captured[2]
+
+      hashShouldBe = segmentValue[range]
+    }
+
     if (hashShouldBe === undefined) {
       throw new Error(`Unknown segment name ${filename}/${range} in segment validator`)
     }
@@ -36,7 +61,7 @@ export {
 
 function fetchSha256Segments (url: string) {
   return fetch(url)
-    .then(res => res.json())
+    .then(res => res.json() as Promise<SegmentsJSON>)
     .catch(err => {
       console.error('Cannot get sha256 segments', err)
       return {}

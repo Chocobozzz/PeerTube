@@ -7,6 +7,7 @@ import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { VideoPrivacy, VideoUpdate } from '@shared/models'
+import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -109,7 +110,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
 
             this.videoCaptions = videoCaptions
 
-            this.hydrateFormFromVideo()
+            hydrateFormFromVideo(this.form, this.video, true)
           },
 
           err => {
@@ -146,31 +147,5 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
             console.error(err)
           }
         )
-
-  }
-
-  private hydrateFormFromVideo () {
-    this.form.patchValue(this.video.toFormPatch())
-
-    const objects = [
-      {
-        url: 'thumbnailUrl',
-        name: 'thumbnailfile'
-      },
-      {
-        url: 'previewUrl',
-        name: 'previewfile'
-      }
-    ]
-
-    for (const obj of objects) {
-      fetch(this.video[obj.url])
-        .then(response => response.blob())
-        .then(data => {
-          this.form.patchValue({
-            [ obj.name ]: data
-          })
-        })
-    }
   }
 }

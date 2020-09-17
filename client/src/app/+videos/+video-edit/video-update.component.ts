@@ -5,7 +5,8 @@ import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService, SelectChannelItem } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { VideoPrivacy } from '@shared/models'
+import { VideoPrivacy, VideoLive } from '@shared/models'
+import { hydrateFormFromVideo } from './shared/video-edit-utils'
 
 @Component({
   selector: 'my-videos-update',
@@ -14,11 +15,12 @@ import { VideoPrivacy } from '@shared/models'
 })
 export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
+  userVideoChannels: SelectChannelItem[] = []
+  videoCaptions: VideoCaptionEdit[] = []
+  videoLive: VideoLive
 
   isUpdatingVideo = false
-  userVideoChannels: SelectChannelItem[] = []
   schedulePublicationPossible = false
-  videoCaptions: VideoCaptionEdit[] = []
   waitTranscodingEnabled = true
 
   private updateDone = false
@@ -40,10 +42,11 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
     this.route.data
         .pipe(map(data => data.videoData))
-        .subscribe(({ video, videoChannels, videoCaptions }) => {
+        .subscribe(({ video, videoChannels, videoCaptions, videoLive }) => {
           this.video = new VideoEdit(video)
           this.userVideoChannels = videoChannels
           this.videoCaptions = videoCaptions
+          this.videoLive = videoLive
 
           this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
 
@@ -53,7 +56,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           }
 
           // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
-          setTimeout(() => this.hydrateFormFromVideo())
+          setTimeout(() => hydrateFormFromVideo(this.form, this.video, true))
         },
 
         err => {
@@ -132,30 +135,5 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.form.patchValue({
       pluginData: this.video.pluginData
     })
-  }
-
-  private hydrateFormFromVideo () {
-    this.form.patchValue(this.video.toFormPatch())
-
-    const objects = [
-      {
-        url: 'thumbnailUrl',
-        name: 'thumbnailfile'
-      },
-      {
-        url: 'previewUrl',
-        name: 'previewfile'
-      }
-    ]
-
-    for (const obj of objects) {
-      fetch(this.video[obj.url])
-        .then(response => response.blob())
-        .then(data => {
-          this.form.patchValue({
-            [ obj.name ]: data
-          })
-        })
-    }
   }
 }

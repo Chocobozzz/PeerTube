@@ -62,8 +62,11 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   }
 
   getFiles () {
-    if (this.files.length === 0) return this.getHlsPlaylist().files
+    if (this.files.length !== 0) return this.files
 
-    return this.files
+    const hls = this.getHlsPlaylist()
+    if (hls) return hls.files
+
+    return []
   }
 }

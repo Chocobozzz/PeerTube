@@ -83,7 +83,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should transcode video on server 2', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     const videoAttributes = {
       name: 'my super name for server 2',

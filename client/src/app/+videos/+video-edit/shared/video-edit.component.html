@@ -195,6 +195,29 @@
       </ng-template>
     </ng-container>
 
+    <ng-container ngbNavItem *ngIf="videoLive">
+      <a ngbNavLink i18n>Live settings</a>
+
+      <ng-template ngbNavContent>
+        <div class="row live-settings">
+          <div class="col-md-12">
+
+            <div class="form-group">
+              <label for="videoLiveRTMPUrl" i18n>Live RTMP Url</label>
+              <my-input-readonly-copy id="videoLiveRTMPUrl" [value]="videoLive.rtmpUrl"></my-input-readonly-copy>
+            </div>
+
+            <div class="form-group">
+              <label for="videoLiveStreamKey" i18n>Live stream key</label>
+              <my-input-readonly-copy id="videoLiveStreamKey" [value]="videoLive.streamKey"></my-input-readonly-copy>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+    </ng-container>
+
+
     <ng-container ngbNavItem>
       <a ngbNavLink i18n>Advanced settings</a>
 

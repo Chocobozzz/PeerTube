@@ -64,6 +64,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
+
   expect(data.transcoding.enabled).to.be.false
   expect(data.transcoding.allowAdditionalExtensions).to.be.false
   expect(data.transcoding.allowAudioFiles).to.be.false
@@ -76,6 +77,16 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.transcoding.resolutions['2160p']).to.be.true
   expect(data.transcoding.webtorrent.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
+
+  expect(data.live.enabled).to.be.false
+  expect(data.live.transcoding.enabled).to.be.false
+  expect(data.live.transcoding.threads).to.equal(2)
+  expect(data.live.transcoding.resolutions['240p']).to.be.false
+  expect(data.live.transcoding.resolutions['360p']).to.be.false
+  expect(data.live.transcoding.resolutions['480p']).to.be.false
+  expect(data.live.transcoding.resolutions['720p']).to.be.false
+  expect(data.live.transcoding.resolutions['1080p']).to.be.false
+  expect(data.live.transcoding.resolutions['2160p']).to.be.false
 
   expect(data.import.videos.http.enabled).to.be.true
   expect(data.import.videos.torrent.enabled).to.be.true
@@ -149,6 +160,16 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['2160p']).to.be.false
   expect(data.transcoding.hls.enabled).to.be.false
   expect(data.transcoding.webtorrent.enabled).to.be.true
+
+  expect(data.live.enabled).to.be.true
+  expect(data.live.transcoding.enabled).to.be.true
+  expect(data.live.transcoding.threads).to.equal(4)
+  expect(data.live.transcoding.resolutions['240p']).to.be.true
+  expect(data.live.transcoding.resolutions['360p']).to.be.true
+  expect(data.live.transcoding.resolutions['480p']).to.be.true
+  expect(data.live.transcoding.resolutions['720p']).to.be.true
+  expect(data.live.transcoding.resolutions['1080p']).to.be.true
+  expect(data.live.transcoding.resolutions['2160p']).to.be.true
 
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
@@ -299,6 +320,21 @@ describe('Test config', function () {
         },
         hls: {
           enabled: false
+        }
+      },
+      live: {
+        enabled: true,
+        transcoding: {
+          enabled: true,
+          threads: 4,
+          resolutions: {
+            '240p': true,
+            '360p': true,
+            '480p': true,
+            '720p': true,
+            '1080p': true,
+            '2160p': true
+          }
         }
       },
       import: {
