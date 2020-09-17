@@ -68,6 +68,7 @@ import { ActorFollowScoreCache } from '../files-cache'
 import { JobQueue } from '../job-queue'
 import { Notifier } from '../notifier'
 import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '../thumbnail'
+import { setVideoTags } from '../video'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { crawlCollectionPage } from './crawl'
@@ -409,8 +410,7 @@ async function updateVideoFromAP (options: {
         const tags = videoObject.tag
                                 .filter(isAPHashTagObject)
                                 .map(tag => tag.name)
-        const tagInstances = await TagModel.findOrCreateTags(tags, t)
-        await videoUpdated.$set('Tags', tagInstances, sequelizeOptions)
+        await setVideoTags({ video: videoUpdated, tags, transaction: t, defaultValue: videoUpdated.Tags })
       }
 
       {
@@ -594,8 +594,7 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
     const tags = videoObject.tag
                             .filter(isAPHashTagObject)
                             .map(t => t.name)
-    const tagInstances = await TagModel.findOrCreateTags(tags, t)
-    await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
+    await setVideoTags({ video: videoCreated, tags, transaction: t })
 
     // Process captions
     const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
@@ -604,7 +603,6 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
     await Promise.all(videoCaptionsPromises)
 
     videoCreated.VideoFiles = videoFiles
-    videoCreated.Tags = tagInstances
 
     const autoBlacklisted = await autoBlacklistVideoIfNeeded({
       video: videoCreated,

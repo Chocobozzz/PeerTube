@@ -1,30 +1,10 @@
-import * as express from 'express'
-import * as magnetUtil from 'magnet-uri'
-import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
-import { MIMETYPES } from '../../../initializers/constants'
-import { getYoutubeDLInfo, YoutubeDLInfo, getYoutubeDLSubs } from '../../../helpers/youtube-dl'
-import { createReqFiles } from '../../../helpers/express-utils'
-import { logger } from '../../../helpers/logger'
-import { VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
-import { VideoModel } from '../../../models/video/video'
-import { VideoCaptionModel } from '../../../models/video/video-caption'
-import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
-import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
-import { TagModel } from '../../../models/video/tag'
-import { VideoImportModel } from '../../../models/video/video-import'
-import { JobQueue } from '../../../lib/job-queue/job-queue'
-import { join } from 'path'
-import { isArray } from '../../../helpers/custom-validators/misc'
 import * as Bluebird from 'bluebird'
-import * as parseTorrent from 'parse-torrent'
-import { getSecureTorrentName } from '../../../helpers/utils'
+import * as express from 'express'
 import { move, readFile } from 'fs-extra'
-import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
-import { CONFIG } from '../../../initializers/config'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { createVideoMiniatureFromExisting, createVideoMiniatureFromUrl } from '../../../lib/thumbnail'
-import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import * as magnetUtil from 'magnet-uri'
+import * as parseTorrent from 'parse-torrent'
+import { join } from 'path'
+import { setVideoTags } from '@server/lib/video'
 import {
   MChannelAccountDefault,
   MThumbnail,
@@ -36,6 +16,26 @@ import {
   MVideoWithBlacklistLight
 } from '@server/types/models'
 import { MVideoImport, MVideoImportFormattable } from '@server/types/models/video/video-import'
+import { VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
+import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
+import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
+import { isArray } from '../../../helpers/custom-validators/misc'
+import { createReqFiles } from '../../../helpers/express-utils'
+import { logger } from '../../../helpers/logger'
+import { getSecureTorrentName } from '../../../helpers/utils'
+import { getYoutubeDLInfo, getYoutubeDLSubs, YoutubeDLInfo } from '../../../helpers/youtube-dl'
+import { CONFIG } from '../../../initializers/config'
+import { MIMETYPES } from '../../../initializers/constants'
+import { sequelizeTypescript } from '../../../initializers/database'
+import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
+import { JobQueue } from '../../../lib/job-queue/job-queue'
+import { createVideoMiniatureFromExisting, createVideoMiniatureFromUrl } from '../../../lib/thumbnail'
+import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
+import { VideoModel } from '../../../models/video/video'
+import { VideoCaptionModel } from '../../../models/video/video-caption'
+import { VideoImportModel } from '../../../models/video/video-import'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -260,7 +260,12 @@ async function processThumbnail (req: express.Request, video: VideoModel) {
   if (thumbnailField) {
     const thumbnailPhysicalFile = thumbnailField[0]
 
-    return createVideoMiniatureFromExisting(thumbnailPhysicalFile.path, video, ThumbnailType.MINIATURE, false)
+    return createVideoMiniatureFromExisting({
+      inputPath: thumbnailPhysicalFile.path,
+      video,
+      type: ThumbnailType.MINIATURE,
+      automaticallyGenerated: false
+    })
   }
 
   return undefined
@@ -271,7 +276,12 @@ async function processPreview (req: express.Request, video: VideoModel) {
   if (previewField) {
     const previewPhysicalFile = previewField[0]
 
-    return createVideoMiniatureFromExisting(previewPhysicalFile.path, video, ThumbnailType.PREVIEW, false)
+    return createVideoMiniatureFromExisting({
+      inputPath: previewPhysicalFile.path,
+      video,
+      type: ThumbnailType.PREVIEW,
+      automaticallyGenerated: false
+    })
   }
 
   return undefined
@@ -325,15 +335,7 @@ function insertIntoDB (parameters: {
       transaction: t
     })
 
-    // Set tags to the video
-    if (tags) {
-      const tagInstances = await TagModel.findOrCreateTags(tags, t)
-
-      await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
-      videoCreated.Tags = tagInstances
-    } else {
-      videoCreated.Tags = []
-    }
+    await setVideoTags({ video: videoCreated, tags, transaction: t })
 
     // Create video import object in database
     const videoImport = await VideoImportModel.create(

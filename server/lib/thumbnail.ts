@@ -42,15 +42,18 @@ function createVideoMiniatureFromUrl (fileUrl: string, video: MVideoThumbnail, t
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
-function createVideoMiniatureFromExisting (
-  inputPath: string,
-  video: MVideoThumbnail,
-  type: ThumbnailType,
-  automaticallyGenerated: boolean,
+function createVideoMiniatureFromExisting (options: {
+  inputPath: string
+  video: MVideoThumbnail
+  type: ThumbnailType
+  automaticallyGenerated: boolean
   size?: ImageSize
-) {
+  keepOriginal?: boolean
+}) {
+  const { inputPath, video, type, automaticallyGenerated, size, keepOriginal } = options
+
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-  const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height })
+  const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height }, keepOriginal)
 
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated, existingThumbnail })
 }

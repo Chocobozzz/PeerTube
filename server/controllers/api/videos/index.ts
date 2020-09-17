@@ -6,11 +6,11 @@ import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
+import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
-import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
-import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { VideoCreate, VideoState, VideoUpdate } from '../../../../shared'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
@@ -34,7 +34,7 @@ import { JobQueue } from '../../../lib/job-queue'
 import { Notifier } from '../../../lib/notifier'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { Redis } from '../../../lib/redis'
-import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../../lib/thumbnail'
+import { generateVideoMiniature } from '../../../lib/thumbnail'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
   asyncMiddleware,
@@ -186,25 +186,9 @@ async function addVideo (req: express.Request, res: express.Response) {
   const videoPhysicalFile = req.files['videofile'][0]
   const videoInfo: VideoCreate = req.body
 
-  // Prepare data so we don't block the transaction
-  const videoData = {
-    name: videoInfo.name,
-    remote: false,
-    category: videoInfo.category,
-    licence: videoInfo.licence,
-    language: videoInfo.language,
-    commentsEnabled: videoInfo.commentsEnabled !== false, // If the value is not "false", the default is "true"
-    downloadEnabled: videoInfo.downloadEnabled !== false,
-    waitTranscoding: videoInfo.waitTranscoding || false,
-    state: CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED,
-    nsfw: videoInfo.nsfw || false,
-    description: videoInfo.description,
-    support: videoInfo.support,
-    privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,
-    duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
-    channelId: res.locals.videoChannel.id,
-    originallyPublishedAt: videoInfo.originallyPublishedAt
-  }
+  const videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
+  videoData.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
+  videoData.duration = videoPhysicalFile['duration'] // duration was added by a previous middleware
 
   const video = new VideoModel(videoData) as MVideoDetails
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
@@ -230,17 +214,11 @@ async function addVideo (req: express.Request, res: express.Response) {
   videoPhysicalFile.filename = getVideoFilePath(video, videoFile)
   videoPhysicalFile.path = destination
 
-  // Process thumbnail or create it from the video
-  const thumbnailField = req.files['thumbnailfile']
-  const thumbnailModel = thumbnailField
-    ? await createVideoMiniatureFromExisting(thumbnailField[0].path, video, ThumbnailType.MINIATURE, false)
-    : await generateVideoMiniature(video, videoFile, ThumbnailType.MINIATURE)
-
-  // Process preview or create it from the video
-  const previewField = req.files['previewfile']
-  const previewModel = previewField
-    ? await createVideoMiniatureFromExisting(previewField[0].path, video, ThumbnailType.PREVIEW, false)
-    : await generateVideoMiniature(video, videoFile, ThumbnailType.PREVIEW)
+  const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
+    video,
+    files: req.files,
+    fallback: type => generateVideoMiniature(video, videoFile, type)
+  })
 
   // Create the torrent file
   await createTorrentAndSetInfoHash(video, videoFile)
@@ -261,13 +239,7 @@ async function addVideo (req: express.Request, res: express.Response) {
 
     video.VideoFiles = [ videoFile ]
 
-    // Create tags
-    if (videoInfo.tags !== undefined) {
-      const tagInstances = await TagModel.findOrCreateTags(videoInfo.tags, t)
-
-      await video.$set('Tags', tagInstances, sequelizeOptions)
-      video.Tags = tagInstances
-    }
+    await setVideoTags({ video, tags: videoInfo.tags, transaction: t })
 
     // Schedule an update in the future?
     if (videoInfo.scheduleUpdate) {
@@ -318,14 +290,12 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const wasConfidentialVideo = videoInstance.isConfidential()
   const hadPrivacyForFederation = videoInstance.hasPrivacyForFederation()
 
-  // Process thumbnail or create it from the video
-  const thumbnailModel = req.files?.['thumbnailfile']
-    ? await createVideoMiniatureFromExisting(req.files['thumbnailfile'][0].path, videoInstance, ThumbnailType.MINIATURE, false)
-    : undefined
-
-  const previewModel = req.files?.['previewfile']
-    ? await createVideoMiniatureFromExisting(req.files['previewfile'][0].path, videoInstance, ThumbnailType.PREVIEW, false)
-    : undefined
+  const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
+    video: videoInstance,
+    files: req.files,
+    fallback: () => Promise.resolve(undefined),
+    automaticallyGenerated: false
+  })
 
   try {
     const videoInstanceUpdated = await sequelizeTypescript.transaction(async t => {
@@ -366,12 +336,12 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (previewModel) await videoInstanceUpdated.addAndSaveThumbnail(previewModel, t)
 
       // Video tags update?
-      if (videoInfoToUpdate.tags !== undefined) {
-        const tagInstances = await TagModel.findOrCreateTags(videoInfoToUpdate.tags, t)
-
-        await videoInstanceUpdated.$set('Tags', tagInstances, sequelizeOptions)
-        videoInstanceUpdated.Tags = tagInstances
-      }
+      await setVideoTags({
+        video: videoInstanceUpdated,
+        tags: videoInfoToUpdate.tags,
+        transaction: t,
+        defaultValue: videoInstanceUpdated.Tags
+      })
 
       // Video channel update?
       if (res.locals.videoChannel && videoInstanceUpdated.channelId !== res.locals.videoChannel.id) {
