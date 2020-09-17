@@ -1,6 +1,8 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
 import { AuthService, AuthUser, CanComponentDeactivate, ServerService } from '@app/core'
 import { ServerConfig } from '@shared/models'
+import { VideoEditType } from './shared/video-edit.type'
+import { VideoGoLiveComponent } from './video-add-components/video-go-live.component'
 import { VideoImportTorrentComponent } from './video-add-components/video-import-torrent.component'
 import { VideoImportUrlComponent } from './video-add-components/video-import-url.component'
 import { VideoUploadComponent } from './video-add-components/video-upload.component'
@@ -14,10 +16,11 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   @ViewChild('videoUpload') videoUpload: VideoUploadComponent
   @ViewChild('videoImportUrl') videoImportUrl: VideoImportUrlComponent
   @ViewChild('videoImportTorrent') videoImportTorrent: VideoImportTorrentComponent
+  @ViewChild('videoGoLive') videoGoLive: VideoGoLiveComponent
 
   user: AuthUser = null
 
-  secondStepType: 'upload' | 'import-url' | 'import-torrent'
+  secondStepType: VideoEditType
   videoName: string
   serverConfig: ServerConfig
 
@@ -41,7 +44,7 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
     this.user = this.auth.getUser()
   }
 
-  onFirstStepDone (type: 'upload' | 'import-url' | 'import-torrent', videoName: string) {
+  onFirstStepDone (type: VideoEditType, videoName: string) {
     this.secondStepType = type
     this.videoName = videoName
   }
@@ -62,9 +65,9 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   }
 
   canDeactivate (): { canDeactivate: boolean, text?: string} {
-    if (this.secondStepType === 'upload') return this.videoUpload.canDeactivate()
     if (this.secondStepType === 'import-url') return this.videoImportUrl.canDeactivate()
     if (this.secondStepType === 'import-torrent') return this.videoImportTorrent.canDeactivate()
+    if (this.secondStepType === 'go-live') return this.videoGoLive.canDeactivate()
 
     return { canDeactivate: true }
   }
@@ -75,6 +78,10 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
 
   isVideoImportTorrentEnabled () {
     return this.serverConfig.import.videos.torrent.enabled
+  }
+
+  isVideoLiveEnabled () {
+    return this.serverConfig.live.enabled
   }
 
   isInSecondStep () {

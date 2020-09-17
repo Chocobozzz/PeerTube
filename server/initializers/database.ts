@@ -1,11 +1,11 @@
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
-import { AbuseModel } from '@server/models/abuse/abuse'
-import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
-import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
-import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
 import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
+import { AbuseModel } from '../models/abuse/abuse'
+import { AbuseMessageModel } from '../models/abuse/abuse-message'
+import { VideoAbuseModel } from '../models/abuse/video-abuse'
+import { VideoCommentAbuseModel } from '../models/abuse/video-comment-abuse'
 import { AccountModel } from '../models/account/account'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { AccountVideoRateModel } from '../models/account/account-video-rate'
@@ -34,6 +34,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoImportModel } from '../models/video/video-import'
+import { VideoLiveModel } from '../models/video/video-live'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element'
 import { VideoShareModel } from '../models/video/video-share'
@@ -118,6 +119,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoViewModel,
     VideoRedundancyModel,
     UserVideoHistoryModel,
+    VideoLiveModel,
     AccountBlocklistModel,
     ServerBlocklistModel,
     UserNotificationModel,

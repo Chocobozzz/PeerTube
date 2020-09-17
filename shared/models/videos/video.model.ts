@@ -23,6 +23,8 @@ export interface Video {
   isLocal: boolean
   name: string
 
+  isLive: boolean
+
   thumbnailPath: string
   thumbnailUrl?: string
 

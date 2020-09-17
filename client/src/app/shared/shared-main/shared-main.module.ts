@@ -23,7 +23,7 @@ import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
 import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent } from './misc'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
-import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
+import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService, VideoLiveService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
 
@@ -142,6 +142,7 @@ import { VideoChannelService } from './video-channel'
     RedundancyService,
     VideoImportService,
     VideoOwnershipService,
+    VideoLiveService,
     VideoService,
 
     VideoCaptionService,

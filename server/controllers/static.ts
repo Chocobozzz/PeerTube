@@ -260,7 +260,14 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
             webtorrent: {
               enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
             },
-            enabledResolutions: getEnabledResolutions()
+            enabledResolutions: getEnabledResolutions('vod')
+          },
+          live: {
+            enabled: CONFIG.LIVE.ENABLED,
+            transcoding: {
+              enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
+              enabledResolutions: getEnabledResolutions('live')
+            }
           },
           import: {
             videos: {

@@ -113,7 +113,15 @@ async function getConfig (req: express.Request, res: express.Response) {
       webtorrent: {
         enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
       },
-      enabledResolutions: getEnabledResolutions()
+      enabledResolutions: getEnabledResolutions('vod')
+    },
+    live: {
+      enabled: CONFIG.LIVE.ENABLED,
+
+      transcoding: {
+        enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
+        enabledResolutions: getEnabledResolutions('live')
+      }
     },
     import: {
       videos: {
@@ -232,7 +240,7 @@ async function deleteCustomConfig (req: express.Request, res: express.Response) 
 
   const data = customConfig()
 
-  return res.json(data).end()
+  return res.json(data)
 }
 
 async function updateCustomConfig (req: express.Request, res: express.Response) {
@@ -254,7 +262,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
     oldCustomConfigAuditKeys
   )
 
-  return res.json(data).end()
+  return res.json(data)
 }
 
 function getRegisteredThemes () {
@@ -268,9 +276,13 @@ function getRegisteredThemes () {
                       }))
 }
 
-function getEnabledResolutions () {
-  return Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
-               .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
+function getEnabledResolutions (type: 'vod' | 'live') {
+  const transcoding = type === 'vod'
+    ? CONFIG.TRANSCODING
+    : CONFIG.LIVE.TRANSCODING
+
+  return Object.keys(transcoding.RESOLUTIONS)
+               .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
                .map(r => parseInt(r, 10))
 }
 
@@ -409,6 +421,21 @@ function customConfig (): CustomConfig {
       },
       hls: {
         enabled: CONFIG.TRANSCODING.HLS.ENABLED
+      }
+    },
+    live: {
+      enabled: CONFIG.LIVE.ENABLED,
+      transcoding: {
+        enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
+        threads: CONFIG.LIVE.TRANSCODING.THREADS,
+        resolutions: {
+          '240p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['240p'],
+          '360p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['360p'],
+          '480p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['480p'],
+          '720p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['720p'],
+          '1080p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1080p'],
+          '2160p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['2160p']
+        }
       }
     },
     import: {

@@ -550,6 +550,11 @@ export class VideoModel extends Model<VideoModel> {
   remote: boolean
 
   @AllowNull(false)
+  @Default(false)
+  @Column
+  isLive: boolean
+
+  @AllowNull(false)
   @Is('VideoUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
   url: string

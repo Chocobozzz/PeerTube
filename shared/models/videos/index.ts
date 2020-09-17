@@ -19,6 +19,8 @@ export * from './video-create.model'
 export * from './video-file-metadata'
 export * from './video-file.model'
 
+export * from './video-live.model'
+
 export * from './video-privacy.enum'
 export * from './video-query.type'
 export * from './video-rate.type'

@@ -20,10 +20,11 @@ import {
 import { FormReactiveValidationMessages, FormValidatorService, SelectChannelItem } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
+import { ServerConfig, VideoConstant, VideoLive, VideoPrivacy } from '@shared/models'
 import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
+import { VideoEditType } from './video-edit.type'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 
@@ -40,7 +41,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() schedulePublicationPossible = true
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
   @Input() waitTranscodingEnabled = true
-  @Input() type: 'import-url' | 'import-torrent' | 'upload' | 'update'
+  @Input() type: VideoEditType
+  @Input() videoLive: VideoLive
 
   @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
 
@@ -124,7 +126,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       previewfile: null,
       support: VIDEO_SUPPORT_VALIDATOR,
       schedulePublicationAt: VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR,
-      originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR
+      originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
+      liveStreamKey: null
     }
 
     this.formValidatorService.updateForm(
@@ -320,7 +323,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
             const currentSupport = this.form.value[ 'support' ]
 
             // First time we set the channel?
-            if (isNaN(oldChannelId) && !currentSupport) return this.updateSupportField(newChannel.support)
+            if (isNaN(oldChannelId)) {
+              // Fill support if it's empty
+              if (!currentSupport) this.updateSupportField(newChannel.support)
+
+              return
+            }
 
             const oldChannel = this.userVideoChannels.find(c => c.id === oldChannelId)
             if (!newChannel || !oldChannel) {

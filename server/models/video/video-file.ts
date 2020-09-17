@@ -123,8 +123,8 @@ export class VideoFileModel extends Model<VideoFileModel> {
   @Column
   extname: string
 
-  @AllowNull(false)
-  @Is('VideoFileInfohash', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash'))
+  @AllowNull(true)
+  @Is('VideoFileInfohash', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash', true))
   @Column
   infoHash: string
 

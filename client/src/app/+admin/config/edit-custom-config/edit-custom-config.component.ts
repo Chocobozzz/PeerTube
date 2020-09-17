@@ -34,6 +34,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   customConfig: CustomConfig
 
   resolutions: { id: string, label: string, description?: string }[] = []
+  liveResolutions: { id: string, label: string, description?: string }[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
 
   languageItems: SelectOptionsItem[] = []
@@ -81,6 +82,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         label: $localize`2160p`
       }
     ]
+
+    this.liveResolutions = this.resolutions.filter(r => r.id !== '0p')
 
     this.transcodingThreadOptions = [
       { value: 0, label: $localize`Auto (via ffmpeg)` },
@@ -198,6 +201,15 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
           enabled: null
         }
       },
+      live: {
+        enabled: null,
+
+        transcoding: {
+          enabled: null,
+          threads: TRANSCODING_THREADS_VALIDATOR,
+          resolutions: {}
+        }
+      },
       autoBlacklist: {
         videos: {
           ofUsers: {
@@ -245,11 +257,22 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
     const defaultValues = {
       transcoding: {
         resolutions: {}
+      },
+      live: {
+        transcoding: {
+          resolutions: {}
+        }
       }
     }
+
     for (const resolution of this.resolutions) {
       defaultValues.transcoding.resolutions[resolution.id] = 'false'
       formGroupData.transcoding.resolutions[resolution.id] = null
+    }
+
+    for (const resolution of this.liveResolutions) {
+      defaultValues.live.transcoding.resolutions[resolution.id] = 'false'
+      formGroupData.live.transcoding.resolutions[resolution.id] = null
     }
 
     this.buildForm(formGroupData)
@@ -266,6 +289,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
   isTranscodingEnabled () {
     return this.form.value['transcoding']['enabled'] === true
+  }
+
+  isLiveEnabled () {
+    return this.form.value['live']['enabled'] === true
+  }
+
+  isLiveTranscodingEnabled () {
+    return this.form.value['live']['transcoding']['enabled'] === true
   }
 
   isSignupEnabled () {

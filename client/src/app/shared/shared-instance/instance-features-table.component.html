@@ -64,6 +64,24 @@
     </tr>
 
     <tr>
+      <th i18n class="label" colspan="2">Live streaming</th>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Live streaming enabled</th>
+      <td>
+        <my-feature-boolean [value]="serverConfig.live.enabled"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Transcode live video in multiple resolutions</th>
+      <td>
+        <my-feature-boolean [value]="serverConfig.live.transcoding.enabled && serverConfig.live.transcoding.enabledResolutions.length > 1"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
       <th i18n class="label" colspan="2">Import</th>
     </tr>
 

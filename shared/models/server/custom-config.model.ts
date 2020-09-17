@@ -1,6 +1,15 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
+export type ConfigResolutions = {
+  '240p': boolean
+  '360p': boolean
+  '480p': boolean
+  '720p': boolean
+  '1080p': boolean
+  '2160p': boolean
+}
+
 export interface CustomConfig {
   instance: {
     name: string
@@ -75,15 +84,7 @@ export interface CustomConfig {
     allowAudioFiles: boolean
 
     threads: number
-    resolutions: {
-      '0p': boolean
-      '240p': boolean
-      '360p': boolean
-      '480p': boolean
-      '720p': boolean
-      '1080p': boolean
-      '2160p': boolean
-    }
+    resolutions: ConfigResolutions & { '0p': boolean }
 
     webtorrent: {
       enabled: boolean
@@ -91,6 +92,16 @@ export interface CustomConfig {
 
     hls: {
       enabled: boolean
+    }
+  }
+
+  live: {
+    enabled: boolean
+
+    transcoding: {
+      enabled: boolean
+      threads: number
+      resolutions: ConfigResolutions
     }
   }
 

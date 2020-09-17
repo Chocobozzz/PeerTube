@@ -16,5 +16,5 @@ export interface VideoCreate {
   downloadEnabled?: boolean
   privacy: VideoPrivacy
   scheduleUpdate?: VideoScheduleUpdate
-  originallyPublishedAt: Date | string
+  originallyPublishedAt?: Date | string
 }

@@ -175,6 +175,16 @@ function pageToStartAndCount (page: number, itemsPerPage: number) {
   return { start, count: itemsPerPage }
 }
 
+function mapToJSON (map: Map<any, any>) {
+  const obj: any = {}
+
+  for (const [ k, v ] of map) {
+    obj[k] = v
+  }
+
+  return obj
+}
+
 function buildPath (path: string) {
   if (isAbsolute(path)) return path
 
@@ -263,6 +273,7 @@ export {
 
   sha256,
   sha1,
+  mapToJSON,
 
   promisify0,
   promisify1,

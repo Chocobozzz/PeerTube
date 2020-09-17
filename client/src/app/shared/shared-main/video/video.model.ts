@@ -40,6 +40,8 @@ export class Video implements VideoServerModel {
   thumbnailPath: string
   thumbnailUrl: string
 
+  isLive: boolean
+
   previewPath: string
   previewUrl: string
 
@@ -103,6 +105,8 @@ export class Video implements VideoServerModel {
     this.state = hash.state
     this.description = hash.description
 
+    this.isLive = hash.isLive
+
     this.duration = hash.duration
     this.durationLabel = durationToString(hash.duration)
 
@@ -113,10 +117,14 @@ export class Video implements VideoServerModel {
     this.name = hash.name
 
     this.thumbnailPath = hash.thumbnailPath
-    this.thumbnailUrl = hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
+    this.thumbnailUrl = this.thumbnailPath
+      ? hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
+      : null
 
     this.previewPath = hash.previewPath
-    this.previewUrl = hash.previewUrl || (absoluteAPIUrl + hash.previewPath)
+    this.previewUrl = this.previewPath
+      ? hash.previewUrl || (absoluteAPIUrl + hash.previewPath)
+      : null
 
     this.embedPath = hash.embedPath
     this.embedUrl = hash.embedUrl || (getAbsoluteEmbedUrl() + hash.embedPath)

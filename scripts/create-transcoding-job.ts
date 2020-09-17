@@ -43,7 +43,7 @@ async function run () {
   if (program.generateHls) {
     const resolutionsEnabled = program.resolution
       ? [ program.resolution ]
-      : computeResolutionsToTranscode(videoFileResolution).concat([ videoFileResolution ])
+      : computeResolutionsToTranscode(videoFileResolution, 'vod').concat([ videoFileResolution ])
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({

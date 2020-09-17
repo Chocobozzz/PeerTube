@@ -198,6 +198,27 @@ const CONFIG = {
       get ENABLED () { return config.get<boolean>('transcoding.webtorrent.enabled') }
     }
   },
+  LIVE: {
+    get ENABLED () { return config.get<boolean>('live.enabled') },
+
+    RTMP: {
+      get PORT () { return config.get<number>('live.rtmp.port') }
+    },
+
+    TRANSCODING: {
+      get ENABLED () { return config.get<boolean>('live.transcoding.enabled') },
+      get THREADS () { return config.get<number>('live.transcoding.threads') },
+
+      RESOLUTIONS: {
+        get '240p' () { return config.get<boolean>('live.transcoding.resolutions.240p') },
+        get '360p' () { return config.get<boolean>('live.transcoding.resolutions.360p') },
+        get '480p' () { return config.get<boolean>('live.transcoding.resolutions.480p') },
+        get '720p' () { return config.get<boolean>('live.transcoding.resolutions.720p') },
+        get '1080p' () { return config.get<boolean>('live.transcoding.resolutions.1080p') },
+        get '2160p' () { return config.get<boolean>('live.transcoding.resolutions.2160p') }
+      }
+    }
+  },
   IMPORT: {
     VIDEOS: {
       HTTP: {

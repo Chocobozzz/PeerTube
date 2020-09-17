@@ -2,6 +2,7 @@ import { Observable, of, ReplaySubject } from 'rxjs'
 import { catchError, first, map, shareReplay } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core'
+import { VideoEditType } from '@app/+videos/+video-edit/shared/video-edit.type'
 import { AuthService } from '@app/core/auth'
 import { Notifier } from '@app/core/notification'
 import { MarkdownService } from '@app/core/renderer'
@@ -192,7 +193,7 @@ export class PluginService implements ClientHook {
       : PluginType.THEME
   }
 
-  getRegisteredVideoFormFields (type: 'import-url' | 'import-torrent' | 'upload' | 'update') {
+  getRegisteredVideoFormFields (type: VideoEditType) {
     return this.formFields.video.filter(f => f.videoFormOptions.type === type)
   }
 

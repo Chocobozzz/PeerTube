@@ -77,6 +77,8 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     publishedAt: video.publishedAt,
     originallyPublishedAt: video.originallyPublishedAt,
 
+    isLive: video.isLive,
+
     account: video.VideoChannel.Account.toFormattedSummaryJSON(),
     channel: video.VideoChannel.toFormattedSummaryJSON(),
 

@@ -8,7 +8,8 @@ import {
   VIDEO_LICENCES,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES,
-  VIDEO_STATES
+  VIDEO_STATES,
+  VIDEO_LIVE
 } from '../../initializers/constants'
 import { exists, isArray, isDateValid, isFileValid } from './misc'
 import * as magnetUtil from 'magnet-uri'
@@ -77,7 +78,7 @@ function isVideoRatingTypeValid (value: string) {
 }
 
 function isVideoFileExtnameValid (value: string) {
-  return exists(value) && MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined
+  return exists(value) && (value === VIDEO_LIVE.EXTENSION || MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined)
 }
 
 function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {

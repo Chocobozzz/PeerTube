@@ -1,13 +1,13 @@
 import * as ffmpeg from 'fluent-ffmpeg'
+import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
+import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
 import { getMaxBitrate, getTargetBitrate, VideoResolution } from '../../shared/models/videos'
+import { checkFFmpegEncoders } from '../initializers/checker-before-init'
+import { CONFIG } from '../initializers/config'
 import { FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
-import { checkFFmpegEncoders } from '../initializers/checker-before-init'
-import { readFile, remove, writeFile } from 'fs-extra'
-import { CONFIG } from '../initializers/config'
-import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
 
 /**
  * A toolbox to play with audio
@@ -74,9 +74,12 @@ namespace audio {
   }
 }
 
-function computeResolutionsToTranscode (videoFileResolution: number) {
+function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod' | 'live') {
+  const configResolutions = type === 'vod'
+    ? CONFIG.TRANSCODING.RESOLUTIONS
+    : CONFIG.LIVE.TRANSCODING.RESOLUTIONS
+
   const resolutionsEnabled: number[] = []
-  const configResolutions = CONFIG.TRANSCODING.RESOLUTIONS
 
   // Put in the order we want to proceed jobs
   const resolutions = [
@@ -270,25 +273,19 @@ type TranscodeOptions =
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
     try {
-      // we set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
-      let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING, cwd: CONFIG.STORAGE.TMP_DIR })
+      let command = getFFmpeg(options.inputPath)
         .output(options.outputPath)
 
       if (options.type === 'quick-transcode') {
         command = buildQuickTranscodeCommand(command)
       } else if (options.type === 'hls') {
-        command = await buildHLSCommand(command, options)
+        command = await buildHLSVODCommand(command, options)
       } else if (options.type === 'merge-audio') {
         command = await buildAudioMergeCommand(command, options)
       } else if (options.type === 'only-audio') {
         command = buildOnlyAudioCommand(command, options)
       } else {
         command = await buildx264Command(command, options)
-      }
-
-      if (CONFIG.TRANSCODING.THREADS > 0) {
-        // if we don't set any threads ffmpeg will chose automatically
-        command = command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
       }
 
       command
@@ -356,16 +353,89 @@ function convertWebPToJPG (path: string, destination: string): Promise<void> {
   })
 }
 
+function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: number[]) {
+  const command = getFFmpeg(rtmpUrl)
+  command.inputOption('-fflags nobuffer')
+
+  const varStreamMap: string[] = []
+
+  command.complexFilter([
+    {
+      inputs: '[v:0]',
+      filter: 'split',
+      options: resolutions.length,
+      outputs: resolutions.map(r => `vtemp${r}`)
+    },
+
+    ...resolutions.map(r => ({
+      inputs: `vtemp${r}`,
+      filter: 'scale',
+      options: `w=-2:h=${r}`,
+      outputs: `vout${r}`
+    }))
+  ])
+
+  const liveFPS = VIDEO_TRANSCODING_FPS.AVERAGE
+
+  command.withFps(liveFPS)
+
+  command.outputOption('-b_strategy 1')
+  command.outputOption('-bf 16')
+  command.outputOption('-preset superfast')
+  command.outputOption('-level 3.1')
+  command.outputOption('-map_metadata -1')
+  command.outputOption('-pix_fmt yuv420p')
+
+  for (let i = 0; i < resolutions.length; i++) {
+    const resolution = resolutions[i]
+
+    command.outputOption(`-map [vout${resolution}]`)
+    command.outputOption(`-c:v:${i} libx264`)
+    command.outputOption(`-b:v:${i} ${getTargetBitrate(resolution, liveFPS, VIDEO_TRANSCODING_FPS)}`)
+
+    command.outputOption(`-map a:0`)
+    command.outputOption(`-c:a:${i} aac`)
+
+    varStreamMap.push(`v:${i},a:${i}`)
+  }
+
+  addDefaultLiveHLSParams(command, outPath)
+
+  command.outputOption('-var_stream_map', varStreamMap.join(' '))
+
+  command.run()
+
+  return command
+}
+
+function runLiveMuxing (rtmpUrl: string, outPath: string) {
+  const command = getFFmpeg(rtmpUrl)
+  command.inputOption('-fflags nobuffer')
+
+  command.outputOption('-c:v copy')
+  command.outputOption('-c:a copy')
+  command.outputOption('-map 0:a?')
+  command.outputOption('-map 0:v?')
+
+  addDefaultLiveHLSParams(command, outPath)
+
+  command.run()
+
+  return command
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getVideoStreamCodec,
   getAudioStreamCodec,
+  runLiveMuxing,
   convertWebPToJPG,
   getVideoStreamSize,
   getVideoFileResolution,
   getMetadataFromFile,
   getDurationFromVideoFile,
+  runLiveTranscoding,
   generateImageFromVideoFile,
   TranscodeOptions,
   TranscodeOptionsType,
@@ -378,6 +448,25 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function addDefaultX264Params (command: ffmpeg.FfmpegCommand) {
+  command.outputOption('-level 3.1') // 3.1 is the minimal resource allocation for our highest supported resolution
+         .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
+         .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
+         .outputOption('-pix_fmt yuv420p') // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
+         .outputOption('-map_metadata -1') // strip all metadata
+}
+
+function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string) {
+  command.outputOption('-hls_time 4')
+  command.outputOption('-hls_list_size 15')
+  command.outputOption('-hls_flags delete_segments')
+  command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%d.ts')}`)
+  command.outputOption('-master_pl_name master.m3u8')
+  command.outputOption(`-f hls`)
+
+  command.output(join(outPath, '%v.m3u8'))
+}
 
 async function buildx264Command (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
   let fps = await getVideoFileFPS(options.inputPath)
@@ -438,7 +527,7 @@ function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
   return command
 }
 
-async function buildHLSCommand (command: ffmpeg.FfmpegCommand, options: HLSTranscodeOptions) {
+async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
   if (options.copyCodecs) command = presetCopy(command)
@@ -508,12 +597,9 @@ async function presetH264 (command: ffmpeg.FfmpegCommand, input: string, resolut
   let localCommand = command
     .format('mp4')
     .videoCodec('libx264')
-    .outputOption('-level 3.1') // 3.1 is the minimal resource allocation for our highest supported resolution
-    .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
-    .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
-    .outputOption('-pix_fmt yuv420p') // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
-    .outputOption('-map_metadata -1') // strip all metadata
     .outputOption('-movflags faststart')
+
+  addDefaultX264Params(localCommand)
 
   const parsedAudio = await audio.get(input)
 
@@ -564,4 +650,16 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
     .format('mp4')
     .audioCodec('copy')
     .noVideo()
+}
+
+function getFFmpeg (input: string) {
+  // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
+  const command = ffmpeg(input, { niceness: FFMPEG_NICE.TRANSCODING, cwd: CONFIG.STORAGE.TMP_DIR })
+
+  if (CONFIG.TRANSCODING.THREADS > 0) {
+    // If we don't set any threads ffmpeg will chose automatically
+    command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
+  }
+
+  return command
 }

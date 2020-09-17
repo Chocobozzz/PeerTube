@@ -65,7 +65,7 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
   await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
 }
 
-async function updateSha256Segments (video: MVideoWithFile) {
+async function updateSha256VODSegments (video: MVideoWithFile) {
   const json: { [filename: string]: { [range: string]: string } } = {}
 
   const playlistDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
@@ -99,6 +99,11 @@ async function updateSha256Segments (video: MVideoWithFile) {
 
   const outputPath = join(playlistDirectory, VideoStreamingPlaylistModel.getHlsSha256SegmentsFilename())
   await outputJSON(outputPath, json)
+}
+
+async function buildSha256Segment (segmentPath: string) {
+  const buf = await readFile(segmentPath)
+  return sha256(buf)
 }
 
 function getRangesFromPlaylist (playlistContent: string) {
@@ -187,7 +192,8 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
 export {
   updateMasterHLSPlaylist,
-  updateSha256Segments,
+  updateSha256VODSegments,
+  buildSha256Segment,
   downloadPlaylistSegments,
   updateStreamingPlaylistsInfohashesIfNeeded
 }

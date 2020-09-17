@@ -130,7 +130,7 @@ async function run () {
 
     for (const playlist of video.VideoStreamingPlaylists) {
       playlist.playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
-      playlist.segmentsSha256Url = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid)
+      playlist.segmentsSha256Url = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid, video.isLive)
 
       await playlist.save()
     }

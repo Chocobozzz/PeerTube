@@ -50,6 +50,16 @@
         <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)" (firstStepError)="onError()"></my-video-import-torrent>
       </ng-template>
     </ng-container>
+
+    <ng-container ngbNavItem *ngIf="isVideoLiveEnabled()">
+      <a ngbNavLink>
+        <span i18n>Go live</span>
+      </a>
+
+      <ng-template ngbNavContent>
+        <my-video-go-live #videoGoLive (firstStepDone)="onFirstStepDone('go-live', $event)" (firstStepError)="onError()"></my-video-go-live>
+      </ng-template>
+    </ng-container>
   </div>
 
   <div [ngbNavOutlet]="nav"></div>

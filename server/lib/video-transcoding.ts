@@ -13,13 +13,14 @@ import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
 import { VideoResolution } from '../../shared/models/videos'
 import { VideoFileModel } from '../models/video/video-file'
-import { updateMasterHLSPlaylist, updateSha256Segments } from './hls'
+import { updateMasterHLSPlaylist, updateSha256VODSegments } from './hls'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
 import { CONFIG } from '../initializers/config'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { generateVideoStreamingPlaylistName, getVideoFilename, getVideoFilePath } from './video-paths'
+import { spawn } from 'child_process'
 
 /**
  * Optimize the original video file and replace it. The resolution is not changed.
@@ -182,7 +183,7 @@ async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoReso
   const [ videoStreamingPlaylist ] = await VideoStreamingPlaylistModel.upsert({
     videoId: video.id,
     playlistUrl,
-    segmentsSha256Url: WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid),
+    segmentsSha256Url: WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid, video.isLive),
     p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, video.VideoFiles),
     p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
 
@@ -213,7 +214,7 @@ async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoReso
   video.setHLSPlaylist(videoStreamingPlaylist)
 
   await updateMasterHLSPlaylist(video)
-  await updateSha256Segments(video)
+  await updateSha256VODSegments(video)
 
   return video
 }

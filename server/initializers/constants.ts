@@ -23,7 +23,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 530
+const LAST_MIGRATION_VERSION = 540
 
 // ---------------------------------------------------------------------------
 
@@ -50,7 +50,8 @@ const WEBSERVER = {
   SCHEME: '',
   WS: '',
   HOSTNAME: '',
-  PORT: 0
+  PORT: 0,
+  RTMP_URL: ''
 }
 
 // Sortable columns per schema
@@ -264,7 +265,7 @@ const CONSTRAINTS_FIELDS = {
     VIEWS: { min: 0 },
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
-    FILE_SIZE: { min: 10 },
+    FILE_SIZE: { min: -1 },
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_PLAYLISTS: {
@@ -370,39 +371,41 @@ const VIDEO_LICENCES = {
 
 const VIDEO_LANGUAGES: { [id: string]: string } = {}
 
-const VIDEO_PRIVACIES = {
+const VIDEO_PRIVACIES: { [ id in VideoPrivacy ]: string } = {
   [VideoPrivacy.PUBLIC]: 'Public',
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal'
 }
 
-const VIDEO_STATES = {
+const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.PUBLISHED]: 'Published',
   [VideoState.TO_TRANSCODE]: 'To transcode',
-  [VideoState.TO_IMPORT]: 'To import'
+  [VideoState.TO_IMPORT]: 'To import',
+  [VideoState.WAITING_FOR_LIVE]: 'Waiting for livestream',
+  [VideoState.LIVE_ENDED]: 'Livestream ended'
 }
 
-const VIDEO_IMPORT_STATES = {
+const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
   [VideoImportState.FAILED]: 'Failed',
   [VideoImportState.PENDING]: 'Pending',
   [VideoImportState.SUCCESS]: 'Success',
   [VideoImportState.REJECTED]: 'Rejected'
 }
 
-const ABUSE_STATES = {
+const ABUSE_STATES: { [ id in AbuseState ]: string } = {
   [AbuseState.PENDING]: 'Pending',
   [AbuseState.REJECTED]: 'Rejected',
   [AbuseState.ACCEPTED]: 'Accepted'
 }
 
-const VIDEO_PLAYLIST_PRIVACIES = {
+const VIDEO_PLAYLIST_PRIVACIES: { [ id in VideoPlaylistPrivacy ]: string } = {
   [VideoPlaylistPrivacy.PUBLIC]: 'Public',
   [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
   [VideoPlaylistPrivacy.PRIVATE]: 'Private'
 }
 
-const VIDEO_PLAYLIST_TYPES = {
+const VIDEO_PLAYLIST_TYPES: { [ id in VideoPlaylistType ]: string } = {
   [VideoPlaylistType.REGULAR]: 'Regular',
   [VideoPlaylistType.WATCH_LATER]: 'Watch later'
 }
@@ -600,6 +603,17 @@ const LRU_CACHE = {
 const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
 const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
+const VIDEO_LIVE = {
+  EXTENSION: '.ts',
+  RTMP: {
+    CHUNK_SIZE: 60000,
+    GOP_CACHE: true,
+    PING: 60,
+    PING_TIMEOUT: 30,
+    BASE_PATH: 'live'
+  }
+}
+
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4, // 4 hours
   INFO_HASH_EXISTS: 1000 * 3600 * 12 // 12 hours
@@ -622,7 +636,8 @@ const REDUNDANCY = {
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
 
 const ASSETS_PATH = {
-  DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-audio-background.jpg')
+  DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-audio-background.jpg'),
+  DEFAULT_LIVE_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-live-background.jpg')
 }
 
 // ---------------------------------------------------------------------------
@@ -688,9 +703,9 @@ if (isTestInstance() === true) {
   STATIC_MAX_AGE.SERVER = '0'
 
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
-  ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
-  ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
-  ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
+  ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 100 * 10000 // 10 seconds
+  ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 100 * 10000 // 10 seconds
+  ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 100 * 10000 // 10 seconds
 
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
 
@@ -737,6 +752,7 @@ const FILES_CONTENT_HASH = {
 export {
   WEBSERVER,
   API_VERSION,
+  VIDEO_LIVE,
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,
   SEARCH_INDEX,
@@ -892,10 +908,14 @@ function buildVideoMimetypeExt () {
 function updateWebserverUrls () {
   WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
   WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
-  WEBSERVER.SCHEME = CONFIG.WEBSERVER.SCHEME
   WEBSERVER.WS = CONFIG.WEBSERVER.WS
+
+  WEBSERVER.SCHEME = CONFIG.WEBSERVER.SCHEME
   WEBSERVER.HOSTNAME = CONFIG.WEBSERVER.HOSTNAME
   WEBSERVER.PORT = CONFIG.WEBSERVER.PORT
+  WEBSERVER.PORT = CONFIG.WEBSERVER.PORT
+
+  WEBSERVER.RTMP_URL = 'rtmp://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.LIVE.RTMP.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
 }
 
 function updateWebserverConfig () {

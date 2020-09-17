@@ -63,6 +63,7 @@ import { blacklistRouter } from './blacklist'
 import { videoCaptionsRouter } from './captions'
 import { videoCommentRouter } from './comment'
 import { videoImportsRouter } from './import'
+import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
@@ -96,6 +97,7 @@ videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)
 videosRouter.use('/', watchingRouter)
+videosRouter.use('/', liveRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)
@@ -304,7 +306,7 @@ async function addVideo (req: express.Request, res: express.Response) {
       id: videoCreated.id,
       uuid: videoCreated.uuid
     }
-  }).end()
+  })
 }
 
 async function updateVideo (req: express.Request, res: express.Response) {
