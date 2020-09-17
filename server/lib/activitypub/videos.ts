@@ -15,7 +15,7 @@ import {
   ActivityVideoUrlObject,
   VideoState
 } from '../../../shared/index'
-import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
+import { VideoObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -38,7 +38,6 @@ import {
 } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
-import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { VideoCommentModel } from '../../models/video/video-comment'
@@ -104,7 +103,7 @@ async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVid
   }
 }
 
-async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.RequestResponse, videoObject: VideoTorrentObject }> {
+async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.RequestResponse, videoObject: VideoObject }> {
   const options = {
     uri: videoUrl,
     method: 'GET',
@@ -136,7 +135,7 @@ async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
   return body.description ? body.description : ''
 }
 
-function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {
+function getOrCreateVideoChannelFromVideoObject (videoObject: VideoObject) {
   const channel = videoObject.attributedTo.find(a => a.type === 'Group')
   if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
 
@@ -155,7 +154,7 @@ type SyncParam = {
   thumbnail: boolean
   refreshVideo?: boolean
 }
-async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoTorrentObject, syncParam: SyncParam) {
+async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoObject, syncParam: SyncParam) {
   logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
   const jobPayloads: ActivitypubHttpFetcherPayload[] = []
@@ -294,7 +293,7 @@ async function getOrCreateVideoAndAccountAndChannel (
 
 async function updateVideoFromAP (options: {
   video: MVideoAccountLightBlacklistAllFiles
-  videoObject: VideoTorrentObject
+  videoObject: VideoObject
   account: MAccountIdActor
   channel: MChannelDefault
   overrideTo?: string[]
@@ -538,7 +537,7 @@ function isAPHashTagObject (url: any): url is ActivityHashTagObject {
   return url && url.type === 'Hashtag'
 }
 
-async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAccountLight, waitThumbnail = false) {
+async function createVideo (videoObject: VideoObject, channel: MChannelAccountLight, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)
 
   const videoData = await videoActivityObjectToDBAttributes(channel, videoObject, videoObject.to)
@@ -632,7 +631,7 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
   return { autoBlacklisted, videoCreated }
 }
 
-function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObject: VideoTorrentObject, to: string[] = []) {
+function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObject: VideoObject, to: string[] = []) {
   const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
     ? VideoPrivacy.PUBLIC
     : VideoPrivacy.UNLISTED
@@ -664,6 +663,7 @@ function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObjec
     commentsEnabled: videoObject.commentsEnabled,
     downloadEnabled: videoObject.downloadEnabled,
     waitTranscoding: videoObject.waitTranscoding,
+    isLive: videoObject.isLiveBroadcast,
     state: videoObject.state,
     channelId: videoChannel.id,
     duration: parseInt(duration, 10),
@@ -732,7 +732,7 @@ function videoFileActivityUrlToDBAttributes (
   return attributes
 }
 
-function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObject: VideoTorrentObject, videoFiles: MVideoFile[]) {
+function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObject: VideoObject, videoFiles: MVideoFile[]) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 
@@ -766,7 +766,7 @@ function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObjec
   return attributes
 }
 
-function getThumbnailFromIcons (videoObject: VideoTorrentObject) {
+function getThumbnailFromIcons (videoObject: VideoObject) {
   let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
   // Fallback if there are not valid icons
   if (validIcons.length === 0) validIcons = videoObject.icon
@@ -774,7 +774,7 @@ function getThumbnailFromIcons (videoObject: VideoTorrentObject) {
   return minBy(validIcons, 'width')
 }
 
-function getPreviewFromIcons (videoObject: VideoTorrentObject) {
+function getPreviewFromIcons (videoObject: VideoObject) {
   const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minWidth)
 
   // FIXME: don't put a fallback here for compatibility with PeerTube <2.2

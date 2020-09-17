@@ -1,5 +1,5 @@
 import { isRedundancyAccepted } from '@server/lib/redundancy'
-import { ActivityCreate, CacheFileObject, VideoTorrentObject } from '../../../../shared'
+import { ActivityCreate, CacheFileObject, VideoObject } from '../../../../shared'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -52,7 +52,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
-  const videoToCreateData = activity.object as VideoTorrentObject
+  const videoToCreateData = activity.object as VideoObject
 
   const syncParam = { likes: false, dislikes: false, shares: false, comments: false, thumbnail: true, refreshVideo: false }
   const { video, created } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData, syncParam })
