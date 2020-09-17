@@ -55,7 +55,6 @@ import {
   videosUpdateValidator
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
-import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { abuseVideoRouter } from './abuse'

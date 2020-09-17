@@ -1,4 +1,4 @@
-import { ActivityUpdate, CacheFileObject, VideoTorrentObject } from '../../../../shared/models/activitypub'
+import { ActivityUpdate, CacheFileObject, VideoObject } from '../../../../shared/models/activitypub'
 import { ActivityPubActor } from '../../../../shared/models/activitypub/activitypub-actor'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
@@ -55,7 +55,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processUpdateVideo (actor: MActorSignature, activity: ActivityUpdate) {
-  const videoObject = activity.object as VideoTorrentObject
+  const videoObject = activity.object as VideoObject
 
   if (sanitizeAndCheckVideoTorrentObject(videoObject) === false) {
     logger.debug('Video sent by update is not valid.', { videoObject })

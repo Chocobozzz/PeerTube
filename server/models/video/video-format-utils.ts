@@ -1,6 +1,6 @@
 import { Video, VideoDetails } from '../../../shared/models/videos'
 import { VideoModel } from './video'
-import { ActivityTagObject, ActivityUrlObject, VideoTorrentObject } from '../../../shared/models/activitypub/objects'
+import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../shared/models/activitypub/objects'
 import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { VideoCaptionModel } from './video-caption'
 import {
@@ -262,7 +262,7 @@ function addVideoFilesInAPAcc (
   }
 }
 
-function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
+function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
   const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
   if (!video.Tags) video.Tags = []
 
@@ -351,6 +351,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     views: video.views,
     sensitive: video.nsfw,
     waitTranscoding: video.waitTranscoding,
+    isLiveBroadcast: video.isLive,
     state: video.state,
     commentsEnabled: video.commentsEnabled,
     downloadEnabled: video.downloadEnabled,

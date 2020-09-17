@@ -31,7 +31,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
-import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
+import { VideoObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
@@ -1763,7 +1763,7 @@ export class VideoModel extends Model<VideoModel> {
     return videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, files)
   }
 
-  toActivityPubObject (this: MVideoAP): VideoTorrentObject {
+  toActivityPubObject (this: MVideoAP): VideoObject {
     return videoModelToActivityPubObject(this)
   }
 

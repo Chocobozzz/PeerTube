@@ -18,7 +18,7 @@ import {
   MVideoAccountLightBlacklistAllFiles
 } from '@server/types/models'
 import { ActivityCreate } from '../../shared/models/activitypub'
-import { VideoTorrentObject } from '../../shared/models/activitypub/objects'
+import { VideoObject } from '../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
 import { VideoCreate, VideoImportCreate } from '../../shared/models/videos'
 import { VideoCommentCreate } from '../../shared/models/videos/video-comment.model'
@@ -62,7 +62,7 @@ function isLocalVideoCommentReplyAccepted (_object: {
 
 function isRemoteVideoAccepted (_object: {
   activity: ActivityCreate
-  videoAP: VideoTorrentObject
+  videoAP: VideoObject
   byActor: ActorModel
 }): AcceptResult {
   return { accepted: true }
