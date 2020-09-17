@@ -4,18 +4,16 @@ import { createReqFiles } from '@server/helpers/express-utils'
 import { CONFIG } from '@server/initializers/config'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
+import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { videoLiveAddValidator, videoLiveGetValidator } from '@server/middlewares/validators/videos/video-live'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
-import { VideoCreate, VideoPrivacy, VideoState } from '../../../../shared'
-import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { VideoCreate, VideoState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
-import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
-import { buildLocalVideoFromCreate } from '@server/lib/video'
 
 const liveRouter = express.Router()
 
@@ -59,26 +57,24 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoInfo: VideoCreate = req.body
 
   // Prepare data so we don't block the transaction
-  const videoData = buildLocalVideoFromCreate(videoInfo, res.locals.videoChannel.id)
+  const videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
   videoData.isLive = true
-
-  const videoLive = new VideoLiveModel()
-  videoLive.streamKey = uuidv4()
+  videoData.state = VideoState.WAITING_FOR_LIVE
+  videoData.duration = 0
 
   const video = new VideoModel(videoData) as MVideoDetails
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
-  // Process thumbnail or create it from the video
-  const thumbnailField = req.files ? req.files['thumbnailfile'] : null
-  const thumbnailModel = thumbnailField
-    ? await createVideoMiniatureFromExisting(thumbnailField[0].path, video, ThumbnailType.MINIATURE, false)
-    : await createVideoMiniatureFromExisting(ASSETS_PATH.DEFAULT_LIVE_BACKGROUND, video, ThumbnailType.MINIATURE, true)
+  const videoLive = new VideoLiveModel()
+  videoLive.streamKey = uuidv4()
 
-  // Process preview or create it from the video
-  const previewField = req.files ? req.files['previewfile'] : null
-  const previewModel = previewField
-    ? await createVideoMiniatureFromExisting(previewField[0].path, video, ThumbnailType.PREVIEW, false)
-    : await createVideoMiniatureFromExisting(ASSETS_PATH.DEFAULT_LIVE_BACKGROUND, video, ThumbnailType.PREVIEW, true)
+  const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
+    video,
+    files: req.files,
+    fallback: type => {
+      return createVideoMiniatureFromExisting({ inputPath: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND, video, type, automaticallyGenerated: true })
+    }
+  })
 
   const { videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
@@ -94,13 +90,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
     videoLive.videoId = videoCreated.id
     await videoLive.save(sequelizeOptions)
 
-    // Create tags
-    if (videoInfo.tags !== undefined) {
-      const tagInstances = await TagModel.findOrCreateTags(videoInfo.tags, t)
-
-      await video.$set('Tags', tagInstances, sequelizeOptions)
-      video.Tags = tagInstances
-    }
+    await setVideoTags({ video, tags: videoInfo.tags, transaction: t })
 
     logger.info('Video live %s with uuid %s created.', videoInfo.name, videoCreated.uuid)
 
