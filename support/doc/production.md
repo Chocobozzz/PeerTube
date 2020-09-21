@@ -238,7 +238,7 @@ to your own administrator password, although it must be 6 characters or more.
 Now your instance is up you can:
 
  * Subscribe to the mailing list for PeerTube administrators: https://framalistes.org/sympa/subscribe/peertube-admin
- * Add you instance to the public PeerTube instances index if you want to: https://instances.peertu.be/
+ * Add your instance to the public PeerTube instances index if you want to: https://instances.joinpeertube.org/
  * Check [available CLI tools](/support/doc/tools.md)
 
 ## Upgrade
