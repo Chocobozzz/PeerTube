@@ -1307,7 +1307,7 @@ paths:
                   type: string
                 waitTranscoding:
                   description: Whether or not we wait transcoding before publish the video
-                  type: string
+                  type: boolean
                 support:
                   description: A text tell the audience how to support the video creator
                   example: Please support my work on <insert crowdfunding plateform>! <3
@@ -1330,6 +1330,9 @@ paths:
                     maxLength: 30
                 commentsEnabled:
                   description: Enable or disable comments for this video
+                  type: boolean
+                downloadEnabled:
+                  description: Enable or disable downloading for this video
                   type: boolean
                 originallyPublishedAt:
                   description: Date when the content was originally published
@@ -1428,14 +1431,14 @@ paths:
                   type: string
                 waitTranscoding:
                   description: Whether or not we wait transcoding before publish the video
-                  type: string
+                  type: boolean
                 support:
                   description: A text tell the audience how to support the video creator
                   example: Please support my work on <insert crowdfunding plateform>! <3
                   type: string
                 nsfw:
                   description: Whether or not this video contains sensitive content
-                  type: string
+                  type: boolean
                 name:
                   description: Video name
                   type: string
@@ -1450,7 +1453,10 @@ paths:
                     maxLength: 30
                 commentsEnabled:
                   description: Enable or disable comments for this video
-                  type: string
+                  type: boolean
+                downloadEnabled:
+                  description: Enable or disable downloading for this video
+                  type: boolean
                 scheduleUpdate:
                   $ref: '#/components/schemas/VideoScheduledUpdate'
               required:
