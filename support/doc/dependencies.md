@@ -39,6 +39,33 @@ sudo apt update
 sudo apt install nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
+redis-server -v # Should be >= 2.8.18
+nodejs -v # Should be >= 10.x
+yarn -v # Should be >= 1.x
+postgres -V # Should be >= 9.6
+```
+
+```
+sudo find /usr -wholename '*/bin/postgres'
+```
+
+or
+
+```
+sudo updatedb
+locate bin/postgres
+```
+
+The output should look something like this:
+
+```
+/usr/lib/postgresql/9.6/bin/postgres
+```
+
+Once you find the path to the binary, you can use it to get the version of the PostgreSQL server:
+
+```
+/usr/lib/postgresql/9.6/bin/postgres -V
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
