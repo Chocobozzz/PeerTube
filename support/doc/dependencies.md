@@ -45,6 +45,10 @@ yarn -v # Should be >= 1.x
 postgres -V # Should be >= 9.6
 ```
 
+If the postgres binary is not in system's PATH, you'll get an error saying "postgres: command not found". This usually happens when the PostgreSQL package is not installed from the distribution's standard repositories.
+
+You can find the path to the binary either with the `locate` or `find` command:
+
 ```
 sudo find /usr -wholename '*/bin/postgres'
 ```
