@@ -50,6 +50,8 @@ $video-info-margin-left: 44px;
 }
 
 #video-wrapper {
+  $video-height: 66vh;
+
   background-color: #000;
   display: flex;
   justify-content: center;
@@ -58,6 +60,7 @@ $video-info-margin-left: 44px;
     display: flex;
     justify-content: center;
     flex-grow: 1;
+    height: $video-height;
   }
 
   .remote-server-down {
@@ -84,7 +87,7 @@ $video-info-margin-left: 44px;
   ::ng-deep .video-js {
     width: 100%;
     max-width: getPlayerWidth(66vh);
-    height: 66vh;
+    height: $video-height;
 
     // VideoJS create an inner video player
     video {

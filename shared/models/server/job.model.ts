@@ -16,6 +16,7 @@ export type JobType =
   | 'videos-views'
   | 'activitypub-refresher'
   | 'video-redundancy'
+  | 'video-live-ending'
 
 export interface Job {
   id: number
@@ -126,3 +127,7 @@ export type VideoTranscodingPayload =
   | NewResolutionTranscodingPayload
   | OptimizeTranscodingPayload
   | MergeAudioTranscodingPayload
+
+export interface VideoLiveEndingPayload {
+  videoId: number
+}

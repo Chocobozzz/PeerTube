@@ -10,6 +10,7 @@ import {
   RefreshPayload,
   VideoFileImportPayload,
   VideoImportPayload,
+  VideoLiveEndingPayload,
   VideoRedundancyPayload,
   VideoTranscodingPayload
 } from '../../../shared/models'
@@ -27,6 +28,7 @@ import { processVideosViews } from './handlers/video-views'
 import { refreshAPObject } from './handlers/activitypub-refresher'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy'
+import { processVideoLiveEnding } from './handlers/video-live-ending'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -39,7 +41,12 @@ type CreateJobArgument =
   { type: 'video-import', payload: VideoImportPayload } |
   { type: 'activitypub-refresher', payload: RefreshPayload } |
   { type: 'videos-views', payload: {} } |
+  { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
   { type: 'video-redundancy', payload: VideoRedundancyPayload }
+
+type CreateJobOptions = {
+  delay?: number
+}
 
 const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
@@ -52,6 +59,7 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'video-import': processVideoImport,
   'videos-views': processVideosViews,
   'activitypub-refresher': refreshAPObject,
+  'video-live-ending': processVideoLiveEnding,
   'video-redundancy': processVideoRedundancy
 }
 
@@ -66,7 +74,8 @@ const jobTypes: JobType[] = [
   'video-import',
   'videos-views',
   'activitypub-refresher',
-  'video-redundancy'
+  'video-redundancy',
+  'video-live-ending'
 ]
 
 class JobQueue {
@@ -122,12 +131,12 @@ class JobQueue {
     }
   }
 
-  createJob (obj: CreateJobArgument): void {
-    this.createJobWithPromise(obj)
+  createJob (obj: CreateJobArgument, options: CreateJobOptions = {}): void {
+    this.createJobWithPromise(obj, options)
         .catch(err => logger.error('Cannot create job.', { err, obj }))
   }
 
-  createJobWithPromise (obj: CreateJobArgument) {
+  createJobWithPromise (obj: CreateJobArgument, options: CreateJobOptions = {}) {
     const queue = this.queues[obj.type]
     if (queue === undefined) {
       logger.error('Unknown queue %s: cannot create job.', obj.type)
@@ -137,7 +146,8 @@ class JobQueue {
     const jobArgs: Bull.JobOptions = {
       backoff: { delay: 60 * 1000, type: 'exponential' },
       attempts: JOB_ATTEMPTS[obj.type],
-      timeout: JOB_TTL[obj.type]
+      timeout: JOB_TTL[obj.type],
+      delay: options.delay
     }
 
     return queue.add(obj.payload, jobArgs)

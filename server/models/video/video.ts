@@ -127,6 +127,7 @@ import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
+import { LiveManager } from '@server/lib/live-manager'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -797,6 +798,13 @@ export class VideoModel extends Model<VideoModel> {
            })
 
     return undefined
+  }
+
+  @BeforeDestroy
+  static stopLiveIfNeeded (instance: VideoModel) {
+    if (!instance.isLive) return
+
+    return LiveManager.Instance.stopSessionOf(instance.id)
   }
 
   @BeforeDestroy

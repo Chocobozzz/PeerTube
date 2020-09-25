@@ -139,7 +139,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'email': 5,
   'videos-views': 1,
   'activitypub-refresher': 1,
-  'video-redundancy': 1
+  'video-redundancy': 1,
+  'video-live-ending': 1
 }
 const JOB_CONCURRENCY: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 1,
@@ -152,7 +153,8 @@ const JOB_CONCURRENCY: { [id in JobType]: number } = {
   'email': 5,
   'videos-views': 1,
   'activitypub-refresher': 1,
-  'video-redundancy': 1
+  'video-redundancy': 1,
+  'video-live-ending': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -165,7 +167,8 @@ const JOB_TTL: { [id in JobType]: number } = {
   'email': 60000 * 10, // 10 minutes
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
-  'video-redundancy': 1000 * 3600 * 3 // 3 hours
+  'video-redundancy': 1000 * 3600 * 3, // 3 hours
+  'video-live-ending': 1000 * 60 * 10 // 10 minutes
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
@@ -605,6 +608,7 @@ const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
 const VIDEO_LIVE = {
   EXTENSION: '.ts',
+  CLEANUP_DELAY: 1000 * 60 * 5, // 5 mintues
   RTMP: {
     CHUNK_SIZE: 60000,
     GOP_CACHE: true,

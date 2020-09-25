@@ -29,6 +29,14 @@
       This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
     </div>
 
+    <div i18n class="col-md-12 alert alert-info" *ngIf="isWaitingForLive()">
+      This live has not started yet.
+    </div>
+
+    <div i18n class="col-md-12 alert alert-info" *ngIf="isLiveEnded()">
+      This live is finished.
+    </div>
+
     <div class="col-md-12 alert alert-danger" *ngIf="video?.blacklisted">
       <div class="blocked-label" i18n>This video is blocked.</div>
       {{ video.blockedReason }}
@@ -113,7 +121,7 @@
                     </div>
                   </div>
 
-                  <ng-container *ngIf="!isUserLoggedIn()">
+                  <ng-container *ngIf="!isUserLoggedIn() && !isLive()">
                     <button
                       *ngIf="isVideoDownloadable()" class="action-button action-button-save"
                       (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"

@@ -89,7 +89,7 @@ live:
     port: 1935
 
   transcoding:
-    enabled: false
+    enabled: true
     threads: 2
 
     resolutions:

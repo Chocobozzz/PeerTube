@@ -66,6 +66,7 @@ import { FilteredModelAttributes } from '../../types/sequelize'
 import { ActorFollowScoreCache } from '../files-cache'
 import { JobQueue } from '../job-queue'
 import { Notifier } from '../notifier'
+import { PeerTubeSocket } from '../peertube-socket'
 import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '../thumbnail'
 import { setVideoTags } from '../video'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
@@ -348,6 +349,7 @@ async function updateVideoFromAP (options: {
       video.privacy = videoData.privacy
       video.channelId = videoData.channelId
       video.views = videoData.views
+      video.isLive = videoData.isLive
 
       const videoUpdated = await video.save(sequelizeOptions) as MVideoFullLight
 
@@ -434,6 +436,7 @@ async function updateVideoFromAP (options: {
     })
 
     if (wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoUpdated) // Notify our users?
+    if (videoUpdated.isLive) PeerTubeSocket.Instance.sendVideoLiveNewState(video)
 
     logger.info('Remote video with uuid %s updated', videoObject.uuid)
 

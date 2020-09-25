@@ -1,14 +1,21 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, DefaultScope, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { WEBSERVER } from '@server/initializers/constants'
 import { MVideoLive, MVideoLiveVideo } from '@server/types/models'
-import { VideoLive } from '@shared/models/videos/video-live.model'
+import { LiveVideo, VideoState } from '@shared/models'
 import { VideoModel } from './video'
+import { VideoBlacklistModel } from './video-blacklist'
 
 @DefaultScope(() => ({
   include: [
     {
       model: VideoModel,
-      required: true
+      required: true,
+      include: [
+        {
+          model: VideoBlacklistModel,
+          required: false
+        }
+      ]
     }
   ]
 }))
@@ -49,7 +56,22 @@ export class VideoLiveModel extends Model<VideoLiveModel> {
     const query = {
       where: {
         streamKey
-      }
+      },
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true,
+          where: {
+            state: VideoState.WAITING_FOR_LIVE
+          },
+          include: [
+            {
+              model: VideoBlacklistModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
     }
 
     return VideoLiveModel.findOne<MVideoLiveVideo>(query)
@@ -65,7 +87,7 @@ export class VideoLiveModel extends Model<VideoLiveModel> {
     return VideoLiveModel.findOne<MVideoLive>(query)
   }
 
-  toFormattedJSON (): VideoLive {
+  toFormattedJSON (): LiveVideo {
     return {
       rtmpUrl: WEBSERVER.RTMP_URL,
       streamKey: this.streamKey

@@ -246,9 +246,20 @@ transcoding:
 live:
   enabled: false
 
+  # Limit lives duration
+  # Set null to disable duration limit
+  max_duration: 5 hours
+
+  # Allow your users to save a replay of their live
+  # PeerTube will transcode segments in a video file
+  # If the user daily/total quota is reached, PeerTube will stop the live
+  # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
+  allow_replay: true
+
   rtmp:
     port: 1935
 
+  # Allow to transcode the live streaming in multiple live resolutions
   transcoding:
     enabled: false
     threads: 2

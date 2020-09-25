@@ -4,7 +4,17 @@ import { catchError } from 'rxjs/operators'
 import { PlatformLocation } from '@angular/common'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, AuthUser, ConfirmService, MarkdownService, Notifier, RestExtractor, ServerService, UserService } from '@app/core'
+import {
+  AuthService,
+  AuthUser,
+  ConfirmService,
+  MarkdownService,
+  Notifier,
+  PeerTubeSocket,
+  RestExtractor,
+  ServerService,
+  UserService
+} from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { RedirectService } from '@app/core/routing/redirect.service'
 import { isXPercentInViewport, scrollToTop } from '@app/helpers'
@@ -29,6 +39,8 @@ import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
 import { VideoSupportComponent } from './modal/video-support.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
+
+type URLOptions = CustomizationOptions & { playerMode: PlayerMode }
 
 @Component({
   selector: 'my-video-watch',
@@ -76,6 +88,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private paramsSub: Subscription
   private queryParamsSub: Subscription
   private configSub: Subscription
+  private liveVideosSub: Subscription
 
   private serverConfig: ServerConfig
 
@@ -99,6 +112,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private videoCaptionService: VideoCaptionService,
     private hotkeysService: HotkeysService,
     private hooks: HooksService,
+    private peertubeSocket: PeerTubeSocket,
     private location: PlatformLocation,
     @Inject(LOCALE_ID) private localeId: string
   ) {
@@ -165,6 +179,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.paramsSub) this.paramsSub.unsubscribe()
     if (this.queryParamsSub) this.queryParamsSub.unsubscribe()
     if (this.configSub) this.configSub.unsubscribe()
+    if (this.liveVideosSub) this.liveVideosSub.unsubscribe()
 
     // Unbind hotkeys
     this.hotkeysService.remove(this.hotkeys)
@@ -304,6 +319,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   hasVideoScheduledPublication () {
     return this.video && this.video.scheduledUpdate !== undefined
+  }
+
+  isLive () {
+    return !!(this.video?.isLive)
+  }
+
+  isWaitingForLive () {
+    return this.video?.state.id === VideoState.WAITING_FOR_LIVE
+  }
+
+  isLiveEnded () {
+    return this.video?.state.id === VideoState.LIVE_ENDED
   }
 
   isVideoBlur (video: Video) {
@@ -470,8 +497,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private async onVideoFetched (
     video: VideoDetails,
     videoCaptions: VideoCaption[],
-    urlOptions: CustomizationOptions & { playerMode: PlayerMode }
+    urlOptions: URLOptions
   ) {
+    this.subscribeToLiveEventsIfNeeded(this.video, video)
+
     this.video = video
     this.videoCaptions = videoCaptions
 
@@ -488,6 +517,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       )
       if (res === false) return this.location.back()
     }
+
+    const videoState = this.video.state.id
+    if (videoState === VideoState.LIVE_ENDED || videoState === VideoState.WAITING_FOR_LIVE) return
 
     // Flush old player if needed
     this.flushPlayer()
@@ -792,6 +824,29 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!this.player) return
 
     return !this.player.paused()
+  }
+
+  private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {
+    if (!this.liveVideosSub) {
+      this.liveVideosSub = this.peertubeSocket.getLiveVideosObservable()
+        .subscribe(({ payload }) => {
+          if (payload.state !== VideoState.PUBLISHED || this.video.state.id !== VideoState.WAITING_FOR_LIVE) return
+
+          const videoUUID = this.video.uuid
+
+          // Reset to refetch the video
+          this.video = undefined
+          this.loadVideo(videoUUID)
+        })
+    }
+
+    if (oldVideo && oldVideo.id !== newVideo.id) {
+      await this.peertubeSocket.unsubscribeLiveVideos(oldVideo.id)
+    }
+
+    if (!newVideo.isLive) return
+
+    await this.peertubeSocket.subscribeToLiveVideosSocket(newVideo.id)
   }
 
   private initHotkeys () {

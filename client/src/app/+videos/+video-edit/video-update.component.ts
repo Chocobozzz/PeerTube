@@ -5,7 +5,7 @@ import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService, SelectChannelItem } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { VideoPrivacy, VideoLive } from '@shared/models'
+import { LiveVideo, VideoPrivacy } from '@shared/models'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
 
 @Component({
@@ -17,7 +17,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
   userVideoChannels: SelectChannelItem[] = []
   videoCaptions: VideoCaptionEdit[] = []
-  videoLive: VideoLive
+  liveVideo: LiveVideo
 
   isUpdatingVideo = false
   schedulePublicationPossible = false
@@ -42,11 +42,11 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
     this.route.data
         .pipe(map(data => data.videoData))
-        .subscribe(({ video, videoChannels, videoCaptions, videoLive }) => {
+        .subscribe(({ video, videoChannels, videoCaptions, liveVideo }) => {
           this.video = new VideoEdit(video)
           this.userVideoChannels = videoChannels
           this.videoCaptions = videoCaptions
-          this.videoLive = videoLive
+          this.liveVideo = liveVideo
 
           this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
 

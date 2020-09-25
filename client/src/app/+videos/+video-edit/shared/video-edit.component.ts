@@ -20,7 +20,7 @@ import {
 import { FormReactiveValidationMessages, FormValidatorService, SelectChannelItem } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { ServerConfig, VideoConstant, VideoLive, VideoPrivacy } from '@shared/models'
+import { ServerConfig, VideoConstant, LiveVideo, VideoPrivacy } from '@shared/models'
 import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
@@ -42,7 +42,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
   @Input() waitTranscodingEnabled = true
   @Input() type: VideoEditType
-  @Input() videoLive: VideoLive
+  @Input() liveVideo: LiveVideo
 
   @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
 
