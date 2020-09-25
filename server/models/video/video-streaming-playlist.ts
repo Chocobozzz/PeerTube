@@ -153,6 +153,17 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
     return VideoStreamingPlaylistModel.findByPk(id, options)
   }
 
+  static loadHLSPlaylistByVideo (videoId: number) {
+    const options = {
+      where: {
+        type: VideoStreamingPlaylistType.HLS,
+        videoId
+      }
+    }
+
+    return VideoStreamingPlaylistModel.findOne(options)
+  }
+
   static getHlsPlaylistFilename (resolution: number) {
     return resolution + '.m3u8'
   }

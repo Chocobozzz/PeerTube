@@ -2,7 +2,7 @@ import { Subject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
 import { Component, EventEmitter, Input, Output, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
-import { Notifier, User, UserNotificationSocket } from '@app/core'
+import { Notifier, User, PeerTubeSocket } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 
@@ -27,7 +27,7 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
 
   constructor (
     private userNotificationService: UserNotificationService,
-    private userNotificationSocket: UserNotificationSocket,
+    private peertubeSocket: PeerTubeSocket,
     private notifier: Notifier,
     private router: Router
   ) {
@@ -75,7 +75,7 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
   }
 
   private async subscribeToNotifications () {
-    const obs = await this.userNotificationSocket.getMyNotificationsSocket()
+    const obs = await this.peertubeSocket.getMyNotificationsSocket()
 
     this.notificationSub = obs.subscribe(data => {
       if (data.type === 'new') return this.unreadNotifications++

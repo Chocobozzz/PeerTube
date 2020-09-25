@@ -2,18 +2,22 @@
 import { AsyncQueue, queue } from 'async'
 import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { ensureDir, readdir, remove } from 'fs-extra'
-import { basename, join } from 'path'
+import { ensureDir } from 'fs-extra'
+import { basename } from 'path'
 import { computeResolutionsToTranscode, runLiveMuxing, runLiveTranscoding } from '@server/helpers/ffmpeg-utils'
 import { logger } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants'
+import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MVideo, MVideoLiveVideo } from '@server/types/models'
+import { MStreamingPlaylist, MVideoLiveVideo } from '@server/types/models'
 import { VideoState, VideoStreamingPlaylistType } from '@shared/models'
+import { federateVideoIfNeeded } from './activitypub/videos'
 import { buildSha256Segment } from './hls'
+import { JobQueue } from './job-queue'
+import { PeerTubeSocket } from './peertube-socket'
 import { getHLSDirectory } from './video-paths'
 
 const NodeRtmpServer = require('node-media-server/node_rtmp_server')
@@ -47,6 +51,7 @@ class LiveManager {
   private static instance: LiveManager
 
   private readonly transSessions = new Map<string, FfmpegCommand>()
+  private readonly videoSessions = new Map<number, string>()
   private readonly segmentsSha256 = new Map<string, Map<string, string>>()
 
   private segmentsSha256Queue: AsyncQueue<SegmentSha256QueueParam>
@@ -56,7 +61,8 @@ class LiveManager {
   }
 
   init () {
-    this.getContext().nodeEvent.on('postPublish', (sessionId: string, streamPath: string) => {
+    const events = this.getContext().nodeEvent
+    events.on('postPublish', (sessionId: string, streamPath: string) => {
       logger.debug('RTMP received stream', { id: sessionId, streamPath })
 
       const splittedPath = streamPath.split('/')
@@ -69,7 +75,7 @@ class LiveManager {
         .catch(err => logger.error('Cannot handle sessions.', { err }))
     })
 
-    this.getContext().nodeEvent.on('donePublish', sessionId => {
+    events.on('donePublish', sessionId => {
       this.abortSession(sessionId)
     })
 
@@ -115,6 +121,16 @@ class LiveManager {
     return this.segmentsSha256.get(videoUUID)
   }
 
+  stopSessionOf (videoId: number) {
+    const sessionId = this.videoSessions.get(videoId)
+    if (!sessionId) return
+
+    this.abortSession(sessionId)
+
+    this.onEndTransmuxing(videoId)
+      .catch(err => logger.error('Cannot end transmuxing of video %d.', videoId, { err }))
+  }
+
   private getContext () {
     return context
   }
@@ -135,6 +151,13 @@ class LiveManager {
     }
 
     const video = videoLive.Video
+    if (video.isBlacklisted()) {
+      logger.warn('Video is blacklisted. Refusing stream %s.', streamKey)
+      return this.abortSession(sessionId)
+    }
+
+    this.videoSessions.set(video.id, sessionId)
+
     const playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
 
     const session = this.getContext().sessions.get(sessionId)
@@ -153,11 +176,6 @@ class LiveManager {
 
       type: VideoStreamingPlaylistType.HLS
     }, { returning: true }) as [ MStreamingPlaylist, boolean ]
-
-    video.state = VideoState.PUBLISHED
-    await video.save()
-
-    // FIXME: federation?
 
     return this.runMuxing({
       sessionId,
@@ -207,11 +225,46 @@ class LiveManager {
 
     this.transSessions.set(sessionId, ffmpegExec)
 
-    const onFFmpegEnded = () => {
-      watcher.close()
-        .catch(err => logger.error('Cannot close watcher of %s.', outPath, { err }))
+    const videoUUID = videoLive.Video.uuid
+    const tsWatcher = chokidar.watch(outPath + '/*.ts')
 
-      this.onEndTransmuxing(videoLive.Video, playlist, streamPath, outPath)
+    const updateHandler = segmentPath => {
+      this.segmentsSha256Queue.push({ operation: 'update', segmentPath, videoUUID })
+    }
+
+    const deleteHandler = segmentPath => this.segmentsSha256Queue.push({ operation: 'delete', segmentPath, videoUUID })
+
+    tsWatcher.on('add', p => updateHandler(p))
+    tsWatcher.on('change', p => updateHandler(p))
+    tsWatcher.on('unlink', p => deleteHandler(p))
+
+    const masterWatcher = chokidar.watch(outPath + '/master.m3u8')
+    masterWatcher.on('add', async () => {
+      try {
+        const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoLive.videoId)
+
+        video.state = VideoState.PUBLISHED
+        await video.save()
+        videoLive.Video = video
+
+        await federateVideoIfNeeded(video, false)
+
+        PeerTubeSocket.Instance.sendVideoLiveNewState(video)
+      } catch (err) {
+        logger.error('Cannot federate video %d.', videoLive.videoId, { err })
+      } finally {
+        masterWatcher.close()
+          .catch(err => logger.error('Cannot close master watcher of %s.', outPath, { err }))
+      }
+    })
+
+    const onFFmpegEnded = () => {
+      logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', streamPath)
+
+      Promise.all([ tsWatcher.close(), masterWatcher.close() ])
+        .catch(err => logger.error('Cannot close watchers of %s.', outPath, { err }))
+
+      this.onEndTransmuxing(videoLive.Video.id)
         .catch(err => logger.error('Error in closed transmuxing.', { err }))
     }
 
@@ -225,44 +278,30 @@ class LiveManager {
     })
 
     ffmpegExec.on('end', () => onFFmpegEnded())
-
-    const videoUUID = videoLive.Video.uuid
-    const watcher = chokidar.watch(outPath + '/*.ts')
-
-    const updateHandler = segmentPath => this.segmentsSha256Queue.push({ operation: 'update', segmentPath, videoUUID })
-    const deleteHandler = segmentPath => this.segmentsSha256Queue.push({ operation: 'delete', segmentPath, videoUUID })
-
-    watcher.on('add', p => updateHandler(p))
-    watcher.on('change', p => updateHandler(p))
-    watcher.on('unlink', p => deleteHandler(p))
   }
 
-  private async onEndTransmuxing (video: MVideo, playlist: MStreamingPlaylist, streamPath: string, outPath: string) {
-    logger.info('RTMP transmuxing for %s ended.', streamPath)
+  private async onEndTransmuxing (videoId: number) {
+    try {
+      const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+      if (!fullVideo) return
 
-    const files = await readdir(outPath)
+      JobQueue.Instance.createJob({
+        type: 'video-live-ending',
+        payload: {
+          videoId: fullVideo.id
+        }
+      }, { delay: VIDEO_LIVE.CLEANUP_DELAY })
 
-    for (const filename of files) {
-      if (
-        filename.endsWith('.ts') ||
-        filename.endsWith('.m3u8') ||
-        filename.endsWith('.mpd') ||
-        filename.endsWith('.m4s') ||
-        filename.endsWith('.tmp')
-      ) {
-        const p = join(outPath, filename)
+      // FIXME: use end
+      fullVideo.state = VideoState.WAITING_FOR_LIVE
+      await fullVideo.save()
 
-        remove(p)
-          .catch(err => logger.error('Cannot remove %s.', p, { err }))
-      }
+      PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
+
+      await federateVideoIfNeeded(fullVideo, false)
+    } catch (err) {
+      logger.error('Cannot save/federate new video state of live streaming.', { err })
     }
-
-    playlist.destroy()
-      .catch(err => logger.error('Cannot remove live streaming playlist.', { err }))
-
-    video.state = VideoState.LIVE_ENDED
-    video.save()
-      .catch(err => logger.error('Cannot save new video state of live streaming.', { err }))
   }
 
   private async addSegmentSha (options: SegmentSha256QueueParam) {

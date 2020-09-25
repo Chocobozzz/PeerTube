@@ -4,7 +4,7 @@ import { ToastModule } from 'primeng/toast'
 import { CommonModule } from '@angular/common'
 import { NgModule, Optional, SkipSelf } from '@angular/core'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
+import { PeerTubeSocket } from '@app/core/notification/peertube-socket.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { UnloggedGuard } from '@app/core/routing/unlogged-guard.service'
@@ -84,7 +84,7 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
     RedirectService,
     Notifier,
     MessageService,
-    UserNotificationSocket,
+    PeerTubeSocket,
     ServerConfigResolver,
     CanDeactivateGuard
   ]

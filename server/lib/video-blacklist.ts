@@ -17,6 +17,7 @@ import { sendDeleteVideo } from './activitypub/send'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { Notifier } from './notifier'
 import { Hooks } from './plugins/hooks'
+import { LiveManager } from './live-manager'
 
 async function autoBlacklistVideoIfNeeded (parameters: {
   video: MVideoWithBlacklistLight
@@ -71,6 +72,10 @@ async function blacklistVideo (videoInstance: MVideoAccountLight, options: Video
 
   if (options.unfederate === true) {
     await sendDeleteVideo(videoInstance, undefined)
+  }
+
+  if (videoInstance.isLive) {
+    LiveManager.Instance.stopSessionOf(videoInstance.id)
   }
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)

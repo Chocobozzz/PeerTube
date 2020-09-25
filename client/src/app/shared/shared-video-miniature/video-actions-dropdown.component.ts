@@ -146,7 +146,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoDownloadable () {
-    return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled
+    return this.video &&
+      this.video.isLive !== true &&
+      this.video instanceof VideoDetails &&
+      this.video.downloadEnabled
   }
 
   canVideoBeDuplicated () {

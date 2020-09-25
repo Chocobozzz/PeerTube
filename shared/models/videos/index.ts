@@ -1,6 +1,7 @@
 export * from './blacklist'
 export * from './caption'
 export * from './channel'
+export * from './live'
 export * from './import'
 export * from './playlist'
 export * from './rate'
@@ -19,7 +20,7 @@ export * from './video-create.model'
 export * from './video-file-metadata'
 export * from './video-file.model'
 
-export * from './video-live.model'
+export * from './live/live-video.model'
 
 export * from './video-privacy.enum'
 export * from './video-query.type'

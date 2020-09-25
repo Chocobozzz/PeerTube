@@ -4,9 +4,9 @@ import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
-import { VideoCaptionService, VideoEdit, VideoService, VideoLiveService } from '@app/shared/shared-main'
+import { LiveVideoService, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { VideoCreate, VideoLive, VideoPrivacy } from '@shared/models'
+import { LiveVideo, VideoCreate, VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -23,7 +23,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
 
   isInUpdateForm = false
 
-  videoLive: VideoLive
+  liveVideo: LiveVideo
   videoId: number
   videoUUID: string
   error: string
@@ -38,7 +38,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
     protected serverService: ServerService,
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
-    private videoLiveService: VideoLiveService,
+    private liveVideoService: LiveVideoService,
     private router: Router
     ) {
     super()
@@ -69,7 +69,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
     const toPatch = Object.assign({}, video, { privacy: this.firstStepPrivacyId })
     this.form.patchValue(toPatch)
 
-    this.videoLiveService.goLive(video).subscribe(
+    this.liveVideoService.goLive(video).subscribe(
       res => {
         this.videoId = res.video.id
         this.videoUUID = res.video.uuid
@@ -114,10 +114,10 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
   }
 
   private fetchVideoLive () {
-    this.videoLiveService.getVideoLive(this.videoId)
+    this.liveVideoService.getVideoLive(this.videoId)
       .subscribe(
-        videoLive => {
-          this.videoLive = videoLive
+        liveVideo => {
+          this.liveVideo = liveVideo
         },
 
         err => {

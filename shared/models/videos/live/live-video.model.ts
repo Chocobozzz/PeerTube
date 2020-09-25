@@ -1,4 +1,4 @@
-export interface VideoLive {
+export interface LiveVideo {
   rtmpUrl: string
   streamKey: string
 }

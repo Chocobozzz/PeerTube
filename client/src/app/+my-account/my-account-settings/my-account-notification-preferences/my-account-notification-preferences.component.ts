@@ -86,7 +86,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   private savePreferencesImpl () {
-    this.userNotificationService.updateNotificationSettings(this.user, this.user.notificationSettings)
+    this.userNotificationService.updateNotificationSettings(this.user.notificationSettings)
       .subscribe(
         () => {
           this.notifier.success($localize`Preferences saved`, undefined, 2000)

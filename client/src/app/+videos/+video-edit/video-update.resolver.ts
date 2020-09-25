@@ -2,13 +2,13 @@ import { forkJoin, of } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router'
-import { VideoCaptionService, VideoChannelService, VideoDetails, VideoLiveService, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionService, VideoChannelService, VideoDetails, LiveVideoService, VideoService } from '@app/shared/shared-main'
 
 @Injectable()
 export class VideoUpdateResolver implements Resolve<any> {
   constructor (
     private videoService: VideoService,
-    private videoLiveService: VideoLiveService,
+    private liveVideoService: LiveVideoService,
     private videoChannelService: VideoChannelService,
     private videoCaptionService: VideoCaptionService
   ) {
@@ -49,7 +49,7 @@ export class VideoUpdateResolver implements Resolve<any> {
         ),
 
       video.isLive
-          ? this.videoLiveService.getVideoLive(video.id)
+          ? this.liveVideoService.getVideoLive(video.id)
           : of(undefined)
     ]
   }
