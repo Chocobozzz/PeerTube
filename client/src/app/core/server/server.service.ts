@@ -76,6 +76,8 @@ export class ServerService {
     },
     live: {
       enabled: false,
+      allowReplay: true,
+      maxDuration: null,
       transcoding: {
         enabled: false,
         enabledResolutions: []

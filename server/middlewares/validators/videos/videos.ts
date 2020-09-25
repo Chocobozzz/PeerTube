@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
+import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoFullLight } from '@server/types/models'
 import { ServerErrorCode, UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
@@ -73,7 +74,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
 
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
-    if (await user.isAbleToUploadVideo(videoFile) === false) {
+    if (await isAbleToUploadVideo(user.id, videoFile.size) === false) {
       res.status(403)
          .json({ error: 'The user video quota is exceeded with this video.' })
 
@@ -291,7 +292,7 @@ const videosAcceptChangeOwnershipValidator = [
 
     const user = res.locals.oauth.token.User
     const videoChangeOwnership = res.locals.videoChangeOwnership
-    const isAble = await user.isAbleToUploadVideo(videoChangeOwnership.Video.getMaxQualityFile())
+    const isAble = await isAbleToUploadVideo(user.id, videoChangeOwnership.Video.getMaxQualityFile().size)
     if (isAble === false) {
       res.status(403)
         .json({ error: 'The user video quota is exceeded with this video.' })

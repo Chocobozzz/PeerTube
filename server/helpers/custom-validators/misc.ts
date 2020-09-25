@@ -45,6 +45,10 @@ function isBooleanValid (value: any) {
   return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
 }
 
+function isIntOrNull (value: any) {
+  return value === null || validator.isInt('' + value)
+}
+
 function toIntOrNull (value: string) {
   const v = toValueOrNull(value)
 
@@ -116,6 +120,7 @@ export {
   isArrayOf,
   isNotEmptyIntArray,
   isArray,
+  isIntOrNull,
   isIdValid,
   isSafePath,
   isUUIDValid,

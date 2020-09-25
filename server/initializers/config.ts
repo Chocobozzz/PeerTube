@@ -201,6 +201,9 @@ const CONFIG = {
   LIVE: {
     get ENABLED () { return config.get<boolean>('live.enabled') },
 
+    get MAX_DURATION () { return parseDurationToMs(config.get<string>('live.max_duration')) },
+    get ALLOW_REPLAY () { return config.get<boolean>('live.allow_replay') },
+
     RTMP: {
       get PORT () { return config.get<number>('live.rtmp.port') }
     },

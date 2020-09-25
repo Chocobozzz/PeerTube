@@ -30,9 +30,17 @@ import { VideoBlacklistModel } from './video-blacklist'
 })
 export class VideoLiveModel extends Model<VideoLiveModel> {
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column(DataType.STRING)
   streamKey: string
+
+  @AllowNull(false)
+  @Column
+  perpetualLive: boolean
+
+  @AllowNull(false)
+  @Column
+  saveReplay: boolean
 
   @CreatedAt
   createdAt: Date

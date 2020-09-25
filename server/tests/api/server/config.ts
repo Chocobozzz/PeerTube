@@ -79,6 +79,8 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.transcoding.hls.enabled).to.be.true
 
   expect(data.live.enabled).to.be.false
+  expect(data.live.allowReplay).to.be.true
+  expect(data.live.maxDuration).to.equal(1000 * 3600 * 5)
   expect(data.live.transcoding.enabled).to.be.false
   expect(data.live.transcoding.threads).to.equal(2)
   expect(data.live.transcoding.resolutions['240p']).to.be.false
@@ -162,6 +164,8 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.webtorrent.enabled).to.be.true
 
   expect(data.live.enabled).to.be.true
+  expect(data.live.allowReplay).to.be.false
+  expect(data.live.maxDuration).to.equal(5000)
   expect(data.live.transcoding.enabled).to.be.true
   expect(data.live.transcoding.threads).to.equal(4)
   expect(data.live.transcoding.resolutions['240p']).to.be.true
@@ -324,6 +328,8 @@ describe('Test config', function () {
       },
       live: {
         enabled: true,
+        allowReplay: false,
+        maxDuration: 5000,
         transcoding: {
           enabled: true,
           threads: 4,

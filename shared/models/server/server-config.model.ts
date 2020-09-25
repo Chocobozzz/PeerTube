@@ -101,6 +101,9 @@ export interface ServerConfig {
   live: {
     enabled: boolean
 
+    maxDuration: number
+    allowReplay: boolean
+
     transcoding: {
       enabled: boolean
 
