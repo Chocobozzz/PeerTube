@@ -128,6 +128,8 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
     },
     live: {
       enabled: true,
+      allowReplay: false,
+      maxDuration: null,
       transcoding: {
         enabled: true,
         threads: 4,

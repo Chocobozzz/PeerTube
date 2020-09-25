@@ -608,7 +608,9 @@ const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
 const VIDEO_LIVE = {
   EXTENSION: '.ts',
-  CLEANUP_DELAY: 1000 * 60 * 5, // 5 mintues
+  CLEANUP_DELAY: 1000 * 60 * 5, // 5 minutes
+  SEGMENT_TIME: 4, // 4 seconds
+  SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
   RTMP: {
     CHUNK_SIZE: 60000,
     GOP_CACHE: true,
@@ -620,7 +622,8 @@ const VIDEO_LIVE = {
 
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4, // 4 hours
-  INFO_HASH_EXISTS: 1000 * 3600 * 12 // 12 hours
+  INFO_HASH_EXISTS: 1000 * 3600 * 12, // 12 hours
+  LIVE_ABLE_TO_UPLOAD: 1000 * 60 // 1 minute
 }
 
 const MEMOIZE_LENGTH = {

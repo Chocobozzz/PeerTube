@@ -5,7 +5,7 @@ import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
 import { getMaxBitrate, getTargetBitrate, VideoResolution } from '../../shared/models/videos'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
 import { CONFIG } from '../initializers/config'
-import { FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
+import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 
@@ -353,7 +353,7 @@ function convertWebPToJPG (path: string, destination: string): Promise<void> {
   })
 }
 
-function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: number[]) {
+function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: number[], deleteSegments: boolean) {
   const command = getFFmpeg(rtmpUrl)
   command.inputOption('-fflags nobuffer')
 
@@ -399,7 +399,7 @@ function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: numb
     varStreamMap.push(`v:${i},a:${i}`)
   }
 
-  addDefaultLiveHLSParams(command, outPath)
+  addDefaultLiveHLSParams(command, outPath, deleteSegments)
 
   command.outputOption('-var_stream_map', varStreamMap.join(' '))
 
@@ -408,7 +408,7 @@ function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: numb
   return command
 }
 
-function runLiveMuxing (rtmpUrl: string, outPath: string) {
+function runLiveMuxing (rtmpUrl: string, outPath: string, deleteSegments: boolean) {
   const command = getFFmpeg(rtmpUrl)
   command.inputOption('-fflags nobuffer')
 
@@ -417,7 +417,7 @@ function runLiveMuxing (rtmpUrl: string, outPath: string) {
   command.outputOption('-map 0:a?')
   command.outputOption('-map 0:v?')
 
-  addDefaultLiveHLSParams(command, outPath)
+  addDefaultLiveHLSParams(command, outPath, deleteSegments)
 
   command.run()
 
@@ -457,10 +457,14 @@ function addDefaultX264Params (command: ffmpeg.FfmpegCommand) {
          .outputOption('-map_metadata -1') // strip all metadata
 }
 
-function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string) {
-  command.outputOption('-hls_time 4')
-  command.outputOption('-hls_list_size 15')
-  command.outputOption('-hls_flags delete_segments')
+function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string, deleteSegments: boolean) {
+  command.outputOption('-hls_time ' + VIDEO_LIVE.SEGMENT_TIME)
+  command.outputOption('-hls_list_size ' + VIDEO_LIVE.SEGMENTS_LIST_SIZE)
+
+  if (deleteSegments === true) {
+    command.outputOption('-hls_flags delete_segments')
+  }
+
   command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%d.ts')}`)
   command.outputOption('-master_pl_name master.m3u8')
   command.outputOption(`-f hls`)

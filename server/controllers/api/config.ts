@@ -118,6 +118,9 @@ async function getConfig (req: express.Request, res: express.Response) {
     live: {
       enabled: CONFIG.LIVE.ENABLED,
 
+      allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
+      maxDuration: CONFIG.LIVE.MAX_DURATION,
+
       transcoding: {
         enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
         enabledResolutions: getEnabledResolutions('live')
@@ -425,6 +428,8 @@ function customConfig (): CustomConfig {
     },
     live: {
       enabled: CONFIG.LIVE.ENABLED,
+      allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
+      maxDuration: CONFIG.LIVE.MAX_DURATION,
       transcoding: {
         enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
         threads: CONFIG.LIVE.TRANSCODING.THREADS,

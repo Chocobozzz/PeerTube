@@ -9,7 +9,7 @@ async function up (utils: {
     const query = `
     CREATE TABLE IF NOT EXISTS "videoLive" (
       "id"   SERIAL ,
-      "streamKey" VARCHAR(255) NOT NULL,
+      "streamKey" VARCHAR(255),
       "videoId" INTEGER NOT NULL REFERENCES "video" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
       "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
       "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,

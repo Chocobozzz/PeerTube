@@ -36,6 +36,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   resolutions: { id: string, label: string, description?: string }[] = []
   liveResolutions: { id: string, label: string, description?: string }[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
+  liveMaxDurationOptions: { label: string, value: number }[] = []
 
   languageItems: SelectOptionsItem[] = []
   categoryItems: SelectOptionsItem[] = []
@@ -92,6 +93,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       { value: 4, label: '4' },
       { value: 8, label: '8' }
     ]
+
+    this.liveMaxDurationOptions = [
+      { value: 0, label: $localize`No limit` },
+      { value: 1000 * 3600, label: $localize`1 hour` },
+      { value: 1000 * 3600 * 3, label: $localize`3 hours` },
+      { value: 1000 * 3600 * 5, label: $localize`5 hours` },
+      { value: 1000 * 3600 * 10, label: $localize`10 hours` }
+    ]
   }
 
   get videoQuotaOptions () {
@@ -114,7 +123,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+        .subscribe(config => {
+          this.serverConfig = config
+        })
 
     const formGroupData: { [key in keyof CustomConfig ]: any } = {
       instance: {
@@ -203,6 +214,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       },
       live: {
         enabled: null,
+
+        maxDuration: null,
+        allowReplay: null,
 
         transcoding: {
           enabled: null,
@@ -339,6 +353,20 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       this.nav.select(hashToNav[hash])
       setTimeout(() => this.viewportScroller.scrollToAnchor(hash), 100)
     }
+  }
+
+  hasConsistentOptions () {
+    if (this.hasLiveAllowReplayConsistentOptions()) return true
+
+    return false
+  }
+
+  hasLiveAllowReplayConsistentOptions () {
+    if (this.isTranscodingEnabled() === false && this.isLiveEnabled() && this.form.value['live']['allowReplay'] === true) {
+      return false
+    }
+
+    return true
   }
 
   private updateForm () {

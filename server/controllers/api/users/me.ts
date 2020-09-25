@@ -9,7 +9,7 @@ import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
 import { updateActorAvatarFile } from '../../../lib/avatar'
-import { sendVerifyUserEmail } from '../../../lib/user'
+import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -133,8 +133,8 @@ async function getUserInformation (req: express.Request, res: express.Response) 
 
 async function getUserVideoQuotaUsed (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
-  const videoQuotaUsed = await UserModel.getOriginalVideoFileTotalFromUser(user)
-  const videoQuotaUsedDaily = await UserModel.getOriginalVideoFileTotalDailyFromUser(user)
+  const videoQuotaUsed = await getOriginalVideoFileTotalFromUser(user)
+  const videoQuotaUsedDaily = await getOriginalVideoFileTotalDailyFromUser(user)
 
   const data: UserVideoQuota = {
     videoQuotaUsed,

@@ -497,7 +497,7 @@ export {
 
 function checkUserIdExist (idArg: number | string, res: express.Response, withStats = false) {
   const id = parseInt(idArg + '', 10)
-  return checkUserExist(() => UserModel.loadById(id, withStats), res)
+  return checkUserExist(() => UserModel.loadByIdWithChannels(id, withStats), res)
 }
 
 function checkUserEmailExist (email: string, res: express.Response, abortResponse = true) {

@@ -135,6 +135,13 @@ function checkConfig () {
     }
   }
 
+  // Live
+  if (CONFIG.LIVE.ENABLED === true) {
+    if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
+      return 'Live allow replay cannot be enabled if transcoding is not enabled.'
+    }
+  }
+
   return null
 }
 

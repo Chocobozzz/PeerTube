@@ -103,6 +103,9 @@ describe('Test config API validators', function () {
     live: {
       enabled: true,
 
+      allowReplay: false,
+      maxDuration: null,
+
       transcoding: {
         enabled: true,
         threads: 4,

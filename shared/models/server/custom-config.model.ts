@@ -98,6 +98,9 @@ export interface CustomConfig {
   live: {
     enabled: boolean
 
+    allowReplay: boolean
+    maxDuration: number
+
     transcoding: {
       enabled: boolean
       threads: number

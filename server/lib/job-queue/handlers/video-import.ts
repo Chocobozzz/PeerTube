@@ -4,6 +4,7 @@ import { extname } from 'path'
 import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { isAbleToUploadVideo } from '@server/lib/user'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import {
@@ -108,7 +109,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     // Get information about this video
     const stats = await stat(tempVideoPath)
-    const isAble = await videoImport.User.isAbleToUploadVideo({ size: stats.size })
+    const isAble = await isAbleToUploadVideo(videoImport.User.id, stats.size)
     if (isAble === false) {
       throw new Error('The user video quota is exceeded with this video to import.')
     }

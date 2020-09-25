@@ -41,6 +41,7 @@ const timeTable = {
 }
 
 export function parseDurationToMs (duration: number | string): number {
+  if (duration === null) return null
   if (typeof duration === 'number') return duration
 
   if (typeof duration === 'string') {

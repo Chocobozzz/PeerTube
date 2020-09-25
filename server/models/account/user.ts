@@ -23,6 +23,7 @@ import {
 } from 'sequelize-typescript'
 import {
   MMyUserFormattable,
+  MUser,
   MUserDefault,
   MUserFormattable,
   MUserId,
@@ -70,6 +71,7 @@ import { VideoImportModel } from '../video/video-import'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { AccountModel } from './account'
 import { UserNotificationSettingModel } from './user-notification-setting'
+import { VideoLiveModel } from '../video/video-live'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -540,7 +542,11 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static loadById (id: number, withStats = false): Bluebird<MUserDefault> {
+  static loadById (id: number): Bluebird<MUser> {
+    return UserModel.unscoped().findByPk(id)
+  }
+
+  static loadByIdWithChannels (id: number, withStats = false): Bluebird<MUserDefault> {
     const scopes = [
       ScopeNames.WITH_VIDEOCHANNELS
     ]
@@ -685,26 +691,85 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static getOriginalVideoFileTotalFromUser (user: MUserId) {
-    // Don't use sequelize because we need to use a sub query
-    const query = UserModel.generateUserQuotaBaseSQL({
-      withSelect: true,
-      whereUserId: '$userId'
-    })
+  static loadByLiveId (liveId: number): Bluebird<MUser> {
+    const query = {
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id' ],
+              model: VideoChannelModel.unscoped(),
+              required: true,
+              include: [
+                {
+                  attributes: [ 'id' ],
+                  model: VideoModel.unscoped(),
+                  required: true,
+                  include: [
+                    {
+                      attributes: [ 'id', 'videoId' ],
+                      model: VideoLiveModel.unscoped(),
+                      required: true,
+                      where: {
+                        id: liveId
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
 
-    return UserModel.getTotalRawQuery(query, user.id)
+    return UserModel.findOne(query)
   }
 
-  // Returns cumulative size of all video files uploaded in the last 24 hours.
-  static getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
-    // Don't use sequelize because we need to use a sub query
-    const query = UserModel.generateUserQuotaBaseSQL({
-      withSelect: true,
-      whereUserId: '$userId',
-      where: '"video"."createdAt" > now() - interval \'24 hours\''
-    })
+  static generateUserQuotaBaseSQL (options: {
+    whereUserId: '$userId' | '"UserModel"."id"'
+    withSelect: boolean
+    where?: string
+  }) {
+    const andWhere = options.where
+      ? 'AND ' + options.where
+      : ''
 
-    return UserModel.getTotalRawQuery(query, user.id)
+    const videoChannelJoin = 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+      'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+      `WHERE "account"."userId" = ${options.whereUserId} ${andWhere}`
+
+    const webtorrentFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
+      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+      videoChannelJoin
+
+    const hlsFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
+      'INNER JOIN "videoStreamingPlaylist" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
+      'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" ' +
+      videoChannelJoin
+
+    return 'SELECT COALESCE(SUM("size"), 0) AS "total" ' +
+      'FROM (' +
+        `SELECT MAX("t1"."size") AS "size" FROM (${webtorrentFiles} UNION ${hlsFiles}) t1 ` +
+        'GROUP BY "t1"."videoId"' +
+      ') t2'
+  }
+
+  static getTotalRawQuery (query: string, userId: number) {
+    const options = {
+      bind: { userId },
+      type: QueryTypes.SELECT as QueryTypes.SELECT
+    }
+
+    return UserModel.sequelize.query<{ total: string }>(query, options)
+                    .then(([ { total } ]) => {
+                      if (total === null) return 0
+
+                      return parseInt(total, 10)
+                    })
   }
 
   static async getStats () {
@@ -873,65 +938,5 @@ export class UserModel extends Model<UserModel> {
                                  .map(p => ({ id: p.id, name: p.name, type: p.type }))
 
     return Object.assign(formatted, { specialPlaylists })
-  }
-
-  async isAbleToUploadVideo (videoFile: { size: number }) {
-    if (this.videoQuota === -1 && this.videoQuotaDaily === -1) return Promise.resolve(true)
-
-    const [ totalBytes, totalBytesDaily ] = await Promise.all([
-      UserModel.getOriginalVideoFileTotalFromUser(this),
-      UserModel.getOriginalVideoFileTotalDailyFromUser(this)
-    ])
-
-    const uploadedTotal = videoFile.size + totalBytes
-    const uploadedDaily = videoFile.size + totalBytesDaily
-
-    if (this.videoQuotaDaily === -1) return uploadedTotal < this.videoQuota
-    if (this.videoQuota === -1) return uploadedDaily < this.videoQuotaDaily
-
-    return uploadedTotal < this.videoQuota && uploadedDaily < this.videoQuotaDaily
-  }
-
-  private static generateUserQuotaBaseSQL (options: {
-    whereUserId: '$userId' | '"UserModel"."id"'
-    withSelect: boolean
-    where?: string
-  }) {
-    const andWhere = options.where
-      ? 'AND ' + options.where
-      : ''
-
-    const videoChannelJoin = 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-      'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-      `WHERE "account"."userId" = ${options.whereUserId} ${andWhere}`
-
-    const webtorrentFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
-      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-      videoChannelJoin
-
-    const hlsFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
-      'INNER JOIN "videoStreamingPlaylist" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
-      'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" ' +
-      videoChannelJoin
-
-    return 'SELECT COALESCE(SUM("size"), 0) AS "total" ' +
-      'FROM (' +
-        `SELECT MAX("t1"."size") AS "size" FROM (${webtorrentFiles} UNION ${hlsFiles}) t1 ` +
-        'GROUP BY "t1"."videoId"' +
-      ') t2'
-  }
-
-  private static getTotalRawQuery (query: string, userId: number) {
-    const options = {
-      bind: { userId },
-      type: QueryTypes.SELECT as QueryTypes.SELECT
-    }
-
-    return UserModel.sequelize.query<{ total: string }>(query, options)
-                    .then(([ { total } ]) => {
-                      if (total === null) return 0
-
-                      return parseInt(total, 10)
-                    })
   }
 }
