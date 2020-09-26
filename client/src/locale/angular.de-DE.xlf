@@ -3838,10 +3838,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a97062f0bfb585b28058981d53fb047a2f2288c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="new">Allow 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance
-        </target>
+        <target state="translated"><x id="START_TAG_STRONG"/>Ihren Nutzern<x id="CLOSE_TAG_STRONG"/> erlauben, nicht-lokale Videos/Künstler anhand deren URI zu suchen. Die Videos/Künstler müssen nicht mit Ihrer Instanz föderiert sein</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">469</context></context-group>
       </trans-unit>
       <trans-unit id="273341057700e25fb8a19896b5039dcf3f14b9ba" datatype="html">
@@ -6171,7 +6168,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
-        <target state="new">Debug</target>
+        <target state="translated">Debuggen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">98</context>
