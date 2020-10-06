@@ -160,10 +160,10 @@ dnf upgrade
 2. Add a user with sudoers group access:
 
 ```
-useradd my-peertube-user
-passwd my-peertube-user
-usermod my-peertube-user -a -G wheel	# Add my-peertube-user to sudoers
-su my-peertube-user
+useradd peertube
+passwd peertube
+usermod peertube -a -G wheel	# Add peertube to sudoers
+su peertube
 ```
 
 3. (Optional) Install certbot (choose instructions for nginx and your distribution):
