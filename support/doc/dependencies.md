@@ -185,7 +185,7 @@ This is necessary because `ffmpeg` is not in the Fedora repos.
 7. Run:
 
 ```
-sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim
+sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim oidentd
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
