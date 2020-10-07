@@ -206,6 +206,9 @@ sudo systemctl start nginx.service
 # Redis
 sudo systemctl enable redis.service
 sudo systemctl start redis.service
+# oidentd
+sudo systemctl enable oidentd.service
+sudo systemctl start oidentd.service
 ```
 
 9. Firewall
