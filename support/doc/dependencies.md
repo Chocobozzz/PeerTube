@@ -160,10 +160,10 @@ dnf upgrade
 2. Add a user with sudoers group access:
 
 ```
-useradd peertube
-passwd peertube
-usermod peertube -a -G wheel	# Add peertube to sudoers
-su peertube
+useradd my-peertube-user
+passwd my-peertube-user
+usermod my-peertube-user -a -G wheel	# Add my-peertube-user to sudoers
+su my-peertube-user
 ```
 
 3. (Optional) Install certbot (choose instructions for nginx and your distribution):
@@ -185,7 +185,7 @@ This is necessary because `ffmpeg` is not in the Fedora repos.
 7. Run:
 
 ```
-sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git
+sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
