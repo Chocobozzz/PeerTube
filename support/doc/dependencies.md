@@ -190,7 +190,20 @@ ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
 
-8. Post-installation
+8. Configure nginx
+
+```
+sudo mkdir /etc/nginx/sites-available
+sudo mkdir /etc/nginx/sites-enabled
+```
+
+Add the following line in /etc/nginx/nginx.conf (below `include /etc/nginx/conf.d/*.conf`)
+
+```
+include /etc/nginx/sites-enabled/*;
+```
+
+9. Post-installation
 
 _from [PostgreSQL documentation](https://www.postgresql.org/download/linux/redhat/):_
 > Due to policies for Red Hat family distributions, the PostgreSQL installation will not be enabled for automatic start or have the database initialized automatically.
@@ -211,7 +224,7 @@ sudo systemctl enable oidentd.service
 sudo systemctl start oidentd.service
 ```
 
-9. Firewall
+10. Firewall
 
 By default, you cannot access your server via public IP. To do so, you must configure firewall:
 
@@ -226,7 +239,7 @@ sudo firewall-cmd --permanent --zone=public --add-service=https
 sudo firewall-cmd --reload
 ```
 
-10. Configure max ports
+11. Configure max ports
 
 This is necessary if you are running dev setup, otherwise you will have errors with `nodemon`
 
