@@ -1642,11 +1642,7 @@
       </trans-unit>
       <trans-unit id="8d1011bd5b502c857858a97d074118377d8fe714" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> reports</source>
-        <target>Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports
-        </target>
+        <target>يعرض <x id="INTERPOLATION"/> ل <x id="INTERPOLATION_1"/> من <x id="INTERPOLATION_2"/> إبلغا</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="5bd2577f482e8ac75e9fd9970c58b7f4b2995e56" datatype="html">
@@ -1671,7 +1667,7 @@
       </trans-unit>
       <trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc" datatype="html">
         <source>Updated</source>
-        <target>محدث</target>
+        <target>مُحدث</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a" datatype="html">
@@ -1726,15 +1722,12 @@
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b" datatype="html">
         <source>Instance</source>
-        <target>منصة الخادوم</target>
+        <target>مثيل خادم</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="079e99cce11c87b142e80fdd14dae98a61012fc4" datatype="html">
         <source>Muted at <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Muted at 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target>كُتم على<x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8" datatype="html">
@@ -1754,16 +1747,12 @@
       </trans-unit>
       <trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted instances</source>
-        <target>Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances
-        </target>
+        <target>يعرض <x id="INTERPOLATION"/> ل <x id="INTERPOLATION_1"/> من <x id="INTERPOLATION_2"/> خادما مكتوما</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="c7b73cded84adfa978aae675417f4bb688631a71" datatype="html">
         <source>Mute domains</source>
-        <target>مجالات الفم</target>
+        <target>أكتم نطاقات</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="29881a45dafbe5aa05cd9d0441a4c0c2fb06df92" datatype="html">
@@ -1807,16 +1796,12 @@
       </trans-unit>
       <trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted accounts</source>
-        <target>Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts
-        </target>
+        <target state="translated">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8259696070728377358" datatype="html">
         <source>Plugins/Themes</source>
-        <target>الإضافات / المواضيع</target>
+        <target>الإضافات / السمات</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/admin.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="86288c2ac6b43ed195f0bc8bce825a3ab8151b71" datatype="html">
@@ -1851,11 +1836,7 @@
       </trans-unit>
       <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005" datatype="html">
         <source><x id="INTERPOLATION"/> <x id="ICU"/> for "<x id="INTERPOLATION_1"/>" </source>
-        <target>
-          <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for "
-          <x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" 
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for " <x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
@@ -1870,14 +1851,12 @@
       </trans-unit>
       <trans-unit id="fc06c11db79db253b0d0f1b070cf48e039e8a3a8" datatype="html">
         <source>Plugin npm package (new window)</source>
-        <target>حزمة البرنامج المساعد npm (نافذة جديدة)</target>
+        <target state="translated">حزمة البرنامج المساعد npm (نافذة جديدة)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="ba504ef7da4384f035fc148de2d121322aaa7407" datatype="html">
         <source>This <x id="INTERPOLATION"/> does not have settings. </source>
-        <target>This 
-          <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings. 
-        </target>
+        <target>لا يملك<x id="INTERPOLATION"/> اعدادات </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
@@ -1897,7 +1876,7 @@
       </trans-unit>
       <trans-unit id="dcfc990a822e11feb00eb91d9cf4d6ec0ed37dd0" datatype="html">
         <source>Debug</source>
-        <target>تصحيح</target>
+        <target>تنقيح</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/system.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="555ae4dbd23d5056aeafc8f3f31ebbab170bb917" datatype="html">
@@ -1912,7 +1891,7 @@
       </trans-unit>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c" datatype="html">
         <source>ID</source>
-        <target>هوية شخصية</target>
+        <target>معرّف</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc" datatype="html">
@@ -1932,12 +1911,12 @@
       </trans-unit>
       <trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
         <source>Will start soon...</source>
-        <target>سوف تبدأ قريبا ...</target>
+        <target>سيبدأ قريبا ...</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="0198c6af8421c8f69a90c3e9a4a12cf923cbb84b" datatype="html">
         <source>Running...</source>
-        <target>ادارة ...</target>
+        <target>يشغل...</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="edcc19a49c950289ffe5d38be4843cdf194e5622" datatype="html">
@@ -1972,22 +1951,22 @@
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
         <source>Instance information</source>
-        <target>معلومات المنصة</target>
+        <target>معلومات مثيل الخادم</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
-        <target>نموذج</target>
+        <target>مثيل الخادم</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
         <source>Name</source>
-        <target>التسمية</target>
+        <target>الاسم</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="512b045163a7187b2fc5d554e5f59fb3e49e174b" datatype="html">
         <source>Short description</source>
-        <target>الوصف القصير</target>
+        <target>وصف قصير</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0" datatype="html">
@@ -1997,7 +1976,7 @@
       </trans-unit>
       <trans-unit id="f14028bddcf7760c635464db8a9d2f69afd81b92" datatype="html">
         <source>Main instance categories</source>
-        <target>فئات المنصة الرئيسية</target>
+        <target>الفئات الرئيسية لمثيل الخادم</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="27ea89c8d39a59d9ff6c761fbad00d57b7863849" datatype="html">
@@ -2012,43 +1991,32 @@
       </trans-unit>
       <trans-unit id="f27b192f4d3153db7dc7044bea37e71655bfb3ea" datatype="html">
         <source>MODERATION &amp; NSFW</source>
-        <target>MODERATION &amp; NSFW</target>
+        <target>اشراف &amp; NSFW</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="f0716b4964f9dc6437aaed3ae0c78e94fd259fb9" datatype="html">
         <source>Manage <x id="START_LINK"/>users<x id="CLOSE_LINK"/> to build a moderation team. </source>
-        <target>Manage 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to build a moderation team. 
-        </target>
+        <target>أدر <x id="START_LINK"/>المستخدمين<x id="CLOSE_LINK"/> لإنشاء فريق اشراف </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="aad49456e42847e2ea95fbaeb2f49387199e5634" datatype="html">
         <source>This instance is dedicated to sensitive or NSFW content</source>
-        <target>هذا المثال مخصص لمحتوى حساس أو محتوى NSFW</target>
+        <target>هذا المثيل مخصص للمحتوى حساس أو محتوى NSFW</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="55c4d3cc288701854147f69ccf3d86d316589968" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target>Enabling it will allow other administrators to know that you are mainly federating sensitive content.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. 
-        </target>
+        <target state="translated">Enabling it will allow other administrators to know that you are mainly federating sensitive content. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9" datatype="html">
         <source>Policy on videos containing sensitive content</source>
-        <target>سياسة الفيديوهات التي تحتوي على محتوى حساس</target>
+        <target>سياسة الفيديوهات التي تحوي محتوا حساسا</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="8dccab3d8cadb847889ff89644d3f08ffee0d76e" datatype="html">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target>مع 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>لا تدرج
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> أو 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>أخفي الصور المصغرة
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a سوف يتم طلب التاكيد قبل مشاهد الفيديو 
-        </target>
+        <target state="translated">مع <x id="START_TAG_STRONG"/>لا تدرج <x id="CLOSE_TAG_STRONG"/> أو <x id="START_TAG_STRONG"/> اخفاء الصور المصغرة <x id="CLOSE_TAG_STRONG"/>سوف يتم طلب التاكيد قبل مشاهدة الفيديو </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774" datatype="html">
@@ -2073,12 +2041,12 @@
       </trans-unit>
       <trans-unit id="b222d95cb22ff8c295920ca10c188c5d94cb0aa9" datatype="html">
         <source>YOU AND YOUR INSTANCE</source>
-        <target>أنت ومنصة خادمك</target>
+        <target>أنت ومثيل الخادم الخاص بك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="fdbabe6f967747b657518384b54bcc58d3913063" datatype="html">
         <source>Who is behind the instance?</source>
-        <target>مَن وراء منصة الخادم هذا؟</target>
+        <target>مَن وراء مثيل الخادم هذا؟</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="963707d11903100147b40788e4f67cc93a234308" datatype="html">
@@ -2088,7 +2056,7 @@
       </trans-unit>
       <trans-unit id="fef7c7a74c5646fe219d94db60e0652d6b878af5" datatype="html">
         <source>Why did you create this instance?</source>
-        <target>لماذا قمت بإنشاء هذا المنصة؟</target>
+        <target>لماذا قمت بإنشاء هذا المثيل؟</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="53fe4c724dc3f942c4d1eac4206a9686cbbf968e" datatype="html">
@@ -2103,7 +2071,7 @@
       </trans-unit>
       <trans-unit id="09d61fa0397899a1b26d09123aef7e7bf5bd78e1" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target>من المهم أن تعرف للمستخدمين الذين يرغبون في التسجيل على المنصة الخاص بك</target>
+        <target>من المهم أن تعرف المستخدمين الذين يرغبون في التسجيل في مثيل الخادم الخاص بك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d" datatype="html">
@@ -2123,42 +2091,37 @@
       </trans-unit>
       <trans-unit id="7dfc119f06b80d9324703c471b0c00118fa5849d" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target>ما الخادم / الجهاز الذي يعمل عليه المنصة؟</target>
+        <target>ما الخادم / الجهاز الذي يعمل عليه مثيل الخادم؟</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">220</context></context-group>
       </trans-unit>
       <trans-unit id="4a58b1d4aff414350b701aa587aeb39a1276307a" datatype="html">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target>بمعنى آخر. 2vCore 2GB RAM ، رابط مباشر إلى الخادم الذي تستأجره ، إلخ.</target>
+        <target state="translated">بمعنى آخر. 2vCore 2GB RAM ، رابط مباشر إلى الخادم الذي تستأجره ، إلخ.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">221</context></context-group>
       </trans-unit>
       <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5" datatype="html">
         <source>Basic configuration</source>
-        <target>الاعدادات الإفتراصية</target>
+        <target>الاعدادات الإفتراضية</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">239</context></context-group>
       </trans-unit>
       <trans-unit id="e18e5566ca6266c849208665c731805571333a8b" datatype="html">
         <source>APPEARANCE</source>
-        <target>مظهر خارجي</target>
+        <target>المظهر</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="0aa2ad4efb780f946dd9a821fe7471dde20014c3" datatype="html">
         <source>Use <x id="START_LINK"/>plugins &amp; themes<x id="CLOSE_LINK"/> for more involved changes, or <x id="START_LINK_1"/>add slight customizations<x id="CLOSE_LINK"/>. </source>
-        <target>Use 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>plugins &amp; themes
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>add slight customizations
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>plugins &amp; themes <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>add slight customizations <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">247</context></context-group>
       </trans-unit>
       <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb" datatype="html">
         <source>default</source>
-        <target>إفتراضي</target>
+        <target>افتراضي</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">259</context></context-group>
       </trans-unit>
       <trans-unit id="a42daa4748e433f25a51f598627d10de9c88d5d3" datatype="html">
         <source>Landing page</source>
-        <target>الصفحة المقصودة</target>
+        <target state="translated">الصفحة المقصودة</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
@@ -2193,7 +2156,7 @@
       </trans-unit>
       <trans-unit id="3a10a32f96683addb9e1335cdba7d6685587fe6e" datatype="html">
         <source>Display a message on your instance</source>
-        <target>عرض رسالة على المنصة الخاص بك</target>
+        <target>اعرض رسالة على مثيل الخادم الخاص بك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">288</context></context-group>
       </trans-unit>
       <trans-unit id="58be3e0a0ef272fbd6e715b44059c3d89b332d9b" datatype="html">
@@ -2223,15 +2186,12 @@
       </trans-unit>
       <trans-unit id="eb55f6a974ace4bade90b976dba651c9545c979d" datatype="html">
         <source>Manage <x id="START_LINK"/>users<x id="CLOSE_LINK"/> to set their quota individually. </source>
-        <target>Manage 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to set their quota individually. 
-        </target>
+        <target>أدر <x id="START_LINK"/>المستخدمين<x id="CLOSE_LINK"/> لتعيين حصصهم على حدى </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="9bef6fc7194e11d18fdcac6aaccc816fe9ffc5a7" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
-        <target>⚠️ تتطلب هذه الوظيفة الكثير من الاهتمام والاعتدال الإضافي.</target>
+        <target state="translated">⚠️ تتطلب هذه الوظيفة الكثير من الاهتمام والإشراف الإضافي.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">353</context></context-group>
       </trans-unit>
       <trans-unit id="90f449b1f4787e6c9731198a96d35399c1b340a7" datatype="html">
@@ -2266,7 +2226,7 @@
       </trans-unit>
       <trans-unit id="ec3d83c2ae784e843fbe96eb368f9e6e0f26cc2e" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target>السماح بالاستيراد بملف سيل أو URI مغناطيسي</target>
+        <target>اسمح بالاستيراد عن طريق ملف تورنت أو رابط magnet</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">424</context></context-group>
       </trans-unit>
       <trans-unit id="c590ac6eba10ab6269e068156a910c7c58328cc5" datatype="html">
@@ -2286,41 +2246,32 @@
       </trans-unit>
       <trans-unit id="a97062f0bfb585b28058981d53fb047a2f2288c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target>Allow 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance
-        </target>
+        <target state="translated">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">469</context></context-group>
       </trans-unit>
       <trans-unit id="273341057700e25fb8a19896b5039dcf3f14b9ba" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
-        <target>السماح للمستخدمين بالبحث عن بعد URI / معالجة</target>
+        <target>السماح للمستخدمين بالبحث عن بعد URI / مقبض</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">466</context></context-group>
       </trans-unit>
       <trans-unit id="ffe92ff41a38a4407b1e1da41a015292497324c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target>Allow 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance
-        </target>
+        <target state="translated">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">480</context></context-group>
       </trans-unit>
       <trans-unit id="1a1dd78b1169f98fb2120c6af13e136aec2daf69" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
-        <target>السماح للمجهول بالقيام بالبحث عن بعد URI / معالجة</target>
+        <target>السماح للمجهول بالقيام بالبحث عن بعد URI / مقبض</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">477</context></context-group>
       </trans-unit>
       <trans-unit id="f3af9d2cf9a341ce634210908597e491e77e7376" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target>⚠️ تعتمد هذه الوظيفة بشكل كبير على تنسيق الحالات التي يتبعها فهرس البحث الذي تحدده.</target>
+        <target state="translated">⚠️ تعتمد هذه الوظيفة بشكل كبير على تنسيق الحالات التي يتبعها فهرس البحث الذي تحدده.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">494</context></context-group>
       </trans-unit>
       <trans-unit id="0c43b766533e99e88f65a9f1c8d63fb1926ab5cc" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK"/>host your own<x id="CLOSE_LINK"/>. </source>
-        <target>You should only use moderated search indexes in production, or 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">497</context></context-group>
       </trans-unit>
       <trans-unit id="e5cd21a49e6eefd0610106b6afcd4ed56baab566" datatype="html">
@@ -2340,48 +2291,42 @@
       </trans-unit>
       <trans-unit id="be8b7fa8a3193d5015561140328a1240190842c1" datatype="html">
         <source>Search bar uses the global search index by default</source>
-        <target>يستخدم شريط البحث فهرس البحث الشامل بشكل افتراضي</target>
+        <target>يستخدم شريط البحث فهرس البحث العالمي افتراضيا</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">521</context></context-group>
       </trans-unit>
       <trans-unit id="bcaa25583cd971359254080004fbbb71c2b97ad6" datatype="html">
         <source>Enable global search</source>
-        <target>تمكين البحث الشامل</target>
+        <target>تمكين البحث العالمي</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">491</context></context-group>
       </trans-unit>
       <trans-unit id="3f237e2a863d0308a21bdb0bb5d4b84e3376dbee" datatype="html">
         <source>FEDERATION</source>
-        <target>الفديرالية</target>
+        <target state="translated">الفديرالية</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">542</context></context-group>
       </trans-unit>
       <trans-unit id="2cc42a6b77d06f99a195ef8f3324d49267eedf87" datatype="html">
         <source>Manage <x id="START_LINK"/>relations<x id="CLOSE_LINK"/> with other instances. </source>
-        <target>Manage 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>relations
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> with other instances. 
-        </target>
+        <target>أدر<x id="START_LINK"/>العلاقات<x id="CLOSE_LINK"/> مع مثيلات الخادم الأخرى </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">544</context></context-group>
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
         <source>Other instances can follow yours</source>
-        <target>يمكن أن تتبع حالات أخرى مثلك</target>
+        <target>يمكن أن تتابع مثيلات خادم أخرى مثيلك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">556</context></context-group>
       </trans-unit>
       <trans-unit id="3d9ffce2b1f284cb60067de15a313d3ecde0875f" datatype="html">
         <source>Manually approve new instance followers</source>
-        <target>الموافقة يدويًا على متابعي المنصة الجديد</target>
+        <target>الموافقة يدويًا على متابعي المثيل الجدد</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">563</context></context-group>
       </trans-unit>
       <trans-unit id="9a3dd9c65ee3381ae3b78b9c56cc4e0d2e41f0e8" datatype="html">
         <source>Automatically follow back instances</source>
-        <target>تتبع المنصات تلقائيًا</target>
+        <target>تابع المثيلات التي تتابعك تلقائيًا</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">576</context></context-group>
       </trans-unit>
       <trans-unit id="f183764323fcffd1b3ba4d13cdc21ec8971472cc" datatype="html">
         <source>You should only follow moderated indexes in production, or <x id="START_LINK"/>host your own<x id="CLOSE_LINK"/>. </source>
-        <target>You should only follow moderated indexes in production, or 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">You should only follow moderated indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">595</context></context-group>
       </trans-unit>
       <trans-unit id="764910b42b08b8342f7ba5907b258341ec044fa0" datatype="html">
@@ -2391,7 +2336,7 @@
       </trans-unit>
       <trans-unit id="62f023a56fd29518ab030384702362e6bf6a83e4" datatype="html">
         <source>Automatically follow instances of a public index</source>
-        <target>تتبع حالات مؤشر عام تلقائيًا</target>
+        <target>تابع مثيلات من فهرس عام تلقائيًا</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">589</context></context-group>
       </trans-unit>
       <trans-unit id="5805ff22d19f43016e2b1a0f7eff12185c78e89d" datatype="html">
@@ -2421,7 +2366,7 @@
       </trans-unit>
       <trans-unit id="31f11266d05b7a427477a8a9056a717ce332cfe3" datatype="html">
         <source>Optional. If any, provide the Twitter account representing your instance to improve link previews.</source>
-        <target>اختياري. إن وجدت ، قدم حساب Twitter الذي يمثل المنصة الخاص بك لتحسين معاينات الرابط.</target>
+        <target>اختياري. إن وجدت ، قدم حساب Twitter يمثل مثيل الخادم الخاص بك لتحسين معاينات الرابط.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">657</context></context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524" datatype="html">
@@ -2431,18 +2376,12 @@
       </trans-unit>
       <trans-unit id="fcad8bedb9a3a3600c4f5c13e9f404e788dbf327" datatype="html">
         <source>Instance allowed by Twitter</source>
-        <target>المثال المسموح به من قبل تويتر</target>
+        <target>المثيل المسموح به من قبل تويتر</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">679</context></context-group>
       </trans-unit>
       <trans-unit id="f0d14f556321dbae66c765d6a3b0062f3a150931" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect on your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </source>
-        <target>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> If the instance is not, we use an image link card that will redirect on your PeerTube instance.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. 
-        </target>
+        <target state="translated">If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> If the instance is not, we use an image link card that will redirect on your PeerTube instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">684</context></context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab" datatype="html">
@@ -2457,12 +2396,12 @@
       </trans-unit>
       <trans-unit id="ee4b28ab2d3293d453dec75c6654c6425705283c" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target>معالجة مقاطع الفيديو التي تم تحميلها بحيث تكون في شكل قابل للتدفق يمكن لأي جهاز تشغيله. رغم كونه مكلفًا ، إلا أن هذا جزء مهم من بيرتيوب ، لذا كن حذرا.</target>
+        <target>معالجة مقاطع الفيديو التي تم تحميلها بحيث تكون في شكل قابل للعرض على أي جهاز. رغم كونه مكلفًا ، إلا أن هذا جزء مهم من بيرتيوب ، لذا كن حذرا.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">711</context></context-group>
       </trans-unit>
       <trans-unit id="fca29003c4ea1226ff8cbee89481758aab0e2be9" datatype="html">
         <source>Transcoding enabled</source>
-        <target>تمُكّن تحويل الترميز</target>
+        <target>مُكّن تحويل الترميز</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">723</context></context-group>
       </trans-unit>
       <trans-unit id="6ef2ab819d4441fa8bddf6759b6936783d06616f" datatype="html">
@@ -2492,40 +2431,17 @@
       </trans-unit>
       <trans-unit id="1f83d0ff227c35b5631a2b2f78067b3e915cdb59" datatype="html">
         <source><x id="START_TAG_STRONG"/>Experimental, we suggest you to not disable webtorrent support for now<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/><x id="LINE_BREAK"/><x id="START_TAG_STRONG"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG"/></source>
-        <target>
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Experimental, we suggest you to not disable webtorrent support for now
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled HLS support, it will multiply videos storage by 2
-          <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If disabled, breaks federation with PeerTube instances &lt; 2.1
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-        </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Experimental, we suggest you to not disable webtorrent support for now <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled HLS support, it will multiply videos storage by 2 <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If disabled, breaks federation with PeerTube instances &lt; 2.1 <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">762</context></context-group>
       </trans-unit>
       <trans-unit id="ff852c5a22beaff7a8c62447b0a96f9ced7c3ed6" datatype="html">
         <source>WebTorrent support enabled</source>
-        <target>دعم WebTorrent نشط</target>
+        <target>دعم WebTorrent مفعّل</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">758</context></context-group>
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
         <source><x id="START_TAG_STRONG"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
-        <target>
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:
-          <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-          <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/>
-          <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother
-          <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-          <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback in particular with long videos
-          <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-          <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)
-          <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-          <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/>
-          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2
-          <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-        </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1 <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player: <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback in particular with long videos <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading) <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2 <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">783</context></context-group>
       </trans-unit>
       <trans-unit id="5ac527cc856e9fa02927ccb0a6172688e07c1d7a" datatype="html">
@@ -2540,7 +2456,7 @@
       </trans-unit>
       <trans-unit id="4f9162543288be617b88ad6fcae84325f11e31b6" datatype="html">
         <source>Resolutions to generate</source>
-        <target>قرارات لتوليد</target>
+        <target>دقّات الفيديو المراد توليدها</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">817</context></context-group>
       </trans-unit>
       <trans-unit id="f05f4a8b97269a2da6d7fcc6e86fbfafd16e30bd" datatype="html">
@@ -2550,7 +2466,7 @@
       </trans-unit>
       <trans-unit id="3469b0eb5bd7b7f0e85c029cd82ae1912bb51677" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target>بعض الملفات غير مجمعة ، ويتم جلبها عند الضرورة. تحديد سياسات التخزين المؤقت الخاصة بهم.</target>
+        <target state="translated">بعض الملفات غير مجمعة ، ويتم جلبها عند الضرورة. تحديد سياسات التخزين المؤقت الخاصة بهم.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">845</context></context-group>
       </trans-unit>
       <trans-unit id="e7845bb59f7887d60f1cf3b7b9fe5cfdb0b7e915" datatype="html">
@@ -2560,7 +2476,7 @@
       </trans-unit>
       <trans-unit id="478d017e2701ae21cefab20e7226702d77f15727" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target>عدد تسميات الفيديو التي يجب الاحتفاظ بها في ذاكرة التخزين المؤقت</target>
+        <target state="translated">عدد تسميات الفيديو التي يجب الاحتفاظ بها في ذاكرة التخزين المؤقت</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">862</context></context-group>
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
@@ -2570,7 +2486,7 @@
       </trans-unit>
       <trans-unit id="7473fbca4ff699b020fc8894bad4c88611c76f5c" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target>تعديلات طفيفة على منصة بيرتيوب الخاص بك عند إنشاء مكون إضافي أو موضوع هو مبالغة.</target>
+        <target>تعديلات طفيفة على منصة بيرتيوب الخاص بك عند إنشاء مكون إضافي أو سمة هو مبالغة.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">879</context></context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c" datatype="html">
@@ -2580,36 +2496,17 @@
       </trans-unit>
       <trans-unit id="782afa7c58d912592d73fce888ffce8542a4acf3" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK"/>Example: <x id="START_TAG_PRE"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE"/></source>
-        <target>Write JavaScript code directly.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Example: 
-          <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');
-          <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/>
-        </target>
+        <target state="translated">Write JavaScript code directly. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing'); <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">892</context></context-group>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
-        <target>Write CSS code directly. Example:
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css 
-          <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; 
-          <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-          <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with 
-          <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css
-          <x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email 
-          <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; 
-          <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-          <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/>
-        </target>
+        <target state="translated">Write CSS code directly. Example: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css <x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">911</context></context-group>
       </trans-unit>
       <trans-unit id="f8f8fca3139cba7d4fd6d9578d93e601f639cc83" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
-        <target>يبدو أن التكوين غير صالح. يرجى البحث عن الأخطاء المحتملة في علامات التبويب المختلفة.</target>
+        <target>يبدو أن التكوين غير صالح. يرجى البحث عن الأخطاء المحتملة في الألسنةالمختلفة.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">948</context></context-group>
       </trans-unit>
       <trans-unit id="dad5a5283e4c853c011a0f03d5a52310338bbff8" datatype="html">
@@ -2659,16 +2556,12 @@
       </trans-unit>
       <trans-unit id="b9dee3108a18796bd69c6be316c8fb985b58fb8e" datatype="html">
         <source>Delete from <x id="INTERPOLATION"/></source>
-        <target>Delete from 
-          <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/>
-        </target>
+        <target>احذفه من <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {
-          <x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }
-        </target>
+        <target>{VAR_PLURAL, plural, =0 {لا توجد فيديوهات} =1 {فيديو واحد} other {<x id="INTERPOLATION"/> فيديو}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582" datatype="html">
@@ -2680,9 +2573,7 @@
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4" datatype="html">
         <source>Updated <x id="INTERPOLATION"/></source>
-        <target>تحديث 
-          <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION"/> محدث</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd" datatype="html">
@@ -2742,7 +2633,7 @@
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
-        <target state="translated">ترجمة</target>
+        <target state="translated">ترجمات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -2750,14 +2641,12 @@
       </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081" datatype="html">
         <source>Unlisted</source>
-        <target>غير مفهرس</target>
+        <target state="translated">غير مفهرس</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch-playlist.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="f73a82bb90c6c856cc0d2e3b2f5c109460074912" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target>{VAR_PLURAL, plural, =1 {1 view} other {
-          <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }
-        </target>
+        <target>{VAR_PLURAL, plural, =1 {مشاهدة واحدة} other {<x id="INTERPOLATION"/> مشاهدة}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="1d3781d7296d4b4e04e7f023aec1052fb2955c4d" datatype="html">
@@ -2782,28 +2671,17 @@
       </trans-unit>
       <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3" datatype="html">
         <source><x id="START_TAG_SPAN"/>Remote subscribe<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Remote interact<x id="CLOSE_TAG_SPAN"/></source>
-        <target>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote subscribe
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-          <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote interact
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote subscribe <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote interact <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="01cf713559c39a17cf5c8fbcd33b004a77ce0963" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. </source>
-        <target>You can subscribe to the channel via any ActivityPub-capable fediverse instance.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. 
-        </target>
+        <target state="translated">You can subscribe to the channel via any ActivityPub-capable fediverse instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </source>
-        <target>You can interact with this via any ActivityPub-capable fediverse instance.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. 
-        </target>
+        <target state="translated">You can interact with this via any ActivityPub-capable fediverse instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="d0336848b0c375a1c25ba369b3481ee383217a4f" datatype="html">
@@ -2818,12 +2696,12 @@
       </trans-unit>
       <trans-unit id="c33a843e309de9d67771aa5e666f61e92f4c6216" datatype="html">
         <source>channels subscribed</source>
-        <target>اشتركت القنوات</target>
+        <target>القنوات المشترك فيها</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="e01bfa3629e2133dbf307975446bde047eb8bd1f" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="9b3287f52c239cad05ec98391553e5052ba1aa66" datatype="html">
@@ -2833,7 +2711,7 @@
       </trans-unit>
       <trans-unit id="c7e2b4c04a0459ebc4d2e54e419abb679bc713f2" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target>الاشتراك بحساب على هذا المنصة</target>
+        <target>الاشتراك بحساب في هذا المثيل</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0" datatype="html">
@@ -2848,7 +2726,7 @@
       </trans-unit>
       <trans-unit id="d8758664cadd6452256ca25ca0c7259074f427c1" datatype="html">
         <source>Using a syndication feed</source>
-        <target>باستخدام تغذية النقابة</target>
+        <target state="translated">باستخدام تغذية النقابة</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="d5e5bc7d213694fc0414a76f0ff3085bae44268a" datatype="html">
@@ -2890,7 +2768,7 @@
       </trans-unit>
       <trans-unit id="ce43cc343ed3bd908e593db994ca3f6dbff079df" datatype="html">
         <source>PASSWORD</source>
-        <target>الكلمة السرية</target>
+        <target>كلمة المرور</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="d5e31741c591719630b5bba1ba38f8c1a04c10e3" datatype="html">
@@ -2900,40 +2778,32 @@
       </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9" datatype="html">
         <source>Change password</source>
-        <target>تغيير الكلمة السرية</target>
+        <target>تغيير كلمة المرور</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="0dd390d056411e1709ec97ec51c46d78600e3f7b" datatype="html">
         <source>Current password</source>
-        <target>الكلمة السرية الحالية</target>
+        <target>كلمة المرور الحالية</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="e70e209561583f360b1e9cefd2cbb1fe434b6229" datatype="html">
         <source>New password</source>
-        <target>الكلمة السرية الجديدة</target>
+        <target>كلمة المرور الجديدة</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="ede41f01c781b168a783cfcefc6fb67d48780d9b" datatype="html">
         <source>Confirm new password</source>
-        <target>تأكيد الكلمة السرية الجديدة</target>
+        <target>تأكيد كلمة المرور الجديدة</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="dbcc539bd3ca0b962b87ea26855ca9d5d3c5cdf1" datatype="html">
         <source>Your current email is <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></source>
-        <target>Your current email is 
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ user.email }}"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target>بريدك الالكتروني الحالي هو <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="03d1a9c026074c12ea3f2fb39a34bc6a18fedf05" datatype="html">
         <source><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> is awaiting email verification </source>
-        <target>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> is awaiting email verification 
-        </target>
+        <target><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> ينتظر تأكيد بريدك الالكتروني. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="d20a2fa4a3360caa8825e49a31b5fd3a442ac219" datatype="html">
@@ -2948,12 +2818,12 @@
       </trans-unit>
       <trans-unit id="3a83d433c5d27e1d06ece0475fac8ba409b6c9ac" datatype="html">
         <source>Your current password</source>
-        <target>كلمة السر الحالية الخاصة بك</target>
+        <target>كلمة المرور الحالية الخاصة بك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="5b5b91438db5731debea388908f788bab8d3d404" datatype="html">
         <source>Your password</source>
-        <target>كلمتك السرية</target>
+        <target>كلمتك المرور</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="820741079d4bc32fb98b7a871a6e507b18b6c85c" datatype="html">
@@ -5636,7 +5506,7 @@
       </trans-unit>
       <trans-unit id="1710094819987243777" datatype="html">
         <source>You don't have themes installed yet.</source>
-        <target>ليس لديك موضوعات مثبتة بعد.</target>
+        <target>ليس لديك سمات مثبتة.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="931472057457682240" datatype="html">
@@ -5723,7 +5593,7 @@
       </trans-unit>
       <trans-unit id="2798270190074840767" datatype="html">
         <source>Themes</source>
-        <target>القوالب</target>
+        <target>السمات</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="2941409202780782189" datatype="html">
@@ -5733,7 +5603,7 @@
       </trans-unit>
       <trans-unit id="840045833311458646" datatype="html">
         <source>theme</source>
-        <target>موضوع</target>
+        <target>سمة</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="7591870443991978948" datatype="html">
