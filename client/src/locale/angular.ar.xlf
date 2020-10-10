@@ -2306,7 +2306,7 @@
       </trans-unit>
       <trans-unit id="2cc42a6b77d06f99a195ef8f3324d49267eedf87" datatype="html">
         <source>Manage <x id="START_LINK"/>relations<x id="CLOSE_LINK"/> with other instances. </source>
-        <target>أدر<x id="START_LINK"/>العلاقات<x id="CLOSE_LINK"/> مع مثيلات الخادم الأخرى </target>
+        <target>أدر<x id="START_LINK"/>العلاقات<x id="CLOSE_LINK"/> مع مثيلات الخادم الأخرين </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">544</context></context-group>
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
@@ -2878,10 +2878,7 @@
       </trans-unit>
       <trans-unit id="b08d67fe4e192ea8352bebdc6aabbd1bb7abed02" datatype="html">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Created 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target>أُنشئ <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="81b97b8ea996ad1e4f9fca8415021850214884b1" datatype="html">
@@ -2912,7 +2909,7 @@
       </trans-unit>
       <trans-unit id="6550287183367517925" datatype="html">
         <source>Create new playlist</source>
-        <target state="translated">أنشئ قائمة جديدة</target>
+        <target state="translated">أنشئ قائمة تشغيل جديدة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">64</context>
@@ -2920,7 +2917,7 @@
       </trans-unit>
       <trans-unit id="2864486939135008600" datatype="html">
         <source>Playlist elements</source>
-        <target state="translated">عناصر القائمة</target>
+        <target state="translated">عناصر قائمة التشغيل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">73</context>
@@ -2938,9 +2935,7 @@
       </trans-unit>
       <trans-unit id="e8a34c00da7e95d407a66f33f28943a480dbba82" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/> </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191" datatype="html">
@@ -2950,7 +2945,7 @@
       </trans-unit>
       <trans-unit id="a5707e9905e079605243397ee111b8be449941aa" datatype="html">
         <source>See the error</source>
-        <target>انظر الخطأ</target>
+        <target>اعرض الخطأ</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="842b1f5e4942fb515ef790308ca9ea6a60b4b331" datatype="html">
@@ -2960,11 +2955,7 @@
       </trans-unit>
       <trans-unit id="a86239658c3cf042e7c987bb0df7473a53d7517e" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> imports</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> imports
-        </target>
+        <target state="translated">يعرض <x id="INTERPOLATION"/> ل <x id="INTERPOLATION_1"/> من <x id="INTERPOLATION_2"/> استورادا</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="0b68f86015522b0dbd374822caefe74a62e3470f" datatype="html">
@@ -2974,7 +2965,7 @@
       </trans-unit>
       <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45" datatype="html">
         <source>Delete your account</source>
-        <target>حذف حسابك</target>
+        <target>احذف حسابك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="3a5d57052d13d2da1cbcffdbb8effb9874b1595a" datatype="html">
@@ -2989,16 +2980,12 @@
       </trans-unit>
       <trans-unit id="8fef247fd0c5bf790151f7661cafc4b7fd0397f3" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> subscribers </source>
-        <target>
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> مشترك
-        </target>
+        <target><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> مشتركا </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add" datatype="html">
         <source>Created by <x id="INTERPOLATION"/></source>
-        <target>أنشأها 
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/>
-        </target>
+        <target>أنشأها <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="cd2d9bfd5a5f7bdc1d4f1242e8a35d74830b6ffe" datatype="html">
@@ -3026,10 +3013,7 @@
       </trans-unit>
       <trans-unit id="9d2d802fa417a5a3f230cb5bcc975551a252c59c" datatype="html">
         <source><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> Notification preferences </source>
-        <target>
-          <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/>
-          <x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/> Notification preferences 
-        </target>
+        <target><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> تفضيلات الاشعارات </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="e7f88c481ecdda90467acd3f4dbe934465cee30f" datatype="html">
@@ -3044,7 +3028,7 @@
       </trans-unit>
       <trans-unit id="58479ebfcc980e1ee37a8102bc4f9a35eca2f680" datatype="html">
         <source>All read</source>
-        <target>جميع الخطوط</target>
+        <target state="translated">الكل مقروء</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="dd3b6c367381ddfa8f317b8e9b31c55368c65136" datatype="html">
@@ -3112,7 +3096,7 @@
       </trans-unit>
       <trans-unit id="25837d28a88f93b1fe278ca11099d7489ca0ac4b" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="translated">استعرض الفيديوهات في بيرتيوب لإضافتهم لقائمتك.</target>
+        <target state="translated">تصفح الفيديوهات في بيرتيوب لإضافتهم لقائمتك.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="28c9f2a23ea8f12710a011a965939a5af6980dd1" datatype="html">
@@ -3127,7 +3111,7 @@
       </trans-unit>
       <trans-unit id="6749bdfd88a223fd464a9b09541342fbf42a0ad6" datatype="html">
         <source>Search your channels</source>
-        <target state="translated">ابحث عن قنوات</target>
+        <target state="translated">ابحث في قنواتك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="574cce019fb31925d11095591d4321847ff1c7a5" datatype="html">
@@ -3137,16 +3121,12 @@
       </trans-unit>
       <trans-unit id="f15780bbd2d7fa777071975f7445e98a33065e38" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target>{VAR_PLURAL, plural, =1 {1 subscriber} other {
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> subscribers} }
-        </target>
+        <target>{VAR_PLURAL, plural, =1 {نشترك واحد} other {<x id="INTERPOLATION"/> مشتركا}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }
-        </target>
+        <target>{VAR_PLURAL, plural, =0 {بدون فيديوهات} =1 {فيديو واحد} other {<x id="INTERPOLATION"/> فيديو}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
@@ -3179,7 +3159,7 @@
       </trans-unit>
       <trans-unit id="66ad6eb3f06251c75325b780943a07f94c949df7" datatype="html">
         <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
-        <target>نص قصير ليخبر الناس كيف يمكنهم دعم قناتك (منصة العضوية ...). &lt;br /&gt;&lt;br /&gt; عندما تقوم بتحميل مقطع فيديو في هذه القناة ، سيتم ملء حقل دعم الفيديو تلقائيًا بهذا النص.</target>
+        <target>نص قصير ليخبر الناس كيف يمكنهم دعم قناتك (منصة عضوية ...). &lt;br /&gt;&lt;br /&gt; عندما تقوم بتحميل مقطع فيديو في هذه القناة ، سيتم ملء حقل دعم الفيديو تلقائيًا بهذا النص.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd" datatype="html">
@@ -3194,10 +3174,7 @@
       </trans-unit>
       <trans-unit id="19886846ed573d0a74c61c4e8df073eb4f64acd0" datatype="html">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/>. </source>
-        <target>If you need help to use PeerTube, you can have a look at the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentation
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target>اذا أردت تعليمات لاستخدام بيرتيوب راجع <x id="START_LINK"/>التوثيق<x id="CLOSE_LINK"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="09a69cde5889927629e2ac9dc63a71b88252b530" datatype="html">
@@ -3225,7 +3202,7 @@
       </trans-unit>
       <trans-unit id="3193822049276963401" datatype="html">
         <source>Video channel playlists</source>
-        <target state="translated">قوائم قناة الفيديو</target>
+        <target state="translated">قوائم تشغيل قناة الفيديو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">38</context>
@@ -3261,32 +3238,32 @@
       </trans-unit>
       <trans-unit id="a08080316e052053fd20647731a6de826dc8072f" datatype="html">
         <source>This instance does not require email verification.</source>
-        <target>لا يتطلب هذا المنصة التحقق عبر البريد الإلكتروني.</target>
+        <target>لا يتطلب هذا المثيل التحقق عبر البريد الإلكتروني.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="bd2edf99dd6562385ccec19a7ab2d1898e626605" datatype="html">
         <source>Banned</source>
-        <target>تم حظره</target>
+        <target>محظور</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809" datatype="html">
         <source>Muted</source>
-        <target>تم كتمه</target>
+        <target>مكتوم</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="44bd08a7ec1e407356620967d65d8fe2d8639d0a" datatype="html">
         <source>Instance muted</source>
-        <target>منصة الخادوم مكتوم</target>
+        <target>مثيل الخادم مكتوم</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="48bbf6dbdb22e0ef4bd257eae2ab356f2ea66c89" datatype="html">
         <source>Muted by your instance</source>
-        <target>تم كتمه عبر منصة خادومك</target>
+        <target>كتَمه عبر مثيل الخادم الخاص بك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="1a6443bb7ed01046dd83cf78806f795f1204ffa1" datatype="html">
         <source>Instance muted by your instance</source>
-        <target>تم كتم المنصة بواسطة المنصة الخاص بك</target>
+        <target>كتم مثيل الخادم بواسطة مثيل الخادم الخاص بك</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="1b9099f59dd3baaeeaac2c29fe653dc1b0436157" datatype="html">
@@ -3311,7 +3288,7 @@
       </trans-unit>
       <trans-unit id="f36bd6a1570cb9b0a5023870f35160957cad2a8f" datatype="html">
         <source>See this video channel</source>
-        <target>الإطلاع على قناة الفيديو هذه</target>
+        <target>اعرض قناة الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="7bfe8fdef5d1a90e5bf286ec6ed4c079522a9b44" datatype="html">
@@ -3336,9 +3313,7 @@
       </trans-unit>
       <trans-unit id="8bc634cd9d8c9b684dbfaaf17a522f894bedbffc" datatype="html">
         <source>Joined <x id="INTERPOLATION"/></source>
-        <target>Joined 
-          <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/>
-        </target>
+        <target state="translated">Joined <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-about/account-about.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="f696d5719a2a79916d44a175743591dc0d5629fe" datatype="html">
@@ -3348,7 +3323,7 @@
       </trans-unit>
       <trans-unit id="29b4ae3296e239446fa0dea88a5112de15cffa54" datatype="html">
         <source>Created by</source>
-        <target>انشأ من قبل</target>
+        <target>أنشأه</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+video-channels/video-channels.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="e006ed166ce188cab168e1ca90435b33d042d913" datatype="html">
@@ -3371,16 +3346,12 @@
       </trans-unit>
       <trans-unit id="5523952d0300c96cfba2ec5a693c95f923e90c40" datatype="html">
         <source>Created <x id="INTERPOLATION"/></source>
-        <target>Created 
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.createdAt | date }}"/>
-        </target>
+        <target>أُنشئ <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+video-channels/video-channel-about/video-channel-about.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="5ebd76e736e1c58a1850234d1d26f1ab8c9ad11f" datatype="html">
         <source>Created <x id="INTERPOLATION"/> playlists </source>
-        <target>Created 
-          <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> playlists 
-        </target>
+        <target>أنشئت <x id="INTERPOLATION"/> قائمة تشغيل </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="fbbe62dee434f0521e0dfb8e3957d92fc5fcd76f" datatype="html">
@@ -3400,9 +3371,7 @@
       </trans-unit>
       <trans-unit id="5fea66be16da46ed7a0775e9a62b7b5e94b77473" datatype="html">
         <source>Contact <x id="INTERPOLATION"/> administrator</source>
-        <target>Contact 
-          <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrator
-        </target>
+        <target>اتصل بمدير <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="533b2b9a76ee1335cb44c01f0bfd50d43e9400b0" datatype="html">
@@ -3427,19 +3396,17 @@
       </trans-unit>
       <trans-unit id="ce301bc59085d13cf569fb7a97f073148435ec27" datatype="html">
         <source>About <x id="INTERPOLATION"/></source>
-        <target>About 
-          <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>
-        </target>
+        <target>حول <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="3c1aff50472b313c70a72ee02c081b8eeb1c616c" datatype="html">
         <source>Contact administrator</source>
-        <target>اتصل بالمسؤول</target>
+        <target>اتصل بالمدير</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="aaa2830aa30a5565ec06c852178ea7f181c693ea" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target>هذا المثال مخصص لمحتوى حساس / NSFW.</target>
+        <target>هذا المثيل مخصص لمحتوى حساس / NSFW.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5e595f291985655929e0348cf68ead712a081061" datatype="html">
@@ -3506,23 +3473,17 @@
       </trans-unit>
       <trans-unit id="49ea58bdafe3b72efaa42bac13d7d9b2f22a2990" datatype="html">
         <source>PeerTube is a self-hosted ActivityPub-federated video streaming platform using P2P directly in your web browser.</source>
-        <target>بيرتيوب عبارة عن منصة بث فيديو عبر ActivityPub باستخدام اتصال ند لند ،شاهده مباشرةً في متصفح الويب.</target>
+        <target>بيرتيوب عبارة عن منصة بث فيديو عبر ActivityPub ،شاهد مباشرةً في متصفح الويب باستخدام اتصال ند لند.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="6469b375536342370eefd959bb72a06dc3d5884b" datatype="html">
         <source>It is a free and open-source software, under the <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target>It is a free and open-source software, under the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target>هو برمجية حرة ومفتوحة المصد تحت <x id="START_LINK"/>رخصة AGPLv3<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7b85d0debc419e6c9c390ce02686b57d256cd139" datatype="html">
         <source>For more information, please visit <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </source>
-        <target>For more information, please visit 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target>لمزيد من المعلومات زر <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="0f972eed0e4c81f8006cf8061a400304b2c62b21" datatype="html">
@@ -3542,7 +3503,7 @@
       </trans-unit>
       <trans-unit id="41d3c1ad1b83498b20d96d74bc14e0a1e9749529" datatype="html">
         <source>Discover unofficial Android applications or browser addons!</source>
-        <target>اكتشف تطبيقات Android غير الرسمية أو إضافات المتصفح!</target>
+        <target>اكتشف تطبيقات أندرويد غير الرسمية أو إضافات المتصفح!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="a1b892a310faf2ee74544d659ce968314997d56a" datatype="html">
@@ -3577,12 +3538,12 @@
       </trans-unit>
       <trans-unit id="fc899a02306f4fd2ce20978136d252dd6eb346cf" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target>يجب إرسال طلب HTTP على كل متتبع لكل فيديو للتجسس. إذا أردنا التجسس على جميع مقاطع فيديو في بيرتيوب ، فيجب علينا إرسال العديد من الطلبات حيث توجد مقاطع فيديو (من المحتمل أن يكون هناك الكثير)</target>
+        <target>يجب إرسال طلب HTTP لكل متتبع من أجل كل فيديو للتجسس عليه. إذا أردنا التجسس على جميع مقاطع فيديو في بيرتيوب ، فيجب علينا إرسال طلبات بعدد مقاطع الفيديو (من المحتمل أن يكون هناك الكثير)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="278669a7857ee77786cf4578b11bb601002cf7a8" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target>لكل طلب يتم إرساله ، يقوم المتتبع بإرجاع النظراء العشوائيين بعدد محدود. على سبيل المثال ، إذا كان هناك 1000 نظير في السرب وأرسل المتتبع 20 نظيرًا فقط لكل طلب ، فيجب إرسال 50 طلبًا على الأقل لمعرفة كل نظير في السرب</target>
+        <target>لكل طلب يتم إرساله ، يقوم المتتبع بإرجاع عدد محدود من النظراء العشوائيين. على سبيل المثال ، إذا كان هناك 1000 نظير في السرب وأرسل المتتبع 20 نظيرًا لكل طلب ، فيجب إرسال 50 طلبًا على الأقل لمعرفة كل نظير في السرب</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="3f47eec5fb00ae46a0035cc8f9e428e3d549e337" datatype="html">
@@ -3602,17 +3563,12 @@
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
         <source>Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK"/>with the WebTorrent library<x id="CLOSE_LINK"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK_1"/>this document<x id="CLOSE_LINK"/> for more information </source>
-        <target>Web peers are not publicly accessible: because we use WebRTC inside the web browser (
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the WebTorrent library
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information 
-        </target>
+        <target state="translated">Web peers are not publicly accessible: because we use WebRTC inside the web browser ( <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the WebTorrent library <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
-        <target>أسوأ سيناريو لشخص عادي يتجسس على أصدقائه غير مرجح تمامًا. هناك طرق أكثر فعالية للحصول على هذا النوع من المعلومات.</target>
+        <target>أسوأ سيناريو هو شخص عادي يتجسس على أصدقائه لكنه غير مرجح. هناك طرق أكثر فعالية للحصول على هذا النوع من المعلومات.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf" datatype="html">
@@ -3627,7 +3583,7 @@
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99" datatype="html">
         <source>What can I do to limit the exposure of my IP address?</source>
-        <target>ماذا يمكنني أن أفعل للحد من التعرض لعنوان IP الخاص بي؟</target>
+        <target>ماذا يمكنني أن أفعل للحد من كشف عنوان IP الخاص بي؟</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="301e86f807ed659ff42d3b4bba6e03b88bff7907" datatype="html">
@@ -3647,7 +3603,7 @@
       </trans-unit>
       <trans-unit id="89c0c2c3150b99bbea20214895df56c8f8d6125d" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target>قمنا بتعيين حد لعدد الزملاء الذين أرسلهم المتتبع</target>
+        <target>قمنا بتعيين حد لعدد النظراء الذين يرسلهم المتتبع</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="b23c2b01db8b09f1a9bc6144d66291e28f02daf4" datatype="html">
@@ -3657,12 +3613,12 @@
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target>السماح لمشرفي المنصات بتعطيل P2P من واجهة الإدارة</target>
+        <target>السماح لمدراء المثيلات بتعطيل P2P من واجهة الإدارة</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="85755719c08571f7f5b7c5b391329b7e4e7ccc7b" datatype="html">
         <source>Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</source>
-        <target>تكرار تلقائي للفيديو من بعض الحالات: لا يعرف المرء ما إذا كان IP قد قام بتنزيل الفيديو عن قصد أو إذا كان خادمًا</target>
+        <target>تكرار تلقائي للفيديو من بعض المثيلات: لا يعرف المرء ما إذا كان IP قد قام بتنزيل الفيديو عن قصد أو إذا كان خادمًا</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
