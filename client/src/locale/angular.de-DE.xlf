@@ -20,7 +20,7 @@
       </trans-unit>
       <trans-unit id="1cff8e38c81055fa0ae7dbc80a7a0c5c39bbc263" datatype="html">
         <source><x id="INTERPOLATION"/> published a new video: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> hat eine neues Video veröffentlicht <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="INTERPOLATION"/> hat ein neues Video veröffentlich: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="5f61f85f3c9e196f7044fec4dfe165b081e14a3f" datatype="html">
@@ -579,7 +579,7 @@
       </trans-unit>
       <trans-unit id="7c7f4be7b726e61c577e63842a58d9e435f7c597" datatype="html">
         <source>users</source>
-        <target state="translated">Nutzer</target>
+        <target state="translated">Benutzer</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="5bc509bb72973f9895241127d5556e9e31051137" datatype="html">
@@ -589,12 +589,12 @@
       </trans-unit>
       <trans-unit id="bd21b1e6b5674003187e5cbec0e7e2854f9d8388" datatype="html">
         <source>video views</source>
-        <target state="translated">Videoaufrufe</target>
+        <target state="translated">Aufrufe</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="d11fe88f08e43bfe4dec7d16fe469aa65d1e3d84" datatype="html">
         <source>video comments</source>
-        <target state="translated">Videokommentare</target>
+        <target state="translated">Kommentare</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="0bedca44bfc0ef579be6053ffe0e8cdee9aba07d" datatype="html">
@@ -609,7 +609,7 @@
       </trans-unit>
       <trans-unit id="8de9d3173fafc2c7a94352dec3de899b6cedf9c5" datatype="html">
         <source>followers</source>
-        <target state="translated">Folger</target>
+        <target state="translated">Follower</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1ec99ffe83830affef834fd7beeda8ee313203fe" datatype="html">
@@ -646,14 +646,12 @@
       </trans-unit>
       <trans-unit id="dbabcb47dc77c29275d0f836280ef1dcd924fdb9" datatype="html">
         <source>Block video "<x id="INTERPOLATION"/>"</source>
-        <target state="new">Block video "
-          <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"
-        </target>
+        <target state="translated">Video " <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>" sperren</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="dc3bdad5421d0ee7ddd76ae62b699d72dd9f61b4" datatype="html">
         <source>Please describe the reason...</source>
-        <target state="new">Please describe the reason...</target>
+        <target state="translated">Bitte beschreiben sie den Grund...</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="c078d4901a5fac169665947cc7a6108b94dd80c7">
