@@ -55,27 +55,27 @@
       </trans-unit>
       <trans-unit id="285ef550cb17086e949266777312a1884bd7d739" datatype="html">
         <source><x id="START_LINK"/>A new abuse<x id="CLOSE_LINK"/> has been created </source>
-        <target state="translated"><x id="START_LINK"/>Ein neuer Missbrauch<x id="CLOSE_LINK"/> wurde erstellt </target>
+        <target state="translated"><x id="START_LINK"/>Ein neuer Missbrauch<x id="CLOSE_LINK"/> wurde gemeldet </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="680ba11d9548df295024d7f8ab7b816580725d5d" datatype="html">
         <source><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Ihre Missbrauchsmeldung <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wurde <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>angenommen <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>abgelehnt<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated"><x id="START_LINK"/>Ihr Missbrauchsfall <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>akzeptiert<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>abgelehnt<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="3f8e1a007a869471c5ab6e9b6149165ecc26e4ad" datatype="html">
         <source><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Missbrauchsfall <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>hat eine neue Mitteilung </target>
+        <target state="translated"><x id="START_LINK"/>Missbrauchsfall <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat eine neue Mitteilung </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="translated">Das kürzlich hinzugefügte Video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wurde <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>automatisch gesperrt <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Das kürzlich hinzugefügte Video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> wurde <x id="START_LINK_1"/>automatisch gesperrt<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> commented your video <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hat dein Video kommentiert <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat ihr Video kommentiert <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="4d2311a5156bd322cc7e2ebafcf6063ba8232e63" datatype="html">
@@ -85,58 +85,42 @@
       </trans-unit>
       <trans-unit id="b187dd5f406f4195b326ab01fa81f823025821b9" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been published </source>
-        <target state="translated">Dein Video 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wurde veröffentlicht 
-        </target>
+        <target state="translated">Ihr Video<x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> wurde veröffentlicht </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="78dea99c581be394bf509426e114c9cda9f5825d" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> succeeded </source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Dein Video
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> wurde erfolgreich importiert 
-        </target>
+        <target state="translated"><x id="START_LINK"/>Ihr Video Import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> war erfolgreich </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="dc586a7c70baa9217d98f58f4701fc3a29cd9d4d" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> failed </source>
-        <target state="translated">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Dein Video
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> konnte leider nicht importiert werden 
-        </target>
+        <target state="translated"><x id="START_LINK"/>Ihr Video Import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> ist leider fehlgeschlagen </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="55c81d14a4e11004f0bcda5a47575f316e85e43e" datatype="html">
         <source>User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> registered on your instance </source>
-        <target state="translated">Benutzer <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hat auf deiner Instanz registriert </target>
+        <target state="translated">User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat sich bei ihrer Instanz registriert </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="0f146c0a4152eb93ec2ad119e1dec613864d64c6" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> is following <x id="START_TAG_NG_CONTAINER"/>your channel <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>your account<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> folgt jetzt <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>deinem Kanal <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/> <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>deinem Konto <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> folgt <x id="START_TAG_NG_CONTAINER"/>ihrem Kanal <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>ihrem Konto<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> mentioned you on <x id="START_LINK_1"/>video <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hat dich hier erwähnt: <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat Sie bei folgendem Video erwähnt: <x id="START_LINK_1"/>video <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">Deine Instanz hat <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>einen neuen Follower <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ( <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> wartet auf ihre Bestätigung<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated">Ihre Instanz hat <x id="START_LINK"/>einen neuen Follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/>wartend auf ihre Bestätigung<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">Deine Instanz ist automatisch 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> gefolgt 
-        </target>
+        <target state="translated">Ihre Instanz folgte automatisch <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="f61b49d5729bbd138f2a083fbaee2920811d31c5" datatype="html">
@@ -295,7 +279,7 @@
       </trans-unit>
       <trans-unit id="448d436df053141260523149173073ccbb0259f9" datatype="html">
         <source>Report video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Video melden " <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</target>
+        <target state="translated">Video melden "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="97916f2928694b8d574b6f052b93e54565ed9823" datatype="html">
@@ -325,7 +309,7 @@
       </trans-unit>
       <trans-unit id="f73a82bb90c6c856cc0d2e3b2f5c109460074912" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 Aufruf} other { <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> Aufrufe} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 Aufruf} other {<x id="INTERPOLATION"/> Aufrufe}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="1d3781d7296d4b4e04e7f023aec1052fb2955c4d" datatype="html">
@@ -342,9 +326,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target>{VAR_PLURAL, plural, =0 {Keine Videos} =1 {1 Video} other {
-          <x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> Videos} }
-        </target>
+        <target>{VAR_PLURAL, plural, =0 {Keine Videos} =1 {1 Video} other {<x id="INTERPOLATION"/> Videos}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582">
@@ -356,9 +338,7 @@
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4">
         <source>Updated <x id="INTERPOLATION"/></source>
-        <target>
-          <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/> aktualisiert
-        </target>
+        <target>Aktualisiert <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="15c02cb6b6c3be53477e502d3e1ee26955b23af0" datatype="html">
@@ -383,9 +363,7 @@
       </trans-unit>
       <trans-unit id="b9dee3108a18796bd69c6be316c8fb985b58fb8e">
         <source>Delete from <x id="INTERPOLATION"/></source>
-        <target>Entferne von 
-          <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/>
-        </target>
+        <target>Entferne von <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
@@ -460,23 +438,17 @@
       </trans-unit>
       <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3">
         <source><x id="START_TAG_SPAN"/>Remote subscribe<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Remote interact<x id="CLOSE_TAG_SPAN"/></source>
-        <target><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote abonnieren <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote interagieren <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target><x id="START_TAG_SPAN"/>Remote abonnieren<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Remote interagieren<x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="01cf713559c39a17cf5c8fbcd33b004a77ce0963" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. </source>
-        <target state="translated">Du kannst einen Kanal über jede ActivityPub-kompatible Fediverse-Instanz abonnieren.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Zum Beispiel bei Mastodon oder Pleroma kannst du die Kanal-URL ins Suchfeld eintragen und abonnieren. 
-        </target>
+        <target state="translated">Du kannst einen Kanal über jede ActivityPub-kompatible Fediverse-Instanz abonnieren. <x id="LINE_BREAK"/> <x id="LINE_BREAK"/> Zum Beispiel bei Mastodon oder Pleroma kannst du die Kanal-URL ins Suchfeld eintragen und abonnieren. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </source>
-        <target state="translated">Du kannst über jede ActivityPub-kompatible Fediverse-Instanz damit interagieren.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Zum Beispiel bei Mastodon oder Pleroma kannst du die aktuelle URL in das Suchfeld eintragen und dann damit interagieren. 
-        </target>
+        <target state="translated">Du kannst über jede ActivityPub-kompatible Fediverse-Instanz damit interagieren. <x id="LINE_BREAK"/> <x id="LINE_BREAK"/> zum Beispiel bei Mastodon oder Pleroma kannst du die aktuelle URL in das Suchfeld eintragen und dann damit interagieren. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6513f65441f986d9204122e01b4ab1df1d63d18e" datatype="html">
@@ -486,12 +458,7 @@
       </trans-unit>
       <trans-unit id="083e95bdf6f64257d2ddd399ecf9f48ab88e279f" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="translated">
-          <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Standardrichtlinie für NSFW-/heikle Videos
-          <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-          <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>kann von den Nutzern geändert werden
-          <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-        </target>
+        <target state="translated"><x id="START_TAG_DIV"/>Standardrichtlinie für NSFW-/heikle Videos<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>kann vom Nutzer geändert werden<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
@@ -526,12 +493,7 @@
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> per day)<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target>
-          Unbegrenzt 
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(
-          <x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> pro Tag)
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target>Unbegrenzt <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> pro Tag)<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
@@ -646,7 +608,7 @@
       </trans-unit>
       <trans-unit id="dbabcb47dc77c29275d0f836280ef1dcd924fdb9" datatype="html">
         <source>Block video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Video " <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>" sperren</target>
+        <target state="translated">Video sperren "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="dc3bdad5421d0ee7ddd76ae62b699d72dd9f61b4" datatype="html">
@@ -670,10 +632,7 @@
       </trans-unit>
       <trans-unit id="6b6240483bee515c1e20c0c21fc6096e8cdd08e9" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK"/>contact an administrator<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Entschuldigung, es gab ein Problem mit dem externen Login-Prozess. Bitte 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Administrator kontaktieren
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Leider gab es ein Problem mit dem externen Anmeldeprozess. Bitte <x id="START_LINK"/>kontaktieren sie einen Administrator<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="17f43ee2fb343f8b60568527d105777b99ae8414" datatype="html">
@@ -683,11 +642,7 @@
       </trans-unit>
       <trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK"/> Find yours among multiple instances at <x id="START_LINK"/>https://joinpeertube.org/instances<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Diese Instanz erlaubt gegenwärtig keine Registrierung von Nutzern, aber Sie können eine andere Instanz für die Registrierung eines Accounts für den Upload von Videos hier finden. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Eine Übersicht verschiedener Instanzen finden Sie auf 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Diese Instanz erlaubt gegenwärtig keine Registrierung von Nutzern, aber Sie können eine andere Instanz für die Registrierung eines Accounts für den Upload von Videos hier finden.<x id="LINE_BREAK"/> Eine Übersicht verschiedener Instanzen finden Sie auf <x id="START_LINK"/>https://joinpeertube.org/instances<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453">
@@ -775,7 +730,7 @@
       </trans-unit>
       <trans-unit id="cdc5b877341ff8e6009282a299f2f2d6987dbdbe" datatype="html">
         <source>on the vidiverse</source>
-        <target state="new">on the vidiverse</target>
+        <target state="translated">im Vidiverse</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -802,23 +757,12 @@
       </trans-unit>
       <trans-unit id="4c3960fb1d9b07d1db3b5bda3ee40019211830dc">
         <source>for <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></source>
-        <target>
-          für 
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target>für <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7c603b9ed878097782e2b8908f662e2344b46061">
         <source>Filters <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></source>
-        <target>
-          Filter
-          
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target>Filter <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
@@ -875,18 +819,12 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></source>
-        <target state="translated">Offizielle PeerTube-Website (Nachrichten, Hilfe, beitragen...): 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Offizielle PeerTube-Website (Nachrichten, Hilfe, beitragen...): <x id="START_LINK"/>https://joinpeertube.org <x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6" datatype="html">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK"/></source>
-        <target state="translated">Füge deine Instanz zum öffentlichen PeerTube-Index hinzu: 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Füge deine Instanz zum öffentlichen PeerTube-Index hinzu: <x id="START_LINK"/>https://instances.joinpeertube.org/instances <x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859" datatype="html">
@@ -896,32 +834,12 @@
       </trans-unit>
       <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="translated">Deinen 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Instanznamen
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auswählen, 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>eine Beschreibung hinzufügen
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, beschreiben 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>wer du bist
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, warum 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>du diese Instanz erstellt hast
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> und 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>wie lange
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> du planst 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>sie zu betreiben 
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ist sehr wichtig für die Besucher um zu verstehen auf was für einer Art von Instanz sie sich befinden. 
-        </target>
+        <target state="translated">Deinen <x id="START_TAG_STRONG"/>Instanznamen <x id="CLOSE_TAG_STRONG"/> auswählen, <x id="START_TAG_STRONG"/>eine Beschreibung hinzufügen <x id="CLOSE_TAG_STRONG"/>, beschreiben <x id="START_TAG_STRONG"/>wer du bist <x id="CLOSE_TAG_STRONG"/>, warum <x id="START_TAG_STRONG"/>du diese Instanz erstellt hast <x id="CLOSE_TAG_STRONG"/> und <x id="START_TAG_STRONG"/>wie lange <x id="CLOSE_TAG_STRONG"/> du planst <x id="START_TAG_STRONG"/>sie zu betreiben <x id="CLOSE_TAG_STRONG"/> ist sehr wichtig für die Besucher um zu verstehen auf was für einer Art von Instanz sie sich befinden. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="bd6c91a86a18f512ade62e216efcfb5d2520711c" datatype="html">
         <source>If you want to open registrations, please decide what are <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/>, fill your <x id="START_TAG_STRONG"/>instance terms<x id="CLOSE_TAG_STRONG"/> and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Wenn du die Instanz für Registrierungen öffnen willst, lege bitte fest, wie 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>deine Moderationsregeln
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> lauten, fülle die 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Nutzungsbedingungen deiner Instanz
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>aus und lege Kategorien fest und gib die Sprache an, die du sprichst. Auf diese Art hilfst du Nutzern sich auf 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>der richtigen
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube-Instanz anzumelden. 
-        </target>
+        <target state="translated">Wenn du die Instanz für Registrierungen öffnen willst, lege bitte fest, wie <x id="START_TAG_STRONG"/>deine Moderationsregeln <x id="CLOSE_TAG_STRONG"/> lauten, fülle die <x id="START_TAG_STRONG"/>Nutzungsbedingungen deiner Instanz <x id="CLOSE_TAG_STRONG"/>aus und lege Kategorien fest und gib die Sprache an, die du sprichst. Auf diese Art hilfst du Nutzern sich auf <x id="START_TAG_STRONG"/>der richtigen <x id="CLOSE_TAG_STRONG"/> PeerTube-Instanz anzumelden. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
