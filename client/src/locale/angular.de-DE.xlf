@@ -899,7 +899,7 @@
       </trans-unit>
       <trans-unit id="565e31173ab0ea2c00c311c9051c15d8896a0b80" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Sie können diese Felder konfigurieren, sodass Nutzer es einfacher haben, sich eine <x id="START_TAG_STRONG"/>passende Instanz<x id="CLOSE_TAG_STRONG"/> auszuwählen. Ohne diese Felder kann es sein, dass die Instanz nicht auf der <x id="START_LINK"/>JoinPeerTube-Webseite<x id="CLOSE_LINK"/> aufgeführt wird.</target>
+        <target state="translated">Sie können diese Felder konfigurieren, sodass Nutzer es einfacher haben, sich eine <x id="START_TAG_STRONG"/>passende Instanz<x id="CLOSE_TAG_STRONG"/> auszuwählen. Ohne diese Felder kann es sein, dass die Instanz nicht auf der <x id="START_LINK"/>JoinPeerTube-Webseite<x id="CLOSE_LINK"/> aufgeführt wird. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7d438f72f9985c4d06ed4fe80c90afc2e1df34d2" datatype="html">
@@ -937,17 +937,17 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1eecebc91b4c671d43617b559cf3933275492931" datatype="html">
         <source>Account settings</source>
-        <target state="translated">Konto Parameters</target>
+        <target state="translated">Konto Einstellungen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7c55f3a275f9e86fc95243e2fd1f17156a4e97f0" datatype="html">
         <source>Channels settings</source>
-        <target state="translated">Kanal Parameters</target>
+        <target state="translated">Kanal Einstellungen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="c43efa2dff95b97be0c36a65d2ada4cd594e010f" datatype="html">
         <source>Interface:</source>
-        <target state="new">Interface:</target>
+        <target state="translated">Oberfläche:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="a9ada5fec7ddf53a031711b025014495372627de" datatype="html">
@@ -957,14 +957,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="9fe1faff741de7a4d50e520d2161209997f8224c" datatype="html">
         <source>Sensitive:</source>
-        <target state="new">Sensitive:</target>
+        <target state="translated">Sensible Inhalte:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="5a69be913ebcc70f300060cf1be0c7f8827159d6" datatype="html">
         <source>Interface: <x id="INTERPOLATION"/></source>
-        <target state="new">Interface: 
-          <x id="INTERPOLATION" equiv-text="{{ language }}"/>
-        </target>
+        <target state="translated">Interface: <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
@@ -994,7 +992,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="d3381fff430c3687ae1c6302af99d88baa4f480b" datatype="html">
         <source>Shortcuts</source>
-        <target state="translated">Shortcuts</target>
+        <target state="translated">Abkürzungen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="f8e6eaa974acec3b80e5c77ec0dc4ff80939964d" datatype="html">
@@ -1004,7 +1002,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2020</source>
-        <target state="translated">betrieben durch PeerTube - CopyLeft 2015-2020</target>
+        <target state="translated">powered by PeerTube - CopyLeft 2015-2020</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="3fdc751b264ca9998e1542fcf5794e274cd56344">
@@ -1074,7 +1072,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="47546e45bbb476baaaad38244db444c427ddc502">
         <source>Playlists</source>
-        <target>Playlist</target>
+        <target>Playlists</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="357064ca9d9ac859eb618e28e8126fa32be049e2">
@@ -1129,7 +1127,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771">
         <source>View your notifications</source>
-        <target>Zeige deine Benachrichtigungen</target>
+        <target>Zeige ihre Benachrichtigungen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/avatar-notification.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8bcabdf6b16cad0313a86c7e940c5e3ad7f9f8ab">
@@ -1164,9 +1162,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="b2f3e08a790518414d240fbe2c3c116c6f83c275" datatype="html">
         <source>using <x id="INTERPOLATION"/></source>
-        <target state="new">using 
-          <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/>
-        </target>
+        <target state="translated">using <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
@@ -1186,7 +1182,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target state="translated">nur Instanzen denen gefolgt wird</target>
+        <target state="translated">Nur Instanzen denen gefolgt wird</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="e5a60e5f83aad776726b8b9e7ff1b69f047a8416" datatype="html">
@@ -1201,7 +1197,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="48d27fa96b882d9c5c2a779376328790d80378eb" datatype="html">
         <source>will list the matching video</source>
-        <target state="new">will list the matching video</target>
+        <target state="translated">Will list the matching video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="25d438ce4c6d14835921c34bda6cc88f4fe5b1b4" datatype="html">
@@ -1236,7 +1232,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a57adbb9bc3ecbc397157af25f96fc2123c9c383" datatype="html">
         <source>Reset</source>
-        <target state="translated">Reset</target>
+        <target state="translated">Zurücksetzen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="98acac685fc4b2d35e5d0cf3cd224d247a756c3e">
@@ -1286,7 +1282,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="265ee68edfe57e510270da31ec99f67d94346009" datatype="html">
         <source>Reset</source>
-        <target state="translated">Reset</target>
+        <target state="translated">Zurücksetzen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="75706466a5cffa6f6bf0d6c94a8345a001ce8cea" datatype="html">
@@ -1336,7 +1332,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ca72d574353a355b8fadbc1ceda174a0bd1bf7cd" datatype="html">
         <source>Reset</source>
-        <target state="translated">Reset</target>
+        <target state="translated">Zurücksetzen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
