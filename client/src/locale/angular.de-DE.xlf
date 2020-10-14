@@ -55,7 +55,7 @@
       </trans-unit>
       <trans-unit id="285ef550cb17086e949266777312a1884bd7d739" datatype="html">
         <source><x id="START_LINK"/>A new abuse<x id="CLOSE_LINK"/> has been created </source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Ein neuer Missbrauch <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wurde gemeldet </target>
+        <target state="translated"><x id="START_LINK"/>Ein neuer Missbrauch<x id="CLOSE_LINK"/> wurde erstellt </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="680ba11d9548df295024d7f8ab7b816580725d5d" datatype="html">
