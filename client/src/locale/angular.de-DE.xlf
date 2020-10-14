@@ -30,7 +30,7 @@
       </trans-unit>
       <trans-unit id="03ccba66e74e25303828fc37062dda862ec272dc" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been unblocked </source>
-        <target state="translated">Ihr Video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> wurde freigeschaltet</target>
+        <target state="translated">Ihr Video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> wurde freigegeben </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="b1393385d75d42dfb7e893e3e99290bcc697e791" datatype="html">
