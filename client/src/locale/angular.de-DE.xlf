@@ -541,7 +541,7 @@
       </trans-unit>
       <trans-unit id="a4378d599f760c6d1de2667d4535b48db092cb6e" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="new"> You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">Sie können jede Torrent-Datei importieren, die auf eine Mediendatei zeigt. Sie sollten sicherstellen, dass Sie das Recht auf die Verbreitung des Inhalts, auf den die Datei zeigt, haben, ansonsten könnte dies rechtliche Schwierigkeiten für Sie und die Instanz zur Folge haben.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">17,19</context>
