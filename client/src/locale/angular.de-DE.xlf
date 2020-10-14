@@ -30,7 +30,7 @@
       </trans-unit>
       <trans-unit id="03ccba66e74e25303828fc37062dda862ec272dc" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been unblocked </source>
-        <target state="translated">Ihr Video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wurde freigegeben. </target>
+        <target state="translated">Ihr Video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> wurde freigeschaltet</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="b1393385d75d42dfb7e893e3e99290bcc697e791" datatype="html">
@@ -742,8 +742,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
-        <target state="new">An email with the reset password instructions will be sent to <x id="PH"/>.
-The link will expire within 1 hour.</target>
+        <target state="translated">Es wird eine E-Mail zum Zurücksetzen des Passworts an <x id="PH"/> gesendet. Der Link wird in einer Stunde ablaufen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
           <context context-type="linenumber">106,107</context>
@@ -766,10 +765,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="406b08e859ab668ff07056881dcc4390109d4e1d" datatype="html">
         <source><x id="INTERPOLATION"/> <x id="ICU"/> </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
-          <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION"/><x id="ICU"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="26b0b148ff87e083300fa9ca213f8ada7fa6211d" datatype="html">
