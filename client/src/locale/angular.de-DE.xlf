@@ -914,9 +914,7 @@
       </trans-unit>
       <trans-unit id="c2fe7580753ac7c1442df31eb97f8acc6fa250e6" datatype="html">
         <source>Configure</source>
-        <target state="new">
-       Configure
-    </target>
+        <target state="translated">Konfigurieren</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -987,7 +985,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="0530eaf7a05c66b3167da49a57e5af4326f3af15" datatype="html">
         <source>Get help using PeerTube</source>
-        <target state="new">Get help using PeerTube</target>
+        <target state="translated">Hilfe zur Benutzung von PeerTube erhalten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="d3381fff430c3687ae1c6302af99d88baa4f480b" datatype="html">
@@ -997,7 +995,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="f8e6eaa974acec3b80e5c77ec0dc4ff80939964d" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="new">powered by PeerTube</target>
+        <target state="translated">betrieben durch PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
@@ -1027,7 +1025,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3245220240937722814" datatype="html">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">Meine Kanäle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -1035,7 +1033,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
         <source>My videos</source>
-        <target state="new">My videos</target>
+        <target state="translated">Meine Videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -1043,7 +1041,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
         <source>My playlists</source>
-        <target state="new">My playlists</target>
+        <target state="translated">Meine Playlists</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -1051,7 +1049,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
         <source>My subscriptions</source>
-        <target state="new">My subscriptions</target>
+        <target state="translated">Meine Abonnements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -1059,7 +1057,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
         <source>My history</source>
-        <target state="new">My history</target>
+        <target state="translated">Mein Verlauf</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -1192,7 +1190,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="648ca3b1ac41763033a412ead17c4a3dd71545be" datatype="html">
         <source>will list the matching channel</source>
-        <target state="new">will list the matching channel</target>
+        <target state="translated">wird den passenden Kanal auflisten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="48d27fa96b882d9c5c2a779376328790d80378eb" datatype="html">
@@ -1202,7 +1200,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="25d438ce4c6d14835921c34bda6cc88f4fe5b1b4" datatype="html">
         <source>Any other input will return matching video or channel names.</source>
-        <target state="new">Any other input will return matching video or channel names.</target>
+        <target state="translated">Andere Eingaben werden passende Video- oder Kanalnamen zurückgeben.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -1217,7 +1215,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="39ec2a3e2da523763f4db4b2227b7dbae5d70eba" datatype="html">
         <source>In this instance's network</source>
-        <target state="new">In this instance's network</target>
+        <target state="translated">Im Netzwerk dieser Instanz</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="9848e55d7c95eddc1c4a044a63ed0e88e8cb6f5c" datatype="html">
@@ -1322,7 +1320,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="118bedbb308a28f06d1c0c84645a35c9bf93cbf3" datatype="html">
         <source>Search target</source>
-        <target state="new">Search target</target>
+        <target state="translated">Suchziel</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="cdfec9a92a3081018d34e82d74e85e4e9f63a95f" datatype="html">
@@ -1347,7 +1345,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8" datatype="html">
         <source>Video channels</source>
-        <target state="new">Video channels</target>
+        <target state="translated">Videokanäle</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
@@ -1384,16 +1382,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="554a78c6ac043b4a9058c39d63e4475a454e4dc2" datatype="html">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK"/> There is a maximum of 5 tags. <x id="LINE_BREAK"/> Press <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/> to add a new tag. </source>
-        <target state="new">
-                    Tags could be used to suggest relevant recommendations. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    There is a maximum of 5 tags. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    Press 
-          <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter
-          <x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/> to add a new tag.
-                  
-        </target>
+        <target state="translated">Tags können genutzt werden, um relevante Empfehlungen vorzuschlagen. <x id="LINE_BREAK"/> Es können maximal fünf Tags angegeben werden. <x id="LINE_BREAK"/> Drücken Sie <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/>, um einen Tag hinzuzufügen.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
