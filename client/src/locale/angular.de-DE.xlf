@@ -1392,7 +1392,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="be24dae69c0d0605237d6dd638b172a42a88851e" datatype="html">
         <source>No items found</source>
-        <target state="new">No items found</target>
+        <target state="translated">Kein Element gefunden</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/select/select-checkbox.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
@@ -1524,9 +1524,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="64ec6a11fd39e7a4cba76281bdd490124437e96f" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="new">
-                    Short text to tell people how they can support you (membership platform...).
-                  </target>
+        <target state="translated">Kurzer Text, der Nutzer über die Möglichkeiten, Sie zu unterstützen, informiert (Mitgliederplattform...).</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6">
@@ -1536,14 +1534,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="109ff29714fe8f2a0bfb232f04b908062fac22b0" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target state="new">
-                    This is the date when the content was originally published (e.g. the release date for a film)
-                  </target>
+        <target state="translated">Datum, an dem der Inhalt ursprünglich veröffentlicht wurde (z. B. das Veröffentlichungsdatum eines Films)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">239</context></context-group>
       </trans-unit>
       <trans-unit id="48c3bde722dc317f76aa607445f11128f7fc7276" datatype="html">
         <source>Plugin settings</source>
-        <target state="new">Plugin settings</target>
+        <target state="translated">Plugin-Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">269</context>
@@ -1571,7 +1567,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="92cd0a8da81d2ec6d454aa524c0ad967e1ca0818" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="new"> You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">Sie können jede URL importieren, die von <x id="START_LINK"/>youtube-dl unterstützt wird<x id="CLOSE_LINK"/> oder auf eine Mediendatei zeigt. Sie sollten sicherstellen, dass Sie das Recht auf die Verbreitung des Inhalts, auf den die Datei zeigt, haben, ansonsten könnte dies rechtliche Schwierigkeiten für Sie und die Instanz zur Folge haben.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">11,14</context>
