@@ -1382,7 +1382,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="554a78c6ac043b4a9058c39d63e4475a454e4dc2" datatype="html">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK"/> There is a maximum of 5 tags. <x id="LINE_BREAK"/> Press <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/> to add a new tag. </source>
-        <target state="translated">Tags können genutzt werden, um relevante Empfehlungen vorzuschlagen. <x id="LINE_BREAK"/> Es können maximal fünf Tags angegeben werden. <x id="LINE_BREAK"/> Drücken Sie <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/>, um einen Tag hinzuzufügen.</target>
+        <target state="translated">Tags können genutzt werden, um relevante Empfehlungen vorzuschlagen. <x id="LINE_BREAK"/> Es können maximal fünf Tags angegeben werden. <x id="LINE_BREAK"/> Drücken Sie <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/>, um einen Tag hinzuzufügen. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
@@ -1437,14 +1437,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
         <source>Schedule publication (<x id="INTERPOLATION"/>)</source>
-        <target>Veröffentlichung planen (
-          <x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)
-        </target>
+        <target>Veröffentlichung planen ( <x id="INTERPOLATION"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="ea504765b49242bfcaefec84a9cf2f6f179c2ea5" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="new">Contains sensitive content</target>
+        <target state="translated">Enthält sensible Inhalte</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
@@ -1479,7 +1477,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
         <source>Already uploaded ✔</source>
-        <target>Fast hochgeladen	✔</target>
+        <target>Bereits hochgeladen ✔</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="ca4588e185413b2fc77dbe35c861cc540b11b9ad">
