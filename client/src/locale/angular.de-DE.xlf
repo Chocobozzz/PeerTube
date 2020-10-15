@@ -2577,7 +2577,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="d2e7333704502d1720b353742634630b71ea8bd7" datatype="html">
         <source>Video blocks</source>
-        <target state="translated">Blockierte Videos</target>
+        <target state="translated">Gesperrte Videos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
