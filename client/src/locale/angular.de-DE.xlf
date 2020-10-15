@@ -3234,12 +3234,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1bb1ca2264b1ab8be73deee74852a4e6d40101c5" datatype="html">
         <source>With your own funds? With user donations? Advertising?</source>
-        <target state="new">With your own funds? With user donations? Advertising?</target>
+        <target state="translated">Mit Ihrem Vermögen? Mit Spenden oder mit Werbung?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">200</context></context-group>
       </trans-unit>
       <trans-unit id="434d9f89497fe693bb5e4cdce02925dec8d0281f" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target state="new">OTHER INFORMATION</target>
+        <target state="translated">WEITERE INFORMATIONEN</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="7dfc119f06b80d9324703c471b0c00118fa5849d" datatype="html">
@@ -3249,7 +3249,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4a58b1d4aff414350b701aa587aeb39a1276307a" datatype="html">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="new">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</target>
+        <target state="translated">z. B. 2vCore 2GB RAM, ein Direktlink zum Server, den Sie mieten, etc.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">221</context></context-group>
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
@@ -3259,19 +3259,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="e18e5566ca6266c849208665c731805571333a8b" datatype="html">
         <source>APPEARANCE</source>
-        <target state="new">APPEARANCE</target>
+        <target state="translated">AUSSEHEN</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="0aa2ad4efb780f946dd9a821fe7471dde20014c3" datatype="html">
         <source>Use <x id="START_LINK"/>plugins &amp; themes<x id="CLOSE_LINK"/> for more involved changes, or <x id="START_LINK_1"/>add slight customizations<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-              Use 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>plugins &amp; themes
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>add slight customizations
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-            
-        </target>
+        <target state="translated">Nutzen Sie <x id="START_LINK"/>Plug-Ins &amp; Themes<x id="CLOSE_LINK"/> für größere Veränderungen oder <x id="START_LINK_1"/>fügen Sie kleinere Veränderungen hinzu<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">247</context></context-group>
       </trans-unit>
       <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb">
@@ -3281,7 +3274,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a42daa4748e433f25a51f598627d10de9c88d5d3" datatype="html">
         <source>Landing page</source>
-        <target state="new">Landing page</target>
+        <target state="translated">Startseite</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
@@ -3311,7 +3304,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="c5d4e7a320b88bdcf7fb2b670b81173048af3956" datatype="html">
         <source>BROADCAST MESSAGE</source>
-        <target state="new">BROADCAST MESSAGE</target>
+        <target state="translated">NACHRICHTENVERTEILUNG</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">286</context></context-group>
       </trans-unit>
       <trans-unit id="3a10a32f96683addb9e1335cdba7d6685587fe6e" datatype="html">
