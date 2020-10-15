@@ -1567,7 +1567,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="92cd0a8da81d2ec6d454aa524c0ad967e1ca0818" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Sie können jede URL importieren, die von <x id="START_LINK"/>youtube-dl unterstützt wird<x id="CLOSE_LINK"/> oder auf eine Mediendatei zeigt. Sie sollten sicherstellen, dass Sie das Recht auf die Verbreitung des Inhalts, auf den die Datei zeigt, haben, ansonsten könnte dies rechtliche Schwierigkeiten für Sie und die Instanz zur Folge haben.</target>
+        <target state="translated">Sie können jede URL importieren, die von <x id="START_LINK"/>youtube-dl unterstützt wird<x id="CLOSE_LINK"/> oder auf eine Mediendatei zeigt. Sie sollten sicherstellen, dass Sie das Recht auf die Verbreitung des Inhalts, auf den die Datei zeigt, haben, ansonsten könnte dies rechtliche Schwierigkeiten für Sie und die Instanz zur Folge haben. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">11,14</context>
@@ -1580,11 +1580,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
         <source>Congratulations, the video behind <x id="INTERPOLATION"/> will be imported! You can already add information about this video. </source>
-        <target>
-  Glückwunsch, das Video unter 
-          <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> wird importiert. Du kannst bereits Informationen über dieses Video hinzufügen.
-
-        </target>
+        <target>Glückwunsch, das Video unter <x id="INTERPOLATION"/> wird importiert. Du kannst bereits Informationen über dieses Video hinzufügen. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
@@ -1614,13 +1610,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1860b3f71e0b82e9c10e1eaf0ff073216ed896cc">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK"/> The chosen image will be definitive and cannot be modified. </source>
-        <target>
-          Ein Bild, das mit deiner Audiodatei zusammengeführt wird.
-          
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          Das ausgwählte Bild wird endgültig sein und kann nicht angepasst werden.
-        
-        </target>
+        <target>Ein Bild, das mit deiner Audiodatei zusammengeführt wird. <x id="LINE_BREAK"/> Das ausgewählte Bild wird endgültig sein und kann nicht angepasst werden. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="dfd046dad933ba0a50926b9ab3c1b579c802312e" datatype="html">
@@ -1635,9 +1625,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6357683911e256c566259880de43ea9403de00d3">
         <source>Congratulations! Your video is now available in your private library.</source>
-        <target>
-  Glückwunsch! Dein Video ist jetzt in deiner privaten Bibliothek verfügbar.
-</target>
+        <target>Glückwunsch! Dein Video ist jetzt in ihrer privaten Bibliothek verfügbar.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="f7ac2376749c7985f94f0fc89ba75ea624de1215">
@@ -1662,7 +1650,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
         <source>Select the torrent to import</source>
-        <target>Wähle die Torrent-Datei für den Import aus</target>
+        <target>Wählen sie die Torrent-Datei für den Import aus</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="63f5d0ec23e3cf4abf6d5221107633c90d8d4a15" datatype="html">
@@ -1684,27 +1672,17 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ebe5234338205e30a59cf703e2a2b6ef49fb75f8" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="translated">Wir empfehlen nicht mit dem 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Nutzer deine Videos hinzuzufügen, das dies der Super-Admin Benutzer deiner Instanz ist. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Stattdessen, 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>erstelle einen gesonderten Account
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>um deine Videos hochzuladen. 
-        </target>
+        <target state="translated">Wir empfehlen nicht mit dem <x id="START_TAG_STRONG"/>root <x id="CLOSE_TAG_STRONG"/> Nutzer deine Videos hinzuzufügen, das dies der Super-Admin Benutzer deiner Instanz ist. <x id="LINE_BREAK"/> Stattdessen, <x id="START_LINK"/>erstelle einen gesonderten Account <x id="CLOSE_LINK"/>um deine Videos hochzuladen. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
         <source>Import <x id="INTERPOLATION"/></source>
-        <target>Importiere 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target>Importiere <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5">
         <source>Upload <x id="INTERPOLATION"/></source>
-        <target>Lade 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/> hoch
-        </target>
+        <target>Lade <x id="INTERPOLATION"/> hoch</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
@@ -1782,7 +1760,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="f0e9c70583e8264cda79a8151de51cbb1ecb02ef" datatype="html">
         <source>More customization</source>
-        <target state="translated">Weitere Individualiserungen</target>
+        <target state="translated">Weitere Individualisierungen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">216</context></context-group>
       </trans-unit>
       <trans-unit id="cfad9c5d4357d7c4ac99cc2ce63c54c9738901d7" datatype="html">
@@ -1805,9 +1783,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="71b6e75eb1d54bcd9a64b9af9b99121785a065d0" datatype="html">
         <source>Support <x id="INTERPOLATION"/></source>
-        <target state="translated">Unterstütze 
-          <x id="INTERPOLATION" equiv-text="{{ video.account.displayName }}"/>
-        </target>
+        <target state="translated">Unterstütze <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/modal/video-support.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="cb66498f1a530d9b29ee5bc6605628add658dd87" datatype="html">
@@ -1847,7 +1823,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3c4c080864b313cfdff5fdea6aae5da276246d99">
         <source>Public</source>
-        <target>Publik</target>
+        <target>Öffentlich</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch-playlist.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="38e66e2d779d6d819cd7703ab73ab1bab75f8614">
@@ -1866,38 +1842,22 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a">
         <source>This video will be published on <x id="INTERPOLATION"/>. </source>
-        <target>
-      Dieses Video wird zum 
-          <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/> veröffentlicht.
-    
-        </target>
+        <target>Dieses Video wird zum <x id="INTERPOLATION"/> veröffentlicht. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="bbb57efb2edd572de832c8fff03bc85d7723abd3" datatype="html">
         <source>This video is blocked.</source>
-        <target state="translated">Das Video ist blockiert.</target>
+        <target state="translated">Das Video ist gesperrt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="82bf4d36722689b7c0058ed18e50d7b550d6d8b6" datatype="html">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/><x id="START_TAG_SPAN"/> • <x id="INTERPOLATION"/> views<x id="CLOSE_TAG_SPAN"/></source>
-        <target state="translated">Veröffentlicht 
-          <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/>
-          <x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • 
-          <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> Aufrufe
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated">Veröffentlicht <x id="START_TAG_MY-DATE-TOGGLE"/> <x id="CLOSE_TAG_MY-DATE-TOGGLE"/> <x id="START_TAG_SPAN"/> • <x id="INTERPOLATION"/> Aufrufe <x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="04aabb1507157d38b070f1a7ed5271bcea041404" datatype="html">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/><x id="START_TAG_SPAN"/> • <x id="INTERPOLATION"/> views<x id="CLOSE_TAG_SPAN"/></source>
-        <target state="translated">Veröffentlicht am 
-          <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/>
-          <x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • 
-          <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> Abrufe
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated">Veröffentlicht am <x id="START_TAG_MY-DATE-TOGGLE"/> <x id="CLOSE_TAG_MY-DATE-TOGGLE"/> <x id="START_TAG_SPAN"/> • <x id="INTERPOLATION"/> Abrufe <x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="74059c5dce671d464259e3ce37a5d408c3fd7720" datatype="html">
@@ -1937,9 +1897,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="0b7f242da10ece3f2995095c455b9a92ebcdd3b4">
         <source>By <x id="INTERPOLATION"/></source>
-        <target>Von 
-          <x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/>
-        </target>
+        <target>Von <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="d0336848b0c375a1c25ba369b3481ee383217a4f" datatype="html">
@@ -1989,7 +1947,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="89707647cc7c304e499ae46a5a0c5b508c3c80a0" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">das teilende System für dieses Video verlangt, dass einige technische Informationen über Ihr System (z.B. öffentliche IP-Adresse) an andere Teilnehmer gesendet werden.</target>
+        <target state="translated">Das teilende System für dieses Video verlangt, dass einige technische Informationen über Ihr System (z.B. öffentliche IP-Adresse) an andere Teilnehmer gesendet werden.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
@@ -2053,25 +2011,17 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ce6445567d33993fced14aae3456db909121d12e" datatype="html">
         <source>View <x id="INTERPOLATION"/> replies from <x id="INTERPOLATION_1"/> and others </source>
-        <target state="translated">Zeige 
-          <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> Antworten von 
-          <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> und anderen 
-        </target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> Antworten von <x id="INTERPOLATION_1"/> und anderen </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="8487d97def3c5336b1cde21c7da14e61a9633061" datatype="html">
         <source>View <x id="INTERPOLATION"/> replies from <x id="INTERPOLATION_1"/> </source>
-        <target state="translated">Zeige 
-          <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> Antworten von 
-          <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/>
-        </target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> Antworten von <x id="INTERPOLATION_1"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="dce85627dad907cb2013d06f97f82ad7bf87b0a6" datatype="html">
         <source>View <x id="INTERPOLATION"/> replies</source>
-        <target state="translated">Zeige 
-          <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> Antworten
-        </target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> Antworten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
