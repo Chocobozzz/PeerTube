@@ -4298,7 +4298,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Keine Videos} =1 {1 Video} other { <x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> Videos} } </target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Keine Videos} =1 {1 Video} other { <x id="INTERPOLATION"/> Videos} }</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
@@ -4355,9 +4355,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8bc634cd9d8c9b684dbfaaf17a522f894bedbffc">
         <source>Joined <x id="INTERPOLATION"/></source>
-        <target>Hier seit 
-          <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/>
-        </target>
+        <target>Hier seit <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-about/account-about.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="f696d5719a2a79916d44a175743591dc0d5629fe" datatype="html">
@@ -4387,9 +4385,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5523952d0300c96cfba2ec5a693c95f923e90c40">
         <source>Created <x id="INTERPOLATION"/></source>
-        <target>Erstellt am 
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.createdAt | date }}"/>
-        </target>
+        <target>Erstellt am <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+video-channels/video-channel-about/video-channel-about.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="5ebd76e736e1c58a1850234d1d26f1ab8c9ad11f" datatype="html">
@@ -4418,9 +4414,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5fea66be16da46ed7a0775e9a62b7b5e94b77473">
         <source>Contact <x id="INTERPOLATION"/> administrator</source>
-        <target>Kontaktiere 
-          <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> Administrator
-        </target>
+        <target>Kontaktiere <x id="INTERPOLATION"/> Administrator</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="533b2b9a76ee1335cb44c01f0bfd50d43e9400b0">
@@ -4445,9 +4439,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="ce301bc59085d13cf569fb7a97f073148435ec27" datatype="html">
         <source>About <x id="INTERPOLATION"/></source>
-        <target state="translated">Über 
-          <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>
-        </target>
+        <target state="translated">Über <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="3c1aff50472b313c70a72ee02c081b8eeb1c616c">
@@ -4542,18 +4534,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6469b375536342370eefd959bb72a06dc3d5884b" datatype="html">
         <source>It is a free and open-source software, under the <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Es ist freie und open-source Software, lizensiert mit 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Es ist freie und open-source Software, lizensiert mit <x id="START_LINK"/>AGPLv3 <x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7b85d0debc419e6c9c390ce02686b57d256cd139" datatype="html">
         <source>For more information, please visit <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Für mehr Informationen, besuche bitte
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Für mehr Informationen, besuche bitte <x id="START_LINK"/>joinpeertube.org <x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="0f972eed0e4c81f8006cf8061a400304b2c62b21" datatype="html">
@@ -4775,10 +4761,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3d2fb0ff92d3dd1e6040cd79b2a60edac6dea2da" datatype="html">
         <source>Developed with ❤ by <x id="START_LINK"/>Framasoft<x id="CLOSE_LINK"/></source>
-        <target state="translated">Entwickelt mit ❤ von 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Framasoft
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Entwickelt mit ❤ von <x id="START_LINK"/>Framasoft <x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube-contributors.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
@@ -4843,12 +4826,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target>
-      Ein Kanal ist eine Einheit in die du Videos hochladen kannst. Mehrere zu erstellen hilft dir deine Inhalte zu organisieren und zu trennen.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-      Zum Beispiel, könntest du entscheiden, einen Kanal zu haben, auf dem du deine Klavierkonzerte veröffentlichst und einen anderen, auf dem du über Umweltthemen sprichst.
-    
-        </target>
+        <target>Ein Kanal ist eine Einheit in die du Videos hochladen kannst. Mehrere zu erstellen hilft dir deine Inhalte zu organisieren und zu trennen. <x id="LINE_BREAK"/> Zum Beispiel, könntest du entscheiden, einen Kanal zu haben, auf dem du deine Klavierkonzerte veröffentlichst und einen anderen, auf dem du über Umweltthemen sprichst. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="df3021e29cbce57c12151ae6e1e0bf8c640e87da" datatype="html">
@@ -4904,14 +4882,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="d315d635144b1104f1c1e9ef80ff3d07fcfa571c" datatype="html">
         <source>I am at least 16 years old and agree to the <x id="START_LINK"/>Terms<x id="CLOSE_LINK"/><x id="START_TAG_NG_CONTAINER"/> and to the <x id="START_LINK_1"/>Code of Conduct<x id="CLOSE_LINK"/><x id="CLOSE_TAG_NG_CONTAINER"/> of this instance </source>
-        <target state="translated">Ich bin mindestens 16 Jahre alt und stimme den 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Nutzungsbedingungen
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> und den 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Verhaltensregeln
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> dieser Instanz zu 
-        </target>
+        <target state="translated">Ich bin mindestens 16 Jahre alt und stimme den <x id="START_LINK"/>Nutzungsbedingungen <x id="CLOSE_LINK"/> <x id="START_TAG_NG-CONTAINER"/> und den <x id="START_LINK_1"/>Verhaltensregeln <x id="CLOSE_LINK"/> <x id="CLOSE_TAG_NG-CONTAINER"/> dieser Instanz zu </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="3301086086650990787" datatype="html">
@@ -4968,9 +4939,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3755500631176893489">
         <source>Published <x id="PH"/> videos</source>
-        <target>Veröffentlichte 
-          <x id="PH"/> Videos
-        </target>
+        <target>Veröffentlichte <x id="PH"/> Videos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
@@ -5307,16 +5276,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8639315630141911544">
         <source>Account <x id="PH"/> unmuted by your instance.</source>
-        <target>Account 
-          <x id="PH"/> ist von deiner Instanz nicht mehr stummgeschatet.
-        </target>
+        <target>Account <x id="PH"/> ist von deiner Instanz nicht mehr stummgeschatet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="3371601176452094961">
         <source>Instance <x id="PH"/> unmuted by your instance.</source>
-        <target>Instance 
-          <x id="PH"/> ist von deiner Instanz nicht mehr stummgeschaltet.
-        </target>
+        <target>Instance <x id="PH"/> ist von deiner Instanz nicht mehr stummgeschaltet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
@@ -5519,9 +5484,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="9107383323119159110">
         <source>Do you really want to uninstall <x id="PH"/>?</source>
-        <target>Möchten Sie wirklich 
-          <x id="PH"/> deinstallieren?
-        </target>
+        <target>Möchten Sie wirklich <x id="PH"/> deinstallieren?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="4474510732215437338" datatype="html">
@@ -5574,9 +5537,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2994182849694226596">
         <source>Install <x id="PH"/>?</source>
-        <target>Installiere 
-          <x id="PH"/>?
-        </target>
+        <target>Installiere <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="6703720397495603345">
@@ -5661,9 +5622,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1886888801485703107">
         <source>User <x id="PH"/> created.</source>
-        <target>Benutzer 
-          <x id="PH"/> erstellt.
-        </target>
+        <target>Benutzer <x id="PH"/> erstellt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
@@ -5689,9 +5648,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5974506725502681113">
         <source>Password changed for user <x id="PH"/>.</source>
-        <target>Kennwort für Benutzer 
-          <x id="PH"/> geändert.
-        </target>
+        <target>Kennwort für Benutzer <x id="PH"/> geändert.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-password.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="149953821752893163">
