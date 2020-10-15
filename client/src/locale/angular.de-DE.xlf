@@ -2479,7 +2479,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="765fcd9017ea1e180bbd266673d7cf11535d8c4a" datatype="html">
         <source>Banned users</source>
-        <target state="translated">Gebannte Nutzer</target>
+        <target state="translated">Gesperrte Nutzer</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="7d88bb14f4ef7eaea7ca41c1832c66451410047a" datatype="html">
