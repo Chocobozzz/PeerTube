@@ -2239,7 +2239,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="08658c558971c49d1120d6c8a5a4fecf5c3b1561" datatype="html">
         <source>Video/Comment/Account</source>
-        <target state="translated">Video/Kommentar/Account</target>
+        <target state="translated">Video/Kommentar/Konto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c">
@@ -2284,10 +2284,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Erstellt 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target>Erstellt <x id="START_TAG_P-SORTICON"/> <x id="CLOSE_TAG_P-SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="9c9e0eb0ce8abea8b4c7c5dbb6e80a9a5f5b4193" datatype="html">
@@ -2327,11 +2324,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> followers</source>
-        <target state="translated">Zeige 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> bis 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> von 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> Follower
-        </target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> bis <x id="INTERPOLATION_1"/> von <x id="INTERPOLATION_2"/> Follower</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="270a185f179774aa3cee3120ed4f5650e8816b9f" datatype="html">
@@ -2348,10 +2341,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="107f0fef40ba00a1a183a03eba85054ed8413f92" datatype="html">
         <source>Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Redundanz erlaubt 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Redundanz erlaubt <x id="START_TAG_P-SORTICON"/> <x id="CLOSE_TAG_P-SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="8cffa679dff97a096d44fca9348eeaa1867d40aa" datatype="html">
@@ -2371,11 +2361,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="b2ddee45fe4c3ebc20f39ed10ef70505c9eb65ce" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> hosts</source>
-        <target state="translated">Zeige 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> bis 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> von 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> Hosts
-        </target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> bis <x id="INTERPOLATION_1"/> von <x id="INTERPOLATION_2"/> Hosts</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
