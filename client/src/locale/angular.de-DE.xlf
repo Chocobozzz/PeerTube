@@ -65,7 +65,7 @@
       </trans-unit>
       <trans-unit id="3f8e1a007a869471c5ab6e9b6149165ecc26e4ad" datatype="html">
         <source><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </source>
-        <target state="translated"><x id="START_LINK"/>Missbrauchsfall <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat eine neue Mitteilung </target>
+        <target state="translated"><x id="START_LINK"/>Missbrauch<x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat eine neue Nachricht </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
