@@ -2441,7 +2441,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="new">Doesn't need review before a video goes public</target>
+        <target state="translated">Benötigt keine Prüfung vor der Veröffentlichung</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="27a8f947ecc46bcad10d965360f500a14128bd7d">
@@ -2476,7 +2476,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="715d36ab50d156b744ffedc975ffb97cae75ff7b" datatype="html">
         <source>Advanced user filters</source>
-        <target state="new">Advanced user filters</target>
+        <target state="translated">Erweiterte Nutzerfilter</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="765fcd9017ea1e180bbd266673d7cf11535d8c4a" datatype="html">
@@ -2496,9 +2496,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="d9e38d58225f58cb64126e4d5ec58f39dcb326df" datatype="html">
         <source>Deleted account</source>
-        <target state="new">
-          Deleted account
-        </target>
+        <target state="translated">Gelöschter Account</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5">
@@ -2513,7 +2511,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="12289e981bf1acd36d74ee0e50d6fb43ba29ca6a" datatype="html">
         <source>Total daily video quota</source>
-        <target state="new">Total daily video quota</target>
+        <target state="translated">Gesamtes tägliches Videokontingent</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
@@ -2523,11 +2521,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> users</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> users
-        </target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> bis <x id="INTERPOLATION_1"/> von <x id="INTERPOLATION_2"/> Nutzern</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="2049290282534091182">
@@ -2600,57 +2594,52 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2122599f5b51ab83849bc77fa5cafcdcd896ac72" datatype="html">
         <source>Advanced block filters</source>
-        <target state="new">Advanced block filters</target>
+        <target state="translated">Erweiterte Blockfilter</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="7d0cb3dbf192b9f3a5dbfb6d56d7609b200cbd4e" datatype="html">
         <source>Automatic blocks</source>
-        <target state="new">Automatic blocks</target>
+        <target state="translated">Automatische Blocks</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="dfc11b6dc1387e59dbb79d248cf4c638fb9df3ea" datatype="html">
         <source>Manual blocks</source>
-        <target state="new">Manual blocks</target>
+        <target state="translated">Manuelle Blocks</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="91bd2d52b840951d3b1f5830b023bee8bca91293" datatype="html">
         <source>Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="new">Video 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="b7237eade678ae47485fbd27ec7f8c1079a8c6b7" datatype="html">
         <source>Total size</source>
-        <target state="new">Total size</target>
+        <target state="translated">Gesamtgröße</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="e536fc8b9a652aa7f7b87193cdfa143481da3bad" datatype="html">
         <source>List redundancies</source>
-        <target state="new">List redundancies</target>
+        <target state="translated">Redundanzen auflisten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="897116a91d135b1552880aed6050814a4a0df28a" datatype="html">
         <source>Your instance doesn't mirror any video.</source>
-        <target state="new">Your instance doesn't mirror any video.</target>
+        <target state="translated">Ihre Instanz spiegelt keine Videos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="afc5c2bbf66996ab213f6eca65b24ca423d36e31" datatype="html">
         <source>Your instance has no mirrored videos.</source>
-        <target state="new">Your instance has no mirrored videos.</target>
+        <target state="translated">Ihre Instanz hat keine gespiegelten Videos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="0e96ed54157e69989a2c0bcce2f62399accdaa27" datatype="html">
         <source>Enabled strategies stats</source>
-        <target state="new">Enabled strategies stats</target>
+        <target state="translated">Strategiestatistiken aktiviert</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="0f6e6ec286d43c14f16444a077639090f38e29de" datatype="html">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="new">
-      No redundancy strategy is enabled on your instance.
-    </target>
+        <target state="translated">Auf Ihrer Instanz ist keine Redundanzstrategie aktiviert.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="96dfa3efa02bfafc0bc6d4ab186ebef2813a9e8a">
@@ -2675,27 +2664,27 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="c5cc399a82eb7993156daf2d6c1d9e071cde47ad" datatype="html">
         <source>No abuses found matching current filters.</source>
-        <target state="new">No abuses found matching current filters.</target>
+        <target state="translated">Keine Missbräuche mit den aktuellen Filtern gefunden.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="5d9dd64c1974b18918db7f24051bb385bd5558e1" datatype="html">
         <source>No abuses found.</source>
-        <target state="new">No abuses found.</target>
+        <target state="translated">Keine Missbräuche gefunden.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="d2a65fafac0e4e0a3289ec54627bd7f691d8020d" datatype="html">
         <source>Block reason:</source>
-        <target state="new">Block reason:</target>
+        <target state="translated">Grund für das Blockieren:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="f8add432da83aa37b8cf03c5b907c3a9e51088fd" datatype="html">
         <source>No blocked video found matching current filters.</source>
-        <target state="new">No blocked video found matching current filters.</target>
+        <target state="translated">Kein geblocktes Video passt zu den aktuellen Filtern.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="8d02797f76f99ad51f55e91ff82088e8772152e0" datatype="html">
         <source>No blocked video found.</source>
-        <target state="new">No blocked video found.</target>
+        <target state="translated">Keine geblockten Videos gefunden.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="9f5c75bd513580d630817cd39179fd41e5ec36f6" datatype="html">
