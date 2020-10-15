@@ -1640,12 +1640,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6206e8d42fea5d7147d3e68d8e061583886603ae" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
-        <target state="new">Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</target>
+        <target state="translated">Entschuldigung, Ihr Account kann keine Videos hochladen. Wenn Sie Videos hochladen möchten, muss ein Administrator Ihr Videokontingent freischalten.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="d8bd78a04cdb225ea9a4c95dbdc4db26229981e2" datatype="html">
         <source>Read instance rules for help</source>
-        <target state="new">Read instance rules for help</target>
+        <target state="translated">Lesen Sie die Regel der Instanz für Hilfe</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
@@ -1712,7 +1712,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4619111912751495491" datatype="html">
         <source>Report this comment</source>
-        <target state="new">Report this comment</target>
+        <target state="translated">Diesen Kommentar melden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -1818,7 +1818,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="d0701f8fd194fd5a29f6dc015d0a27c85128b65e" datatype="html">
         <source>Display PeerTube button link</source>
-        <target state="new">Display PeerTube button link</target>
+        <target state="translated">PeerTube-Link als Button anzeigen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">203</context></context-group>
       </trans-unit>
       <trans-unit id="3c4c080864b313cfdff5fdea6aae5da276246d99">
@@ -1877,7 +1877,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8270eaeb2582eef4b7cde314c370aaf5b45c43d2" datatype="html">
         <source>DOWNLOAD</source>
-        <target state="new">DOWNLOAD</target>
+        <target state="translated">HERUNTERLADEN</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="677619204556459328">
@@ -1957,7 +1957,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="75d9bb7a2e6256268cd0653aac75a8b994d3cf1f" datatype="html">
         <source>The video was blocked due to automatic blocking of new videos</source>
-        <target state="new">The video was blocked due to automatic blocking of new videos</target>
+        <target state="translated">Dieses Video wurde blockiert, da automatisch alle neuen Videos blockiert werden</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
@@ -1967,9 +1967,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f" datatype="html">
         <source>OK</source>
-        <target state="new">
-      OK
-    </target>
+        <target state="translated">Ok</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">293</context></context-group>
       </trans-unit>
       <trans-unit id="a8db53a47543132da1a68066f0a9cba0551a8933" datatype="html">
@@ -2033,17 +2031,17 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
         <source>The deletion will be sent to remote instances so they can reflect the change.</source>
-        <target state="new"> The deletion will be sent to remote instances so they can reflect the change.</target>
+        <target state="translated">Der Löschvorgang wird an andere Instanzen weitergeleitet, sodass diese die Änderung durchführen können.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="7321800851971795962" datatype="html">
         <source>It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target state="new"> It is a remote comment, so the deletion will only be effective on your instance.</target>
+        <target state="translated">Dies ist ein Kommentar einer anderen Instanz, das Löschen kann daher nur lokal erfolgen.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
         <source>Delete and re-draft</source>
-        <target state="new">Delete and re-draft</target>
+        <target state="translated">Löschen und neu entwerfen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -2051,7 +2049,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="new">Do you really want to delete and re-draft this comment?</target>
+        <target state="translated">Wollen Sie diesen Kommentar wirklich löschen und neu entwerfen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -2064,7 +2062,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4e5254dedf0c12ce7e7c2197384fceebe3b29a2b" datatype="html">
         <source>Markdown compatible</source>
-        <target state="new">Markdown compatible</target>
+        <target state="translated">Kompatibel mit Markdown</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">13</context>
@@ -2072,7 +2070,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4739ffad85f09defefdb6e51b45f43b2ef7c4388" datatype="html">
         <source>Markdown compatible that supports:</source>
-        <target state="new">Markdown compatible that supports:</target>
+        <target state="translated">Kompatibel mit Markdown. Unterstützt:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2080,7 +2078,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="9a53b17a021bb0677c156fd893461797fc497a10" datatype="html">
         <source>Auto generated links</source>
-        <target state="new">Auto generated links</target>
+        <target state="translated">Automatisch erzeugte Links</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2088,7 +2086,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="664f99b8919d6dd2faa1c1f7c378aa86d1be5e8a" datatype="html">
         <source>Break lines</source>
-        <target state="new">Break lines</target>
+        <target state="translated">Zeilenumbrüche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2096,7 +2094,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="b15e7bec5c7833d2d9634946ccbed68967b1bee1" datatype="html">
         <source>Lists</source>
-        <target state="new">Lists</target>
+        <target state="translated">Listen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">20</context>
@@ -2104,7 +2102,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ab4426b60f13c00b61d6b714d390dc629f314980" datatype="html">
         <source>Emphasis</source>
-        <target state="new">Emphasis</target>
+        <target state="translated">Hervorhebung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2112,7 +2110,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4e13b179501d3d32721037e03b4c04acb9857c5f" datatype="html">
         <source>bold</source>
-        <target state="new">bold</target>
+        <target state="translated">fett</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">23</context>
@@ -2120,7 +2118,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3c12190421fbb2756e6bbead923df9ec5de8ede2" datatype="html">
         <source>italic</source>
-        <target state="new">italic</target>
+        <target state="translated">kursiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">23</context>
@@ -2128,7 +2126,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="adb4bbdcb961b8aac8298d6cac554d9b25636b7a" datatype="html">
         <source>Emoji shortcuts</source>
-        <target state="new">Emoji shortcuts</target>
+        <target state="translated">Emojitastenkürzel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2136,7 +2134,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="b9809a21a8eb3c9db2a0282c5dd94bc221575c96" datatype="html">
         <source>Emoji markup</source>
-        <target state="new">Emoji markup</target>
+        <target state="translated">Markup für Emojis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">30</context>
@@ -2144,7 +2142,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="f37feb427aaa551edd1f22616be6464bc0d492de" datatype="html">
         <source>See complete list</source>
-        <target state="new">See complete list</target>
+        <target state="translated">Gesamte Liste ansehen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">32</context>
@@ -2157,11 +2155,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2c6453cc150c9f652a7f1238d2f172e625f0f117" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance. On most platforms, you can find the video by typing its URL in the search bar and then comment it from within the software's interface.</source>
-        <target state="new">
-      You can comment using an account on any ActivityPub-compatible instance.
-      On most platforms, you can find the video by typing its URL in the search bar and then comment it
-      from within the software's interface.
-    </target>
+        <target state="translated">Sie können unter Nutzung eines Accounts einer beliebigen ActivityPub-kompatiblen Instanz kommentieren. Auf den meisten Plattformen können Sie das Video durch Eingabe der URL in die Suchleiste finden und dort kommentieren.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="968b02fbc645be799727de0d1ec3c6f9b11b20eb">
@@ -2176,7 +2170,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="974170f455ff5a9034d5737e84b4194c0046fc6b" datatype="html">
         <source>Markdown Emoji List</source>
-        <target state="new">Markdown Emoji List</target>
+        <target state="translated">Liste der Markdown-Emojis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">84</context>
@@ -2184,7 +2178,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2662644497259948010" datatype="html">
         <source>Comment</source>
-        <target state="new">Comment</target>
+        <target state="translated">Kommentar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -2192,7 +2186,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4502286564339177240" datatype="html">
         <source>Reply</source>
-        <target state="new">Reply</target>
+        <target state="translated">Antworten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -2225,14 +2219,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="b56702ff10875710f111634cc315cd3ef01b206f" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="new">
-          Your report will be sent to moderators of 
-          <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the comment origin (
-          <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
-        
-        </target>
+        <target state="translated">Ihr Bericht wird an die Moderatoren von <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> und an den Ursprung des Videos (<x id="INTERPOLATION_1"/>) versandt<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3a23875897fb8099f85410700fcca415626621a3" datatype="html">
@@ -2252,7 +2239,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="08658c558971c49d1120d6c8a5a4fecf5c3b1561" datatype="html">
         <source>Video/Comment/Account</source>
-        <target state="new">Video/Comment/Account</target>
+        <target state="translated">Video/Kommentar/Account</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c">
