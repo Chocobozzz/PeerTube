@@ -3304,7 +3304,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="c5d4e7a320b88bdcf7fb2b670b81173048af3956" datatype="html">
         <source>BROADCAST MESSAGE</source>
-        <target state="translated">NACHRICHTENVERTEILUNG</target>
+        <target state="translated">BROADCAST-NACHRICHT</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">286</context></context-group>
       </trans-unit>
       <trans-unit id="3a10a32f96683addb9e1335cdba7d6685587fe6e" datatype="html">
