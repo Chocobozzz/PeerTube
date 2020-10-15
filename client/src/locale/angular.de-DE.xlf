@@ -2896,7 +2896,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5d3b267bc054bb6b5743dd3d46ee58cff5141697" datatype="html">
         <source>No account found.</source>
-        <target state="translated">Kein Account gefunden.</target>
+        <target state="translated">Kein Konto gefunden.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="2338185419645468935" datatype="html">
