@@ -130,7 +130,7 @@
       </trans-unit>
       <trans-unit id="3fb9a5f7268114445d8c109a8f48102e93471f5a" datatype="html">
         <source>Change your avatar</source>
-        <target state="translated">Ändern sie ihren Avatar</target>
+        <target state="translated">Ändern Sie Ihr Profilbild</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/account/actor-avatar-info.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
@@ -167,7 +167,7 @@
       </trans-unit>
       <trans-unit id="04f47b9519b96ac834a111c0e113d18c77d177de" datatype="html">
         <source>Please describe the issue...</source>
-        <target state="translated">Bitte beschreiben sie das Problem...</target>
+        <target state="translated">Bitte beschreiben Sie das Problem...</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="8efba03f22550a671ee2c2c6dfd1ff03ea047700" datatype="html">
@@ -279,7 +279,7 @@
       </trans-unit>
       <trans-unit id="448d436df053141260523149173073ccbb0259f9" datatype="html">
         <source>Report video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Video melden "<x id="INTERPOLATION"/>"</target>
+        <target state="translated">Video "<x id="INTERPOLATION"/>" melden</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="97916f2928694b8d574b6f052b93e54565ed9823" datatype="html">
