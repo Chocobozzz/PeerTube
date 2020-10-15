@@ -7908,7 +7908,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2990849907502572301" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target state="translated">Dieses Video wird von Ihrer Instanz dupliziert.</target>
+        <target state="translated">Dieses Video wird von Ihrer Instanz dupliziert werden.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
