@@ -2901,7 +2901,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2338185419645468935" datatype="html">
         <source>List installed plugins</source>
-        <target state="new">List installed plugins</target>
+        <target state="translated">Liste installierte Plug-Ins auf</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">28</context>
@@ -2909,7 +2909,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8897412584195581488" datatype="html">
         <source>Search plugins</source>
-        <target state="new">Search plugins</target>
+        <target state="translated">Plug-Ins durchsuchen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -2917,7 +2917,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4994333937800672218" datatype="html">
         <source>Show plugin</source>
-        <target state="new">Show plugin</target>
+        <target state="translated">Plug-In anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">46</context>
@@ -2925,11 +2925,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted accounts</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts
-        </target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> bis <x id="INTERPOLATION_1"/> von <x id="INTERPOLATION_2"/> stummgeschalteten Accounts</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8259696070728377358">
