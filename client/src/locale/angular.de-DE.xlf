@@ -45,7 +45,7 @@
       </trans-unit>
       <trans-unit id="c039b9ff89810152d8c0006979d3542a122cd286" datatype="html">
         <source><x id="START_LINK"/>A new comment abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>Ein neuer Kommentarmissbrauch<x id="CLOSE_LINK"/>wurde bei folgendem Kommentar gemeldet:<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>Ein neuer Missbrauchsfall <x id="CLOSE_LINK"/>wurde bei folgendem Video gemeldet: <x id="START_LINK_1"/> <x id="INTERPOLATION"/> <x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="bfe60e77cfae17a8719a5fb422fb7e4b2bcc83c2" datatype="html">
@@ -3097,7 +3097,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="translated">Starte Video auf der Videoseite automatisch</target>
+        <target state="translated">Starte Video auf der Videoseite automatisch.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
@@ -3582,7 +3582,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="f0d14f556321dbae66c765d6a3b0062f3a150931" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect on your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </source>
-        <target state="translated">Wenn Ihre Instanz von Twitter explizit zugelassen wurde, wird ein Videoplayer im Twitterfeed eines geteilten PeerTube-Videos hinzugefügt.<x id="LINE_BREAK"/> Ansonsten wird ein Bild mit einem Link zur PeerTube-Instanz genutzt.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Aktivieren Sie dieses Kontrollkästchen, speichern Sie die Konfiguration und testen Sie die Funktion mit einer Video-URL Ihrer Instanz auf <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/>, um zu sehen, ob Ihre Instanz zugelassen ist.</target>
+        <target state="translated">Wenn Ihre Instanz von Twitter explizit zugelassen wurde, wird ein Videoplayer im Twitterfeed eines geteilten PeerTube-Videos hinzugefügt.<x id="LINE_BREAK"/> Ansonsten wird ein Bild mit einem Link zur PeerTube-Instanz genutzt.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Aktivieren Sie dieses Kontrollkästchen, speichern Sie die Konfiguration und testen Sie die Funktion mit einer Video-URL Ihrer Instanz auf <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/>, um zu sehen, ob Ihre Instanz zugelassen ist. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">684</context></context-group>
       </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
@@ -3632,7 +3632,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1f83d0ff227c35b5631a2b2f78067b3e915cdb59" datatype="html">
         <source><x id="START_TAG_STRONG"/>Experimental, we suggest you to not disable webtorrent support for now<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/><x id="LINE_BREAK"/><x id="START_TAG_STRONG"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG"/></source>
-        <target state="translated"><x id="START_TAG_STRONG"/>Experimentell, wir empfehlen, den Webtorrent-Support zur Zeit nicht abzuschalten<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Wenn HLS-Unterstützung aktiviert wird, wird der Speicherplatz für Videos mit zwei multipliziert<x id="CLOSE_PARAGRAPH"/><x id="LINE_BREAK"/><x id="START_TAG_STRONG"/>Unterbricht Föderation mit PeerTube-Instanzen &lt; 2.1, wenn es deaktiviert wird</target>
+        <target state="translated"><x id="START_TAG_STRONG"/>Experimental, wir empfehlen, die Unterstützung für Webtorrents vorerst nicht zu deaktivieren <x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Falls sie zusätzlich noch die HLS Unterstützung aktiveiert haben, wird der Speicherverbrauch für Videos verdoppelt<x id="CLOSE_PARAGRAPH"/><x id="LINE_BREAK"/><x id="START_TAG_STRONG"/>Falls es deaktiviert wurde, brechen sie die Föderation mit PeerTube Instanzen &lt; 2.1<x id="CLOSE_TAG_STRONG"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">762</context></context-group>
       </trans-unit>
       <trans-unit id="ff852c5a22beaff7a8c62447b0a96f9ced7c3ed6" datatype="html">
@@ -3702,7 +3702,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
-        <target state="translated">Direkter CSS-Code. Beispiel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_PRE"/> <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> hinzufügen, um Stile zu überschreiben. Beispiel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css.logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/></target>
+        <target state="translated">Schreiben sie CSS-Code direkt. Beispiel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">911</context></context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -4577,7 +4577,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="278669a7857ee77786cf4578b11bb601002cf7a8" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="translated">Jede Anfrage beantwortet der Tracker mit zufälligen Peers mit einer begrenzten Anzahl. Beispielsweise müssen, wenn es 1000 Peers im Schwarm gibt und pro Anfrage 20 Peers gesendet werden, mindestens 50 Anfragen gestellt werden, um jeden Peer im Schwarm zu finden.</target>
+        <target state="translated">Jede Anfrage beantwortet der Tracker mit zufälligen Peers mit einer begrenzten Anzahl. Beispielsweise müssen, wenn es 1000 Peers im Schwarm gibt und pro Anfrage 20 Peers gesendet werden, mindestens 50 Anfragen gestellt werden, um jeden Peer im Schwarm zu finden</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="3f47eec5fb00ae46a0035cc8f9e428e3d549e337" datatype="html">
@@ -5010,7 +5010,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1909009883731319373" datatype="html">
         <source>Report <x id="PH"/> </source>
-        <target state="translated"><x id="PH"/> melden</target>
+        <target state="translated"><x id="PH"/> melden </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/account-report.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="5065410539274460415" datatype="html">
@@ -5151,9 +5151,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4245720728052819482">
         <source>Do you really want to unfollow <x id="PH"/>?</source>
-        <target>Möchtest du 
-          <x id="PH"/> wirklich nicht mehr folgen?
-        </target>
+        <target>Möchtest du <x id="PH"/> wirklich nicht mehr folgen?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="9160510009013134726">
@@ -5163,9 +5161,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3935234189109112926">
         <source>You are not following <x id="PH"/> anymore.</source>
-        <target>Du folgst 
-          <x id="PH"/> nicht mehr.
-        </target>
+        <target>Du folgst <x id="PH"/> nicht mehr.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="2593763089859685916">
@@ -5180,10 +5176,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="135214224090612796">
         <source>Redundancy for <x id="PH"/> is <x id="PH_1"/></source>
-        <target>Redundanz für 
-          <x id="PH"/> is 
-          <x id="PH_1"/>
-        </target>
+        <target>Redundanz für <x id="PH"/> is <x id="PH_1"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="81585474102700882" datatype="html">
@@ -5561,7 +5554,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2903648076838460070" datatype="html">
         <source>Videos blocked</source>
-        <target state="translated">Blockierte Videos</target>
+        <target state="translated">Gesperrte Videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">67</context>
@@ -6049,23 +6042,17 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1431617394009162547">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target>Abspielliste 
-          <x id="PH"/> geändert.
-        </target>
+        <target>Abspielliste <x id="PH"/> geändert.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-update.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="2027805873922338635">
         <source>Do you really want to delete <x id="PH"/>?</source>
-        <target>Willst du wirklich 
-          <x id="PH"/> löschen?
-        </target>
+        <target>Willst du wirklich <x id="PH"/> löschen?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="3380608219513805292">
         <source>Playlist <x id="PH"/> deleted.</source>
-        <target>Abspielliste 
-          <x id="PH"/> gelöscht.
-        </target>
+        <target>Abspielliste <x id="PH"/> gelöscht.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
@@ -6075,9 +6062,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8197117721861453263">
         <source>Do you really want to delete <x id="PH"/> videos?</source>
-        <target>Willst du wirklich 
-          <x id="PH"/> Videos löschen?
-        </target>
+        <target>Willst du wirklich <x id="PH"/> Videos löschen?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="2728855911908920537">
@@ -6099,9 +6084,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2767660806989176400">
         <source>Video <x id="PH"/> deleted.</source>
-        <target>Video 
-          <x id="PH"/> entfernt.
-        </target>
+        <target>Video <x id="PH"/> entfernt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
       <trans-unit id="6810714890760227072">
@@ -6176,16 +6159,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2847376451647729886">
         <source>You are now logged in as <x id="PH"/>!</source>
-        <target>Du bist jetzt eingeloggt als 
-          <x id="PH"/>!
-        </target>
+        <target>Du bist jetzt eingeloggt als <x id="PH"/>!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="2687679787442328897">
         <source>An email with verification link will be sent to <x id="PH"/>.</source>
-        <target>Eine E-Mail mit dem Bestätigungs-Link wird an 
-          <x id="PH"/> gesendet.
-        </target>
+        <target>Eine E-Mail mit dem Bestätigungs-Link wird an <x id="PH"/> gesendet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="8231550792139699065" datatype="html">
@@ -6198,7 +6177,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4997281272800290390" datatype="html">
         <source>Verify account ask send email</source>
-        <target state="translated">E-Mail zur Kontobestätigung gesendet.</target>
+        <target state="translated">E-Mail zur Kontobestätigung gesendet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">26</context>
@@ -7438,16 +7417,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8269144351796756896">
         <source>Do you really want to unban <x id="PH"/>?</source>
-        <target>Möchtest du die Sperre von 
-          <x id="PH"/> wirklich aufheben?
-        </target>
+        <target>Möchtest du die Sperre von <x id="PH"/> wirklich aufheben?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="1794219875546376069">
         <source>User <x id="PH"/> unbanned.</source>
-        <target>Sperre von Benutzer 
-          <x id="PH"/> aufgehoben.
-        </target>
+        <target>Sperre von Benutzer <x id="PH"/> aufgehoben.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4885683604826993045">
@@ -7457,23 +7432,17 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6301381219225831298">
         <source>User <x id="PH"/> deleted.</source>
-        <target>Benutzer 
-          <x id="PH"/> entfernt.
-        </target>
+        <target>Benutzer <x id="PH"/> entfernt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="3896582359861826661">
         <source>User <x id="PH"/> email set as verified</source>
-        <target>E-Mail des Benutzers 
-          <x id="PH"/> als bestätigt markiert
-        </target>
+        <target>E-Mail des Benutzers <x id="PH"/> als bestätigt markiert</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528">
         <source>Account <x id="PH"/> muted.</source>
-        <target>Account 
-          <x id="PH"/> stummgeschaltet.
-        </target>
+        <target>Account <x id="PH"/> stummgeschaltet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">119</context></context-group>
       </trans-unit>
       <trans-unit id="1598375456114200087">
@@ -7488,9 +7457,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2558977494773636050">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target>Account 
-          <x id="PH"/> von der Instanz stummgeschaltet.
-        </target>
+        <target>Account <x id="PH"/> von der Instanz stummgeschaltet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">175</context></context-group>
       </trans-unit>
       <trans-unit id="1595779426198793580" datatype="html">
