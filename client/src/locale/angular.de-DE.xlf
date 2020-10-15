@@ -3779,12 +3779,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7858676566953242358" datatype="html">
         <source>Sample rate</source>
-        <target state="new">Sample rate</target>
+        <target state="translated">Abtastrate</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="5403856660543890284" datatype="html">
         <source>Channel Layout</source>
-        <target state="new">Channel Layout</target>
+        <target state="translated">Kanaldesign</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925">
@@ -3794,7 +3794,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="dc7b800a27960e33af36f16f6c25aaf5776464f7" datatype="html">
         <source>Interface settings</source>
-        <target state="new">Interface settings</target>
+        <target state="translated">Oberflächeneinstellungen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
@@ -3834,7 +3834,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="new">Policy for sensitive videos</target>
+        <target state="translated">Umgang mit sensiblen Videos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="ea8e7b15807cce2fea74798db2396a4de016e5c7" datatype="html">
@@ -3849,7 +3849,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="984be691d289644c6d40fa2cc858093be31ab58e" datatype="html">
         <source>Add a new language</source>
-        <target state="new">Add a new language</target>
+        <target state="translated">Neue Sprache hinzufügen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="dbcc539bd3ca0b962b87ea26855ca9d5d3c5cdf1">
@@ -3884,7 +3884,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3a83d433c5d27e1d06ece0475fac8ba409b6c9ac" datatype="html">
         <source>Your current password</source>
-        <target state="new">Your current password</target>
+        <target state="translated">Aktuelles Passwort</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="5b5b91438db5731debea388908f788bab8d3d404">
@@ -3934,17 +3934,17 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="765e3847550ed5aab483c2a03f320090aa0a13f2" datatype="html">
         <source>Select a channel to receive the video</source>
-        <target state="new">Select a channel to receive the video</target>
+        <target state="translated">Zum Empfangen des Videos einen Kanal wählen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-accept-ownership/my-account-accept-ownership.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="798f761c8cf39e72ad38f2237dac3a3ad33c6a30" datatype="html">
         <source>Channel that will receive the video</source>
-        <target state="new">Channel that will receive the video</target>
+        <target state="translated">Kanal, der das Video erhalten wird</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-accept-ownership/my-account-accept-ownership.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="e03a27ba50b0be207b4d17d044ab5ea300d70b43" datatype="html">
         <source>My ownership changes</source>
-        <target state="new">My ownership changes</target>
+        <target state="translated">Inhaberänderungen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="e98239d8a6be1100119ff4b5630c822b82786740">
@@ -3969,24 +3969,22 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="bde01505620f59f773377f94034e4038e6bd50c0" datatype="html">
         <source>Account page</source>
-        <target state="new">Account page</target>
+        <target state="translated">Kontoseite</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="e8a34c00da7e95d407a66f33f28943a480dbba82" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/> </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="cee3f34700944cc5786627e1b23073d946644620" datatype="html">
         <source>No ownership change request found.</source>
-        <target state="new">No ownership change request found.</target>
+        <target state="translated">Kein Inhaberänderungswunsch gefunden.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="4247400351982331798" datatype="html">
         <source>Account settings</source>
-        <target state="new">Account settings</target>
+        <target state="translated">Kontoeinstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">37</context>
@@ -3994,7 +3992,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="154062590416726309" datatype="html">
         <source>Account playlists</source>
-        <target state="new">Account playlists</target>
+        <target state="translated">Kontoplaylists</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">55</context>
@@ -4002,7 +4000,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6550287183367517925" datatype="html">
         <source>Create new playlist</source>
-        <target state="new">Create new playlist</target>
+        <target state="translated">Neue Playlist erstellen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">64</context>
@@ -4010,7 +4008,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2864486939135008600" datatype="html">
         <source>Playlist elements</source>
-        <target state="new">Playlist elements</target>
+        <target state="translated">Playlistelemente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">73</context>
@@ -4018,12 +4016,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="bd751145ec934c2839fd6acffee05fbf439782ed" datatype="html">
         <source>My imports</source>
-        <target state="new">My imports</target>
+        <target state="translated">Importe</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="574cce019fb31925d11095591d4321847ff1c7a5" datatype="html">
         <source>Create video channel</source>
-        <target state="new">Create video channel</target>
+        <target state="translated">Videokanal erstellen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="8fef247fd0c5bf790151f7661cafc4b7fd0397f3">
@@ -4040,13 +4038,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="cc895c3d23ec739ac77d472ff979980195fd30c1" datatype="html">
         <source>CHANNEL</source>
-        <target state="new">CHANNEL</target>
+        <target state="translated">KANAL</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="66ad6eb3f06251c75325b780943a07f94c949df7" datatype="html">
         <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="new">Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt;
-    When you will upload a video in this channel, the video support field will be automatically filled by this text.</target>
+        <target state="translated">Kurzer Text, der Nutzer über die Möglichkeiten, den Kanal zu unterstützen, informiert (Mitgliederplattform, etc.)&lt;br /&gt;&lt;br /&gt; Beim Hochladen eines Videos wird das Unterstützerfeld automatisch hiermit gefüllt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd">
@@ -4068,26 +4065,22 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a5707e9905e079605243397ee111b8be449941aa" datatype="html">
         <source>See the error</source>
-        <target state="new">See the error</target>
+        <target state="translated">Fehler anzeigen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="842b1f5e4942fb515ef790308ca9ea6a60b4b331" datatype="html">
         <source>This video was deleted</source>
-        <target state="new">This video was deleted</target>
+        <target state="translated">Dieses Video wurde gelöscht</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="a86239658c3cf042e7c987bb0df7473a53d7517e" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> imports</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> imports
-        </target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> bis <x id="INTERPOLATION_1"/> von <x id="INTERPOLATION_2"/> Importen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="0b68f86015522b0dbd374822caefe74a62e3470f" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
-        <target state="new">Once you delete your account, there is no going back. You will be asked to confirm this action.</target>
+        <target state="translated">Ein gelöschtes Konto kann nicht wiederhergestellt werden. Sie werden gebeten, die Löschung zu bestätigen.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
@@ -4102,7 +4095,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="f886abe6ca73a34403dde0578e71173cebe00428" datatype="html">
         <source>Channel page</source>
-        <target state="new">Channel page</target>
+        <target state="translated">Kanalseite</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">166</context></context-group>
       </trans-unit>
       <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add">
@@ -4114,7 +4107,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="cd2d9bfd5a5f7bdc1d4f1242e8a35d74830b6ffe" datatype="html">
         <source>Owner account page</source>
-        <target state="new">Owner account page</target>
+        <target state="translated">Inhaberseite</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="e006ed166ce188cab168e1ca90435b33d042d913">
@@ -4124,7 +4117,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="cb6fc818d4547d66ac5ea65f2c5d5cbfb6ebc04e" datatype="html">
         <source>Video history</source>
-        <target state="new">Video history</target>
+        <target state="translated">Verlauf</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="29c45bf49891748f930ef78b2e09857498b15131">
@@ -4139,7 +4132,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="355c9f9d50ed1c6f12729332a44c1fd0f7576638" datatype="html">
         <source>You don't have any video history yet.</source>
-        <target state="new">You don't have any video history yet.</target>
+        <target state="translated">Ihr Verlauf ist noch leer.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="9d2d802fa417a5a3f230cb5bcc975551a252c59c">
@@ -4154,12 +4147,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="e7f88c481ecdda90467acd3f4dbe934465cee30f" datatype="html">
         <source>Newest first</source>
-        <target state="new">Newest first</target>
+        <target state="translated">Neueste zuerst</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="a05dac5ded54ab304817a823693e2af2ad1cffef" datatype="html">
         <source>Unread first</source>
-        <target state="new">Unread first</target>
+        <target state="translated">Ungelesene zuerst</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="58479ebfcc980e1ee37a8102bc4f9a35eca2f680" datatype="html">
@@ -4179,12 +4172,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="9d7a1c199570d42b4cc40d7886fcc7c06b0a35d2" datatype="html">
         <source>My Playlists</source>
-        <target state="new">My Playlists</target>
+        <target state="translated">Meine Playlisten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="b91219836ab865fd8aa041a8d6c3d84dd78115a4" datatype="html">
         <source>NEW PLAYLIST</source>
-        <target state="new">NEW PLAYLIST</target>
+        <target state="translated">NEUE PLAYLIST</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="33ce1814b1079cb3a0c0605fc5b4e6f439d2b035" datatype="html">
@@ -4194,12 +4187,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="61b31fe7bfae807e3ccc0dbf001c6dc9b72aaf19" datatype="html">
         <source>Create playlist</source>
-        <target state="new">Create playlist</target>
+        <target state="translated">Playlist erstellen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlists.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8828123061564507501" datatype="html">
         <source>Playlist <x id="PH"/>} deleted.</source>
-        <target state="new">Playlist <x id="PH"/>} deleted.</target>
+        <target state="translated">Playlist <x id="PH"/>} gelöscht.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlists.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -4222,19 +4215,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="25837d28a88f93b1fe278ca11099d7489ca0ac4b" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="new">
-        Browse videos on PeerTube to add them in your playlist.
-      </target>
+        <target state="translated">Durchsuche Videos auf PeerTube und füge sie der Playlist hinzu.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="28c9f2a23ea8f12710a011a965939a5af6980dd1" datatype="html">
         <source>See the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/> for more information. </source>
-        <target state="new">
-        See the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentation
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information.
-      
-        </target>
+        <target state="translated">Weitere Informationen finden Sie in der <x id="START_LINK"/>Dokumentation<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="3346d8a0bf3dd8c25ddc561ccd5fafb6ee9fadc8" datatype="html">
@@ -4271,7 +4257,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="9128669621822125729" datatype="html">
         <source>Video channel videos</source>
-        <target state="new">Video channel videos</target>
+        <target state="translated">Kanalvideos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">25</context>
@@ -4279,7 +4265,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3193822049276963401" datatype="html">
         <source>Video channel playlists</source>
-        <target state="new">Video channel playlists</target>
+        <target state="translated">Kanalplaylists</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">38</context>
@@ -4287,7 +4273,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4723526509708949088" datatype="html">
         <source>About video channel</source>
-        <target state="new">About video channel</target>
+        <target state="translated">Über den Kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channels-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -4332,7 +4318,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1b9099f59dd3baaeeaac2c29fe653dc1b0436157" datatype="html">
         <source>Manage account</source>
-        <target state="new">Manage account</target>
+        <target state="translated">Konto verwalten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="87f77a03c185ea644ed8378a562a2d0225513974">
@@ -4349,9 +4335,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Keine Videos} =1 {1 Video} other { <x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> Videos} } </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
