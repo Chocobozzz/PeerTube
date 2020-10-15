@@ -3314,7 +3314,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="58be3e0a0ef272fbd6e715b44059c3d89b332d9b" datatype="html">
         <source>Enable broadcast message</source>
-        <target state="translated">Nachrichtenverteilung aktivieren</target>
+        <target state="translated">Broadcast-Nachricht aktivieren</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="6938c4a91284a1bc8b61b0d8085d9985e46c9f5b" datatype="html">
@@ -3414,7 +3414,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="493c65a11deddda45b42a39f503fc4bb3f876cf2" datatype="html">
         <source>Default daily upload limit per user</source>
-        <target state="translated">Standardtageskontigent für das Hochladen pro Nutzer</target>
+        <target state="translated">Standardtageskontingent für das Hochladen pro Nutzer</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">389</context></context-group>
       </trans-unit>
       <trans-unit id="6c65014c4ccf5a3ca7b0f4bdb17ff00578004420" datatype="html">
@@ -3717,7 +3717,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
         <source>Transcoding threads</source>
-        <target>Transcodierungsthreads</target>
+        <target>Transkodierungsthreads</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">804</context></context-group>
       </trans-unit>
       <trans-unit id="4f9162543288be617b88ad6fcae84325f11e31b6" datatype="html">
