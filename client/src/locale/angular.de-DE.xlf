@@ -3224,7 +3224,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="09d61fa0397899a1b26d09123aef7e7bf5bd78e1" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="translated">Es ist wichtig für Ihre Nutzer, wer sich auf Ihrer Instanz registrieren möchte</target>
+        <target state="translated">Es ist wichtig für Ihre Nutzer, die sich auf Ihrer Instanz registrieren möchten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d" datatype="html">
