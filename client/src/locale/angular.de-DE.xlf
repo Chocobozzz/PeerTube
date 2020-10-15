@@ -3309,14 +3309,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3a10a32f96683addb9e1335cdba7d6685587fe6e" datatype="html">
         <source>Display a message on your instance</source>
-        <target state="new">
-              Display a message on your instance
-            </target>
+        <target state="translated">Zeigen Sie eine Nachricht auf Ihrer Instanz an</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">288</context></context-group>
       </trans-unit>
       <trans-unit id="58be3e0a0ef272fbd6e715b44059c3d89b332d9b" datatype="html">
         <source>Enable broadcast message</source>
-        <target state="new">Enable broadcast message</target>
+        <target state="translated">Nachrichtenverteilung aktivieren</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="6938c4a91284a1bc8b61b0d8085d9985e46c9f5b" datatype="html">
