@@ -2684,7 +2684,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8d02797f76f99ad51f55e91ff82088e8772152e0" datatype="html">
         <source>No blocked video found.</source>
-        <target state="translated">Keine geblockten Videos gefunden.</target>
+        <target state="translated">Keine gesperrten Videos gefunden.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="9f5c75bd513580d630817cd39179fd41e5ec36f6" datatype="html">
@@ -2781,7 +2781,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="e9a289d014e33a5a45e1cf47131074f50abb7c18" datatype="html">
         <source>The video was blocked</source>
-        <target state="new">The video was blocked</target>
+        <target state="translated">Dieses Video ist gesperrt</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="e186aa4dc511ff4347ec5304691000e3e0a4a048" datatype="html">
