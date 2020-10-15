@@ -2489,7 +2489,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ed64ec2b14251cfbe9ab28abde51d3f052fde1e7" datatype="html">
         <source>Open account in a new tab</source>
-        <target state="translated">Nutzerkonto in einem neuen Tab öffnen</target>
+        <target state="translated">Nutzerkonto in neuem Tab öffnen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="d9e38d58225f58cb64126e4d5ec58f39dcb326df" datatype="html">
