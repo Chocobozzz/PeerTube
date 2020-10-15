@@ -950,7 +950,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a9ada5fec7ddf53a031711b025014495372627de" datatype="html">
         <source>Videos:</source>
-        <target state="new">Videos:</target>
+        <target state="translated">Videos:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="9fe1faff741de7a4d50e520d2161209997f8224c" datatype="html">
@@ -2329,9 +2329,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="270a185f179774aa3cee3120ed4f5650e8816b9f" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action }}"/> </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ action }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ action }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/batch-domains-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767">
@@ -3124,7 +3122,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="f27b192f4d3153db7dc7044bea37e71655bfb3ea" datatype="html">
         <source>MODERATION &amp; NSFW</source>
-        <target state="new">MODERATION &amp; NSFW</target>
+        <target state="translated">MODERATION &amp; NSFW</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="f0716b4964f9dc6437aaed3ae0c78e94fd259fb9" datatype="html">
@@ -5605,7 +5603,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
         <source>User <x id="PH"/> updated.</source>
-        <target state="translated">Benutzer <x id="PH"/> upgedatet.</target>
+        <target state="translated">Benutzer <x id="PH"/> aktualisiert.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1349763489797682899">
@@ -5615,9 +5613,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8819563010322372715">
         <source>An email asking for password reset has been sent to <x id="PH"/>.</source>
-        <target>Eine E-Mail, die zum Zurücksetzen des Kennworts auffordert, wurde an 
-          <x id="PH"/> gesendet.
-        </target>
+        <target>Eine E-Mail, die zum Zurücksetzen des Kennworts auffordert, wurde an <x id="PH"/> gesendet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="7483807629538115183" datatype="html">
@@ -5703,9 +5699,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4884272193574287483">
         <source>Do you really want to unban <x id="PH"/> users?</source>
-        <target>Willst du wirklich den Bann von 
-          <x id="PH"/> Benutzern aufheben?
-        </target>
+        <target>Willst du wirklich den Bann von <x id="PH"/> Benutzern aufheben?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">198</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385">
@@ -5741,16 +5735,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7390990800435887351">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target>Stummschaltung von Account 
-          <x id="PH"/> aufgehoben.
-        </target>
+        <target>Stummschaltung von Account <x id="PH"/> aufgehoben.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="7246356397085094208">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target>Stummschaltung von Instanz 
-          <x id="PH"/> aufgehoben.
-        </target>
+        <target>Stummschaltung von Instanz <x id="PH"/> aufgehoben.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="7163720856202695008">
@@ -5953,9 +5943,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1137937154872046253">
         <source>Video channel <x id="PH"/> created.</source>
-        <target>Videokanal 
-          <x id="PH"/> erstellt.
-        </target>
+        <target>Videokanal <x id="PH"/> erstellt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-create.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="8723777130353305761">
@@ -5965,23 +5953,17 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7589345916094713536">
         <source>Video channel <x id="PH"/> updated.</source>
-        <target>Videokanal 
-          <x id="PH"/> aktualisiert.
-        </target>
+        <target>Videokanal <x id="PH"/> aktualisiert.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-update.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="2575302837003821736">
         <source>Please type the display name of the video channel (<x id="PH"/>) to confirm</source>
-        <target>Bitte gib zum Bestätigen den Anzeigenamen des Videokanals (
-          <x id="PH"/>) ein
-        </target>
+        <target>Bitte gib zum Bestätigen den Anzeigenamen des Videokanals ( <x id="PH"/>) ein</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="624066830180032195">
         <source>Video channel <x id="PH"/> deleted.</source>
-        <target>Videokanal 
-          <x id="PH"/> entfernt.
-        </target>
+        <target>Videokanal <x id="PH"/> entfernt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="6450826648284332649" datatype="html">
@@ -6015,9 +5997,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5032453707232754344">
         <source>Playlist <x id="PH"/> created.</source>
-        <target>Abspielliste 
-          <x id="PH"/> erstellt.
-        </target>
+        <target>Abspielliste <x id="PH"/> erstellt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
@@ -6659,7 +6639,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6172217783476989430">
         <source>Transcoding threads is required.</source>
-        <target>Bitte gib eine Anzahl für die Trankcodierungsthreads an.</target>
+        <target>Bitte gib eine Anzahl für die Transkodierungsthreads an.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5320424292625586941">
@@ -7470,9 +7450,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2448281151916042849">
         <source>User <x id="PH"/> banned.</source>
-        <target>Benutzer 
-          <x id="PH"/> gesperrt.
-        </target>
+        <target>Benutzer <x id="PH"/> gesperrt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8269144351796756896">
@@ -7556,23 +7534,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3085641638748358969">
         <source>Account <x id="PH"/> unmuted by the instance.</source>
-        <target>Account 
-          <x id="PH"/> nicht mehr von der Instanz stummgeschaltet.
-        </target>
+        <target>Account <x id="PH"/> nicht mehr von der Instanz stummgeschaltet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="4991892477258601737">
         <source>Instance <x id="PH"/> muted by the instance.</source>
-        <target>Instanz 
-          <x id="PH"/> von der Instanz stummgeschaltet.
-        </target>
+        <target>Instanz <x id="PH"/> von der Instanz stummgeschaltet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">203</context></context-group>
       </trans-unit>
       <trans-unit id="4379430340167561220">
         <source>Instance <x id="PH"/> unmuted by the instance.</source>
-        <target>Instance 
-          <x id="PH"/> nicht mehr von der Instanz stummgeschaltet.
-        </target>
+        <target>Instance <x id="PH"/> nicht mehr von der Instanz stummgeschaltet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">217</context></context-group>
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
@@ -7790,9 +7762,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="968295009933361070">
         <source>Too many attempts, please try again after <x id="PH"/> minutes.</source>
-        <target>Zu viele Versuche in kurzer Zeit. Bitte versuche es in 
-          <x id="PH"/> Minuten nochmal.
-        </target>
+        <target>Zu viele Versuche in kurzer Zeit. Bitte versuche es in <x id="PH"/> Minuten nochmal.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="4965472196059235310">
@@ -7807,16 +7777,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Alle Kanäle von 
-          <x id="PH"/> abonniert. Du wirst über neue Videos darin benachrichtigt.
-        </target>
+        <target state="translated">Alle Kanäle von <x id="PH"/> abonniert. Du wirst über neue Videos darin benachrichtigt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">
-          <x id="PH"/> abonniert. Du wirst über neue Videos benachrichtigt.
-        </target>
+        <target state="translated"><x id="PH"/> abonniert. Du wirst über neue Videos benachrichtigt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="7019115336138470191">
@@ -7857,10 +7823,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1056145626640340519">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
-        <target>Video zu 
-          <x id="PH"/> mit dem Zeitstempel 
-          <x id="PH_1"/> hinzugefügt
-        </target>
+        <target>Video zu <x id="PH"/> mit dem Zeitstempel <x id="PH_1"/> hinzugefügt</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">377</context></context-group>
       </trans-unit>
       <trans-unit id="7754186870520534716">
@@ -7987,17 +7950,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5072091387445907742" datatype="html">
         <source>Actions for the reporter</source>
-        <target state="new">Actions for the reporter</target>
+        <target state="translated">Optionen für den Melder</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">334</context></context-group>
       </trans-unit>
       <trans-unit id="6599069899275412095" datatype="html">
         <source>Mute reporter</source>
-        <target state="new">Mute reporter</target>
+        <target state="translated">Melder stummschalten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="2990849907502572301" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target state="new">This video will be duplicated by your instance.</target>
+        <target state="translated">Dieses Video wird von ihrer Instanz dupliziert werden</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
@@ -8018,7 +7981,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
-        <target state="new">Block</target>
+        <target state="translated">Blockieren</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">262</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309">
