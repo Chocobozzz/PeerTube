@@ -5562,7 +5562,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
         <source>Muted instances</source>
-        <target state="new">Muted instances</target>
+        <target state="translated">Stummgeschaltete Instanzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">89</context>
@@ -7877,12 +7877,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3941342949736653028" datatype="html">
         <source>Video deleted.</source>
-        <target state="new">Video deleted.</target>
+        <target state="translated">Video gelöscht.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="6286037250766429054" datatype="html">
         <source>yes</source>
-        <target state="new">yes</target>
+        <target state="translated">ja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">149</context>
@@ -7890,7 +7890,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2420525563530770652" datatype="html">
         <source>no</source>
-        <target state="new">no</target>
+        <target state="translated">nein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -7908,7 +7908,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2990849907502572301" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target state="translated">Dieses Video wird von ihrer Instanz dupliziert werden</target>
+        <target state="translated">Dieses Video wird von Ihrer Instanz dupliziert.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
@@ -8310,7 +8310,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
           <context context-type="linenumber">296</context>
@@ -8608,7 +8608,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
-        <target state="new">Edit a video</target>
+        <target state="translated">Ein Video bearbeiten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">106</context>
