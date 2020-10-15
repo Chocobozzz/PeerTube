@@ -7898,7 +7898,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5072091387445907742" datatype="html">
         <source>Actions for the reporter</source>
-        <target state="translated">Optionen für den Melder</target>
+        <target state="translated">Aktionen für den Berichterstatter</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">334</context></context-group>
       </trans-unit>
       <trans-unit id="6599069899275412095" datatype="html">
