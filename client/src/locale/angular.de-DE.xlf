@@ -613,7 +613,7 @@
       </trans-unit>
       <trans-unit id="dc3bdad5421d0ee7ddd76ae62b699d72dd9f61b4" datatype="html">
         <source>Please describe the reason...</source>
-        <target state="translated">Bitte beschreiben sie den Grund...</target>
+        <target state="translated">Bitte beschreiben Sie den Grund...</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="c078d4901a5fac169665947cc7a6108b94dd80c7">
@@ -1195,7 +1195,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="48d27fa96b882d9c5c2a779376328790d80378eb" datatype="html">
         <source>will list the matching video</source>
-        <target state="translated">Will list the matching video</target>
+        <target state="translated">wird das passende Video auflisten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="25d438ce4c6d14835921c34bda6cc88f4fe5b1b4" datatype="html">
@@ -2479,7 +2479,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="765fcd9017ea1e180bbd266673d7cf11535d8c4a" datatype="html">
         <source>Banned users</source>
-        <target state="translated">Gesperrte Nutzer</target>
+        <target state="translated">Gebannte Nutzer</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="7d88bb14f4ef7eaea7ca41c1832c66451410047a" datatype="html">
