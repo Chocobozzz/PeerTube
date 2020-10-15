@@ -7903,7 +7903,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6599069899275412095" datatype="html">
         <source>Mute reporter</source>
-        <target state="translated">Melder stummschalten</target>
+        <target state="translated">Berichterstatter stummschalten</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="2990849907502572301" datatype="html">
