@@ -608,7 +608,7 @@
       </trans-unit>
       <trans-unit id="dbabcb47dc77c29275d0f836280ef1dcd924fdb9" datatype="html">
         <source>Block video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Video "<x id="INTERPOLATION"/>" blockieren</target>
+        <target state="translated">Video "<x id="INTERPOLATION"/>"sperren</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="dc3bdad5421d0ee7ddd76ae62b699d72dd9f61b4" datatype="html">
@@ -2359,7 +2359,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="b2ddee45fe4c3ebc20f39ed10ef70505c9eb65ce" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> hosts</source>
-        <target state="translated">Zeige <x id="INTERPOLATION"/> bis <x id="INTERPOLATION_1"/> von <x id="INTERPOLATION_2"/> Hosts</target>
+        <target state="translated">Zeige <x id="INTERPOLATION"/> bis <x id="INTERPOLATION_1"/> von <x id="INTERPOLATION_2"/> Ho</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
@@ -2399,7 +2399,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ed66036cb394f49f63cb5fb5632f483613b790f6" datatype="html">
         <source>Highlight banned users</source>
-        <target state="translated">Hebe gesperrte Nutzer hervor</target>
+        <target state="translated">Gesperrte Nutzer hervorheben</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
