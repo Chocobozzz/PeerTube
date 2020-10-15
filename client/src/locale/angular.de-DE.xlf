@@ -2891,7 +2891,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="33c4091a2a2438ba655caa47ede7f7a82f5f0297" datatype="html">
         <source>No account found matching current filters.</source>
-        <target state="translated">Kein Account passt zu den aktuellen Filtern.</target>
+        <target state="translated">Kein Konto passt zu den aktuellen Filtern.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5d3b267bc054bb6b5743dd3d46ee58cff5141697" datatype="html">
