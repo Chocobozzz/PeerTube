@@ -2940,7 +2940,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5a329cfc387d2231434afc2842ff649392da8921" datatype="html">
         <source>Plugin homepage (new window)</source>
-        <target state="new">Plugin homepage (new window)</target>
+        <target state="translated">Plug-In-Homepage (Neues Fenster)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
@@ -2950,12 +2950,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="82c6fc1dfd67a87c2a9f54c221907d0d61c63b88" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="new">Users can resolve distant content</target>
+        <target state="translated">Nutzer können entfernten Inhalt lösen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="0fab2b1e25b97842c52a6b95f139bda7e416fde6" datatype="html">
         <source>Close this message</source>
-        <target state="new">Close this message</target>
+        <target state="translated">Diese Nachricht schließen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/app.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716">
@@ -2965,7 +2965,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3b79d221458541611e8508d3551dd1ddd76b49d9" datatype="html">
         <source>Display settings</source>
-        <target state="new">Display settings</target>
+        <target state="translated">Anzeigeeinstellungen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1dfba504a0d0bf41da961d89d402dedecde5e30d">
@@ -3004,7 +3004,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="fc06c11db79db253b0d0f1b070cf48e039e8a3a8" datatype="html">
         <source>Plugin npm package (new window)</source>
-        <target state="new">Plugin npm package (new window)</target>
+        <target state="translated">npm-Paket des Plug-Ins (neues Fenster)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="ba504ef7da4384f035fc148de2d121322aaa7407">
@@ -3064,7 +3064,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
-        <target state="new">INSTANCE</target>
+        <target state="translated">INSTANZ</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59">
@@ -3084,40 +3084,37 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="27ea89c8d39a59d9ff6c761fbad00d57b7863849" datatype="html">
         <source>Add a new category</source>
-        <target state="new">Add a new category</target>
+        <target state="translated">Neue Kategorie hinzufügen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="new">The 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.
-        </target>
+        <target state="translated">Das <x id="START_LINK"/>Verteilsystem<x id="CLOSE_LINK"/> hat zur Folge, dass einige technischen Daten Ihres Systems (wie die öffentliche IP-Adresse) zu anderen Peers gesendet wird, hilft aber stark dabei, die Belastung des Servers zu verringern.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="0f9a16c167ea4f043577304b13046c143692cb99" datatype="html">
         <source>Help share videos being played</source>
-        <target state="new">Help share videos being played</target>
+        <target state="translated">Helfen Sie dabei, Videos zu verteilen, die abgespielt werden</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="new">When on a video page, directly start playing the video.</target>
+        <target state="translated">Starte Video auf der Videoseite automatisch</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target state="new">Automatically play videos</target>
+        <target state="translated">Spiele Videos automatisch ab</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="new">When a video ends, follow up with the next suggested video.</target>
+        <target state="translated">Schließe das nachfolgende, empfohlene Video an, wenn das Video endet.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="new">Automatically start playing the next video</target>
+        <target state="translated">Spiele automatisch nächstes Video ab</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="ccb0ae7ba7f7a83045f1ad78d0c0044b5ed80629" datatype="html">
@@ -3132,12 +3129,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="f0716b4964f9dc6437aaed3ae0c78e94fd259fb9" datatype="html">
         <source>Manage <x id="START_LINK"/>users<x id="CLOSE_LINK"/> to build a moderation team. </source>
-        <target state="new">
-                Manage 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to build a moderation team.
-              
-        </target>
+        <target state="translated">Manage <x id="START_LINK"/>die Nutzer<x id="CLOSE_LINK"/>, um ein Moderatorenteam aufzubauen. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="aad49456e42847e2ea95fbaeb2f49387199e5634" datatype="html">
@@ -3147,13 +3139,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="55c4d3cc288701854147f69ccf3d86d316589968" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="new">
-                      Enabling it will allow other administrators to know that you are mainly federating sensitive content.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                      Moreover, the NSFW checkbox on video upload will be automatically checked by default.
-                    
-        </target>
+        <target state="translated">Aktivieren wird andere Administratoren darüber informieren, dass Sie hauptsächlich sensible Inhalte verteilen.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Außerdem wird die NSFW-Box beim Videoupload standardmäßig aktiviert. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
@@ -3163,14 +3149,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8dccab3d8cadb847889ff89644d3f08ffee0d76e" datatype="html">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target state="new">
-                      With 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video.
-                    
-        </target>
+        <target state="translated">Mit <x id="START_TAG_STRONG"/>Nicht listen<x id="CLOSE_TAG_STRONG"/> oder <x id="START_TAG_STRONG"/>Mache Thumbnails unscharf<x id="CLOSE_TAG_STRONG"/> wird eine Bestätigung vor Abspielen des Videos angefordert. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
@@ -3190,7 +3169,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="05f5612d42b02be4d6d9e0a99585ae7e30a91780" datatype="html">
         <source>Strategy</source>
-        <target state="new">Strategy</target>
+        <target state="translated">Strategie</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
@@ -3210,12 +3189,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="d635f94dd3214d8e5fb83a2af04e7b96c861e91f" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="new">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</target>
+        <target state="translated">Wer moderiert die Instanz? Wie geht die Instanz mit NSFW-Videos um? Wie mit politischen Videos, etc?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="b222d95cb22ff8c295920ca10c188c5d94cb0aa9" datatype="html">
         <source>YOU AND YOUR INSTANCE</source>
-        <target state="new">YOU AND YOUR INSTANCE</target>
+        <target state="translated">SIE UND IHRE INSTANZ</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="fdbabe6f967747b657518384b54bcc58d3913063" datatype="html">
@@ -3225,7 +3204,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="963707d11903100147b40788e4f67cc93a234308" datatype="html">
         <source>A single person? A non-profit? A company?</source>
-        <target state="new">A single person? A non-profit? A company?</target>
+        <target state="translated">Eine einzelne Person? Ein gemeinnütziges Unternehmen? Eine Firma?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">166</context></context-group>
       </trans-unit>
       <trans-unit id="fef7c7a74c5646fe219d94db60e0652d6b878af5" datatype="html">
@@ -3235,7 +3214,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="53fe4c724dc3f942c4d1eac4206a9686cbbf968e" datatype="html">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="new">To share your personal videos? To open registrations and allow people to upload what they want?</target>
+        <target state="translated">Zum Teilen persönlicher Videos? Mit offener Registrierung, wobei jeder alles hochladen darf?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="ac6b554b2f923239f6d7c5fcef8a7cce7d6b43b6" datatype="html">
@@ -3245,7 +3224,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="09d61fa0397899a1b26d09123aef7e7bf5bd78e1" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="new">It's important to know for users who want to register on your instance</target>
+        <target state="translated">Es ist wichtig für Ihre Nutzer, wer sich auf Ihrer Instanz registrieren möchte</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d" datatype="html">
