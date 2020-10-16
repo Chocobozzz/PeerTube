@@ -951,7 +951,7 @@
       </trans-unit>
       <trans-unit id="020d5da7c3f4726e3623587a05a11f00e1d40409" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">سيرسل الإبلاغ الى مشرفي <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> وسيوجه الى الفيديو الأصلي <x id="INTERPOLATION_1"/> كذلك<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="04f47b9519b96ac834a111c0e113d18c77d177de" datatype="html">
@@ -973,7 +973,7 @@
       </trans-unit>
       <trans-unit id="b56702ff10875710f111634cc315cd3ef01b206f" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">سيرسل الإبلاغ الى مشرفي <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> وسيوجه الى التعليق الأصلي <x id="INTERPOLATION_1"/> كذلك<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
@@ -1258,7 +1258,7 @@
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG"/>original<x id="CLOSE_TAG_STRONG"/> video size. <x id="LINE_BREAK"/> At most, this user could upload ~ <x id="INTERPOLATION"/>. </source>
-        <target state="translated">Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG"/>original<x id="CLOSE_TAG_STRONG"/> video size. <x id="LINE_BREAK"/> At most, this user could upload ~ <x id="INTERPOLATION"/>. </target>
+        <target state="translated">تحويل الترميز مفعل. سيقتطع الحجم <x id="START_TAG_STRONG"/>الأصلي<x id="CLOSE_TAG_STRONG"/> للفيديو من حصة الفيديو.<x id="LINE_BREAK"/>يمكن لهذا المستخدم رفع ~ <x id="INTERPOLATION"/> كحد أقصى. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496" datatype="html">
@@ -4599,7 +4599,7 @@
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
         <source>Delete and re-draft</source>
-        <target state="new">Delete and re-draft</target>
+        <target state="translated">احذف وأعد الصياغة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -4607,7 +4607,7 @@
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="new">Do you really want to delete and re-draft this comment?</target>
+        <target state="translated">أتريد حذف وإعادة صياغة هذا التعليق؟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -5573,7 +5573,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target state="new">Federation</target>
+        <target state="translated">الاتحادية</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -6656,7 +6656,7 @@
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
         <source>Redirection</source>
-        <target state="new">Redirection</target>
+        <target state="translated">اعادة توجيه</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">374</context></context-group>
       </trans-unit>
       <trans-unit id="8858527736400081688" datatype="html">
@@ -7836,7 +7836,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target state="new">Increment hours</target>
+        <target state="translated">زد ساعات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
           <context context-type="linenumber">296</context>
@@ -7844,7 +7844,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target state="new">Decrement hours</target>
+        <target state="translated">اطرح ساعات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
           <context context-type="linenumber">296</context>
@@ -7852,7 +7852,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target state="new">Increment minutes</target>
+        <target state="translated">زد دقائق</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
           <context context-type="linenumber">296</context>
@@ -7860,7 +7860,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target state="new">Decrement minutes</target>
+        <target state="translated">اطرح دقائق</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
           <context context-type="linenumber">296</context>
@@ -7884,7 +7884,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target state="new">Increment seconds</target>
+        <target state="translated">زد ثواني</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
           <context context-type="linenumber">296</context>
@@ -7892,7 +7892,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target state="new">Decrement seconds</target>
+        <target state="translated">اطرح ثواني</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../../node_modules/@ng-bootstrap/ng-bootstrap/__ivy_ngcc__/fesm2015/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.ts</context>
           <context context-type="linenumber">296</context>
@@ -8217,7 +8217,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
         <source>Infringes your copyright wrt. the regional laws with which the server must comply.</source>
-        <target state="new">Infringes your copyright wrt. the regional laws with which the server must comply.</target>
+        <target state="translated">ينتهك حقوق النشر خاصتك. أو القوانين الاقليمية المغروضة على الخادم.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
@@ -8369,7 +8369,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
         <source>Remove &amp; re-draft</source>
-        <target state="new">Remove &amp; re-draft</target>
+        <target state="translated">أزل وأعد الصياغة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context>
           <context context-type="linenumber">187</context>
