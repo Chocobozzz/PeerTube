@@ -2032,7 +2032,7 @@
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
         <source>Delete and re-draft</source>
-        <target state="translated">Supprimer et reformuler</target>
+        <target state="translated">احذف وأعد الصياغة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
