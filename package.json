@@ -166,7 +166,7 @@
     "@types/config": "^0.0.36",
     "@types/express": "^4.0.35",
     "@types/express-rate-limit": "^5.0.0",
-    "@types/fluent-ffmpeg": "^2.1.8",
+    "@types/fluent-ffmpeg": "^2.1.16",
     "@types/fs-extra": "^9.0.1",
     "@types/libxmljs": "^0.18.0",
     "@types/lodash": "^4.14.64",

@@ -270,7 +270,8 @@ type TranscodeOptions =
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
     try {
-      let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
+      // we set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
+      let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING, cwd: CONFIG.STORAGE.TMP_DIR })
         .output(options.outputPath)
 
       if (options.type === 'quick-transcode') {
