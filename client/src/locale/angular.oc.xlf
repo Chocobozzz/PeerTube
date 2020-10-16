@@ -7106,17 +7106,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4873149362496451858">
         <source>Last 7 days</source>
-        <target>Los 7 darrièrs jorns</target>
+        <target>Los darrièrs 7 jorns</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="2949150997160654358">
         <source>Last 30 days</source>
-        <target>Los 30 darrièrs jorns</target>
+        <target>Los darrièrs 30 jorns</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="5328600704510694984">
         <source>Last 365 days</source>
-        <target>Los 365 darrièrs jorns</target>
+        <target>Los darrièrs 365 jorns</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8487565500496466433">
