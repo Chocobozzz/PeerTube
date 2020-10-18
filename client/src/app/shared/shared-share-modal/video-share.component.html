@@ -173,6 +173,13 @@
                 i18n-labelText labelText="Loop"
               ></my-peertube-checkbox>
             </div>
+
+            <div *ngIf="!isLocalVideo() && !isVideoInEmbedTab()" class="form-group">
+              <my-peertube-checkbox
+                inputName="originUrl" [(ngModel)]="customizations.originUrl"
+                i18n-labelText labelText="Use origin instance URL"
+              ></my-peertube-checkbox>
+            </div>
           </div>
 
           <ng-container *ngIf="isVideoInEmbedTab()">
