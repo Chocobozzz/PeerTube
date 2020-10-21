@@ -71,15 +71,13 @@ with a `Content-Range` HTTP header.
 
 ## If a client requests each chunk of a video through HTTP, will the server be overloaded?
 
-Not really. Reverse proxies like Nginx handle very well requests of static
-files. In my tests, it can send chunks at 10MB/s without consuming more than 5%
-of CPU on a very small VPS.
+Not really. Reverse proxies like Nginx handle static file requests very well. In my tests, it can send chunks at 10MB/s without consuming more than 5% CPU on a very small VPS.
 
 
 ## Will an index of all the videos of servers you follow be too large for small servers?
 
-In our benchmarks, 1,000,000 videos takes around 2GB of storage on PostgreSQL.
-We think it is acceptable for a video platform.
+In our benchmarks, 1,000,000 videos consume around 2GB of PostgreSQL storage.
+We think that is acceptable for a video platform.
 
 
 ## Which container formats can I use for the videos I want to upload?
@@ -94,13 +92,13 @@ and FLV formats when transcoding is enabled on their instance.
 It's not officially supported, but you can try the `update-host` script: https://docs.joinpeertube.org/#/maintain-tools?id=update-hostjs
 
 
-## Why do we have to put our Twitter username in PeerTube configuration?
+## Why do we have to put our Twitter username in the PeerTube configuration?
 
 You don't have to: we set a default value if you don't have a Twitter account.
 We need this information because Twitter requires an account for links share/videos embed on their platform.
 
 
-## How video views are calculated?
+## How are video views counted?
 
 Your web browser sends a view to the server after 30 seconds of playback. If a video is less than 30 seconds in length, a view is sent after 75% of the video. After giving a view, that IP address cannot add another view in the next hour.
 Views are buffered, so don't panic if the view counter stays the same after you watched a video.
@@ -122,12 +120,12 @@ So you would need:
 
 Yes you can, but you won't be able to send data to users that watch the video in their web browser.
 The reason is they connect to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
-To check if your BitTorrent client supports WebTorrent you can see this issue: https://github.com/webtorrent/webtorrent/issues/369
+You can check if your BitTorrent client supports WebTorrent in this issue: https://github.com/webtorrent/webtorrent/issues/369
 
 
 ## Why host on GitHub and Framagit?
 
-The project has initially been hosted on GitHub by Chocobozzz. A full migration to [Framagit](https://framagit.org/framasoft/peertube/PeerTube) would be ideal now that Framasoft supports PeerTube, but it would take a lot of time and is an ongoing effort.
+The project was initially hosted on GitHub by Chocobozzz. A full migration to [Framagit](https://framagit.org/framasoft/peertube/PeerTube) would be ideal now that Framasoft supports PeerTube, but it would take a lot of time and is an ongoing effort.
 
 
 ## Are you going to use the Steem blockchain?
