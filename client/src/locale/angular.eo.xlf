@@ -6448,7 +6448,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4580988005648117665" datatype="html">
         <source>Search</source>
-        <target state="new">Search</target>
+        <target state="translated">Serĉi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+search/search.component.ts</context>
           <context context-type="linenumber">230</context>
@@ -6538,19 +6538,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6784913005965759008" datatype="html">
         <source><x id="PH"/> h <x id="PH_1"/> min <x id="PH_2"/> sec</source>
-        <target state="translated">
-          <x id="PH"/> h 
-          <x id="PH_1"/> min 
-          <x id="PH_2"/> sek
-        </target>
+        <target state="translated"><x id="PH"/> h <x id="PH_1"/> min <x id="PH_2"/> sek</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-duration-formatter.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="2068773941062585163" datatype="html">
         <source><x id="PH"/> min <x id="PH_1"/> sec</source>
-        <target state="translated">
-          <x id="PH"/> min 
-          <x id="PH_1"/> sek
-        </target>
+        <target state="translated"><x id="PH"/> min <x id="PH_1"/> sek</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-duration-formatter.pipe.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
@@ -6582,32 +6575,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8198703669620791633">
         <source>Previews cache size is required.</source>
-        <target>Necesas grando de kaŝmemoro por miniaturoj.</target>
+        <target>Necesas grando de kaŝmemoro por antaŭrigardoj.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="3971192070835972256">
         <source>Previews cache size must be greater than 1.</source>
-        <target>Grando de kaŝmemoro por miniaturoj devas esti pli ol 1.</target>
+        <target>Grando de kaŝmemoro por antaŭrigardoj devas esti pli ol 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2903453036126968504">
         <source>Previews cache size must be a number.</source>
-        <target>Grando de kaŝmemoro por miniaturoj devas esti nombro.</target>
+        <target>Grando de kaŝmemoro por antaŭrigardoj devas esti nombro.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6941976540222684735">
         <source>Captions cache size is required.</source>
-        <target>Necesas grando de transskriba kaŝmemoro.</target>
+        <target>Necesas grando de kaŝmemoro por transskriboj.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="780869536819343075">
         <source>Captions cache size must be greater than 1.</source>
-        <target>Grando de transskriba kaŝmemoro devas esti pli ol 1.</target>
+        <target>Grando de kaŝmemoro por transskriboj devas esti pli ol 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2498218540197718478">
         <source>Captions cache size must be a number.</source>
-        <target>Grando de transskriba kaŝmemoro devas esti nombro.</target>
+        <target>Grando de kaŝmemoro por transskriboj devas esti nombro.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="818392297325723982">
@@ -6637,7 +6630,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6172217783476989430">
         <source>Transcoding threads is required.</source>
-        <target>Necesas transkodadaj fadenoj.</target>
+        <target>Necesas transkodaj fadenoj.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5320424292625586941">
@@ -6682,7 +6675,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3981804692726336204">
         <source>A subject is required.</source>
-        <target>Temo necesas.</target>
+        <target>Necesas temo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7787099349830266861">
@@ -6742,22 +6735,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
-        <target state="new">Channel name is required.</target>
+        <target state="translated">Necesas nomo de kanalo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
         <source>Channel name must be at least 1 character long.</source>
-        <target state="new">Channel name must be at least 1 character long.</target>
+        <target state="translated">Nomo de kanalo devas havi almenaŭ 1 signon.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="8602785819772117007" datatype="html">
         <source>Channel name cannot be more than 50 characters long.</source>
-        <target state="new">Channel name cannot be more than 50 characters long.</target>
+        <target state="translated">Nomo de kanalo ne povas havi pli ol 50 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="7261858447215513786" datatype="html">
         <source>Channel name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Channel name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Nomo de kanalo havu nur minusklajn literojn kaj nombrojn; ankaŭ punktoj kaj substrekoj estas permesitaj.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056">
@@ -6772,7 +6765,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3392630942539073768">
         <source>The new password and the confirmed password do not correspond.</source>
-        <target>La nova pasvorto kun la konfirma ne kongruas.</target>
+        <target>La nova pasvorto ne akordas kun la konfirma pasvorto.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2027337371129904473">
@@ -6782,7 +6775,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="267386529333143660">
         <source>Quota must be greater than -1.</source>
-        <target>Datumlimo devas esti pli ol -1.</target>
+        <target>Datumlimo devas esti pli ol −1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="1220179061234048936">
@@ -6832,12 +6825,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1303578752658966736">
         <source>Display name must be at least 1 character long.</source>
-        <target>Vidiga nomo devas havi almenaŭ 1 signon.</target>
+        <target>Prezenta nomo devas havi almenaŭ 1 signon.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4613240543124934954">
         <source>Display name cannot be more than 50 characters long.</source>
-        <target>Vidiga nomo ne povas havi pli ol 50 signojn.</target>
+        <target>Prezenta nomo ne povas havi pli ol 50 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1000468652492651683">
@@ -6872,17 +6865,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="new">Abuse message is required.</target>
+        <target state="translated">Necesas mesaĝo je misuzo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="new">Abuse message must be at least 2 characters long.</target>
+        <target state="translated">Mesaĝo je misuzo devas havi almenaŭ 2 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="new">Abuse message cannot be more than 3000 characters long.</target>
+        <target state="translated">Mesaĝo je misuzo ne povas havi pli ol 3000 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6700357678556223012">
@@ -6947,7 +6940,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6461548560008228165" datatype="html">
         <source>Support text cannot be more than 1000 characters long</source>
-        <target state="new">Support text cannot be more than 1000 characters long</target>
+        <target state="translated">Teksto je subteno ne povas havi pli ol 1000 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="4267638333776227701">
@@ -6957,7 +6950,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="71132671234491945">
         <source>Comment must be at least 2 characters long.</source>
-        <target>Komento havu almenaŭ 2 signojn.</target>
+        <target>Komento devas havi almenaŭ 2 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="4148250392704331190">
@@ -6967,8 +6960,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6541082750381847310" datatype="html">
         <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="new">Request is too large for the server.
- Please contact you administrator if you want to increase the limit size.</target>
+        <target state="translated">La peto estas tro granda por la servilo. Bonvolu kontakti la administranton, se vi volas pligrandigi la limon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">61,62</context>
@@ -6996,12 +6988,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2807676084745266104">
         <source>Video name must be at least 3 characters long.</source>
-        <target>Nomo de filmo havu almenaŭ 3 signojn.</target>
+        <target>Nomo de filmo devas havi almenaŭ 3 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="2155414141025589556">
         <source>Video name cannot be more than 120 characters long.</source>
-        <target>Nomo de filmo ne havu pli ol 120 signojn.</target>
+        <target>Nomo de filmo ne povas havi pli ol 120 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="9115337161597088460">
@@ -7036,12 +7028,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4146790476782316573" datatype="html">
         <source>A maximum of 5 tags can be used on a video.</source>
-        <target state="new">A maximum of 5 tags can be used on a video.</target>
+        <target state="translated">Filmo povas havi maksimume 5 etikedojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="7572457740984885269" datatype="html">
         <source>A tag should be more than 2, and less than 30 characters long.</source>
-        <target state="new">A tag should be more than 2, and less than 30 characters long.</target>
+        <target state="translated">Etikedo havu pli ol 2, kaj malpli ol 30 signojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="4806300480558315727">
@@ -7066,7 +7058,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6360987759186261451" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH"/>}.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH"/>}.</target>
+        <target state="translated">PeerTube ne povas trakti ĉi tian dosieron. Akceptataj sufiksoj estas <x id="PH"/>}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -7074,7 +7066,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6708273825233539746" datatype="html">
         <source>Add a new option</source>
-        <target state="new">Add a new option</target>
+        <target state="translated">Aldoni novan elekteblon</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/select/select-checkbox.component.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="4670312387769733978">
@@ -7340,12 +7332,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
-        <target state="new">Instance languages</target>
+        <target state="translated">Lingvoj de nodo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
         <source>All languages</source>
-        <target state="new">All languages</target>
+        <target state="translated">Ĉiuj lingvoj</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="996392855508119363">
@@ -7365,7 +7357,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6291055174438137560" datatype="html">
         <source>~ 1 minute</source>
-        <target state="new">~ 1 minute</target>
+        <target state="translated">~ 1 minuto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -7373,7 +7365,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="189524047518780716" datatype="html">
         <source>~ <x id="PH"/> minutes</source>
-        <target state="new">~ <x id="PH"/> minutes</target>
+        <target state="translated">~ <x id="PH"/> minutoj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -7448,49 +7440,37 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2448281151916042849">
         <source>User <x id="PH"/> banned.</source>
-        <target>Uzanto 
-          <x id="PH"/> forbarita.
-        </target>
+        <target>Uzanto <x id="PH"/> forbarita.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8269144351796756896">
         <source>Do you really want to unban <x id="PH"/>?</source>
-        <target>Ĉu vi certe volas malforbari uzanton 
-          <x id="PH"/>?
-        </target>
+        <target>Ĉu vi certe volas malforbari uzanton <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="1794219875546376069">
         <source>User <x id="PH"/> unbanned.</source>
-        <target>Uzanto 
-          <x id="PH"/> malforbarita.
-        </target>
+        <target>Uzanto <x id="PH"/> malforbarita.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4885683604826993045">
         <source>If you remove this user, you will not be able to create another with the same username!</source>
-        <target>Se vi forigi ĉi tiun uzanton, vi ne povos krei alian kun la sama uzantnomo!</target>
+        <target>Se vi forigos ĉi tiun uzanton, vi ne povos krei alian kun la sama salutnomo!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="6301381219225831298">
         <source>User <x id="PH"/> deleted.</source>
-        <target>Uzanto 
-          <x id="PH"/> forigita.
-        </target>
+        <target>Uzanto <x id="PH"/> forigita.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="3896582359861826661">
         <source>User <x id="PH"/> email set as verified</source>
-        <target>Retpoŝtadreso de uzanto 
-          <x id="PH"/> agordiĝis kiel konfirmita
-        </target>
+        <target>Retpoŝtadreso de uzanto <x id="PH"/> agordiĝis konfirmita</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528">
         <source>Account <x id="PH"/> muted.</source>
-        <target>Konto 
-          <x id="PH"/> silentigita.
-        </target>
+        <target>Konto <x id="PH"/> silentigita.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">119</context></context-group>
       </trans-unit>
       <trans-unit id="1598375456114200087">
@@ -7505,9 +7485,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2558977494773636050">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target>Konto 
-          <x id="PH"/> silentigita de la nodo.
-        </target>
+        <target>Konto <x id="PH"/> silentigita de la nodo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">175</context></context-group>
       </trans-unit>
       <trans-unit id="1595779426198793580" datatype="html">
@@ -7517,40 +7495,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH"/> muted by the instance.</source>
-        <target state="translated">Servilo 
-          <x id="PH"/> silentigita de la nodo.
-        </target>
+        <target state="translated">Servilo <x id="PH"/> silentigita de la nodo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">470</context></context-group>
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
         <source>Add a message to communicate with the reporter</source>
-        <target state="new">Add a message to communicate with the reporter</target>
+        <target state="translated">Aldonu mesaĝon por komuniki kun la raportinto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="new">Add a message to communicate with the moderation team</target>
+        <target state="translated">Aldonu mesaĝon por komuniki kun la reguligistaro</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="3085641638748358969">
         <source>Account <x id="PH"/> unmuted by the instance.</source>
-        <target>Konto 
-          <x id="PH"/> malsilentigita de la nodo.
-        </target>
+        <target>Konto <x id="PH"/> malsilentigita de la nodo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="4991892477258601737">
         <source>Instance <x id="PH"/> muted by the instance.</source>
-        <target>Nodo 
-          <x id="PH"/> silentigita de la nodo.
-        </target>
+        <target>Nodo <x id="PH"/> silentigita de la nodo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">203</context></context-group>
       </trans-unit>
       <trans-unit id="4379430340167561220">
         <source>Instance <x id="PH"/> unmuted by the instance.</source>
-        <target>Nodo 
-          <x id="PH"/> malsilentigita de ĉi tiu nodo.
-        </target>
+        <target>Nodo <x id="PH"/> malsilentigita de ĉi tiu nodo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">217</context></context-group>
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
@@ -7735,7 +7705,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
         <source>Infringes your copyright wrt. the regional laws with which the server must comply.</source>
-        <target state="new">Infringes your copyright wrt. the regional laws with which the server must comply.</target>
+        <target state="translated">Rompas vian kopirajton konsidere lokajn leĝojn, kiujn la servilo devas observi.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
@@ -7755,7 +7725,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
         <source>Captions</source>
-        <target state="new">Captions</target>
+        <target state="translated">Transskriboj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">178</context>
@@ -7785,16 +7755,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Abonanta ĉiujn nunajn kanalojn de 
-          <x id="PH"/>. Vi sciiĝos pri ĉiuj ĝiaj novaj filmoj.
-        </target>
+        <target state="translated">Abonanta ĉiujn nunajn kanalojn de <x id="PH"/>. Vi sciiĝos pri ĉiuj ĝiaj novaj filmoj.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Abonanta je 
-          <x id="PH"/>. Vi sciiĝos pri ĉiuj ĝiaj novaj filmoj.
-        </target>
+        <target state="translated">Abonanta je <x id="PH"/>. Vi sciiĝos pri ĉiuj ĝiaj novaj filmoj.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="7019115336138470191">
@@ -7855,7 +7821,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6421445850411984665" datatype="html">
         <source>Starts at</source>
-        <target state="new">Starts at </target>
+        <target state="translated">Ekas je</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -7863,7 +7829,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7145200412085189912" datatype="html">
         <source>Stops at</source>
-        <target state="new">Stops at </target>
+        <target state="translated">Haltas je</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -7871,7 +7837,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="921225940108335688" datatype="html">
         <source>and stops at</source>
-        <target state="new"> and stops at </target>
+        <target state="translated">kaj haltas je</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -7884,22 +7850,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2210418817778733727" datatype="html">
         <source>Actions for the comment</source>
-        <target state="new">Actions for the comment</target>
+        <target state="translated">Agoj je la komento</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">424</context></context-group>
       </trans-unit>
       <trans-unit id="7978668497183230348" datatype="html">
         <source>Delete comment</source>
-        <target state="new">Delete comment</target>
+        <target state="translated">Forigi komenton</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">430</context></context-group>
       </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html">
         <source>Do you really want to delete this comment?</source>
-        <target state="new">Do you really want to delete this comment?</target>
+        <target state="translated">Ĉu vi certe volas forigi ĉi tiun komenton?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context><context context-type="linenumber">166</context></context-group>
       </trans-unit>
       <trans-unit id="7837272126865175984" datatype="html">
         <source>Comment deleted.</source>
-        <target state="new">Comment deleted.</target>
+        <target state="translated">Komento foriĝis.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">442</context></context-group>
       </trans-unit>
       <trans-unit id="346270517625845962" datatype="html">
@@ -7939,17 +7905,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3622946684246476652">
         <source>Do you really want to delete this video?</source>
-        <target>Ĉu vi vere volas elŝuti tiun ĉi filmon?</target>
+        <target>Ĉu vi certe volas forigi tiun ĉi filmon?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="3941342949736653028" datatype="html">
         <source>Video deleted.</source>
-        <target state="translated">Filmo forigita.</target>
+        <target state="translated">Filmo foriĝis.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="6286037250766429054" datatype="html">
         <source>yes</source>
-        <target state="new">yes</target>
+        <target state="translated">jes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">149</context>
@@ -7957,7 +7923,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2420525563530770652" datatype="html">
         <source>no</source>
-        <target state="new">no</target>
+        <target state="translated">ne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -7965,7 +7931,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5072091387445907742" datatype="html">
         <source>Actions for the reporter</source>
-        <target state="translated">Agoj por la raportinto</target>
+        <target state="translated">Agoj je la raportinto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">334</context></context-group>
       </trans-unit>
       <trans-unit id="6599069899275412095" datatype="html">
@@ -7980,7 +7946,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
         <source>Download</source>
-        <target state="new">Download</target>
+        <target state="translated">Elŝuti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">250</context>
@@ -7988,7 +7954,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
         <source>Update</source>
-        <target state="new">Update</target>
+        <target state="translated">Ĝisdatigi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">256</context>
@@ -8011,12 +7977,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7008439939460403347" datatype="html">
         <source>Report</source>
-        <target state="new">Report</target>
+        <target state="translated">Raporti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">286</context></context-group>
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
         <source>Remove</source>
-        <target state="new">Remove</target>
+        <target state="translated">Forigi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -8024,7 +7990,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
         <source>Remove &amp; re-draft</source>
-        <target state="new">Remove &amp; re-draft</target>
+        <target state="translated">Forigi kaj reskribi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context>
           <context context-type="linenumber">187</context>
@@ -8037,7 +8003,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3719503424625455635" datatype="html">
         <source>Mute server account</source>
-        <target state="new">Mute server account</target>
+        <target state="translated">Silentigi servilan konton</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">322</context></context-group>
       </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a">
