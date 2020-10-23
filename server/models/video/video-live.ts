@@ -36,10 +36,6 @@ export class VideoLiveModel extends Model<VideoLiveModel> {
 
   @AllowNull(false)
   @Column
-  perpetualLive: boolean
-
-  @AllowNull(false)
-  @Column
   saveReplay: boolean
 
   @CreatedAt
