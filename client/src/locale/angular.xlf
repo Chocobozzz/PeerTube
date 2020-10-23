@@ -1168,77 +1168,84 @@
         <source>Last day</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9178360613965745088" datatype="html">
         <source>Last hour</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3422890808980876594" datatype="html">
-        <source>Debug</source>
+      <trans-unit id="3164845764519833078" datatype="html">
+        <source>debug</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="314315645942131479" datatype="html">
-        <source>Info</source>
+      <trans-unit id="4279081882680795350" datatype="html">
+        <source>info</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6759205696902713848" datatype="html">
-        <source>Warning</source>
+      <trans-unit id="3379167598974960777" datatype="html">
+        <source>warning</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1519954996184640001" datatype="html">
-        <source>Error</source>
+      <trans-unit id="8772116786769251214" datatype="html">
+        <source>error</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a" datatype="html">
         <source>Refresh</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7f34c2aa1c5e1d4bc339995fe325e831d7fbe40a" datatype="html">
+        <source>now</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
         <source>By <x id="INTERPOLATION"/> -&gt;</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1875025899004073421" datatype="html">
@@ -1834,6 +1841,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3422890808980876594" datatype="html">
+        <source>Debug</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/system.routes.ts</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
@@ -3361,60 +3375,39 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
+        <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c" datatype="html">
         <source>ID</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">30,29</context>
+          <context context-type="linenumber">39,38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc" datatype="html">
         <source>Type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">31,30</context>
+          <context context-type="linenumber">40,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b" datatype="html">
-        <source>State</source>
+      <trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
+        <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c107d625f06dc3b494d0a22546e6a0609360007d" datatype="html">
-        <source>Delayed</source>
+      <trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
+        <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
-        <source>Will start soon...</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">48</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="0198c6af8421c8f69a90c3e9a4a12cf923cbb84b" datatype="html">
-        <source>Running...</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">49</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="edcc19a49c950289ffe5d38be4843cdf194e5622" datatype="html">
-        <source>Finished</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="64b582e0d8e3a28331a14d2a1017fa5d6ffb8d93" datatype="html">
-        <source>Failed</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3150704904301058778" datatype="html">
@@ -8981,6 +8974,13 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6759205696902713848" datatype="html">
+        <source>Warning</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/core/routing/can-deactivate-guard.service.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3779524668013120370" datatype="html">
         <source>Go to my subscriptions</source>
         <context-group purpose="location">
@@ -9015,6 +9015,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">98,99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1519954996184640001" datatype="html">
+        <source>Error</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/core/auth/auth.service.ts</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
@@ -9338,6 +9345,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location">
           <context context-type="sourcefile">../app/header/suggestion.component.html</context>
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="314315645942131479" datatype="html">
+        <source>Info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/core/notification/notifier.service.ts</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4648900870671159218" datatype="html">
@@ -10249,6 +10263,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context>
           <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b" datatype="html">
+        <source>State</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a5707e9905e079605243397ee111b8be449941aa" datatype="html">

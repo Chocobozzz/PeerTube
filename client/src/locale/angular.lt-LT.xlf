@@ -2774,7 +2774,7 @@ The link will expire within 1 hour.</target>
         <source>ID</source>
         <target state="new">ID</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">30</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="1d284acc5ec053b3cd87e4e9fcd7aaefec0c54fb" datatype="html">
         <source>Follower handle</source>
         <target state="new">Follower handle</target>
@@ -2785,32 +2785,12 @@ The link will expire within 1 hour.</target>
         <target state="new">State</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit>
-      <trans-unit id="c107d625f06dc3b494d0a22546e6a0609360007d" datatype="html">
-        <source>Delayed</source>
-        <target state="new">Delayed</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">47</context></context-group></trans-unit>
-      <trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
-        <source>Will start soon...</source>
-        <target state="new">Will start soon...</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">48</context></context-group></trans-unit>
-      <trans-unit id="0198c6af8421c8f69a90c3e9a4a12cf923cbb84b" datatype="html">
-        <source>Running...</source>
-        <target state="new">Running...</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">49</context></context-group></trans-unit>
-      <trans-unit id="edcc19a49c950289ffe5d38be4843cdf194e5622" datatype="html">
-        <source>Finished</source>
-        <target state="new">Finished</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">50</context></context-group></trans-unit>
-      <trans-unit id="64b582e0d8e3a28331a14d2a1017fa5d6ffb8d93" datatype="html">
-        <source>Failed</source>
-        <target state="new">Failed</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">51</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit>
+      
+      
+      
+      
+      
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b" datatype="html">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
         <target state="new">Created 
@@ -3717,29 +3697,53 @@ The link will expire within 1 hour.</target>
         <source>Job state</source>
         <target state="new">Job state</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group></trans-unit><trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
+        <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source><target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc" datatype="html">
         <source>Type</source>
         <target state="new">Type</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">31</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit><trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
+        <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source><target state="new">No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit><trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
+        <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source><target state="new">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a" datatype="html">
         <source>Refresh</source>
         <target state="new">Refresh</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">20</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">33</context></context-group></trans-unit><trans-unit id="7f34c2aa1c5e1d4bc339995fe325e831d7fbe40a" datatype="html">
+        <source>now</source><target state="new">now</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
         <target state="new">Loading...</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">37</context></context-group></trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
         <source>By <x id="INTERPOLATION"/> -></source>
         <target state="new">By 
           <x id="INTERPOLATION" equiv-text="{{ log.by }}"/> ->
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
         <target state="new">INSTANCE</target>
@@ -6593,47 +6597,68 @@ channel with the same name (<x id="PH_2"/>)!</target>
         <source>Last day</source>
         <target state="new">Last day</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">83</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">84</context></context-group></trans-unit>
       <trans-unit id="9178360613965745088" datatype="html">
         <source>Last hour</source>
         <target state="new">Last hour</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">87</context></context-group></trans-unit><trans-unit id="3422890808980876594" datatype="html">
-        <source>Debug</source><target state="new">Debug</target>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit><trans-unit id="3164845764519833078" datatype="html">
+        <source>debug</source><target state="new">debug</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">101</context>
         </context-group>
-      </trans-unit>
+      </trans-unit><trans-unit id="4279081882680795350" datatype="html">
+        <source>info</source><target state="new">info</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit><trans-unit id="3379167598974960777" datatype="html">
+        <source>warning</source><target state="new">warning</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit><trans-unit id="8772116786769251214" datatype="html">
+        <source>error</source><target state="new">error</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit><trans-unit id="3422890808980876594" datatype="html">
+        <source>Debug</source><target state="new">Debug</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/system.routes.ts</context><context context-type="linenumber">48</context></context-group></trans-unit>
       <trans-unit id="314315645942131479" datatype="html">
         <source>Info</source>
         <target state="new">Info</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">102</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/notification/notifier.service.ts</context><context context-type="linenumber">11</context></context-group></trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
         <source>Warning</source>
         <target state="new">Warning</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">106</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/routing/can-deactivate-guard.service.ts</context><context context-type="linenumber">23</context></context-group></trans-unit>
       <trans-unit id="1519954996184640001" datatype="html">
         <source>Error</source>
         <target state="new">Error</target>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">110</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">103</context></context-group></trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
         <target state="new">Standard logs</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">121</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">124</context></context-group></trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
         <target state="new">Audit logs</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">125</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">128</context></context-group></trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
         <source>User <x id="PH"/> created.</source>
         <target state="new">User 

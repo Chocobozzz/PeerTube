@@ -30,8 +30,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
-        <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;تكامل ماركداون&lt;/a&gt; المدعوم:</target>
+        <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown&lt;/a> compatible that supports:</source>
+        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">تكامل ماركداون&lt;/a> المدعوم:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c" datatype="html">
@@ -1867,62 +1867,66 @@
         <source>Job state</source>
         <target>حالة العمل</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group>
+      </trans-unit><trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
+        <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source><target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c" datatype="html">
         <source>ID</source>
         <target>معرّف</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">30</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc" datatype="html">
         <source>Type</source>
         <target>النوع</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">31</context></context-group>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit><trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
+        <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source><target state="new">No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit><trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
+        <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source><target state="new">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b" datatype="html">
         <source>State</source>
         <target>الحالة</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">32</context></context-group>
-      </trans-unit>
-      <trans-unit id="c107d625f06dc3b494d0a22546e6a0609360007d" datatype="html">
-        <source>Delayed</source>
-        <target>تأخر</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">47</context></context-group>
-      </trans-unit>
-      <trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
-        <source>Will start soon...</source>
-        <target>سيبدأ قريبا ...</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">48</context></context-group>
-      </trans-unit>
-      <trans-unit id="0198c6af8421c8f69a90c3e9a4a12cf923cbb84b" datatype="html">
-        <source>Running...</source>
-        <target>يشغل...</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">49</context></context-group>
-      </trans-unit>
-      <trans-unit id="edcc19a49c950289ffe5d38be4843cdf194e5622" datatype="html">
-        <source>Finished</source>
-        <target>انتهى</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">50</context></context-group>
-      </trans-unit>
-      <trans-unit id="64b582e0d8e3a28331a14d2a1017fa5d6ffb8d93" datatype="html">
-        <source>Failed</source>
-        <target>فشل</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">51</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit>
+      
+      
+      
+      
+      
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a" datatype="html">
         <source>Refresh</source>
         <target>تحديث</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">20</context></context-group>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">33</context></context-group></trans-unit><trans-unit id="7f34c2aa1c5e1d4bc339995fe325e831d7fbe40a" datatype="html">
+        <source>now</source><target state="new">now</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
         <target>جار التحميل ...</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">24</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">37</context></context-group></trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
-        <source>By <x id="INTERPOLATION"/> -&gt;</source>
-        <target>بواسطة <x id="INTERPOLATION"/> -&gt;</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">32</context></context-group>
-      </trans-unit>
+        <source>By <x id="INTERPOLATION"/> -></source>
+        <target>بواسطة <x id="INTERPOLATION"/> -></target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="4a41f824a35ba01d5bd7be61aa06b3e8145209d0" datatype="html">
         <source>Configuration</source>
         <target>الضبط</target>
@@ -2419,8 +2423,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">758</context></context-group>
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
-        <source><x id="START_TAG_STRONG"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
-        <target state="translated"><x id="START_TAG_STRONG"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></target>
+        <source><x id="START_TAG_STRONG"/>Requires ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
+        <target state="translated"><x id="START_TAG_STRONG"/>Requires ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">783</context></context-group>
       </trans-unit>
       <trans-unit id="5ac527cc856e9fa02927ccb0a6172688e07c1d7a" datatype="html">
@@ -2479,7 +2483,13 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">892</context></context-group>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
-        <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
+        <source> Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css <x id="INTERPOLATION"/>
+      color: red;
+    <x id="INTERPOLATION_1"/>
+    <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css .logged-in-email <x id="INTERPOLATION"/>
+      color: red;
+    <x id="INTERPOLATION_1"/>
+    <x id="CLOSE_TAG_PRE"/></source>
         <target state="translated">Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">911</context></context-group>
       </trans-unit>
@@ -3106,7 +3116,9 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
-        <source>Do you really want to delete <x id="PH"/>? It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2"/>)!</source>
+        <source>Do you really want to delete <x id="PH"/>?
+It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another
+channel with the same name (<x id="PH_2"/>)!</source>
         <target state="translated">أتريد حذف <x id="PH"/>؟ ستحذف جميع فيديوهات قناة <x id="PH_1"/>، ولن تتمكن من إنشاء قناة بنفس الاسم (<x id="PH_2"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context>
@@ -3134,8 +3146,9 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="66ad6eb3f06251c75325b780943a07f94c949df7" datatype="html">
-        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
-        <target>نص قصير ليخبر الناس كيف يمكنهم دعم قناتك (منصة عضوية ...). &lt;br /&gt;&lt;br /&gt; عندما تقوم بتحميل مقطع فيديو في هذه القناة ، سيتم ملء حقل دعم الفيديو تلقائيًا بهذا النص.</target>
+        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br />&lt;br />
+    When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
+        <target>نص قصير ليخبر الناس كيف يمكنهم دعم قناتك (منصة عضوية ...). &lt;br />&lt;br /> عندما تقوم بتحميل مقطع فيديو في هذه القناة ، سيتم ملء حقل دعم الفيديو تلقائيًا بهذا النص.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd" datatype="html">
@@ -3846,7 +3859,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH"/>.
+The link will expire within 1 hour.</source>
         <target state="translated">أُرسل بريد يحوي تعليمات استعادة كلمة المرور الى <x id="PH"/>. ستنتهي صلاحية الرابط خلال ساعة.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
@@ -4106,7 +4120,7 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee" datatype="html">
-        <source>Already uploaded ✔</source>
+        <source>Already uploaded	✔</source>
         <target>تم الرفع بالفعل ✔</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
@@ -4877,8 +4891,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
-        <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
-        <target state="translated">A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</target>
+        <source>A &lt;code>.mp4&lt;/code> that keeps the original audio track, with no video</source>
+        <target state="translated">A &lt;code>.mp4&lt;/code> that keeps the original audio track, with no video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
@@ -5440,46 +5454,67 @@
       <trans-unit id="4981709795568846080" datatype="html">
         <source>Last day</source>
         <target>البارحة</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">83</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">84</context></context-group></trans-unit>
       <trans-unit id="9178360613965745088" datatype="html">
         <source>Last hour</source>
         <target>الساعة الماضية</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">87</context></context-group>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit><trans-unit id="3164845764519833078" datatype="html">
+        <source>debug</source><target state="new">debug</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit><trans-unit id="4279081882680795350" datatype="html">
+        <source>info</source><target state="new">info</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit><trans-unit id="3379167598974960777" datatype="html">
+        <source>warning</source><target state="new">warning</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit><trans-unit id="8772116786769251214" datatype="html">
+        <source>error</source><target state="new">error</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
         <target state="translated">تنقيح</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">98</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/system.routes.ts</context><context context-type="linenumber">48</context></context-group></trans-unit>
       <trans-unit id="314315645942131479" datatype="html">
         <source>Info</source>
         <target>معلومات</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">102</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/notification/notifier.service.ts</context><context context-type="linenumber">11</context></context-group></trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
         <source>Warning</source>
         <target>تنبيه</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">106</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/routing/can-deactivate-guard.service.ts</context><context context-type="linenumber">23</context></context-group></trans-unit>
       <trans-unit id="1519954996184640001" datatype="html">
         <source>Error</source>
         <target>خطأ</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">110</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">103</context></context-group></trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
         <target>السجلات القياسية</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">121</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">124</context></context-group></trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
         <target>سجلات التدقيق</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">125</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">128</context></context-group></trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
         <source>User <x id="PH"/> created.</source>
         <target>أُنشئ المستخدم <x id="PH"/>.</target>
@@ -6153,8 +6188,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6613870447286561244" datatype="html">
-        <source>Long (&gt; 10 min)</source>
-        <target>طويل (&gt; 10 دقائق)</target>
+        <source>Long (> 10 min)</source>
+        <target>طويل (> 10 دقائق)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="1787083504545967" datatype="html">
@@ -6554,7 +6589,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">243</context></context-group>
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
-        <source>Your video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
+        <source>Your video quota is exceeded with this video (
+video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <target state="translated">حجم الفيديو يتجاوز الحصة ( حجم الفيديو: <x id="PH"/>، المستخدمة: <x id="PH_1"/>، الحصة: <x id="PH_2"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
@@ -6562,7 +6598,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
-        <source>Your daily video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
+        <source>Your daily video quota is exceeded with this video (
+video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <target state="translated">حجم الفيديو يتجاوز الحصة اليومية ( حجم الفيديو: <x id="PH"/>، المستخدمة: <x id="PH_1"/>، الحصة: <x id="PH_2"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
@@ -6650,8 +6687,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
-        <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</source>
-        <target state="translated">هذا الفيديو ليس متوفرا على هذا المثيل. هل تريد التوجه المثيل الأصلي: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt; ؟</target>
+        <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</source>
+        <target state="translated">هذا الفيديو ليس متوفرا على هذا المثيل. هل تريد التوجه المثيل الأصلي: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a> ؟</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">373</context></context-group>
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
@@ -6889,7 +6926,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>.
+Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="new">Cannot retrieve OAuth Client credentials: <x id="PH"/>.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
         <context-group purpose="location">
@@ -7393,7 +7431,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6541082750381847310" datatype="html">
-        <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
+        <source>Request is too large for the server.
+ Please contact you administrator if you want to increase the limit size.</source>
         <target state="translated">حجم الطلب كبير بالنسبة للخادم.إن أردت اتصل بالمدير لرفع حد الحجم.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context>

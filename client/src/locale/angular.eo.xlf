@@ -392,8 +392,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/markdown-textarea.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
-        <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="translated">Akorda kun &lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt;, subtenanta:</target>
+        <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown&lt;/a> compatible that supports:</source>
+        <target state="translated">Akorda kun &lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown&lt;/a>, subtenanta:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
@@ -698,7 +698,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH"/>.
+The link will expire within 1 hour.</source>
         <target state="translated">Retletero kun la restariga pasvorto sendiĝos al <x id="PH"/>. La ligilo havas tempolimon de 1 horo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
@@ -821,7 +822,7 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></source>
-        <target>Oficiala retejo de PeerTube (novaĵoj, subteno, kontribuoj…): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target>Oficiala retejo de PeerTube (novaĵoj, subteno, kontribuoj…): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6">
@@ -1481,7 +1482,7 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
-        <source>Already uploaded ✔</source>
+        <source>Already uploaded	✔</source>
         <target>Jam alŝutita	✔</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
@@ -2254,8 +2255,8 @@
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c">
         <source>ID</source>
         <target>Identigilo</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">30</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="1d284acc5ec053b3cd87e4e9fcd7aaefec0c54fb">
         <source>Follower handle</source>
         <target>Nomo de abonanto</target>
@@ -2264,33 +2265,13 @@
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
         <source>State</source>
         <target>Stato</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">32</context></context-group>
-      </trans-unit>
-      <trans-unit id="c107d625f06dc3b494d0a22546e6a0609360007d" datatype="html">
-        <source>Delayed</source>
-        <target state="translated">Prokrastita</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">47</context></context-group>
-      </trans-unit>
-      <trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
-        <source>Will start soon...</source>
-        <target state="translated">Baldaŭ komenciĝos…</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">48</context></context-group>
-      </trans-unit>
-      <trans-unit id="0198c6af8421c8f69a90c3e9a4a12cf923cbb84b" datatype="html">
-        <source>Running...</source>
-        <target state="translated">Progresanta…</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">49</context></context-group>
-      </trans-unit>
-      <trans-unit id="edcc19a49c950289ffe5d38be4843cdf194e5622" datatype="html">
-        <source>Finished</source>
-        <target state="translated">Finita</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">50</context></context-group>
-      </trans-unit>
-      <trans-unit id="64b582e0d8e3a28331a14d2a1017fa5d6ffb8d93" datatype="html">
-        <source>Failed</source>
-        <target state="translated">Malskucesinta</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">51</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit>
+      
+      
+      
+      
+      
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
         <target>Kreita <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
@@ -3048,27 +3029,51 @@
         <source>Job state</source>
         <target state="translated">Stato de tasko</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group>
+      </trans-unit><trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
+        <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source><target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc">
         <source>Type</source>
         <target>Speco</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">31</context></context-group>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit><trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
+        <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source><target state="new">No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit><trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
+        <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source><target state="new">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a">
         <source>Refresh</source>
         <target>Aktualigi</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">20</context></context-group>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">33</context></context-group></trans-unit><trans-unit id="7f34c2aa1c5e1d4bc339995fe325e831d7fbe40a" datatype="html">
+        <source>now</source><target state="new">now</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
         <target state="translated">Enlegante…</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">24</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">37</context></context-group></trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
-        <source>By <x id="INTERPOLATION"/> -&gt;</source>
+        <source>By <x id="INTERPOLATION"/> -></source>
         <target state="translated">De <x id="INTERPOLATION"/> →</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">32</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
         <target state="translated">NODO</target>
@@ -3156,7 +3161,7 @@
       </trans-unit>
       <trans-unit id="8dccab3d8cadb847889ff89644d3f08ffee0d76e" datatype="html">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target state="translated">Kun <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Ne listigi<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> aŭ <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Malklarigi bildetojn<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, oni ricevos peton de konfirmo pri sia volo spekti la filmon. </target>
+        <target state="translated">Kun <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Ne listigi<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> aŭ <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Malklarigi bildetojn<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, oni ricevos peton de konfirmo pri sia volo spekti la filmon. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
@@ -3650,7 +3655,7 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">758</context></context-group>
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
-        <source><x id="START_TAG_STRONG"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
+        <source><x id="START_TAG_STRONG"/>Requires ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
         <target state="translated"><x id="START_TAG_STRONG"/>Bezonas ffmpeg ≥ 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Estigi HLS-ludlistojn kaj fragmentigi MP4-dosierojn, kaŭzante pli bonan ludadon kun la nuna norma ludilo:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Ŝanĝo de distingumo pli glatas<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Pli rapida ludado, precipe de longaj filmoj<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Pli dependebla ludado (malpli da eraroj, enlegado)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>Se vi ankaŭ ŝaltis subtenon de WebTorrent, ĝi duobligos la deponejon de filmoj<x id="CLOSE_PARAGRAPH"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">783</context></context-group>
       </trans-unit>
@@ -3710,7 +3715,13 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">892</context></context-group>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
-        <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
+        <source> Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css <x id="INTERPOLATION"/>
+      color: red;
+    <x id="INTERPOLATION_1"/>
+    <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css .logged-in-email <x id="INTERPOLATION"/>
+      color: red;
+    <x id="INTERPOLATION_1"/>
+    <x id="CLOSE_TAG_PRE"/></source>
         <target state="translated">Skribu CSS-kodon rekte. Ekzemple:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Antaŭmetu <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> por superforti stilojn. Ekzemple: <x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">911</context></context-group>
       </trans-unit>
@@ -4031,8 +4042,9 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="66ad6eb3f06251c75325b780943a07f94c949df7" datatype="html">
-        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="translated">Mallonga teksto por komprenigi, kiel oni povas subteni vian kanalon (ekz. per membra platformo).&lt;br /&gt;&lt;br /&gt; Kiam vi alŝutos filmon al ĉi tiu kanalo, la kampo de subteno estos memage plenigita de ĉi tiu teksto.</target>
+        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br />&lt;br />
+    When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
+        <target state="translated">Mallonga teksto por komprenigi, kiel oni povas subteni vian kanalon (ekz. per membra platformo).&lt;br />&lt;br /> Kiam vi alŝutos filmon al ĉi tiu kanalo, la kampo de subteno estos memage plenigita de ĉi tiu teksto.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd">
@@ -4309,7 +4321,9 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
-        <source>Do you really want to delete <x id="PH"/>? It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2"/>)!</source>
+        <source>Do you really want to delete <x id="PH"/>?
+It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another
+channel with the same name (<x id="PH_2"/>)!</source>
         <target state="translated">Ĉu vi certe volas forigi <x id="PH"/>? Tio forigos ĉiujn filmojn alŝutitajn de <x id="PH_1"/> al ĉi tiu kanalo, kaj vi ne povos krei alian kanalon kun la sama nomo (<x id="PH_2"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context>
@@ -4968,8 +4982,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
-        <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
-        <target state="translated">&lt;code&gt;.mp4&lt;/code&gt; kiu retenas la originalan sonparton, sen filmoparto</target>
+        <source>A &lt;code>.mp4&lt;/code> that keeps the original audio track, with no video</source>
+        <target state="translated">&lt;code>.mp4&lt;/code> kiu retenas la originalan sonparton, sen filmoparto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="3768852440495368591">
@@ -5519,46 +5533,67 @@
       <trans-unit id="4981709795568846080">
         <source>Last day</source>
         <target>Lasta tago</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">83</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">84</context></context-group></trans-unit>
       <trans-unit id="9178360613965745088">
         <source>Last hour</source>
         <target>Lasta horo</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">87</context></context-group>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit><trans-unit id="3164845764519833078" datatype="html">
+        <source>debug</source><target state="new">debug</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit><trans-unit id="4279081882680795350" datatype="html">
+        <source>info</source><target state="new">info</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit><trans-unit id="3379167598974960777" datatype="html">
+        <source>warning</source><target state="new">warning</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit><trans-unit id="8772116786769251214" datatype="html">
+        <source>error</source><target state="new">error</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
         <target state="new">Debug</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">98</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/system.routes.ts</context><context context-type="linenumber">48</context></context-group></trans-unit>
       <trans-unit id="314315645942131479">
         <source>Info</source>
         <target>Informoj</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">102</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/notification/notifier.service.ts</context><context context-type="linenumber">11</context></context-group></trans-unit>
       <trans-unit id="6759205696902713848">
         <source>Warning</source>
         <target>Averto</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">106</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/routing/can-deactivate-guard.service.ts</context><context context-type="linenumber">23</context></context-group></trans-unit>
       <trans-unit id="1519954996184640001">
         <source>Error</source>
         <target>Eraro</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">110</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">103</context></context-group></trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
         <target state="translated">Normaj protokoloj</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">121</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">124</context></context-group></trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
         <target state="translated">Protokolo de kontrolo</target>
-        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">125</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">128</context></context-group></trans-unit>
       <trans-unit id="1886888801485703107">
         <source>User <x id="PH"/> created.</source>
         <target>Uzanto <x id="PH"/> kreita.</target>
@@ -6286,7 +6321,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>.
+Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="new">Cannot retrieve OAuth Client credentials: <x id="PH"/>.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
         <context-group purpose="location">
@@ -6417,8 +6453,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6613870447286561244">
-        <source>Long (&gt; 10 min)</source>
-        <target>Longa (&gt; 10 min)</target>
+        <source>Long (> 10 min)</source>
+        <target>Longa (> 10 min)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="1787083504545967">
@@ -6959,7 +6995,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6541082750381847310" datatype="html">
-        <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
+        <source>Request is too large for the server.
+ Please contact you administrator if you want to increase the limit size.</source>
         <target state="translated">La peto estas tro granda por la servilo. Bonvolu kontakti la administranton, se vi volas pligrandigi la limon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context>
@@ -8405,7 +8442,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">243</context></context-group>
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
-        <source>Your video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
+        <source>Your video quota is exceeded with this video (
+video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <target state="translated">Via datumlimo por filmoj estas trafita per ĉi tiu filmo ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
@@ -8413,7 +8451,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
-        <source>Your daily video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
+        <source>Your daily video quota is exceeded with this video (
+video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <target state="translated">Via samtaga datumlimo por filmoj estas trafita per ĉi tiu filmo ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
@@ -8461,8 +8500,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
-        <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</source>
-        <target state="new">This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</target>
+        <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</source>
+        <target state="new">This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">373</context></context-group>
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
