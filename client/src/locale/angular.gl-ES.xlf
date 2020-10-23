@@ -1699,7 +1699,7 @@
       </trans-unit>
       <trans-unit id="92cd0a8da81d2ec6d454aa524c0ad967e1ca0818" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="new"> You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">Podes importar calquera URL <x id="START_LINK"/>que teña soporte con youtube-dl<x id="CLOSE_LINK"/> ou URL que apunte a un ficheiro de medios. Deberías ter certeza sobre os dereitos de difusión dese contido, doutro xeito poderías causar problemas legais á túa instancia e a ti mesma. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">11,14</context>
@@ -1736,7 +1736,7 @@
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
-        <target state="new">Hide the video until a specific date</target>
+        <target state="translated">Agochar o vídeo ata unha data concreta</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d">
@@ -1757,122 +1757,102 @@
       </trans-unit>
       <trans-unit id="dfd046dad933ba0a50926b9ab3c1b579c802312e" datatype="html">
         <source>Processing…</source>
-        <target state="new">Processing…</target>
+        <target state="translated">Procesando…</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="a81bfce50be151484f8e59b34829ab07ef97982b" datatype="html">
         <source>Total video quota</source>
-        <target state="new">Total video quota</target>
+        <target state="translated">Cota total de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="6357683911e256c566259880de43ea9403de00d3" datatype="html">
         <source>Congratulations! Your video is now available in your private library.</source>
-        <target state="new">
-  Congratulations! Your video is now available in your private library.
-</target>
+        <target state="translated">Parabéns! O vídeo xa está dispoñible na túa biblioteca privada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="f7ac2376749c7985f94f0fc89ba75ea624de1215" datatype="html">
         <source>Publish will be available when upload is finished</source>
-        <target state="new">Publish will be available when upload is finished</target>
+        <target state="translated">A publicación estará dispoñible cando remate a subida</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3" datatype="html">
         <source>Publish</source>
-        <target state="new">Publish</target>
+        <target state="translated">Publicar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="6206e8d42fea5d7147d3e68d8e061583886603ae" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
-        <target state="new">Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</target>
+        <target state="translated">Lamentámolo, a túa conta non permite subir contidos. Se queres engadir vídeos, unha administradora debe aumentar a túa cota.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="d8bd78a04cdb225ea9a4c95dbdc4db26229981e2" datatype="html">
         <source>Read instance rules for help</source>
-        <target state="new">Read instance rules for help</target>
+        <target state="translated">Le as regras da instancia para ter axuda</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b" datatype="html">
         <source>Select the torrent to import</source>
-        <target state="new">Select the torrent to import</target>
+        <target state="translated">Escolle o torrent a importar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="63f5d0ec23e3cf4abf6d5221107633c90d8d4a15" datatype="html">
         <source>OR</source>
-        <target state="new">OR</target>
+        <target state="translated">OU</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9" datatype="html">
         <source>Paste magnet URI</source>
-        <target state="new">Paste magnet URI</target>
+        <target state="translated">Pega un URI magnet</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266" datatype="html">
         <source>Congratulations, the video will be imported with BitTorrent! You can already add information about this video.</source>
-        <target state="new">
-  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
-</target>
+        <target state="translated">Parabéns, o vídeo será importado con BitTorrent! Xa podes engadir información acerca do vídeo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="ebe5234338205e30a59cf703e2a2b6ef49fb75f8" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="new">
-    We recommend you to not use the 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.
-    
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-    Instead, 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>create a dedicated account
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.
-  
-        </target>
+        <target state="translated">Non che recomendamos usar <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> para publicar vídeos, porque é a conta de administración da túa instancia. <x id="LINE_BREAK"/> No seu lugar, <x id="START_LINK"/>crea unha conta dedicada<x id="CLOSE_LINK"/> para subir os vídeos. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860" datatype="html">
         <source>Import <x id="INTERPOLATION"/></source>
-        <target state="new">Import 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target state="translated">Importa <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5" datatype="html">
         <source>Upload <x id="INTERPOLATION"/></source>
-        <target state="new">Upload 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target state="translated">Sube <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3" datatype="html">
         <source>Upload a file</source>
-        <target state="new">Upload a file</target>
+        <target state="translated">Sube un ficheiro</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470" datatype="html">
         <source>Import with URL</source>
-        <target state="new">Import with URL</target>
+        <target state="translated">Importa con URL</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="752c401d7dcd708944eef60e411187f71d882340" datatype="html">
         <source>Import with torrent</source>
-        <target state="new">Import with torrent</target>
+        <target state="translated">Importa con torrent</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1" datatype="html">
         <source>Other videos</source>
-        <target state="new">
-        Other videos
-      </target>
+        <target state="translated">Outros vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/recommendations/recommended-videos.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="70155053814b6999f8abce4f89bab85afc76e538" datatype="html">
         <source>AUTOPLAY</source>
-        <target state="new">AUTOPLAY</target>
+        <target state="translated">AUTOPLAY</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/recommendations/recommended-videos.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="4619111912751495491" datatype="html">
         <source>Report this comment</source>
-        <target state="new">Report this comment</target>
+        <target state="translated">Denuncia este comentario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -1880,17 +1860,17 @@
       </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9" datatype="html">
         <source>Share</source>
-        <target state="new">Share</target>
+        <target state="translated">Comparte</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="71420314c00d8b709ea1aad8f608498f8db92258" datatype="html">
         <source>Share the playlist</source>
-        <target state="new">Share the playlist</target>
+        <target state="translated">Comparte a lista</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="dfc8701a2a6898d6784db0ebf9d3191552d81d89" datatype="html">
         <source>Share the playlist at this video position</source>
-        <target state="new">Share the playlist at this video position</target>
+        <target state="translated">Comparte a lista nesta posición do vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="51f7d84d38a304f7f056d2dcaf6d733c3ade35f9" datatype="html">
