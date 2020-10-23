@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
-        <target/>
+        <target>Anterior</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts</context>
           <context context-type="linenumber">13</context>
@@ -20,7 +20,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.next" datatype="html">
         <source>Next</source>
-        <target/>
+        <target>Următor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts</context>
           <context context-type="linenumber">17</context>
@@ -28,7 +28,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source>
-        <target/>
+        <target>Luna anterioară</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts</context>
           <context context-type="linenumber">4</context>
@@ -40,7 +40,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source>
-        <target/>
+        <target>Luna următoare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts</context>
           <context context-type="linenumber">26</context>
@@ -52,7 +52,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source>
-        <target/>
+        <target>Selectați luna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts</context>
           <context context-type="linenumber">5</context>
@@ -64,7 +64,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-year" datatype="html">
         <source>Select year</source>
-        <target/>
+        <target>Selectați anul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts</context>
           <context context-type="linenumber">13</context>
@@ -76,7 +76,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source>
-        <target/>
+        <target state="translated">««</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">2</context>
@@ -84,7 +84,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
-        <target/>
+        <target state="translated">«</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">3</context>
@@ -92,7 +92,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
-        <target/>
+        <target state="translated">»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">4</context>
@@ -100,7 +100,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
-        <target/>
+        <target>»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">5</context>
@@ -140,7 +140,7 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.d.ts</context>
           <context context-type="linenumber">7</context>
@@ -156,7 +156,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
-        <target/>
+        <target state="translated">HH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">13</context>
@@ -164,7 +164,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
         <source>Hours</source>
-        <target/>
+        <target>Ore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">15</context>
@@ -188,7 +188,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target/>
+        <target state="translated">MM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">35</context>
@@ -196,7 +196,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
         <source>Minutes</source>
-        <target/>
+        <target>Minute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">37</context>
@@ -220,7 +220,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target/>
+        <target>SS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">57</context>
@@ -228,7 +228,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
         <source>Seconds</source>
-        <target/>
+        <target>Secunde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">59</context>
@@ -244,7 +244,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">76</context>
@@ -252,7 +252,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">77</context>
@@ -260,7 +260,7 @@
       </trans-unit>
       <trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source>
-        <target/>
+        <target>Închide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/toast/toast.d.ts</context>
           <context context-type="linenumber">8</context>
@@ -268,7 +268,7 @@
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c" datatype="html">
         <source>You don't have notifications.</source>
-        <target/>
+        <target state="translated">Nu aveți notificări.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">1</context>
@@ -276,7 +276,7 @@
       </trans-unit>
       <trans-unit id="1cff8e38c81055fa0ae7dbc80a7a0c5c39bbc263" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a new video: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a new video: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">15</context>
@@ -284,7 +284,7 @@
       </trans-unit>
       <trans-unit id="5f61f85f3c9e196f7044fec4dfe165b081e14a3f" datatype="html">
         <source>The notification concerns a video now unavailable</source>
-        <target/>
+        <target>Notificarea se referă la un videoclip care acum este indisponibil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">23</context>
@@ -292,7 +292,7 @@
       </trans-unit>
       <trans-unit id="cd1df1f67905a0fc5c598a95f450ab6cfd6ca3c6" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblacklisted </source>
-        <target/>
+        <target>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblacklisted </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">32</context>
@@ -316,7 +316,7 @@
       </trans-unit>
       <trans-unit id="8b6534c6f0dab443bd67f7d6b51f5347b115b9af" datatype="html">
         <source>The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>auto-blacklisted<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target>Videoclipul adăugat recent <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a fost <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>înscris automat pe lista neagră<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">56</context>
@@ -324,7 +324,7 @@
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> commented your video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a adăugat comentarii la videoclipul dvs. <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">69</context>
@@ -332,7 +332,7 @@
       </trans-unit>
       <trans-unit id="4d2311a5156bd322cc7e2ebafcf6063ba8232e63" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
-        <target/>
+        <target>Notificarea se referă la un comentariu indisponibil acum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">77</context>
@@ -340,7 +340,7 @@
       </trans-unit>
       <trans-unit id="b187dd5f406f4195b326ab01fa81f823025821b9" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been published </source>
-        <target/>
+        <target>Videoclipul dvs. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a fost publicat </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">86</context>
@@ -348,7 +348,7 @@
       </trans-unit>
       <trans-unit id="78dea99c581be394bf509426e114c9cda9f5825d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> succeeded </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> Importarea videoclipului dvs. <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> s-a realizat cu succes </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">94</context>
@@ -356,7 +356,7 @@
       </trans-unit>
       <trans-unit id="dc586a7c70baa9217d98f58f4701fc3a29cd9d4d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> failed </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Importatea videoclipului dvs. <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> a eșuat </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">102</context>
@@ -364,7 +364,7 @@
       </trans-unit>
       <trans-unit id="55c81d14a4e11004f0bcda5a47575f316e85e43e" datatype="html">
         <source>User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> registered on your instance </source>
-        <target/>
+        <target>Utilizatorul <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a fost înregistrat pe instanța dvs. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">110</context>
@@ -372,7 +372,7 @@
       </trans-unit>
       <trans-unit id="0f146c0a4152eb93ec2ad119e1dec613864d64c6" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is following <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your channel <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your account<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> este următorul <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> canalul dvs. <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> contul dvs. <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">120</context>
@@ -380,7 +380,7 @@
       </trans-unit>
       <trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mentioned you on <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> v-a menționat în <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>videoclipul <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">133</context>
@@ -388,7 +388,7 @@
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target/>
+        <target>Instanța dvs. are <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>un nou adept<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> care așteaptă aprobarea dvs. <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">141</context>
@@ -396,7 +396,7 @@
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target>Instanța dvs. a urmat automat <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">150</context>
@@ -404,7 +404,7 @@
       </trans-unit>
       <trans-unit id="f61b49d5729bbd138f2a083fbaee2920811d31c5" datatype="html">
         <source>The notification points to a content now unavailable</source>
-        <target/>
+        <target>Notificarea indică un conținut indisponibil acum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">158</context>
@@ -412,7 +412,7 @@
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">22</context>
@@ -420,7 +420,7 @@
       </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566" datatype="html">
         <source>Save to</source>
-        <target/>
+        <target>Salvați în</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">4</context>
@@ -428,7 +428,7 @@
       </trans-unit>
       <trans-unit id="24813b8a3e45f0b57136c18d003027262cfe2d1f" datatype="html">
         <source>Options</source>
-        <target/>
+        <target>Opțiuni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">9</context>
@@ -472,7 +472,7 @@
       </trans-unit>
       <trans-unit id="8efba03f22550a671ee2c2c6dfd1ff03ea047700" datatype="html">
         <source>Search playlists</source>
-        <target/>
+        <target>Căutare în listă de redare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">45</context>
@@ -480,7 +480,7 @@
       </trans-unit>
       <trans-unit id="19fc45e7e0cab63a8c4422ea7158bf5c6228cee4" datatype="html">
         <source>Create a private playlist</source>
-        <target/>
+        <target>Crearea unei liste de redare personală</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">65</context>
@@ -488,7 +488,7 @@
       </trans-unit>
       <trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9" datatype="html">
         <source>Display name</source>
-        <target/>
+        <target>Afișare nume</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">70</context>
@@ -520,7 +520,7 @@
       </trans-unit>
       <trans-unit id="70a67e04629f6d412db0a12d51820b480788d795" datatype="html">
         <source>Create</source>
-        <target/>
+        <target>Creare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">80</context>
@@ -552,7 +552,7 @@
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd" datatype="html">
         <source>Download</source>
-        <target/>
+        <target>Descărcare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">4</context>
@@ -564,7 +564,7 @@
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
         <source>subtitles</source>
-        <target/>
+        <target>subtitrări</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">11</context>
@@ -572,7 +572,7 @@
       </trans-unit>
       <trans-unit id="e53246788ffa2660a170aa859691a55576df2e6c" datatype="html">
         <source>video</source>
-        <target/>
+        <target>videoclip</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">12</context>
@@ -584,7 +584,7 @@
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
         <source>Format</source>
-        <target/>
+        <target state="translated">Format</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">45</context>
@@ -592,7 +592,7 @@
       </trans-unit>
       <trans-unit id="be745b3dc0df310871766eb6c8f78c3ce652a2b4" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">49</context>
@@ -608,7 +608,7 @@
       </trans-unit>
       <trans-unit id="01504bc3847894e0816ec486648854d3835f91b0" datatype="html">
         <source>Video stream</source>
-        <target/>
+        <target>Flux video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">57</context>
@@ -616,7 +616,7 @@
       </trans-unit>
       <trans-unit id="697b93fd14fd3c85be79056c6d7f459da204eff1" datatype="html">
         <source>Audio stream</source>
-        <target/>
+        <target>Flux audio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">69</context>
@@ -624,7 +624,7 @@
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c" datatype="html">
         <source>Direct download</source>
-        <target/>
+        <target>Descărcare directă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">87</context>
@@ -632,7 +632,7 @@
       </trans-unit>
       <trans-unit id="ac3a02ecd20f41278f1ef7c03f45c1117b4b796d" datatype="html">
         <source>Torrent (.torrent file)</source>
-        <target/>
+        <target>Torrent (fișier .torrent)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">92</context>
@@ -640,7 +640,7 @@
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
         <source>Cancel</source>
-        <target/>
+        <target>Anulare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">99</context>
@@ -696,7 +696,7 @@
       </trans-unit>
       <trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b" datatype="html">
         <source>Report video</source>
-        <target/>
+        <target>Raportare video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">3</context>
@@ -704,7 +704,7 @@
       </trans-unit>
       <trans-unit id="9430cb2c6ceed0b2addc7112a40317985e4193e1" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </source>
-        <target/>
+        <target>Raportul dvs. va fi trimis moderatorilor de la <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> și va fi redirecționat la sursa videoclipului (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) de asemenea <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">9</context>
@@ -712,7 +712,7 @@
       </trans-unit>
       <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125" datatype="html">
         <source>Reason...</source>
-        <target/>
+        <target>Motiv...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">16</context>
@@ -728,7 +728,7 @@
       </trans-unit>
       <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd" datatype="html">
         <source>Submit</source>
-        <target/>
+        <target>Trimite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">31</context>
@@ -752,7 +752,7 @@
       </trans-unit>
       <trans-unit id="f672385c803647b063687d3c912e2ce5738b51c8" datatype="html">
         <source>Blacklist video</source>
-        <target/>
+        <target>Lista neagră videoclipuri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context>
           <context context-type="linenumber">3</context>
@@ -760,7 +760,7 @@
       </trans-unit>
       <trans-unit id="297603f796b0d287ac02b80d5aca6156c91a8fea" datatype="html">
         <source>This will ask remote instances to delete it</source>
-        <target/>
+        <target>Această acțiune va solicita instanțelor la distanță să îl șteargă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context>
           <context context-type="linenumber">26</context>
@@ -788,7 +788,7 @@
       </trans-unit>
       <trans-unit id="ddd8a4986d2d1717a274a5a0fbed04988a819e69" datatype="html">
         <source>Private</source>
-        <target/>
+        <target>Personal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context>
           <context context-type="linenumber">7</context>
@@ -812,7 +812,7 @@
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d" datatype="html">
         <source>Blacklisted</source>
-        <target/>
+        <target>Pe lista neagră</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context>
           <context context-type="linenumber">41</context>
@@ -836,7 +836,7 @@
       </trans-unit>
       <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">22</context>
@@ -844,7 +844,7 @@
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4" datatype="html">
         <source>Updated <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></source>
-        <target/>
+        <target>Actualizat <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">29</context>
@@ -852,7 +852,7 @@
       </trans-unit>
       <trans-unit id="15c02cb6b6c3be53477e502d3e1ee26955b23af0" datatype="html">
         <source>Unavailable</source>
-        <target/>
+        <target>Indisponibil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">32</context>
@@ -860,7 +860,7 @@
       </trans-unit>
       <trans-unit id="28df1b02fd88d2deb0212bc5d7ff34cf9492fa54" datatype="html">
         <source>Deleted</source>
-        <target/>
+        <target>Șters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">34</context>
@@ -884,7 +884,7 @@
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
         <source>Save</source>
-        <target/>
+        <target>Salvare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">82</context>
@@ -904,7 +904,7 @@
       </trans-unit>
       <trans-unit id="b9dee3108a18796bd69c6be316c8fb985b58fb8e" datatype="html">
         <source>Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></source>
-        <target/>
+        <target>Ștergere de pe <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">88</context>
@@ -912,7 +912,7 @@
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e" datatype="html">
         <source>No results.</source>
-        <target/>
+        <target>Fără rezultate.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/videos-selection.component.html</context>
           <context context-type="linenumber">1</context>
@@ -952,7 +952,7 @@
       </trans-unit>
       <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb" datatype="html">
         <source>Cancel</source>
-        <target/>
+        <target>Anulare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/videos-selection.component.html</context>
           <context context-type="linenumber">15</context>
@@ -960,7 +960,7 @@
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7" datatype="html">
         <source>Delete</source>
-        <target/>
+        <target>Ștergere</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/buttons/delete-button.component.html</context>
           <context context-type="linenumber">5</context>
@@ -980,7 +980,7 @@
       </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c" datatype="html">
         <source>Edit</source>
-        <target/>
+        <target>Editare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/buttons/edit-button.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1032,7 +1032,7 @@
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d" datatype="html">
         <source>Truncated preview</source>
-        <target/>
+        <target>Previzualizare trunchiată</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1040,7 +1040,7 @@
       </trans-unit>
       <trans-unit id="f82f53a2544638939a8ba93c0fb1b0a4419c3196" datatype="html">
         <source>Complete preview</source>
-        <target/>
+        <target>Previzualizare completă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1048,7 +1048,7 @@
       </trans-unit>
       <trans-unit id="9c71feb04c2beab559f79c41c6127815fb9c1a6f" datatype="html">
         <source>Get help</source>
-        <target/>
+        <target>Obțineți ajutor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/help.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1056,7 +1056,7 @@
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
         <source>Recommended</source>
-        <target/>
+        <target>Recomandat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/peertube-checkbox.component.html</context>
           <context context-type="linenumber">33</context>
@@ -1064,7 +1064,7 @@
       </trans-unit>
       <trans-unit id="5cb397241041f7ad70997806227bafcdf7eb1b33" datatype="html">
         <source>Go the channel page</source>
-        <target/>
+        <target>Accesați pagina canalului</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/channel/avatar.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1076,7 +1076,7 @@
       </trans-unit>
       <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c" datatype="html">
         <source>Go to the account page</source>
-        <target/>
+        <target>Accesați pagina contului</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/channel/avatar.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1088,7 +1088,7 @@
       </trans-unit>
       <trans-unit id="d0336848b0c375a1c25ba369b3481ee383217a4f" datatype="html">
         <source>Subscribe</source>
-        <target/>
+        <target>Abonați-vă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1096,7 +1096,7 @@
       </trans-unit>
       <trans-unit id="6e215e23505768151b501b7e11dd5b864e604fd9" datatype="html">
         <source>Subscribe to all channels</source>
-        <target/>
+        <target>Abonați-vă la toate canalele</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1104,7 +1104,7 @@
       </trans-unit>
       <trans-unit id="c33a843e309de9d67771aa5e666f61e92f4c6216" datatype="html">
         <source>channels subscribed</source>
-        <target/>
+        <target>canale abonate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1120,7 +1120,7 @@
       </trans-unit>
       <trans-unit id="9b3287f52c239cad05ec98391553e5052ba1aa66" datatype="html">
         <source>Using an ActivityPub account</source>
-        <target/>
+        <target>Folosirea unui cont ActivityPub</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">50</context>
@@ -1128,7 +1128,7 @@
       </trans-unit>
       <trans-unit id="c7e2b4c04a0459ebc4d2e54e419abb679bc713f2" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target/>
+        <target>Abonați-vă cu un cont în această instanță</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">53</context>
@@ -1136,7 +1136,7 @@
       </trans-unit>
       <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0" datatype="html">
         <source>Subscribe with your local account</source>
-        <target/>
+        <target>Abonați-vă cu contul dvs. local</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">54</context>
@@ -1144,7 +1144,7 @@
       </trans-unit>
       <trans-unit id="5047522cc670b1f4a288bce07f9b1c5061e913ed" datatype="html">
         <source>Subscribe with a Mastodon account:</source>
-        <target/>
+        <target>Abonați-vă cu un cont Mastodon:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">57</context>
@@ -1152,7 +1152,7 @@
       </trans-unit>
       <trans-unit id="d8758664cadd6452256ca25ca0c7259074f427c1" datatype="html">
         <source>Using a syndication feed</source>
-        <target/>
+        <target>Utilizarea unui flux de sindicat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">62</context>
@@ -1160,7 +1160,7 @@
       </trans-unit>
       <trans-unit id="d5e5bc7d213694fc0414a76f0ff3085bae44268a" datatype="html">
         <source>Subscribe via RSS</source>
-        <target/>
+        <target>Abonați-vă prin RSS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">63</context>
@@ -1168,7 +1168,7 @@
       </trans-unit>
       <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote interact<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target/>
+        <target><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Abonare la distanță<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Interacțiune la distanță<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">10</context>
@@ -1176,7 +1176,7 @@
       </trans-unit>
       <trans-unit id="01cf713559c39a17cf5c8fbcd33b004a77ce0963" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. </source>
-        <target/>
+        <target>Vă puteți abona la canal prin orice instanță alimentată cu ActivityPub.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> De exemplu, cu Mastodon sau Pleroma puteți introduce adresa URL a canalului în caseta de căutare și vă puteți abona acolo. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1192,7 +1192,7 @@
       </trans-unit>
       <trans-unit id="6513f65441f986d9204122e01b4ab1df1d63d18e" datatype="html">
         <source>PeerTube version</source>
-        <target/>
+        <target>Versiunea PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1208,7 +1208,7 @@
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c" datatype="html">
         <source>User registration allowed</source>
-        <target/>
+        <target>Înregistrarea utilizatorului este permisă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1216,7 +1216,7 @@
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2" datatype="html">
         <source>Video uploads</source>
-        <target/>
+        <target>Încărcări videoclipuri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">27</context>
@@ -1228,7 +1228,7 @@
       </trans-unit>
       <trans-unit id="ba774dce7a0cbbc29d7086b8557939c7e8d9883d" datatype="html">
         <source>Transcoding in multiple resolutions</source>
-        <target/>
+        <target>Transcodare în rezoluții multiple</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1236,7 +1236,7 @@
       </trans-unit>
       <trans-unit id="7deebcf3491b27625e9b308179a6635b48368dcb" datatype="html">
         <source>Requires manual validation by moderators</source>
-        <target/>
+        <target>Necesită validare manuală de către moderatori</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">40</context>
@@ -1244,7 +1244,7 @@
       </trans-unit>
       <trans-unit id="f1155367f44b4e3d2286db687d324a9b0cc1a7cb" datatype="html">
         <source>Automatically published</source>
-        <target/>
+        <target>Publicat automat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">41</context>
@@ -1252,7 +1252,7 @@
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b" datatype="html">
         <source>Video quota</source>
-        <target/>
+        <target>Cota video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">46</context>
@@ -1276,7 +1276,7 @@
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36" datatype="html">
         <source>Import</source>
-        <target/>
+        <target state="translated">Import</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">66</context>
@@ -1292,7 +1292,7 @@
       </trans-unit>
       <trans-unit id="590fc27fcbd7dd680da2bb2da644a183338f6bd1" datatype="html">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
-        <target/>
+        <target>Import HTTP (YouTube, Vimeo, URL direct...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">70</context>
@@ -1300,7 +1300,7 @@
       </trans-unit>
       <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a" datatype="html">
         <source>Torrent import</source>
-        <target/>
+        <target>Import Torrent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">77</context>
@@ -1316,7 +1316,7 @@
       </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5" datatype="html">
         <source>P2P enabled</source>
-        <target/>
+        <target>P2P activat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">89</context>
@@ -1324,7 +1324,7 @@
       </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016" datatype="html">
         <source>Search</source>
-        <target/>
+        <target>Căutare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">96</context>
@@ -1352,7 +1352,7 @@
       </trans-unit>
       <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d" datatype="html">
         <source>Local</source>
-        <target/>
+        <target>Local</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1364,7 +1364,7 @@
       </trans-unit>
       <trans-unit id="7c7f4be7b726e61c577e63842a58d9e435f7c597" datatype="html">
         <source>users</source>
-        <target/>
+        <target>utilizatori</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1372,7 +1372,7 @@
       </trans-unit>
       <trans-unit id="5bc509bb72973f9895241127d5556e9e31051137" datatype="html">
         <source>videos</source>
-        <target/>
+        <target>videoclipuri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1392,7 +1392,7 @@
       </trans-unit>
       <trans-unit id="d11fe88f08e43bfe4dec7d16fe469aa65d1e3d84" datatype="html">
         <source>video comments</source>
-        <target/>
+        <target>comentarii video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">41</context>
@@ -1460,7 +1460,7 @@
       </trans-unit>
       <trans-unit id="c078d4901a5fac169665947cc7a6108b94dd80c7" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ menuEntry.label }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ menuEntry.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/menu/top-menu-dropdown.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1472,7 +1472,7 @@
       </trans-unit>
       <trans-unit id="20f62f24170d57b1efeb2387a0949f482cd4d129" datatype="html">
         <source>Default policy on videos containing sensitive content</source>
-        <target/>
+        <target>Politică prestabilită pentru videoclipurile care conțin conținut sensibil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1488,7 +1488,7 @@
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target/>
+        <target>Politica pentru videoclipurile cu conținut sensibil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1540,7 +1540,7 @@
       </trans-unit>
       <trans-unit id="ea8e7b15807cce2fea74798db2396a4de016e5c7" datatype="html">
         <source>Only display videos in the following languages/subtitles</source>
-        <target/>
+        <target>Afișarevideoclipuri numai în următoarele limbi / subtitrări</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">23</context>
@@ -1556,7 +1556,7 @@
       </trans-unit>
       <trans-unit id="f871b41bfbdb193507cce2cd848c2d02bde77a03" datatype="html">
         <source>No results found</source>
-        <target/>
+        <target>Nu s-au găsit rezultate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">34</context>
@@ -1588,7 +1588,7 @@
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target/>
+        <target>Când vă aflați pe o pagină video, videoclipul va fi redat imediat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">58</context>
@@ -1596,7 +1596,7 @@
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target/>
+        <target>Redă automat videoclipurile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">55</context>
@@ -1604,7 +1604,7 @@
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target/>
+        <target>Când se termină un videoclip, va urma următorul videoclip sugerat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">69</context>
@@ -1612,7 +1612,7 @@
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target/>
+        <target>Începe automat redarea următorului videoclip</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">66</context>
@@ -1620,7 +1620,7 @@
       </trans-unit>
       <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
         <source>Theme</source>
-        <target/>
+        <target>Temă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-interface/my-account-interface-settings.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1656,7 +1656,7 @@
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea" datatype="html">
         <source>Login</source>
-        <target/>
+        <target>Autentificare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1672,7 +1672,7 @@
       </trans-unit>
       <trans-unit id="17f43ee2fb343f8b60568527d105777b99ae8414" datatype="html">
         <source>If you are looking for an account…</source>
-        <target/>
+        <target>Dacă sunteți în căutarea unui cont …</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1688,7 +1688,7 @@
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453" datatype="html">
         <source>Request new verification email.</source>
-        <target/>
+        <target>Se solicită un nou e-mail de verificare.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">27</context>
@@ -1700,7 +1700,7 @@
       </trans-unit>
       <trans-unit id="e08a77594f3d89311cdf6da5090044270909c194" datatype="html">
         <source>User</source>
-        <target/>
+        <target>Utilizator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">35</context>
@@ -1712,7 +1712,7 @@
       </trans-unit>
       <trans-unit id="51ef29329faccb28d94369897068897d1b3d0478" datatype="html">
         <source>Username or email address</source>
-        <target/>
+        <target>Nume de utilizator sau adresa de email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">37</context>
@@ -1720,7 +1720,7 @@
       </trans-unit>
       <trans-unit id="9fed9d6f57dafb967ffaaf3c63f54ad976cab926" datatype="html">
         <source>or create an account</source>
-        <target/>
+        <target>sau crearea unui cont</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">40</context>
@@ -1728,7 +1728,7 @@
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407" datatype="html">
         <source>Password</source>
-        <target/>
+        <target>Parola</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">51</context>
@@ -1764,7 +1764,7 @@
       </trans-unit>
       <trans-unit id="48ff0628dcbb4d37e9687302df3023b8427b48f2" datatype="html">
         <source>Click here to reset your password</source>
-        <target/>
+        <target>Faceți clic aici pentru a vă reseta parola</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">57</context>
@@ -1772,7 +1772,7 @@
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9" datatype="html">
         <source>Login</source>
-        <target/>
+        <target>Autentificare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">64</context>
@@ -1784,7 +1784,7 @@
       </trans-unit>
       <trans-unit id="f5d783c0613d323fdd20074ffbc519ee715a4f2b" datatype="html">
         <source>Or sign in with</source>
-        <target/>
+        <target>Sau conectați-vă cu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">68</context>
@@ -1792,7 +1792,7 @@
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681" datatype="html">
         <source>Forgot your password</source>
-        <target/>
+        <target>V-ați uitat parola</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">83</context>
@@ -1800,7 +1800,7 @@
       </trans-unit>
       <trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target/>
+        <target>Ne pare rău, nu vă puteți recupera parola deoarece administratorul instanței dvs. nu a configurat sistemul de e-mail PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">90</context>
@@ -1808,7 +1808,7 @@
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc" datatype="html">
         <source>Email</source>
-        <target/>
+        <target state="translated">Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">95</context>
@@ -1844,7 +1844,7 @@
       </trans-unit>
       <trans-unit id="69b6ac577a19acc39fc0c22342092f327fff2529" datatype="html">
         <source>Email address</source>
-        <target/>
+        <target>Adresa de email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">97</context>
@@ -1856,7 +1856,7 @@
       </trans-unit>
       <trans-unit id="78be69e4d26b3b654c49962839d8545e61bf8b55" datatype="html">
         <source>Send me an email to reset my password</source>
-        <target/>
+        <target>Trimite-mi un e-mail pentru a-mi reseta parola</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">110</context>
@@ -1864,7 +1864,7 @@
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa" datatype="html">
         <source>Reset my password</source>
-        <target/>
+        <target>Resetează-mi parola</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1872,7 +1872,7 @@
       </trans-unit>
       <trans-unit id="7f3bdcce4b2e8c37cd7f0f6c92ef8cff34b039b8" datatype="html">
         <source>Confirm password</source>
-        <target/>
+        <target>Confirmare parolă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1880,7 +1880,7 @@
       </trans-unit>
       <trans-unit id="3652e5c6e33165264d5271d06cc04ab7123b6df1" datatype="html">
         <source>Confirmed password</source>
-        <target/>
+        <target>Parolă confirmată</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1888,7 +1888,7 @@
       </trans-unit>
       <trans-unit id="8bdf8db5eeeaef83184b489b80c1557b516fb3c3" datatype="html">
         <source>Reset my password</source>
-        <target/>
+        <target>Resetează-mi parola</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1932,7 +1932,7 @@
       </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d" datatype="html">
         <source>No results found</source>
-        <target/>
+        <target>Nu s-au găsit rezultate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">28</context>
@@ -1948,7 +1948,7 @@
       </trans-unit>
       <trans-unit id="5cf92a1d527e65908c75633e8484cdd3b6d16b9b" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target/>
+        <target>Bun venit pe PeerTube, dragă administratorule!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1956,7 +1956,7 @@
       </trans-unit>
       <trans-unit id="fb2ab91ad6091b4a42f4ec08487650a0bc2d541c" datatype="html">
         <source>CLI documentation</source>
-        <target/>
+        <target>Documentație CLI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1964,7 +1964,7 @@
       </trans-unit>
       <trans-unit id="65462878ca6d04c826906432816a3df3e048ac87" datatype="html">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target/>
+        <target>Încărcați sau importați videoclipuri, analizați jurnalele, eliminați directoarele de stocare, resetați parola utilizatorului ...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2004,7 +2004,7 @@
       </trans-unit>
       <trans-unit id="6b705cdf0d567cf608b9891a1d912daebac3523e" datatype="html">
         <source>Useful links</source>
-        <target/>
+        <target>Link-uri utile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">41</context>
@@ -2028,7 +2028,7 @@
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target/>
+        <target>Este timpul să vă configurați instanța!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">59</context>
@@ -2052,7 +2052,7 @@
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
         <source>Remind me later</source>
-        <target/>
+        <target>Amintește-mi mai târziu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">80</context>
@@ -2060,7 +2060,7 @@
       </trans-unit>
       <trans-unit id="b310fa17f1bbfc4dd61b80c1cfc4116a81a9c76c" datatype="html">
         <source>Configure my instance</source>
-        <target/>
+        <target>Configurați-mi instanța</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">86</context>
@@ -2068,7 +2068,7 @@
       </trans-unit>
       <trans-unit id="a9af18b4f210f5a19bb2503407923d3f25c57f98" datatype="html">
         <source>Configuration warning!</source>
-        <target/>
+        <target>Avertisment de configurare!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2076,7 +2076,7 @@
       </trans-unit>
       <trans-unit id="120796abeaabea4067c1cd739194cb6c86252155" datatype="html">
         <source>Hello dear administrator. You enabled user registration on your instance but you did not configure the following fields:</source>
-        <target/>
+        <target>Bună, dragă administratorule. Ați activat înregistrarea utilizatorului în instanța dvs., dar nu ați configurat următoarele câmpuri:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -2084,7 +2084,7 @@
       </trans-unit>
       <trans-unit id="ab7e3d0be94cc55ce997a5f38c679956e66f3936" datatype="html">
         <source>Instance name</source>
-        <target/>
+        <target>Nume instanță</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">13</context>
@@ -2092,7 +2092,7 @@
       </trans-unit>
       <trans-unit id="b6e9a7a198c9882894677a0358d22ed79482808a" datatype="html">
         <source>Instance short description</source>
-        <target/>
+        <target>Descriere scurtă a instanței</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2100,7 +2100,7 @@
       </trans-unit>
       <trans-unit id="801cb5b4cc93a5c0a4d89a46b96487d3638f0bc5" datatype="html">
         <source>Who you are</source>
-        <target/>
+        <target>Cine sunteți</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -2108,7 +2108,7 @@
       </trans-unit>
       <trans-unit id="de688f72fc745cc8481a5e9cc70b8ca9e6f41e2a" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target/>
+        <target>Cât timp intenționați să vă întrețineți instanța</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">17</context>
@@ -2116,7 +2116,7 @@
       </trans-unit>
       <trans-unit id="af60a062ecc7c70b278bdb3ba7ad0147abfecf0a" datatype="html">
         <source>How you plan to pay your instance</source>
-        <target/>
+        <target>Cum intenționați să plătiți instanța dvs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2124,7 +2124,7 @@
       </trans-unit>
       <trans-unit id="c69c1bd027bae555557a48123a26d770a93ee473" datatype="html">
         <source>How you will moderate your instance</source>
-        <target/>
+        <target>Cum vă veți modera instanța</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -2132,7 +2132,7 @@
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c" datatype="html">
         <source>Instance terms</source>
-        <target/>
+        <target>Termenii instanței</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">21</context>
@@ -2148,7 +2148,7 @@
       </trans-unit>
       <trans-unit id="c8e491ab57fa4f6a0d6d09b296299b6c034244ec" datatype="html">
         <source>Configure these fields</source>
-        <target/>
+        <target>Configurați aceste câmpuri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">30</context>
@@ -2156,7 +2156,7 @@
       </trans-unit>
       <trans-unit id="7d438f72f9985c4d06ed4fe80c90afc2e1df34d2" datatype="html">
         <source>Don't show me this warning anymore</source>
-        <target/>
+        <target>Nu-mi mai arăta acest avertisment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">38</context>
@@ -2164,7 +2164,7 @@
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8" datatype="html">
         <source>Close</source>
-        <target/>
+        <target>Închide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">44</context>
@@ -2172,7 +2172,7 @@
       </trans-unit>
       <trans-unit id="1cb86e649ad2e5cfc86efb2d28c06b1d959f8aa6" datatype="html">
         <source>Homepage</source>
-        <target/>
+        <target>Pagina principală</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">11</context>
@@ -2180,7 +2180,7 @@
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96" datatype="html">
         <source>Change the language</source>
-        <target/>
+        <target>Schimbați limba</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/language-chooser.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2188,7 +2188,7 @@
       </trans-unit>
       <trans-unit id="1c98d728375e7bd5b166d1aeb29485ef8b5d6e28" datatype="html">
         <source>Help to translate PeerTube!</source>
-        <target/>
+        <target>Ajutați la traducerea PeerTube!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/language-chooser.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2196,7 +2196,7 @@
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
         <source>Settings</source>
-        <target/>
+        <target>Configurare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2212,7 +2212,7 @@
       </trans-unit>
       <trans-unit id="3b79d221458541611e8508d3551dd1ddd76b49d9" datatype="html">
         <source>Display settings</source>
-        <target/>
+        <target>Afișare setări</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2220,7 +2220,7 @@
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925" datatype="html">
         <source>Video settings</source>
-        <target/>
+        <target>Setări video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2228,7 +2228,7 @@
       </trans-unit>
       <trans-unit id="dc7b800a27960e33af36f16f6c25aaf5776464f7" datatype="html">
         <source>Interface settings</source>
-        <target/>
+        <target>Setări de interfață</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -2236,7 +2236,7 @@
       </trans-unit>
       <trans-unit id="608d7164ed2d996dc827b17cd7b6f5915c617be4" datatype="html">
         <source>Public profile</source>
-        <target/>
+        <target>Profil public</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2244,7 +2244,7 @@
       </trans-unit>
       <trans-unit id="1eecebc91b4c671d43617b559cf3933275492931" datatype="html">
         <source>Account settings</source>
-        <target/>
+        <target>Setări cont</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">25</context>
@@ -2252,7 +2252,7 @@
       </trans-unit>
       <trans-unit id="7c55f3a275f9e86fc95243e2fd1f17156a4e97f0" datatype="html">
         <source>Channels settings</source>
-        <target/>
+        <target>Setări canale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">29</context>
@@ -2288,7 +2288,7 @@
       </trans-unit>
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
         <source>Help share videos</source>
-        <target/>
+        <target>Ajutați la partajarea videoclipurilor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">55</context>
@@ -2296,7 +2296,7 @@
       </trans-unit>
       <trans-unit id="cb17d0eefd7d4fc2633ffd351eae187a2c7d4b57" datatype="html">
         <source>More account settings</source>
-        <target/>
+        <target>Mai multe setări de cont</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">60</context>
@@ -2304,7 +2304,7 @@
       </trans-unit>
       <trans-unit id="d2dcb25a3b90ccb169effc066d36335363546d17" datatype="html">
         <source>Keyboard shortcuts</source>
-        <target/>
+        <target>Comenzi rapide de la tastatură</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">66</context>
@@ -2312,7 +2312,7 @@
       </trans-unit>
       <trans-unit id="3fdc751b264ca9998e1542fcf5794e274cd56344" datatype="html">
         <source>Log out</source>
-        <target/>
+        <target state="translated">Dezautentificare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">70</context>
@@ -2320,7 +2320,7 @@
       </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87" datatype="html">
         <source>Create an account</source>
-        <target/>
+        <target>Creați un cont</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">78</context>
@@ -2344,7 +2344,7 @@
       </trans-unit>
       <trans-unit id="47546e45bbb476baaaad38244db444c427ddc502" datatype="html">
         <source>Playlists</source>
-        <target/>
+        <target>Liste de redare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">91</context>
@@ -2352,7 +2352,7 @@
       </trans-unit>
       <trans-unit id="357064ca9d9ac859eb618e28e8126fa32be049e2" datatype="html">
         <source>Subscriptions</source>
-        <target/>
+        <target>Abonamente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">96</context>
@@ -2400,7 +2400,7 @@
       </trans-unit>
       <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1" datatype="html">
         <source>Recently added</source>
-        <target/>
+        <target>Recent adăugate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">126</context>
@@ -2408,7 +2408,7 @@
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919" datatype="html">
         <source>Administration</source>
-        <target/>
+        <target>Administrare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">140</context>
@@ -2424,7 +2424,7 @@
       </trans-unit>
       <trans-unit id="34746fb1c7f3d2194d99652bdff89e6e14c9c4f4" datatype="html">
         <source>Contact</source>
-        <target/>
+        <target>Contact</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">160</context>
@@ -2432,7 +2432,7 @@
       </trans-unit>
       <trans-unit id="85b79c9064aed1ead31ace985f31aa1363f6bdaf" datatype="html">
         <source>Help</source>
-        <target/>
+        <target>Ajutor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">161</context>
@@ -2440,7 +2440,7 @@
       </trans-unit>
       <trans-unit id="0530eaf7a05c66b3167da49a57e5af4326f3af15" datatype="html">
         <source>Get help using PeerTube</source>
-        <target/>
+        <target>Obțineți ajutor pentru folosirea PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">161</context>
@@ -2448,7 +2448,7 @@
       </trans-unit>
       <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
         <source>FAQ</source>
-        <target/>
+        <target>Întrebări frecvente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">162</context>
@@ -2464,7 +2464,7 @@
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a" datatype="html">
         <source>Stats</source>
-        <target/>
+        <target>Statistici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">163</context>
@@ -2472,7 +2472,7 @@
       </trans-unit>
       <trans-unit id="e351b40b3869a5c7d19c3d4918cb1ac7aaab95c4" datatype="html">
         <source>API</source>
-        <target/>
+        <target state="translated">API</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">164</context>
@@ -2480,7 +2480,7 @@
       </trans-unit>
       <trans-unit id="fd91a5f2ef27c48b6908d9016fb6de2a224e8559" datatype="html">
         <source>API documentation</source>
-        <target/>
+        <target>Documentație API</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">164</context>
@@ -2488,7 +2488,7 @@
       </trans-unit>
       <trans-unit id="d3381fff430c3687ae1c6302af99d88baa4f480b" datatype="html">
         <source>Shortcuts</source>
-        <target/>
+        <target>Scurtături</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">165</context>
@@ -2496,7 +2496,7 @@
       </trans-unit>
       <trans-unit id="5c195f8d79bd19e8520c890a2513fe635529b7a7" datatype="html">
         <source>powered by PeerTube</source>
-        <target/>
+        <target>dezvoltat de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">171</context>
@@ -2504,7 +2504,7 @@
       </trans-unit>
       <trans-unit id="018843afca0913de849c80fdf962a6a42f5190b4" datatype="html">
         <source>PeerTube website</source>
-        <target/>
+        <target>website PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">171</context>
@@ -2512,7 +2512,7 @@
       </trans-unit>
       <trans-unit id="2a851f40f4a956fc4c3e0c3ed8dd33f10a4fa161" datatype="html">
         <source>PeerTube license</source>
-        <target/>
+        <target>licență PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">175</context>
@@ -2520,7 +2520,7 @@
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2020</source>
-        <target/>
+        <target>dezvoltat de PeerTube - CopyLeft 2015-2020</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">170</context>
@@ -2528,7 +2528,7 @@
       </trans-unit>
       <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771" datatype="html">
         <source>View your notifications</source>
-        <target/>
+        <target state="translated">Vizualizați notificările</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/avatar-notification.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2536,7 +2536,7 @@
       </trans-unit>
       <trans-unit id="8bcabdf6b16cad0313a86c7e940c5e3ad7f9f8ab" datatype="html">
         <source>Notifications</source>
-        <target/>
+        <target>Notificări</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/avatar-notification.component.html</context>
           <context context-type="linenumber">13</context>
@@ -2544,7 +2544,7 @@
       </trans-unit>
       <trans-unit id="1da23f4068fd3796fbcb24d0c42bb62f92c96829" datatype="html">
         <source>Mark all as read</source>
-        <target/>
+        <target>Marchează totul ca fiind citit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/avatar-notification.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2556,7 +2556,7 @@
       </trans-unit>
       <trans-unit id="341e026e3f317aa3164916cc63a059c961a78b81" datatype="html">
         <source>Update your notification preferences</source>
-        <target/>
+        <target>Actualizați preferințele de notificare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/avatar-notification.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2564,7 +2564,7 @@
       </trans-unit>
       <trans-unit id="3d1b5c9cd76948c04fdb7bb3fe51b6c1242c1bd5" datatype="html">
         <source>See all your notifications</source>
-        <target/>
+        <target state="translated">Vedeți toate notificările</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/avatar-notification.component.html</context>
           <context context-type="linenumber">39</context>
@@ -2572,7 +2572,7 @@
       </trans-unit>
       <trans-unit id="4b3972c3e9485218508a95f7a4ce7758e3f09ced" datatype="html">
         <source>Upload</source>
-        <target/>
+        <target>Încărcare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">5</context>
@@ -2580,7 +2580,7 @@
       </trans-unit>
       <trans-unit id="2f8adf9966f3c287b193683af9e1eaba4f526d68" datatype="html">
         <source>In this channel</source>
-        <target/>
+        <target>În acest canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2588,7 +2588,7 @@
       </trans-unit>
       <trans-unit id="2fb6c7364664174a205180f7173c4128b350c5ec" datatype="html">
         <source>In this instance</source>
-        <target/>
+        <target>În această instanță</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">13</context>
@@ -2612,7 +2612,7 @@
       </trans-unit>
       <trans-unit id="73216504c8903e04fdb415d876eb8969dd3afa60" datatype="html">
         <source>Search videos, channels…</source>
-        <target/>
+        <target>Căutați videoclipuri, canale …</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2636,7 +2636,7 @@
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target/>
+        <target>Rezultatele vor fi îmbunătățite cu cele ale unui index al unei terțe părți. Vor fi trimise numai datele necesare pentru a efectua interogarea.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2644,7 +2644,7 @@
       </trans-unit>
       <trans-unit id="ee697ded3eb6909ca0e619ab5cc9647cbd849da5" datatype="html">
         <source>ADVANCED SEARCH</source>
-        <target/>
+        <target>CĂUTARE AVANSATĂ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">29</context>
@@ -2652,7 +2652,7 @@
       </trans-unit>
       <trans-unit id="8e799fee4b3df7ea53786f096380f81c78a77efd" datatype="html">
         <source>any instance</source>
-        <target/>
+        <target>orice instanță</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">32</context>
@@ -2660,7 +2660,7 @@
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target/>
+        <target>doar instanțele urmărite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">33</context>
@@ -2676,7 +2676,7 @@
       </trans-unit>
       <trans-unit id="c9af5a8f7fae61166a0cc135063ff16d76deef55" datatype="html">
         <source>channel</source>
-        <target/>
+        <target>canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">40</context>
@@ -2688,7 +2688,7 @@
       </trans-unit>
       <trans-unit id="1dde6766dd298aa1e1b12afe67ad23dfbca88d2e" datatype="html">
         <source>Any other text will return matching video or channel names.</source>
-        <target/>
+        <target>Orice alt text va afișa numele videoclipurilor sau canalelor potrivite.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">49</context>
@@ -2696,7 +2696,7 @@
       </trans-unit>
       <trans-unit id="5d43539fc358c3a548b9d487be821db73e2702ff" datatype="html">
         <source>Sort</source>
-        <target/>
+        <target>Sortare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">7</context>
@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="a57adbb9bc3ecbc397157af25f96fc2123c9c383" datatype="html">
         <source>Reset</source>
-        <target/>
+        <target>Resetare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2728,7 +2728,7 @@
       </trans-unit>
       <trans-unit id="98acac685fc4b2d35e5d0cf3cd224d247a756c3e" datatype="html">
         <source>Published date</source>
-        <target/>
+        <target>Data publicării</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -2736,7 +2736,7 @@
       </trans-unit>
       <trans-unit id="31523e672b9f39a621e5d9e2a22b24bbf9aa8d4d" datatype="html">
         <source>Original publication year</source>
-        <target/>
+        <target>Anul publicării originale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">35</context>
@@ -2744,7 +2744,7 @@
       </trans-unit>
       <trans-unit id="e9866754251f6f45c42710a3de01da5d79c6ae91" datatype="html">
         <source>After...</source>
-        <target/>
+        <target>După...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">47</context>
@@ -2752,7 +2752,7 @@
       </trans-unit>
       <trans-unit id="46c36269a23f9105124bbdd58f8c91833b92e565" datatype="html">
         <source>Before...</source>
-        <target/>
+        <target>Înainte de...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">57</context>
@@ -2760,7 +2760,7 @@
       </trans-unit>
       <trans-unit id="a02ea1d4e7424ca989929da5e598f379940fdbf2" datatype="html">
         <source>Duration</source>
-        <target/>
+        <target>Durata</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">67</context>
@@ -2772,7 +2772,7 @@
       </trans-unit>
       <trans-unit id="dc67060f94f0f2b58549f54a5c07925dffd20238" datatype="html">
         <source>Display sensitive content</source>
-        <target/>
+        <target>Afișare conținut sensibil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">81</context>
@@ -2780,7 +2780,7 @@
       </trans-unit>
       <trans-unit id="4f20f2d5a6882190892e58b85f6ccbedfa737952" datatype="html">
         <source>Yes</source>
-        <target/>
+        <target>Da</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">89</context>
@@ -2788,7 +2788,7 @@
       </trans-unit>
       <trans-unit id="3d3ae7deebc5949b0c1c78b9847886a94321d9fd" datatype="html">
         <source>No</source>
-        <target/>
+        <target>Nu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">94</context>
@@ -2796,7 +2796,7 @@
       </trans-unit>
       <trans-unit id="607de17c2a755f65775881c19e276e7c933bcf94" datatype="html">
         <source>Category</source>
-        <target/>
+        <target>Categorie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">102</context>
@@ -2812,7 +2812,7 @@
       </trans-unit>
       <trans-unit id="265ee68edfe57e510270da31ec99f67d94346009" datatype="html">
         <source>Reset</source>
-        <target/>
+        <target>Resetare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">103</context>
@@ -2836,7 +2836,7 @@
       </trans-unit>
       <trans-unit id="75706466a5cffa6f6bf0d6c94a8345a001ce8cea" datatype="html">
         <source>Display all categories</source>
-        <target/>
+        <target>Afișarea tuturor categoriilor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">108</context>
@@ -2844,7 +2844,7 @@
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c" datatype="html">
         <source>Licence</source>
-        <target/>
+        <target>Licență</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">115</context>
@@ -2860,7 +2860,7 @@
       </trans-unit>
       <trans-unit id="e19d80c6277747a68f3da8cfe1318303d2b5c952" datatype="html">
         <source>Display all licenses</source>
-        <target/>
+        <target>Afișarea tuturor licențelor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">121</context>
@@ -2868,7 +2868,7 @@
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619" datatype="html">
         <source>Language</source>
-        <target/>
+        <target>Limbă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">128</context>
@@ -2888,7 +2888,7 @@
       </trans-unit>
       <trans-unit id="dcc3173a99661496cd1f836283993cc3e6576b26" datatype="html">
         <source>Display all languages</source>
-        <target/>
+        <target>Afișarea tuturor limbilor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">134</context>
@@ -2896,7 +2896,7 @@
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8" datatype="html">
         <source>All of these tags</source>
-        <target/>
+        <target>Toate aceste etichete</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">143</context>
@@ -2904,7 +2904,7 @@
       </trans-unit>
       <trans-unit id="9bdd535a2817bf0b843a124bf65e4992625e7ecf" datatype="html">
         <source>+ Tag</source>
-        <target/>
+        <target>+ Etichetă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">150</context>
@@ -2920,7 +2920,7 @@
       </trans-unit>
       <trans-unit id="e5a71671bcec89845f208e90c3bf508aafc8f931" datatype="html">
         <source>Enter a tag</source>
-        <target/>
+        <target>Introduceți o etichetă</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">150</context>
@@ -2932,7 +2932,7 @@
       </trans-unit>
       <trans-unit id="492d2bd18db0cba03f6d9e3b0c42b8639fbe51ab" datatype="html">
         <source>One of these tags</source>
-        <target/>
+        <target>Una din aceste etichete</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">156</context>
@@ -2940,7 +2940,7 @@
       </trans-unit>
       <trans-unit id="ca72d574353a355b8fadbc1ceda174a0bd1bf7cd" datatype="html">
         <source>Reset</source>
-        <target/>
+        <target>Resetare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">171</context>
@@ -2948,7 +2948,7 @@
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22" datatype="html">
         <source>Filter</source>
-        <target/>
+        <target>Filtru</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">175</context>
@@ -2956,7 +2956,7 @@
       </trans-unit>
       <trans-unit id="41ed53a3f1d4dfc57011d0aba13b8b074e8b41b6" datatype="html">
         <source>Display unlisted and private videos</source>
-        <target/>
+        <target>Afișați videoclipuri nelistate și private</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/abstract-video-list.html</context>
           <context context-type="linenumber">22</context>
@@ -3028,7 +3028,7 @@
       </trans-unit>
       <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e" datatype="html">
         <source>Title</source>
-        <target/>
+        <target>Titlu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3036,7 +3036,7 @@
       </trans-unit>
       <trans-unit id="cafc87479686947e2590b9f588a88040aeaf660b" datatype="html">
         <source>Tags</source>
-        <target/>
+        <target>Etichete</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">19</context>
@@ -7011,7 +7011,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="d4c6a2c1a0980128921e991daccf1eca6e7d26bf" datatype="html">
-        <source></source>
+        <source/>
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
