@@ -15,17 +15,17 @@
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
         <source>You don't have notifications.</source>
-        <target>Нет уведомлений.</target>
+        <target>У вас нет уведомлений.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="1cff8e38c81055fa0ae7dbc80a7a0c5c39bbc263" datatype="html">
         <source><x id="INTERPOLATION"/> published a new video: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="INTERPOLATION"/> опубликовано новое видео: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="INTERPOLATION"/> опубликовало новое видео: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="5f61f85f3c9e196f7044fec4dfe165b081e14a3f" datatype="html">
         <source>The notification concerns a video now unavailable</source>
-        <target state="translated">Уведомление касается видео, которое теперь недоступно</target>
+        <target state="translated">Уведомление касается видео которое сейчас недоступно</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="03ccba66e74e25303828fc37062dda862ec272dc" datatype="html">
@@ -40,17 +40,17 @@
       </trans-unit>
       <trans-unit id="552e90b955a7121d58f6e5a38b68c7e90f5ed90c" datatype="html">
         <source><x id="START_LINK"/>A new video abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>Новая жалоба <x id="CLOSE_LINK"/> на видео<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>Новая жалоба<x id="CLOSE_LINK"/> на видео <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="c039b9ff89810152d8c0006979d3542a122cd286" datatype="html">
         <source><x id="START_LINK"/>A new comment abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>Новый комментарий <x id="CLOSE_LINK"/> был создан в жалобе на видео <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>Новая жалоба на комментарий<x id="CLOSE_LINK"/> была создана под видео <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="bfe60e77cfae17a8719a5fb422fb7e4b2bcc83c2" datatype="html">
         <source><x id="START_LINK"/>A new account abuse<x id="CLOSE_LINK"/> has been created on account <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>Новая жалоба <x id="CLOSE_LINK"/> создана на аккаунт <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>Новая жалоба<x id="CLOSE_LINK"/> создана на аккаунт <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="285ef550cb17086e949266777312a1884bd7d739" datatype="html">
@@ -60,27 +60,27 @@
       </trans-unit>
       <trans-unit id="680ba11d9548df295024d7f8ab7b816580725d5d" datatype="html">
         <source><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK"/>Ваша жалоба <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> был <x id="START_TAG_NG_CONTAINER"/>принята<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>отклонена<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated"><x id="START_LINK"/>Ваша жалоба <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> была <x id="START_TAG_NG_CONTAINER"/>принята<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>отклонена<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="3f8e1a007a869471c5ab6e9b6149165ecc26e4ad" datatype="html">
         <source><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </source>
-        <target state="translated"><x id="START_LINK"/>Жалоба<x id="INTERPOLATION"/><x id="CLOSE_LINK"/> новое сообщение </target>
+        <target state="translated"><x id="START_LINK"/>Жалоба <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> получила новое сообщение </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="translated">Недавно добавленное видео <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>автоматически заблокировано<x id="CLOSE_LINK"/></target>
+        <target state="translated">Недавно добавленное видео <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> была <x id="START_LINK_1"/>автоматически заблокирована<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> commented your video <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> прокомментировал ваше видео <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> прокомментировало ваше видео <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="4d2311a5156bd322cc7e2ebafcf6063ba8232e63" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
-        <target state="translated">Уведомление касается комментария, который теперь недоступен</target>
+        <target state="translated">Уведомление касается комментария который сейчас недоступен</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="b187dd5f406f4195b326ab01fa81f823025821b9" datatype="html">
@@ -90,12 +90,12 @@
       </trans-unit>
       <trans-unit id="78dea99c581be394bf509426e114c9cda9f5825d" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> succeeded </source>
-        <target state="translated"><x id="START_LINK"/>Импорт вашего видео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> выполнено </target>
+        <target state="translated"><x id="START_LINK"/>Импорт вашего видео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> завершено </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="dc586a7c70baa9217d98f58f4701fc3a29cd9d4d" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> failed </source>
-        <target state="translated"><x id="START_LINK"/>Ваше видео импортировано<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> с ошибкой </target>
+        <target state="translated"><x id="START_LINK"/>Импорт вашего видео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> не выполнена </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="55c81d14a4e11004f0bcda5a47575f316e85e43e" datatype="html">
@@ -110,22 +110,22 @@
       </trans-unit>
       <trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> mentioned you on <x id="START_LINK_1"/>video <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> упомянутое вами в <x id="START_LINK_1"/>видео <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> упомянуло вас в <x id="START_LINK_1"/>видео <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">Ваш экземпляр имеет <x id="START_LINK"/>нового последователя <x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> ожидается ваше одобрение<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">Ваш экземпляр имеет <x id="START_LINK"/>нового подписчика<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> ожидающего вашего согласия<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">Ваш экземпляр автоматически последовал за ним <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated">Ваш экземпляр автоматически подписался на <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="f61b49d5729bbd138f2a083fbaee2920811d31c5" datatype="html">
         <source>The notification points to a content now unavailable</source>
-        <target state="translated">Уведомление указывает на содержимое, которое теперь недоступно</target>
+        <target state="translated">Уведомление указывает на содержимое которое сейчас недоступно</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">190</context></context-group>
       </trans-unit>
       <trans-unit id="3fb9a5f7268114445d8c109a8f48102e93471f5a" datatype="html">
@@ -160,7 +160,7 @@
       </trans-unit>
       <trans-unit id="020d5da7c3f4726e3623587a05a11f00e1d40409" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">Ваш отчёт будет отправлен модераторам <x id="INTERPOLATION"/> <x id="START_TAG_NG-CONTAINER"/> и будет ссылаться на источник видео ( <x id="INTERPOLATION_1"/>) тоже <x id="CLOSE_TAG_NG-CONTAINER"/>. </target>
+        <target state="translated">Ваша жалоба будет отправлена модераторам <x id="INTERPOLATION"/><x id="START_TAG_NG-CONTAINER"/> и источнику видео (<x id="INTERPOLATION_1"/>) тоже<x id="CLOSE_TAG_NG-CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="04f47b9519b96ac834a111c0e113d18c77d177de" datatype="html">
@@ -170,7 +170,7 @@
       </trans-unit>
       <trans-unit id="8efba03f22550a671ee2c2c6dfd1ff03ea047700" datatype="html">
         <source>Search playlists</source>
-        <target state="translated">Найти плейлист</target>
+        <target state="translated">Искать плейлисты</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="19fc45e7e0cab63a8c4422ea7158bf5c6228cee4" datatype="html">
@@ -190,7 +190,7 @@
       </trans-unit>
       <trans-unit id="e53246788ffa2660a170aa859691a55576df2e6c" datatype="html">
         <source>video</source>
-        <target state="translated">Видео</target>
+        <target state="translated">видео</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
@@ -210,12 +210,12 @@
       </trans-unit>
       <trans-unit id="01504bc3847894e0816ec486648854d3835f91b0" datatype="html">
         <source>Video stream</source>
-        <target state="translated">Видео стрим</target>
+        <target state="translated">Видеопоток</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="697b93fd14fd3c85be79056c6d7f459da204eff1" datatype="html">
         <source>Audio stream</source>
-        <target state="translated">Аудио стрим</target>
+        <target state="translated">Аудиопоток</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c">
@@ -275,12 +275,12 @@
       </trans-unit>
       <trans-unit id="448d436df053141260523149173073ccbb0259f9" datatype="html">
         <source>Report video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Видео отчёт " <x id="INTERPOLATION"/>"</target>
+        <target state="translated">Пожаловаться на "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="97916f2928694b8d574b6f052b93e54565ed9823" datatype="html">
         <source>What is the issue?</source>
-        <target state="translated">Какая ошибка?</target>
+        <target state="translated">В чём проблема?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="297603f796b0d287ac02b80d5aca6156c91a8fea" datatype="html">
@@ -305,7 +305,7 @@
       </trans-unit>
       <trans-unit id="f73a82bb90c6c856cc0d2e3b2f5c109460074912" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 просмотр} other { <x id="INTERPOLATION"/> просмотров} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 просмотр} other {<x id="INTERPOLATION"/> просмотров}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="1d3781d7296d4b4e04e7f023aec1052fb2955c4d" datatype="html">
@@ -320,7 +320,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other { <x id="INTERPOLATION"/> видео} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Нет видео} other {<x id="INTERPOLATION"/> видео}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582" datatype="html">
@@ -340,7 +340,7 @@
       </trans-unit>
       <trans-unit id="28df1b02fd88d2deb0212bc5d7ff34cf9492fa54" datatype="html">
         <source>Deleted</source>
-        <target state="translated">Удален</target>
+        <target state="translated">Удалено</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="2edccfda908b57c073dc0811eaa58818de2be2dc">
@@ -375,17 +375,17 @@
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
         <source>Truncated preview</source>
-        <target>Укороченная обложка</target>
+        <target state="translated">Обрезанная обложка</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/markdown-textarea.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="f82f53a2544638939a8ba93c0fb1b0a4419c3196">
         <source>Complete preview</source>
-        <target>Предпросмотр</target>
+        <target state="translated">Предпросмотр</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/markdown-textarea.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</target>
+        <target state="translated">&lt;a href="https://ru.wikipedia.org/wiki/Markdown#Примеры_синтаксиса" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; совместимый что поддерживает:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
@@ -400,7 +400,7 @@
       </trans-unit>
       <trans-unit id="c7e2b4c04a0459ebc4d2e54e419abb679bc713f2" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">Подписаться с помощью учетной записи на этом экземпляре</target>
+        <target state="translated">Подписаться с аккаунта на этом экземпляре</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0">
@@ -415,12 +415,12 @@
       </trans-unit>
       <trans-unit id="d8758664cadd6452256ca25ca0c7259074f427c1">
         <source>Using a syndication feed</source>
-        <target>Используя синдикативный поток</target>
+        <target state="translated">Используя канал распределения</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="d5e5bc7d213694fc0414a76f0ff3085bae44268a">
         <source>Subscribe via RSS</source>
-        <target>Подписаться используя RSS</target>
+        <target>Подписаться по RSS</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="3e486bad6576aa445ccb6051069e45a3658e4160" datatype="html">
@@ -430,17 +430,17 @@
       </trans-unit>
       <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3">
         <source><x id="START_TAG_SPAN"/>Remote subscribe<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Remote interact<x id="CLOSE_TAG_SPAN"/></source>
-        <target><x id="START_TAG_SPAN"/>Удалённая подписка <x id="CLOSE_TAG_SPAN"/> <x id="START_TAG_SPAN_1"/>Удалённое соединение <x id="CLOSE_TAG_SPAN"/></target>
+        <target><x id="START_TAG_SPAN"/>Удалённая подписка<x id="CLOSE_TAG_SPAN"/> <x id="START_TAG_SPAN_1"/>Удалённое взаимодействие<x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="01cf713559c39a17cf5c8fbcd33b004a77ce0963" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. </source>
-        <target state="translated">Вы можете подписаться на канал через любой экземпляр с поддержкой ActivityPub. <x id="LINE_BREAK"/> <x id="LINE_BREAK"/> Например, с Mastodon или Pleroma вы можете ввести URL-адрес канала в поле поиска и подписаться там. </target>
+        <target state="translated">Вы можете подписаться на канал через любой экземпляр с поддержкой ActivityPub. <x id="LINE_BREAK"/><x id="LINE_BREAK"/> Например, с Mastodon или Pleroma вы можете ввести URL-адрес канала в поле поиска и подписаться там. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </source>
-        <target state="translated">Вы можете взаимодействовать через любой экземпляр с поддержкой ActivityPub. <x id="LINE_BREAK"/> <x id="LINE_BREAK"/> Например, с Mastodon или Pleroma вы можете ввести текущий URL-адрес в поле поиска и взаимодействовать с ним там. </target>
+        <target state="translated">Вы можете взаимодействовать через любой экземпляр с поддержкой ActivityPub. <x id="LINE_BREAK"/><x id="LINE_BREAK"/> Например, с Mastodon или Pleroma вы можете ввести текущий URL-адрес в поле поиска и взаимодействовать с ним там. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6513f65441f986d9204122e01b4ab1df1d63d18e" datatype="html">
@@ -450,12 +450,12 @@
       </trans-unit>
       <trans-unit id="083e95bdf6f64257d2ddd399ecf9f48ab88e279f" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="translated"><x id="START_TAG_DIV"/>Default NSFW/политика конфиденциальности видео <x id="CLOSE_TAG_DIV"/> <x id="START_TAG_DIV_1"/>может быть переопределен пользователями <x id="CLOSE_TAG_DIV"/></target>
+        <target state="translated"><x id="START_TAG_DIV"/>Политика NSFW/чувствительных видео по-умолчанию<x id="CLOSE_TAG_DIV"/> <x id="START_TAG_DIV_1"/>может быть переопределена пользователями<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
         <source>User registration allowed</source>
-        <target>Разрешена регистрация пользователя</target>
+        <target>Разрешена регистрация пользователей</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2" datatype="html">
@@ -475,17 +475,17 @@
       </trans-unit>
       <trans-unit id="f1155367f44b4e3d2286db687d324a9b0cc1a7cb" datatype="html">
         <source>Automatically published</source>
-        <target state="translated">Автоматически публиковать</target>
+        <target state="translated">Опубликовано автоматически</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
-        <target>Квота видео</target>
+        <target>Квота на видео</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> per day)<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target>Неограниченно <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> per day)<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target>Неограниченно <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> в день)<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
@@ -495,7 +495,7 @@
       </trans-unit>
       <trans-unit id="a4378d599f760c6d1de2667d4535b48db092cb6e" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">Вы можете импортировать любой torrent файл указывающий на видео. Вы должны быть уверены что не нарушаете авторские права на указываемый контент. Иначе накажут.</target>
+        <target state="translated">Вы можете импортировать любой torrent файл указывающий на медиафайл. Вы должны быть уверены что у вас есть права на распространение указанного контента, иначе это может повлечь юридические последствия для вас и вашего экземпляра.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -503,7 +503,7 @@
       </trans-unit>
       <trans-unit id="590fc27fcbd7dd680da2bb2da644a183338f6bd1">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
-        <target>HTTP импорт (YouTube, Vimeo, прямой URL-адрес...)</target>
+        <target>HTTP импорт (YouTube, Vimeo, прямой URL...)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a">
@@ -568,7 +568,7 @@
       </trans-unit>
       <trans-unit id="1ec99ffe83830affef834fd7beeda8ee313203fe" datatype="html">
         <source>following</source>
-        <target state="translated">последователи</target>
+        <target state="translated">подписаны</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729" datatype="html">
@@ -632,7 +632,7 @@
       </trans-unit>
       <trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK"/> Find yours among multiple instances at <x id="START_LINK"/>https://joinpeertube.org/instances<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Сейчас экземпляр не позволяет регистрацию пользователей, но вы можете найти другой экземпляр позволяющий зарегистрироваться и загружать ваши видео там. <x id="LINE_BREAK"/> Найти вас в других экземплярах <x id="START_LINK"/>https://joinpeertube.org/instances<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Сейчас экземпляр не позволяет регистрацию пользователей, но вы можете найти другой экземпляр позволяющий зарегистрироваться и загружать ваши видео там. <x id="LINE_BREAK"/> Найдите ваш среди других экземпляров на <x id="START_LINK"/>https://joinpeertube.org/instances<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453">
@@ -687,7 +687,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
-        <target state="translated">Письмо с инструкцией по сбросу пароля будет отправлено на <x id="PH"/>. Ссылка будет рабочей в течение часа.</target>
+        <target state="translated">Письмо с инструкцией по сбросу пароля будет отправлено на <x id="PH"/>. Ссылка будет рабочей в течении часа.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
           <context context-type="linenumber">106,107</context>
@@ -695,12 +695,12 @@
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
         <source>Email</source>
-        <target>Электронная почта</target>
+        <target>Email</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="69b6ac577a19acc39fc0c22342092f327fff2529">
         <source>Email address</source>
-        <target>Электронный адрес</target>
+        <target>Email адрес</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="78be69e4d26b3b654c49962839d8545e61bf8b55">
@@ -715,7 +715,7 @@
       </trans-unit>
       <trans-unit id="26b0b148ff87e083300fa9ca213f8ada7fa6211d" datatype="html">
         <source>on this instance</source>
-        <target state="translated">в этом экземпляре</target>
+        <target state="translated">на этом экземпляре</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="cdc5b877341ff8e6009282a299f2f2d6987dbdbe" datatype="html">
@@ -776,7 +776,7 @@
       </trans-unit>
       <trans-unit id="fb2ab91ad6091b4a42f4ec08487650a0bc2d541c" datatype="html">
         <source>CLI documentation</source>
-        <target state="translated">CLI документация</target>
+        <target state="translated">Документация CLI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="65462878ca6d04c826906432816a3df3e048ac87" datatype="html">
@@ -811,12 +811,12 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></source>
-        <target state="translated">Официальный сайт PeerTube (новости, поддержка, вклад...): <x id="START_LINK"/>https://joinpeertube.org <x id="CLOSE_LINK"/></target>
+        <target state="translated">Официальный сайт PeerTube (новости, поддержка, сотрудничество...): <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6" datatype="html">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK"/></source>
-        <target state="translated">Добавьте свой экземпляр в публичный список PeerTube: <x id="START_LINK"/>https://instances.joinpeertube.org/instances <x id="CLOSE_LINK"/></target>
+        <target state="translated">Добавьте свой экземпляр в публичный список PeerTube: <x id="START_LINK"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859" datatype="html">
@@ -826,12 +826,12 @@
       </trans-unit>
       <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="translated">Выберите <x id="START_TAG_STRONG"/>имя экземпляра<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>опишите его<x id="CLOSE_TAG_STRONG"/>, укажите<x id="START_TAG_STRONG"/>кто вы<x id="CLOSE_TAG_STRONG"/>, почему <x id="START_TAG_STRONG"/>вы создали этот экземпляр<x id="CLOSE_TAG_STRONG"/> и<x id="START_TAG_STRONG"/>и как долого<x id="CLOSE_TAG_STRONG"/> вы планируете <x id="START_TAG_STRONG"/>его обслуживать<x id="CLOSE_TAG_STRONG"/> это очень важно для гостей для понимания цели существования вашего экземпляра. </target>
+        <target state="translated">Выбирая ваше <x id="START_TAG_STRONG"/>имя экземпляра<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>изменяя описание<x id="CLOSE_TAG_STRONG"/>, указывая <x id="START_TAG_STRONG"/>кто вы<x id="CLOSE_TAG_STRONG"/>, почему <x id="START_TAG_STRONG"/>вы создали этот экземпляр<x id="CLOSE_TAG_STRONG"/> и <x id="START_TAG_STRONG"/>как долго<x id="CLOSE_TAG_STRONG"/> вы планируете <x id="START_TAG_STRONG"/>его обслуживать<x id="CLOSE_TAG_STRONG"/> очень важно посетителям для понимания того что это за экземпляр. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="bd6c91a86a18f512ade62e216efcfb5d2520711c" datatype="html">
         <source>If you want to open registrations, please decide what are <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/>, fill your <x id="START_TAG_STRONG"/>instance terms<x id="CLOSE_TAG_STRONG"/> and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Если вы хотите открыть регистрацию, пожалуйста определите<x id="START_TAG_STRONG"/>ваши правила<x id="CLOSE_TAG_STRONG"/>, заполните <x id="START_TAG_STRONG"/>политику экземпляра<x id="CLOSE_TAG_STRONG"/>укажите категории и ваш язык. Это поможет пользователям зарегистрироваться <x id="START_TAG_STRONG"/>на подходящем экземпляре<x id="CLOSE_TAG_STRONG"/> PeerTube. </target>
+        <target state="translated">Если вы хотите открыть регистрацию, пожалуйста определите <x id="START_TAG_STRONG"/>ваши правила<x id="CLOSE_TAG_STRONG"/>, заполните <x id="START_TAG_STRONG"/>политику экземпляра<x id="CLOSE_TAG_STRONG"/> и укажите категории и ваш язык. Таким образом, вы поможете пользователям зарегистрироваться <x id="START_TAG_STRONG"/>на подходящем<x id="CLOSE_TAG_STRONG"/> экземпляре PeerTube. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
@@ -846,7 +846,7 @@
       </trans-unit>
       <trans-unit id="a9af18b4f210f5a19bb2503407923d3f25c57f98" datatype="html">
         <source>Configuration warning!</source>
-        <target state="translated">Предупреждение о конфигурации!</target>
+        <target state="translated">Предупреждение конфигурации!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="e30fd615e98eb6ebc28346024a89f00192a98396" datatype="html">
@@ -866,7 +866,7 @@
       </trans-unit>
       <trans-unit id="801cb5b4cc93a5c0a4d89a46b96487d3638f0bc5" datatype="html">
         <source>Who you are</source>
-        <target state="translated">Кто ты</target>
+        <target state="translated">Кто вы</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="de688f72fc745cc8481a5e9cc70b8ca9e6f41e2a" datatype="html">
@@ -886,12 +886,12 @@
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c" datatype="html">
         <source>Instance terms</source>
-        <target state="translated">Термины экземпляра</target>
+        <target state="translated">Правила на экземпляре</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="565e31173ab0ea2c00c311c9051c15d8896a0b80" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Пожалуйста, подумайте о настройке этих полей, чтобы помочь людям выбрать <x id="START_TAG_STRONG"/>соответствующий экземпляр<x id="CLOSE_TAG_STRONG"/>.Без них ваш экземпляр не может быть указан на<x id="START_LINK"/>сайте JoinPeerTube <x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Пожалуйста, подумайте о настройке этих полей, чтобы помочь людям выбрать <x id="START_TAG_STRONG"/>соответствующий экземпляр<x id="CLOSE_TAG_STRONG"/>. Без них, ваш экземпляр не может быть указан на <x id="START_LINK"/>сайте JoinPeerTube<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7d438f72f9985c4d06ed4fe80c90afc2e1df34d2" datatype="html">
@@ -978,7 +978,7 @@
       </trans-unit>
       <trans-unit id="0530eaf7a05c66b3167da49a57e5af4326f3af15" datatype="html">
         <source>Get help using PeerTube</source>
-        <target state="translated">Получить помощь с помощью PeerTube</target>
+        <target state="translated">Получить помощь с PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="d3381fff430c3687ae1c6302af99d88baa4f480b" datatype="html">
@@ -988,7 +988,7 @@
       </trans-unit>
       <trans-unit id="f8e6eaa974acec3b80e5c77ec0dc4ff80939964d" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="translated">заряжено PeerTubeОМ</target>
+        <target state="translated">работает на PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
@@ -1288,7 +1288,7 @@
       </trans-unit>
       <trans-unit id="e19d80c6277747a68f3da8cfe1318303d2b5c952" datatype="html">
         <source>Display all licenses</source>
-        <target state="translated">Отображение всех лицензий</target>
+        <target state="translated">Показать все лицензии</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
@@ -1435,7 +1435,7 @@
       </trans-unit>
       <trans-unit id="ea504765b49242bfcaefec84a9cf2f6f179c2ea5" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="translated">Содержит конфиденциальный контент</target>
+        <target state="translated">Содержит чувствительный контент</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
@@ -3004,7 +3004,7 @@
       </trans-unit>
       <trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source>
-        <target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</target>
+        <target state="translated">Показывается от <x id="INTERPOLATION"/> до <x id="INTERPOLATION_1"/> из <x id="INTERPOLATION_2"/> задании</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">32</context>
@@ -3017,7 +3017,7 @@
       </trans-unit>
       <trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
         <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
-        <target state="new">No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</target>
+        <target state="translated">Не найдено <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> задании.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">86</context>
@@ -3025,7 +3025,7 @@
       </trans-unit>
       <trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
         <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
-        <target state="new">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <target state="translated">Не найдено задании <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> которые <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">87</context>
@@ -3051,7 +3051,7 @@
       </trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
         <source>By <x id="INTERPOLATION"/> -&gt;</source>
-        <target state="translated">By <x id="INTERPOLATION"/> -&gt;</target>
+        <target state="translated">От <x id="INTERPOLATION"/> -&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
