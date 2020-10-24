@@ -138,7 +138,7 @@ async function updateYoutubeDLBinary () {
   const binDirectory = join(root(), 'node_modules', 'youtube-dl', 'bin')
   const bin = join(binDirectory, 'youtube-dl')
   const detailsPath = join(binDirectory, 'details')
-  const url = 'https://yt-dl.org/downloads/latest/youtube-dl'
+  const url = process.env.YOUTUBE_DL_DOWNLOAD_HOST || 'https://yt-dl.org/downloads/latest/youtube-dl'
 
   await ensureDir(binDirectory)
 
