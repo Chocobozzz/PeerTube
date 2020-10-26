@@ -21,7 +21,7 @@ async function processImage (
   try {
     jimpInstance = await Jimp.read(path)
   } catch (err) {
-    logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', { err })
+    logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', path, { err })
 
     const newName = path + '.jpg'
     await convertWebPToJPG(path, newName)

@@ -5,10 +5,10 @@ import { CONFIG } from '@server/initializers/config'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
-import { videoLiveAddValidator, videoLiveGetValidator } from '@server/middlewares/validators/videos/video-live'
+import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator } from '@server/middlewares/validators/videos/video-live'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
-import { VideoCreate, VideoState } from '../../../../shared'
+import { LiveVideoCreate, LiveVideoUpdate, VideoState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
@@ -36,7 +36,14 @@ liveRouter.post('/live',
 liveRouter.get('/live/:videoId',
   authenticate,
   asyncMiddleware(videoLiveGetValidator),
-  asyncRetryTransactionMiddleware(getVideoLive)
+  asyncRetryTransactionMiddleware(getLiveVideo)
+)
+
+liveRouter.put('/live/:videoId',
+  authenticate,
+  asyncMiddleware(videoLiveGetValidator),
+  videoLiveUpdateValidator,
+  asyncRetryTransactionMiddleware(updateLiveVideo)
 )
 
 // ---------------------------------------------------------------------------
@@ -47,14 +54,25 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getVideoLive (req: express.Request, res: express.Response) {
+async function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
   return res.json(videoLive.toFormattedJSON())
 }
 
+async function updateLiveVideo (req: express.Request, res: express.Response) {
+  const body: LiveVideoUpdate = req.body
+
+  const videoLive = res.locals.videoLive
+  videoLive.saveReplay = body.saveReplay || false
+
+  await videoLive.save()
+
+  return res.sendStatus(204)
+}
+
 async function addLiveVideo (req: express.Request, res: express.Response) {
-  const videoInfo: VideoCreate = req.body
+  const videoInfo: LiveVideoCreate = req.body
 
   // Prepare data so we don't block the transaction
   const videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
@@ -66,13 +84,20 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoLive = new VideoLiveModel()
+  videoLive.saveReplay = videoInfo.saveReplay || false
   videoLive.streamKey = uuidv4()
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video,
     files: req.files,
     fallback: type => {
-      return createVideoMiniatureFromExisting({ inputPath: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND, video, type, automaticallyGenerated: true })
+      return createVideoMiniatureFromExisting({
+        inputPath: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
+        video,
+        type,
+        automaticallyGenerated: true,
+        keepOriginal: true
+      })
     }
   })
 

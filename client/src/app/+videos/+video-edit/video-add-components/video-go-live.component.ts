@@ -1,4 +1,5 @@
 
+import { forkJoin } from 'rxjs'
 import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
@@ -6,7 +7,7 @@ import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { LiveVideoService, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { LiveVideo, VideoCreate, VideoPrivacy } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -53,7 +54,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
   }
 
   goLive () {
-    const video: VideoCreate = {
+    const video: LiveVideoCreate = {
       name: 'Live',
       privacy: VideoPrivacy.PRIVATE,
       nsfw: this.serverConfig.instance.isNSFW,
@@ -95,22 +96,32 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
     video.id = this.videoId
     video.uuid = this.videoUUID
 
+    const liveVideoUpdate: LiveVideoUpdate = {
+      saveReplay: this.form.value.saveReplay
+    }
+
     // Update the video
-    this.updateVideoAndCaptions(video)
-        .subscribe(
-          () => {
-            this.notifier.success($localize`Live published.`)
+    forkJoin([
+      this.updateVideoAndCaptions(video),
 
-            this.router.navigate([ '/videos/watch', video.uuid ])
-          },
+      this.liveVideoService.updateLive(this.videoId, liveVideoUpdate)
+    ]).subscribe(
+      () => {
+        this.notifier.success($localize`Live published.`)
 
-          err => {
-            this.error = err.message
-            scrollToTop()
-            console.error(err)
-          }
-        )
+        this.router.navigate(['/videos/watch', video.uuid])
+      },
 
+      err => {
+        this.error = err.message
+        scrollToTop()
+        console.error(err)
+      }
+    )
+  }
+
+  getMaxLiveDuration () {
+    return this.serverConfig.live.maxDuration / 1000
   }
 
   private fetchVideoLive () {

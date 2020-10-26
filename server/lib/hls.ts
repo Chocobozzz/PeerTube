@@ -106,22 +106,6 @@ async function buildSha256Segment (segmentPath: string) {
   return sha256(buf)
 }
 
-function getRangesFromPlaylist (playlistContent: string) {
-  const ranges: { offset: number, length: number }[] = []
-  const lines = playlistContent.split('\n')
-  const regex = /^#EXT-X-BYTERANGE:(\d+)@(\d+)$/
-
-  for (const line of lines) {
-    const captured = regex.exec(line)
-
-    if (captured) {
-      ranges.push({ length: parseInt(captured[1], 10), offset: parseInt(captured[2], 10) })
-    }
-  }
-
-  return ranges
-}
-
 function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, timeout: number) {
   let timer
 
@@ -199,3 +183,19 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function getRangesFromPlaylist (playlistContent: string) {
+  const ranges: { offset: number, length: number }[] = []
+  const lines = playlistContent.split('\n')
+  const regex = /^#EXT-X-BYTERANGE:(\d+)@(\d+)$/
+
+  for (const line of lines) {
+    const captured = regex.exec(line)
+
+    if (captured) {
+      ranges.push({ length: parseInt(captured[1], 10), offset: parseInt(captured[2], 10) })
+    }
+  }
+
+  return ranges
+}

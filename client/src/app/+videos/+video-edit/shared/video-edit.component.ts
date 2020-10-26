@@ -127,7 +127,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       support: VIDEO_SUPPORT_VALIDATOR,
       schedulePublicationAt: VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR,
       originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
-      liveStreamKey: null
+      liveStreamKey: null,
+      saveReplay: null
     }
 
     this.formValidatorService.updateForm(
@@ -237,6 +238,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   openAddCaptionModal () {
     this.videoCaptionAddModal.show()
+  }
+
+  isSaveReplayEnabled () {
+    return this.serverConfig.live.allowReplay
   }
 
   private sortVideoCaptions () {

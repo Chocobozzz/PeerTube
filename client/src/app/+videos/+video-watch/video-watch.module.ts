@@ -15,7 +15,6 @@ import { VideoCommentsComponent } from './comment/video-comments.component'
 import { VideoSupportComponent } from './modal/video-support.component'
 import { RecommendationsModule } from './recommendations/recommendations.module'
 import { TimestampRouteTransformerDirective } from './timestamp-route-transformer.directive'
-import { VideoDurationPipe } from './video-duration-formatter.pipe'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 import { VideoWatchComponent } from './video-watch.component'
@@ -46,7 +45,6 @@ import { VideoWatchComponent } from './video-watch.component'
     VideoCommentComponent,
 
     TimestampRouteTransformerDirective,
-    VideoDurationPipe,
     TimestampRouteTransformerDirective
   ],
 

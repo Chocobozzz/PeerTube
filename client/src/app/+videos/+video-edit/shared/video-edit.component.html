@@ -142,7 +142,7 @@
       </ng-template>
     </ng-container>
 
-    <ng-container ngbNavItem>
+    <ng-container ngbNavItem *ngIf="!liveVideo">
       <a ngbNavLink i18n>Captions</a>
 
       <ng-template ngbNavContent>
@@ -210,6 +210,18 @@
             <div class="form-group">
               <label for="liveVideoStreamKey" i18n>Live stream key</label>
               <my-input-readonly-copy id="liveVideoStreamKey" [value]="liveVideo.streamKey"></my-input-readonly-copy>
+            </div>
+
+            <div class="form-group" *ngIf="isSaveReplayEnabled()">
+              <my-peertube-checkbox inputName="liveVideoSaveReplay" formControlName="saveReplay">
+                <ng-template ptTemplate="label">
+                  <ng-container i18n>Automatically publish a replay when your live ends</ng-container>
+                </ng-template>
+
+                <ng-container ngProjectAs="description">
+                  <span i18n>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</span>
+                </ng-container>
+              </my-peertube-checkbox>
             </div>
           </div>
         </div>

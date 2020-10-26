@@ -94,7 +94,8 @@ export class VideoLiveModel extends Model<VideoLiveModel> {
   toFormattedJSON (): LiveVideo {
     return {
       rtmpUrl: WEBSERVER.RTMP_URL,
-      streamKey: this.streamKey
+      streamKey: this.streamKey,
+      saveReplay: this.saveReplay
     }
   }
 }

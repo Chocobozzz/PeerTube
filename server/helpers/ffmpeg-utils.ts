@@ -424,6 +424,20 @@ function runLiveMuxing (rtmpUrl: string, outPath: string, deleteSegments: boolea
   return command
 }
 
+function hlsPlaylistToFragmentedMP4 (playlistPath: string, outputPath: string) {
+  const command = getFFmpeg(playlistPath)
+
+  command.outputOption('-c copy')
+  command.output(outputPath)
+
+  command.run()
+
+  return new Promise<string>((res, rej) => {
+    command.on('error', err => rej(err))
+    command.on('end', () => res())
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -443,6 +457,7 @@ export {
   getVideoFileFPS,
   computeResolutionsToTranscode,
   audio,
+  hlsPlaylistToFragmentedMP4,
   getVideoFileBitrate,
   canDoQuickTranscode
 }

@@ -3,10 +3,11 @@ import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService, SelectChannelItem } from '@app/shared/shared-forms'
-import { VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { LiveVideoService, VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { LiveVideo, VideoPrivacy } from '@shared/models'
+import { LiveVideo, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
+import { of } from 'rxjs'
 
 @Component({
   selector: 'my-videos-update',
@@ -32,7 +33,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private notifier: Notifier,
     private videoService: VideoService,
     private loadingBar: LoadingBarService,
-    private videoCaptionService: VideoCaptionService
+    private videoCaptionService: VideoCaptionService,
+    private liveVideoService: LiveVideoService
     ) {
     super()
   }
@@ -56,7 +58,15 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           }
 
           // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
-          setTimeout(() => hydrateFormFromVideo(this.form, this.video, true))
+          setTimeout(() => {
+            hydrateFormFromVideo(this.form, this.video, true)
+
+            if (this.liveVideo) {
+              this.form.patchValue({
+                saveReplay: this.liveVideo.saveReplay
+              })
+            }
+          })
         },
 
         err => {
@@ -102,6 +112,10 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
     this.video.patch(this.form.value)
 
+    const liveVideoUpdate: LiveVideoUpdate = {
+      saveReplay: this.form.value.saveReplay
+    }
+
     this.loadingBar.useRef().start()
     this.isUpdatingVideo = true
 
@@ -109,7 +123,13 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.videoService.updateVideo(this.video)
         .pipe(
           // Then update captions
-          switchMap(() => this.videoCaptionService.updateCaptions(this.video.id, this.videoCaptions))
+          switchMap(() => this.videoCaptionService.updateCaptions(this.video.id, this.videoCaptions)),
+
+          switchMap(() => {
+            if (!this.liveVideo) return of(undefined)
+
+            return this.liveVideoService.updateLive(this.video.id, liveVideoUpdate)
+          })
         )
         .subscribe(
           () => {
