@@ -147,16 +147,17 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
   return onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
 }
 
-async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoResolution, copyCodecs: boolean, isPortraitMode: boolean) {
+async function generateHlsPlaylist (options: {
+  video: MVideoWithFile
+  videoInputPath: string
+  resolution: VideoResolution
+  copyCodecs: boolean
+  isPortraitMode: boolean
+}) {
+  const { video, videoInputPath, resolution, copyCodecs, isPortraitMode } = options
+
   const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
   await ensureDir(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
-
-  const videoFileInput = copyCodecs
-    ? video.getWebTorrentFile(resolution)
-    : video.getMaxQualityFile()
-
-  const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
-  const videoInputPath = getVideoFilePath(videoOrStreamingPlaylist, videoFileInput)
 
   const outputPath = join(baseHlsDirectory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))
   const videoFilename = generateVideoStreamingPlaylistName(video.uuid, resolution)
@@ -184,7 +185,7 @@ async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoReso
     videoId: video.id,
     playlistUrl,
     segmentsSha256Url: WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid, video.isLive),
-    p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, video.VideoFiles),
+    p2pMediaLoaderInfohashes: [],
     p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
 
     type: VideoStreamingPlaylistType.HLS
@@ -210,6 +211,11 @@ async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoReso
 
   await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
   videoStreamingPlaylist.VideoFiles = await videoStreamingPlaylist.$get('VideoFiles')
+
+  videoStreamingPlaylist.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(
+    playlistUrl, videoStreamingPlaylist.VideoFiles
+  )
+  await videoStreamingPlaylist.save()
 
   video.setHLSPlaylist(videoStreamingPlaylist)
 

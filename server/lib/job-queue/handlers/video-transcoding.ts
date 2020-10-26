@@ -1,21 +1,22 @@
 import * as Bull from 'bull'
+import { getVideoFilePath } from '@server/lib/video-paths'
+import { MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
 import {
   MergeAudioTranscodingPayload,
   NewResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
   VideoTranscodingPayload
 } from '../../../../shared'
-import { logger } from '../../../helpers/logger'
-import { VideoModel } from '../../../models/video/video'
-import { JobQueue } from '../job-queue'
-import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { sequelizeTypescript } from '../../../initializers/database'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
-import { generateHlsPlaylist, mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewResolution } from '../../video-transcoding'
-import { Notifier } from '../../notifier'
+import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
-import { MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
+import { sequelizeTypescript } from '../../../initializers/database'
+import { VideoModel } from '../../../models/video/video'
+import { federateVideoIfNeeded } from '../../activitypub/videos'
+import { Notifier } from '../../notifier'
+import { generateHlsPlaylist, mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewResolution } from '../../video-transcoding'
+import { JobQueue } from '../job-queue'
 
 async function processVideoTranscoding (job: Bull.Job) {
   const payload = job.data as VideoTranscodingPayload
@@ -29,7 +30,20 @@ async function processVideoTranscoding (job: Bull.Job) {
   }
 
   if (payload.type === 'hls') {
-    await generateHlsPlaylist(video, payload.resolution, payload.copyCodecs, payload.isPortraitMode || false)
+    const videoFileInput = payload.copyCodecs
+      ? video.getWebTorrentFile(payload.resolution)
+      : video.getMaxQualityFile()
+
+    const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
+    const videoInputPath = getVideoFilePath(videoOrStreamingPlaylist, videoFileInput)
+
+    await generateHlsPlaylist({
+      video,
+      videoInputPath,
+      resolution: payload.resolution,
+      copyCodecs: payload.copyCodecs,
+      isPortraitMode: payload.isPortraitMode || false
+    })
 
     await retryTransactionWrapper(onHlsPlaylistGenerationSuccess, video)
   } else if (payload.type === 'new-resolution') {

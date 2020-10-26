@@ -15,7 +15,14 @@ import {
 } from '@ng-bootstrap/ng-bootstrap'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, ActorAvatarInfoComponent, AvatarComponent } from './account'
-import { FromNowPipe, InfiniteScrollerDirective, NumberFormatterPipe, PeerTubeTemplateDirective, BytesPipe } from './angular'
+import {
+  BytesPipe,
+  DurationFormatterPipe,
+  FromNowPipe,
+  InfiniteScrollerDirective,
+  NumberFormatterPipe,
+  PeerTubeTemplateDirective
+} from './angular'
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditButtonComponent } from './buttons'
 import { DateToggleComponent } from './date'
@@ -23,7 +30,7 @@ import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
 import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent } from './misc'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
-import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService, LiveVideoService } from './video'
+import { LiveVideoService, RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
 
@@ -56,6 +63,8 @@ import { VideoChannelService } from './video-channel'
     FromNowPipe,
     NumberFormatterPipe,
     BytesPipe,
+    DurationFormatterPipe,
+
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
 
@@ -103,6 +112,7 @@ import { VideoChannelService } from './video-channel'
     FromNowPipe,
     BytesPipe,
     NumberFormatterPipe,
+    DurationFormatterPipe,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,

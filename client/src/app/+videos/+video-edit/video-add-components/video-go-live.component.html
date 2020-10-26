@@ -27,6 +27,11 @@
   {{ error }}
 </div>
 
+<div class="alert alert-info" i18n *ngIf="isInUpdateForm && getMaxLiveDuration()">
+  Max live duration is {{ getMaxLiveDuration() | myDurationFormatter }}.
+  If your live reaches this limit, it will be automatically terminated.
+</div>
+
 <!-- Hidden because we want to load the component -->
 <form [hidden]="!isInUpdateForm" novalidate [formGroup]="form">
   <my-video-edit
