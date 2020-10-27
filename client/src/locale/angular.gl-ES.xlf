@@ -2456,61 +2456,57 @@
       </trans-unit>
       <trans-unit id="d9b4b939363bf385cbb7828c1535f2e2a5e0d362" datatype="html">
         <source>No host found matching current filters.</source>
-        <target state="new">No host found matching current filters.</target>
+        <target state="translated">Non se atoparon servidores co criterio do filtro.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="6f635f2eba7fe60e4266192fbfef20948fbe3b0a" datatype="html">
         <source>Your instance is not following anyone.</source>
-        <target state="new">Your instance is not following anyone.</target>
+        <target state="translated">A túa instancia non segue a ninguén.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="b2ddee45fe4c3ebc20f39ed10ef70505c9eb65ce" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> hosts</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts
-        </target>
+        <target state="translated">Mostrando <x id="INTERPOLATION"/> a <x id="INTERPOLATION_1"/> de <x id="INTERPOLATION_2"/> servidores</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
         <source>Follow domains</source>
-        <target state="new">Follow domains</target>
+        <target state="translated">Seguir dominios</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="1fc09996a8d49e3d1cc3abedb3edf3fa4c427a5f" datatype="html">
         <source>Videos redundancies</source>
-        <target state="new">Videos redundancies</target>
+        <target state="translated">Redundancias de vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8a3b2dec938ae1c71320e653fb1fdb810e614f76" datatype="html">
         <source>My videos duplicated by remote instances</source>
-        <target state="new">My videos duplicated by remote instances</target>
+        <target state="translated">Os meus vídeos duplicados por instancias remotas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="cb2281bf5c9f420429bbd5c5473ee7aacc879e1e" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target state="new">Remote videos duplicated by my instance</target>
+        <target state="translated">Vídeos remotos duplicados pola miña instancia</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015" datatype="html">
         <source>Create user</source>
-        <target state="new">Create user</target>
+        <target state="translated">Crear usuaria</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="55d4cef22a65e0850dc95aa127f45e9df525f68f" datatype="html">
         <source>Table parameters</source>
-        <target state="new">Table parameters</target>
+        <target state="translated">Parámetros da táboa</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="48c6910585f5bef4f725104287ec904c7cb8c6e9" datatype="html">
         <source>Select columns</source>
-        <target state="new">Select columns</target>
+        <target state="translated">Escoller columnas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="ed66036cb394f49f63cb5fb5632f483613b790f6" datatype="html">
         <source>Highlight banned users</source>
-        <target state="new">Highlight banned users</target>
+        <target state="translated">Resaltar usuarias bloqueadas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
@@ -2520,143 +2516,127 @@
       </trans-unit>
       <trans-unit id="1bd571d8f3981f6043b0df3402cc3d97e0d7ad2a" datatype="html">
         <source>john</source>
-        <target state="new">john</target>
+        <target state="translated">xoán</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="bb3542ff8e5defa6d0c773799e5c8fe399605d05" datatype="html">
         <source>mail@example.com</source>
-        <target state="new">mail@example.com</target>
+        <target state="translated">email@exemplo.com</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="8861667a66c0000e6ae144520026d55123cea117" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-              If you leave the password empty, an email will be sent to the user.
-            </target>
+        <target state="translated">Se non escribes un contrasinal, enviarase un email á usuaria.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="c36a66f2107e8da5371ebc9d15c2008dff567f46" datatype="html">
         <source>Role</source>
-        <target state="new">Role</target>
+        <target state="translated">Rol</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG"/>original<x id="CLOSE_TAG_STRONG"/> video size. <x id="LINE_BREAK"/> At most, this user could upload ~ <x id="INTERPOLATION"/>. </source>
-        <target state="new">
-          Transcoding is enabled. The video quota only takes into account 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          At most, this user could upload ~ 
-          <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
-        
-        </target>
+        <target state="translated">Recodificación activada. A cota de vídeo só ten en conta o tamaño <x id="START_TAG_STRONG"/>orixinal<x id="CLOSE_TAG_STRONG"/> do vídeo. <x id="LINE_BREAK"/> Como moito, esta usuaria podería subir ~ <x id="INTERPOLATION"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496" datatype="html">
         <source>Daily video quota</source>
-        <target state="new">Daily video quota</target>
+        <target state="translated">Cota diaria de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">166</context></context-group>
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="new">Doesn't need review before a video goes public</target>
+        <target state="translated">Non precisa revisión antes de facer público un vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="27a8f947ecc46bcad10d965360f500a14128bd7d" datatype="html">
         <source>Send a link to reset the password by email to the user</source>
-        <target state="new">Send a link to reset the password by email to the user</target>
+        <target state="translated">Enviar unha ligazón para restablecer o contrasinal desde email</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="950adafba22e3c85e889f2c38faebe98145bfb7f" datatype="html">
         <source>Ask for new password</source>
-        <target state="new">Ask for new password</target>
+        <target state="translated">Pedir novo contrasinal</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="e6a48b1ed6160a99fba3a1607e27e9e93a4f4244" datatype="html">
         <source>Manually set the user password</source>
-        <target state="new">Manually set the user password</target>
+        <target state="translated">Establecer manualmente o contrasinal da usuaria</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">209</context></context-group>
       </trans-unit>
       <trans-unit id="2aba1e87039819aca3b70faa9aa848c12bf139ca" datatype="html">
         <source>Show</source>
-        <target state="new">Show</target>
+        <target state="translated">Mostrar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-password.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="1eede69e18c5ac9c0b0295b72cabb7e64e029e74" datatype="html">
         <source>Hide</source>
-        <target state="new">Hide</target>
+        <target state="translated">Agochar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-password.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="ea762ca1d74c96d8568ac68482778f52ca531cc4" datatype="html">
         <source>Batch actions</source>
-        <target state="new">Batch actions</target>
+        <target state="translated">Accións en grupo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="715d36ab50d156b744ffedc975ffb97cae75ff7b" datatype="html">
         <source>Advanced user filters</source>
-        <target state="new">Advanced user filters</target>
+        <target state="translated">Filtros de usuaria avanzados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="765fcd9017ea1e180bbd266673d7cf11535d8c4a" datatype="html">
         <source>Banned users</source>
-        <target state="new">Banned users</target>
+        <target state="translated">Usuarias bloqueadas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="7d88bb14f4ef7eaea7ca41c1832c66451410047a" datatype="html">
         <source>The user was banned</source>
-        <target state="new">The user was banned</target>
+        <target state="translated">Esta usuaria foi bloqueada</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="ed64ec2b14251cfbe9ab28abde51d3f052fde1e7" datatype="html">
         <source>Open account in a new tab</source>
-        <target state="new">Open account in a new tab</target>
+        <target state="translated">Abrir conta nunha nova lapela</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="d9e38d58225f58cb64126e4d5ec58f39dcb326df" datatype="html">
         <source>Deleted account</source>
-        <target state="new">
-          Deleted account
-        </target>
+        <target state="translated">Conta eliminada</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5" datatype="html">
         <source>User's email must be verified to login</source>
-        <target state="new">User's email must be verified to login</target>
+        <target state="translated">O email da usuaria debe ser verificado para conectarse</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">129</context></context-group>
       </trans-unit>
       <trans-unit id="79cee9973620b2592ff2824c525aa8ed0b5e2b8b" datatype="html">
         <source>User's email is verified / User can login without email verification</source>
-        <target state="new">User's email is verified / User can login without email verification</target>
+        <target state="translated">Email da usuaria verificado / A usuaria pode conectar sen verificar o email</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="12289e981bf1acd36d74ee0e50d6fb43ba29ca6a" datatype="html">
         <source>Total daily video quota</source>
-        <target state="new">Total daily video quota</target>
+        <target state="translated">Cota diaria total de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee" datatype="html">
         <source>Ban reason:</source>
-        <target state="new">Ban reason:</target>
+        <target state="translated">Razón do bloqueo:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> users</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> users
-        </target>
+        <target state="translated">Mostrando <x id="INTERPOLATION"/> a <x id="INTERPOLATION_1"/> de <x id="INTERPOLATION_2"/> usuarias</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="2049290282534091182" datatype="html">
         <source>Moderation</source>
-        <target state="new">Moderation</target>
+        <target state="translated">Moderación</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/admin.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
-        <target state="new">Reports</target>
+        <target state="translated">Denuncias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -2664,7 +2644,7 @@
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
-        <target state="new">Video blocks</target>
+        <target state="translated">Bloqueo de vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -2672,7 +2652,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887" datatype="html">
         <source>Muted accounts</source>
-        <target state="new">Muted accounts</target>
+        <target state="translated">Contas acaladas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -2680,7 +2660,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853" datatype="html">
         <source>Muted servers</source>
-        <target state="new">Muted servers</target>
+        <target state="translated">Servidores acalados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -2688,7 +2668,7 @@
       </trans-unit>
       <trans-unit id="4555457172864212828" datatype="html">
         <source>Users</source>
-        <target state="new">Users</target>
+        <target state="translated">Usuarias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -2696,7 +2676,7 @@
       </trans-unit>
       <trans-unit id="3008420115644088420" datatype="html">
         <source>Configuration</source>
-        <target state="new">Configuration</target>
+        <target state="translated">Configuración</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -2704,60 +2684,57 @@
       </trans-unit>
       <trans-unit id="d2e7333704502d1720b353742634630b71ea8bd7" datatype="html">
         <source>Video blocks</source>
-        <target state="new">Video blocks</target>
+        <target state="translated">Bloqueo de vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c" datatype="html">
         <source>Muted accounts</source>
-        <target state="new">Muted accounts</target>
+        <target state="translated">Contas acaladas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="bd0611346af048015e0a1275091ef68ce98832d2" datatype="html">
         <source>Muted servers</source>
-        <target state="new">Muted servers</target>
+        <target state="translated">Servidores acalados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="2122599f5b51ab83849bc77fa5cafcdcd896ac72" datatype="html">
         <source>Advanced block filters</source>
-        <target state="new">Advanced block filters</target>
+        <target state="translated">Filtros de bloqueo avanzados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="7d0cb3dbf192b9f3a5dbfb6d56d7609b200cbd4e" datatype="html">
         <source>Automatic blocks</source>
-        <target state="new">Automatic blocks</target>
+        <target state="translated">Bloqueos automáticos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="dfc11b6dc1387e59dbb79d248cf4c638fb9df3ea" datatype="html">
         <source>Manual blocks</source>
-        <target state="new">Manual blocks</target>
+        <target state="translated">Bloqueos manuais</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="91bd2d52b840951d3b1f5830b023bee8bca91293" datatype="html">
         <source>Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="new">Video 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Vídeo <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="b7237eade678ae47485fbd27ec7f8c1079a8c6b7" datatype="html">
         <source>Total size</source>
-        <target state="new">Total size</target>
+        <target state="translated">Tamaño total</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="e536fc8b9a652aa7f7b87193cdfa143481da3bad" datatype="html">
         <source>List redundancies</source>
-        <target state="new">List redundancies</target>
+        <target state="translated">Amosar redundancias</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="897116a91d135b1552880aed6050814a4a0df28a" datatype="html">
         <source>Your instance doesn't mirror any video.</source>
-        <target state="new">Your instance doesn't mirror any video.</target>
+        <target state="translated">A túa instancia non replica ningún vídeo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="afc5c2bbf66996ab213f6eca65b24ca423d36e31" datatype="html">
         <source>Your instance has no mirrored videos.</source>
-        <target state="new">Your instance has no mirrored videos.</target>
+        <target state="translated">A túa instancia non ten vídeos replicados.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="0e96ed54157e69989a2c0bcce2f62399accdaa27" datatype="html">
