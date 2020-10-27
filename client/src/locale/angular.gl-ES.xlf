@@ -15,7 +15,7 @@
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
         <source>You don't have notifications.</source>
-        <target>Non ten notificacións</target>
+        <target>Non tes notificacións.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="1cff8e38c81055fa0ae7dbc80a7a0c5c39bbc263" datatype="html">
@@ -2739,137 +2739,122 @@
       </trans-unit>
       <trans-unit id="0e96ed54157e69989a2c0bcce2f62399accdaa27" datatype="html">
         <source>Enabled strategies stats</source>
-        <target state="new">Enabled strategies stats</target>
+        <target state="translated">Activadas estatísticas das estratexias</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="0f6e6ec286d43c14f16444a077639090f38e29de" datatype="html">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="new">
-      No redundancy strategy is enabled on your instance.
-    </target>
+        <target state="translated">Non hai activadas estratexias de redundancias na túa instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="96dfa3efa02bfafc0bc6d4ab186ebef2813a9e8a" datatype="html">
         <source>Sensitive</source>
-        <target state="new">Sensitive</target>
+        <target state="translated">Sensible</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="b748c96a1ee98d2fa9a645fb71838f5d4938855b" datatype="html">
         <source>Unfederated</source>
-        <target state="new">Unfederated</target>
+        <target state="translated">Non federado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="a7f42da3bb4eea0b71b0a20a2aff6612a82cab99" datatype="html">
         <source>Date <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="new">Date 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Data <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c" datatype="html">
         <source>Actions</source>
-        <target state="new">Actions</target>
+        <target state="translated">Accións</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="c5cc399a82eb7993156daf2d6c1d9e071cde47ad" datatype="html">
         <source>No abuses found matching current filters.</source>
-        <target state="new">No abuses found matching current filters.</target>
+        <target state="translated">Non se atoparon abusos concordantes cos filtros establecidos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="5d9dd64c1974b18918db7f24051bb385bd5558e1" datatype="html">
         <source>No abuses found.</source>
-        <target state="new">No abuses found.</target>
+        <target state="translated">Sen abusos atopados.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="d2a65fafac0e4e0a3289ec54627bd7f691d8020d" datatype="html">
         <source>Block reason:</source>
-        <target state="new">Block reason:</target>
+        <target state="translated">Razón do bloqueo:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="f8add432da83aa37b8cf03c5b907c3a9e51088fd" datatype="html">
         <source>No blocked video found matching current filters.</source>
-        <target state="new">No blocked video found matching current filters.</target>
+        <target state="translated">Sen videos bloqueados atopados que cumpran cos filtros actuais.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="8d02797f76f99ad51f55e91ff82088e8772152e0" datatype="html">
         <source>No blocked video found.</source>
-        <target state="new">No blocked video found.</target>
+        <target state="translated">Sen vídeo bloqueado atopado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="9f5c75bd513580d630817cd39179fd41e5ec36f6" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> blocked videos</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> blocked videos
-        </target>
+        <target state="translated">Mostrando <x id="INTERPOLATION"/> a <x id="INTERPOLATION_1"/> de <x id="INTERPOLATION_2"/> vídeos bloqueados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="24968c3b9f7cb940df7e5bf46f61a11710481829" datatype="html">
         <source>Reports</source>
-        <target state="new">Reports</target>
+        <target state="translated">Denuncias</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/abuse-list/abuse-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f" datatype="html">
         <source>Moderation comment</source>
-        <target state="new">Moderation comment</target>
+        <target state="translated">Comentario da Moderación</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="5731e5d5ac989bf08848b5a57a5586cf84d80964" datatype="html">
         <source>This comment can only be seen by you or the other moderators.</source>
-        <target state="new">
-        This comment can only be seen by you or the other moderators.
-      </target>
+        <target state="translated">Este comentario só pode ser visto por ti e outras moderadoras.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="0562e455c88234829f3c27a38f3039f027bfd5d2" datatype="html">
         <source>Update this comment</source>
-        <target state="new">Update this comment</target>
+        <target state="translated">Actualiza este comentario</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="f7753a5d0baa909f5860eb49e14c41fc4ae00fb4" datatype="html">
         <source>Advanced report filters</source>
-        <target state="new">Advanced report filters</target>
+        <target state="translated">Filtros de denuncia avanzados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="006dd388f1d14f58c33fb4ed4bb05a1dfbc42ffa" datatype="html">
         <source>Unsolved reports</source>
-        <target state="new">Unsolved reports</target>
+        <target state="translated">Denuncias non resoltas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="dee7eb63010b67c2464dd7987307e85369f24b9d" datatype="html">
         <source>Accepted reports</source>
-        <target state="new">Accepted reports</target>
+        <target state="translated">Denuncias aceptadas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="8140a31650a8a974acaf9f7e88cfb246ed6c9314" datatype="html">
         <source>Refused reports</source>
-        <target state="new">Refused reports</target>
+        <target state="translated">Denuncias rexeitadas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="1f5ed7018178a08c8eb17305833874a976fa428c" datatype="html">
         <source>Reports with blocked videos</source>
-        <target state="new">Reports with blocked videos</target>
+        <target state="translated">Denuncias con vídeos bloqueados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="new">Reports with deleted videos</target>
+        <target state="translated">Denuncias con vídeos eliminados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="2bf5a31043ff476ca081a4080f3f3f17518dc6f2" datatype="html">
         <source>Reporter</source>
-        <target state="new">Reporter</target>
+        <target state="translated">Denunciante</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="fd7b8e728c25b616934661747224b1b2e7d9ea5c" datatype="html">
         <source><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></source>
-        <target state="new">
-          <x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {...} other {...}}"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated"><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="fe8634bd713368d7971877c0e09d1869f09c924d" datatype="html">
@@ -3286,10 +3271,7 @@
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="new">The 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.
-        </target>
+        <target state="translated">O <x id="START_LINK"/>sistema compartido<x id="CLOSE_LINK"/> implica que algunha información técnica acerca do teu sistema (como o enderezo IP público) pode ser enviado a outras usuarias, pero reduce grandemente a carga do servidor.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="0f9a16c167ea4f043577304b13046c143692cb99" datatype="html">
@@ -5680,9 +5662,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3935234189109112926" datatype="html">
         <source>You are not following <x id="PH"/> anymore.</source>
-        <target state="new">You are not following 
-          <x id="PH"/> anymore.
-        </target>
+        <target state="translated">Xa non segues <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="2593763089859685916" datatype="html">
