@@ -268,7 +268,7 @@
           >{{ tag }}</a>
         </div>
 
-        <div class="video-attribute">
+        <div class="video-attribute" *ngIf="!video.isLive">
           <span i18n class="video-attribute-label">Duration</span>
           <span class="video-attribute-value">{{ video.duration | myDurationFormatter }}</span>
         </div>
