@@ -8,6 +8,7 @@ import { CONFIG } from '../initializers/config'
 import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
+import { concat } from 'lodash'
 
 /**
  * A toolbox to play with audio
@@ -424,17 +425,40 @@ function runLiveMuxing (rtmpUrl: string, outPath: string, deleteSegments: boolea
   return command
 }
 
-function hlsPlaylistToFragmentedMP4 (playlistPath: string, outputPath: string) {
-  const command = getFFmpeg(playlistPath)
+async function hlsPlaylistToFragmentedMP4 (hlsDirectory: string, segmentFiles: string[], outputPath: string) {
+  const concatFile = 'concat.txt'
+  const concatFilePath = join(hlsDirectory, concatFile)
+  const content = segmentFiles.map(f => 'file ' + f)
+                              .join('\n')
+
+  await writeFile(concatFilePath, content + '\n')
+
+  const command = getFFmpeg(concatFilePath)
+  command.inputOption('-safe 0')
+  command.inputOption('-f concat')
 
   command.outputOption('-c copy')
   command.output(outputPath)
 
   command.run()
 
+  function cleaner () {
+    remove(concatFile)
+    .catch(err => logger.error('Cannot remove concat file in %s.', hlsDirectory, { err }))
+  }
+
   return new Promise<string>((res, rej) => {
-    command.on('error', err => rej(err))
-    command.on('end', () => res())
+    command.on('error', err => {
+      cleaner()
+
+      rej(err)
+    })
+
+    command.on('end', () => {
+      cleaner()
+
+      res()
+    })
   })
 }
 

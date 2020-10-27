@@ -7,7 +7,7 @@ import { generateHlsPlaylist } from '@server/lib/video-transcoding'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MVideo } from '@server/types/models'
+import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 
@@ -27,7 +27,7 @@ async function processVideoLiveEnding (job: Bull.Job) {
     return cleanupLive(video, streamingPlaylist)
   }
 
-  return saveLive(video, streamingPlaylist)
+  return saveLive(video, live)
 }
 
 // ---------------------------------------------------------------------------
@@ -38,18 +38,32 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function saveLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
-  const videoFiles = await streamingPlaylist.get('VideoFiles')
+async function saveLive (video: MVideo, live: MVideoLive) {
   const hlsDirectory = getHLSDirectory(video, false)
+  const files = await readdir(hlsDirectory)
 
-  for (const videoFile of videoFiles) {
-    const playlistPath = join(hlsDirectory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(videoFile.resolution))
+  const playlistFiles = files.filter(f => f.endsWith('.m3u8') && f !== 'master.m3u8')
+  const resolutions: number[] = []
 
-    const mp4TmpName = buildMP4TmpName(videoFile.resolution)
-    await hlsPlaylistToFragmentedMP4(playlistPath, mp4TmpName)
+  for (const playlistFile of playlistFiles) {
+    const playlistPath = join(hlsDirectory, playlistFile)
+    const { videoFileResolution } = await getVideoFileResolution(playlistPath)
+
+    const mp4TmpName = buildMP4TmpName(videoFileResolution)
+
+    // Playlist name is for example 3.m3u8
+    // Segments names are 3-0.ts 3-1.ts etc
+    const shouldStartWith = playlistFile.replace(/\.m3u8$/, '') + '-'
+
+    const segmentFiles = files.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
+    await hlsPlaylistToFragmentedMP4(hlsDirectory, segmentFiles, mp4TmpName)
+
+    resolutions.push(videoFileResolution)
   }
 
   await cleanupLiveFiles(hlsDirectory)
+
+  await live.destroy()
 
   video.isLive = false
   video.state = VideoState.TO_TRANSCODE
@@ -57,14 +71,14 @@ async function saveLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
 
   const videoWithFiles = await VideoModel.loadWithFiles(video.id)
 
-  for (const videoFile of videoFiles) {
-    const videoInputPath = buildMP4TmpName(videoFile.resolution)
+  for (const resolution of resolutions) {
+    const videoInputPath = buildMP4TmpName(resolution)
     const { isPortraitMode } = await getVideoFileResolution(videoInputPath)
 
     await generateHlsPlaylist({
       video: videoWithFiles,
       videoInputPath,
-      resolution: videoFile.resolution,
+      resolution: resolution,
       copyCodecs: true,
       isPortraitMode
     })
@@ -103,5 +117,5 @@ async function cleanupLiveFiles (hlsDirectory: string) {
 }
 
 function buildMP4TmpName (resolution: number) {
-  return resolution + 'tmp.mp4'
+  return resolution + '-tmp.mp4'
 }

@@ -128,6 +128,7 @@ import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
 import { LiveManager } from '@server/lib/live-manager'
+import { VideoLiveModel } from './video-live'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -724,6 +725,15 @@ export class VideoModel extends Model<VideoModel> {
     onDelete: 'cascade'
   })
   VideoBlacklist: VideoBlacklistModel
+
+  @HasOne(() => VideoLiveModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoLive: VideoLiveModel
 
   @HasOne(() => VideoImportModel, {
     foreignKey: {
