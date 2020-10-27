@@ -154,7 +154,7 @@ const JOB_CONCURRENCY: { [id in JobType]: number } = {
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 1
+  'video-live-ending': 10
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -736,6 +736,8 @@ if (isTestInstance() === true) {
   OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD = 2
 
   PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 5000
+
+  VIDEO_LIVE.CLEANUP_DELAY = 10000
 }
 
 updateWebserverUrls()

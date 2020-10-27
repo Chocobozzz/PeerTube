@@ -710,7 +710,7 @@ export class UserModel extends Model<UserModel> {
                   required: true,
                   include: [
                     {
-                      attributes: [ 'id', 'videoId' ],
+                      attributes: [],
                       model: VideoLiveModel.unscoped(),
                       required: true,
                       where: {
@@ -726,7 +726,7 @@ export class UserModel extends Model<UserModel> {
       ]
     }
 
-    return UserModel.findOne(query)
+    return UserModel.unscoped().findOne(query)
   }
 
   static generateUserQuotaBaseSQL (options: {
