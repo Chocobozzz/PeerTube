@@ -81,6 +81,8 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.live.enabled).to.be.false
   expect(data.live.allowReplay).to.be.true
   expect(data.live.maxDuration).to.equal(1000 * 3600 * 5)
+  expect(data.live.maxInstanceLives).to.equal(20)
+  expect(data.live.maxUserLives).to.equal(3)
   expect(data.live.transcoding.enabled).to.be.false
   expect(data.live.transcoding.threads).to.equal(2)
   expect(data.live.transcoding.resolutions['240p']).to.be.false
@@ -166,6 +168,8 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.enabled).to.be.true
   expect(data.live.allowReplay).to.be.false
   expect(data.live.maxDuration).to.equal(5000)
+  expect(data.live.maxInstanceLives).to.equal(-1)
+  expect(data.live.maxUserLives).to.equal(10)
   expect(data.live.transcoding.enabled).to.be.true
   expect(data.live.transcoding.threads).to.equal(4)
   expect(data.live.transcoding.resolutions['240p']).to.be.true
@@ -330,6 +334,8 @@ describe('Test config', function () {
         enabled: true,
         allowReplay: false,
         maxDuration: 5000,
+        maxInstanceLives: -1,
+        maxUserLives: 10,
         transcoding: {
           enabled: true,
           threads: 4,

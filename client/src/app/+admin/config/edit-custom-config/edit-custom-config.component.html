@@ -740,6 +740,16 @@
                     </div>
 
                     <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() }">
+                      <label i18n for="liveMaxInstanceLives">Max lives created on your instance (-1 for "unlimited")</label>
+                      <input type="number" name="liveMaxInstanceLives" formControlName="maxInstanceLives" />
+                    </div>
+
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() }">
+                      <label i18n for="liveMaxUserLives">Max lives created per user (-1 for "unlimited")</label>
+                      <input type="number" name="liveMaxUserLives" formControlName="maxUserLives" />
+                    </div>
+
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() }">
                       <label i18n for="liveMaxDuration">Max live duration</label>
                       <div class="peertube-select-container">
                         <select id="liveMaxDuration" formControlName="maxDuration" class="form-control">

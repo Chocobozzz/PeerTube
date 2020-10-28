@@ -38,7 +38,7 @@ function checkMissedConfig () {
     'federation.videos.federate_unlisted',
     'search.remote_uri.users', 'search.remote_uri.anonymous', 'search.search_index.enabled', 'search.search_index.url',
     'search.search_index.disable_local_search', 'search.search_index.is_default_search',
-    'live.enabled', 'live.allow_replay', 'live.max_duration',
+    'live.enabled', 'live.allow_replay', 'live.max_duration', 'live.max_user_lives', 'live.max_instance_lives',
     'live.transcoding.enabled', 'live.transcoding.threads',
     'live.transcoding.resolutions.240p', 'live.transcoding.resolutions.360p', 'live.transcoding.resolutions.480p',
     'live.transcoding.resolutions.720p', 'live.transcoding.resolutions.1080p', 'live.transcoding.resolutions.2160p'
