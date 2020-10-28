@@ -65,6 +65,8 @@ const customConfigUpdateValidator = [
   body('live.enabled').isBoolean().withMessage('Should have a valid live enabled boolean'),
   body('live.allowReplay').isBoolean().withMessage('Should have a valid live allow replay boolean'),
   body('live.maxDuration').custom(isIntOrNull).withMessage('Should have a valid live max duration'),
+  body('live.maxInstanceLives').custom(isIntOrNull).withMessage('Should have a valid max instance lives'),
+  body('live.maxUserLives').custom(isIntOrNull).withMessage('Should have a valid max user lives'),
   body('live.transcoding.enabled').isBoolean().withMessage('Should have a valid live transcoding enabled boolean'),
   body('live.transcoding.threads').isInt().withMessage('Should have a valid live transcoding threads'),
   body('live.transcoding.resolutions.240p').isBoolean().withMessage('Should have a valid transcoding 240p resolution enabled boolean'),

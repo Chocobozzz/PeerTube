@@ -1142,6 +1142,37 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.getAvailableForApi(queryOptions)
   }
 
+  static countLocalLives () {
+    const options = {
+      where: {
+        remote: false,
+        isLive: true
+      }
+    }
+
+    return VideoModel.count(options)
+  }
+
+  static countLivesOfAccount (accountId: number) {
+    const options = {
+      where: {
+        remote: false,
+        isLive: true
+      },
+      include: [
+        {
+          required: true,
+          model: VideoChannelModel.unscoped(),
+          where: {
+            accountId
+          }
+        }
+      ]
+    }
+
+    return VideoModel.count(options)
+  }
+
   static load (id: number | string, t?: Transaction): Bluebird<MVideoThumbnail> {
     const where = buildWhereIdOrUUID(id)
     const options = {

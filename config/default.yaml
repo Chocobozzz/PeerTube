@@ -250,6 +250,14 @@ live:
   # Set null to disable duration limit
   max_duration: 5 hours
 
+  # Limit max number of live videos created on your instance
+  # -1 == unlimited
+  max_instance_lives: 20
+
+  # Limit max number of live videos created by a user on your instance
+  # -1 == unlimited
+  max_user_lives: 3
+
   # Allow your users to save a replay of their live
   # PeerTube will transcode segments in a video file
   # If the user daily/total quota is reached, PeerTube will stop the live

@@ -216,6 +216,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         enabled: null,
 
         maxDuration: null,
+        maxInstanceLives: null,
+        maxUserLives: null,
         allowReplay: null,
 
         transcoding: {

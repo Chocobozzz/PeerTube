@@ -2,7 +2,7 @@ import * as express from 'express'
 import { body, param } from 'express-validator'
 import { checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '@server/helpers/middlewares/videos'
 import { VideoLiveModel } from '@server/models/video/video-live'
-import { UserRight, VideoState } from '@shared/models'
+import { ServerErrorCode, UserRight, VideoState } from '@shared/models'
 import { isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoNameValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
@@ -10,6 +10,7 @@ import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
 import { areValidationErrors } from '../utils'
 import { getCommonVideoEditAttributes } from './videos'
+import { VideoModel } from '@server/models/video/video'
 
 const videoLiveGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -50,11 +51,15 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     logger.debug('Checking videoLiveAddValidator parameters', { parameters: req.body })
 
     if (CONFIG.LIVE.ENABLED !== true) {
+      cleanUpReqFiles(req)
+
       return res.status(403)
         .json({ error: 'Live is not enabled on this instance' })
     }
 
     if (CONFIG.LIVE.ALLOW_REPLAY !== true && req.body.saveReplay === true) {
+      cleanUpReqFiles(req)
+
       return res.status(403)
         .json({ error: 'Saving live replay is not allowed instance' })
     }
@@ -63,6 +68,34 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
     const user = res.locals.oauth.token.User
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+
+    if (CONFIG.LIVE.MAX_INSTANCE_LIVES !== -1) {
+      const totalInstanceLives = await VideoModel.countLocalLives()
+
+      if (totalInstanceLives >= CONFIG.LIVE.MAX_INSTANCE_LIVES) {
+        cleanUpReqFiles(req)
+
+        return res.status(403)
+          .json({
+            code: ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED,
+            error: 'Cannot create this live because the max instance lives limit is reached.'
+          })
+      }
+    }
+
+    if (CONFIG.LIVE.MAX_USER_LIVES !== -1) {
+      const totalUserLives = await VideoModel.countLivesOfAccount(user.Account.id)
+
+      if (totalUserLives >= CONFIG.LIVE.MAX_USER_LIVES) {
+        cleanUpReqFiles(req)
+
+        return res.status(403)
+          .json({
+            code: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED,
+            error: 'Cannot create this live because the max user lives limit is reached.'
+          })
+      }
+    }
 
     return next()
   }

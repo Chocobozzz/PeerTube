@@ -7,7 +7,7 @@ import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { LiveVideoService, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, ServerErrorCode, VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -81,7 +81,16 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
 
       err => {
         this.firstStepError.emit()
-        this.notifier.error(err.message)
+
+        let message = err.message
+
+        if (err.body?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
+          message = $localize`Cannot create live because this instance have too many created lives`
+        } else if (err.body?.code) {
+          message = $localize`Cannot create live because you created too many lives`
+        }
+
+        this.notifier.error(message)
       }
     )
   }

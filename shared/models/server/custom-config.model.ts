@@ -99,7 +99,10 @@ export interface CustomConfig {
     enabled: boolean
 
     allowReplay: boolean
+
     maxDuration: number
+    maxInstanceLives: number
+    maxUserLives: number
 
     transcoding: {
       enabled: boolean

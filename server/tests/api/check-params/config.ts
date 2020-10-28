@@ -105,6 +105,8 @@ describe('Test config API validators', function () {
 
       allowReplay: false,
       maxDuration: null,
+      maxInstanceLives: -1,
+      maxUserLives: 50,
 
       transcoding: {
         enabled: true,

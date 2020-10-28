@@ -21,6 +21,20 @@ export class InstanceFeaturesTableComponent implements OnInit {
     return Math.min(this.initialUserVideoQuota, this.serverConfig.user.videoQuotaDaily)
   }
 
+  get maxInstanceLives () {
+    const value = this.serverConfig.live.maxInstanceLives
+    if (value === -1) return $localize`Unlimited`
+
+    return value
+  }
+
+  get maxUserLives () {
+    const value = this.serverConfig.live.maxUserLives
+    if (value === -1) return $localize`Unlimited`
+
+    return value
+  }
+
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
