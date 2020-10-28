@@ -1,6 +1,7 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">Block video "{{ video.name }}"</h4>
+    <h4 i18n class="modal-title" *ngIf="!video.isLive">Block video "{{ video.name }}"</h4>
+    <h4 i18n class="modal-title" *ngIf="video.isLive">Block live "{{ video.name }}"</h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
@@ -27,6 +28,10 @@
           </ng-container>
         </my-peertube-checkbox>
       </div>
+
+      <strong class="live-info" *ngIf="video.isLive" i18n>
+        Blocking this live will automatically terminate the live stream.
+      </strong>
 
       <div class="form-group inputs">
         <input

@@ -1,4 +1,5 @@
 import * as Bull from 'bull'
+import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
 import {
@@ -172,27 +173,5 @@ function createHlsJobIfEnabled (payload?: { videoUUID: string, resolution: numbe
     }
 
     return JobQueue.Instance.createJob({ type: 'video-transcoding', payload: hlsTranscodingPayload })
-  }
-}
-
-async function publishAndFederateIfNeeded (video: MVideoUUID) {
-  const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
-    // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
-    // Video does not exist anymore
-    if (!videoDatabase) return undefined
-
-    // We transcoded the video file in another format, now we can publish it
-    const videoPublished = await videoDatabase.publishIfNeededAndSave(t)
-
-    // If the video was not published, we consider it is a new one for other instances
-    await federateVideoIfNeeded(videoDatabase, videoPublished, t)
-
-    return { videoDatabase, videoPublished }
-  })
-
-  if (videoPublished) {
-    Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
-    Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
   }
 }

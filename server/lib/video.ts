@@ -1,9 +1,12 @@
 import { Transaction } from 'sequelize/types'
+import { sequelizeTypescript } from '@server/initializers/database'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
 import { FilteredModelAttributes } from '@server/types'
-import { MTag, MThumbnail, MVideoTag, MVideoThumbnail } from '@server/types/models'
+import { MTag, MThumbnail, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
 import { ThumbnailType, VideoCreate, VideoPrivacy } from '@shared/models'
+import { federateVideoIfNeeded } from './activitypub/videos'
+import { Notifier } from './notifier'
 import { createVideoMiniatureFromExisting } from './thumbnail'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
@@ -78,10 +81,33 @@ async function setVideoTags (options: {
   }
 }
 
+async function publishAndFederateIfNeeded (video: MVideoUUID) {
+  const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
+    // Maybe the video changed in database, refresh it
+    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
+    // Video does not exist anymore
+    if (!videoDatabase) return undefined
+
+    // We transcoded the video file in another format, now we can publish it
+    const videoPublished = await videoDatabase.publishIfNeededAndSave(t)
+
+    // If the video was not published, we consider it is a new one for other instances
+    await federateVideoIfNeeded(videoDatabase, videoPublished, t)
+
+    return { videoDatabase, videoPublished }
+  })
+
+  if (videoPublished) {
+    Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
+    Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   buildLocalVideoFromReq,
+  publishAndFederateIfNeeded,
   buildVideoThumbnailsFromReq,
   setVideoTags
 }

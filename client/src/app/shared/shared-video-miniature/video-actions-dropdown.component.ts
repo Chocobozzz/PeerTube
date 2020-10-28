@@ -186,7 +186,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
   async removeVideo () {
     this.modalOpened.emit()
 
-    const res = await this.confirmService.confirm($localize`Do you really want to delete this video?`, $localize`Delete`)
+    let message = $localize`Do you really want to delete this video?`
+    if (this.video.isLive) {
+      message += ' ' + $localize`The live stream will be automatically terminated.`
+    }
+
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
     this.videoService.removeVideo(this.video.id)

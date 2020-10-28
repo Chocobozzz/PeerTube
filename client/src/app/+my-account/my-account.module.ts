@@ -34,7 +34,8 @@ import { MyAccountVideoPlaylistElementsComponent } from './my-account-video-play
 import { MyAccountVideoPlaylistUpdateComponent } from './my-account-video-playlists/my-account-video-playlist-update.component'
 import { MyAccountVideoPlaylistsComponent } from './my-account-video-playlists/my-account-video-playlists.component'
 import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
-import { VideoChangeOwnershipComponent } from './my-account-videos/video-change-ownership/video-change-ownership.component'
+import { VideoChangeOwnershipComponent } from './my-account-videos/modals/video-change-ownership.component'
+import { LiveStreamInformationComponent } from './my-account-videos/modals/live-stream-information.component'
 import { MyAccountComponent } from './my-account.component'
 
 @NgModule({
@@ -68,6 +69,8 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountVideosComponent,
 
     VideoChangeOwnershipComponent,
+    LiveStreamInformationComponent,
+
     MyAccountOwnershipComponent,
     MyAccountAcceptOwnershipComponent,
     MyAccountVideoImportsComponent,

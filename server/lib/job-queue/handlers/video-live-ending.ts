@@ -1,7 +1,8 @@
 import * as Bull from 'bull'
 import { readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { getVideoFileResolution, hlsPlaylistToFragmentedMP4 } from '@server/helpers/ffmpeg-utils'
+import { getDurationFromVideoFile, getVideoFileResolution, hlsPlaylistToFragmentedMP4 } from '@server/helpers/ffmpeg-utils'
+import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
 import { generateHlsPlaylist } from '@server/lib/video-transcoding'
 import { VideoModel } from '@server/models/video/video'
@@ -44,6 +45,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   const playlistFiles = files.filter(f => f.endsWith('.m3u8') && f !== 'master.m3u8')
   const resolutions: number[] = []
+  let duration: number
 
   for (const playlistFile of playlistFiles) {
     const playlistPath = join(hlsDirectory, playlistFile)
@@ -58,6 +60,10 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     const segmentFiles = files.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
     await hlsPlaylistToFragmentedMP4(hlsDirectory, segmentFiles, mp4TmpName)
 
+    if (!duration) {
+      duration = await getDurationFromVideoFile(mp4TmpName)
+    }
+
     resolutions.push(videoFileResolution)
   }
 
@@ -67,6 +73,8 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   video.isLive = false
   video.state = VideoState.TO_TRANSCODE
+  video.duration = duration
+
   await video.save()
 
   const videoWithFiles = await VideoModel.loadWithFiles(video.id)
@@ -86,6 +94,8 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   video.state = VideoState.PUBLISHED
   await video.save()
+
+  await publishAndFederateIfNeeded(video)
 }
 
 async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {

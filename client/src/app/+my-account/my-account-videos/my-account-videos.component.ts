@@ -5,10 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign } from '@app/helpers'
-import { Video, VideoService } from '@app/shared/shared-main'
+import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions, OwnerDisplayType, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
 import { VideoSortField } from '@shared/models'
-import { VideoChangeOwnershipComponent } from './video-change-ownership/video-change-ownership.component'
+import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
+import { LiveStreamInformationComponent } from './modals/live-stream-information.component'
 
 @Component({
   selector: 'my-account-videos',
@@ -18,6 +19,7 @@ import { VideoChangeOwnershipComponent } from './video-change-ownership/video-ch
 export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
   @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
   @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
+  @ViewChild('liveStreamInformationModal', { static: true }) liveStreamInformationModal: LiveStreamInformationComponent
 
   titlePage: string
   selection: SelectionType = {}
@@ -36,6 +38,8 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
     blacklistInfo: true
   }
   ownerDisplayType: OwnerDisplayType = 'videoChannel'
+
+  videoActions: DropdownAction<{ video: Video }>[] = []
 
   videos: Video[] = []
   videosSearch: string
@@ -56,6 +60,8 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
   }
 
   ngOnInit () {
+    this.buildActions()
+
     this.videosSearchChanged
       .pipe(debounceTime(500))
       .subscribe(() => {
@@ -138,12 +144,36 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
         )
   }
 
-  changeOwnership (event: Event, video: Video) {
-    event.preventDefault()
+  changeOwnership (video: Video) {
     this.videoChangeOwnershipModal.show(video)
+  }
+
+  displayLiveInformation (video: Video) {
+    this.liveStreamInformationModal.show(video)
   }
 
   private removeVideoFromArray (id: number) {
     this.videos = this.videos.filter(v => v.id !== id)
+  }
+
+  private buildActions () {
+    this.videoActions = [
+      {
+        label: $localize`Display live information`,
+        handler: ({ video }) => this.displayLiveInformation(video),
+        isDisplayed: ({ video }) => video.isLive,
+        iconName: 'live'
+      },
+      {
+        label: $localize`Change ownership`,
+        handler: ({ video }) => this.changeOwnership(video),
+        iconName: 'ownership-change'
+      },
+      {
+        label: $localize`Delete`,
+        handler: ({ video }) => this.deleteVideo(video),
+        iconName: 'delete'
+      }
+    ]
   }
 }
