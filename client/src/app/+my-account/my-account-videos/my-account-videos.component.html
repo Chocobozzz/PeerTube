@@ -34,18 +34,13 @@
 
   <ng-template ptTemplate="rowButtons" let-video>
     <div class="action-button">
-      <my-delete-button label (click)="deleteVideo(video)"></my-delete-button>
-
       <my-edit-button label [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
 
-      <my-button i18n-label label="Change ownership"
-                 className="action-button-change-ownership grey-button"
-                 icon="ownership-change"
-                 (click)="changeOwnership($event, video)"
-      ></my-button>
+      <my-action-dropdown [actions]="videoActions" [entry]="{ video: video }"></my-action-dropdown>
     </div>
   </ng-template>
 </my-videos-selection>
 
 
 <my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>
+<my-live-stream-information #liveStreamInformationModal></my-live-stream-information>

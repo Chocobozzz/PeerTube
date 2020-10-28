@@ -66,6 +66,7 @@ const icons = {
   'cross': require('!!raw-loader?!../../../assets/images/feather/x.svg').default,
   'tick': require('!!raw-loader?!../../../assets/images/feather/check.svg').default,
   'columns': require('!!raw-loader?!../../../assets/images/feather/columns.svg').default,
+  'live': require('!!raw-loader?!../../../assets/images/feather/live.svg').default,
   'repeat': require('!!raw-loader?!../../../assets/images/feather/repeat.svg').default,
   'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default
 }

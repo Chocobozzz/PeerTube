@@ -226,7 +226,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   isVideoDownloadable () {
-    return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled
+    return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled && !this.video.isLive
   }
 
   loadCompleteDescription () {
