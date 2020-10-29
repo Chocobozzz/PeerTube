@@ -210,6 +210,8 @@
             <div class="form-group">
               <label for="liveVideoStreamKey" i18n>Live stream key</label>
               <my-input-readonly-copy id="liveVideoStreamKey" [value]="liveVideo.streamKey"></my-input-readonly-copy>
+
+              <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
             </div>
 
             <div class="form-group" *ngIf="isSaveReplayEnabled()">

@@ -323,6 +323,13 @@ table {
   }
 }
 
+.form-group-description {
+  @extend .text-muted;
+
+  font-size: 90%;
+  margin-top: 10px;
+}
+
 @media screen and (max-width: #{breakpoint(xxl)}) {
   .main-col {
     &.expanded {
