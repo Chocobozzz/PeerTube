@@ -2866,12 +2866,12 @@
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4" datatype="html">
         <source>Video</source>
-        <target state="new">Video</target>
+        <target state="translated">Vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="dee48932053451ee2dfafe5500a5262cd4220d5e" datatype="html">
         <source>This video has been reported multiple times.</source>
-        <target state="new">This video has been reported multiple times.</target>
+        <target state="translated">Este vídeo foi denunciado en múltiples ocasións.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="e9a289d014e33a5a45e1cf47131074f50abb7c18" datatype="html">
