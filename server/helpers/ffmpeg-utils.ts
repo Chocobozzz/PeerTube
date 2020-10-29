@@ -8,7 +8,6 @@ import { CONFIG } from '../initializers/config'
 import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
-import { concat } from 'lodash'
 
 /**
  * A toolbox to play with audio
