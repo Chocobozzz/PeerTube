@@ -147,9 +147,7 @@
       </trans-unit>
       <trans-unit id="4d2311a5156bd322cc7e2ebafcf6063ba8232e63" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
-        <target state="new">
-            The notification concerns a comment now unavailable
-          </target>
+        <target state="translated">La notifica riguarda un commento non più disponibile</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="b187dd5f406f4195b326ab01fa81f823025821b9" datatype="html">
@@ -247,14 +245,12 @@
       </trans-unit>
       <trans-unit id="f61b49d5729bbd138f2a083fbaee2920811d31c5" datatype="html">
         <source>The notification points to a content now unavailable</source>
-        <target state="new">
-          The notification points to a content now unavailable
-        </target>
+        <target state="translated">La notifica punta a un contenuto non più disponibile</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">190</context></context-group>
       </trans-unit>
       <trans-unit id="3fb9a5f7268114445d8c109a8f48102e93471f5a" datatype="html">
         <source>Change your avatar</source>
-        <target state="new">Change your avatar</target>
+        <target state="translated">Cambia il tuo avatar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/account/actor-avatar-info.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
@@ -298,7 +294,7 @@
       </trans-unit>
       <trans-unit id="04f47b9519b96ac834a111c0e113d18c77d177de" datatype="html">
         <source>Please describe the issue...</source>
-        <target state="new">Please describe the issue...</target>
+        <target state="translated">Per favore descrivi il problema</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="8efba03f22550a671ee2c2c6dfd1ff03ea047700" datatype="html">
@@ -323,7 +319,7 @@
       </trans-unit>
       <trans-unit id="e53246788ffa2660a170aa859691a55576df2e6c" datatype="html">
         <source>video</source>
-        <target state="new">video</target>
+        <target state="translated">video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
@@ -345,12 +341,12 @@
       </trans-unit>
       <trans-unit id="01504bc3847894e0816ec486648854d3835f91b0" datatype="html">
         <source>Video stream</source>
-        <target state="new">Video stream</target>
+        <target state="translated">Flusso video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="697b93fd14fd3c85be79056c6d7f459da204eff1" datatype="html">
         <source>Audio stream</source>
-        <target state="new">Audio stream</target>
+        <target state="translated">Flusso audio</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c">
@@ -365,7 +361,7 @@
       </trans-unit>
       <trans-unit id="1006562256968398209" datatype="html">
         <source>video</source>
-        <target state="new">video</target>
+        <target state="translated">video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -373,7 +369,7 @@
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
-        <target state="new">subtitles</target>
+        <target state="translated">sottotitoli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -417,17 +413,17 @@
       </trans-unit>
       <trans-unit id="97916f2928694b8d574b6f052b93e54565ed9823" datatype="html">
         <source>What is the issue?</source>
-        <target state="new">What is the issue?</target>
+        <target state="translated">Qual'è il problema?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="297603f796b0d287ac02b80d5aca6156c91a8fea" datatype="html">
         <source>This will ask remote instances to delete it</source>
-        <target state="new">This will ask remote instances to delete it</target>
+        <target state="translated">Questo chiederà all'istanza remota di cancellarlo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="0cd0f27936731dabfd8d89277b781d5dd664bc89" datatype="html">
         <source>Unfederate the video</source>
-        <target state="new">Unfederate the video</target>
+        <target state="translated">Unfedera il video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
@@ -449,7 +445,7 @@
       </trans-unit>
       <trans-unit id="1d3781d7296d4b4e04e7f023aec1052fb2955c4d" datatype="html">
         <source>Blocked</source>
-        <target state="new">Blocked</target>
+        <target state="translated">Bloccato</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="fb8ccb136ab0ad1ff1dfbce739198be16a814f87">
@@ -549,7 +545,7 @@
       </trans-unit>
       <trans-unit id="c7e2b4c04a0459ebc4d2e54e419abb679bc713f2" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="new">Subscribe with an account on this instance</target>
+        <target state="translated">Iscriviti con un account in questa istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0">
@@ -574,7 +570,7 @@
       </trans-unit>
       <trans-unit id="3e486bad6576aa445ccb6051069e45a3658e4160" datatype="html">
         <source>PROFILE SETTINGS</source>
-        <target state="new">PROFILE SETTINGS</target>
+        <target state="translated">IMPOSTAZIONI PROFILO</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3">
@@ -631,17 +627,17 @@
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2" datatype="html">
         <source>Video uploads</source>
-        <target state="new">Video uploads</target>
+        <target state="translated">Video caricati</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="ba774dce7a0cbbc29d7086b8557939c7e8d9883d" datatype="html">
         <source>Transcoding in multiple resolutions</source>
-        <target state="new">Transcoding in multiple resolutions</target>
+        <target state="translated">Transcodifica in risoluzioni multiple</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7deebcf3491b27625e9b308179a6635b48368dcb" datatype="html">
         <source>Requires manual validation by moderators</source>
-        <target state="new">Requires manual validation by moderators</target>
+        <target state="translated">Richiede la validazione manuale dai moderatori</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="f1155367f44b4e3d2286db687d324a9b0cc1a7cb" datatype="html">
@@ -670,7 +666,7 @@
       </trans-unit>
       <trans-unit id="a4378d599f760c6d1de2667d4535b48db092cb6e" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="new"> You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">Puoi importare qualsiasi file torrent che punti a un file multimediale. Assicurati di avere i diritti di diffusione sul contenuto a cui fa riferimento, altrimenti potresti causare problemi legali a te stesso e alla tua istanza.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -688,7 +684,7 @@
       </trans-unit>
       <trans-unit id="59bdc3dfa4075f92c734588899485db702c8f120" datatype="html">
         <source>Player</source>
-        <target state="new">Player</target>
+        <target state="translated">Player</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5" datatype="html">
@@ -728,7 +724,7 @@
       </trans-unit>
       <trans-unit id="0bedca44bfc0ef579be6053ffe0e8cdee9aba07d" datatype="html">
         <source>of hosted video</source>
-        <target state="new">of hosted video</target>
+        <target state="translated">di video ospitati</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="de7d61497b3dc7df0f83c57f333458a7064ac4e7" datatype="html">
@@ -743,12 +739,12 @@
       </trans-unit>
       <trans-unit id="1ec99ffe83830affef834fd7beeda8ee313203fe" datatype="html">
         <source>following</source>
-        <target state="new">following</target>
+        <target state="translated">seguendo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729" datatype="html">
         <source>User</source>
-        <target state="new">User</target>
+        <target state="translated">Utente</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/users/user.service.ts</context><context context-type="linenumber">382</context></context-group>
       </trans-unit>
       <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
@@ -782,7 +778,7 @@
       </trans-unit>
       <trans-unit id="dc3bdad5421d0ee7ddd76ae62b699d72dd9f61b4" datatype="html">
         <source>Please describe the reason...</source>
-        <target state="new">Please describe the reason...</target>
+        <target state="translated">Per favore descrivi il motivo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="c078d4901a5fac169665947cc7a6108b94dd80c7">
@@ -882,8 +878,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
-        <target state="new">An email with the reset password instructions will be sent to <x id="PH"/>.
-The link will expire within 1 hour.</target>
+        <target state="translated">Una mail con le istruzioni per il reset della password sarà spedita a <x id="PH"/>. Il link scadrà fra 1 ora</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
           <context context-type="linenumber">106,107</context>
@@ -914,12 +909,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="26b0b148ff87e083300fa9ca213f8ada7fa6211d" datatype="html">
         <source>on this instance</source>
-        <target state="new">on this instance</target>
+        <target state="translated">su questa istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="cdc5b877341ff8e6009282a299f2f2d6987dbdbe" datatype="html">
         <source>on the vidiverse</source>
-        <target state="new">on the vidiverse</target>
+        <target state="translated">su vidiverse</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -1088,12 +1083,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="a9af18b4f210f5a19bb2503407923d3f25c57f98" datatype="html">
         <source>Configuration warning!</source>
-        <target state="new">Configuration warning!</target>
+        <target state="translated">Avviso sulla configurazione!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="e30fd615e98eb6ebc28346024a89f00192a98396" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="new">You enabled user registration on your instance but did not configure the following fields:</target>
+        <target state="translated">Hai abilitato la registrazione utente sulla tua istanza ma non hai configurato i seguenti campi:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="ab7e3d0be94cc55ce997a5f38c679956e66f3936" datatype="html">
@@ -1118,17 +1113,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="af60a062ecc7c70b278bdb3ba7ad0147abfecf0a" datatype="html">
         <source>How you plan to pay your instance</source>
-        <target state="new">How you plan to pay your instance</target>
+        <target state="translated">Come pensi di remunerare la tua istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="c69c1bd027bae555557a48123a26d770a93ee473" datatype="html">
         <source>How you will moderate your instance</source>
-        <target state="new">How you will moderate your instance</target>
+        <target state="translated">Come modererai la tua istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c" datatype="html">
         <source>Instance terms</source>
-        <target state="new">Instance terms</target>
+        <target state="translated">Termini dell'istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="565e31173ab0ea2c00c311c9051c15d8896a0b80" datatype="html">
@@ -1156,9 +1151,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="c2fe7580753ac7c1442df31eb97f8acc6fa250e6" datatype="html">
         <source>Configure</source>
-        <target state="new">
-       Configure
-    </target>
+        <target state="translated">Configura</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -1190,17 +1183,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="c43efa2dff95b97be0c36a65d2ada4cd594e010f" datatype="html">
         <source>Interface:</source>
-        <target state="new">Interface:</target>
+        <target state="translated">Interfaccia:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="a9ada5fec7ddf53a031711b025014495372627de" datatype="html">
         <source>Videos:</source>
-        <target state="new">Videos:</target>
+        <target state="translated">Video:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="9fe1faff741de7a4d50e520d2161209997f8224c" datatype="html">
         <source>Sensitive:</source>
-        <target state="new">Sensitive:</target>
+        <target state="translated">Sensibile:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="5a69be913ebcc70f300060cf1be0c7f8827159d6" datatype="html">
@@ -1237,17 +1230,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="d3381fff430c3687ae1c6302af99d88baa4f480b" datatype="html">
         <source>Shortcuts</source>
-        <target state="new">Shortcuts</target>
+        <target state="translated">Scorciatoie</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="f8e6eaa974acec3b80e5c77ec0dc4ff80939964d" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="new">powered by PeerTube</target>
+        <target state="translated">powered by PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2020</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2020</target>
+        <target state="translated">powered by PeerTube - CopyLeft 2015-2020</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="3fdc751b264ca9998e1542fcf5794e274cd56344">
@@ -1272,7 +1265,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3245220240937722814" datatype="html">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">I miei canali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -1280,7 +1273,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
         <source>My videos</source>
-        <target state="new">My videos</target>
+        <target state="translated">I miei video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -1288,7 +1281,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
         <source>My playlists</source>
-        <target state="new">My playlists</target>
+        <target state="translated">Le mie playlist</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -1296,7 +1289,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
         <source>My subscriptions</source>
-        <target state="new">My subscriptions</target>
+        <target state="translated">Le mie iscrizioni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -1304,7 +1297,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
         <source>My history</source>
-        <target state="new">My history</target>
+        <target state="translated">Il mio storico</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -1347,7 +1340,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="9d9983bd6d0817a5b1bb7650034a2f9a5f4b7bac" datatype="html">
         <source>Most liked</source>
-        <target state="new">Most liked</target>
+        <target state="translated">Più piaciuti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1">
@@ -1382,7 +1375,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1da23f4068fd3796fbcb24d0c42bb62f92c96829" datatype="html">
         <source>Mark all as read</source>
-        <target state="new">Mark all as read</target>
+        <target state="translated">Marca tutti come letti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/avatar-notification.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="341e026e3f317aa3164916cc63a059c961a78b81">
@@ -1414,7 +1407,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="new">Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</target>
+        <target state="translated">I risultati saranno aumentati con quelli di un indice di terze parti. Verranno inviati solo i dati necessari per effettuare la query.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="ee697ded3eb6909ca0e619ab5cc9647cbd849da5" datatype="html">
@@ -1429,27 +1422,27 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target state="new">only followed instances</target>
+        <target state="translated">solo istanze seguite</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="e5a60e5f83aad776726b8b9e7ff1b69f047a8416" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="new">Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</target>
+        <target state="translated">Determina se è possibile risolvere qualsiasi contenuto distante o se questa istanza lo consente solo per le istanze che segue.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="648ca3b1ac41763033a412ead17c4a3dd71545be" datatype="html">
         <source>will list the matching channel</source>
-        <target state="new">will list the matching channel</target>
+        <target state="translated">elencherà il canale corrispondente</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="48d27fa96b882d9c5c2a779376328790d80378eb" datatype="html">
         <source>will list the matching video</source>
-        <target state="new">will list the matching video</target>
+        <target state="translated">elencherà il video corrispondente</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="25d438ce4c6d14835921c34bda6cc88f4fe5b1b4" datatype="html">
         <source>Any other input will return matching video or channel names.</source>
-        <target state="new">Any other input will return matching video or channel names.</target>
+        <target state="translated">Qualsiasi altro ingresso restituirà video o nomi di canale corrispondenti.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -1464,12 +1457,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="39ec2a3e2da523763f4db4b2227b7dbae5d70eba" datatype="html">
         <source>In this instance's network</source>
-        <target state="new">In this instance's network</target>
+        <target state="translated">Nella rete di questa istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="9848e55d7c95eddc1c4a044a63ed0e88e8cb6f5c" datatype="html">
         <source>In the vidiverse</source>
-        <target state="new">In the vidiverse</target>
+        <target state="translated">Nel vidiverse</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5d43539fc358c3a548b9d487be821db73e2702ff">
@@ -1479,9 +1472,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="a57adbb9bc3ecbc397157af25f96fc2123c9c383" datatype="html">
         <source>Reset</source>
-        <target state="new">
-            Reset
-          </target>
+        <target state="translated">Reset</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="98acac685fc4b2d35e5d0cf3cd224d247a756c3e">
@@ -1531,14 +1522,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="265ee68edfe57e510270da31ec99f67d94346009" datatype="html">
         <source>Reset</source>
-        <target state="new">
-          Reset
-        </target>
+        <target state="translated">Reset</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="75706466a5cffa6f6bf0d6c94a8345a001ce8cea" datatype="html">
         <source>Display all categories</source>
-        <target state="new">Display all categories</target>
+        <target state="translated">Mostra tutte le categorie</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
@@ -1548,7 +1537,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="e19d80c6277747a68f3da8cfe1318303d2b5c952" datatype="html">
         <source>Display all licenses</source>
-        <target state="new">Display all licenses</target>
+        <target state="translated">Mostra tutte le licenze</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
@@ -1558,7 +1547,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="dcc3173a99661496cd1f836283993cc3e6576b26" datatype="html">
         <source>Display all languages</source>
-        <target state="new">Display all languages</target>
+        <target state="translated">Mostra tutte le lingue</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -1573,19 +1562,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="118bedbb308a28f06d1c0c84645a35c9bf93cbf3" datatype="html">
         <source>Search target</source>
-        <target state="new">Search target</target>
+        <target state="translated">Obiettivo di ricerca</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="cdfec9a92a3081018d34e82d74e85e4e9f63a95f" datatype="html">
         <source>Vidiverse</source>
-        <target state="new">Vidiverse</target>
+        <target state="translated">Vidiverse</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="ca72d574353a355b8fadbc1ceda174a0bd1bf7cd" datatype="html">
         <source>Reset</source>
-        <target state="new">
-      Reset
-    </target>
+        <target state="translated">Reset</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.html</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
@@ -1600,7 +1587,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8" datatype="html">
         <source>Video channels</source>
-        <target state="new">Video channels</target>
+        <target state="translated">Canali video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
@@ -1656,7 +1643,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="be24dae69c0d0605237d6dd638b172a42a88851e" datatype="html">
         <source>No items found</source>
-        <target state="new">No items found</target>
+        <target state="translated">Nessun elemento trovato</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/select/select-checkbox.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
@@ -1666,9 +1653,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3b86a740c713742c3f7538c60b890fccdd0a5caf" datatype="html">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="new">
-                    Video descriptions are truncated by default and require manual action to expand them.
-                  </target>
+        <target state="translated">Le descrizioni dei video sono troncate in modo predefinito e viene richiesta un'azione manuale per espanderle.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
@@ -1683,22 +1668,22 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
         <source>FAQ</source>
-        <target state="new">FAQ</target>
+        <target state="translated">FAQ</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="a2892dc0bd40629b160c490cdd4aff82204bbec6" datatype="html">
         <source>Frequently asked questions about PeerTube</source>
-        <target state="new">Frequently asked questions about PeerTube</target>
+        <target state="translated">Domande frequenti su Peertube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="e351b40b3869a5c7d19c3d4918cb1ac7aaab95c4" datatype="html">
         <source>API</source>
-        <target state="new">API</target>
+        <target state="translated">API</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="fd91a5f2ef27c48b6908d9016fb6de2a224e8559" datatype="html">
         <source>API documentation</source>
-        <target state="new">API documentation</target>
+        <target state="translated">Documentazione API</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
@@ -1710,7 +1695,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ea504765b49242bfcaefec84a9cf2f6f179c2ea5" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="new">Contains sensitive content</target>
+        <target state="translated">Contiene contenuto sensibile</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
@@ -1720,7 +1705,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ec396d3c2e26cbe4a1b3d6747c732419c6dcc3bb" datatype="html">
         <source>Publish after transcoding</source>
-        <target state="new">Publish after transcoding</target>
+        <target state="translated">Pubblica dopo la transcodifica</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
@@ -1782,7 +1767,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430" datatype="html">
         <source>Video preview</source>
-        <target state="new">Video preview</target>
+        <target state="translated">Anteprima del video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">206</context></context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -1792,9 +1777,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="64ec6a11fd39e7a4cba76281bdd490124437e96f" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="new">
-                    Short text to tell people how they can support you (membership platform...).
-                  </target>
+        <target state="translated">Breve testo per dire alle persone come possono supportarti (piattaforma di appartenenza ...).</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6">
@@ -1804,14 +1787,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="109ff29714fe8f2a0bfb232f04b908062fac22b0" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target state="new">
-                    This is the date when the content was originally published (e.g. the release date for a film)
-                  </target>
+        <target state="translated">Questa è la data in cui il contenuto è stato originariamente pubblicato (ad esempio la data di uscita di un film)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">239</context></context-group>
       </trans-unit>
       <trans-unit id="48c3bde722dc317f76aa607445f11128f7fc7276" datatype="html">
         <source>Plugin settings</source>
-        <target state="new">Plugin settings</target>
+        <target state="translated">Impostazioni plugin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">269</context>
@@ -2043,9 +2024,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="08c1bbb22df74b12c362fd114d0aa5a230ee4656" datatype="html">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="new">
-                The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
-              </target>
+        <target state="translated">L'URL non è protetto (nessun HTTPS), quindi il video incorporato non funzionerà sui siti Web HTTPS (i browser Web bloccano le richieste HTTP non protette sui siti Web HTTPS).</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
@@ -2115,12 +2094,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3e10c53d0372db827bf38571e56d166f1df963bf" datatype="html">
         <source>Display player controls</source>
-        <target state="new">Display player controls</target>
+        <target state="translated">Visualizza controlli di riproduzione</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">196</context></context-group>
       </trans-unit>
       <trans-unit id="d0701f8fd194fd5a29f6dc015d0a27c85128b65e" datatype="html">
         <source>Display PeerTube button link</source>
-        <target state="new">Display PeerTube button link</target>
+        <target state="translated">Visualizza pulsante di link a Peertube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">203</context></context-group>
       </trans-unit>
       <trans-unit id="3c4c080864b313cfdff5fdea6aae5da276246d99">
@@ -2130,16 +2109,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="38e66e2d779d6d819cd7703ab73ab1bab75f8614" datatype="html">
         <source>The video is being imported, it will be available when the import is finished.</source>
-        <target state="new">
-      The video is being imported, it will be available when the import is finished.
-    </target>
+        <target state="translated">Il video è in fase di caricamento, sarà disponibile quando il caricamento è finito.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="d2a8e8e4e5345201c07ba03a7fafe8b663230246" datatype="html">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="new">
-      The video is being transcoded, it may not work properly.
-    </target>
+        <target state="translated">Il video è in fase di transcodifica, potrebbe non funzionare correttamente.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a">
@@ -2153,7 +2128,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="bbb57efb2edd572de832c8fff03bc85d7723abd3" datatype="html">
         <source>This video is blocked.</source>
-        <target state="new">This video is blocked.</target>
+        <target state="translated">Il video è bloccato.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="82bf4d36722689b7c0058ed18e50d7b550d6d8b6" datatype="html">
@@ -2182,17 +2157,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="74059c5dce671d464259e3ce37a5d408c3fd7720" datatype="html">
         <source>SUPPORT</source>
-        <target state="new">SUPPORT</target>
+        <target state="translated">SUPPORTO</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="83ea0f7a6f84393af198d48193e01a96f3fcbc9a" datatype="html">
         <source>SHARE</source>
-        <target state="new">SHARE</target>
+        <target state="translated">CONDIVIDI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="cf272d006ff8c0b60e61b14e17fa6a39b30d614a" datatype="html">
         <source>SAVE</source>
-        <target state="new">SAVE</target>
+        <target state="translated">SALVA</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="8270eaeb2582eef4b7cde314c370aaf5b45c43d2" datatype="html">
@@ -2212,7 +2187,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4001371302469308813" datatype="html">
         <source>Support options for this video</source>
-        <target state="new">Support options for this video</target>
+        <target state="translated">Opzioni di supporto per questo video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="0b7f242da10ece3f2995095c455b9a92ebcdd3b4">
@@ -2224,22 +2199,22 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="d0336848b0c375a1c25ba369b3481ee383217a4f" datatype="html">
         <source>Subscribe</source>
-        <target state="new">Subscribe</target>
+        <target state="translated">Iscriviti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="6e215e23505768151b501b7e11dd5b864e604fd9" datatype="html">
         <source>Subscribe to all channels</source>
-        <target state="new">Subscribe to all channels</target>
+        <target state="translated">Iscriviti a tutti i canali</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="c33a843e309de9d67771aa5e666f61e92f4c6216" datatype="html">
         <source>channels subscribed</source>
-        <target state="new">channels subscribed</target>
+        <target state="translated">canali sottoscritti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="e01bfa3629e2133dbf307975446bde047eb8bd1f" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="new">{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Disiscriviti} other {Disiscriviti da tutti i canali} }</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
@@ -2254,7 +2229,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="57bfd54c230fc20caff1f0b321ad42be3bf859a6" datatype="html">
         <source>Origin instance</source>
-        <target state="new">Origin instance</target>
+        <target state="translated">Istanza d'origine</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="284b55e2ae9f6e5bc78c92a18ef26da02f380079">
@@ -2264,14 +2239,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4c0ba3cde3b3c58b855ffb4beaa5804a2fc3826b" datatype="html">
         <source>Friendly Reminder:</source>
-        <target state="new">Friendly Reminder: </target>
+        <target state="translated">Promemoria di cortesia:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="89707647cc7c304e499ae46a5a0c5b508c3c80a0" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="new">
-          the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
-        </target>
+        <target state="translated">il sistema di condivisione utilizzato per questo video implica che alcune informazioni tecniche sul tuo sistema (come un indirizzo IP pubblico) possano essere inviate ad altri peer.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
@@ -2281,7 +2254,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="75d9bb7a2e6256268cd0653aac75a8b994d3cf1f" datatype="html">
         <source>The video was blocked due to automatic blocking of new videos</source>
-        <target state="new">The video was blocked due to automatic blocking of new videos</target>
+        <target state="translated">Il video è stato bloccato a causa del blocco automatico dei nuovi video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
@@ -2291,14 +2264,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f" datatype="html">
         <source>OK</source>
-        <target state="new">
-      OK
-    </target>
+        <target state="translated">OK</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">293</context></context-group>
       </trans-unit>
       <trans-unit id="a8db53a47543132da1a68066f0a9cba0551a8933" datatype="html">
         <source>1 Comment</source>
-        <target state="new">1 Comment</target>
+        <target state="translated">1 Commento</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="8164af7bbe7fb9a3d2064ddf2627a7a4d5446575" datatype="html">
@@ -2310,24 +2281,22 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="c5bb9f8936cb33db2ca351a1b87a984fdf11917c" datatype="html">
         <source>Comments</source>
-        <target state="new">Comments</target>
+        <target state="translated">Commenti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="a87cd0a1633f944e697fa2ee68362d8bc11c41ee" datatype="html">
         <source>SORT BY</source>
-        <target state="new">
-        SORT BY
-      </target>
+        <target state="translated">ORDINA PER</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6d355ab9a2c6af4f7ffcb44dd8ca0c5572f958ca" datatype="html">
         <source>Most recent first (default)</source>
-        <target state="new">Most recent first (default)</target>
+        <target state="translated">I più recenti prima (predefinito)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="df2d2cca87a54e75abb4196d10358579dd0321b4" datatype="html">
         <source>Most replies first</source>
-        <target state="new">Most replies first</target>
+        <target state="translated">I più risposti prima</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
@@ -2370,17 +2339,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
         <source>The deletion will be sent to remote instances so they can reflect the change.</source>
-        <target state="new"> The deletion will be sent to remote instances so they can reflect the change.</target>
+        <target state="translated">L'eliminazione verrà inviata alle istanze remote in modo che possano riflettere la modifica.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="7321800851971795962" datatype="html">
         <source>It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target state="new"> It is a remote comment, so the deletion will only be effective on your instance.</target>
+        <target state="translated">È un commento remoto, quindi l'eliminazione sarà effettiva solo sulla tua istanza.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
         <source>Delete and re-draft</source>
-        <target state="new">Delete and re-draft</target>
+        <target state="translated">Elimina e rimetti in bozza</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -2388,7 +2357,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="new">Do you really want to delete and re-draft this comment?</target>
+        <target state="translated">Vuoi davvero eliminare e riscrivere questo commento?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -2401,7 +2370,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4e5254dedf0c12ce7e7c2197384fceebe3b29a2b" datatype="html">
         <source>Markdown compatible</source>
-        <target state="new">Markdown compatible</target>
+        <target state="translated">Markdown compatibile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">13</context>
@@ -2409,7 +2378,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4739ffad85f09defefdb6e51b45f43b2ef7c4388" datatype="html">
         <source>Markdown compatible that supports:</source>
-        <target state="new">Markdown compatible that supports:</target>
+        <target state="translated">Markdown compatibile che supporta:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2417,7 +2386,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="9a53b17a021bb0677c156fd893461797fc497a10" datatype="html">
         <source>Auto generated links</source>
-        <target state="new">Auto generated links</target>
+        <target state="translated">Links autogenerati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2425,7 +2394,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="664f99b8919d6dd2faa1c1f7c378aa86d1be5e8a" datatype="html">
         <source>Break lines</source>
-        <target state="new">Break lines</target>
+        <target state="translated">Linee di interruzione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2433,7 +2402,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="b15e7bec5c7833d2d9634946ccbed68967b1bee1" datatype="html">
         <source>Lists</source>
-        <target state="new">Lists</target>
+        <target state="translated">Liste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">20</context>
@@ -2441,7 +2410,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ab4426b60f13c00b61d6b714d390dc629f314980" datatype="html">
         <source>Emphasis</source>
-        <target state="new">Emphasis</target>
+        <target state="translated">Enfasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2449,7 +2418,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4e13b179501d3d32721037e03b4c04acb9857c5f" datatype="html">
         <source>bold</source>
-        <target state="new">bold</target>
+        <target state="translated">grassetto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">23</context>
@@ -2457,7 +2426,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3c12190421fbb2756e6bbead923df9ec5de8ede2" datatype="html">
         <source>italic</source>
-        <target state="new">italic</target>
+        <target state="translated">corsivo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">23</context>
@@ -2465,7 +2434,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="adb4bbdcb961b8aac8298d6cac554d9b25636b7a" datatype="html">
         <source>Emoji shortcuts</source>
-        <target state="new">Emoji shortcuts</target>
+        <target state="translated">Scorciatoie emoji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2473,7 +2442,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="b9809a21a8eb3c9db2a0282c5dd94bc221575c96" datatype="html">
         <source>Emoji markup</source>
-        <target state="new">Emoji markup</target>
+        <target state="translated">Markup Emoji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">30</context>
@@ -2481,7 +2450,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="f37feb427aaa551edd1f22616be6464bc0d492de" datatype="html">
         <source>See complete list</source>
-        <target state="new">See complete list</target>
+        <target state="translated">Visualizza la lista completa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">32</context>
@@ -2494,11 +2463,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2c6453cc150c9f652a7f1238d2f172e625f0f117" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance. On most platforms, you can find the video by typing its URL in the search bar and then comment it from within the software's interface.</source>
-        <target state="new">
-      You can comment using an account on any ActivityPub-compatible instance.
-      On most platforms, you can find the video by typing its URL in the search bar and then comment it
-      from within the software's interface.
-    </target>
+        <target state="translated">Puoi commentare utilizzando un account su qualsiasi istanza compatibile con ActivityPub. Sulla maggior parte delle piattaforme, puoi trovare il video digitando il suo URL nella barra di ricerca e quindi commentarlo dall'interfaccia del software.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="968b02fbc645be799727de0d1ec3c6f9b11b20eb">
@@ -2510,12 +2475,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="413bcc4a4c824366e17673f38cb2af4619e940e2" datatype="html">
         <source>Login to comment</source>
-        <target state="new">Login to comment</target>
+        <target state="translated">Accedi per commentare</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="974170f455ff5a9034d5737e84b4194c0046fc6b" datatype="html">
         <source>Markdown Emoji List</source>
-        <target state="new">Markdown Emoji List</target>
+        <target state="translated">Lista Markdown Emoji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">84</context>
@@ -2523,7 +2488,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2662644497259948010" datatype="html">
         <source>Comment</source>
-        <target state="new">Comment</target>
+        <target state="translated">Commenta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -2531,7 +2496,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4502286564339177240" datatype="html">
         <source>Reply</source>
-        <target state="new">Reply</target>
+        <target state="translated">Rispondi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -2549,12 +2514,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3dc4cf221502c170c7fcd4b2bffc9b3aa46b84bb" datatype="html">
         <source>This comment has been deleted</source>
-        <target state="new">This comment has been deleted</target>
+        <target state="translated">Il commento è stato cancellato</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
-        <target state="new">Video redundancies</target>
+        <target state="translated">Ridondanze video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/admin.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="4e8635c108375983b42229df44bda8c0af84f396">
@@ -2576,7 +2541,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3a23875897fb8099f85410700fcca415626621a3" datatype="html">
         <source>Follow domain</source>
-        <target state="new">Follow domain</target>
+        <target state="translated">Segui dominio</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="25925fc5826bc5b3eeae7c45b08b0ed74b9e2954">
@@ -2586,7 +2551,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1e5e23363e949f7dcbaf034bdb141a561132a10e" datatype="html">
         <source>Clear filters</source>
-        <target state="new">Clear filters</target>
+        <target state="translated">Cancella i filtri</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="08658c558971c49d1120d6c8a5a4fecf5c3b1561" datatype="html">
@@ -2619,7 +2584,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="9c9e0eb0ce8abea8b4c7c5dbb6e80a9a5f5b4193" datatype="html">
         <source>Open actor page in a new tab</source>
-        <target state="new">Open actor page in a new tab</target>
+        <target state="translated">Apri la pagina dell'attore in una nuova scheda</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="7823909fb1d8d313382f6f4bd842f1a7ef6f08d1">
@@ -2644,12 +2609,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ff772a40114c96a96d8f2bfe0394658eda5a51ca" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target state="new">No follower found matching current filters.</target>
+        <target state="translated">Nessun follower trovato corrispondente ai filtri attuali.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="2bea79363bdef3300bdcad9ef20a680c05e9f781" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target state="new">Your instance doesn't have any follower.</target>
+        <target state="translated">La tua istanza non ha follower.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
@@ -3769,7 +3734,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
         <source>Most liked videos</source>
-        <target state="new">Most liked videos</target>
+        <target state="translated">Video più piaciuti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
@@ -4424,7 +4389,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="db930d0e3dbcb12963bec15cfec67fac6534542d" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="new">In Recently added, Trending, Local, Most liked and Search pages</target>
+        <target state="translated">In Recentemente aggiunti, Di tendenza, Locali, Più piaciuti e Pagine di ricerca</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="984be691d289644c6d40fa2cc858093be31ab58e" datatype="html">
@@ -5014,7 +4979,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
         <source>Most liked videos</source>
-        <target state="new">Most liked videos</target>
+        <target state="translated">Video più piaciuti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/video-list/video-most-liked.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -6861,7 +6826,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4434998055872154420" datatype="html">
         <source>Account subscriptions</source>
-        <target state="new">Account subscriptions</target>
+        <target state="translated">Iscrizioni all'Account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">114</context>
@@ -6972,7 +6937,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="31e313e20810b296cb7cc389fd7a3736cff7df44" datatype="html">
         <source>Search your subscriptions</source>
-        <target state="new">Search your subscriptions</target>
+        <target state="translated">Cerca le tue iscrizioni</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="4f953496ca94b4f83af049ff715172df2729fb79">
@@ -9474,7 +9439,7 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
       </trans-unit>
       <trans-unit id="1812379335568847528" datatype="html">
         <source>Subscriptions</source>
-        <target state="new">Subscriptions</target>
+        <target state="translated">Iscrizioni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">38</context>
