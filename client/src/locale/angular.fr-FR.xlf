@@ -3012,7 +3012,7 @@
       </trans-unit>
       <trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source>
-        <target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</target>
+        <target state="translated">Montrant <x id="INTERPOLATION"/> à <x id="INTERPOLATION_1"/> de <x id="INTERPOLATION_2"/> jobs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">32</context>
@@ -3025,7 +3025,7 @@
       </trans-unit>
       <trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
         <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
-        <target state="new">No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</target>
+        <target state="translated">Pas de <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> travaux trouvés.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">86</context>
@@ -3033,7 +3033,7 @@
       </trans-unit>
       <trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
         <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
-        <target state="new">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <target state="translated">Pas <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> de travaux trouvés qui sont <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">87</context>
@@ -3046,7 +3046,7 @@
       </trans-unit>
       <trans-unit id="7f34c2aa1c5e1d4bc339995fe325e831d7fbe40a" datatype="html">
         <source>now</source>
-        <target state="new">now</target>
+        <target state="translated">maintenant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">15</context>
@@ -5526,7 +5526,7 @@
       </trans-unit>
       <trans-unit id="3164845764519833078" datatype="html">
         <source>debug</source>
-        <target state="new">debug</target>
+        <target state="translated">débogage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -5534,7 +5534,7 @@
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target state="new">info</target>
+        <target state="translated">info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -5542,7 +5542,7 @@
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
-        <target state="new">warning</target>
+        <target state="translated">alerte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -5550,7 +5550,7 @@
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="new">error</target>
+        <target state="translated">erreur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">113</context>
