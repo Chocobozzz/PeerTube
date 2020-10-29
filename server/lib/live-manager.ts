@@ -84,7 +84,7 @@ class LiveManager {
     })
 
     events.on('donePublish', sessionId => {
-      this.abortSession(sessionId)
+      logger.info('Live session ended.', { sessionId })
     })
 
     this.segmentsSha256Queue = queue<SegmentSha256QueueParam, Error>((options, cb) => {
@@ -145,10 +145,16 @@ class LiveManager {
 
   private abortSession (id: string) {
     const session = this.getContext().sessions.get(id)
-    if (session) session.stop()
+    if (session) {
+      session.stop()
+      this.getContext().sessions.delete(id)
+    }
 
     const transSession = this.transSessions.get(id)
-    if (transSession) transSession.kill('SIGKILL')
+    if (transSession) {
+      transSession.kill('SIGINT')
+      this.transSessions.delete(id)
+    }
   }
 
   private async handleSession (sessionId: string, streamPath: string, streamKey: string) {
@@ -300,6 +306,8 @@ class LiveManager {
     const onFFmpegEnded = () => {
       logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', streamPath)
 
+      this.transSessions.delete(sessionId)
+
       Promise.all([ tsWatcher.close(), masterWatcher.close() ])
         .catch(err => logger.error('Cannot close watchers of %s.', outPath, { err }))
 
@@ -311,7 +319,7 @@ class LiveManager {
       onFFmpegEnded()
 
       // Don't care that we killed the ffmpeg process
-      if (err?.message?.includes('SIGKILL')) return
+      if (err?.message?.includes('SIGINT')) return
 
       logger.error('Live transcoding error.', { err, stdout, stderr })
     })
