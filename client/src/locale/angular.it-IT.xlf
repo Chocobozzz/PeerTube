@@ -4082,10 +4082,7 @@
       </trans-unit>
       <trans-unit id="ee4b28ab2d3293d453dec75c6654c6425705283c" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="new">
-              Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
-              resources, this is a critical part of PeerTube, so tread carefully.
-            </target>
+        <target state="translated">Elabora i video caricati in modo che siano in una forma riproducibile in streaming che può essere riprodotta da qualsiasi dispositivo. Sebbene costosa in termini di risorse, questa è una parte fondamentale di PeerTube, quindi procedi con cautela.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">711</context></context-group>
       </trans-unit>
       <trans-unit id="fca29003c4ea1226ff8cbee89481758aab0e2be9">
@@ -4095,12 +4092,12 @@
       </trans-unit>
       <trans-unit id="6ef2ab819d4441fa8bddf6759b6936783d06616f">
         <source>If you disable transcoding, many videos from your users will not work!</source>
-        <target>Se si disattiva la trascodifica, molti video degli utenti non funzioneranno.</target>
+        <target>Se si disattiva la transcodifica, molti video degli utenti non funzioneranno.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">727</context></context-group>
       </trans-unit>
       <trans-unit id="89b449293480a19f931439c5064d53879176fc17" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos.</source>
-        <target state="new">Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos.</target>
+        <target state="translated">Consente agli utenti di caricare video .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">738</context></context-group>
       </trans-unit>
       <trans-unit id="0050a55afb9c565df1f9b3f750c2d4adb697698f">
@@ -4110,12 +4107,12 @@
       </trans-unit>
       <trans-unit id="abdec139a0b513ddbd4549284c38dc60e96bb477" datatype="html">
         <source>Allows users to upload audio files that will be merged with the preview file on upload.</source>
-        <target state="new">Allows users to upload audio files that will be merged with the preview file on upload.</target>
+        <target state="translated">Consente agli utenti di caricare file audio che verranno uniti al file di anteprima al momento del caricamento.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">749</context></context-group>
       </trans-unit>
       <trans-unit id="88cfa6e185dd938361d1d9c04314bbd3afb54fb6" datatype="html">
         <source>Allow audio files upload</source>
-        <target state="new">Allow audio files upload</target>
+        <target state="translated">Permetti il caricamento di file audio</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">746</context></context-group>
       </trans-unit>
       <trans-unit id="1f83d0ff227c35b5631a2b2f78067b3e915cdb59" datatype="html">
@@ -4133,7 +4130,7 @@
       </trans-unit>
       <trans-unit id="ff852c5a22beaff7a8c62447b0a96f9ced7c3ed6" datatype="html">
         <source>WebTorrent support enabled</source>
-        <target state="new">WebTorrent support enabled</target>
+        <target state="translated">Supporto a WebTorrent abilitato</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">758</context></context-group>
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
@@ -4158,7 +4155,7 @@
       </trans-unit>
       <trans-unit id="5ac527cc856e9fa02927ccb0a6172688e07c1d7a" datatype="html">
         <source>HLS with P2P support enabled</source>
-        <target state="new">HLS with P2P support enabled</target>
+        <target state="translated">HLS con supporto P2P abilitato</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">779</context></context-group>
       </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
@@ -4168,7 +4165,7 @@
       </trans-unit>
       <trans-unit id="4f9162543288be617b88ad6fcae84325f11e31b6" datatype="html">
         <source>Resolutions to generate</source>
-        <target state="new">Resolutions to generate</target>
+        <target state="translated">Risoluzioni da generare</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">817</context></context-group>
       </trans-unit>
       <trans-unit id="f05f4a8b97269a2da6d7fcc6e86fbfafd16e30bd" datatype="html">
@@ -4178,31 +4175,27 @@
       </trans-unit>
       <trans-unit id="3469b0eb5bd7b7f0e85c029cd82ae1912bb51677" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="new">
-              Some files are not federated, and fetched when necessary. Define their caching policies.
-            </target>
+        <target state="translated">Alcuni file non sono federati e vengono recuperati quando necessario. Definisci le loro politiche di memorizzazione nella cache.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">845</context></context-group>
       </trans-unit>
       <trans-unit id="e7845bb59f7887d60f1cf3b7b9fe5cfdb0b7e915" datatype="html">
         <source>Number of previews to keep in cache</source>
-        <target state="new">Number of previews to keep in cache</target>
+        <target state="translated">Numero di anteprime da conservare nella cache</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">853</context></context-group>
       </trans-unit>
       <trans-unit id="478d017e2701ae21cefab20e7226702d77f15727" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="new">Number of video captions to keep in cache</target>
+        <target state="translated">Numero di sottotitoli video da conservare nella cache</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">862</context></context-group>
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
         <source>CUSTOMIZATIONS</source>
-        <target state="new">CUSTOMIZATIONS</target>
+        <target state="translated">PERSONALIZZAZIONI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">877</context></context-group>
       </trans-unit>
       <trans-unit id="7473fbca4ff699b020fc8894bad4c88611c76f5c" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="new">
-              Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.
-            </target>
+        <target state="translated">Lievi modifiche all'istanza di PeerTube per la creazione di un plug-in o di un tema sono eccessive.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">879</context></context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
@@ -4258,37 +4251,37 @@
       </trans-unit>
       <trans-unit id="f8f8fca3139cba7d4fd6d9578d93e601f639cc83" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
-        <target state="new">It seems like the configuration is invalid. Please search for potential errors in the different tabs.</target>
+        <target state="translated">Sembra che la configurazione sia invalida. Per favore cerca potenziali errori nei nelle schede</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">948</context></context-group>
       </trans-unit>
       <trans-unit id="e09928fe11389fd1ea310890ba5dc9df05d53509" datatype="html">
         <source>VIDEO SETTINGS</source>
-        <target state="new">VIDEO SETTINGS</target>
+        <target state="translated">IMPOSTAZIONI VIDEO</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="f70dbe547767b3a0f0006d44688beee60c884417" datatype="html">
         <source>NOTIFICATIONS</source>
-        <target state="new">NOTIFICATIONS</target>
+        <target state="translated">NOTIFICHE</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="8e4cafda991c13b5103e45195f7f2488974a913e" datatype="html">
         <source>INTERFACE</source>
-        <target state="new">INTERFACE</target>
+        <target state="translated">INTERFACCIA</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="ce43cc343ed3bd908e593db994ca3f6dbff079df" datatype="html">
         <source>PASSWORD</source>
-        <target state="new">PASSWORD</target>
+        <target state="translated">PASSWORD</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="d5e31741c591719630b5bba1ba38f8c1a04c10e3" datatype="html">
         <source>EMAIL</source>
-        <target state="new">EMAIL</target>
+        <target state="translated">EMAIL</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="e6c299a11dadb59bf789ecc5d85eb1a1ebff4613" datatype="html">
         <source>DANGER ZONE</source>
-        <target state="new">DANGER ZONE</target>
+        <target state="translated">ZONA PERICOLOSA</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">197</context></context-group>
       </trans-unit>
       <trans-unit id="4915431133669985304">
@@ -4298,42 +4291,42 @@
       </trans-unit>
       <trans-unit id="1963136290621768454" datatype="html">
         <source>Resolution</source>
-        <target state="new">Resolution</target>
+        <target state="translated">Risoluzione</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="7814358426066520520" datatype="html">
         <source>Aspect ratio</source>
-        <target state="new">Aspect ratio</target>
+        <target state="translated">Proporzioni</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">180</context></context-group>
       </trans-unit>
       <trans-unit id="44862519224794374" datatype="html">
         <source>Average frame rate</source>
-        <target state="new">Average frame rate</target>
+        <target state="translated">Frequenza fotogrammi media</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="5053683525387462246" datatype="html">
         <source>Pixel format</source>
-        <target state="new">Pixel format</target>
+        <target state="translated">Formato pixel</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="7858676566953242358" datatype="html">
         <source>Sample rate</source>
-        <target state="new">Sample rate</target>
+        <target state="translated">Frequenza di campionamento</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="5403856660543890284" datatype="html">
         <source>Channel Layout</source>
-        <target state="new">Channel Layout</target>
+        <target state="translated">Layout del canale</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925">
         <source>Video settings</source>
-        <target>Impostazione video</target>
+        <target>Impostazioni video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="dc7b800a27960e33af36f16f6c25aaf5776464f7" datatype="html">
         <source>Interface settings</source>
-        <target state="new">Interface settings</target>
+        <target state="translated">Impostazioni interfaccia</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
@@ -4375,12 +4368,12 @@
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="new">Policy for sensitive videos</target>
+        <target state="translated">Norme per i video sensibili</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="ea8e7b15807cce2fea74798db2396a4de016e5c7" datatype="html">
         <source>Only display videos in the following languages/subtitles</source>
-        <target state="new">Only display videos in the following languages/subtitles</target>
+        <target state="translated">Mostra i video solo nella seguente lingua/sottotitoli</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="db930d0e3dbcb12963bec15cfec67fac6534542d" datatype="html">
@@ -4390,7 +4383,7 @@
       </trans-unit>
       <trans-unit id="984be691d289644c6d40fa2cc858093be31ab58e" datatype="html">
         <source>Add a new language</source>
-        <target state="new">Add a new language</target>
+        <target state="translated">Aggiungi una nuova lingua</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="dbcc539bd3ca0b962b87ea26855ca9d5d3c5cdf1" datatype="html">
@@ -4415,42 +4408,42 @@
       </trans-unit>
       <trans-unit id="d20a2fa4a3360caa8825e49a31b5fd3a442ac219" datatype="html">
         <source>New email</source>
-        <target state="new">New email</target>
+        <target state="translated">Nuova email</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="150bb2b8ea3b2745294f0cfe8b37c83dbca4b463" datatype="html">
         <source>Your new email</source>
-        <target state="new">Your new email</target>
+        <target state="translated">La tua nuova email</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="3a83d433c5d27e1d06ece0475fac8ba409b6c9ac" datatype="html">
         <source>Your current password</source>
-        <target state="new">Your current password</target>
+        <target state="translated">La tua password attuale</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="5b5b91438db5731debea388908f788bab8d3d404" datatype="html">
         <source>Your password</source>
-        <target state="new">Your password</target>
+        <target state="translated">La tua password</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="820741079d4bc32fb98b7a871a6e507b18b6c85c" datatype="html">
         <source>Change email</source>
-        <target state="new">Change email</target>
+        <target state="translated">Cambia email</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
         <source>Theme</source>
-        <target state="new">Theme</target>
+        <target state="translated">Tema</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808" datatype="html">
         <source>instance default</source>
-        <target state="new">instance default</target>
+        <target state="translated">istanza predefinita</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="2aad0303b66062ca5fb031b72df15b2cbce6e35d" datatype="html">
         <source>peertube default</source>
-        <target state="new">peertube default</target>
+        <target state="translated">peertube predefinito</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="2dc22fcebf6aaa76196d2def33a827a34bf910bf">
@@ -4465,7 +4458,7 @@
       </trans-unit>
       <trans-unit id="addd26e1d0d8a38fcfceeb76642c6f838f9525e3" datatype="html">
         <source>Search your videos</source>
-        <target state="translated">Cerca i tuoi video</target>
+        <target state="translated">Ricerca nei tuoi video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="fbc450919a486e8ed311a7e91a41987d47d83804">
@@ -4485,7 +4478,7 @@
       </trans-unit>
       <trans-unit id="e03a27ba50b0be207b4d17d044ab5ea300d70b43" datatype="html">
         <source>My ownership changes</source>
-        <target state="new">My ownership changes</target>
+        <target state="translated">Modifiche dei miei permessi</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="e98239d8a6be1100119ff4b5630c822b82786740">
