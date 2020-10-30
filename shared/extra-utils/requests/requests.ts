@@ -63,7 +63,7 @@ function makeUploadRequest (options: {
   path: string
   token?: string
   fields: { [ fieldName: string ]: any }
-  attaches: { [ attachName: string ]: any | any[] }
+  attaches?: { [ attachName: string ]: any | any[] }
   statusCodeExpected?: number
 }) {
   if (!options.statusCodeExpected) options.statusCodeExpected = 400
@@ -93,7 +93,7 @@ function makeUploadRequest (options: {
     }
   })
 
-  Object.keys(options.attaches).forEach(attach => {
+  Object.keys(options.attaches || {}).forEach(attach => {
     const value = options.attaches[attach]
     if (Array.isArray(value)) {
       req.attach(attach, buildAbsoluteFixturePath(value[0]), value[1])

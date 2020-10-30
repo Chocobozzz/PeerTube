@@ -17,4 +17,7 @@ export interface VideoCreate {
   privacy: VideoPrivacy
   scheduleUpdate?: VideoScheduleUpdate
   originallyPublishedAt?: Date | string
+
+  thumbnailfile?: Blob
+  previewfile?: Blob
 }

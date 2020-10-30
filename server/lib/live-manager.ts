@@ -322,6 +322,8 @@ class LiveManager {
       if (err?.message?.includes('SIGINT')) return
 
       logger.error('Live transcoding error.', { err, stdout, stderr })
+
+      this.abortSession(sessionId)
     })
 
     ffmpegExec.on('end', () => onFFmpegEnded())

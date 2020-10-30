@@ -385,6 +385,7 @@ function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: numb
   command.outputOption('-level 3.1')
   command.outputOption('-map_metadata -1')
   command.outputOption('-pix_fmt yuv420p')
+  command.outputOption('-max_muxing_queue_size 1024')
 
   for (let i = 0; i < resolutions.length; i++) {
     const resolution = resolutions[i]
