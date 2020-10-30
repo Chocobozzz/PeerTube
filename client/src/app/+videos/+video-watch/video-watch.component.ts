@@ -189,7 +189,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   getRatePopoverText () {
     if (this.isUserLoggedIn()) return undefined
 
-    return $localize`You need to be logged in to rate this video.`
+    return $localize`You need to be <a href="/login">logged in</a> to rate this video.`
   }
 
   showMoreDescription () {
