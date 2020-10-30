@@ -4839,7 +4839,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="fc978c97e261ee6494db916622339aedb633da3a" datatype="html">
         <source>Follows</source>
-        <target state="new">Follows</target>
+        <target state="translated">Seguiti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="5fea66be16da46ed7a0775e9a62b7b5e94b77473">
@@ -4861,7 +4861,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4b0ca852bafa5037c4e64c7b18f9cd1e14b799de" datatype="html">
         <source>Subject</source>
-        <target state="new">Subject</target>
+        <target state="translated">Soggetto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="d2815c9b510b8172d8cac4008b9709df69d636df">
@@ -4883,7 +4883,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="aaa2830aa30a5565ec06c852178ea7f181c693ea" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target state="new">This instance is dedicated to sensitive/NSFW content.</target>
+        <target state="translated">Questa istanza è dedicata ai contenuti sensibili / NSFW.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5e595f291985655929e0348cf68ead712a081061" datatype="html">
@@ -4895,29 +4895,27 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="f6a8cb2287c0c738d3d02ca36e145830c9734db5" datatype="html">
         <source>Who we are</source>
-        <target state="new">Who we are</target>
+        <target state="translated">Chi siamo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="911fb379526b62e9a62590722830c146ebd31be8" datatype="html">
         <source>Why we created this instance</source>
-        <target state="new">Why we created this instance</target>
+        <target state="translated">Perché abbiamo creato questa istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3f264e961636eb6eff1dbae7e3887447e22be154" datatype="html">
         <source>How long we plan to maintain this instance</source>
-        <target state="new">How long we plan to maintain this instance</target>
+        <target state="translated">Per quanto tempo prevediamo di mantenere questa istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="2646614e3af5f103885f64e4f097e45569091fd6" datatype="html">
         <source>How we will pay for this instance</source>
-        <target state="new">How we will pay for this instance</target>
+        <target state="translated">Come finanzieremo quest'istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="2a422d9f181480a3199d18e7d5d616ad4e75530a" datatype="html">
         <source>INFORMATION</source>
-        <target state="new">
-        INFORMATION
-      </target>
+        <target state="translated">INFORMAZIONI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="c47227276184c2145c8ca1161ce08075df573568" datatype="html">
@@ -4936,7 +4934,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3624f527ba5d5ed005a4ff2540d1a210233aa320" datatype="html">
         <source>Hardware information</source>
-        <target state="new">Hardware information</target>
+        <target state="translated">Informazioni Hardware</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="d84d2cd0e5c2053a4451e7f77b81269e157cc5af" datatype="html">
@@ -4956,9 +4954,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6b8b10fedeff64aa441ebedc2b7fbd07f6f246c1" datatype="html">
         <source>What is PeerTube?</source>
-        <target state="new">
-    What is PeerTube?
-  </target>
+        <target state="translated">Cos'è PeerTube?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="49ea58bdafe3b72efaa42bac13d7d9b2f22a2990" datatype="html">
@@ -4991,8 +4987,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="0f972eed0e4c81f8006cf8061a400304b2c62b21" datatype="html">
         <source>Use PeerTube documentation</source>
-        <target state="new">Use PeerTube
-            documentation</target>
+        <target state="translated">Usa la documentazione di PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="80c7532b45374a38b6c5f3bd5576464660b95b89" datatype="html">
@@ -5010,9 +5005,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="41d3c1ad1b83498b20d96d74bc14e0a1e9749529" datatype="html">
         <source>Discover unofficial Android applications or browser addons!</source>
-        <target state="new">
-          Discover unofficial Android applications or browser addons!
-        </target>
+        <target state="translated">Scopri applicazioni Android non ufficiali o componenti aggiuntivi del browser!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="a1b892a310faf2ee74544d659ce968314997d56a" datatype="html">
@@ -5035,11 +5028,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="d0a97e9255fb49b92504d36516f902f440bc8878" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="new">
-        PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server,
-        but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What
-        follows applies only if you want to keep using the P2P mode of PeerTube.
-      </target>
+        <target state="translated">PeerTube utilizza il protocollo BitTorrent per condividere la larghezza di banda tra gli utenti per impostazione predefinita per aiutare a ridurre il carico sul server, ma alla fine ti lascia la scelta di tornare allo streaming regolare esclusivamente dal server del video. Quanto segue si applica solo se si desidera continuare a utilizzare la modalità P2P di PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
@@ -5057,10 +5046,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="fc899a02306f4fd2ce20978136d252dd6eb346cf" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target state="new">
-          An HTTP request has to be sent on each tracker for each video to spy.
-          If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
-        </target>
+        <target state="translated">Una richiesta HTTP deve essere inviata su ogni tracker per ogni video da spiare. Se vogliamo spiare tutti i video di PeerTube, dobbiamo inviare tante richieste quanti sono i video (quindi potenzialmente molte)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="278669a7857ee77786cf4578b11bb601002cf7a8" datatype="html">
@@ -5089,9 +5075,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="ff5458261525060246f1f49a740c8d094dc4bac4" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="new">
-          The IP address is a vague information: usually, it regularly changes and can represent many persons or entities
-        </target>
+        <target state="translated">L'indirizzo IP è un'informazione vaga: di solito cambia regolarmente e può rappresentare molte persone o entità</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
@@ -5125,11 +5109,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1fd22031e4f7920db2300cc76ee9c8516b25f50d" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="new">
-        The threats to privacy with YouTube are different from PeerTube's.
-        In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
-        Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
-      </target>
+        <target state="translated">Le minacce alla privacy con YouTube sono diverse da quelle di PeerTube. Nel caso di YouTube, la piattaforma raccoglie un'enorme quantità di informazioni personali (non solo il tuo IP) per analizzarle e tracciarti. Inoltre, YouTube è di proprietà di Google / Alphabet, una società che ti traccia su molti siti Web (tramite AdSense o Google Analytics).</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
@@ -5154,10 +5134,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="db4d65ed605b948169d51eac4c1b2ff662088eb7" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="new">
-        PeerTube wants to deliver the best countermeasures possible, to give you more choice
-        and render attacks less likely. Here is what we put in place so far:
-      </target>
+        <target state="translated">PeerTube vuole fornire le migliori contromisure possibili, per darti più scelta e rendere meno probabili gli attacchi. Ecco cosa abbiamo messo in atto finora:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="89c0c2c3150b99bbea20214895df56c8f8d6125d" datatype="html">
@@ -5172,7 +5149,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target state="new">Allow instance admins to disable P2P from the administration interface</target>
+        <target state="translated">Consenti agli amministratori dell'istanza di disabilitare il P2P dall'interfaccia di amministrazione</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="85755719c08571f7f5b7c5b391329b7e4e7ccc7b" datatype="html">
@@ -5200,12 +5177,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
         <source>Followings instances</source>
-        <target state="new">Followings instances</target>
+        <target state="translated">Istanze che seguono</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="d0f0a0a5da1553964ae4891aaebd2b2c3e5ddae4" datatype="html">
         <source>This instance does not have instances followings.</source>
-        <target state="new">This instance does not have instances followings.</target>
+        <target state="translated">Questa istanza non ha istanze che la seguono.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
