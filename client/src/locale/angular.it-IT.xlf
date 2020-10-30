@@ -2853,7 +2853,7 @@
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
-        <target state="new">Reports</target>
+        <target state="translated">Segnalazioni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -2861,7 +2861,7 @@
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
-        <target state="new">Video blocks</target>
+        <target state="translated">Video bloccati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -2869,7 +2869,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887" datatype="html">
         <source>Muted accounts</source>
-        <target state="new">Muted accounts</target>
+        <target state="translated">Accounts silenziati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -2877,7 +2877,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853" datatype="html">
         <source>Muted servers</source>
-        <target state="new">Muted servers</target>
+        <target state="translated">Servers silenziati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -2901,7 +2901,7 @@
       </trans-unit>
       <trans-unit id="d2e7333704502d1720b353742634630b71ea8bd7" datatype="html">
         <source>Video blocks</source>
-        <target state="new">Video blocks</target>
+        <target state="translated">Video bloccati</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
@@ -3652,52 +3652,52 @@
       </trans-unit>
       <trans-unit id="53fe4c724dc3f942c4d1eac4206a9686cbbf968e" datatype="html">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="new">To share your personal videos? To open registrations and allow people to upload what they want?</target>
+        <target state="translated">Per condividere i tuoi video personali? Per aprire le registrazioni e permettere alle persone di caricare quello che vogliono?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="ac6b554b2f923239f6d7c5fcef8a7cce7d6b43b6" datatype="html">
         <source>How long do you plan to maintain this instance?</source>
-        <target state="new">How long do you plan to maintain this instance?</target>
+        <target state="translated">Per quanto a lungo pensi di mantenere l'istanza?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="09d61fa0397899a1b26d09123aef7e7bf5bd78e1" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="new">It's important to know for users who want to register on your instance</target>
+        <target state="translated">E' importante conoscerlo per gli utenti che voglio registrarsi sulla tua istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d" datatype="html">
         <source>How will you finance the PeerTube server?</source>
-        <target state="new">How will you finance the PeerTube server?</target>
+        <target state="translated">Come finanzierai il server PeerTube?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">199</context></context-group>
       </trans-unit>
       <trans-unit id="1bb1ca2264b1ab8be73deee74852a4e6d40101c5" datatype="html">
         <source>With your own funds? With user donations? Advertising?</source>
-        <target state="new">With your own funds? With user donations? Advertising?</target>
+        <target state="translated">Con i tuoi fondi? Con le donazioni degli utenti? Pubblicità?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">200</context></context-group>
       </trans-unit>
       <trans-unit id="434d9f89497fe693bb5e4cdce02925dec8d0281f" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target state="new">OTHER INFORMATION</target>
+        <target state="translated">ALTRE INFORMAZIONI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="7dfc119f06b80d9324703c471b0c00118fa5849d" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target state="new">What server/hardware does the instance run on?</target>
+        <target state="translated">Su quale server/macchina l'istanza gira?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">220</context></context-group>
       </trans-unit>
       <trans-unit id="4a58b1d4aff414350b701aa587aeb39a1276307a" datatype="html">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="new">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</target>
+        <target state="translated">i.e. 2vCore 2GB RAM, un link diretto al server che hai noleggiato, etc.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">221</context></context-group>
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
         <source>Instance information</source>
-        <target state="new">Instance information</target>
+        <target state="translated">Informazioni sull'istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="e18e5566ca6266c849208665c731805571333a8b" datatype="html">
         <source>APPEARANCE</source>
-        <target state="new">APPEARANCE</target>
+        <target state="translated">ASPETTO</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="0aa2ad4efb780f946dd9a821fe7471dde20014c3" datatype="html">
@@ -3714,32 +3714,32 @@
       </trans-unit>
       <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb" datatype="html">
         <source>default</source>
-        <target state="new">default</target>
+        <target state="translated">predefinito</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">259</context></context-group>
       </trans-unit>
       <trans-unit id="a42daa4748e433f25a51f598627d10de9c88d5d3" datatype="html">
         <source>Landing page</source>
-        <target state="new">Landing page</target>
+        <target state="translated">Pagina iniziale</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
-        <target state="new">Discover videos</target>
+        <target state="translated">Scopri video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d" datatype="html">
         <source>Trending videos</source>
-        <target state="new">Trending videos</target>
+        <target state="translated">Video di tendenza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">272</context></context-group>
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
         <source>Most liked videos</source>
-        <target state="translated">Video più piaciuti</target>
+        <target state="translated">I video più piaciuti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
         <source>Recently added videos</source>
-        <target state="new">Recently added videos</target>
+        <target state="translated">Video recentemente aggiunti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
@@ -3749,39 +3749,37 @@
       </trans-unit>
       <trans-unit id="c5d4e7a320b88bdcf7fb2b670b81173048af3956" datatype="html">
         <source>BROADCAST MESSAGE</source>
-        <target state="new">BROADCAST MESSAGE</target>
+        <target state="translated">MESSAGGIO A TUTTI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">286</context></context-group>
       </trans-unit>
       <trans-unit id="3a10a32f96683addb9e1335cdba7d6685587fe6e" datatype="html">
         <source>Display a message on your instance</source>
-        <target state="new">
-              Display a message on your instance
-            </target>
+        <target state="translated">Visualizza un messaggio sulla tua istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">288</context></context-group>
       </trans-unit>
       <trans-unit id="58be3e0a0ef272fbd6e715b44059c3d89b332d9b" datatype="html">
         <source>Enable broadcast message</source>
-        <target state="new">Enable broadcast message</target>
+        <target state="translated">Abilita messaggio broadcast</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="6938c4a91284a1bc8b61b0d8085d9985e46c9f5b" datatype="html">
         <source>Allow users to dismiss the broadcast message</source>
-        <target state="new">Allow users to dismiss the broadcast message </target>
+        <target state="translated">Consenti agli utenti di eliminare il messaggio trasmesso</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">306</context></context-group>
       </trans-unit>
       <trans-unit id="dd24d21f2898608f623ae2513e1eb0a08a442f7a" datatype="html">
         <source>Broadcast message level</source>
-        <target state="new">Broadcast message level</target>
+        <target state="translated">Livello del messaggio di trasmissione</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">311</context></context-group>
       </trans-unit>
       <trans-unit id="ccac601bf473fa28c9ac46794f1cd40542f74347" datatype="html">
         <source>Message</source>
-        <target state="new">Message</target>
+        <target state="translated">Messaggio</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">323</context></context-group>
       </trans-unit>
       <trans-unit id="0ea3c4f671addedc1fff64ba63adbf0629fab06a" datatype="html">
         <source>NEW USERS</source>
-        <target state="new">NEW USERS</target>
+        <target state="translated">NUOVI UTENTI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">338</context></context-group>
       </trans-unit>
       <trans-unit id="eb55f6a974ace4bade90b976dba651c9545c979d" datatype="html">
@@ -3806,7 +3804,7 @@
       </trans-unit>
       <trans-unit id="25de1b6d18bda68f72a31c4ce8aa1c493584764f" datatype="html">
         <source>Enable Signup</source>
-        <target state="new">Enable Signup</target>
+        <target state="translated">Abilita registrazione</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">350</context></context-group>
       </trans-unit>
       <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
@@ -3831,12 +3829,12 @@
       </trans-unit>
       <trans-unit id="89f26f7ae43839fb1c983c6dc82d7bb9f559ac98" datatype="html">
         <source>Incriminated in reports</source>
-        <target state="new">Incriminated in reports</target>
+        <target state="translated">Incriminato nei rapporti</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="374b01a6d0311b4e675834b47db9e34d3fb833e7" datatype="html">
         <source>Authored reports accepted</source>
-        <target state="new">Authored reports accepted</target>
+        <target state="translated">Rapporti scritti accettati</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="8e29da1e7e8def288e5cf788c6f5ac6e5824259c" datatype="html">
@@ -3846,47 +3844,47 @@
       </trans-unit>
       <trans-unit id="53ddc7cf814d93205e987d607dbcfcf9cd74b59a" datatype="html">
         <source>NEW USER</source>
-        <target state="new">NEW USER</target>
+        <target state="translated">NUOVO UTENTE</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="4a41f824a35ba01d5bd7be61aa06b3e8145209d0" datatype="html">
         <source>Configuration</source>
-        <target state="new">Configuration</target>
+        <target state="translated">Configurazione</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="ec47d80e9b5608ecd396c32a46ca6b87601e7b20" datatype="html">
         <source>Default video quota per user</source>
-        <target state="new">Default video quota per user</target>
+        <target state="translated">Quantità predefinita di video per utente</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">377</context></context-group>
       </trans-unit>
       <trans-unit id="493c65a11deddda45b42a39f503fc4bb3f876cf2" datatype="html">
         <source>Default daily upload limit per user</source>
-        <target state="new">Default daily upload limit per user</target>
+        <target state="translated">Limite giornaliero di caricamenti per utente</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">389</context></context-group>
       </trans-unit>
       <trans-unit id="6c65014c4ccf5a3ca7b0f4bdb17ff00578004420" datatype="html">
         <source>Allow import with HTTP URL (i.e. YouTube)</source>
-        <target state="new">Allow import with HTTP URL (i.e. YouTube)</target>
+        <target state="translated">Permetti il caricamento HTTP URL (es. YouTube)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">417</context></context-group>
       </trans-unit>
       <trans-unit id="ec3d83c2ae784e843fbe96eb368f9e6e0f26cc2e" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target state="new">Allow import with a torrent file or a magnet URI</target>
+        <target state="translated">Permetti l'import con un file torrent o il link magnet-URI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">424</context></context-group>
       </trans-unit>
       <trans-unit id="c590ac6eba10ab6269e068156a910c7c58328cc5" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
-        <target state="new">Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</target>
+        <target state="translated">A meno che un utente sia marcato come attendibile, i loro video rimarranno privati fino a quando un moderatore non li recensisce.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">441</context></context-group>
       </trans-unit>
       <trans-unit id="3097153cbaee3d44d0e298fbe9e8105b6e1fea0d" datatype="html">
         <source>Block new videos automatically</source>
-        <target state="new">Block new videos automatically</target>
+        <target state="translated">Blocca automaticamente i nuovi video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">438</context></context-group>
       </trans-unit>
       <trans-unit id="7b6494fa44035831e1215cd4a0284aec00f8cbbd" datatype="html">
         <source>SEARCH</source>
-        <target state="new">SEARCH</target>
+        <target state="translated">RICERCA</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">455</context></context-group>
       </trans-unit>
       <trans-unit id="a97062f0bfb585b28058981d53fb047a2f2288c4" datatype="html">
@@ -3899,7 +3897,7 @@
       </trans-unit>
       <trans-unit id="273341057700e25fb8a19896b5039dcf3f14b9ba" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
-        <target state="new">Allow users to do remote URI/handle search</target>
+        <target state="translated">Consenti agli utenti di eseguire la ricerca URI / gestire in remoto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">466</context></context-group>
       </trans-unit>
       <trans-unit id="ffe92ff41a38a4407b1e1da41a015292497324c4" datatype="html">
@@ -3912,12 +3910,12 @@
       </trans-unit>
       <trans-unit id="1a1dd78b1169f98fb2120c6af13e136aec2daf69" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
-        <target state="new">Allow anonymous to do remote URI/handle search</target>
+        <target state="translated">Consenti a anonymous di eseguire la ricerca remota di URI / handle</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">477</context></context-group>
       </trans-unit>
       <trans-unit id="f3af9d2cf9a341ce634210908597e491e77e7376" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target state="new">⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</target>
+        <target state="translated">⚠️ Questa funzionalità dipende in larga misura dalla moderazione delle istanze seguita dall'indice di ricerca selezionato.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">494</context></context-group>
       </trans-unit>
       <trans-unit id="0c43b766533e99e88f65a9f1c8d63fb1926ab5cc" datatype="html">
@@ -3932,32 +3930,32 @@
       </trans-unit>
       <trans-unit id="e5cd21a49e6eefd0610106b6afcd4ed56baab566" datatype="html">
         <source>Search index URL</source>
-        <target state="new">Search index URL</target>
+        <target state="translated">URL dell'indice di ricerca</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">503</context></context-group>
       </trans-unit>
       <trans-unit id="8c720eb4f32907db445c969a451e59a28a15e89c" datatype="html">
         <source>Disable local search in search bar</source>
-        <target state="new">Disable local search in search bar</target>
+        <target state="translated">Disabilita la ricerca locale nella barra di ricerca</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">514</context></context-group>
       </trans-unit>
       <trans-unit id="3b2b04802c47e4af0057651b972f52dffc92e8e1" datatype="html">
         <source>Otherwise the local search stays used by default</source>
-        <target state="new">Otherwise the local search stays used by default</target>
+        <target state="translated">In caso contrario, la ricerca locale rimane utilizzata per impostazione predefinita</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">524</context></context-group>
       </trans-unit>
       <trans-unit id="be8b7fa8a3193d5015561140328a1240190842c1" datatype="html">
         <source>Search bar uses the global search index by default</source>
-        <target state="new">Search bar uses the global search index by default</target>
+        <target state="translated">La barra di ricerca utilizza l'indice di ricerca globale per impostazione predefinita</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">521</context></context-group>
       </trans-unit>
       <trans-unit id="bcaa25583cd971359254080004fbbb71c2b97ad6" datatype="html">
         <source>Enable global search</source>
-        <target state="new">Enable global search</target>
+        <target state="translated">Abilita la ricerca globale</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">491</context></context-group>
       </trans-unit>
       <trans-unit id="3f237e2a863d0308a21bdb0bb5d4b84e3376dbee" datatype="html">
         <source>FEDERATION</source>
-        <target state="new">FEDERATION</target>
+        <target state="translated">FEDERAZIONE</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">542</context></context-group>
       </trans-unit>
       <trans-unit id="2cc42a6b77d06f99a195ef8f3324d49267eedf87" datatype="html">
@@ -3972,17 +3970,17 @@
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
         <source>Other instances can follow yours</source>
-        <target state="new">Other instances can follow yours</target>
+        <target state="translated">Altre istanze possono seguire la tua</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">556</context></context-group>
       </trans-unit>
       <trans-unit id="3d9ffce2b1f284cb60067de15a313d3ecde0875f" datatype="html">
         <source>Manually approve new instance followers</source>
-        <target state="new">Manually approve new instance followers</target>
+        <target state="translated">Approva manualmente i nuovi follower dell'istanza</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">563</context></context-group>
       </trans-unit>
       <trans-unit id="9a3dd9c65ee3381ae3b78b9c56cc4e0d2e41f0e8" datatype="html">
         <source>Automatically follow back instances</source>
-        <target state="new">Automatically follow back instances</target>
+        <target state="translated">Segui automaticamente le istanze</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">576</context></context-group>
       </trans-unit>
       <trans-unit id="f183764323fcffd1b3ba4d13cdc21ec8971472cc" datatype="html">
@@ -3997,22 +3995,22 @@
       </trans-unit>
       <trans-unit id="9bef6fc7194e11d18fdcac6aaccc816fe9ffc5a7" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
-        <target state="new">⚠️ This functionality requires a lot of attention and extra moderation.</target>
+        <target state="translated">⚠️ Questa funzionalità richiede molta attenzione e moderazione ulteriore.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">353</context></context-group>
       </trans-unit>
       <trans-unit id="764910b42b08b8342f7ba5907b258341ec044fa0" datatype="html">
         <source>Index URL</source>
-        <target state="new">Index URL</target>
+        <target state="translated">Indice URL</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">601</context></context-group>
       </trans-unit>
       <trans-unit id="62f023a56fd29518ab030384702362e6bf6a83e4" datatype="html">
         <source>Automatically follow instances of a public index</source>
-        <target state="new">Automatically follow instances of a public index</target>
+        <target state="translated">Segui automaticamente le istanze di un indice pubblico</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">589</context></context-group>
       </trans-unit>
       <trans-unit id="5805ff22d19f43016e2b1a0f7eff12185c78e89d" datatype="html">
         <source>ADMINISTRATORS</source>
-        <target state="new">ADMINISTRATORS</target>
+        <target state="translated">AMMINISTRATORI</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">621</context></context-group>
       </trans-unit>
       <trans-unit id="2149300564474427551">
@@ -4042,9 +4040,7 @@
       </trans-unit>
       <trans-unit id="31f11266d05b7a427477a8a9056a717ce332cfe3" datatype="html">
         <source>Optional. If any, provide the Twitter account representing your instance to improve link previews.</source>
-        <target state="new">
-              Optional. If any, provide the Twitter account representing your instance to improve link previews.
-            </target>
+        <target state="translated">Opzionale. Se presente, fornisci l'account Twitter che rappresenta la tua istanza per migliorare le anteprime dei collegamenti.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">657</context></context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
@@ -4054,7 +4050,7 @@
       </trans-unit>
       <trans-unit id="fcad8bedb9a3a3600c4f5c13e9f404e788dbf327" datatype="html">
         <source>Instance allowed by Twitter</source>
-        <target state="new">Instance allowed by Twitter</target>
+        <target state="translated">Istanza consentita da Twitter</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">679</context></context-group>
       </trans-unit>
       <trans-unit id="f0d14f556321dbae66c765d6a3b0062f3a150931" datatype="html">
@@ -4081,7 +4077,7 @@
       </trans-unit>
       <trans-unit id="9a6dbeb95c096daa71967ac36a043de69d0cf72b" datatype="html">
         <source>TRANSCODING</source>
-        <target state="new">TRANSCODING</target>
+        <target state="translated">TRANSCODIFICA</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">709</context></context-group>
       </trans-unit>
       <trans-unit id="ee4b28ab2d3293d453dec75c6654c6425705283c" datatype="html">
