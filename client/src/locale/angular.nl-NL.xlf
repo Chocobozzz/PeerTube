@@ -840,20 +840,7 @@ Geen resultaten gevonden</target>
       </trans-unit>
       <trans-unit id="bd6c91a86a18f512ade62e216efcfb5d2520711c" datatype="html">
         <source>If you want to open registrations, please decide what are <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/>, fill your <x id="START_TAG_STRONG"/>instance terms<x id="CLOSE_TAG_STRONG"/> and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="new">
-          If you want to open registrations, please decide what are 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, fill your 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance
-          terms
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          and specify the categories and languages you speak. This way, you will help users to register on 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the
-          appropriate
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          PeerTube instance.
-        
-        </target>
+        <target state="translated">Wil je gebruikersregistratie inschakelen? Daarvoor is het nodig <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>je moderatieregels in te stellen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>je instance-voorwaarden aan te geven <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> en de te gebruiken categorieën en talen aan te geven. Zo help je gebruikers zich te registreren op <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>de geschikte<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube-instance. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
@@ -913,15 +900,7 @@ Geen resultaten gevonden</target>
       </trans-unit>
       <trans-unit id="565e31173ab0ea2c00c311c9051c15d8896a0b80" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-      Please consider configuring these fields to help people to choose 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.
-      Without them, your instance may not be referenced on the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-    
-        </target>
+        <target state="translated">Overweeg deze velden in te stellen om zo mensen te helpen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>de geschikte instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> te kiezen. Zonder deze velden bestaat de kans dat je instance geen verwijzing krijgt op de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube-website <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7d438f72f9985c4d06ed4fe80c90afc2e1df34d2" datatype="html">
@@ -3191,13 +3170,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="55c4d3cc288701854147f69ccf3d86d316589968" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="new">
-                      Enabling it will allow other administrators to know that you are mainly federating sensitive content.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                      Moreover, the NSFW checkbox on video upload will be automatically checked by default.
-                    
-        </target>
+        <target state="translated">Dit inschakelen geeft andere beheerders te kennen dat je vooral gevoelige inhoud federeert. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Daarenboven zal het selectievakje "niet voor een werkomgeving geschikte inhoud" standaard aangevinkt zijn bij het uploaden van video's. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
@@ -3207,14 +3180,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="8dccab3d8cadb847889ff89644d3f08ffee0d76e" datatype="html">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target state="new">
-                      With 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video.
-                    
-        </target>
+        <target state="translated">Met <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Niet oplijsten <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Miniaturen vervagen <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> zal vóór het bekijken van de video om bevestiging gevraagd worden. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
@@ -3329,14 +3295,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="0aa2ad4efb780f946dd9a821fe7471dde20014c3" datatype="html">
         <source>Use <x id="START_LINK"/>plugins &amp; themes<x id="CLOSE_LINK"/> for more involved changes, or <x id="START_LINK_1"/>add slight customizations<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-              Use 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>plugins &amp; themes
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>add slight customizations
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-            
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Plugins &amp; thema's <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> gebruiken voor uitgebreide wijzigingen, of <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>kleine aanpassingen aanbrengen <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">247</context></context-group>
       </trans-unit>
       <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb">
@@ -3411,12 +3370,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="eb55f6a974ace4bade90b976dba651c9545c979d" datatype="html">
         <source>Manage <x id="START_LINK"/>users<x id="CLOSE_LINK"/> to set their quota individually. </source>
-        <target state="new">
-              Manage 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to set their quota individually.
-            
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Gebruikers <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> beheren om hun quota individueel in te stellen. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="90f449b1f4787e6c9731198a96d35399c1b340a7">
@@ -3541,12 +3495,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="0c43b766533e99e88f65a9f1c8d63fb1926ab5cc" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK"/>host your own<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-                        You should only use moderated search indexes in production, or 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-                      
-        </target>
+        <target state="translated">In productie is het sterk aangeraden gemodeerde zoekindexen te gebruiken of <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>je eigen zoekindex te hosten<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">497</context></context-group>
       </trans-unit>
       <trans-unit id="e5cd21a49e6eefd0610106b6afcd4ed56baab566" datatype="html">
@@ -3581,12 +3530,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="2cc42a6b77d06f99a195ef8f3324d49267eedf87" datatype="html">
         <source>Manage <x id="START_LINK"/>relations<x id="CLOSE_LINK"/> with other instances. </source>
-        <target state="new">
-              Manage 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>relations
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> with other instances.
-            
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Relaties <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> met andere instances beheren. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">544</context></context-group>
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
@@ -3606,12 +3550,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="f183764323fcffd1b3ba4d13cdc21ec8971472cc" datatype="html">
         <source>You should only follow moderated indexes in production, or <x id="START_LINK"/>host your own<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-                          You should only follow moderated indexes in production, or 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-                        
-        </target>
+        <target state="translated">In productie is het sterk aangeraden gemodereerde indexen te volgen of <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>je eigen indexen te hosten<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">595</context></context-group>
       </trans-unit>
       <trans-unit id="9bef6fc7194e11d18fdcac6aaccc816fe9ffc5a7" datatype="html">
@@ -3928,14 +3867,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737" datatype="html">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target state="new">
-          With 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video.
-        
-        </target>
+        <target state="translated">Met <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Niet oplijsten <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Miniaturen vervagen <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> zal vóór het bekijken van de video om bevestiging gevraagd worden. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
@@ -4698,26 +4630,17 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="278669a7857ee77786cf4578b11bb601002cf7a8" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="new">
-          For each request sent, the tracker returns random peers at a limited number.
-          For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50
-          requests sent to know every peer in the swarm
-        </target>
+        <target state="translated">Voor elk gedaan verzoek geeft de tracker een beperkt aantal peers terug. Als er bijvoorbeeld 1000 peers in de zwerm zijn en de tracker maar 20 peers per verzoek teruggeeft moeten er ten minste 50 verzoeken zijn gedaan om elke peer in de zwerm te kennen.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="3f47eec5fb00ae46a0035cc8f9e428e3d549e337" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
-        <target state="new">
-          Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
-        </target>
+        <target state="translated">Die verzoeken moeten regelmatig gebeuren om te weten wie begint of stopt een video te bekijken. Dat soort gedrag is eenvoudig te detecteren.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="a5089b43b2fd8a2639bc7a4cdfaa90e869f51cc3" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target state="new">
-          If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the
-          video
-        </target>
+        <target state="translated">Als een ip-adres opgeslagen is in de tracker betekent dat niet dat de persoon achter dit ip-adres - als zo iemand al bestaat - de video bekeken heeft.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="ff5458261525060246f1f49a740c8d094dc4bac4" datatype="html">
@@ -4727,18 +4650,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
         <source>Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK"/>with the WebTorrent library<x id="CLOSE_LINK"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK_1"/>this document<x id="CLOSE_LINK"/> for more information </source>
-        <target state="new">
-          Web peers are not publicly accessible: because we use WebRTC inside the web browser (
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the
-          WebTorrent library
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent.
-          When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers
-          to forward the information to.
-          See 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information
-        
-        </target>
+        <target state="translated">Web-peers zijn niet publiek toegankelijk. Omdat we WEBRTC gebruiken binnen de browser ( <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>met de WebTorrent-bibliotheek<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>) is het protocol verschillend van het klassieke BitTorrent-protocol. In een webbrowser stuur je een signaal met daarin je ip-adres naar de tracker. Die zal toevallig andere pers kiezen om de informatie naar door te sturen. Zie <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>dit document <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> voor meer informatie. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
@@ -4753,11 +4665,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="1fd22031e4f7920db2300cc76ee9c8516b25f50d" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="new">
-        The threats to privacy with YouTube are different from PeerTube's.
-        In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
-        Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
-      </target>
+        <target state="translated">De gevaren voor je privacy liggen anders bij YouTube dan bij PeerTube. YouTube verzamelt een grote hoeveelheid persoonlijke informatie over jou - niet enkel je ip-adres- , analyseert deze en volgt je. Daarenboven is YouTube eigendom van Google/Alphabet, een bedrijf dat je op vele websites volgt via AdSense of Google Analytics.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
@@ -7771,7 +7679,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="2208303514299860142" datatype="html">
         <source>Show back content from that user for you, your instance and its users.</source>
-        <target state="new">Show back content from that user for you, your instance and its users.</target>
+        <target state="translated">De inhoud van deze gebruiker opnieuw zichtbaar maken voor de gebruikers van deze instance.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="3191211873505538654">
@@ -7781,7 +7689,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="6642176372946562984" datatype="html">
         <source>Hide any content from that instance for you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance for you, your instance and its users.</target>
+        <target state="translated">De inhoud van deze instance verbergen voor alle gebruikers van deze instance.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">352</context></context-group>
       </trans-unit>
       <trans-unit id="5325628963747139770">
@@ -7791,7 +7699,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="758471033841077314" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="new">Show back content from that instance for you, your instance and its users.</target>
+        <target state="translated">De inhoud van de gedempte instance weer zichtbaar maken voor alle gebruikers van deze instance.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">358</context></context-group>
       </trans-unit>
       <trans-unit id="3785095284194008197" datatype="html">
@@ -7801,7 +7709,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="6565153079076716427" datatype="html">
         <source>Remove comments of this account from your instance.</source>
-        <target state="new">Remove comments of this account from your instance.</target>
+        <target state="translated">De commentaren door deze account verwijderen van je instance.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">369</context></context-group>
       </trans-unit>
       <trans-unit id="6746743143272021955" datatype="html">
