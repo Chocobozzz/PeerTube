@@ -106,15 +106,36 @@ Views are buffered, so don't panic if the view counter stays the same after you 
 
 ## Should I have a big server to run PeerTube?
 
-Not really. For instance, the demonstration server [https://peertube.cpy.re](https://peertube.cpy.re) has 2 vCores and 2GB of RAM and consumes on average:
- * **CPU** -> nginx ~ 20%, peertube ~ 10%,   postgres ~ 1%, redis ~ 3%
- * **RAM** -> nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
+PeerTube should run happily on a vm with 2 threads, at least 1 Gb of RAM and enough storage for videos. In terms of network, a lot will depend on which PeerTube instances you federate with.
 
-So you would need:
- * **CPU** 1 core if you don't enable transcoding, 2 at least if you enable it (works with 1 but this is really slow)
- * **RAM** 1GB
- * **Storage** Completely depends on how many videos your users will upload
+As a real life example, the PeerTube demonstration server [https://peertube.cpy.re](https://peertube.cpy.re) runs on 2 vCores and 2GB of RAM. Average consumption is:
+ * **CPU**: nginx ~ 20%, peertube ~ 10%,   postgres ~ 1%, redis ~ 3%
+ * **RAM**: nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
 
+### CPU
+Except for video transcoding, a PeerTube instance is not really cpu bound. Neither nginx, peertube, postgres nor redis require a lot of cpu. If it were only for those, once could easily get by with just one thread.
+
+Transcoding though _is_ very cpu intensive and requires its own thread. It serves two purposes on a PeerTube instance: it ensures compatibility with web based playback, and it generates different resolutions for the same video. If in doubt, don't disable transcoding.
+
+### RAM
+1 Gb of RAM should be plenty for a basic PeerTube instance. The only reason you'd want significantly more would be to RAM cache of very popular video fragments.
+
+### Storage
+There are two important angles to storage: disk space usage and sustained read speed.
+
+To make a rough estimate of your disk space usage requirements, you want to know the answer to three questions:
+- What is the size of the video source archive?
+- Do you want to enable transcoding? If so, do you want to provide multiple resolutions per video? Try this out with a few videos and you'll get an idea of a multiplication factor.
+- Which sharing mechanisms do you want to enable? Just WebTorrent, or also HLS with p2p? If you want both, this will double your storage needs.
+
+In terms of read speed, you want to make sure that you can saturate your network uplink serving PeerTube videos. This should not be a problem with ssd disks. With traditional hard disks though it is really worth checking!
+
+### Network
+A rough estimate of a traditional server's video streaming network capacity is usually quite straightforward. You simply divide your server's available bandwidth by the average bandwidth per stream, and you have an upper bound.
+
+Take a server for example with a 1 Gbps/s uplink for example pushing out 1080p60 streams at 5 Mbps per stream. That means the absolute theoretical upper capacity bound is 200 simultaneous viewers if your server's disk i/o can keep up. Expect a bit less in practice.
+
+But what if you need to serve more users? That's where PeerTube's federation feature shines. If other PeerTube instances are following yours, chances are they'll cache your super popular video and help serve additional viewers. Even the viewers themselves should contribute a little additional bandwidth while watching the video in their browsers.
 
 ## Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?
 
