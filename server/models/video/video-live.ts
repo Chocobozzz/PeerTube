@@ -93,7 +93,11 @@ export class VideoLiveModel extends Model<VideoLiveModel> {
 
   toFormattedJSON (): LiveVideo {
     return {
-      rtmpUrl: WEBSERVER.RTMP_URL,
+      // If we don't have a stream key, it means this is a remote live so we don't specify the rtmp URL
+      rtmpUrl: this.streamKey
+        ? WEBSERVER.RTMP_URL
+        : null,
+
       streamKey: this.streamKey,
       saveReplay: this.saveReplay
     }

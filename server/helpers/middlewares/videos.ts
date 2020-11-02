@@ -92,9 +92,9 @@ async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAcc
   return true
 }
 
-function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right: UserRight, res: Response) {
+function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right: UserRight, res: Response, onlyOwned = true) {
   // Retrieve the user who did the request
-  if (video.isOwned() === false) {
+  if (onlyOwned && video.isOwned() === false) {
     res.status(403)
        .json({ error: 'Cannot manage a video of another server.' })
        .end()

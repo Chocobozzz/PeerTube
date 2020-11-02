@@ -1,3 +1,4 @@
+import { VideoLiveModel } from '@server/models/video/video-live'
 import * as Bluebird from 'bluebird'
 import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
@@ -84,7 +85,7 @@ async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVid
     // Check this is not a blacklisted video, or unfederated blacklisted video
     (video.isBlacklisted() === false || (isNewVideo === false && video.VideoBlacklist.unfederated === false)) &&
     // Check the video is public/unlisted and published
-    video.hasPrivacyForFederation() && video.state === VideoState.PUBLISHED
+    video.hasPrivacyForFederation() && (video.state === VideoState.PUBLISHED || video.state === VideoState.WAITING_FOR_LIVE)
   ) {
     // Fetch more attributes that we will need to serialize in AP object
     if (isArray(video.VideoCaptions) === false) {
@@ -424,6 +425,27 @@ async function updateVideoFromAP (options: {
         await Promise.all(videoCaptionsPromises)
       }
 
+      {
+        // Create or update existing live
+        if (video.isLive) {
+          const [ videoLive ] = await VideoLiveModel.upsert({
+            saveReplay: videoObject.liveSaveReplay,
+            videoId: video.id
+          }, { transaction: t, returning: true })
+
+          videoUpdated.VideoLive = videoLive
+        } else { // Delete existing live if it exists
+          await VideoLiveModel.destroy({
+            where: {
+              videoId: video.id
+            },
+            transaction: t
+          })
+
+          videoUpdated.VideoLive = null
+        }
+      }
+
       return videoUpdated
     })
 
@@ -436,7 +458,7 @@ async function updateVideoFromAP (options: {
     })
 
     if (wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoUpdated) // Notify our users?
-    if (videoUpdated.isLive) PeerTubeSocket.Instance.sendVideoLiveNewState(video)
+    if (videoUpdated.isLive) PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
 
     logger.info('Remote video with uuid %s updated', videoObject.uuid)
 
@@ -605,6 +627,16 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
     await Promise.all(videoCaptionsPromises)
 
     videoCreated.VideoFiles = videoFiles
+
+    if (videoCreated.isLive) {
+      const videoLive = new VideoLiveModel({
+        streamKey: null,
+        saveReplay: videoObject.liveSaveReplay,
+        videoId: videoCreated.id
+      })
+
+      videoCreated.VideoLive = await videoLive.save({ transaction: t })
+    }
 
     const autoBlacklisted = await autoBlacklistVideoIfNeeded({
       video: videoCreated,

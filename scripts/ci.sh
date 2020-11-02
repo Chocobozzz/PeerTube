@@ -58,8 +58,9 @@ elif [ "$1" = "api-2" ]; then
 
     serverFiles=$(findTestFiles server/tests/api/server)
     usersFiles=$(findTestFiles server/tests/api/users)
+    liveFiles=$(findTestFiles server/tests/api/live)
 
-    MOCHA_PARALLEL=true runTest 2 $serverFiles $usersFiles
+    MOCHA_PARALLEL=true runTest 2 $serverFiles $usersFiles liveFiles
 elif [ "$1" = "api-3" ]; then
     npm run build:server
 

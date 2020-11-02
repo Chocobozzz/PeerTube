@@ -21,7 +21,9 @@ export interface VideoObject {
   views: number
 
   sensitive: boolean
+
   isLiveBroadcast: boolean
+  liveSaveReplay: boolean
 
   commentsEnabled: boolean
   downloadEnabled: boolean

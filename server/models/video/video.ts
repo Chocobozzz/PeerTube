@@ -26,6 +26,7 @@ import {
 } from 'sequelize-typescript'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation } from '@server/helpers/video'
+import { LiveManager } from '@server/lib/live-manager'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
@@ -121,14 +122,13 @@ import {
   videoModelToFormattedJSON
 } from './video-format-utils'
 import { VideoImportModel } from './video-import'
+import { VideoLiveModel } from './video-live'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { buildListQuery, BuildVideosQueryOptions, wrapForAPIResults } from './video-query-builder'
 import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
-import { LiveManager } from '@server/lib/live-manager'
-import { VideoLiveModel } from './video-live'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -142,7 +142,8 @@ export enum ScopeNames {
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
   WITH_USER_ID = 'WITH_USER_ID',
   WITH_IMMUTABLE_ATTRIBUTES = 'WITH_IMMUTABLE_ATTRIBUTES',
-  WITH_THUMBNAILS = 'WITH_THUMBNAILS'
+  WITH_THUMBNAILS = 'WITH_THUMBNAILS',
+  WITH_LIVE = 'WITH_LIVE'
 }
 
 export type ForAPIOptions = {
@@ -241,6 +242,14 @@ export type AvailableForListIDsOptions = {
     include: [
       {
         model: ThumbnailModel,
+        required: false
+      }
+    ]
+  },
+  [ScopeNames.WITH_LIVE]: {
+    include: [
+      {
+        model: VideoLiveModel,
         required: false
       }
     ]
@@ -943,6 +952,17 @@ export class VideoModel extends Model<VideoModel> {
             }
           ]
         },
+        {
+          model: VideoStreamingPlaylistModel.unscoped(),
+          required: false,
+          include: [
+            {
+              model: VideoFileModel,
+              required: false
+            }
+          ]
+        },
+        VideoLiveModel,
         VideoFileModel,
         TagModel
       ]
@@ -1330,7 +1350,8 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_WEBTORRENT_FILES,
       ScopeNames.WITH_STREAMING_PLAYLISTS,
-      ScopeNames.WITH_THUMBNAILS
+      ScopeNames.WITH_THUMBNAILS,
+      ScopeNames.WITH_LIVE
     ]
 
     if (userId) {
@@ -1362,6 +1383,7 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_THUMBNAILS,
+      ScopeNames.WITH_LIVE,
       { method: [ ScopeNames.WITH_WEBTORRENT_FILES, true ] },
       { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] }
     ]

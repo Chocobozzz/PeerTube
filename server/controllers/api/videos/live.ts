@@ -4,6 +4,7 @@ import { createReqFiles } from '@server/helpers/express-utils'
 import { CONFIG } from '@server/initializers/config'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
+import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator } from '@server/middlewares/validators/videos/video-live'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -63,10 +64,13 @@ async function getLiveVideo (req: express.Request, res: express.Response) {
 async function updateLiveVideo (req: express.Request, res: express.Response) {
   const body: LiveVideoUpdate = req.body
 
+  const video = res.locals.videoAll
   const videoLive = res.locals.videoLive
   videoLive.saveReplay = body.saveReplay || false
 
-  await videoLive.save()
+  video.VideoLive = await videoLive.save()
+
+  await federateVideoIfNeeded(video, false)
 
   return res.sendStatus(204)
 }
@@ -113,9 +117,11 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
     videoCreated.VideoChannel = res.locals.videoChannel
 
     videoLive.videoId = videoCreated.id
-    await videoLive.save(sequelizeOptions)
+    videoCreated.VideoLive = await videoLive.save(sequelizeOptions)
 
     await setVideoTags({ video, tags: videoInfo.tags, transaction: t })
+
+    await federateVideoIfNeeded(videoCreated, true, t)
 
     logger.info('Video live %s with uuid %s created.', videoInfo.name, videoCreated.uuid)
 
