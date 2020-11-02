@@ -2,8 +2,8 @@ import * as ffmpeg from 'fluent-ffmpeg'
 import { LiveVideoCreate, LiveVideoUpdate, VideoDetails, VideoState } from '@shared/models'
 import { buildAbsoluteFixturePath, wait } from '../miscs/miscs'
 import { makeGetRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
-import { ServerInfo } from '../server/servers'
-import { getVideo, getVideoWithToken } from './videos'
+import { getVideoWithToken } from './videos'
+import { omit } from 'lodash'
 
 function getLive (url: string, token: string, videoId: number | string, statusCodeExpected = 200) {
   const path = '/api/v1/videos/live'
@@ -31,16 +31,18 @@ function updateLive (url: string, token: string, videoId: number | string, field
 function createLive (url: string, token: string, fields: LiveVideoCreate, statusCodeExpected = 200) {
   const path = '/api/v1/videos/live'
 
-  let attaches: any = {}
-  if (fields.thumbnailfile) attaches = { thumbnailfile: fields.thumbnailfile }
-  if (fields.previewfile) attaches = { previewfile: fields.previewfile }
+  const attaches: any = {}
+  if (fields.thumbnailfile) attaches.thumbnailfile = fields.thumbnailfile
+  if (fields.previewfile) attaches.previewfile = fields.previewfile
+
+  const updatedFields = omit(fields, 'thumbnailfile', 'previewfile')
 
   return makeUploadRequest({
     url,
     path,
     token,
     attaches,
-    fields,
+    fields: updatedFields,
     statusCodeExpected
   })
 }

@@ -189,7 +189,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   videoData.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
   videoData.duration = videoPhysicalFile['duration'] // duration was added by a previous middleware
 
-  const video = new VideoModel(videoData) as MVideoDetails
+  const video = new VideoModel(videoData) as MVideoFullLight
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = new VideoFileModel({

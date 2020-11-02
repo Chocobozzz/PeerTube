@@ -10,10 +10,12 @@ import { randomInt } from '../../core-utils/miscs/miscs'
 
 interface ServerInfo {
   app: ChildProcess
+
   url: string
   host: string
-
+  hostname: string
   port: number
+
   parallel: boolean
   internalServerNumber: number
   serverNumber: number
@@ -109,6 +111,7 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
     serverNumber,
     url: `http://localhost:${port}`,
     host: `localhost:${port}`,
+    hostname: 'localhost',
     client: {
       id: null,
       secret: null

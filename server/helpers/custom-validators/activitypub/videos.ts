@@ -63,6 +63,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   if (!isBooleanValid(video.downloadEnabled)) video.downloadEnabled = true
   if (!isBooleanValid(video.commentsEnabled)) video.commentsEnabled = false
   if (!isBooleanValid(video.isLiveBroadcast)) video.isLiveBroadcast = false
+  if (!isBooleanValid(video.liveSaveReplay)) video.liveSaveReplay = false
 
   return isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
@@ -79,7 +80,6 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     isDateValid(video.updated) &&
     (!video.originallyPublishedAt || isDateValid(video.originallyPublishedAt)) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
-    video.url.length !== 0 &&
     video.attributedTo.length !== 0
 }
 

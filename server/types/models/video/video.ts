@@ -21,6 +21,7 @@ import { MThumbnail } from './thumbnail'
 import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
 import { MScheduleVideoUpdate } from './schedule-video-update'
 import { MUserVideoHistoryTime } from '../user/user-video-history'
+import { MVideoLive } from './video-live'
 
 type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 
@@ -29,7 +30,7 @@ type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 export type MVideo =
   Omit<VideoModel, 'VideoChannel' | 'Tags' | 'Thumbnails' | 'VideoPlaylistElements' | 'VideoAbuses' |
   'VideoFiles' | 'VideoStreamingPlaylists' | 'VideoShares' | 'AccountVideoRates' | 'VideoComments' | 'VideoViews' | 'UserVideoHistories' |
-  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions'>
+  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions' | 'VideoLive'>
 
 // ############################################################################
 
@@ -151,7 +152,8 @@ export type MVideoFullLight =
   Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoFiles', MVideoFile[]> &
   Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
-  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]> &
+  Use<'VideoLive', MVideoLive>
 
 // ############################################################################
 
@@ -165,7 +167,8 @@ export type MVideoAP =
   Use<'VideoCaptions', MVideoCaptionLanguageUrl[]> &
   Use<'VideoBlacklist', MVideoBlacklistUnfederated> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
-  Use<'Thumbnails', MThumbnail[]>
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'VideoLive', MVideoLive>
 
 export type MVideoAPWithoutCaption = Omit<MVideoAP, 'VideoCaptions'>
 

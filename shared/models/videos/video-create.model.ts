@@ -18,6 +18,6 @@ export interface VideoCreate {
   scheduleUpdate?: VideoScheduleUpdate
   originallyPublishedAt?: Date | string
 
-  thumbnailfile?: Blob
-  previewfile?: Blob
+  thumbnailfile?: Blob | string
+  previewfile?: Blob | string
 }

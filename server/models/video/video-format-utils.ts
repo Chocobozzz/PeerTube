@@ -352,11 +352,20 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     sensitive: video.nsfw,
     waitTranscoding: video.waitTranscoding,
     isLiveBroadcast: video.isLive,
+
+    liveSaveReplay: video.isLive
+      ? video.VideoLive.saveReplay
+      : null,
+
     state: video.state,
     commentsEnabled: video.commentsEnabled,
     downloadEnabled: video.downloadEnabled,
     published: video.publishedAt.toISOString(),
-    originallyPublishedAt: video.originallyPublishedAt ? video.originallyPublishedAt.toISOString() : null,
+
+    originallyPublishedAt: video.originallyPublishedAt
+      ? video.originallyPublishedAt.toISOString()
+      : null,
+
     updated: video.updatedAt.toISOString(),
     mediaType: 'text/markdown',
     content: video.description,

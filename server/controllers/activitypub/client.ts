@@ -223,7 +223,7 @@ function getAccountVideoRateFactory (rateType: VideoRateType) {
 
 async function videoController (req: express.Request, res: express.Response) {
   // We need more attributes
-  const video = await VideoModel.loadForGetAPI({ id: res.locals.onlyVideoWithRights.id }) as MVideoAPWithoutCaption
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(res.locals.onlyVideoWithRights.id)
 
   if (video.url.startsWith(WEBSERVER.URL) === false) return res.redirect(video.url)
 

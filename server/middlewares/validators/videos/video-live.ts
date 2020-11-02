@@ -16,14 +16,14 @@ const videoLiveGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.body })
+    logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params, user: res.locals.oauth.token.User.username })
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
 
-    // Check if the user who did the request is able to update the video
+    // Check if the user who did the request is able to get the live info
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res, false)) return
 
     const videoLive = await VideoLiveModel.loadByVideoId(res.locals.videoAll.id)
     if (!videoLive) return res.sendStatus(404)
@@ -121,6 +121,10 @@ const videoLiveUpdateValidator = [
       return res.status(400)
         .json({ error: 'Cannot update a live that has already started' })
     }
+
+    // Check the user can manage the live
+    const user = res.locals.oauth.token.User
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res)) return
 
     return next()
   }
