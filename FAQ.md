@@ -12,9 +12,9 @@
 - [If a client requests each chunk of a video through HTTP, will the server be overloaded?](#if-a-client-requests-each-chunk-of-a-video-through-http-will-the-server-be-overloaded)
 - [Will an index of all the videos of servers you follow be too large for small servers?](#will-an-index-of-all-the-videos-of-servers-you-follow-be-too-large-for-small-servers)
 - [Which container formats can I use for the videos I want to upload?](#which-container-formats-can-i-use-for-the-videos-i-want-to-upload)
-- [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
+- [I want to change my domain name. How can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
 - [Why do we have to put our Twitter username in PeerTube configuration?](#why-do-we-have-to-put-our-twitter-username-in-peertube-configuration)
-- [How video views are calculated?](#how-video-views-are-calculated)
+- [How are video views counted?](#how-are-video-views-counted)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
 - [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
 - [Why host on GitHub and Framagit?](#why-host-on-github-and-framagit)
@@ -22,7 +22,7 @@
 - [Are you going to support advertisements?](#are-you-going-to-support-advertisements)
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
 - [I have found a security vulnerability in PeerTube. Where and how should I report it?](#i-have-found-a-security-vulnerability-in-peertube-where-and-how-should-i-report-it)
-- [Does PeerTube ensures federation compatibility with previous version?](#does-peertube-ensures-federation-compatibility-with-previous-version)
+- [Does PeerTube ensure federation compatibility with previous version?](#does-peertube-ensure-federation-compatibility-with-previous-version)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -38,9 +38,9 @@ and social answers (need for a particular moderation policy, preserving
 content, etc.).
 
 While a paragraph is not enough to answer all these problems, PeerTube has
-very early prouded itself for using a contributory design, both for creating
+very early prided itself on using a contributory design, both for creating
 communities as federated nodes (as [Mastodon](https://joinmastodon.org/) for
-example), and for seeding videos (instances can seed each other's videos). But it's not
+example), and for seeding videos (instances can seed each other's videos). But that's not
 enough because one video could become popular and overload the server. That is
 why we need to use a P2P protocol to limit the server load. Thanks to
 [WebTorrent](https://github.com/feross/webtorrent), we can use BitTorrent
@@ -106,7 +106,7 @@ Views are buffered, so don't panic if the view counter stays the same after you 
 
 ## Should I have a big server to run PeerTube?
 
-Not really. For instance, the demonstration server [https://peertube.cpy.re](https://peertube.cpy.re) has 2 vCore and 2GB of RAM and consumes on average:
+Not really. For instance, the demonstration server [https://peertube.cpy.re](https://peertube.cpy.re) has 2 vCores and 2GB of RAM and consumes on average:
  * **CPU** -> nginx ~ 20%, peertube ~ 10%,   postgres ~ 1%, redis ~ 3%
  * **RAM** -> nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
 
@@ -164,7 +164,7 @@ We are always open to discussion about potential PRs bringing in features, even 
 
 We have a policy for contributions related to security. Please refer to [SECURITY.md](./SECURITY.md)
 
-## Does PeerTube ensures federation compatibility with previous version?
+## Does PeerTube ensure federation compatibility with previous version?
 
 We **try** to keep compatibility with the latest minor version (2.3.1 with 2.2 for example).
 We don't have resources to keep compatibility with other versions.
