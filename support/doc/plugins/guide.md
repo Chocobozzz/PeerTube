@@ -586,6 +586,11 @@ $ npm run build
 
 You built files are in the `dist/` directory. Check `package.json` to correctly point to them.
 
+```
+$ npm link
+```
+
+Now you can install your plugin from your local PeerTube instance.
 
 ### Test your plugin/theme
 
@@ -619,7 +624,8 @@ $ node ./dist/server/tools/peertube.js auth add -u 'http://localhost:9000' -U 'r
 Then, you can install or reinstall your local plugin/theme by running:
 
 ```
-$ node ./dist/server/tools/peertube.js plugins install --path /your/absolute/plugin-or-theme/path
+$ npm link peertube-plugin-my-plugin
+$ node ./dist/server/tools/peertube.js plugins install --path /your/absolute/plugin-or-theme/peertube-plugin-my-plugin
 ```
 
 ### Publish
