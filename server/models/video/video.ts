@@ -249,7 +249,7 @@ export type AvailableForListIDsOptions = {
   [ScopeNames.WITH_LIVE]: {
     include: [
       {
-        model: VideoLiveModel,
+        model: VideoLiveModel.unscoped(),
         required: false
       }
     ]

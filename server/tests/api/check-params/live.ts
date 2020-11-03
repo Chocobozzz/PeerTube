@@ -18,6 +18,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   stopFfmpeg,
+  testFfmpegStreamError,
   updateCustomSubConfig,
   updateLive,
   uploadVideoAndGetId,
@@ -399,6 +400,21 @@ describe('Test video lives API validator', function () {
 
       await waitUntilLiveStarts(server.url, server.accessToken, videoId)
       await updateLive(server.url, server.accessToken, videoId, {}, 400)
+
+      await stopFfmpeg(command)
+    })
+
+    it('Should fail to stream twice in the save live', async function () {
+      this.timeout(30000)
+
+      const resLive = await getLive(server.url, server.accessToken, videoId)
+      const live: LiveVideo = resLive.body
+
+      const command = sendRTMPStream(live.rtmpUrl, live.streamKey)
+
+      await waitUntilLiveStarts(server.url, server.accessToken, videoId)
+
+      await testFfmpegStreamError(server.url, server.accessToken, videoId, true)
 
       await stopFfmpeg(command)
     })

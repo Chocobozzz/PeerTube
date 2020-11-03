@@ -8,9 +8,10 @@ import { generateHlsPlaylist } from '@server/lib/video-transcoding'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
+import { MStreamingPlaylist, MVideo, MVideoLive, MVideoWithFile } from '@server/types/models'
 import { VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
+import { VideoFileModel } from '@server/models/video/video-file'
 
 async function processVideoLiveEnding (job: Bull.Job) {
   const payload = job.data as VideoLiveEndingPayload
@@ -60,6 +61,10 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     const segmentFiles = files.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
     await hlsPlaylistToFragmentedMP4(hlsDirectory, segmentFiles, mp4TmpName)
 
+    for (const file of segmentFiles) {
+      await remove(join(hlsDirectory, file))
+    }
+
     if (!duration) {
       duration = await getDurationFromVideoFile(mp4TmpName)
     }
@@ -77,7 +82,12 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   await video.save()
 
+  // Remove old HLS playlist video files
   const videoWithFiles = await VideoModel.loadWithFiles(video.id)
+
+  const hlsPlaylist = videoWithFiles.getHLSPlaylist()
+  await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
+  hlsPlaylist.VideoFiles = []
 
   for (const resolution of resolutions) {
     const videoInputPath = buildMP4TmpName(resolution)
@@ -90,12 +100,11 @@ async function saveLive (video: MVideo, live: MVideoLive) {
       copyCodecs: true,
       isPortraitMode
     })
+
+    await remove(join(hlsDirectory, videoInputPath))
   }
 
-  video.state = VideoState.PUBLISHED
-  await video.save()
-
-  await publishAndFederateIfNeeded(video)
+  await publishAndFederateIfNeeded(video, true)
 }
 
 async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
