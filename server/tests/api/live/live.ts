@@ -2,14 +2,15 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { LiveVideo, LiveVideoCreate, VideoDetails, VideoPrivacy } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, User, VideoDetails, VideoPrivacy } from '@shared/models'
 import {
-  acceptChangeOwnership,
   cleanupTests,
   createLive,
+  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getLive,
+  getMyUserInformation,
   getVideo,
   getVideosList,
   makeRawRequest,
@@ -17,9 +18,13 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
+  testFfmpegStreamError,
   testImage,
   updateCustomSubConfig,
   updateLive,
+  updateUser,
+  userLogin,
+  wait,
   waitJobs
 } from '../../../../shared/extra-utils'
 
@@ -28,6 +33,9 @@ const expect = chai.expect
 describe('Test live', function () {
   let servers: ServerInfo[] = []
   let liveVideoUUID: string
+  let userId: number
+  let userAccessToken: string
+  let userChannelId: number
 
   before(async function () {
     this.timeout(120000)
@@ -44,6 +52,22 @@ describe('Test live', function () {
         allowReplay: true
       }
     })
+
+    {
+      const user = { username: 'user1', password: 'superpassword' }
+      const res = await createUser({
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
+        username: user.username,
+        password: user.password
+      })
+      userId = res.body.user.id
+
+      userAccessToken = await userLogin(servers[0], user)
+
+      const resMe = await getMyUserInformation(servers[0].url, userAccessToken)
+      userChannelId = (resMe.body as User).videoChannels[0].id
+    }
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
@@ -198,17 +222,111 @@ describe('Test live', function () {
 
   describe('Test live constraints', function () {
 
-    it('Should not have size limit if save replay is disabled', async function () {
+    async function createLiveWrapper (saveReplay: boolean) {
+      const liveAttributes = {
+        name: 'user live',
+        channelId: userChannelId,
+        privacy: VideoPrivacy.PUBLIC,
+        saveReplay
+      }
 
+      const res = await createLive(servers[0].url, userAccessToken, liveAttributes)
+      return res.body.video.uuid as string
+    }
+
+    before(async function () {
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        live: {
+          enabled: true,
+          allowReplay: true
+        }
+      })
+
+      await updateUser({
+        url: servers[0].url,
+        userId,
+        accessToken: servers[0].accessToken,
+        videoQuota: 1,
+        videoQuotaDaily: -1
+      })
     })
 
-    it('Should have size limit if save replay is enabled', async function () {
-      // daily quota + total quota
+    it('Should not have size limit if save replay is disabled', async function () {
+      this.timeout(30000)
 
+      const userVideoLiveoId = await createLiveWrapper(false)
+      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
+    })
+
+    it('Should have size limit depending on user global quota if save replay is enabled', async function () {
+      this.timeout(30000)
+
+      const userVideoLiveoId = await createLiveWrapper(true)
+      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const res = await getVideo(server.url, userVideoLiveoId)
+
+        const video: VideoDetails = res.body
+        expect(video.isLive).to.be.false
+        expect(video.duration).to.be.greaterThan(0)
+      }
+
+      // TODO: check stream correctly saved + cleaned
+    })
+
+    it('Should have size limit depending on user daily quota if save replay is enabled', async function () {
+      this.timeout(30000)
+
+      await updateUser({
+        url: servers[0].url,
+        userId,
+        accessToken: servers[0].accessToken,
+        videoQuota: -1,
+        videoQuotaDaily: 1
+      })
+
+      const userVideoLiveoId = await createLiveWrapper(true)
+      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+
+      // TODO: check stream correctly saved + cleaned
+    })
+
+    it('Should succeed without quota limit', async function () {
+      this.timeout(30000)
+
+      // Wait for user quota memoize cache invalidation
+      await wait(5000)
+
+      await updateUser({
+        url: servers[0].url,
+        userId,
+        accessToken: servers[0].accessToken,
+        videoQuota: 10 * 1000 * 1000,
+        videoQuotaDaily: -1
+      })
+
+      const userVideoLiveoId = await createLiveWrapper(true)
+      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
     })
 
     it('Should have max duration limit', async function () {
+      this.timeout(30000)
 
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        live: {
+          enabled: true,
+          allowReplay: true,
+          maxDuration: 1
+        }
+      })
+
+      const userVideoLiveoId = await createLiveWrapper(true)
+      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
+
+      // TODO: check stream correctly saved + cleaned
     })
   })
 

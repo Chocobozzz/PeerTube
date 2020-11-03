@@ -311,6 +311,14 @@ export class VideoFileModel extends Model<VideoFileModel> {
     return element.save({ transaction })
   }
 
+  static removeHLSFilesOfVideoId (videoStreamingPlaylistId: number) {
+    const options = {
+      where: { videoStreamingPlaylistId }
+    }
+
+    return VideoFileModel.destroy(options)
+  }
+
   getVideoOrStreamingPlaylist (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo | MStreamingPlaylistVideo {
     if (this.videoId) return (this as MVideoFileVideo).Video
 

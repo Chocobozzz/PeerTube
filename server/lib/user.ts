@@ -18,8 +18,6 @@ import { Redis } from './redis'
 import { createLocalVideoChannel } from './video-channel'
 import { createWatchLaterPlaylist } from './video-playlist'
 
-import memoizee = require('memoizee')
-
 type ChannelNames = { name: string, displayName: string }
 
 async function createUserAccountAndChannelAndPlaylist (parameters: {
@@ -152,8 +150,8 @@ async function isAbleToUploadVideo (userId: number, size: number) {
   if (user.videoQuota === -1 && user.videoQuotaDaily === -1) return Promise.resolve(true)
 
   const [ totalBytes, totalBytesDaily ] = await Promise.all([
-    getOriginalVideoFileTotalFromUser(user.id),
-    getOriginalVideoFileTotalDailyFromUser(user.id)
+    getOriginalVideoFileTotalFromUser(user),
+    getOriginalVideoFileTotalDailyFromUser(user)
   ])
 
   const uploadedTotal = size + totalBytes

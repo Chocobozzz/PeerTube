@@ -26,7 +26,6 @@ import {
   MUser,
   MUserDefault,
   MUserFormattable,
-  MUserId,
   MUserNotifSettingChannelDefault,
   MUserWithNotificationSetting,
   MVideoFullLight
@@ -68,10 +67,10 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoImportModel } from '../video/video-import'
+import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { AccountModel } from './account'
 import { UserNotificationSettingModel } from './user-notification-setting'
-import { VideoLiveModel } from '../video/video-live'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',

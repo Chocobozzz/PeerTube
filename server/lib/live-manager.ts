@@ -133,10 +133,8 @@ class LiveManager {
     const sessionId = this.videoSessions.get(videoId)
     if (!sessionId) return
 
+    this.videoSessions.delete(videoId)
     this.abortSession(sessionId)
-
-    this.onEndTransmuxing(videoId, true)
-      .catch(err => logger.error('Cannot end transmuxing of video %d.', videoId, { err }))
   }
 
   private getContext () {
@@ -259,9 +257,12 @@ class LiveManager {
       updateSegment(segmentPath)
 
       if (this.isDurationConstraintValid(startStreamDateTime) !== true) {
+        logger.info('Stopping session of %s: max duration exceeded.', videoUUID)
+
         this.stopSessionOf(videoLive.videoId)
       }
 
+      // Check user quota if the user enabled replay saving
       if (videoLive.saveReplay === true) {
         stat(segmentPath)
           .then(segmentStat => {
@@ -270,6 +271,8 @@ class LiveManager {
           .then(() => this.isQuotaConstraintValid(user, videoLive))
           .then(quotaValid => {
             if (quotaValid !== true) {
+              logger.info('Stopping session of %s: user quota exceeded.', videoUUID)
+
               this.stopSessionOf(videoLive.videoId)
             }
           })
@@ -319,7 +322,7 @@ class LiveManager {
       onFFmpegEnded()
 
       // Don't care that we killed the ffmpeg process
-      if (err?.message?.includes('SIGINT')) return
+      if (err?.message?.includes('Exiting normally')) return
 
       logger.error('Live transcoding error.', { err, stdout, stderr })
 
@@ -348,8 +351,7 @@ class LiveManager {
         }
       }, { delay: cleanupNow ? 0 : VIDEO_LIVE.CLEANUP_DELAY })
 
-      // FIXME: use end
-      fullVideo.state = VideoState.WAITING_FOR_LIVE
+      fullVideo.state = VideoState.LIVE_ENDED
       await fullVideo.save()
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)

@@ -1,9 +1,9 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { LiveVideoCreate, LiveVideoUpdate, VideoDetails, VideoState } from '@shared/models'
+import { omit } from 'lodash'
+import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, VideoDetails, VideoState } from '@shared/models'
 import { buildAbsoluteFixturePath, wait } from '../miscs/miscs'
 import { makeGetRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
 import { getVideoWithToken } from './videos'
-import { omit } from 'lodash'
 
 function getLive (url: string, token: string, videoId: number | string, statusCodeExpected = 200) {
   const path = '/api/v1/videos/live'
@@ -47,7 +47,14 @@ function createLive (url: string, token: string, fields: LiveVideoCreate, status
   })
 }
 
-function sendRTMPStream (rtmpBaseUrl: string, streamKey: string) {
+async function sendRTMPStreamInVideo (url: string, token: string, videoId: number | string, onErrorCb?: Function) {
+  const res = await getLive(url, token, videoId)
+  const videoLive = res.body as LiveVideo
+
+  return sendRTMPStream(videoLive.rtmpUrl, videoLive.streamKey, onErrorCb)
+}
+
+function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, onErrorCb?: Function) {
   const fixture = buildAbsoluteFixturePath('video_short.mp4')
 
   const command = ffmpeg(fixture)
@@ -63,7 +70,7 @@ function sendRTMPStream (rtmpBaseUrl: string, streamKey: string) {
   command.on('error', err => {
     if (err?.message?.includes('Exiting normally')) return
 
-    console.error('Cannot send RTMP stream.', { err })
+    if (onErrorCb) onErrorCb(err)
   })
 
   if (process.env.DEBUG) {
@@ -73,6 +80,34 @@ function sendRTMPStream (rtmpBaseUrl: string, streamKey: string) {
   command.run()
 
   return command
+}
+
+function waitFfmpegUntilError (command: ffmpeg.FfmpegCommand, successAfterMS = 10000) {
+  return new Promise((res, rej) => {
+    command.on('error', err => {
+      return rej(err)
+    })
+
+    setTimeout(() => {
+      res()
+    }, successAfterMS)
+  })
+}
+
+async function testFfmpegStreamError (url: string, token: string, videoId: number | string, shouldHaveError: boolean) {
+  const command = await sendRTMPStreamInVideo(url, token, videoId)
+  let error: Error
+
+  try {
+    await waitFfmpegUntilError(command, 10000)
+  } catch (err) {
+    error = err
+  }
+
+  await stopFfmpeg(command)
+
+  if (shouldHaveError && !error) throw new Error('Ffmpeg did not have an error')
+  if (!shouldHaveError && error) throw error
 }
 
 async function stopFfmpeg (command: ffmpeg.FfmpegCommand) {
@@ -99,6 +134,9 @@ export {
   updateLive,
   waitUntilLiveStarts,
   createLive,
+  testFfmpegStreamError,
   stopFfmpeg,
+  sendRTMPStreamInVideo,
+  waitFfmpegUntilError,
   sendRTMPStream
 }
