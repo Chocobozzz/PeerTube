@@ -609,7 +609,7 @@ const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 const VIDEO_LIVE = {
   EXTENSION: '.ts',
   CLEANUP_DELAY: 1000 * 60 * 5, // 5 minutes
-  SEGMENT_TIME: 4, // 4 seconds
+  SEGMENT_TIME_SECONDS: 4, // 4 seconds
   SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
   RTMP: {
     CHUNK_SIZE: 60000,
@@ -738,7 +738,8 @@ if (isTestInstance() === true) {
 
   PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 5000
 
-  VIDEO_LIVE.CLEANUP_DELAY = 10000
+  VIDEO_LIVE.CLEANUP_DELAY = 5000
+  VIDEO_LIVE.SEGMENT_TIME_SECONDS = 2
 }
 
 updateWebserverUrls()

@@ -6,22 +6,31 @@ import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
 import { generateHlsPlaylist } from '@server/lib/video-transcoding'
 import { VideoModel } from '@server/models/video/video'
+import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MVideo, MVideoLive, MVideoWithFile } from '@server/types/models'
+import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
-import { VideoFileModel } from '@server/models/video/video-file'
 
 async function processVideoLiveEnding (job: Bull.Job) {
   const payload = job.data as VideoLiveEndingPayload
 
+  function logError () {
+    logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId)
+  }
+
   const video = await VideoModel.load(payload.videoId)
   const live = await VideoLiveModel.loadByVideoId(payload.videoId)
 
+  if (!video || !live) {
+    logError()
+    return
+  }
+
   const streamingPlaylist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id)
-  if (!video || !streamingPlaylist || !live) {
-    logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId)
+  if (!streamingPlaylist) {
+    logError()
     return
   }
 
@@ -52,21 +61,21 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     const playlistPath = join(hlsDirectory, playlistFile)
     const { videoFileResolution } = await getVideoFileResolution(playlistPath)
 
-    const mp4TmpName = buildMP4TmpName(videoFileResolution)
+    const mp4TmpPath = buildMP4TmpPath(hlsDirectory, videoFileResolution)
 
     // Playlist name is for example 3.m3u8
     // Segments names are 3-0.ts 3-1.ts etc
     const shouldStartWith = playlistFile.replace(/\.m3u8$/, '') + '-'
 
     const segmentFiles = files.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
-    await hlsPlaylistToFragmentedMP4(hlsDirectory, segmentFiles, mp4TmpName)
+    await hlsPlaylistToFragmentedMP4(hlsDirectory, segmentFiles, mp4TmpPath)
 
     for (const file of segmentFiles) {
       await remove(join(hlsDirectory, file))
     }
 
     if (!duration) {
-      duration = await getDurationFromVideoFile(mp4TmpName)
+      duration = await getDurationFromVideoFile(mp4TmpPath)
     }
 
     resolutions.push(videoFileResolution)
@@ -90,7 +99,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   hlsPlaylist.VideoFiles = []
 
   for (const resolution of resolutions) {
-    const videoInputPath = buildMP4TmpName(resolution)
+    const videoInputPath = buildMP4TmpPath(hlsDirectory, resolution)
     const { isPortraitMode } = await getVideoFileResolution(videoInputPath)
 
     await generateHlsPlaylist({
@@ -101,7 +110,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
       isPortraitMode
     })
 
-    await remove(join(hlsDirectory, videoInputPath))
+    await remove(videoInputPath)
   }
 
   await publishAndFederateIfNeeded(video, true)
@@ -110,7 +119,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
   const hlsDirectory = getHLSDirectory(video, false)
 
-  await cleanupLiveFiles(hlsDirectory)
+  await remove(hlsDirectory)
 
   streamingPlaylist.destroy()
     .catch(err => logger.error('Cannot remove live streaming playlist.', { err }))
@@ -135,6 +144,6 @@ async function cleanupLiveFiles (hlsDirectory: string) {
   }
 }
 
-function buildMP4TmpName (resolution: number) {
-  return resolution + '-tmp.mp4'
+function buildMP4TmpPath (basePath: string, resolution: number) {
+  return join(basePath, resolution + '-tmp.mp4')
 }

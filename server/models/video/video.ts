@@ -25,7 +25,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
-import { getPrivaciesForFederation, isPrivacyForFederation } from '@server/helpers/video'
+import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live-manager'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
@@ -822,6 +822,8 @@ export class VideoModel extends Model<VideoModel> {
   @BeforeDestroy
   static stopLiveIfNeeded (instance: VideoModel) {
     if (!instance.isLive) return
+
+    logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
     return LiveManager.Instance.stopSessionOf(instance.id)
   }
@@ -1919,6 +1921,10 @@ export class VideoModel extends Model<VideoModel> {
 
   hasPrivacyForFederation () {
     return isPrivacyForFederation(this.privacy)
+  }
+
+  hasStateForFederation () {
+    return isStateForFederation(this.state)
   }
 
   isNewVideo (newPrivacy: VideoPrivacy) {

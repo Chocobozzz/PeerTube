@@ -4,7 +4,7 @@ import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { ensureDir, stat } from 'fs-extra'
 import { basename } from 'path'
-import { computeResolutionsToTranscode, runLiveMuxing, runLiveTranscoding } from '@server/helpers/ffmpeg-utils'
+import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution, getVideoStreamCodec, getVideoStreamSize, runLiveMuxing, runLiveTranscoding } from '@server/helpers/ffmpeg-utils'
 import { logger } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants'
@@ -137,6 +137,13 @@ class LiveManager {
     this.abortSession(sessionId)
   }
 
+  getLiveQuotaUsedByUser (userId: number) {
+    const currentLives = this.livesPerUser.get(userId)
+    if (!currentLives) return 0
+
+    return currentLives.reduce((sum, obj) => sum + obj.size, 0)
+  }
+
   private getContext () {
     return context
   }
@@ -173,8 +180,15 @@ class LiveManager {
     const playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
 
     const session = this.getContext().sessions.get(sessionId)
+    const rtmpUrl = 'rtmp://127.0.0.1:' + config.rtmp.port + streamPath
+
+    const [ resolutionResult, fps ] = await Promise.all([
+      getVideoFileResolution(rtmpUrl),
+      getVideoFileFPS(rtmpUrl)
+    ])
+
     const resolutionsEnabled = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? computeResolutionsToTranscode(session.videoHeight, 'live')
+      ? computeResolutionsToTranscode(resolutionResult.videoFileResolution, 'live')
       : []
 
     logger.info('Will mux/transcode live video of original resolution %d.', session.videoHeight, { resolutionsEnabled })
@@ -193,8 +207,9 @@ class LiveManager {
       sessionId,
       videoLive,
       playlist: videoStreamingPlaylist,
-      streamPath,
       originalResolution: session.videoHeight,
+      rtmpUrl,
+      fps,
       resolutionsEnabled
     })
   }
@@ -203,11 +218,12 @@ class LiveManager {
     sessionId: string
     videoLive: MVideoLiveVideo
     playlist: MStreamingPlaylist
-    streamPath: string
+    rtmpUrl: string
+    fps: number
     resolutionsEnabled: number[]
     originalResolution: number
   }) {
-    const { sessionId, videoLive, playlist, streamPath, resolutionsEnabled, originalResolution } = options
+    const { sessionId, videoLive, playlist, resolutionsEnabled, originalResolution, fps, rtmpUrl } = options
     const startStreamDateTime = new Date().getTime()
     const allResolutions = resolutionsEnabled.concat([ originalResolution ])
 
@@ -238,17 +254,16 @@ class LiveManager {
     const outPath = getHLSDirectory(videoLive.Video)
     await ensureDir(outPath)
 
+    const videoUUID = videoLive.Video.uuid
     const deleteSegments = videoLive.saveReplay === false
 
-    const rtmpUrl = 'rtmp://127.0.0.1:' + config.rtmp.port + streamPath
     const ffmpegExec = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? runLiveTranscoding(rtmpUrl, outPath, allResolutions, deleteSegments)
+      ? runLiveTranscoding(rtmpUrl, outPath, allResolutions, fps, deleteSegments)
       : runLiveMuxing(rtmpUrl, outPath, deleteSegments)
 
-    logger.info('Running live muxing/transcoding.')
+    logger.info('Running live muxing/transcoding for %s.', videoUUID)
     this.transSessions.set(sessionId, ffmpegExec)
 
-    const videoUUID = videoLive.Video.uuid
     const tsWatcher = chokidar.watch(outPath + '/*.ts')
 
     const updateSegment = segmentPath => this.segmentsSha256Queue.push({ operation: 'update', segmentPath, videoUUID })
@@ -307,7 +322,7 @@ class LiveManager {
     })
 
     const onFFmpegEnded = () => {
-      logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', streamPath)
+      logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', rtmpUrl)
 
       this.transSessions.delete(sessionId)
 
@@ -330,13 +345,6 @@ class LiveManager {
     })
 
     ffmpegExec.on('end', () => onFFmpegEnded())
-  }
-
-  getLiveQuotaUsedByUser (userId: number) {
-    const currentLives = this.livesPerUser.get(userId)
-    if (!currentLives) return 0
-
-    return currentLives.reduce((sum, obj) => sum + obj.size, 0)
   }
 
   private async onEndTransmuxing (videoId: number, cleanupNow = false) {

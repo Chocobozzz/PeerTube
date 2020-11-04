@@ -312,6 +312,14 @@ function removeVideo (url: string, token: string, id: number | string, expectedS
           .expect(expectedStatus)
 }
 
+async function removeAllVideos (server: ServerInfo) {
+  const resVideos = await getVideosList(server.url)
+
+  for (const v of resVideos.body.data) {
+    await removeVideo(server.url, server.accessToken, v.id)
+  }
+}
+
 async function checkVideoFilesWereRemoved (
   videoUUID: string,
   serverNumber: number,
@@ -685,6 +693,7 @@ export {
   getVideoFileMetadataUrl,
   getVideoWithToken,
   getVideosList,
+  removeAllVideos,
   getVideosListPagination,
   getVideosListSort,
   removeVideo,

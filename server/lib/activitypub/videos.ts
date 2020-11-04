@@ -85,7 +85,7 @@ async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVid
     // Check this is not a blacklisted video, or unfederated blacklisted video
     (video.isBlacklisted() === false || (isNewVideo === false && video.VideoBlacklist.unfederated === false)) &&
     // Check the video is public/unlisted and published
-    video.hasPrivacyForFederation() && (video.state === VideoState.PUBLISHED || video.state === VideoState.WAITING_FOR_LIVE)
+    video.hasPrivacyForFederation() && video.hasStateForFederation()
   ) {
     // Fetch more attributes that we will need to serialize in AP object
     if (isArray(video.VideoCaptions) === false) {
@@ -302,7 +302,7 @@ async function updateVideoFromAP (options: {
 }) {
   const { video, videoObject, account, channel, overrideTo } = options
 
-  logger.debug('Updating remote video "%s".', options.videoObject.uuid, { account, channel })
+  logger.debug('Updating remote video "%s".', options.videoObject.uuid, { videoObject: options.videoObject, account, channel })
 
   let videoFieldsSave: any
   const wasPrivateVideo = video.privacy === VideoPrivacy.PRIVATE
@@ -561,6 +561,8 @@ function isAPMagnetUrlObject (url: any): url is ActivityMagnetUrlObject {
 function isAPHashTagObject (url: any): url is ActivityHashTagObject {
   return url && url.type === 'Hashtag'
 }
+
+
 
 async function createVideo (videoObject: VideoObject, channel: MChannelAccountLight, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)

@@ -15,7 +15,7 @@ import {
   MVideoThumbnail,
   MVideoWithRights
 } from '@server/types/models'
-import { VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
+import { VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
 import { VideoModel } from '../models/video/video'
 
 type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
@@ -104,6 +104,13 @@ function isPrivacyForFederation (privacy: VideoPrivacy) {
     (CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED === true && castedPrivacy === VideoPrivacy.UNLISTED)
 }
 
+function isStateForFederation (state: VideoState) {
+  const castedState = parseInt(state + '', 10)
+
+  return castedState === VideoState.PUBLISHED || castedState === VideoState.WAITING_FOR_LIVE || castedState === VideoState.LIVE_ENDED
+
+}
+
 function getPrivaciesForFederation () {
   return (CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED === true)
     ? [ { privacy: VideoPrivacy.PUBLIC }, { privacy: VideoPrivacy.UNLISTED } ]
@@ -127,6 +134,7 @@ export {
   addOptimizeOrMergeAudioJob,
   extractVideo,
   getExtFromMimetype,
+  isStateForFederation,
   isPrivacyForFederation,
   getPrivaciesForFederation
 }
