@@ -6,8 +6,13 @@ function getUserNotificationSocket (serverUrl: string, accessToken: string) {
   })
 }
 
+function getLiveNotificationSocket (serverUrl: string) {
+  return io(serverUrl + '/live-videos')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  getUserNotificationSocket
+  getUserNotificationSocket,
+  getLiveNotificationSocket
 }

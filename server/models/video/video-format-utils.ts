@@ -199,6 +199,7 @@ function videoFilesModelToFormattedJSON (
   const video = extractVideo(model)
 
   return [ ...videoFiles ]
+    .filter(f => !f.isLive())
     .sort(sortByResolutionDesc)
     .map(videoFile => {
       return {
@@ -225,7 +226,9 @@ function addVideoFilesInAPAcc (
   baseUrlWs: string,
   files: MVideoFile[]
 ) {
-  const sortedFiles = [ ...files ].sort(sortByResolutionDesc)
+  const sortedFiles = [ ...files ]
+    .filter(f => !f.isLive())
+    .sort(sortByResolutionDesc)
 
   for (const file of sortedFiles) {
     acc.push({

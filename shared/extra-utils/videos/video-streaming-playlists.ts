@@ -41,11 +41,26 @@ async function checkSegmentHash (
   expect(sha256(res2.body)).to.equal(sha256Server)
 }
 
+async function checkResolutionsInMasterPlaylist (playlistUrl: string, resolutions: number[]) {
+  const res = await getPlaylist(playlistUrl)
+
+  const masterPlaylist = res.text
+
+  for (const resolution of resolutions) {
+    const reg = new RegExp(
+      '#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',(FRAME-RATE=\\d+,)?CODECS="avc1.64001f,mp4a.40.2"'
+    )
+
+    expect(masterPlaylist).to.match(reg)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getPlaylist,
   getSegment,
+  checkResolutionsInMasterPlaylist,
   getSegmentSha256,
   checkSegmentHash
 }

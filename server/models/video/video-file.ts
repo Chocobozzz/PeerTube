@@ -329,6 +329,10 @@ export class VideoFileModel extends Model<VideoFileModel> {
     return !!MIMETYPES.AUDIO.EXT_MIMETYPE[this.extname]
   }
 
+  isLive () {
+    return this.size === -1
+  }
+
   hasSameUniqueKeysThan (other: MVideoFile) {
     return this.fps === other.fps &&
       this.resolution === other.resolution &&
