@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import * as chai from 'chai'
 import { omit } from 'lodash'
 import { join } from 'path'
 import { LiveVideo, VideoPrivacy } from '@shared/models'
@@ -14,11 +13,11 @@ import {
   immutableAssign,
   makePostBodyRequest,
   makeUploadRequest,
+  runAndTestFfmpegStreamError,
   sendRTMPStream,
   ServerInfo,
   setAccessTokensToServers,
   stopFfmpeg,
-  testFfmpegStreamError,
   updateCustomSubConfig,
   updateLive,
   uploadVideoAndGetId,
@@ -30,9 +29,7 @@ describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'
   let server: ServerInfo
   let userAccessToken = ''
-  let accountName: string
   let channelId: number
-  let channelName: string
   let videoId: number
   let videoIdNotLive: number
 
@@ -414,7 +411,7 @@ describe('Test video lives API validator', function () {
 
       await waitUntilLiveStarts(server.url, server.accessToken, videoId)
 
-      await testFfmpegStreamError(server.url, server.accessToken, videoId, true)
+      await runAndTestFfmpegStreamError(server.url, server.accessToken, videoId, true)
 
       await stopFfmpeg(command)
     })

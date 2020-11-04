@@ -1,8 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+
+import { expect } from 'chai'
 import * as ffmpeg from 'fluent-ffmpeg'
+import { pathExists, readdir } from 'fs-extra'
 import { omit } from 'lodash'
+import { join } from 'path'
 import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, VideoDetails, VideoState } from '@shared/models'
-import { buildAbsoluteFixturePath, wait } from '../miscs/miscs'
+import { buildAbsoluteFixturePath, buildServerDirectory, wait } from '../miscs/miscs'
 import { makeGetRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
+import { ServerInfo } from '../server/servers'
 import { getVideoWithToken } from './videos'
 
 function getLive (url: string, token: string, videoId: number | string, statusCodeExpected = 200) {
@@ -47,21 +53,22 @@ function createLive (url: string, token: string, fields: LiveVideoCreate, status
   })
 }
 
-async function sendRTMPStreamInVideo (url: string, token: string, videoId: number | string, onErrorCb?: Function) {
+async function sendRTMPStreamInVideo (url: string, token: string, videoId: number | string) {
   const res = await getLive(url, token, videoId)
   const videoLive = res.body as LiveVideo
 
-  return sendRTMPStream(videoLive.rtmpUrl, videoLive.streamKey, onErrorCb)
+  return sendRTMPStream(videoLive.rtmpUrl, videoLive.streamKey)
 }
 
-function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, onErrorCb?: Function) {
+function sendRTMPStream (rtmpBaseUrl: string, streamKey: string) {
   const fixture = buildAbsoluteFixturePath('video_short.mp4')
 
   const command = ffmpeg(fixture)
   command.inputOption('-stream_loop -1')
   command.inputOption('-re')
-
-  command.outputOption('-c copy')
+  command.outputOption('-c:v libx264')
+  command.outputOption('-g 50')
+  command.outputOption('-keyint_min 2')
   command.outputOption('-f flv')
 
   const rtmpUrl = rtmpBaseUrl + '/' + streamKey
@@ -70,7 +77,7 @@ function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, onErrorCb?: Fun
   command.on('error', err => {
     if (err?.message?.includes('Exiting normally')) return
 
-    if (onErrorCb) onErrorCb(err)
+    if (process.env.DEBUG) console.error(err)
   })
 
   if (process.env.DEBUG) {
@@ -94,8 +101,13 @@ function waitFfmpegUntilError (command: ffmpeg.FfmpegCommand, successAfterMS = 1
   })
 }
 
-async function testFfmpegStreamError (url: string, token: string, videoId: number | string, shouldHaveError: boolean) {
+async function runAndTestFfmpegStreamError (url: string, token: string, videoId: number | string, shouldHaveError: boolean) {
   const command = await sendRTMPStreamInVideo(url, token, videoId)
+
+  return testFfmpegStreamError(command, shouldHaveError)
+}
+
+async function testFfmpegStreamError (command: ffmpeg.FfmpegCommand, shouldHaveError: boolean) {
   let error: Error
 
   try {
@@ -127,6 +139,31 @@ async function waitUntilLiveStarts (url: string, token: string, videoId: number 
   } while (video.state.id === VideoState.WAITING_FOR_LIVE)
 }
 
+async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resolutions: number[] = []) {
+  const basePath = buildServerDirectory(server.internalServerNumber, 'streaming-playlists')
+  const hlsPath = join(basePath, 'hls', videoUUID)
+
+  if (resolutions.length === 0) {
+    const result = await pathExists(hlsPath)
+    expect(result).to.be.false
+
+    return
+  }
+
+  const files = await readdir(hlsPath)
+
+  // fragmented file and playlist per resolution + master playlist + segments sha256 json file
+  expect(files).to.have.lengthOf(resolutions.length * 2 + 2)
+
+  for (const resolution of resolutions) {
+    expect(files).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
+    expect(files).to.contain(`${resolution}.m3u8`)
+  }
+
+  expect(files).to.contain('master.m3u8')
+  expect(files).to.contain('segments-sha256.json')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -134,9 +171,11 @@ export {
   updateLive,
   waitUntilLiveStarts,
   createLive,
-  testFfmpegStreamError,
+  runAndTestFfmpegStreamError,
+  checkLiveCleanup,
   stopFfmpeg,
   sendRTMPStreamInVideo,
   waitFfmpegUntilError,
-  sendRTMPStream
+  sendRTMPStream,
+  testFfmpegStreamError
 }

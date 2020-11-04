@@ -353,7 +353,7 @@ function convertWebPToJPG (path: string, destination: string): Promise<void> {
   })
 }
 
-function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: number[], deleteSegments: boolean) {
+function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: number[], fps, deleteSegments: boolean) {
   const command = getFFmpeg(rtmpUrl)
   command.inputOption('-fflags nobuffer')
 
@@ -375,10 +375,6 @@ function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: numb
     }))
   ])
 
-  const liveFPS = VIDEO_TRANSCODING_FPS.AVERAGE
-
-  command.withFps(liveFPS)
-
   command.outputOption('-b_strategy 1')
   command.outputOption('-bf 16')
   command.outputOption('-preset superfast')
@@ -386,13 +382,14 @@ function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: numb
   command.outputOption('-map_metadata -1')
   command.outputOption('-pix_fmt yuv420p')
   command.outputOption('-max_muxing_queue_size 1024')
+  command.outputOption('-g ' + (fps * 2))
 
   for (let i = 0; i < resolutions.length; i++) {
     const resolution = resolutions[i]
 
     command.outputOption(`-map [vout${resolution}]`)
     command.outputOption(`-c:v:${i} libx264`)
-    command.outputOption(`-b:v:${i} ${getTargetBitrate(resolution, liveFPS, VIDEO_TRANSCODING_FPS)}`)
+    command.outputOption(`-b:v:${i} ${getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)}`)
 
     command.outputOption(`-map a:0`)
     command.outputOption(`-c:a:${i} aac`)
@@ -443,8 +440,8 @@ async function hlsPlaylistToFragmentedMP4 (hlsDirectory: string, segmentFiles: s
   command.run()
 
   function cleaner () {
-    remove(concatFile)
-    .catch(err => logger.error('Cannot remove concat file in %s.', hlsDirectory, { err }))
+    remove(concatFilePath)
+      .catch(err => logger.error('Cannot remove concat file in %s.', hlsDirectory, { err }))
   }
 
   return new Promise<string>((res, rej) => {
@@ -497,7 +494,7 @@ function addDefaultX264Params (command: ffmpeg.FfmpegCommand) {
 }
 
 function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string, deleteSegments: boolean) {
-  command.outputOption('-hls_time ' + VIDEO_LIVE.SEGMENT_TIME)
+  command.outputOption('-hls_time ' + VIDEO_LIVE.SEGMENT_TIME_SECONDS)
   command.outputOption('-hls_list_size ' + VIDEO_LIVE.SEGMENTS_LIST_SIZE)
 
   if (deleteSegments === true) {

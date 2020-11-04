@@ -4,6 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { LiveVideo, LiveVideoCreate, User, VideoDetails, VideoPrivacy } from '@shared/models'
 import {
+  addVideoToBlacklist,
   cleanupTests,
   createLive,
   createUser,
@@ -15,6 +16,7 @@ import {
   getVideosList,
   makeRawRequest,
   removeVideo,
+  sendRTMPStream,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -22,9 +24,7 @@ import {
   testImage,
   updateCustomSubConfig,
   updateLive,
-  updateUser,
   userLogin,
-  wait,
   waitJobs
 } from '../../../../shared/extra-utils'
 
@@ -32,7 +32,6 @@ const expect = chai.expect
 
 describe('Test live', function () {
   let servers: ServerInfo[] = []
-  let liveVideoUUID: string
   let userId: number
   let userAccessToken: string
   let userChannelId: number
@@ -49,7 +48,10 @@ describe('Test live', function () {
     await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
       live: {
         enabled: true,
-        allowReplay: true
+        allowReplay: true,
+        transcoding: {
+          enabled: false
+        }
       }
     })
 
@@ -74,6 +76,7 @@ describe('Test live', function () {
   })
 
   describe('Live creation, update and delete', function () {
+    let liveVideoUUID: string
 
     it('Should create a live with the appropriate parameters', async function () {
       this.timeout(20000)
@@ -220,206 +223,74 @@ describe('Test live', function () {
     })
   })
 
-  describe('Test live constraints', function () {
+  describe('Stream checks', function () {
+    let liveVideo: LiveVideo & VideoDetails
+    let rtmpUrl: string
 
-    async function createLiveWrapper (saveReplay: boolean) {
+    before(function () {
+      rtmpUrl = 'rtmp://' + servers[0].hostname + ':1936'
+    })
+
+    async function createLiveWrapper () {
       const liveAttributes = {
         name: 'user live',
         channelId: userChannelId,
         privacy: VideoPrivacy.PUBLIC,
-        saveReplay
+        saveReplay: false
       }
 
       const res = await createLive(servers[0].url, userAccessToken, liveAttributes)
-      return res.body.video.uuid as string
+      const uuid = res.body.video.uuid
+
+      const resLive = await getLive(servers[0].url, servers[0].accessToken, uuid)
+      const resVideo = await getVideo(servers[0].url, uuid)
+
+      return Object.assign(resVideo.body, resLive.body) as LiveVideo & VideoDetails
     }
 
-    before(async function () {
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: true
-        }
-      })
-
-      await updateUser({
-        url: servers[0].url,
-        userId,
-        accessToken: servers[0].accessToken,
-        videoQuota: 1,
-        videoQuotaDaily: -1
-      })
-    })
-
-    it('Should not have size limit if save replay is disabled', async function () {
-      this.timeout(30000)
-
-      const userVideoLiveoId = await createLiveWrapper(false)
-      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
-    })
-
-    it('Should have size limit depending on user global quota if save replay is enabled', async function () {
-      this.timeout(30000)
-
-      const userVideoLiveoId = await createLiveWrapper(true)
-      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
-
-      await waitJobs(servers)
-
-      for (const server of servers) {
-        const res = await getVideo(server.url, userVideoLiveoId)
-
-        const video: VideoDetails = res.body
-        expect(video.isLive).to.be.false
-        expect(video.duration).to.be.greaterThan(0)
-      }
-
-      // TODO: check stream correctly saved + cleaned
-    })
-
-    it('Should have size limit depending on user daily quota if save replay is enabled', async function () {
-      this.timeout(30000)
-
-      await updateUser({
-        url: servers[0].url,
-        userId,
-        accessToken: servers[0].accessToken,
-        videoQuota: -1,
-        videoQuotaDaily: 1
-      })
-
-      const userVideoLiveoId = await createLiveWrapper(true)
-      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
-
-      // TODO: check stream correctly saved + cleaned
-    })
-
-    it('Should succeed without quota limit', async function () {
-      this.timeout(30000)
-
-      // Wait for user quota memoize cache invalidation
-      await wait(5000)
-
-      await updateUser({
-        url: servers[0].url,
-        userId,
-        accessToken: servers[0].accessToken,
-        videoQuota: 10 * 1000 * 1000,
-        videoQuotaDaily: -1
-      })
-
-      const userVideoLiveoId = await createLiveWrapper(true)
-      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
-    })
-
-    it('Should have max duration limit', async function () {
-      this.timeout(30000)
-
-      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-        live: {
-          enabled: true,
-          allowReplay: true,
-          maxDuration: 1
-        }
-      })
-
-      const userVideoLiveoId = await createLiveWrapper(true)
-      await testFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
-
-      // TODO: check stream correctly saved + cleaned
-    })
-  })
-
-  describe('With save replay disabled', function () {
-
-    it('Should correctly create and federate the "waiting for stream" live', async function () {
-
-    })
-
-    it('Should correctly have updated the live and federated it when streaming in the live', async function () {
-
-    })
-
-    it('Should correctly delete the video and the live after the stream ended', async function () {
-      // Wait 10 seconds
-      // get video 404
-      // get video federation 404
-
-      // check cleanup
-    })
-
-    it('Should correctly terminate the stream on blacklist and delete the live', async function () {
-      // Wait 10 seconds
-      // get video 404
-      // get video federation 404
-
-      // check cleanup
-    })
-
-    it('Should correctly terminate the stream on delete and delete the video', async function () {
-      // Wait 10 seconds
-      // get video 404
-      // get video federation 404
-
-      // check cleanup
-    })
-  })
-
-  describe('With save replay enabled', function () {
-
-    it('Should correctly create and federate the "waiting for stream" live', async function () {
-
-    })
-
-    it('Should correctly have updated the live and federated it when streaming in the live', async function () {
-
-    })
-
-    it('Should correctly have saved the live and federated it after the streaming', async function () {
-
-    })
-
-    it('Should update the saved live and correctly federate the updated attributes', async function () {
-
-    })
-
-    it('Should have cleaned up the live files', async function () {
-
-    })
-
-    it('Should correctly terminate the stream on blacklist and blacklist the saved replay video', async function () {
-      // Wait 10 seconds
-      // get video -> blacklisted
-      // get video federation -> blacklisted
-
-      // check cleanup live files quand meme
-    })
-
-    it('Should correctly terminate the stream on delete and delete the video', async function () {
-      // Wait 10 seconds
-      // get video 404
-      // get video federation 404
-
-      // check cleanup
-    })
-  })
-
-  describe('Stream checks', function () {
-
     it('Should not allow a stream without the appropriate path', async function () {
+      this.timeout(30000)
 
+      liveVideo = await createLiveWrapper()
+
+      const command = sendRTMPStream(rtmpUrl + '/bad-live', liveVideo.streamKey)
+      await testFfmpegStreamError(command, true)
     })
 
     it('Should not allow a stream without the appropriate stream key', async function () {
+      this.timeout(30000)
 
+      const command = sendRTMPStream(rtmpUrl + '/live', 'bad-stream-key')
+      await testFfmpegStreamError(command, true)
+    })
+
+    it('Should succeed with the correct params', async function () {
+      this.timeout(30000)
+
+      const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
+      await testFfmpegStreamError(command, false)
     })
 
     it('Should not allow a stream on a live that was blacklisted', async function () {
+      this.timeout(30000)
 
+      liveVideo = await createLiveWrapper()
+
+      await addVideoToBlacklist(servers[0].url, servers[0].accessToken, liveVideo.uuid)
+
+      const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
+      await testFfmpegStreamError(command, true)
     })
 
     it('Should not allow a stream on a live that was deleted', async function () {
+      this.timeout(30000)
 
+      liveVideo = await createLiveWrapper()
+
+      await removeVideo(servers[0].url, servers[0].accessToken, liveVideo.uuid)
+
+      const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
+      await testFfmpegStreamError(command, true)
     })
   })
 
