@@ -244,7 +244,7 @@ class LiveManager {
         size: -1,
         extname: '.ts',
         infoHash: null,
-        fps: -1,
+        fps,
         videoStreamingPlaylistId: playlist.id
       }).catch(err => {
         logger.error('Cannot create file for live streaming.', { err })

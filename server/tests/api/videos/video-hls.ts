@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { join } from 'path'
 import {
   checkDirectoryIsEmpty,
+  checkResolutionsInMasterPlaylist,
   checkSegmentHash,
   checkTmpIsEmpty,
   cleanupTests,
@@ -23,7 +25,6 @@ import {
 } from '../../../../shared/extra-utils'
 import { VideoDetails } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
-import { join } from 'path'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 
 const expect = chai.expect
@@ -66,16 +67,12 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
     }
 
     {
-      const res = await getPlaylist(hlsPlaylist.playlistUrl)
+      await checkResolutionsInMasterPlaylist(hlsPlaylist.playlistUrl, resolutions)
 
+      const res = await getPlaylist(hlsPlaylist.playlistUrl)
       const masterPlaylist = res.text
 
       for (const resolution of resolutions) {
-        const reg = new RegExp(
-          '#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',FRAME-RATE=\\d+,CODECS="avc1.64001f,mp4a.40.2"'
-        )
-
-        expect(masterPlaylist).to.match(reg)
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
       }

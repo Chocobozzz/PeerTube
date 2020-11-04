@@ -2,9 +2,12 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { LiveVideo, LiveVideoCreate, User, VideoDetails, VideoPrivacy } from '@shared/models'
+import { getLiveNotificationSocket } from '@shared/extra-utils/socket/socket-io'
+import { LiveVideo, LiveVideoCreate, User, Video, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import {
   addVideoToBlacklist,
+  checkLiveCleanup,
+  checkResolutionsInMasterPlaylist,
   cleanupTests,
   createLive,
   createUser,
@@ -13,19 +16,23 @@ import {
   getLive,
   getMyUserInformation,
   getVideo,
+  getVideoIdFromUUID,
   getVideosList,
   makeRawRequest,
   removeVideo,
   sendRTMPStream,
+  sendRTMPStreamInVideo,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
+  stopFfmpeg,
   testFfmpegStreamError,
   testImage,
   updateCustomSubConfig,
   updateLive,
   userLogin,
-  waitJobs
+  waitJobs,
+  waitUntilLiveStarts
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -234,12 +241,12 @@ describe('Test live', function () {
     async function createLiveWrapper () {
       const liveAttributes = {
         name: 'user live',
-        channelId: userChannelId,
+        channelId: servers[0].videoChannel.id,
         privacy: VideoPrivacy.PUBLIC,
         saveReplay: false
       }
 
-      const res = await createLive(servers[0].url, userAccessToken, liveAttributes)
+      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
       const uuid = res.body.video.uuid
 
       const resLive = await getLive(servers[0].url, servers[0].accessToken, uuid)
@@ -295,42 +302,226 @@ describe('Test live', function () {
   })
 
   describe('Live transcoding', function () {
+    let liveVideoId: string
+
+    async function createLiveWrapper (saveReplay: boolean) {
+      const liveAttributes = {
+        name: 'live video',
+        channelId: servers[0].videoChannel.id,
+        privacy: VideoPrivacy.PUBLIC,
+        saveReplay
+      }
+
+      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
+      return res.body.video.uuid
+    }
+
+    async function testVideoResolutions (liveVideoId: string, resolutions: number[]) {
+      for (const server of servers) {
+        const resList = await getVideosList(server.url)
+        const videos: Video[] = resList.body.data
+
+        expect(videos.find(v => v.uuid === liveVideoId)).to.exist
+
+        const resVideo = await getVideo(server.url, liveVideoId)
+        const video: VideoDetails = resVideo.body
+
+        expect(video.streamingPlaylists).to.have.lengthOf(1)
+
+        const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)
+        expect(hlsPlaylist).to.exist
+
+        // Only finite files are displayed
+        expect(hlsPlaylist.files).to.have.lengthOf(0)
+
+        await checkResolutionsInMasterPlaylist(hlsPlaylist.playlistUrl, resolutions)
+      }
+    }
+
+    function updateConf (resolutions: number[]) {
+      return updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        live: {
+          enabled: true,
+          allowReplay: true,
+          maxDuration: null,
+          transcoding: {
+            enabled: true,
+            resolutions: {
+              '240p': resolutions.includes(240),
+              '360p': resolutions.includes(360),
+              '480p': resolutions.includes(480),
+              '720p': resolutions.includes(720),
+              '1080p': resolutions.includes(1080),
+              '2160p': resolutions.includes(2160)
+            }
+          }
+        }
+      })
+    }
+
+    before(async function () {
+      await updateConf([])
+    })
 
     it('Should enable transcoding without additional resolutions', async function () {
-      // enable
-      // stream
-      // wait federation + test
+      this.timeout(30000)
 
+      liveVideoId = await createLiveWrapper(false)
+
+      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitJobs(servers)
+
+      await testVideoResolutions(liveVideoId, [ 720 ])
+
+      await stopFfmpeg(command)
     })
 
     it('Should enable transcoding with some resolutions', async function () {
-      // enable
-      // stream
-      // wait federation + test
+      this.timeout(30000)
+
+      const resolutions = [ 240, 480 ]
+      await updateConf(resolutions)
+      liveVideoId = await createLiveWrapper(false)
+
+      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitJobs(servers)
+
+      await testVideoResolutions(liveVideoId, resolutions)
+
+      await stopFfmpeg(command)
     })
 
     it('Should enable transcoding with some resolutions and correctly save them', async function () {
-      // enable
-      // stream
-      // end stream
-      // wait federation + test
+      this.timeout(60000)
+
+      const resolutions = [ 240, 360, 720 ]
+      await updateConf(resolutions)
+      liveVideoId = await createLiveWrapper(true)
+
+      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitJobs(servers)
+
+      await testVideoResolutions(liveVideoId, resolutions)
+
+      await stopFfmpeg(command)
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const resVideo = await getVideo(server.url, liveVideoId)
+        const video: VideoDetails = resVideo.body
+
+        expect(video.duration).to.be.greaterThan(1)
+        expect(video.files).to.have.lengthOf(0)
+
+        const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)
+
+        expect(hlsPlaylist.files).to.have.lengthOf(resolutions.length)
+
+        for (const resolution of resolutions) {
+          const file = hlsPlaylist.files.find(f => f.resolution.id === resolution)
+
+          expect(file).to.exist
+          expect(file.fps).to.equal(25)
+          expect(file.size).to.be.greaterThan(1)
+
+          await makeRawRequest(file.torrentUrl, 200)
+          await makeRawRequest(file.fileUrl, 200)
+        }
+      }
     })
 
     it('Should correctly have cleaned up the live files', async function () {
-      // check files
+      this.timeout(30000)
+
+      await checkLiveCleanup(servers[0], liveVideoId, [ 240, 360, 720 ])
     })
   })
 
   describe('Live socket messages', function () {
 
-    it('Should correctly send a message when the live starts', async function () {
-      // local
-      // federation
+    async function createLiveWrapper () {
+      const liveAttributes = {
+        name: 'live video',
+        channelId: servers[0].videoChannel.id,
+        privacy: VideoPrivacy.PUBLIC
+      }
+
+      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
+      return res.body.video.uuid
+    }
+
+    it('Should correctly send a message when the live starts and ends', async function () {
+      this.timeout(60000)
+
+      const localStateChanges: VideoState[] = []
+      const remoteStateChanges: VideoState[] = []
+
+      const liveVideoUUID = await createLiveWrapper()
+      await waitJobs(servers)
+
+      {
+        const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+
+        const localSocket = getLiveNotificationSocket(servers[0].url)
+        localSocket.on('state-change', data => localStateChanges.push(data.state))
+        localSocket.emit('subscribe', { videoId })
+      }
+
+      {
+        const videoId = await getVideoIdFromUUID(servers[1].url, liveVideoUUID)
+
+        const remoteSocket = getLiveNotificationSocket(servers[1].url)
+        remoteSocket.on('state-change', data => remoteStateChanges.push(data.state))
+        remoteSocket.emit('subscribe', { videoId })
+      }
+
+      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitJobs(servers)
+
+      for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {
+        expect(stateChanges).to.have.lengthOf(1)
+        expect(stateChanges[0]).to.equal(VideoState.PUBLISHED)
+      }
+
+      await stopFfmpeg(command)
+      await waitJobs(servers)
+
+      for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {
+        expect(stateChanges).to.have.lengthOf(2)
+        expect(stateChanges[1]).to.equal(VideoState.LIVE_ENDED)
+      }
     })
 
-    it('Should correctly send a message when the live ends', async function () {
-      // local
-      // federation
+    it('Should not receive a notification after unsubscribe', async function () {
+      this.timeout(60000)
+
+      const stateChanges: VideoState[] = []
+
+      const liveVideoUUID = await createLiveWrapper()
+      await waitJobs(servers)
+
+      const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+
+      const socket = getLiveNotificationSocket(servers[0].url)
+      socket.on('state-change', data => stateChanges.push(data.state))
+      socket.emit('subscribe', { videoId })
+
+      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitJobs(servers)
+
+      expect(stateChanges).to.have.lengthOf(1)
+      socket.emit('unsubscribe', { videoId })
+
+      await stopFfmpeg(command)
+      await waitJobs(servers)
+
+      expect(stateChanges).to.have.lengthOf(1)
     })
   })
 

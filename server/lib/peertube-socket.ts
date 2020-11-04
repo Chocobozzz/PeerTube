@@ -6,6 +6,7 @@ import { UserNotificationModelForApi } from '@server/types/models/user'
 import { LiveVideoEventPayload, LiveVideoEventType } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { authenticateSocket } from '../middlewares'
+import { isIdValid } from '@server/helpers/custom-validators/misc'
 
 class PeerTubeSocket {
 
@@ -39,8 +40,17 @@ class PeerTubeSocket {
 
     this.liveVideosNamespace = io.of('/live-videos')
       .on('connection', socket => {
-        socket.on('subscribe', ({ videoId }) => socket.join(videoId))
-        socket.on('unsubscribe', ({ videoId }) => socket.leave(videoId))
+        socket.on('subscribe', ({ videoId }) => {
+          if (!isIdValid(videoId)) return
+
+          socket.join(videoId)
+        })
+
+        socket.on('unsubscribe', ({ videoId }) => {
+          if (!isIdValid(videoId)) return
+
+          socket.leave(videoId)
+        })
       })
   }
 
