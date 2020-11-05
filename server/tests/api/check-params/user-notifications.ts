@@ -238,7 +238,7 @@ describe('Test user notifications API validators', function () {
     it('Should fail with no token', function (next) {
       const socket = io(`http://localhost:${server.port}/user-notifications`, { reconnection: false })
 
-      socket.on('error', () => {
+      socket.on('error', function () {
         socket.removeListener('error', this)
         socket.disconnect()
         next()
@@ -256,7 +256,7 @@ describe('Test user notifications API validators', function () {
         reconnection: false
       })
 
-      socket.on('error', () => {
+      socket.on('error', function () {
         socket.removeListener('error', this)
         socket.disconnect()
         next()
@@ -274,9 +274,11 @@ describe('Test user notifications API validators', function () {
         reconnection: false
       })
 
-      const errorListener = socket.on('error', err => {
+      function errorListener (err) {
         next(new Error('Error in connection: ' + err))
-      })
+      }
+
+      socket.on('error', errorListener)
 
       socket.on('connect', async () => {
         socket.removeListener('error', errorListener)
