@@ -13,6 +13,7 @@ import {
   VideoDetails,
   VideoService
 } from '../shared-main'
+import { LiveStreamInformationComponent } from '../shared-video-live'
 import { VideoAddToPlaylistComponent } from '../shared-video-playlist'
 import { VideoDownloadComponent } from './video-download.component'
 
@@ -25,6 +26,7 @@ export type VideoActionsDisplayType = {
   report?: boolean
   duplicate?: boolean
   mute?: boolean
+  liveInfo?: boolean
 }
 
 @Component({
@@ -39,6 +41,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
   @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent
+  @ViewChild('liveStreamInformationModal') liveStreamInformationModal: LiveStreamInformationComponent
 
   @Input() video: Video | VideoDetails
   @Input() videoCaptions: VideoCaption[] = []
@@ -51,7 +54,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     delete: true,
     report: true,
     duplicate: true,
-    mute: true
+    mute: true,
+    liveInfo: false
   }
   @Input() placement = 'left'
 
@@ -127,6 +131,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.videoBlockModal.show()
   }
 
+  showLiveInfoModal (video: Video) {
+    this.modalOpened.emit()
+
+    this.liveStreamInformationModal.show(video)
+  }
+
   /* Actions checker */
 
   isVideoUpdatable () {
@@ -143,6 +153,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   isVideoUnblockable () {
     return this.video.isUnblockableBy(this.user)
+  }
+
+  isVideoLiveInfoAvailable () {
+    return this.video.isLiveInfoAvailableBy(this.user)
   }
 
   isVideoDownloadable () {
@@ -259,6 +273,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
           handler: () => this.showDownloadModal(),
           isDisplayed: () => this.displayOptions.download && this.isVideoDownloadable(),
           iconName: 'download'
+        },
+        {
+          label: $localize`Display live information`,
+          handler: ({ video }) => this.showLiveInfoModal(video),
+          isDisplayed: () => this.isVideoLiveInfoAvailable(),
+          iconName: 'live'
         },
         {
           label: $localize`Update`,

@@ -21,7 +21,7 @@ import { isXPercentInViewport, scrollToTop } from '@app/helpers'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { VideoShareComponent } from '@app/shared/shared-share-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
-import { VideoDownloadComponent } from '@app/shared/shared-video-miniature'
+import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { MetaService } from '@ngx-meta/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -81,6 +81,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   tooltipDislike = ''
   tooltipSupport = ''
   tooltipSaveToPlaylist = ''
+
+  videoActionsOptions: VideoActionsDisplayType = {
+    playlist: false,
+    download: true,
+    update: true,
+    blacklist: true,
+    delete: true,
+    report: true,
+    duplicate: true,
+    mute: true,
+    liveInfo: true
+  }
 
   private nextVideoUuid = ''
   private nextVideoTitle = ''

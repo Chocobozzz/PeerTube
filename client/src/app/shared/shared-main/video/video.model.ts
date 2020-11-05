@@ -193,6 +193,11 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 
+  isLiveInfoAvailableBy (user: AuthUser) {
+    return this.isLive &&
+      user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.GET_ANY_LIVE))
+  }
+
   canBeDuplicatedBy (user: AuthUser) {
     return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
   }

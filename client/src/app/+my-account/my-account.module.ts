@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
+import { SharedVideoLiveModule } from '@app/shared/shared-video-live'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedShareModal } from '@app/shared/shared-share-modal'
@@ -33,9 +34,8 @@ import { MyAccountVideoPlaylistCreateComponent } from './my-account-video-playli
 import { MyAccountVideoPlaylistElementsComponent } from './my-account-video-playlists/my-account-video-playlist-elements.component'
 import { MyAccountVideoPlaylistUpdateComponent } from './my-account-video-playlists/my-account-video-playlist-update.component'
 import { MyAccountVideoPlaylistsComponent } from './my-account-video-playlists/my-account-video-playlists.component'
-import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
 import { VideoChangeOwnershipComponent } from './my-account-videos/modals/video-change-ownership.component'
-import { LiveStreamInformationComponent } from './my-account-videos/modals/live-stream-information.component'
+import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
 import { MyAccountComponent } from './my-account.component'
 
 @NgModule({
@@ -56,7 +56,8 @@ import { MyAccountComponent } from './my-account.component'
     SharedUserInterfaceSettingsModule,
     SharedGlobalIconModule,
     SharedAbuseListModule,
-    SharedShareModal
+    SharedShareModal,
+    SharedVideoLiveModule
   ],
 
   declarations: [
@@ -69,7 +70,6 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountVideosComponent,
 
     VideoChangeOwnershipComponent,
-    LiveStreamInformationComponent,
 
     MyAccountOwnershipComponent,
     MyAccountAcceptOwnershipComponent,

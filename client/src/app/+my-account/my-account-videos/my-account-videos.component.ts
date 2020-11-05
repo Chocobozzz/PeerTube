@@ -6,10 +6,10 @@ import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenServi
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign } from '@app/helpers'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
+import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
 import { MiniatureDisplayOptions, OwnerDisplayType, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
 import { VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
-import { LiveStreamInformationComponent } from './modals/live-stream-information.component'
 
 @Component({
   selector: 'my-account-videos',

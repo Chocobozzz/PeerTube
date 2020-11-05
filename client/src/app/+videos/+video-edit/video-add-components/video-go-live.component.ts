@@ -5,7 +5,8 @@ import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
-import { LiveVideoService, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, ServerErrorCode, VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
@@ -64,8 +65,6 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
       channelId: this.firstStepChannelId
     }
 
-    this.firstStepDone.emit(name)
-
     // Go live in private mode, but correctly fill the update form with the first user choice
     const toPatch = Object.assign({}, video, { privacy: this.firstStepPrivacyId })
     this.form.patchValue(toPatch)
@@ -75,6 +74,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
         this.videoId = res.video.id
         this.videoUUID = res.video.uuid
         this.isInUpdateForm = true
+
+        this.firstStepDone.emit(name)
 
         this.fetchVideoLive()
       },

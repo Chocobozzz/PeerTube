@@ -35,7 +35,8 @@
 <!-- Hidden because we want to load the component -->
 <form [hidden]="!isInUpdateForm" novalidate [formGroup]="form">
   <my-video-edit
-    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [schedulePublicationPossible]="false"
+    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
+    [schedulePublicationPossible]="false" [waitTranscodingEnabled]="false"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels" [liveVideo]="liveVideo"
     type="go-live"
   ></my-video-edit>
