@@ -136,7 +136,7 @@
                   <ng-container *ngIf="isUserLoggedIn()">
                     <my-video-actions-dropdown
                       placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [videoCaptions]="videoCaptions"
-                      (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
+                      [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
                     ></my-video-actions-dropdown>
                   </ng-container>
                 </div>

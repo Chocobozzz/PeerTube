@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
-import { LiveVideoService, Video } from '@app/shared/shared-main'
+import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { LiveVideoService } from './live-video.service'
 
 @Component({
   selector: 'my-live-stream-information',

@@ -27,14 +27,14 @@ $video-info-margin-left: 44px;
     flex-direction: column;
     justify-content: center;
 
+    $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+
     #videojs-wrapper {
       width: 100%;
-      height: auto;
+      height: $height;
     }
 
     ::ng-deep .video-js {
-      $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
-
       height: $height;
       width: 100%;
       max-width: initial;

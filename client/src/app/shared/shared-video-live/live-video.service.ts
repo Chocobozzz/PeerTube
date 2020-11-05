@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { LiveVideo, LiveVideoCreate, LiveVideoUpdate } from '@shared/models'
-import { environment } from '../../../../environments/environment'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class LiveVideoService {
