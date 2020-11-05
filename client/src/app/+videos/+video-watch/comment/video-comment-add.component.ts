@@ -43,9 +43,18 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   }
 
   get emojiMarkupList () {
-    const emojiMarkup = require('markdown-it-emoji/lib/data/light.json')
+    const emojiMarkupObjectList = require('markdown-it-emoji/lib/data/light.json')
 
-    return emojiMarkup
+    // Populate emoji-markup-list from object to array to avoid keys alphabetical order
+    const emojiMarkupArrayList = []
+    for (const emojiMarkupName in emojiMarkupObjectList) {
+      if (emojiMarkupName) {
+        const emoji = emojiMarkupObjectList[emojiMarkupName]
+        emojiMarkupArrayList.push([emoji, emojiMarkupName])
+      }
+    }
+
+    return emojiMarkupArrayList
   }
 
   ngOnInit () {
