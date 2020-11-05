@@ -15,6 +15,7 @@ import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorF
 import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
 import { JobQueue } from './job-queue'
 
+const marked = require('marked')
 const Email = require('email-templates')
 
 class Emailer {
@@ -236,6 +237,7 @@ class Emailer {
     const video = comment.Video
     const videoUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath()
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
+    const commentText = marked(comment.text)
 
     const emailPayload: EmailPayload = {
       template: 'video-comment-new',
@@ -245,6 +247,7 @@ class Emailer {
         accountName: comment.Account.getDisplayName(),
         accountUrl: comment.Account.Actor.url,
         comment,
+        commentText,
         video,
         videoUrl,
         action: {
@@ -262,6 +265,7 @@ class Emailer {
     const video = comment.Video
     const videoUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath()
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
+    const commentText = marked(comment.text)
 
     const emailPayload: EmailPayload = {
       template: 'video-comment-mention',
@@ -269,6 +273,7 @@ class Emailer {
       subject: 'Mention on video ' + video.name,
       locals: {
         comment,
+        commentText,
         video,
         videoUrl,
         accountName,
