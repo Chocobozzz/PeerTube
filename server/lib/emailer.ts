@@ -15,7 +15,50 @@ import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorF
 import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
 import { JobQueue } from './job-queue'
 
-const marked = require('marked')
+const sanitizeHtml = require('sanitize-html')
+const markdownItEmoji = require('markdown-it-emoji/light')
+const MarkdownItClass = require('markdown-it')
+const markdownIt = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
+
+markdownIt.enable([
+  'emphasis',
+  'link',
+  'list'
+])
+
+markdownIt.use(markdownItEmoji)
+
+const toSafeHtml = text => {
+  // Restore line feed
+  const textWithLineFeed = text.replace(/<br.?\/?>/g, '\r\n')
+
+  // Convert possible markdown (emojis, emphasis and lists) to html
+  const html = markdownIt.render(textWithLineFeed)
+
+  // Convert to safe Html
+  return sanitizeHtml(html, {
+    allowedTags: [ 'a', 'p', 'span', 'br', 'strong', 'em', 'ul', 'ol', 'li' ],
+    allowedSchemes: [ 'http', 'https' ],
+    allowedAttributes: {
+      a: [ 'href', 'class', 'target', 'rel' ]
+    },
+    transformTags: {
+      a: (tagName, attribs) => {
+        let rel = 'noopener noreferrer'
+        if (attribs.rel === 'me') rel += ' me'
+
+        return {
+          tagName,
+          attribs: Object.assign(attribs, {
+            target: '_blank',
+            rel
+          })
+        }
+      }
+    }
+  })
+}
+
 const Email = require('email-templates')
 
 class Emailer {
@@ -237,7 +280,7 @@ class Emailer {
     const video = comment.Video
     const videoUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath()
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
-    const commentText = marked(comment.text)
+    const commentHtml = toSafeHtml(comment.text)
 
     const emailPayload: EmailPayload = {
       template: 'video-comment-new',
@@ -247,7 +290,7 @@ class Emailer {
         accountName: comment.Account.getDisplayName(),
         accountUrl: comment.Account.Actor.url,
         comment,
-        commentText,
+        commentHtml,
         video,
         videoUrl,
         action: {
@@ -265,7 +308,7 @@ class Emailer {
     const video = comment.Video
     const videoUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath()
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
-    const commentText = marked(comment.text)
+    const commentHtml = toSafeHtml(comment.text)
 
     const emailPayload: EmailPayload = {
       template: 'video-comment-mention',
@@ -273,7 +316,7 @@ class Emailer {
       subject: 'Mention on video ' + video.name,
       locals: {
         comment,
-        commentText,
+        commentHtml,
         video,
         videoUrl,
         accountName,
