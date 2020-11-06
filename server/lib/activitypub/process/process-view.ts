@@ -4,6 +4,7 @@ import { Redis } from '../../redis'
 import { ActivityCreate, ActivityView, ViewObject } from '../../../../shared/models/activitypub'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
+import { LiveManager } from '@server/lib/live-manager'
 
 async function processViewActivity (options: APProcessorOptions<ActivityCreate | ActivityView>) {
   const { activity, byActor } = options
@@ -19,19 +20,27 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processCreateView (activity: ActivityView | ActivityCreate, byActor: MActorSignature) {
-  const videoObject = activity.type === 'View' ? activity.object : (activity.object as ViewObject).object
+  const videoObject = activity.type === 'View'
+    ? activity.object
+    : (activity.object as ViewObject).object
 
   const options = {
     videoObject,
-    fetchType: 'only-immutable-attributes' as 'only-immutable-attributes',
+    fetchType: 'only-video' as 'only-video',
     allowRefresh: false as false
   }
   const { video } = await getOrCreateVideoAndAccountAndChannel(options)
 
-  await Redis.Instance.addVideoView(video.id)
-
   if (video.isOwned()) {
-    // Don't resend the activity to the sender
+    // Our live manager will increment the counter and send the view to followers
+    if (video.isLive) {
+      LiveManager.Instance.addViewTo(video.id)
+      return
+    }
+
+    await Redis.Instance.addVideoView(video.id)
+
+    // Forward the view but don't resend the activity to the sender
     const exceptions = [ byActor ]
     await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
   }
