@@ -4666,57 +4666,32 @@
       </trans-unit>
       <trans-unit id="278669a7857ee77786cf4578b11bb601002cf7a8" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="new">
-          For each request sent, the tracker returns random peers at a limited number.
-          For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50
-          requests sent to know every peer in the swarm
-        </target>
+        <target state="translated">Para cada solicitude enviada, o rastrexador devolve varios pares aleatorios nun número limitado. Exemplo: se hai 1000 pares conectados e o rastrexador devolve 20 deles en cada solicitude, ten que haber polo menos 50 solicitudes enviadas para coñecer a cada par no conxunto de pares.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="3f47eec5fb00ae46a0035cc8f9e428e3d549e337" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
-        <target state="new">
-          Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
-        </target>
+        <target state="translated">Estas solicitudes téñense que enviar regularmente para saber quen comeza/remata de ver un vídeo. É doado detectar ese tipo de comportamento</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="a5089b43b2fd8a2639bc7a4cdfaa90e869f51cc3" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target state="new">
-          If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the
-          video
-        </target>
+        <target state="translated">Se o rastrexador garda un enderezo IP, non significa que a persoa detrás dese IP (se existise tal) visualizou o vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="ff5458261525060246f1f49a740c8d094dc4bac4" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="new">
-          The IP address is a vague information: usually, it regularly changes and can represent many persons or entities
-        </target>
+        <target state="translated">O enderezo IP é información difusa: debido ós cambios frecuentes, podería representar varias persoas ou entidades</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
         <source>Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK"/>with the WebTorrent library<x id="CLOSE_LINK"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK_1"/>this document<x id="CLOSE_LINK"/> for more information </source>
-        <target state="new">
-          Web peers are not publicly accessible: because we use WebRTC inside the web browser (
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the
-          WebTorrent library
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent.
-          When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers
-          to forward the information to.
-          See 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information
-        
-        </target>
+        <target state="translated">Os pares web non son públicamente accesibles: porque usamos WebRTC dentro do navegador web (<x id="START_LINK"/>coa biblioteca WebTorrent<x id="CLOSE_LINK"/>), o protocolo é diferente ó clásico BitTorrrent. Cando usas un navegador web, envías un sinal que contén o teu enderezo IP ó rastrexador que escollerá aleatoriamente outros pares ós que enviar a información. Le <x id="START_LINK_1"/>este documento<x id="CLOSE_LINK"/> para saber máis ó respecto. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
-        <target state="new">
-        The worst-case scenario of an average person spying on their friends is quite unlikely.
-        There are much more effective ways to get that kind of information.
-      </target>
+        <target state="translated">No peor dos casos unha persoa calquera espiando ós seus amigos é bastante improbable. Hai xeitos moito máis efectivos para obter ese tipo de información.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
@@ -4726,11 +4701,7 @@
       </trans-unit>
       <trans-unit id="1fd22031e4f7920db2300cc76ee9c8516b25f50d" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="new">
-        The threats to privacy with YouTube are different from PeerTube's.
-        In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
-        Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
-      </target>
+        <target state="translated">As ameazas á privacidade con YouTube son diferentes que as de PeerTube. No caso de YouTube, a plataforma recolle enormes cantidades de información personal (non só o IP) para analizala e seguirte. Ademáis, YouTube é propiedade de Google/Alphabet, unha compañía que te segue a través de moitos sitios web (vía AdSense ou Google Analytics).</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
@@ -4740,12 +4711,7 @@
       </trans-unit>
       <trans-unit id="301e86f807ed659ff42d3b4bba6e03b88bff7907" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="new">
-        Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing
-        your IP in their connection logs: ISP/routers/trackers/CDN and more.
-        PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
-        Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
-      </target>
+        <target state="translated">O teu enderezo IP é público cada vez que consultas unha web, hai un número de entidades (ademáis da web visitada) que coñecen o teu IP a través do rexistro da conexión: ISP/routers/rastrexadores/CDN e máis. PeerTube é transparente ó respecto: avisamoste de que se queres manter o IP privado debes usar Tor Browser ou unha VPN. Pensar que eliminar o P2P de PeerTube che devolverá o anonimato non ten senso ningún.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
@@ -4755,63 +4721,57 @@
       </trans-unit>
       <trans-unit id="db4d65ed605b948169d51eac4c1b2ff662088eb7" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="new">
-        PeerTube wants to deliver the best countermeasures possible, to give you more choice
-        and render attacks less likely. Here is what we put in place so far:
-      </target>
+        <target state="translated">PeerTube quere implementar as mellores contramedidas posibles, para darche máis opcións facer menos probables os ataques. Esto é o que implementamos por agora:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="89c0c2c3150b99bbea20214895df56c8f8d6125d" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target state="new">We set a limit to the number of peers sent by the tracker</target>
+        <target state="translated">Establecemos un número limitado de pares a enviar ó rastrexador</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="b23c2b01db8b09f1a9bc6144d66291e28f02daf4" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target state="new">We set a limit on the request frequency received by the tracker</target>
+        <target state="translated">Limitamos a frecuencia das solicitudes recibidas polo rastrexador</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target state="new">Allow instance admins to disable P2P from the administration interface</target>
+        <target state="translated">Permitimos que a administración da instancia desactive P2P desde a interface de administración</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="85755719c08571f7f5b7c5b391329b7e4e7ccc7b" datatype="html">
         <source>Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</source>
-        <target state="new">Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</target>
+        <target state="translated">Redundancia automática de vídeos desde algunhas instancias: un non pode saber se o IP descargou o vídeo a vontade ou se foi un servidor</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="new">
-        Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling
-        WebRTC in your browser.
-      </target>
+        <target state="translated">Finalmente, lembra que sempre podes desactivar P2P no control do reproductor de vídeo, ou simplemente desactivando WebRTC no navegador.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
         <source>Followers instances</source>
-        <target state="new">Followers instances</target>
+        <target state="translated">Instancias das seguidoras</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target state="new">This instance does not have instances followers.</target>
+        <target state="translated">Esta instancia non ten seguidoras de instancias.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
         <source>Followings instances</source>
-        <target state="new">Followings instances</target>
+        <target state="translated">Seguimentos de instancias</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="d0f0a0a5da1553964ae4891aaebd2b2c3e5ddae4" datatype="html">
         <source>This instance does not have instances followings.</source>
-        <target state="new">This instance does not have instances followings.</target>
+        <target state="translated">A instancia non ten seguimentos de instancias.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target state="new">About this instance</target>
+        <target state="translated">Acerca desta instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">26</context>
@@ -4819,7 +4779,7 @@
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
         <source>About PeerTube</source>
-        <target state="new">About PeerTube</target>
+        <target state="translated">Acerca de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">38</context>
@@ -4827,7 +4787,7 @@
       </trans-unit>
       <trans-unit id="5782088737558028158" datatype="html">
         <source>About follows</source>
-        <target state="new">About follows</target>
+        <target state="translated">Acerca dos seguimentos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -4835,10 +4795,7 @@
       </trans-unit>
       <trans-unit id="3d2fb0ff92d3dd1e6040cd79b2a60edac6dea2da" datatype="html">
         <source>Developed with ❤ by <x id="START_LINK"/>Framasoft<x id="CLOSE_LINK"/></source>
-        <target state="new">Developed with ❤ by 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Framasoft
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Creado con ❤ por <x id="START_LINK"/>Framasoft<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube-contributors.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
@@ -4850,12 +4807,12 @@
       </trans-unit>
       <trans-unit id="f732c304c7433e5a83ffcd862c3dce709a0f4982" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Seguinte</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="9082008222523034483" datatype="html">
         <source>Get help</source>
-        <target state="new">Get help</target>
+        <target state="translated">Obter axuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">16</context>
@@ -4863,95 +4820,82 @@
       </trans-unit>
       <trans-unit id="f127303f2937f5d9ced837f692899f5d599659a1" datatype="html">
         <source>Create my account</source>
-        <target state="new">
-            Create my account
-          </target>
+        <target state="translated">Crear a miña conta</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="cb9d0623f382c9803df997fb30b9a33a5438d919" datatype="html">
         <source>PeerTube is creating your account...</source>
-        <target state="new">PeerTube is creating your account...</target>
+        <target state="translated">PeerTube está creando a túa conta...</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="8dd413cee2228118c536f503709329a4d1a395e2" datatype="html">
         <source>Done</source>
-        <target state="new">Done</target>
+        <target state="translated">Feito</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="88b19801d99f5dcc4043d6d30dfa32c3f68da5ea" datatype="html">
         <source>Who are we?</source>
-        <target state="new">Who are we?</target>
+        <target state="translated">Quen somos?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="05db4afa3e85d23d29fcfacaa5a61f0d2ae02dc0" datatype="html">
         <source>How long do we plan to maintain this instance?</source>
-        <target state="new">How long do we plan to maintain this instance?</target>
+        <target state="translated">Canto tempo temos pensado manter esta instancia?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="b7ad73ca1e5e4a530ca4eaa5285e4fd0c376c089" datatype="html">
         <source>How will we finance this instance?</source>
-        <target state="new">How will we finance this instance?</target>
+        <target state="translated">Como financiamos esta instancia?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="24e4921833f6fff4376e0ec13a33c44a85922355" datatype="html">
         <source>Administrators &amp; Sustainability</source>
-        <target state="new">Administrators &amp; Sustainability</target>
+        <target state="translated">Administradoras &amp; Sustentabilidade</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="041620337eaebda87971d345d05697639dfe78e4" datatype="html">
         <source>Step</source>
-        <target state="new">Step</target>
+        <target state="translated">Paso</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/custom-stepper.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b" datatype="html">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target state="new">
-      A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-      For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology.
-    
-        </target>
+        <target state="translated">Unha canle é unha entidade á que sobes os vídeos. Creando varias axudas a organizar e separar o teu contido. <x id="LINE_BREAK"/>Por exemplo, poderías decidir ter unha canle para publicar muiñeiras, e outra para publicar vídeos acerca dos bosques e a súa ecoloxía. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="df3021e29cbce57c12151ae6e1e0bf8c640e87da" datatype="html">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
-        <target state="new">
-      Other users can decide to subscribe any channel they want, to be notified when you publish a new video.
-    </target>
+        <target state="translated">Así as usuarias poden decidir subscribirse á canle que queiran, e ser notificadas cando publiques un novo vídeo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="79b3619b36af71e5c70394a3a7b31545e32d83f0" datatype="html">
         <source>Channel display name</source>
-        <target state="new">Channel display name</target>
+        <target state="translated">Nome mostrado da canle</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="306a2ab7f93c214af3f5579f54bd8b3ad0d5560e" datatype="html">
         <source>Channel name</source>
-        <target state="new">Channel name</target>
+        <target state="translated">Nome da canle</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="4ddf54b5beec24b3fe074bfb9cbbc175613634ab" datatype="html">
         <source>john_channel</source>
-        <target state="new">john_channel</target>
+        <target state="translated">canle_de_xoan</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="cb4c2c5a4f4b34d3158f2344a3e625d0dc321f4d" datatype="html">
         <source>Example: my_super_channel</source>
-        <target state="new">Example: my_super_channel</target>
+        <target state="translated">Exempo: a_miña_canle</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="4a935862bd3120d5878e9635a9d46dfc1bcaedb4" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">O nome da canle é un identificador único neste e en todas as outras instancias. É único como un enderezo de email, deste xeito é doado para outras persoas interactuar con el.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="60534abbe922bf9da7284c1c84d26315d695a5b7" datatype="html">
         <source>Channel name cannot be the same than your account name. You can click on the first step to update your account name.</source>
-        <target state="new">
-      Channel name cannot be the same than your account name. You can click on the first step to update your account name.
-    </target>
+        <target state="translated">O nome da canle non pode ser o mesmo que o nome da conta. Podes voltar ó primeiro paso para actualizar o nome da túa conta.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
@@ -4961,30 +4905,17 @@
       </trans-unit>
       <trans-unit id="095664da04cb19afa1c2bb5992db6e253a664dd6" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">O nome de usuaria é un identificador único para a túa conta neste e para todas as instancias. É único como un enderezo de email, así será doado para outras persoas interactuar con el.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="d315d635144b1104f1c1e9ef80ff3d07fcfa571c" datatype="html">
         <source>I am at least 16 years old and agree to the <x id="START_LINK"/>Terms<x id="CLOSE_LINK"/><x id="START_TAG_NG_CONTAINER"/> and to the <x id="START_LINK_1"/>Code of Conduct<x id="CLOSE_LINK"/><x id="CLOSE_TAG_NG_CONTAINER"/> of this instance </source>
-        <target state="new">
-          I am at least 16 years old and agree
-          to the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Terms
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and to the 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Code of Conduct
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-          of this instance
-        
-        </target>
+        <target state="translated">Teño máis de 15 anos e acepto os <x id="START_LINK"/>Termos<x id="CLOSE_LINK"/><x id="START_TAG_NG_CONTAINER"/> e o <x id="START_LINK_1"/>Código de Contuta<x id="CLOSE_LINK"/><x id="CLOSE_TAG_NG_CONTAINER"/> desta instancia </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="3301086086650990787" datatype="html">
         <source>Register</source>
-        <target state="new">Register</target>
+        <target state="translated">Inscribirse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+register/register-routing.module.ts</context>
           <context context-type="linenumber">14</context>
@@ -4992,29 +4923,27 @@
       </trans-unit>
       <trans-unit id="b925172fc8e9b9a7fc6b9f5d742993b77ffdda2c" datatype="html">
         <source>Sorry, we couldn't find the page you were looking for.</source>
-        <target state="new">
-    Sorry, we couldn't find the page you were looking for.
-  </target>
+        <target state="translated">Lamentámolo, pero non atopamos a páxina que buscas.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="6979021199788941693" datatype="html">
         <source>Your message has been sent.</source>
-        <target state="new">Your message has been sent.</target>
+        <target state="translated">A túa mensaxe foi enviada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/contact-admin-modal.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="2072135752262464360" datatype="html">
         <source>You already sent this form recently</source>
-        <target state="new">You already sent this form recently</target>
+        <target state="translated">Xa enviaras este formulario recentemente</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/contact-admin-modal.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="3830487495946043372" datatype="html">
         <source>No description</source>
-        <target state="new">No description</target>
+        <target state="translated">Sen descrición</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-about/account-about.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="819067926858619041" datatype="html">
         <source>Account videos</source>
-        <target state="new">Account videos</target>
+        <target state="translated">Vídeos da conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">29</context>
@@ -5022,7 +4951,7 @@
       </trans-unit>
       <trans-unit id="6823616469362610020" datatype="html">
         <source>Account video channels</source>
-        <target state="new">Account video channels</target>
+        <target state="translated">Canles de vídeo da conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">42</context>
@@ -5030,7 +4959,7 @@
       </trans-unit>
       <trans-unit id="7678273613459026643" datatype="html">
         <source>About account</source>
-        <target state="new">About account</target>
+        <target state="translated">Acerca da conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">51</context>
@@ -5038,21 +4967,17 @@
       </trans-unit>
       <trans-unit id="3755500631176893489" datatype="html">
         <source>Published <x id="PH"/> videos</source>
-        <target state="new">Published 
-          <x id="PH"/> videos
-        </target>
+        <target state="translated">Publicou <x id="PH"/> vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
         <source><x id="PH"/> direct account followers </source>
-        <target state="new">
-          <x id="PH"/> direct account followers
-        </target>
+        <target state="translated"><x id="PH"/> seguidoras directas da conta </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="6250999352462648289" datatype="html">
         <source>Report this account</source>
-        <target state="new">Report this account</target>
+        <target state="translated">Denunciar esta conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">115</context>
@@ -5060,12 +4985,12 @@
       </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target state="new">VIDEO CHANNELS</target>
+        <target state="translated">CANLES DE VÍDEO</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source>
-        <target state="new">VIDEOS</target>
+        <target state="translated">VÍDEOS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -5073,17 +4998,17 @@
       </trans-unit>
       <trans-unit id="1341921152640000230" datatype="html">
         <source>ABOUT</source>
-        <target state="new">ABOUT</target>
+        <target state="translated">ACERCA DE</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="25349740244798533" datatype="html">
         <source>Username copied</source>
-        <target state="new">Username copied</target>
+        <target state="translated">Nome de usuaria copiado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/accounts.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="9221735175659318025" datatype="html">
         <source>1 subscriber</source>
-        <target state="new">1 subscriber</target>
+        <target state="translated">1 subscritora</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">93</context>
@@ -5091,7 +5016,7 @@
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH"/> subscribers</source>
-        <target state="new"><x id="PH"/> subscribers</target>
+        <target state="translated"><x id="PH"/> subscritoras</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -5099,67 +5024,67 @@
       </trans-unit>
       <trans-unit id="db28493f1be1ed4d0edfea612181d27c9c530270" datatype="html">
         <source>Instances you follow</source>
-        <target state="new">Instances you follow</target>
+        <target state="translated">Instancias que segues</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="5bd2577f482e8ac75e9fd9970c58b7f4b2995e56" datatype="html">
         <source>Instances following you</source>
-        <target state="new">Instances following you</target>
+        <target state="translated">Instancias que te seguen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="1035838766454786107" datatype="html">
         <source>Audio-only</source>
-        <target state="new">Audio-only</target>
+        <target state="translated">Só audio</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
         <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
-        <target state="new">A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</target>
+        <target state="translated">Un &lt;code&gt;.mp4&lt;/code&gt; que mantén o audio orixinal, sen vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
         <source>240p</source>
-        <target state="new">240p</target>
+        <target state="translated">240p</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="6824490596490222280" datatype="html">
         <source>360p</source>
-        <target state="new">360p</target>
+        <target state="translated">360p</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="4039682741786530029" datatype="html">
         <source>480p</source>
-        <target state="new">480p</target>
+        <target state="translated">480p</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="5165245100010036661" datatype="html">
         <source>720p</source>
-        <target state="new">720p</target>
+        <target state="translated">720p</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="7709767791012306261" datatype="html">
         <source>1080p</source>
-        <target state="new">1080p</target>
+        <target state="translated">1080p</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="597839553814574067" datatype="html">
         <source>2160p</source>
-        <target state="new">2160p</target>
+        <target state="translated">2160p</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="3957742085471141221" datatype="html">
         <source>Auto (via ffmpeg)</source>
-        <target state="new">Auto (via ffmpeg)</target>
+        <target state="translated">Auto (vía ffmpeg)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="2060042292048624940" datatype="html">
         <source>Configuration updated.</source>
-        <target state="new">Configuration updated.</target>
+        <target state="translated">Configuración actualizada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">294</context></context-group>
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
         <source>Edit custom configuration</source>
-        <target state="new">Edit custom configuration</target>
+        <target state="translated">Editar configuración personalizada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">26</context>
@@ -5167,128 +5092,122 @@
       </trans-unit>
       <trans-unit id="6549061957433635758" datatype="html">
         <source>Process domains</source>
-        <target state="new">Process domains</target>
+        <target state="translated">Procesar dominios</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/batch-domains-modal.component.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1909009883731319373" datatype="html">
         <source>Report <x id="PH"/> </source>
-        <target state="new">Report 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Denunciar a <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/account-report.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="5065410539274460415" datatype="html">
         <source>Account reported.</source>
-        <target state="new">Account reported.</target>
+        <target state="translated">Conta denunciada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/account-report.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="6245265026120479954" datatype="html">
         <source>Comment reported.</source>
-        <target state="new">Comment reported.</target>
+        <target state="translated">Comentario denunciado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/report-modals/comment-report.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="2127446333083057097" datatype="html">
         <source>Domain is required.</source>
-        <target state="new">Domain is required.</target>
+        <target state="translated">Requírese un dominio.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/batch-domains-validators.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="6780793142903080663" datatype="html">
         <source>Domains entered are invalid.</source>
-        <target state="new">Domains entered are invalid.</target>
+        <target state="translated">O dominio escrito non é válido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/batch-domains-validators.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="5886492514458202177" datatype="html">
         <source>Domains entered contain duplicates.</source>
-        <target state="new">Domains entered contain duplicates.</target>
+        <target state="translated">Hai duplicados nos dominios escritos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/batch-domains-validators.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="240806681889331244" datatype="html">
         <source>Unlimited</source>
-        <target state="new">Unlimited</target>
+        <target state="translated">Sen límite</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="5504952199515017930" datatype="html">
         <source>None - no upload possible</source>
-        <target state="new">None - no upload possible</target>
+        <target state="translated">Ningún - non hai nada que subir</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="616370606803836610" datatype="html">
         <source>100MB</source>
-        <target state="new">100MB</target>
+        <target state="translated">100MB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="9162997081789455476" datatype="html">
         <source>500MB</source>
-        <target state="new">500MB</target>
+        <target state="translated">500MB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="1541266817985876981" datatype="html">
         <source>1GB</source>
-        <target state="new">1GB</target>
+        <target state="translated">1GB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="6075751004411938819" datatype="html">
         <source>5GB</source>
-        <target state="new">5GB</target>
+        <target state="translated">5GB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="246811372655482890" datatype="html">
         <source>20GB</source>
-        <target state="new">20GB</target>
+        <target state="translated">20GB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2491910291056632032" datatype="html">
         <source>50GB</source>
-        <target state="new">50GB</target>
+        <target state="translated">50GB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3977630500122496087" datatype="html">
         <source>10MB</source>
-        <target state="new">10MB</target>
+        <target state="translated">10MB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="2060593120571755546" datatype="html">
         <source>50MB</source>
-        <target state="new">50MB</target>
+        <target state="translated">50MB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="7653028819867308249" datatype="html">
         <source>2GB</source>
-        <target state="new">2GB</target>
+        <target state="translated">2GB</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="2520968456492632777" datatype="html">
         <source><x id="PH"/> accepted in instance followers </source>
-        <target state="new">
-          <x id="PH"/> accepted in instance followers
-        </target>
+        <target state="translated"><x id="PH"/> aceptado en seguidoras de instancias </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="450530533730658004" datatype="html">
         <source>Do you really want to reject this follower?</source>
-        <target state="new">Do you really want to reject this follower?</target>
+        <target state="translated">Queres rexeitar esta seguidora?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="7378878529334768232" datatype="html">
         <source>Reject</source>
-        <target state="new">Reject</target>
+        <target state="translated">Rexeitar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="2040902819815401278" datatype="html">
         <source><x id="PH"/> rejected from instance followers </source>
-        <target state="new">
-          <x id="PH"/> rejected from instance followers
-        </target>
+        <target state="translated"><x id="PH"/> rexeitada das seguidoras de instancias </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="3620117223790525725" datatype="html">
         <source>Do you really want to delete this follower?</source>
-        <target state="new">Do you really want to delete this follower?</target>
+        <target state="translated">Queres borrar esta seguidora?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
         <source>Delete</source>
-        <target state="new">Delete</target>
+        <target state="translated">Eliminar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -5296,33 +5215,27 @@
       </trans-unit>
       <trans-unit id="2452034338905853167" datatype="html">
         <source><x id="PH"/> removed from instance followers </source>
-        <target state="new">
-          <x id="PH"/> removed from instance followers
-        </target>
+        <target state="translated"><x id="PH"/> eliminada das seguidoras da instancia </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="2740793005745065895" datatype="html">
         <source><x id="PH"/> is not valid </source>
-        <target state="new">
-          <x id="PH"/> is not valid
-        </target>
+        <target state="translated"><x id="PH"/> non é válido </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/batch-domains-validators.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="2355066641781598196" datatype="html">
         <source>Follow request(s) sent!</source>
-        <target state="new">Follow request(s) sent!</target>
+        <target state="translated">Solicitude(s) de seguimento enviada(s)!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="4245720728052819482" datatype="html">
         <source>Do you really want to unfollow <x id="PH"/>?</source>
-        <target state="new">Do you really want to unfollow 
-          <x id="PH"/>?
-        </target>
+        <target state="translated">Desexas deixar de seguir a <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="9160510009013134726" datatype="html">
         <source>Unfollow</source>
-        <target state="new">Unfollow</target>
+        <target state="translated">Deixar de seguir</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="3935234189109112926" datatype="html">
@@ -5332,98 +5245,87 @@
       </trans-unit>
       <trans-unit id="2593763089859685916" datatype="html">
         <source>enabled</source>
-        <target state="new">enabled</target>
+        <target state="translated">activado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="8444272719785117681" datatype="html">
         <source>disabled</source>
-        <target state="new">disabled</target>
+        <target state="translated">desactivado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="135214224090612796" datatype="html">
         <source>Redundancy for <x id="PH"/> is <x id="PH_1"/></source>
-        <target state="new">Redundancy for 
-          <x id="PH"/> is 
-          <x id="PH_1"/>
-        </target>
+        <target state="translated"><x id="PH_1"/> é redundancia para <x id="PH"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="81585474102700882" datatype="html">
         <source>Used</source>
-        <target state="new">Used</target>
+        <target state="translated">Utilizado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="3955868613858648955" datatype="html">
         <source>Available</source>
-        <target state="new">Available</target>
+        <target state="translated">Dispoñible</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="5875705095657098468" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="new">Do you really want to remove this video redundancy?</target>
+        <target state="translated">Desexas eliminar a redundancia deste vídeo?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="9098272570113000349" datatype="html">
         <source>Remove redundancy</source>
-        <target state="new">Remove redundancy</target>
+        <target state="translated">Eliminar redundancia</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="6537102123107780785" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="new">Video redundancies removed!</target>
+        <target state="translated">Redundancia do vídeo eliminada!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="8639315630141911544" datatype="html">
         <source>Account <x id="PH"/> unmuted by your instance.</source>
-        <target state="new">Account 
-          <x id="PH"/> unmuted by your instance.
-        </target>
+        <target state="translated">Conta <x id="PH"/> reactivada pola túa instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="3371601176452094961" datatype="html">
         <source>Instance <x id="PH"/> unmuted by your instance.</source>
-        <target state="new">Instance 
-          <x id="PH"/> unmuted by your instance.
-        </target>
+        <target state="translated">Instancia <x id="PH"/> reactivada pola túa instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH"/> muted.</source>
-        <target state="new">Instance 
-          <x id="PH"/> muted.
-        </target>
+        <target state="translated">Instancia <x id="PH"/> acalada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="3096398988891996621" datatype="html">
         <source>Instance <x id="PH"/> muted by your instance.</source>
-        <target state="new">Instance 
-          <x id="PH"/> muted by your instance.
-        </target>
+        <target state="translated">Instancia <x id="PH"/> acalada pola túa instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2393853062458645999" datatype="html">
         <source>Comment updated.</source>
-        <target state="new">Comment updated.</target>
+        <target state="translated">Comentario actualizado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/moderation-comment-modal.component.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="149121389669248117" datatype="html">
         <source>Violent or Repulsive</source>
-        <target state="new">Violent or Repulsive</target>
+        <target state="translated">Violento ou Desagradable</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="2493388551376623687" datatype="html">
         <source>Hateful or Abusive</source>
-        <target state="new">Hateful or Abusive</target>
+        <target state="translated">Odioso ou Abusivo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="5124757565683866220" datatype="html">
         <source>Spam or Misleading</source>
-        <target state="new">Spam or Misleading</target>
+        <target state="translated">Spam ou Enganoso</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="8440128775129354214" datatype="html">
         <source>Privacy</source>
-        <target state="new">Privacy</target>
+        <target state="translated">Privacidade</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -5431,170 +5333,162 @@
       </trans-unit>
       <trans-unit id="8768506950499277937" datatype="html">
         <source>Copyright</source>
-        <target state="new">Copyright</target>
+        <target state="translated">Copyright</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="3776575731053010580" datatype="html">
         <source>Server rules</source>
-        <target state="new">Server rules</target>
+        <target state="translated">Regras do servidor</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="6907161397537530258" datatype="html">
         <source>Thumbnails</source>
-        <target state="new">Thumbnails</target>
+        <target state="translated">Miniaturas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="6473213678768782133" datatype="html">
         <source>Internal actions</source>
-        <target state="new">Internal actions</target>
+        <target state="translated">Accións internas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="4559872264406386913" datatype="html">
         <source>Delete report</source>
-        <target state="new">Delete report</target>
+        <target state="translated">Eliminar denuncia</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="5793550984155962433" datatype="html">
         <source>Actions for the flagged account</source>
-        <target state="new">Actions for the flagged account</target>
+        <target state="translated">Accións para a conta marcada</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">310</context></context-group>
       </trans-unit>
       <trans-unit id="1679841953757186358" datatype="html">
         <source>Mark as accepted</source>
-        <target state="new">Mark as accepted</target>
+        <target state="translated">Marcar como aceptada</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">284</context></context-group>
       </trans-unit>
       <trans-unit id="7993358694073742566" datatype="html">
         <source>Mark as rejected</source>
-        <target state="new">Mark as rejected</target>
+        <target state="translated">Marcar como rexeitada</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="4175703770051343108" datatype="html">
         <source>Add internal note</source>
-        <target state="new">Add internal note</target>
+        <target state="translated">Engadir nota interna</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">294</context></context-group>
       </trans-unit>
       <trans-unit id="296166371893775555" datatype="html">
         <source>Actions for the video</source>
-        <target state="new">Actions for the video</target>
+        <target state="translated">Accións para o vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="3924877328520650445" datatype="html">
         <source>Block video</source>
-        <target state="new">Block video</target>
+        <target state="translated">Bloquear vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">363</context></context-group>
       </trans-unit>
       <trans-unit id="4762794934098378428" datatype="html">
         <source>Video blocked.</source>
-        <target state="new">Video blocked.</target>
+        <target state="translated">Vídeo bloqueado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="4328862996304258770" datatype="html">
         <source>Unblock video</source>
-        <target state="new">Unblock video</target>
+        <target state="translated">Desbloquear vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">379</context></context-group>
       </trans-unit>
       <trans-unit id="9065327551191479877" datatype="html">
         <source>Video unblocked.</source>
-        <target state="new">Video unblocked.</target>
+        <target state="translated">Vídeo desbloqueado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">385</context></context-group>
       </trans-unit>
       <trans-unit id="1250415136605923486" datatype="html">
         <source>Do you really want to delete this abuse report?</source>
-        <target state="new">Do you really want to delete this abuse report?</target>
+        <target state="translated">Desexas eliminar esta denuncia por abuso?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="3482559157143817408" datatype="html">
         <source>Abuse deleted.</source>
-        <target state="new">Abuse deleted.</target>
+        <target state="translated">Abuso eliminado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="6282990098351939529" datatype="html">
         <source>Deleted comment</source>
-        <target state="new">Deleted comment</target>
+        <target state="translated">Comentario eliminado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">239</context></context-group>
       </trans-unit>
       <trans-unit id="9196775343330824083" datatype="html">
         <source>Messages with reporter</source>
-        <target state="new">Messages with reporter</target>
+        <target state="translated">Mensaxes por denunciante</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="8770468575924421391" datatype="html">
         <source>Messages with moderators</source>
-        <target state="new">Messages with moderators</target>
+        <target state="translated">Mensaxe con moderadoras</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="8528549800795985099" datatype="html">
         <source>Update internal note</source>
-        <target state="new">Update internal note</target>
+        <target state="translated">Actualizar nota interna</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="3962242315365992494" datatype="html">
         <source>Switch video block to manual</source>
-        <target state="new">Switch video block to manual</target>
+        <target state="translated">Cambiar bloqueo do vídeo a manual</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6906423861055262169" datatype="html">
         <source>Video <x id="PH"/> switched to manual block.</source>
-        <target state="new">Video 
-          <x id="PH"/> switched to manual block.
-        </target>
+        <target state="translated">Vídeo <x id="PH"/> cambiado a bloqueo manual.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="7293356040886494773" datatype="html">
         <source>Do you really want to unblock this video? It will be available again in the videos list.</source>
-        <target state="new">Do you really want to unblock this video? It will be available again in the videos list.</target>
+        <target state="translated">Queres desbloquear este vídeo? Voltará a estar dispoñible na lista de vídeos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="4859202148272511129" datatype="html">
         <source>Unblock</source>
-        <target state="new">Unblock</target>
+        <target state="translated">Desbloquear</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="4922469417589203720" datatype="html">
         <source>Video <x id="PH"/> unblocked.</source>
-        <target state="new">Video 
-          <x id="PH"/> unblocked.
-        </target>
+        <target state="translated">Vídeo <x id="PH"/> desbloqueado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">166</context></context-group>
       </trans-unit>
       <trans-unit id="0594812d4c50c2adbd1a892a3497c4e5c19e4b32" datatype="html">
         <source>yes</source>
-        <target state="new">yes</target>
+        <target state="translated">si</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/feature-boolean.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="6320692861e01fa9c9d4e692d0d27b6c12b21c3b" datatype="html">
         <source>no</source>
-        <target state="new">no</target>
+        <target state="translated">non</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/feature-boolean.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="212615365039028546" datatype="html">
         <source>You don't have plugins installed yet.</source>
-        <target state="new">You don't have plugins installed yet.</target>
+        <target state="translated">Aínda non tes plugins instalados.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="1710094819987243777" datatype="html">
         <source>You don't have themes installed yet.</source>
-        <target state="new">You don't have themes installed yet.</target>
+        <target state="translated">Aínda non tes decorados instalados.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="931472057457682240" datatype="html">
         <source>Update to <x id="PH"/> </source>
-        <target state="new">Update to 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Actualizar a <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="9107383323119159110" datatype="html">
         <source>Do you really want to uninstall <x id="PH"/>?</source>
-        <target state="new">Do you really want to uninstall 
-          <x id="PH"/>?
-        </target>
+        <target state="translated">Desexas desinstalar <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="4474510732215437338" datatype="html">
         <source>Uninstall</source>
-        <target state="new">Uninstall</target>
+        <target state="translated">Desinstalar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">110</context>
@@ -5602,21 +5496,17 @@
       </trans-unit>
       <trans-unit id="3773378957693174719" datatype="html">
         <source><x id="PH"/> uninstalled. </source>
-        <target state="new">
-          <x id="PH"/> uninstalled.
-        </target>
+        <target state="translated"><x id="PH"/> desinstalado. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="7830308409197461339" datatype="html">
         <source><x id="PH"/> updated. </source>
-        <target state="new">
-          <x id="PH"/> updated.
-        </target>
+        <target state="translated"><x id="PH"/> actualizado. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="3229595422546554334" datatype="html">
         <source>Jobs</source>
-        <target state="new">Jobs</target>
+        <target state="translated">Tarefas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">26</context>
@@ -5624,7 +5514,7 @@
       </trans-unit>
       <trans-unit id="4804785061014590286" datatype="html">
         <source>Logs</source>
-        <target state="new">Logs</target>
+        <target state="translated">Rexistros</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -5632,51 +5522,47 @@
       </trans-unit>
       <trans-unit id="3150704904301058778" datatype="html">
         <source>The plugin index is not available. Please retry later.</source>
-        <target state="new">The plugin index is not available. Please retry later.</target>
+        <target state="translated">O índice de plugins non está dispoñible, inténtao máis tarde.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="1387301493234848481" datatype="html">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target state="new">Please only install plugins or themes you trust, since they can execute any code on your instance.</target>
+        <target state="translated">Instala só decorados e plugins nos que confíes, porque poden executar calquera código na túa instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="2994182849694226596" datatype="html">
         <source>Install <x id="PH"/>?</source>
-        <target state="new">Install 
-          <x id="PH"/>?
-        </target>
+        <target state="translated">Instalar <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="6703720397495603345" datatype="html">
         <source><x id="PH"/> installed. </source>
-        <target state="new">
-          <x id="PH"/> installed.
-        </target>
+        <target state="translated"><x id="PH"/> instalado. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="1875025899004073421" datatype="html">
         <source>Settings updated.</source>
-        <target state="new">Settings updated.</target>
+        <target state="translated">Axustes actualizados.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="6901018060567164184" datatype="html">
         <source>Plugins</source>
-        <target state="new">Plugins</target>
+        <target state="translated">Plugins</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="2798270190074840767" datatype="html">
         <source>Themes</source>
-        <target state="new">Themes</target>
+        <target state="translated">Decorados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="2941409202780782189" datatype="html">
         <source>plugin</source>
-        <target state="new">plugin</target>
+        <target state="translated">plugin</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="840045833311458646" datatype="html">
         <source>theme</source>
-        <target state="new">theme</target>
+        <target state="translated">decorado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/shared/plugin-api.service.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="7591870443991978948" datatype="html">
