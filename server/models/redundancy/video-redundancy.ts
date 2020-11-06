@@ -268,7 +268,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       limit: randomizedFactor,
       order: getVideoSort('-views'),
       where: {
-        privacy: VideoPrivacy.PUBLIC
+        privacy: VideoPrivacy.PUBLIC,
+        isLive: false
       },
       include: [
         await VideoRedundancyModel.buildVideoFileForDuplication(),
@@ -288,7 +289,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       limit: randomizedFactor,
       order: getVideoSort('-trending'),
       where: {
-        privacy: VideoPrivacy.PUBLIC
+        privacy: VideoPrivacy.PUBLIC,
+        isLive: false
       },
       include: [
         await VideoRedundancyModel.buildVideoFileForDuplication(),
@@ -309,6 +311,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       order: getVideoSort('-publishedAt'),
       where: {
         privacy: VideoPrivacy.PUBLIC,
+        isLive: false,
         views: {
           [Op.gte]: minViews
         }

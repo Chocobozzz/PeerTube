@@ -334,7 +334,7 @@ export class VideoFileModel extends Model<VideoFileModel> {
   }
 
   isHLS () {
-    return this.videoStreamingPlaylistId !== null
+    return !!this.videoStreamingPlaylistId
   }
 
   hasSameUniqueKeysThan (other: MVideoFile) {

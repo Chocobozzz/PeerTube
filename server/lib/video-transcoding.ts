@@ -174,8 +174,6 @@ async function generateHlsPlaylist (options: {
     }
   }
 
-  logger.debug('Will run transcode.', { transcodeOptions })
-
   await transcode(transcodeOptions)
 
   const playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
