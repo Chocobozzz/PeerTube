@@ -131,7 +131,7 @@ To make a rough estimate of your disk space usage requirements, you want to know
 - Do you want to enable transcoding? If so, do you want to provide multiple resolutions per video? Try this out with a few videos and you will get an idea of how much extra space is required per video and estimate a multiplication factor for future space allocation.
 - Which sharing mechanisms do you want to enable? Just WebTorrent, or also HLS with p2p? If you want both, this will double your storage needs.
 
-In terms of read speed, you want to make sure that you can saturate your network uplink serving PeerTube videos. This should not be a problem with SSD disks, whereas traditional HDD should be accounted for: typical sustained read rates for a well tuned system with a 7200rpm hard disk should hover around 120 MB/s or 960 Mbit/s. The latter should be enough for a typical 1 Gbit/s network uplink.
+In terms of read speed, you want to make sure that you can saturate your network uplink serving PeerTube videos. This should not be a problem with SSD disks, whereas traditional HDD should be accounted for: typical sustained read rates for [a well tuned system](support/doc/production.md#tcpip-tuning) with a 7200rpm hard disk should hover around 120 MB/s or 960 Mbit/s. The latter should be enough for a typical 1 Gbit/s network uplink.
 
 ### Network
 
@@ -140,6 +140,8 @@ A rough estimate of a traditional server's video streaming network capacity is u
 Take a server for example with a 1 Gbit/s uplink for example pushing out 1080p60 streams at 5 Mbit/s per stream. That means the absolute theoretical upper capacity bound is 200 simultaneous viewers if your server's disk i/o can keep up. Expect a bit less in practice.
 
 But what if you need to serve more users? That's where PeerTube's federation feature shines. If other PeerTube instances following yours, chances are they have decided to mirror part of your instance! The feature is called "server redundancy" and caches your most popular videos to help serve additional viewers. While viewers themselves contribute a little additional bandwidth while watching the video in their browsers (mostly during surges), mirroring servers have a much greater uplink and will help your instance with sustained higher concurrent streaming.
+
+If all your preparations and friends' bandwidth is not enough, you might prefer serving files from a CDN ; see our [remote storage guide](https://docs.joinpeertube.org/#/admin-remote-storage).
 
 ## Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?
 
