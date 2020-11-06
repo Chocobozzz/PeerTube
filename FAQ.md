@@ -106,15 +106,42 @@ Views are buffered, so don't panic if the view counter stays the same after you 
 
 ## Should I have a big server to run PeerTube?
 
-Not really. For instance, the demonstration server [https://peertube.cpy.re](https://peertube.cpy.re) has 2 vCores and 2GB of RAM and consumes on average:
- * **CPU** -> nginx ~ 20%, peertube ~ 10%,   postgres ~ 1%, redis ~ 3%
- * **RAM** -> nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
+PeerTube should run happily on a virtual machine with 2 threads/vCPUs, at least 1 Gb of RAM and enough storage for videos. In terms of bandwidth, a lot will depend on which PeerTube instances you federate with and what your relation with them is (more about that below).
 
-So you would need:
- * **CPU** 1 core if you don't enable transcoding, 2 at least if you enable it (works with 1 but this is really slow)
- * **RAM** 1GB
- * **Storage** Completely depends on how many videos your users will upload
+As a real life example, the PeerTube demonstration server [https://peertube.cpy.re](https://peertube.cpy.re) runs on 2 vCores and 2GB of RAM. Average consumption is:
+ * **CPU**: nginx ~ 20%, peertube ~ 10%,   postgres ~ 1%, redis ~ 3%
+ * **RAM**: nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
 
+### CPU
+
+Except for video transcoding, a PeerTube instance is not CPU bound. Neither Nginx, PeerTube itself, PpostgreSQL nor Redis require a lot of computing power. If it were only for those, one could easily get by with just one thread/vCPU.
+
+You will hugely benefit from at least a second thread though, because of transcoding. Transcoding _is_ very cpu intensive. It serves two purposes on a PeerTube instance: it ensures all videos can be played optimally in the web interface, and it generates different resolutions for the same video. PeerTube support for offloading transcoding to other machines is being discussed, but not yet implemented. See https://github.com/Chocobozzz/PeerTube/issues/947 .
+
+### RAM
+
+1 Gb of RAM should be plenty for a basic PeerTube instance, which usually takes at most 150 Mb in RAM. The only reason you might want more would be if you colocate your Redis or PostgreSQL services on a non-SSD system.
+
+### Storage
+
+There are two important angles to storage: disk space usage and sustained read speed.
+
+To make a rough estimate of your disk space usage requirements, you want to know the answer to three questions:
+- What is the total size of the videos you wish to stream?
+- Do you want to enable transcoding? If so, do you want to provide multiple resolutions per video? Try this out with a few videos and you will get an idea of how much extra space is required per video and estimate a multiplication factor for future space allocation.
+- Which sharing mechanisms do you want to enable? Just WebTorrent, or also HLS with p2p? If you want both, this will double your storage needs.
+
+In terms of read speed, you want to make sure that you can saturate your network uplink serving PeerTube videos. This should not be a problem with SSD disks, whereas traditional HDD should be accounted for: typical sustained read rates for [a well tuned system](support/doc/production.md#tcpip-tuning) with a 7200rpm hard disk should hover around 120 MB/s or 960 Mbit/s. The latter should be enough for a typical 1 Gbit/s network uplink.
+
+### Network
+
+A rough estimate of a traditional server's video streaming network capacity is usually quite straightforward. You simply divide your server's available bandwidth by the average bandwidth per stream, and you have an upper bound.
+
+Take a server for example with a 1 Gbit/s uplink for example pushing out 1080p60 streams at 5 Mbit/s per stream. That means the absolute theoretical upper capacity bound is 200 simultaneous viewers if your server's disk i/o can keep up. Expect a bit less in practice.
+
+But what if you need to serve more users? That's where PeerTube's federation feature shines. If other PeerTube instances following yours, chances are they have decided to mirror part of your instance! The feature is called "server redundancy" and caches your most popular videos to help serve additional viewers. While viewers themselves contribute a little additional bandwidth while watching the video in their browsers (mostly during surges), mirroring servers have a much greater uplink and will help your instance with sustained higher concurrent streaming.
+
+If all your preparations and friends' bandwidth is not enough, you might prefer serving files from a CDN ; see our [remote storage guide](https://docs.joinpeertube.org/#/admin-remote-storage).
 
 ## Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?
 
