@@ -93,7 +93,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   ngOnChanges () {
     if (this.loaded) {
       this.loaded = false
-      this.playlistAdd.reload()
+      if (this.playlistAdd) this.playlistAdd.reload()
     }
 
     this.buildActions()
@@ -277,7 +277,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Display live information`,
           handler: ({ video }) => this.showLiveInfoModal(video),
-          isDisplayed: () => this.isVideoLiveInfoAvailable(),
+          isDisplayed: () => this.displayOptions.liveInfo && this.isVideoLiveInfoAvailable(),
           iconName: 'live'
         },
         {

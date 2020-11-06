@@ -70,10 +70,6 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     const segmentFiles = files.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
     await hlsPlaylistToFragmentedMP4(hlsDirectory, segmentFiles, mp4TmpPath)
 
-    for (const file of segmentFiles) {
-      await remove(join(hlsDirectory, file))
-    }
-
     if (!duration) {
       duration = await getDurationFromVideoFile(mp4TmpPath)
     }

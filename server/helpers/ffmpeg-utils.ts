@@ -1,5 +1,5 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { readFile, remove, writeFile } from 'fs-extra'
+import { outputFile, readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
 import { getMaxBitrate, getTargetBitrate, VideoResolution } from '../../shared/models/videos'
@@ -423,8 +423,14 @@ function runLiveMuxing (rtmpUrl: string, outPath: string, deleteSegments: boolea
 }
 
 async function hlsPlaylistToFragmentedMP4 (hlsDirectory: string, segmentFiles: string[], outputPath: string) {
-  const concatFile = 'concat.txt'
-  const concatFilePath = join(hlsDirectory, concatFile)
+  const concatFilePath = join(hlsDirectory, 'concat.txt')
+
+  function cleaner () {
+    remove(concatFilePath)
+      .catch(err => logger.error('Cannot remove concat file in %s.', hlsDirectory, { err }))
+  }
+
+  // First concat the ts files to a mp4 file
   const content = segmentFiles.map(f => 'file ' + f)
                               .join('\n')
 
@@ -434,25 +440,25 @@ async function hlsPlaylistToFragmentedMP4 (hlsDirectory: string, segmentFiles: s
   command.inputOption('-safe 0')
   command.inputOption('-f concat')
 
-  command.outputOption('-c copy')
+  command.outputOption('-c:v copy')
+  command.audioFilter('aresample=async=1:first_pts=0')
   command.output(outputPath)
 
-  command.run()
+  return runCommand(command, cleaner)
+}
 
-  function cleaner () {
-    remove(concatFilePath)
-      .catch(err => logger.error('Cannot remove concat file in %s.', hlsDirectory, { err }))
-  }
+async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
+  command.run()
 
   return new Promise<string>((res, rej) => {
     command.on('error', err => {
-      cleaner()
+      if (onEnd) onEnd()
 
       rej(err)
     })
 
     command.on('end', () => {
-      cleaner()
+      if (onEnd) onEnd()
 
       res()
     })
@@ -501,7 +507,7 @@ function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string
     command.outputOption('-hls_flags delete_segments')
   }
 
-  command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%d.ts')}`)
+  command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%04d.ts')}`)
   command.outputOption('-master_pl_name master.m3u8')
   command.outputOption(`-f hls`)
 
