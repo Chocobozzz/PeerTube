@@ -83,6 +83,8 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   await live.destroy()
 
   video.isLive = false
+  // Reinit views
+  video.views = 0
   video.state = VideoState.TO_TRANSCODE
   video.duration = duration
 

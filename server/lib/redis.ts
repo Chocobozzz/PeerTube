@@ -7,7 +7,7 @@ import {
   USER_EMAIL_VERIFY_LIFETIME,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
-  VIDEO_VIEW_LIFETIME,
+  VIEW_LIFETIME,
   WEBSERVER,
   TRACKER_RATE_LIMITS
 } from '../initializers/constants'
@@ -118,8 +118,12 @@ class Redis {
 
   /* ************ Views per IP ************ */
 
-  setIPVideoView (ip: string, videoUUID: string) {
-    return this.setValue(this.generateViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
+  setIPVideoView (ip: string, videoUUID: string, isLive: boolean) {
+    const lifetime = isLive
+      ? VIEW_LIFETIME.LIVE
+      : VIEW_LIFETIME.VIDEO
+
+    return this.setValue(this.generateViewKey(ip, videoUUID), '1', lifetime)
   }
 
   async doesVideoIPViewExist (ip: string, videoUUID: string) {

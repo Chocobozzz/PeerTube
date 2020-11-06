@@ -66,6 +66,7 @@ import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
+import { LiveManager } from '@server/lib/live-manager'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -416,26 +417,46 @@ async function getVideo (req: express.Request, res: express.Response) {
 }
 
 async function viewVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.onlyImmutableVideo
+  const immutableVideoAttrs = res.locals.onlyImmutableVideo
 
   const ip = req.ip
-  const exists = await Redis.Instance.doesVideoIPViewExist(ip, videoInstance.uuid)
+  const exists = await Redis.Instance.doesVideoIPViewExist(ip, immutableVideoAttrs.uuid)
   if (exists) {
-    logger.debug('View for ip %s and video %s already exists.', ip, videoInstance.uuid)
-    return res.status(204).end()
+    logger.debug('View for ip %s and video %s already exists.', ip, immutableVideoAttrs.uuid)
+    return res.sendStatus(204)
   }
 
-  await Promise.all([
-    Redis.Instance.addVideoView(videoInstance.id),
-    Redis.Instance.setIPVideoView(ip, videoInstance.uuid)
-  ])
+  const video = await VideoModel.load(immutableVideoAttrs.id)
 
-  const serverActor = await getServerActor()
-  await sendView(serverActor, videoInstance, undefined)
+  const promises: Promise<any>[] = [
+    Redis.Instance.setIPVideoView(ip, video.uuid, video.isLive)
+  ]
 
-  Hooks.runAction('action:api.video.viewed', { video: videoInstance, ip })
+  let federateView = true
 
-  return res.status(204).end()
+  // Increment our live manager
+  if (video.isLive && video.isOwned()) {
+    LiveManager.Instance.addViewTo(video.id)
+
+    // Views of our local live will be sent by our live manager
+    federateView = false
+  }
+
+  // Increment our video views cache counter
+  if (!video.isLive) {
+    promises.push(Redis.Instance.addVideoView(video.id))
+  }
+
+  if (federateView) {
+    const serverActor = await getServerActor()
+    promises.push(sendView(serverActor, video, undefined))
+  }
+
+  await Promise.all(promises)
+
+  Hooks.runAction('action:api.video.viewed', { video, ip })
+
+  return res.sendStatus(204)
 }
 
 async function getVideoDescription (req: express.Request, res: express.Response) {

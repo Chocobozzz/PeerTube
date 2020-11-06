@@ -28,9 +28,12 @@ import {
   testImage,
   updateCustomSubConfig,
   updateLive,
+  viewVideo,
+  wait,
   waitJobs,
   waitUntilLiveStarts
 } from '../../../../shared/extra-utils'
+import { FfmpegCommand } from 'fluent-ffmpeg'
 
 const expect = chai.expect
 
@@ -416,6 +419,80 @@ describe('Test live', function () {
       this.timeout(30000)
 
       await checkLiveCleanup(servers[0], liveVideoId, [ 240, 360, 720 ])
+    })
+  })
+
+  describe('Live views', function () {
+    let liveVideoId: string
+    let command: FfmpegCommand
+
+    async function countViews (expected: number) {
+      for (const server of servers) {
+        const res = await getVideo(server.url, liveVideoId)
+        const video: VideoDetails = res.body
+
+        expect(video.views).to.equal(expected)
+      }
+    }
+
+    before(async function () {
+      this.timeout(30000)
+
+      const liveAttributes = {
+        name: 'live video',
+        channelId: servers[0].videoChannel.id,
+        privacy: VideoPrivacy.PUBLIC
+      }
+
+      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
+      liveVideoId = res.body.video.uuid
+
+      command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitJobs(servers)
+    })
+
+    it('Should display no views for a live', async function () {
+      await countViews(0)
+    })
+
+    it('Should view a live twice and display 1 view', async function () {
+      this.timeout(30000)
+
+      await viewVideo(servers[0].url, liveVideoId)
+      await viewVideo(servers[0].url, liveVideoId)
+
+      await wait(5000)
+
+      await waitJobs(servers)
+
+      await countViews(1)
+    })
+
+    it('Should wait 5 seconds and display 0 views', async function () {
+      this.timeout(30000)
+
+      await wait(5000)
+      await waitJobs(servers)
+
+      await countViews(0)
+    })
+
+    it('Should view a live on a remote and on local and display 2 views', async function () {
+      this.timeout(30000)
+
+      await viewVideo(servers[0].url, liveVideoId)
+      await viewVideo(servers[1].url, liveVideoId)
+      await viewVideo(servers[1].url, liveVideoId)
+
+      await wait(5000)
+      await waitJobs(servers)
+
+      await countViews(2)
+    })
+
+    after(async function () {
+      await stopFfmpeg(command)
     })
   })
 

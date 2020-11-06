@@ -13,7 +13,7 @@ import {
 } from '@server/helpers/ffmpeg-utils'
 import { logger } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
-import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants'
+import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME, WEBSERVER } from '@server/initializers/constants'
 import { UserModel } from '@server/models/account/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -61,6 +61,8 @@ class LiveManager {
 
   private readonly transSessions = new Map<string, FfmpegCommand>()
   private readonly videoSessions = new Map<number, string>()
+  // Values are Date().getTime()
+  private readonly watchersPerVideo = new Map<number, number[]>()
   private readonly segmentsSha256 = new Map<string, Map<string, string>>()
   private readonly livesPerUser = new Map<number, { liveId: number, videoId: number, size: number }[]>()
 
@@ -115,6 +117,8 @@ class LiveManager {
         this.stop()
       }
     })
+
+    setInterval(() => this.updateLiveViews(), VIEW_LIFETIME.LIVE)
   }
 
   run () {
@@ -129,6 +133,10 @@ class LiveManager {
 
     this.rtmpServer.stop()
     this.rtmpServer = undefined
+  }
+
+  isRunning () {
+    return !!this.rtmpServer
   }
 
   getSegmentsSha256 (videoUUID: string) {
@@ -148,6 +156,19 @@ class LiveManager {
     if (!currentLives) return 0
 
     return currentLives.reduce((sum, obj) => sum + obj.size, 0)
+  }
+
+  addViewTo (videoId: number) {
+    if (this.videoSessions.has(videoId) === false) return
+
+    let watchers = this.watchersPerVideo.get(videoId)
+
+    if (!watchers) {
+      watchers = []
+      this.watchersPerVideo.set(videoId, watchers)
+    }
+
+    watchers.push(new Date().getTime())
   }
 
   private getContext () {
@@ -331,6 +352,7 @@ class LiveManager {
       logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', rtmpUrl)
 
       this.transSessions.delete(sessionId)
+      this.watchersPerVideo.delete(videoLive.videoId)
 
       Promise.all([ tsWatcher.close(), masterWatcher.close() ])
         .catch(err => logger.error('Cannot close watchers of %s.', outPath, { err }))
@@ -424,6 +446,32 @@ class LiveManager {
     if (live.saveReplay !== true) return true
 
     return this.isAbleToUploadVideoWithCache(user.id)
+  }
+
+  private async updateLiveViews () {
+    if (!this.isRunning()) return
+
+    logger.info('Updating live video views.')
+
+    for (const videoId of this.watchersPerVideo.keys()) {
+      const notBefore = new Date().getTime() - VIEW_LIFETIME.LIVE
+
+      const watchers = this.watchersPerVideo.get(videoId)
+
+      const numWatchers = watchers.length
+
+      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+      video.views = numWatchers
+      await video.save()
+
+      await federateVideoIfNeeded(video, false)
+
+      // Only keep not expired watchers
+      const newWatchers = watchers.filter(w => w > notBefore)
+      this.watchersPerVideo.set(videoId, newWatchers)
+
+      logger.debug('New live video views for %s is %d.', video.url, numWatchers)
+    }
   }
 
   static get Instance () {
