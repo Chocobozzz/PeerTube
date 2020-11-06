@@ -3,18 +3,16 @@
 import 'mocha'
 import * as chai from 'chai'
 import { getLiveNotificationSocket } from '@shared/extra-utils/socket/socket-io'
-import { LiveVideo, LiveVideoCreate, User, Video, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, Video, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import {
   addVideoToBlacklist,
   checkLiveCleanup,
   checkResolutionsInMasterPlaylist,
   cleanupTests,
   createLive,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
   getLive,
-  getMyUserInformation,
   getVideo,
   getVideoIdFromUUID,
   getVideosList,
@@ -30,7 +28,6 @@ import {
   testImage,
   updateCustomSubConfig,
   updateLive,
-  userLogin,
   waitJobs,
   waitUntilLiveStarts
 } from '../../../../shared/extra-utils'
@@ -39,9 +36,6 @@ const expect = chai.expect
 
 describe('Test live', function () {
   let servers: ServerInfo[] = []
-  let userId: number
-  let userAccessToken: string
-  let userChannelId: number
 
   before(async function () {
     this.timeout(120000)
@@ -61,22 +55,6 @@ describe('Test live', function () {
         }
       }
     })
-
-    {
-      const user = { username: 'user1', password: 'superpassword' }
-      const res = await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        username: user.username,
-        password: user.password
-      })
-      userId = res.body.user.id
-
-      userAccessToken = await userLogin(servers[0], user)
-
-      const resMe = await getMyUserInformation(servers[0].url, userAccessToken)
-      userChannelId = (resMe.body as User).videoChannels[0].id
-    }
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])

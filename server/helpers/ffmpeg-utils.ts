@@ -1,5 +1,5 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { outputFile, readFile, remove, writeFile } from 'fs-extra'
+import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
 import { getMaxBitrate, getTargetBitrate, VideoResolution } from '../../shared/models/videos'

@@ -333,6 +333,10 @@ export class VideoFileModel extends Model<VideoFileModel> {
     return this.size === -1
   }
 
+  isHLS () {
+    return this.videoStreamingPlaylistId !== null
+  }
+
   hasSameUniqueKeysThan (other: MVideoFile) {
     return this.fps === other.fps &&
       this.resolution === other.resolution &&

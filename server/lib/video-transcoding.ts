@@ -1,5 +1,9 @@
-import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'
+import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
+import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models'
+import { VideoResolution } from '../../shared/models/videos'
+import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
 import {
   canDoQuickTranscode,
   getDurationFromVideoFile,
@@ -9,18 +13,13 @@ import {
   TranscodeOptions,
   TranscodeOptionsType
 } from '../helpers/ffmpeg-utils'
-import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
-import { VideoResolution } from '../../shared/models/videos'
-import { VideoFileModel } from '../models/video/video-file'
-import { updateMasterHLSPlaylist, updateSha256VODSegments } from './hls'
-import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
-import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
 import { CONFIG } from '../initializers/config'
-import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'
+import { VideoFileModel } from '../models/video/video-file'
+import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
+import { updateMasterHLSPlaylist, updateSha256VODSegments } from './hls'
 import { generateVideoStreamingPlaylistName, getVideoFilename, getVideoFilePath } from './video-paths'
-import { spawn } from 'child_process'
 
 /**
  * Optimize the original video file and replace it. The resolution is not changed.

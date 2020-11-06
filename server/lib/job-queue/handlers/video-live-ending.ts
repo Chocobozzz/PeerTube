@@ -10,8 +10,9 @@ import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
-import { VideoLiveEndingPayload, VideoState } from '@shared/models'
+import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
+import { generateVideoMiniature } from '@server/lib/thumbnail'
 
 async function processVideoLiveEnding (job: Bull.Job) {
   const payload = job.data as VideoLiveEndingPayload
@@ -107,6 +108,15 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     })
 
     await remove(videoInputPath)
+  }
+
+  // Regenerate the thumbnail & preview?
+  if (videoWithFiles.getMiniature().automaticallyGenerated === true) {
+    await generateVideoMiniature(videoWithFiles, videoWithFiles.getMaxQualityFile(), ThumbnailType.MINIATURE)
+  }
+
+  if (videoWithFiles.getPreview().automaticallyGenerated === true) {
+    await generateVideoMiniature(videoWithFiles, videoWithFiles.getMaxQualityFile(), ThumbnailType.PREVIEW)
   }
 
   await publishAndFederateIfNeeded(video, true)
