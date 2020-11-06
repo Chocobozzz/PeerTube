@@ -964,7 +964,7 @@ export class VideoModel extends Model<VideoModel> {
             }
           ]
         },
-        VideoLiveModel,
+        VideoLiveModel.unscoped(),
         VideoFileModel,
         TagModel
       ]
