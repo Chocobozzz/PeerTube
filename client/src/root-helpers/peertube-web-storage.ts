@@ -64,15 +64,26 @@ class MemoryStorage {
 
 let peertubeLocalStorage: Storage
 let peertubeSessionStorage: Storage
-try {
-  peertubeLocalStorage = localStorage
-  peertubeSessionStorage = sessionStorage
-} catch (err) {
+
+function reinitStorage () {
   const instanceLocalStorage = new MemoryStorage()
   const instanceSessionStorage = new MemoryStorage()
 
   peertubeLocalStorage = proxify(instanceLocalStorage)
   peertubeSessionStorage = proxify(instanceSessionStorage)
+}
+
+try {
+  peertubeLocalStorage = localStorage
+  peertubeSessionStorage = sessionStorage
+} catch (err) {
+  // support Firefox and other browsers using an exception rather than null
+  reinitStorage()
+}
+
+// support Brave and other browsers using null rather than an exception
+if (peertubeLocalStorage === null || peertubeSessionStorage === null) {
+  reinitStorage()
 }
 
 export {
