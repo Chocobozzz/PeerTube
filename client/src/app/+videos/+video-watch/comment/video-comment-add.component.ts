@@ -183,7 +183,11 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
         this.textareaElement.nativeElement.focus()
       }
 
+      // Scroll to textarea
       this.textareaElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
+
+      // Use the native textarea autosize according to the text's break lines
+      this.textareaElement.nativeElement.dispatchEvent(new Event('input'))
     })
 
     this.form.patchValue({ text })
