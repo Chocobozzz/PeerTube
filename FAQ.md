@@ -115,7 +115,7 @@ As a real life example, the PeerTube demonstration server [https://peertube.cpy.
 ### CPU
 Except for video transcoding, a PeerTube instance is not really cpu bound. Neither nginx, peertube, postgres nor redis require a lot of cpu. If it were only for those, once could easily get by with just one thread.
 
-You will hugely benefit from at least a second thread though, because of transcoding. Transcoding _is_ very cpu intensive. It serves two purposes on a PeerTube instance: it ensures all videos can be played optimally in the web interface, and it generates different resolutions for the same video. PeerTube support for offloading transcoding to other machines is planned, but not yet implemented. See https://github.com/Chocobozzz/PeerTube/issues/1192 .
+You will hugely benefit from at least a second thread though, because of transcoding. Transcoding _is_ very cpu intensive. It serves two purposes on a PeerTube instance: it ensures all videos can be played optimally in the web interface, and it generates different resolutions for the same video. PeerTube support for offloading transcoding to other machines is being discussed, but not yet implemented. See https://github.com/Chocobozzz/PeerTube/issues/947 .
 
 ### RAM
 1 Gb of RAM should be plenty for a basic PeerTube instance. The only reason you'd want significantly more would be to RAM cache very popular video fragments.
