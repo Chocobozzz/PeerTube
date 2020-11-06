@@ -7,6 +7,8 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'action:api.video.uploaded',
     'action:api.video.viewed',
 
+    'action:api.live-video.created',
+
     'action:api.video-thread.created',
     'action:api.video-comment-reply.created',
     'action:api.video-comment.deleted',
@@ -46,15 +48,22 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
-  registerHook({
-    target: 'filter:api.video.upload.accept.result',
-    handler: ({ accepted }, { videoBody }) => {
-      if (!accepted) return { accepted: false }
-      if (videoBody.name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word' }
+  for (const hook of [ 'filter:api.video.upload.accept.result', 'filter:api.live-video.create.accept.result' ]) {
+    registerHook({
+      target: hook,
+      handler: ({ accepted }, { videoBody, liveVideoBody }) => {
+        if (!accepted) return { accepted: false }
 
-      return { accepted: true }
-    }
-  })
+        const name = videoBody
+          ? videoBody.name
+          : liveVideoBody.name
+
+        if (name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word' }
+
+        return { accepted: true }
+      }
+    })
+  }
 
   registerHook({
     target: 'filter:api.video.pre-import-url.accept.result',

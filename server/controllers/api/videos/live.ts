@@ -5,6 +5,7 @@ import { CONFIG } from '@server/initializers/config'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator } from '@server/middlewares/validators/videos/video-live'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -127,6 +128,8 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
 
     return { videoCreated }
   })
+
+  Hooks.runAction('action:api.live-video.created', { video: videoCreated })
 
   return res.json({
     video: {

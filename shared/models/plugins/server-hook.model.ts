@@ -9,9 +9,10 @@ export const serverFilterHookObject = {
   // Used to get detailed video information (video watch page for example)
   'filter:api.video.get.result': true,
 
-  // Filter the result of the accept upload, import via torrent or url functions
+  // Filter the result of the accept upload/live, import via torrent/url functions
   // If this function returns false then the upload is aborted with an error
   'filter:api.video.upload.accept.result': true,
+  'filter:api.live-video.create.accept.result': true,
   'filter:api.video.pre-import-url.accept.result': true,
   'filter:api.video.pre-import-torrent.accept.result': true,
   'filter:api.video.post-import-url.accept.result': true,
@@ -53,6 +54,9 @@ export const serverActionHookObject = {
   'action:api.video.uploaded': true,
   // Fired when a local video is viewed
   'action:api.video.viewed': true,
+
+  // Fired when a live video is created
+  'action:api.live-video.created': true,
 
   // Fired when a thread is created
   'action:api.video-thread.created': true,

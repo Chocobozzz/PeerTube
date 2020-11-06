@@ -11,6 +11,8 @@ import { CONFIG } from '../../../initializers/config'
 import { areValidationErrors } from '../utils'
 import { getCommonVideoEditAttributes } from './videos'
 import { VideoModel } from '@server/models/video/video'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
 
 const videoLiveGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -97,6 +99,8 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       }
     }
 
+    if (!await isLiveVideoAccepted(req, res)) return cleanUpReqFiles(req)
+
     return next()
   }
 ])
@@ -136,4 +140,30 @@ export {
   videoLiveAddValidator,
   videoLiveUpdateValidator,
   videoLiveGetValidator
+}
+
+// ---------------------------------------------------------------------------
+
+async function isLiveVideoAccepted (req: express.Request, res: express.Response) {
+  // Check we accept this video
+  const acceptParameters = {
+    liveVideoBody: req.body,
+    user: res.locals.oauth.token.User
+  }
+  const acceptedResult = await Hooks.wrapFun(
+    isLocalLiveVideoAccepted,
+    acceptParameters,
+    'filter:api.live-video.create.accept.result'
+  )
+
+  if (!acceptedResult || acceptedResult.accepted !== true) {
+    logger.info('Refused local live video.', { acceptedResult, acceptParameters })
+
+    res.status(403)
+       .json({ error: acceptedResult.errorMessage || 'Refused local live video' })
+
+    return false
+  }
+
+  return true
 }

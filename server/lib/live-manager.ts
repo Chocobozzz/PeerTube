@@ -118,7 +118,7 @@ class LiveManager {
   }
 
   run () {
-    logger.info('Running RTMP server.')
+    logger.info('Running RTMP server on port %d', config.rtmp.port)
 
     this.rtmpServer = new NodeRtmpServer(config)
     this.rtmpServer.run()
