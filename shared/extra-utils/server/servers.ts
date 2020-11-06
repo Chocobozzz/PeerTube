@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { ChildProcess, exec, fork } from 'child_process'
-import { join } from 'path'
-import { root, wait } from '../miscs/miscs'
-import { copy, pathExists, readdir, readFile, remove } from 'fs-extra'
 import { expect } from 'chai'
-import { VideoChannel } from '../../models/videos'
+import { ChildProcess, exec, fork } from 'child_process'
+import { copy, pathExists, readdir, readFile, remove } from 'fs-extra'
+import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
+import { VideoChannel } from '../../models/videos'
+import { root, wait } from '../miscs/miscs'
 
 interface ServerInfo {
   app: ChildProcess
@@ -15,6 +15,8 @@ interface ServerInfo {
   host: string
   hostname: string
   port: number
+
+  rtmpPort: number
 
   parallel: boolean
   internalServerNumber: number
@@ -95,10 +97,18 @@ function randomServer () {
   return randomInt(low, high)
 }
 
+function randomRTMP () {
+  const low = 1900
+  const high = 2100
+
+  return randomInt(low, high)
+}
+
 async function flushAndRunServer (serverNumber: number, configOverride?: Object, args = []) {
   const parallel = parallelTests()
 
   const internalServerNumber = parallel ? randomServer() : serverNumber
+  const rtmpPort = parallel ? randomRTMP() : null
   const port = 9000 + internalServerNumber
 
   await flushTests(internalServerNumber)
@@ -107,6 +117,7 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
     app: null,
     port,
     internalServerNumber,
+    rtmpPort,
     parallel,
     serverNumber,
     url: `http://localhost:${port}`,
@@ -178,6 +189,11 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       },
       admin: {
         email: `admin${server.internalServerNumber}@example.com`
+      },
+      live: {
+        rtmp: {
+          port: server.rtmpPort
+        }
       }
     })
   }

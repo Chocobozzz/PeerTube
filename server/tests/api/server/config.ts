@@ -79,7 +79,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.transcoding.hls.enabled).to.be.true
 
   expect(data.live.enabled).to.be.false
-  expect(data.live.allowReplay).to.be.true
+  expect(data.live.allowReplay).to.be.false
   expect(data.live.maxDuration).to.equal(1000 * 3600 * 5)
   expect(data.live.maxInstanceLives).to.equal(20)
   expect(data.live.maxUserLives).to.equal(3)
@@ -166,7 +166,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.webtorrent.enabled).to.be.true
 
   expect(data.live.enabled).to.be.true
-  expect(data.live.allowReplay).to.be.false
+  expect(data.live.allowReplay).to.be.true
   expect(data.live.maxDuration).to.equal(5000)
   expect(data.live.maxInstanceLives).to.equal(-1)
   expect(data.live.maxUserLives).to.equal(10)
@@ -332,7 +332,7 @@ describe('Test config', function () {
       },
       live: {
         enabled: true,
-        allowReplay: false,
+        allowReplay: true,
         maxDuration: 5000,
         maxInstanceLives: -1,
         maxUserLives: 10,

@@ -31,14 +31,16 @@ async function processCreateView (activity: ActivityView | ActivityCreate, byAct
   }
   const { video } = await getOrCreateVideoAndAccountAndChannel(options)
 
+  if (!video.isLive) {
+    await Redis.Instance.addVideoView(video.id)
+  }
+
   if (video.isOwned()) {
     // Our live manager will increment the counter and send the view to followers
     if (video.isLive) {
       LiveManager.Instance.addViewTo(video.id)
       return
     }
-
-    await Redis.Instance.addVideoView(video.id)
 
     // Forward the view but don't resend the activity to the sender
     const exceptions = [ byActor ]

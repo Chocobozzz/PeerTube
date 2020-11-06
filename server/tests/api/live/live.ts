@@ -121,7 +121,7 @@ describe('Test live', function () {
         const live: LiveVideo = resLive.body
 
         if (server.url === servers[0].url) {
-          expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':1936/live')
+          expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
           expect(live.streamKey).to.not.be.empty
         } else {
           expect(live.rtmpUrl).to.be.null
@@ -185,7 +185,7 @@ describe('Test live', function () {
         const live: LiveVideo = res.body
 
         if (server.url === servers[0].url) {
-          expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':1936/live')
+          expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
           expect(live.streamKey).to.not.be.empty
         } else {
           expect(live.rtmpUrl).to.be.null
@@ -216,7 +216,7 @@ describe('Test live', function () {
     let rtmpUrl: string
 
     before(function () {
-      rtmpUrl = 'rtmp://' + servers[0].hostname + ':1936'
+      rtmpUrl = 'rtmp://' + servers[0].hostname + ':' + servers[0].rtmpPort + ''
     })
 
     async function createLiveWrapper () {
