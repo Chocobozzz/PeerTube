@@ -37,24 +37,24 @@ log:
 
 contact_form:
   enabled: true
-#
-#redundancy:
-#  videos:
-#    check_interval: '1 minute'
-#    strategies:
-#      -
-#        size: '1000MB'
-#        min_lifetime: '10 minutes'
-#        strategy: 'most-views'
-#      -
-#        size: '1000MB'
-#        min_lifetime: '10 minutes'
-#        strategy: 'trending'
-#      -
-#        size: '1000MB'
-#        min_lifetime: '10 minutes'
-#        strategy: 'recently-added'
-#        min_views: 1
+
+redundancy:
+  videos:
+    check_interval: '1 minute'
+    strategies:
+      -
+        size: '1000MB'
+        min_lifetime: '10 minutes'
+        strategy: 'most-views'
+      -
+        size: '1000MB'
+        min_lifetime: '10 minutes'
+        strategy: 'trending'
+      -
+        size: '1000MB'
+        min_lifetime: '10 minutes'
+        strategy: 'recently-added'
+        min_views: 1
 
 cache:
   previews:
