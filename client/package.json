@@ -80,7 +80,7 @@
     "extract-text-webpack-plugin": "4.0.0-beta.0",
     "file-loader": "^6.0.0",
     "focus-visible": "^5.0.2",
-    "hls.js": "^0.14.9",
+    "hls.js": "^0.14.16",
     "html-loader": "^1.0.0",
     "html-webpack-plugin": "^4.0.3",
     "https-browserify": "^1.0.0",
