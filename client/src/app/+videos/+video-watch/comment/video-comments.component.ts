@@ -199,7 +199,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     if (confirm) {
       this.inReplyToCommentId = commentToRedraft.inReplyToCommentId
 
-      // Display <br /> tag as a break line for editing
+      // Restore line feed for editing
       const commentToRedraftText = commentToRedraft.text.replace(/<br.?\/?>/g, '\r\n')
 
       if (commentToRedraft.threadId === commentToRedraft.id) {
