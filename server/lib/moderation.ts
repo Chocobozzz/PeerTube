@@ -20,7 +20,7 @@ import {
 import { ActivityCreate } from '../../shared/models/activitypub'
 import { VideoObject } from '../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
-import { VideoCreate, VideoImportCreate } from '../../shared/models/videos'
+import { LiveVideoCreate, VideoCreate, VideoImportCreate } from '../../shared/models/videos'
 import { VideoCommentCreate } from '../../shared/models/videos/video-comment.model'
 import { UserModel } from '../models/account/user'
 import { ActorModel } from '../models/activitypub/actor'
@@ -38,6 +38,13 @@ export type AcceptResult = {
 function isLocalVideoAccepted (object: {
   videoBody: VideoCreate
   videoFile: Express.Multer.File & { duration?: number }
+  user: UserModel
+}): AcceptResult {
+  return { accepted: true }
+}
+
+function isLocalLiveVideoAccepted (object: {
+  liveVideoBody: LiveVideoCreate
   user: UserModel
 }): AcceptResult {
   return { accepted: true }
@@ -175,6 +182,8 @@ function createAccountAbuse (options: {
 }
 
 export {
+  isLocalLiveVideoAccepted,
+
   isLocalVideoAccepted,
   isLocalVideoThreadAccepted,
   isRemoteVideoAccepted,

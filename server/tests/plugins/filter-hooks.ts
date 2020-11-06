@@ -6,6 +6,7 @@ import { ServerConfig } from '@shared/models'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
+  createLive,
   doubleFollow,
   getConfig,
   getPluginTestPath,
@@ -19,6 +20,7 @@ import {
   registerUser,
   setAccessTokensToServers,
   setDefaultVideoChannel,
+  updateCustomSubConfig,
   updateVideo,
   uploadVideo,
   waitJobs
@@ -61,6 +63,17 @@ describe('Test plugin filter hooks', function () {
 
     const res = await getVideosList(servers[0].url)
     videoUUID = res.body.data[0].uuid
+
+    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+      live: { enabled: true },
+      signup: { enabled: true },
+      import: {
+        videos: {
+          http: { enabled: true },
+          torrent: { enabled: true }
+        }
+      }
+    })
   })
 
   it('Should run filter:api.videos.list.params', async function () {
@@ -85,6 +98,16 @@ describe('Test plugin filter hooks', function () {
 
   it('Should run filter:api.video.upload.accept.result', async function () {
     await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video with bad word' }, 403)
+  })
+
+  it('Should run filter:api.live-video.create.accept.result', async function () {
+    const attributes = {
+      name: 'video with bad word',
+      privacy: VideoPrivacy.PUBLIC,
+      channelId: servers[0].videoChannel.id
+    }
+
+    await createLive(servers[0].url, servers[0].accessToken, attributes, 403)
   })
 
   it('Should run filter:api.video.pre-import-url.accept.result', async function () {

@@ -262,7 +262,7 @@ live:
   # PeerTube will transcode segments in a video file
   # If the user daily/total quota is reached, PeerTube will stop the live
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
-  allow_replay: true
+  allow_replay: false
 
   rtmp:
     port: 1935
