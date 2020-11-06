@@ -271,6 +271,8 @@ type TranscodeOptions =
   | QuickTranscodeOptions
 
 function transcode (options: TranscodeOptions) {
+  logger.debug('Will run transcode.', { options })
+
   return new Promise<void>(async (res, rej) => {
     try {
       let command = getFFmpeg(options.inputPath)

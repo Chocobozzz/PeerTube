@@ -123,7 +123,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 }
 
 async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
-  const hlsDirectory = getHLSDirectory(video, false)
+  const hlsDirectory = getHLSDirectory(video)
 
   await remove(hlsDirectory)
 
