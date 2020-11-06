@@ -316,7 +316,7 @@ const CONSTRAINTS_FIELDS = {
   }
 }
 
-let VIEW_LIFETIME = {
+const VIEW_LIFETIME = {
   VIDEO: 60000 * 60, // 1 hour
   LIVE: 60000 * 5 // 5 minutes
 }

@@ -4,6 +4,7 @@ import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { ensureDir, stat } from 'fs-extra'
 import { basename } from 'path'
+import { isTestInstance } from '@server/helpers/core-utils'
 import {
   computeResolutionsToTranscode,
   getVideoFileFPS,
@@ -451,7 +452,7 @@ class LiveManager {
   private async updateLiveViews () {
     if (!this.isRunning()) return
 
-    logger.info('Updating live video views.')
+    if (!isTestInstance()) logger.info('Updating live video views.')
 
     for (const videoId of this.watchersPerVideo.keys()) {
       const notBefore = new Date().getTime() - VIEW_LIFETIME.LIVE

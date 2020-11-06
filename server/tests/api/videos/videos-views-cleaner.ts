@@ -61,14 +61,14 @@ describe('Test video views cleaner', function () {
     {
       for (const server of servers) {
         const total = await countVideoViewsOf(server.internalServerNumber, videoIdServer1)
-        expect(total).to.equal(2)
+        expect(total).to.equal(2, 'Server ' + server.serverNumber + ' does not have the correct amount of views')
       }
     }
 
     {
       for (const server of servers) {
         const total = await countVideoViewsOf(server.internalServerNumber, videoIdServer2)
-        expect(total).to.equal(2)
+        expect(total).to.equal(2, 'Server ' + server.serverNumber + ' does not have the correct amount of views')
       }
     }
   })
