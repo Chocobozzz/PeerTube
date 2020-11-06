@@ -113,14 +113,17 @@ As a real life example, the PeerTube demonstration server [https://peertube.cpy.
  * **RAM**: nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
 
 ### CPU
+
 Except for video transcoding, a PeerTube instance is not really cpu bound. Neither nginx, peertube, postgres nor redis require a lot of cpu. If it were only for those, once could easily get by with just one thread.
 
 You will hugely benefit from at least a second thread though, because of transcoding. Transcoding _is_ very cpu intensive. It serves two purposes on a PeerTube instance: it ensures all videos can be played optimally in the web interface, and it generates different resolutions for the same video. PeerTube support for offloading transcoding to other machines is being discussed, but not yet implemented. See https://github.com/Chocobozzz/PeerTube/issues/947 .
 
 ### RAM
+
 1 Gb of RAM should be plenty for a basic PeerTube instance. The only reason you'd want significantly more would be to RAM cache very popular video fragments.
 
 ### Storage
+
 There are two important angles to storage: disk space usage and sustained read speed.
 
 To make a rough estimate of your disk space usage requirements, you want to know the answer to three questions:
@@ -131,6 +134,7 @@ To make a rough estimate of your disk space usage requirements, you want to know
 In terms of read speed, you want to make sure that you can saturate your network uplink serving PeerTube videos. This should not be a problem with ssd disks. With traditional hard disks though it is really worth checking! Typical sustained read rates for a well tuned system with a 7200rpm hard disk should hover around 120 MB/s or 960 Mbit/s. This should about saturate a 1 Gbit/s network uplink.
 
 ### Network
+
 A rough estimate of a traditional server's video streaming network capacity is usually quite straightforward. You simply divide your server's available bandwidth by the average bandwidth per stream, and you have an upper bound.
 
 Take a server for example with a 1 Gbit/s uplink for example pushing out 1080p60 streams at 5 Mbit/s per stream. That means the absolute theoretical upper capacity bound is 200 simultaneous viewers if your server's disk i/o can keep up. Expect a bit less in practice.
