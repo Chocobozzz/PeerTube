@@ -4,7 +4,13 @@ import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { ensureDir, stat } from 'fs-extra'
 import { basename } from 'path'
-import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution, getVideoStreamCodec, getVideoStreamSize, runLiveMuxing, runLiveTranscoding } from '@server/helpers/ffmpeg-utils'
+import {
+  computeResolutionsToTranscode,
+  getVideoFileFPS,
+  getVideoFileResolution,
+  runLiveMuxing,
+  runLiveTranscoding
+} from '@server/helpers/ffmpeg-utils'
 import { logger } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants'

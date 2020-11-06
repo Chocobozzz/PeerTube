@@ -1,11 +1,22 @@
-import * as express from 'express'
 import * as cors from 'cors'
+import * as express from 'express'
+import { getRateUrl } from '@server/lib/activitypub/video-rates'
+import { getServerActor } from '@server/models/application/application'
+import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
+import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
-import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
+import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create'
+import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
+import {
+  getVideoCommentsActivityPubUrl,
+  getVideoDislikesActivityPubUrl,
+  getVideoLikesActivityPubUrl,
+  getVideoSharesActivityPubUrl
+} from '../../lib/activitypub/url'
 import {
   asyncMiddleware,
   executeIfActivityPub,
@@ -14,30 +25,19 @@ import {
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares'
+import { cacheRoute } from '../../middlewares/cache'
 import { getAccountVideoRateValidatorFactory, videoCommentGetValidator } from '../../middlewares/validators'
+import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
+import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
-import { VideoCommentModel } from '../../models/video/video-comment'
-import { VideoShareModel } from '../../models/video/video-share'
-import { cacheRoute } from '../../middlewares/cache'
-import { activityPubResponse } from './utils'
-import { AccountVideoRateModel } from '../../models/account/account-video-rate'
-import {
-  getVideoCommentsActivityPubUrl,
-  getVideoDislikesActivityPubUrl,
-  getVideoLikesActivityPubUrl,
-  getVideoSharesActivityPubUrl
-} from '../../lib/activitypub/url'
 import { VideoCaptionModel } from '../../models/video/video-caption'
-import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
-import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
-import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
+import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId, MChannelId } from '@server/types/models'
-import { getServerActor } from '@server/models/application/application'
-import { getRateUrl } from '@server/lib/activitypub/video-rates'
+import { VideoShareModel } from '../../models/video/video-share'
+import { activityPubResponse } from './utils'
 
 const activityPubClientRouter = express.Router()
 activityPubClientRouter.use(cors())

@@ -1,10 +1,10 @@
-import { VideoLiveModel } from '@server/models/video/video-live'
 import * as Bluebird from 'bluebird'
 import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import { join } from 'path'
 import * as request from 'request'
 import * as sequelize from 'sequelize'
+import { VideoLiveModel } from '@server/models/video/video-live'
 import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
@@ -13,8 +13,7 @@ import {
   ActivitypubHttpFetcherPayload,
   ActivityTagObject,
   ActivityUrlObject,
-  ActivityVideoUrlObject,
-  VideoState
+  ActivityVideoUrlObject
 } from '../../../shared/index'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
@@ -561,8 +560,6 @@ function isAPMagnetUrlObject (url: any): url is ActivityMagnetUrlObject {
 function isAPHashTagObject (url: any): url is ActivityHashTagObject {
   return url && url.type === 'Hashtag'
 }
-
-
 
 async function createVideo (videoObject: VideoObject, channel: MChannelAccountLight, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)

@@ -9,7 +9,7 @@ import { extractVideo } from '@server/helpers/video'
 function getVideoFilename (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
 
-  if (isStreamingPlaylist(videoOrPlaylist)) {
+  if (videoFile.isHLS()) {
     return generateVideoStreamingPlaylistName(video.uuid, videoFile.resolution)
   }
 
@@ -25,7 +25,7 @@ function generateWebTorrentVideoName (uuid: string, resolution: number, extname:
 }
 
 function getVideoFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile, isRedundancy = false) {
-  if (isStreamingPlaylist(videoOrPlaylist)) {
+  if (videoFile.isHLS()) {
     const video = extractVideo(videoOrPlaylist)
 
     return join(getHLSDirectory(video), getVideoFilename(videoOrPlaylist, videoFile))

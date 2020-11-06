@@ -339,10 +339,8 @@ export class PeertubePlayerManager {
         const resolution = Math.min(level.height || 0, level.width || 0)
 
         const file = p2pMediaLoaderOptions.videoFiles.find(f => f.resolution.id === resolution)
-        if (!file) {
-          console.error('Cannot find video file for level %d.', level.height)
-          return level.height
-        }
+        // We don't have files for live videos
+        if (!file) return level.height
 
         let label = file.resolution.label
         if (file.fps >= 50) label += file.fps
