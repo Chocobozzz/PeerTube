@@ -5567,22 +5567,22 @@
       </trans-unit>
       <trans-unit id="7591870443991978948" datatype="html">
         <source>Last week</source>
-        <target state="new">Last week</target>
+        <target state="translated">Última semana</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="4981709795568846080" datatype="html">
         <source>Last day</source>
-        <target state="new">Last day</target>
+        <target state="translated">Último día</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="9178360613965745088" datatype="html">
         <source>Last hour</source>
-        <target state="new">Last hour</target>
+        <target state="translated">Última hora</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="3164845764519833078" datatype="html">
         <source>debug</source>
-        <target state="new">debug</target>
+        <target state="translated">depurar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -5590,7 +5590,7 @@
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target state="new">info</target>
+        <target state="translated">info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -5598,7 +5598,7 @@
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
-        <target state="new">warning</target>
+        <target state="translated">aviso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -5606,7 +5606,7 @@
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="new">error</target>
+        <target state="translated">erro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -5614,49 +5614,47 @@
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
-        <target state="new">Debug</target>
+        <target state="translated">Depurar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/system.routes.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="314315645942131479" datatype="html">
         <source>Info</source>
-        <target state="new">Info</target>
+        <target state="translated">Info</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/notification/notifier.service.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
         <source>Warning</source>
-        <target state="new">Warning</target>
+        <target state="translated">Aviso</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/routing/can-deactivate-guard.service.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1519954996184640001" datatype="html">
         <source>Error</source>
-        <target state="new">Error</target>
+        <target state="translated">Erro</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
-        <target state="new">Standard logs</target>
+        <target state="translated">Rexistros estándar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
-        <target state="new">Audit logs</target>
+        <target state="translated">Rexistros de auditoría</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
         <source>User <x id="PH"/> created.</source>
-        <target state="new">User 
-          <x id="PH"/> created.
-        </target>
+        <target state="translated">Usuaria <x id="PH"/> creada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
         <source>Create user</source>
-        <target state="new">Create user</target>
+        <target state="translated">Crear usuaria</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-create.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="2903648076838460070" datatype="html">
         <source>Videos blocked</source>
-        <target state="new">Videos blocked</target>
+        <target state="translated">Vídeos bloqueados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">67</context>
@@ -5664,7 +5662,7 @@
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
         <source>Muted instances</source>
-        <target state="new">Muted instances</target>
+        <target state="translated">Instancias acaladas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">89</context>
@@ -5672,19 +5670,17 @@
       </trans-unit>
       <trans-unit id="5974506725502681113" datatype="html">
         <source>Password changed for user <x id="PH"/>.</source>
-        <target state="new">Password changed for user 
-          <x id="PH"/>.
-        </target>
+        <target state="translated">Cambiado o contrasinal da usuaria <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-password.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="149953821752893163" datatype="html">
         <source>Update user password</source>
-        <target state="new">Update user password</target>
+        <target state="translated">Actualizar contrasinal da usuaria</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-password.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="177544274549739411" datatype="html">
         <source>Following list</source>
-        <target state="new">Following list</target>
+        <target state="translated">Lista de seguimentos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/follows/follows.routes.ts</context>
           <context context-type="linenumber">28</context>
@@ -5692,7 +5688,7 @@
       </trans-unit>
       <trans-unit id="8092429110007204784" datatype="html">
         <source>Followers list</source>
-        <target state="new">Followers list</target>
+        <target state="translated">Lista de seguidoras</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/follows/follows.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -5700,26 +5696,22 @@
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
         <source>User <x id="PH"/> updated.</source>
-        <target state="new">User 
-          <x id="PH"/> updated.
-        </target>
+        <target state="translated">Usuaria <x id="PH"/> actualizada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1349763489797682899" datatype="html">
         <source>Update user</source>
-        <target state="new">Update user</target>
+        <target state="translated">Actualizar usuaria</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="8819563010322372715" datatype="html">
         <source>An email asking for password reset has been sent to <x id="PH"/>.</source>
-        <target state="new">An email asking for password reset has been sent to 
-          <x id="PH"/>.
-        </target>
+        <target state="translated">Enviouse un email a <x id="PH"/> solicitando un cambio de contrasinal.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="7483807629538115183" datatype="html">
         <source>Users list</source>
-        <target state="new">Users list</target>
+        <target state="translated">Lista de usuarias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -5727,7 +5719,7 @@
       </trans-unit>
       <trans-unit id="1525334987774465166" datatype="html">
         <source>Create a user</source>
-        <target state="new">Create a user</target>
+        <target state="translated">Crear unha usuaria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">36</context>
@@ -5735,7 +5727,7 @@
       </trans-unit>
       <trans-unit id="5552039423287890133" datatype="html">
         <source>Update a user</source>
-        <target state="new">Update a user</target>
+        <target state="translated">Actualizar unha usuaria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/users.routes.ts</context>
           <context context-type="linenumber">48</context>
@@ -5743,7 +5735,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target state="new">Federation</target>
+        <target state="translated">Federación</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -5751,7 +5743,7 @@
       </trans-unit>
       <trans-unit id="4682675125751819107" datatype="html">
         <source>Instances you follow</source>
-        <target state="new">Instances you follow</target>
+        <target state="translated">Instancias que segues</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -5759,7 +5751,7 @@
       </trans-unit>
       <trans-unit id="8899833753704589712" datatype="html">
         <source>Instances following you</source>
-        <target state="new">Instances following you</target>
+        <target state="translated">Instancias que te seguen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -5767,12 +5759,12 @@
       </trans-unit>
       <trans-unit id="3767259920053407667" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="new">Videos will be deleted, comments will be tombstoned.</target>
+        <target state="translated">Os vídeos serán eliminados, os comentarios serán soterrados.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="4209525355702493436" datatype="html">
         <source>Ban</source>
-        <target state="new">Ban</target>
+        <target state="translated">Vetar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -5780,144 +5772,132 @@
       </trans-unit>
       <trans-unit id="3855396975723886053" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="new">User won't be able to login anymore, but videos and comments will be kept as is.</target>
+        <target state="translated">A usuaria non poderá conectarse, pero os vídeos e comentarios permanecerán visibles.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="4451482225013335720" datatype="html">
         <source>Unban</source>
-        <target state="new">Unban</target>
+        <target state="translated">Levantar veto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7210277223053877333" datatype="html">
         <source>Set Email as Verified</source>
-        <target state="new">Set Email as Verified</target>
+        <target state="translated">Establecer email como Verificado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="3403978719736970622" datatype="html">
         <source>You cannot ban root.</source>
-        <target state="new">You cannot ban root.</target>
+        <target state="translated">Non podes vetar a root.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="4884272193574287483" datatype="html">
         <source>Do you really want to unban <x id="PH"/> users?</source>
-        <target state="new">Do you really want to unban 
-          <x id="PH"/> users?
-        </target>
+        <target state="translated">Quéreslle levantar o veto a <x id="PH"/> usuarias?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">198</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385" datatype="html">
         <source><x id="PH"/> users unbanned. </source>
-        <target state="new">
-          <x id="PH"/> users unbanned.
-        </target>
+        <target state="translated"><x id="PH"/> usuarias sen veto. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="5325873477837320044" datatype="html">
         <source>You cannot delete root.</source>
-        <target state="new">You cannot delete root.</target>
+        <target state="translated">Non podes eliminar a root.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="4086135983283545219" datatype="html">
         <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <target state="new">If you remove these users, you will not be able to create others with the same username!</target>
+        <target state="translated">Se eliminas estas usuarias, non poderás crear outras co mesmo nome de usuaria!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">220</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
         <source><x id="PH"/> users deleted. </source>
-        <target state="new">
-          <x id="PH"/> users deleted.
-        </target>
+        <target state="translated"><x id="PH"/> usuarias eliminadas. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH"/> users email set as verified. </source>
-        <target state="new">
-          <x id="PH"/> users email set as verified.
-        </target>
+        <target state="translated"><x id="PH"/> email de usuaria marcado como verificado. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">237</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target state="new">Account 
-          <x id="PH"/> unmuted.
-        </target>
+        <target state="translated">Conta <x id="PH"/> xa non está acalada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="7246356397085094208" datatype="html">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target state="new">Instance 
-          <x id="PH"/> unmuted.
-        </target>
+        <target state="translated">Instancia <x id="PH"/> xa non está acalada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="7163720856202695008" datatype="html">
         <source>My videos history</source>
-        <target state="new">My videos history</target>
+        <target state="translated">Historial dos meus vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="5551551295632950210" datatype="html">
         <source>Videos history is enabled</source>
-        <target state="new">Videos history is enabled</target>
+        <target state="translated">O historial dos vídeos está activado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="9136227503281311926" datatype="html">
         <source>Videos history is disabled</source>
-        <target state="new">Videos history is disabled</target>
+        <target state="translated">O historial dos vídeos está desactivado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.ts</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="8966726118414892732" datatype="html">
         <source>Delete videos history</source>
-        <target state="new">Delete videos history</target>
+        <target state="translated">Eliminar historial dos vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="2482543433481435105" datatype="html">
         <source>Are you sure you want to delete all your videos history?</source>
-        <target state="new">Are you sure you want to delete all your videos history?</target>
+        <target state="translated">Queres eliminar todo o historial dos teus vídeos?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.ts</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="4051606152827088952" datatype="html">
         <source>Videos history deleted</source>
-        <target state="new">Videos history deleted</target>
+        <target state="translated">Historial dos vídeos eliminado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="3183245287221165928" datatype="html">
         <source>Ownership accepted</source>
-        <target state="new">Ownership accepted</target>
+        <target state="translated">Propiedade aceptada</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-ownership/my-account-accept-ownership/my-account-accept-ownership.component.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="6012072687166259654" datatype="html">
         <source>Please check your emails to verify your new email.</source>
-        <target state="new">Please check your emails to verify your new email.</target>
+        <target state="translated">Comproba o teu correo para verificar o teu novo email.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6585766371605707311" datatype="html">
         <source>Email updated.</source>
-        <target state="new">Email updated.</target>
+        <target state="translated">Email actualizado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="853586874765134886" datatype="html">
         <source>You current password is invalid.</source>
-        <target state="new">You current password is invalid.</target>
+        <target state="translated">O contrasinal actual non é válido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="6159571046971090595" datatype="html">
         <source>Password updated.</source>
-        <target state="new">Password updated.</target>
+        <target state="translated">Contrasinal actualizado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="5179099584732142331" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">Seguro que queres eliminar a túa conta? Así eliminarás todos os teus datos, incluíndo canles, vídeos e comentarios. O contido na caché doutros servidores e terceiras partes podería levarlles máis tempo eliminalos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="6897292459203320054" datatype="html">
         <source>Type your username to confirm</source>
-        <target state="new">Type your username to confirm</target>
+        <target state="translated">Escribe o teu nome de usuaria para confirmar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
         <source>Delete your account</source>
-        <target state="new">Delete your account</target>
+        <target state="translated">Elimina a túa conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -5925,170 +5905,162 @@
       </trans-unit>
       <trans-unit id="2520605306994744004" datatype="html">
         <source>Delete my account</source>
-        <target state="new">Delete my account</target>
+        <target state="translated">Eliminar a miña conta</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="3902597758945766483" datatype="html">
         <source>Your account is deleted.</source>
-        <target state="new">Your account is deleted.</target>
+        <target state="translated">A túa conta foi eliminada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html">
         <source>Interface settings updated.</source>
-        <target state="new">Interface settings updated.</target>
+        <target state="translated">Actualizados os axustes da interface.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="77907918814566205" datatype="html">
         <source>New video from your subscriptions</source>
-        <target state="new">New video from your subscriptions</target>
+        <target state="translated">Novo vídeo desde as túas subscricións</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4343589211916204486" datatype="html">
         <source>New comment on your video</source>
-        <target state="new">New comment on your video</target>
+        <target state="translated">Novo comentario no teu vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
         <source>New abuse</source>
-        <target state="new">New abuse</target>
+        <target state="translated">Novo abuso</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="2265829846010085268" datatype="html">
         <source>Video blocked automatically waiting review</source>
-        <target state="new">Video blocked automatically waiting review</target>
+        <target state="translated">Vídeo bloqueado automáticamente agardando revisión</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="5671547068905553663" datatype="html">
         <source>One of your video is blocked/unblocked</source>
-        <target state="new">One of your video is blocked/unblocked</target>
+        <target state="translated">Un dos teus vídeos foi bloqueado/desbloqueado</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="1158912204255103651" datatype="html">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="new">Video published (after transcoding/scheduled update)</target>
+        <target state="translated">Vídeo publicado (tras recodificación/actualización programada)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3809414664640924954" datatype="html">
         <source>Video import finished</source>
-        <target state="new">Video import finished</target>
+        <target state="translated">Rematou a importación do vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="3268838889659873892" datatype="html">
         <source>A new user registered on your instance</source>
-        <target state="new">A new user registered on your instance</target>
+        <target state="translated">Unha nova usuaria rexistrada na túa instancia</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="7373104725413001009" datatype="html">
         <source>You or your channel(s) has a new follower</source>
-        <target state="new">You or your channel(s) has a new follower</target>
+        <target state="translated">Ti ou as túas canles tedes unha nova seguidora</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target state="new">Someone mentioned you in video comments</target>
+        <target state="translated">Alguén mencionoute nos comentarios dun vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
         <source>Your instance has a new follower</source>
-        <target state="new">Your instance has a new follower</target>
+        <target state="translated">A túa instancia ten unha nova seguidora</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="773085434165307906" datatype="html">
         <source>Your instance automatically followed another instance</source>
-        <target state="new">Your instance automatically followed another instance</target>
+        <target state="translated">A túa instancia sigueu automáticamente a outra instancia</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="new">An abuse report received a new message</target>
+        <target state="translated">Recibeuse unha nova mensaxe para unha denuncia de abuso</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="new">One of your abuse reports has been accepted or rejected by moderators</target>
+        <target state="translated">Unha das túas denuncias de abuso foi aceptada ou rexeitada pola moderación</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="5095562193296630034" datatype="html">
         <source>Preferences saved</source>
-        <target state="new">Preferences saved</target>
+        <target state="translated">Gardáronse as preferencias</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="4967231969832964676" datatype="html">
         <source>Profile updated.</source>
-        <target state="new">Profile updated.</target>
+        <target state="translated">Perfil actualizado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3525866160632851851" datatype="html">
         <source>Avatar changed.</source>
-        <target state="new">Avatar changed.</target>
+        <target state="translated">Cambiouse o avatar.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-settings/my-account-settings.component.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="1233062525939746039" datatype="html">
         <source>Unknown language</source>
-        <target state="new">Unknown language</target>
+        <target state="translated">Idioma descoñecido</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="3761504852202418603" datatype="html">
         <source>Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</source>
-        <target state="new">Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</target>
+        <target state="translated">Hai demasiados idiomas activados. Por favor, actívaos todos ou deixa menos de 20 idiomas activos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="1904720062363293328" datatype="html">
         <source>You need to enable at least 1 video language.</source>
-        <target state="new">You need to enable at least 1 video language.</target>
+        <target state="translated">Debes activar polo menos un idioma de vídeo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="3960396487495291449" datatype="html">
         <source>Video settings updated.</source>
-        <target state="new">Video settings updated.</target>
+        <target state="translated">Actualizados os axustes de vídeo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="3326446048041727269" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target state="new">Display/Video settings updated.</target>
+        <target state="translated">Axustes Reprodución/Vídeo gardados.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
         <source>Video channel <x id="PH"/> created.</source>
-        <target state="new">Video channel 
-          <x id="PH"/> created.
-        </target>
+        <target state="translated">Creada a canle de vídeo <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-create.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="8723777130353305761" datatype="html">
         <source>This name already exists on this instance.</source>
-        <target state="new">This name already exists on this instance.</target>
+        <target state="translated">Este nome xa existe nesta instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-create.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7589345916094713536" datatype="html">
         <source>Video channel <x id="PH"/> updated.</source>
-        <target state="new">Video channel 
-          <x id="PH"/> updated.
-        </target>
+        <target state="translated">Actualizada a canle de vídeo <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-update.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="2575302837003821736" datatype="html">
         <source>Please type the display name of the video channel (<x id="PH"/>) to confirm</source>
-        <target state="new">Please type the display name of the video channel (
-          <x id="PH"/>) to confirm
-        </target>
+        <target state="translated">Escribe o nome a mostrar para a canle de vídeo (<x id="PH"/>) para confirmar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="624066830180032195" datatype="html">
         <source>Video channel <x id="PH"/> deleted.</source>
-        <target state="new">Video channel 
-          <x id="PH"/> deleted.
-        </target>
+        <target state="translated">Eliminada a canle de vídeo <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="6450826648284332649" datatype="html">
         <source>Views for the day</source>
-        <target state="new">Views for the day</target>
+        <target state="translated">Visualizacións do día</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="4707367314920217630" datatype="html">
         <source>Create new video channel</source>
-        <target state="new">Create new video channel</target>
+        <target state="translated">Crear unha nova canle de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels-routing.module.ts</context>
           <context context-type="linenumber">22</context>
@@ -6096,7 +6068,7 @@
       </trans-unit>
       <trans-unit id="6059091237492573541" datatype="html">
         <source>Update video channel</source>
-        <target state="new">Update video channel</target>
+        <target state="translated">Actualizar canle de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels-routing.module.ts</context>
           <context context-type="linenumber">31</context>
@@ -6104,7 +6076,7 @@
       </trans-unit>
       <trans-unit id="6595008830732269870" datatype="html">
         <source>Not found</source>
-        <target state="new">Not found</target>
+        <target state="translated">Non atopado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+page-not-found/page-not-found-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -6112,24 +6084,22 @@
       </trans-unit>
       <trans-unit id="5032453707232754344" datatype="html">
         <source>Playlist <x id="PH"/> created.</source>
-        <target state="new">Playlist 
-          <x id="PH"/> created.
-        </target>
+        <target state="translated">Creada lista de reprodución <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
         <source>Create</source>
-        <target state="new">Create</target>
+        <target state="translated">Crear</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-create.component.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="8869957234869568361" datatype="html">
         <source>Update playlist</source>
-        <target state="new">Update playlist</target>
+        <target state="translated">Actualizar lista</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="3410331549417637431" datatype="html">
         <source>Account video imports</source>
-        <target state="new">Account video imports</target>
+        <target state="translated">Importacións de vídeos da conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">105</context>
@@ -6137,7 +6107,7 @@
       </trans-unit>
       <trans-unit id="4434998055872154420" datatype="html">
         <source>Account subscriptions</source>
-        <target state="new">Account subscriptions</target>
+        <target state="translated">Subscricións da conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">114</context>
@@ -6145,7 +6115,7 @@
       </trans-unit>
       <trans-unit id="6019411775996586321" datatype="html">
         <source>Videos history</source>
-        <target state="new">Videos history</target>
+        <target state="translated">Historial de vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">150</context>
@@ -6153,7 +6123,7 @@
       </trans-unit>
       <trans-unit id="5851560788527570644" datatype="html">
         <source>Notifications</source>
-        <target state="new">Notifications</target>
+        <target state="translated">Notificacións</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">163</context>
@@ -6161,54 +6131,42 @@
       </trans-unit>
       <trans-unit id="104404386496394770" datatype="html">
         <source>Delete playlist</source>
-        <target state="new">Delete playlist</target>
+        <target state="translated">Eliminar lista</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="1431617394009162547" datatype="html">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target state="new">Playlist 
-          <x id="PH"/> updated.
-        </target>
+        <target state="translated">Lista <x id="PH"/> actualizada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-update.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="2027805873922338635" datatype="html">
         <source>Do you really want to delete <x id="PH"/>?</source>
-        <target state="new">Do you really want to delete 
-          <x id="PH"/>?
-        </target>
+        <target state="translated">Desexas eliminar <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="3380608219513805292" datatype="html">
         <source>Playlist <x id="PH"/> deleted.</source>
-        <target state="new">Playlist 
-          <x id="PH"/> deleted.
-        </target>
+        <target state="translated">Lista <x id="PH"/> eliminada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894" datatype="html">
         <source>My videos</source>
-        <target state="new">My videos</target>
+        <target state="translated">Vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="8197117721861453263" datatype="html">
         <source>Do you really want to delete <x id="PH"/> videos?</source>
-        <target state="new">Do you really want to delete 
-          <x id="PH"/> videos?
-        </target>
+        <target state="translated">Desexas eliminar <x id="PH"/> vídeos?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="2728855911908920537" datatype="html">
         <source><x id="PH"/> videos deleted. </source>
-        <target state="new">
-          <x id="PH"/> videos deleted.
-        </target>
+        <target state="translated"><x id="PH"/> vídeos eliminados. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="2027805873922338635" datatype="html">
         <source>Do you really want to delete <x id="PH"/>? </source>
-        <target state="new">Do you really want to delete 
-          <x id="PH"/>?
-        </target>
+        <target state="translated">Desexas eliminar <x id="PH"/>? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6216,98 +6174,92 @@
       </trans-unit>
       <trans-unit id="2767660806989176400" datatype="html">
         <source>Video <x id="PH"/> deleted.</source>
-        <target state="new">Video 
-          <x id="PH"/> deleted.
-        </target>
+        <target state="translated">Vídeo <x id="PH"/> eliminado.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
       <trans-unit id="6810714890760227072" datatype="html">
         <source>Ownership change request sent.</source>
-        <target state="new">Ownership change request sent.</target>
+        <target state="translated">Enviouse a solicitude de cambio de propiedade.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-videos/video-change-ownership/video-change-ownership.component.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f" datatype="html">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">Canles</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="6749bdfd88a223fd464a9b09541342fbf42a0ad6" datatype="html">
         <source>Search your channels</source>
-        <target state="new">Search your channels</target>
+        <target state="translated">Busca nas túas canles</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="1d3408919f4d08414721cc22c4be39d93d6691d2" datatype="html">
         <source>My playlists</source>
-        <target state="new">My playlists</target>
+        <target state="translated">Listaxes</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-playlists/my-account-video-playlists.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9" datatype="html">
         <source>My subscriptions</source>
-        <target state="new">My subscriptions</target>
+        <target state="translated">Subscricións</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="31e313e20810b296cb7cc389fd7a3736cff7df44" datatype="html">
         <source>Search your subscriptions</source>
-        <target state="new">Search your subscriptions</target>
+        <target state="translated">Busca nas subscricións</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="4f953496ca94b4f83af049ff715172df2729fb79" datatype="html">
         <source>My history</source>
-        <target state="new">My history</target>
+        <target state="translated">Historial</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-history/my-account-history.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="4094479654928755277" datatype="html">
         <source>Misc</source>
-        <target state="new">Misc</target>
+        <target state="translated">Varios</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account.component.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="1991904494976135035" datatype="html">
         <source>My abuse reports</source>
-        <target state="new">My abuse reports</target>
+        <target state="translated">Denuncias por abuso</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="5752861278140673787" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">Cambios de propiedade</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account.component.ts</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="4116024528500133384" datatype="html">
         <source>My settings</source>
-        <target state="new">My settings</target>
+        <target state="translated">Axustes</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="3649954357199183152" datatype="html">
         <source>My notifications</source>
-        <target state="new">My notifications</target>
+        <target state="translated">Notificacións</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account.component.ts</context><context context-type="linenumber">119</context></context-group>
       </trans-unit>
       <trans-unit id="7916647920967632052" datatype="html">
         <source>max size</source>
-        <target state="new">max size</target>
+        <target state="translated">Tamaño máx.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/preview-upload.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="6537885755702623401" datatype="html">
         <source>Now please check your emails to verify your account and complete signup.</source>
-        <target state="new">Now please check your emails to verify your account and complete signup.</target>
+        <target state="translated">Comproba o correo para verificar a túa conta e completar o rexistro.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="2847376451647729886" datatype="html">
         <source>You are now logged in as <x id="PH"/>!</source>
-        <target state="new">You are now logged in as 
-          <x id="PH"/>!
-        </target>
+        <target state="translated">Estás conectada como <x id="PH"/>!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="2687679787442328897" datatype="html">
         <source>An email with verification link will be sent to <x id="PH"/>.</source>
-        <target state="new">An email with verification link will be sent to 
-          <x id="PH"/>.
-        </target>
+        <target state="translated">Enviaremos un email cunha ligazón de verificación a <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="8231550792139699065" datatype="html">
         <source>Verify account email</source>
-        <target state="new">Verify account email</target>
+        <target state="translated">Verificar o email da conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">17</context>
@@ -6315,7 +6267,7 @@
       </trans-unit>
       <trans-unit id="4997281272800290390" datatype="html">
         <source>Verify account ask send email</source>
-        <target state="new">Verify account ask send email</target>
+        <target state="translated">Verificación da conta pide enviar un email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">26</context>
@@ -6323,17 +6275,17 @@
       </trans-unit>
       <trans-unit id="4180693983967989981" datatype="html">
         <source>Unable to find user id or verification string.</source>
-        <target state="new">Unable to find user id or verification string.</target>
+        <target state="translated">Non se atopa o id da usuaria ou cadea de verificación.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+reset-password/reset-password.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="4802465052975340965" datatype="html">
         <source>Published videos</source>
-        <target state="new">Published videos</target>
+        <target state="translated">Vídeos publicados</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="4263581847463492016" datatype="html">
         <source>Published 1 video</source>
-        <target state="new">Published 1 video</target>
+        <target state="translated">Publicaches 1 vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -6341,73 +6293,72 @@
       </trans-unit>
       <trans-unit id="1783173774503340906" datatype="html">
         <source>Subscribe to the account</source>
-        <target state="new">Subscribe to the account</target>
+        <target state="translated">Subscribirse á conta</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">833</context></context-group>
       </trans-unit>
       <trans-unit id="4014335318155107533" datatype="html">
         <source>VIDEO PLAYLISTS</source>
-        <target state="new">VIDEO PLAYLISTS</target>
+        <target state="translated">LISTAXES DE VÍDEOS</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="7709367721354853232" datatype="html">
         <source>Focus the search bar</source>
-        <target state="new">Focus the search bar</target>
+        <target state="translated">Cursor na barra de busca</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/app.component.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="4049262826107502276" datatype="html">
         <source>Toggle the left menu</source>
-        <target state="new">Toggle the left menu</target>
+        <target state="translated">Activar menú esquerdo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/app.component.ts</context><context context-type="linenumber">294</context></context-group>
       </trans-unit>
       <trans-unit id="5409372033656550095" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="new">Go to the discover videos page</target>
+        <target state="translated">Ir á páxina de descubrimento de vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/app.component.ts</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="4278050445961255445" datatype="html">
         <source>Go to the trending videos page</source>
-        <target state="new">Go to the trending videos page</target>
+        <target state="translated">Ir á páxina de videos que son tendencia</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/app.component.ts</context><context context-type="linenumber">304</context></context-group>
       </trans-unit>
       <trans-unit id="3242234958443825475" datatype="html">
         <source>Go to the recently added videos page</source>
-        <target state="new">Go to the recently added videos page</target>
+        <target state="translated">Ir á páxina de vídeos engadidos recentemente</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/app.component.ts</context><context context-type="linenumber">309</context></context-group>
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="new">Go to the local videos page</target>
+        <target state="translated">Ir á páxina de vídeos locais</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/app.component.ts</context><context context-type="linenumber">314</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
         <source>Go to the videos upload page</source>
-        <target state="new">Go to the videos upload page</target>
+        <target state="translated">Ir á páxina para subir vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/app.component.ts</context><context context-type="linenumber">319</context></context-group>
       </trans-unit>
       <trans-unit id="3779524668013120370" datatype="html">
         <source>Go to my subscriptions</source>
-        <target state="new">Go to my subscriptions</target>
+        <target state="translated">Ir ás miñas subscricións</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="1136469849928650779" datatype="html">
         <source>Go to my videos</source>
-        <target state="new">Go to my videos</target>
+        <target state="translated">Ir ós meus vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7836683738999600376" datatype="html">
         <source>Go to my imports</source>
-        <target state="new">Go to my imports</target>
+        <target state="translated">Ir ás importacións</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="7511292153332773503" datatype="html">
         <source>Go to my channels</source>
-        <target state="new">Go to my channels</target>
+        <target state="translated">Ir ás miñas canles</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="new">Cannot retrieve OAuth Client credentials: <x id="PH"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="translated">Non se poden obter as credenciais OAuth Client: <x id="PH"/>. Asegúrate de que configuraches correctamente PeerTube (config/directory), en particular a sección "webserver".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">98,99</context>
@@ -6415,72 +6366,72 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
         <source>You need to reconnect.</source>
-        <target state="new">You need to reconnect.</target>
+        <target state="translated">Tes que reconectar.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="2206638022166154361" datatype="html">
         <source>Keyboard Shortcuts:</source>
-        <target state="new">Keyboard Shortcuts:</target>
+        <target state="translated">Atallos de teclado:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/hotkeys/hotkeys.component.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="4648900870671159218" datatype="html">
         <source>Success</source>
-        <target state="new">Success</target>
+        <target state="translated">Correcto</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/notification/notifier.service.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1266887509445371246" datatype="html">
         <source>Incorrect username or password.</source>
-        <target state="new">Incorrect username or password.</target>
+        <target state="translated">Usuaria ou contrasinal incorrectos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
         <source>Your account is blocked.</source>
-        <target state="new">Your account is blocked.</target>
+        <target state="translated">A túa conta está bloqueada.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="7939914198003891823" datatype="html">
         <source>any language</source>
-        <target state="new">any language</target>
+        <target state="translated">tódolos idiomas</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.ts</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
       <trans-unit id="5633144232269377096" datatype="html">
         <source>hide</source>
-        <target state="new">hide</target>
+        <target state="translated">agochar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="8603861867909474404" datatype="html">
         <source>blur</source>
-        <target state="new">blur</target>
+        <target state="translated">esborranchar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="4534458451100881847" datatype="html">
         <source>display</source>
-        <target state="new">display</target>
+        <target state="translated">mostrar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
         <source>Unknown</source>
-        <target state="new">Unknown</target>
+        <target state="translated">Descoñecido</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/menu/menu.component.ts</context><context context-type="linenumber">193</context></context-group>
       </trans-unit>
       <trans-unit id="8781423666414310853" datatype="html">
         <source>Your password has been successfully reset!</source>
-        <target state="new">Your password has been successfully reset!</target>
+        <target state="translated">Restableceuse correctamente o contrasinal!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+reset-password/reset-password.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="3184700926171002527" datatype="html">
         <source>Any</source>
-        <target state="new">Any</target>
+        <target state="translated">Todo</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="6048892649018070225" datatype="html">
         <source>Today</source>
-        <target state="new">Today</target>
+        <target state="translated">Hoxe</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-miniature/abstract-video-list.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="4498682414491138092" datatype="html">
         <source>Yesterday</source>
-        <target state="new">Yesterday</target>
+        <target state="translated">Onte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/abstract-video-list.ts</context>
           <context context-type="linenumber">113</context>
@@ -6488,7 +6439,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4463380307954693363" datatype="html">
         <source>Last month</source>
-        <target state="new">Last month</target>
+        <target state="translated">Último mes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/abstract-video-list.ts</context>
           <context context-type="linenumber">115</context>
@@ -6496,7 +6447,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7473676707373218484" datatype="html">
         <source>Older</source>
-        <target state="new">Older</target>
+        <target state="translated">Máis antigo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/abstract-video-list.ts</context>
           <context context-type="linenumber">116</context>
@@ -6504,7 +6455,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5036991421517255667" datatype="html">
         <source>Cannot load more videos. Try again later.</source>
-        <target state="new">Cannot load more videos. Try again later.</target>
+        <target state="translated">Non se poden cargar máis vídeo, inténtao máis tarde.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/abstract-video-list.ts</context>
           <context context-type="linenumber">193</context>
@@ -6512,62 +6463,62 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4873149362496451858" datatype="html">
         <source>Last 7 days</source>
-        <target state="new">Last 7 days</target>
+        <target state="translated">Últimos 7 días</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="2949150997160654358" datatype="html">
         <source>Last 30 days</source>
-        <target state="new">Last 30 days</target>
+        <target state="translated">Últimos 30 días</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="5328600704510694984" datatype="html">
         <source>Last 365 days</source>
-        <target state="new">Last 365 days</target>
+        <target state="translated">Últimos 365 días</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8487565500496466433" datatype="html">
         <source>Short (&lt; 4 min)</source>
-        <target state="new">Short (&lt; 4 min)</target>
+        <target state="translated">Curto (&lt; 4 min)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="3642535017283477339" datatype="html">
         <source>Medium (4-10 min)</source>
-        <target state="new">Medium (4-10 min)</target>
+        <target state="translated">Medio (4-10 min)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6613870447286561244" datatype="html">
         <source>Long (&gt; 10 min)</source>
-        <target state="new">Long (&gt; 10 min)</target>
+        <target state="translated">Longo (&gt; 10 min)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="1787083504545967" datatype="html">
         <source>Relevance</source>
-        <target state="new">Relevance</target>
+        <target state="translated">Relevancia</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="7944277186358179990" datatype="html">
         <source>Publish date</source>
-        <target state="new">Publish date</target>
+        <target state="translated">Data de publicación</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="2123659921722214537" datatype="html">
         <source>Views</source>
-        <target state="new">Views</target>
+        <target state="translated">Visualizacións</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="3208627574396957172" datatype="html">
         <source>Search index is unavailable. Retrying with instance results instead.</source>
-        <target state="new">Search index is unavailable. Retrying with instance results instead.</target>
+        <target state="translated">Non está dispoñible a busca no índice, intentándoo cos resultados na instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.ts</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="307702206382241469" datatype="html">
         <source>Search error</source>
-        <target state="new">Search error</target>
+        <target state="translated">Erro na busca</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search.component.ts</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="4580988005648117665" datatype="html">
         <source>Search</source>
-        <target state="new">Search</target>
+        <target state="translated">Buscar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+search/search.component.ts</context>
           <context context-type="linenumber">230</context>
@@ -6575,143 +6526,112 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5891040073345002614" datatype="html">
         <source><x id="PH"/> years ago </source>
-        <target state="new">
-          <x id="PH"/> years ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> anos </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="6852474139781331706" datatype="html">
         <source><x id="PH"/> year ago </source>
-        <target state="new">
-          <x id="PH"/> year ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> un ano </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="9022576335789205254" datatype="html">
         <source><x id="PH"/> months ago </source>
-        <target state="new">
-          <x id="PH"/> months ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> meses </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="9139359498077914820" datatype="html">
         <source><x id="PH"/> month ago </source>
-        <target state="new">
-          <x id="PH"/> month ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> mes </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6473426250245763193" datatype="html">
         <source><x id="PH"/> weeks ago </source>
-        <target state="new">
-          <x id="PH"/> weeks ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> semanas </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3334373857036457679" datatype="html">
         <source><x id="PH"/> week ago </source>
-        <target state="new">
-          <x id="PH"/> week ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> una semana </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="5186107770140555014" datatype="html">
         <source><x id="PH"/> days ago </source>
-        <target state="new">
-          <x id="PH"/> days ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> días </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="5968335347732866388" datatype="html">
         <source><x id="PH"/> day ago </source>
-        <target state="new">
-          <x id="PH"/> day ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> día </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="6522428509564266583" datatype="html">
         <source><x id="PH"/> hours ago </source>
-        <target state="new">
-          <x id="PH"/> hours ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> horas </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1791228261125511283" datatype="html">
         <source><x id="PH"/> hour ago </source>
-        <target state="new">
-          <x id="PH"/> hour ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> hora </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8256466313580256940" datatype="html">
         <source><x id="PH"/> min ago </source>
-        <target state="new">
-          <x id="PH"/> min ago
-        </target>
+        <target state="translated">Fai <x id="PH"/> min </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4733690367258997247" datatype="html">
         <source>just now</source>
-        <target state="new">just now</target>
+        <target state="translated">xusto agora</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="6784913005965759008" datatype="html">
         <source><x id="PH"/> h <x id="PH_1"/> min <x id="PH_2"/> sec</source>
-        <target state="new">
-          <x id="PH"/> h 
-          <x id="PH_1"/> min 
-          <x id="PH_2"/> sec
-        </target>
+        <target state="translated"><x id="PH"/> h <x id="PH_1"/> min <x id="PH_2"/> seg</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-duration-formatter.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="2068773941062585163" datatype="html">
         <source><x id="PH"/> min <x id="PH_1"/> sec</source>
-        <target state="new">
-          <x id="PH"/> min 
-          <x id="PH_1"/> sec
-        </target>
+        <target state="translated"><x id="PH"/> min <x id="PH_1"/> seg</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-duration-formatter.pipe.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH"/> sec </source>
-        <target state="new">
-          <x id="PH"/> sec
-        </target>
+        <target state="translated"><x id="PH"/> seg </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-duration-formatter.pipe.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="9178182467454450952" datatype="html">
         <source>Confirm</source>
-        <target state="new">Confirm</target>
+        <target state="translated">Confirmar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/modal/confirm.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="7784486624424057376" datatype="html">
         <source>Instance name is required.</source>
-        <target state="new">Instance name is required.</target>
+        <target state="translated">Requírese un nome para a instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3281212084219111058" datatype="html">
         <source>Short description should not be longer than 250 characters.</source>
-        <target state="new">Short description should not be longer than 250 characters.</target>
+        <target state="translated">A descrición curta non debería ser maior de 250 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="6033463036257195528" datatype="html">
         <source>Twitter username is required.</source>
-        <target state="new">Twitter username is required.</target>
+        <target state="translated">Requírese o nome de usuaria en Twitter.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="8198703669620791633" datatype="html">
         <source>Previews cache size is required.</source>
-        <target state="new">Previews cache size is required.</target>
+        <target state="translated">Requírese o tamaño da caché de previsualización.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="3971192070835972256" datatype="html">
         <source>Previews cache size must be greater than 1.</source>
-        <target state="new">Previews cache size must be greater than 1.</target>
+        <target state="translated">O tamaño da caché de previsualización ten que ser maior que 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2903453036126968504" datatype="html">
         <source>Previews cache size must be a number.</source>
-        <target state="new">Previews cache size must be a number.</target>
+        <target state="translated">O tamaño da caché de previsualización ten que ser un número.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6941976540222684735" datatype="html">
