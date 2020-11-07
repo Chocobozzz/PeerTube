@@ -63,8 +63,8 @@
 }
 
 input:not([type=submit]) {
-  @include peertube-input-text(100%);
-
+  @include peertube-input-text(400px);
+width:100%;
   display: block;
 
   &#username,
