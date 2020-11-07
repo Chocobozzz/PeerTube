@@ -21,8 +21,11 @@ const MarkdownItClass = require('markdown-it')
 const markdownIt = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
 
 markdownIt.enable([
+  'linkify',
+  'autolink',
   'emphasis',
   'link',
+  'newline',
   'list'
 ])
 
