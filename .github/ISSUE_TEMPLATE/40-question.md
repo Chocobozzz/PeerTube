@@ -1,6 +1,6 @@
 ---
 name: 🙋 Question
-about: Use this template to ask questions
+about: Use this template to ask questions that could not get solved over chat
 labels: 'Type: Question'
 ---
 

@@ -1,10 +1,10 @@
 ---
-name: Installation Issue
+name: 🚀 Installation Issue
 about: Use this template for build/installation issues
 ---
 
 <!--
-Please read the FAQ.md first.
+Please read the FAQ.md and docs.joinpeertube.org first.
 Please make sure your issue doesn't stem from a third-party package.
 Please search among past open/closed issues for a similar one beforehand.
 
