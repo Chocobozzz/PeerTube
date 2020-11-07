@@ -6636,378 +6636,377 @@
       </trans-unit>
       <trans-unit id="6941976540222684735" datatype="html">
         <source>Captions cache size is required.</source>
-        <target state="new">Captions cache size is required.</target>
+        <target state="translated">Requírese un tamaño para a caché de subtítulos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="780869536819343075" datatype="html">
         <source>Captions cache size must be greater than 1.</source>
-        <target state="new">Captions cache size must be greater than 1.</target>
+        <target state="translated">O tamaño da caché para subtítulos debe ser maior a 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2498218540197718478" datatype="html">
         <source>Captions cache size must be a number.</source>
-        <target state="new">Captions cache size must be a number.</target>
+        <target state="translated">O tamaño da caché de subtítulos ten que ser un número.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="818392297325723982" datatype="html">
         <source>Signup limit is required.</source>
-        <target state="new">Signup limit is required.</target>
+        <target state="translated">Requírese un límite de rexistros.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="2582606912307765585" datatype="html">
         <source>Signup limit must be greater than 1.</source>
-        <target state="new">Signup limit must be greater than 1.</target>
+        <target state="translated">O límite de rexistros debe ser maior de 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="2555843408410000965" datatype="html">
         <source>Signup limit must be a number.</source>
-        <target state="new">Signup limit must be a number.</target>
+        <target state="translated">O límite de rexistros ten que ser un número.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="240096858386658337" datatype="html">
         <source>Admin email is required.</source>
-        <target state="new">Admin email is required.</target>
+        <target state="translated">Requírese o email da Admin.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="4392533896009432078" datatype="html">
         <source>Admin email must be valid.</source>
-        <target state="new">Admin email must be valid.</target>
+        <target state="translated">O email de Admin ten que ser válido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="6172217783476989430" datatype="html">
         <source>Transcoding threads is required.</source>
-        <target state="new">Transcoding threads is required.</target>
+        <target state="translated">Requírense fíos de transcodificación.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target state="new">Transcoding threads must be greater or equal to 0.</target>
+        <target state="translated">Os fíos de transcodificación deben ser maior ou igual a 0.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="new">Index URL should be a URL</target>
+        <target state="translated">O URL do índice debería ser un URL</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="new">Search index URL should be a URL</target>
+        <target state="translated">O URL do índice de busca debería ser un URL</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
         <source>Email is required.</source>
-        <target state="new">Email is required.</target>
+        <target state="translated">Requírese email.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="4591482207344282590" datatype="html">
         <source>Email must be valid.</source>
-        <target state="new">Email must be valid.</target>
+        <target state="translated">O email ten que ser válido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
-        <target state="new">Your name is required.</target>
+        <target state="translated">Requírese o teu nome.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5799695548385507586" datatype="html">
         <source>Your name must be at least 1 character long.</source>
-        <target state="new">Your name must be at least 1 character long.</target>
+        <target state="translated">O teu nome ten que ter polo menos 1 caracter.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3600004643604731577" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
-        <target state="new">Your name cannot be more than 120 characters long.</target>
+        <target state="translated">O teu nome non pode ter máis de 120 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
         <source>A subject is required.</source>
-        <target state="new">A subject is required.</target>
+        <target state="translated">Requírese un asunto.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target state="new">The subject must be at least 1 character long.</target>
+        <target state="translated">O asunto ten que ter polo menos 1 caracter.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="5905189237950302829" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="new">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">O asunto non pode ter máis de 120 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="847704400962945123" datatype="html">
         <source>A message is required.</source>
-        <target state="new">A message is required.</target>
+        <target state="translated">Requírese unha mensaxe.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3871842658394273178" datatype="html">
         <source>The message must be at least 3 characters long.</source>
-        <target state="new">The message must be at least 3 characters long.</target>
+        <target state="translated">A mensaxe ten que ter polo menos 3 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3731145759205895653" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
-        <target state="new">The message cannot be more than 5000 characters long.</target>
+        <target state="translated">A lonxitude da mensaxe non pode ser maior de 5000 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="3868123820758341861" datatype="html">
         <source>Username is required.</source>
-        <target state="new">Username is required.</target>
+        <target state="translated">Require un nome de usuaria.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="3577237269587081090" datatype="html">
         <source>Password is required.</source>
-        <target state="new">Password is required.</target>
+        <target state="translated">Require o contrasinal.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="3152303769378345477" datatype="html">
         <source>Confirmation of the password is required.</source>
-        <target state="new">Confirmation of the password is required.</target>
+        <target state="translated">Require a confirmación do contrasinal.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/reset-password-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
         <source>Username must be at least 1 character long.</source>
-        <target state="new">Username must be at least 1 character long.</target>
+        <target state="translated">O nome de usuaria ten que ter polo menos 1 caracter.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="1019755749203839300" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
-        <target state="new">Username cannot be more than 50 characters long.</target>
+        <target state="translated">O nome de usuaria non pode ter máis de 50 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Username should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">O nome de usuaria debería ser alfanumérico e en minúsculas; puntos e trazo baixo están permitidos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
-        <target state="new">Channel name is required.</target>
+        <target state="translated">O nome da canle é requerido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
         <source>Channel name must be at least 1 character long.</source>
-        <target state="new">Channel name must be at least 1 character long.</target>
+        <target state="translated">O nome da canle ten que ter 1 caracter polo menos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="8602785819772117007" datatype="html">
         <source>Channel name cannot be more than 50 characters long.</source>
-        <target state="new">Channel name cannot be more than 50 characters long.</target>
+        <target state="translated">O nome da canle non pode ter máis de 50 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="7261858447215513786" datatype="html">
         <source>Channel name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Channel name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">O nome da canle debería ser alfanumérico e minúsculas; puntos e trazos baixos están permitidos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
         <source>Password must be at least 6 characters long.</source>
-        <target state="new">Password must be at least 6 characters long.</target>
+        <target state="translated">O contrasinal ten que ter polo menos 6 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="1099684476181448167" datatype="html">
         <source>Password cannot be more than 255 characters long.</source>
-        <target state="new">Password cannot be more than 255 characters long.</target>
+        <target state="translated">O contrasinal non pode ter máis de 255 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3392630942539073768" datatype="html">
         <source>The new password and the confirmed password do not correspond.</source>
-        <target state="new">The new password and the confirmed password do not correspond.</target>
+        <target state="translated">O novo contrasinal e o contrasinal confirmado non concordan.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
         <source>Video quota is required.</source>
-        <target state="new">Video quota is required.</target>
+        <target state="translated">A cota de vídeo é requerida.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
         <source>Quota must be greater than -1.</source>
-        <target state="new">Quota must be greater than -1.</target>
+        <target state="translated">A cota debe ser maior de -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
         <source>Daily upload limit is required.</source>
-        <target state="new">Daily upload limit is required.</target>
+        <target state="translated">O límite de subida diario é requerido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="8959404382357999234" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
-        <target state="new">Daily upload limit must be greater than -1.</target>
+        <target state="translated">O límite de subida diaria ten que ser maior de -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="4796798537475457493" datatype="html">
         <source>User role is required.</source>
-        <target state="new">User role is required.</target>
+        <target state="translated">O rol da usuaria é requerido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="2761226139624435788" datatype="html">
         <source>Description must be at least 3 characters long.</source>
-        <target state="new">Description must be at least 3 characters long.</target>
+        <target state="translated">A descrición debe ser maior de 3 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="4717982586356605243" datatype="html">
         <source>Description cannot be more than 1000 characters long.</source>
-        <target state="new">Description cannot be more than 1000 characters long.</target>
+        <target state="translated">A descrición non pode ter máis de 1000 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="new">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">Debes aceptar os termos da instancia para poder rexistrarte nela.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="7803960725351649605" datatype="html">
         <source>Ban reason must be at least 3 characters long.</source>
-        <target state="new">Ban reason must be at least 3 characters long.</target>
+        <target state="translated">A razón do veto debe ter máis de 3 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="3851609012243698179" datatype="html">
         <source>Ban reason cannot be more than 250 characters long.</source>
-        <target state="new">Ban reason cannot be more than 250 characters long.</target>
+        <target state="translated">A razón do veto non pode ter máis de 250 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
         <source>Display name is required.</source>
-        <target state="new">Display name is required.</target>
+        <target state="translated">Requírese un nome público.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="1303578752658966736" datatype="html">
         <source>Display name must be at least 1 character long.</source>
-        <target state="new">Display name must be at least 1 character long.</target>
+        <target state="translated">O nome público debe ter 1 caracter polo menos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4613240543124934954" datatype="html">
         <source>Display name cannot be more than 50 characters long.</source>
-        <target state="new">Display name cannot be more than 50 characters long.</target>
+        <target state="translated">O nome público non pode ter máis de 50 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1000468652492651683" datatype="html">
         <source>Report reason is required.</source>
-        <target state="new">Report reason is required.</target>
+        <target state="translated">Requírese unha razón para a denuncia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="1109780973109145433" datatype="html">
         <source>Report reason must be at least 2 characters long.</source>
-        <target state="new">Report reason must be at least 2 characters long.</target>
+        <target state="translated">A razón da denuncia debe ter 2 caracteres polo menos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5414573937278525654" datatype="html">
         <source>Report reason cannot be more than 3000 characters long.</source>
-        <target state="new">Report reason cannot be more than 3000 characters long.</target>
+        <target state="translated">A razón da denuncia non pode ser maior de 3000 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="8779567454442277762" datatype="html">
         <source>Moderation comment is required.</source>
-        <target state="new">Moderation comment is required.</target>
+        <target state="translated">Requírese un comentario da moderación.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8954765410376245909" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
-        <target state="new">Moderation comment must be at least 2 characters long.</target>
+        <target state="translated">O comentario da moderación debe ter polo menos 2 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6316804467108244906" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation comment cannot be more than 3000 characters long.</target>
+        <target state="translated">O comentario da moderación non pode ter máis de 3000 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="new">Abuse message is required.</target>
+        <target state="translated">Requírese unha mesaxe para o abuso.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="new">Abuse message must be at least 2 characters long.</target>
+        <target state="translated">A mensaxe do abuso debe ter 2 caracteres polo menos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="new">Abuse message cannot be more than 3000 characters long.</target>
+        <target state="translated">A mensaxe de abuso non pode ter máis de 3000 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6700357678556223012" datatype="html">
         <source>The channel is required.</source>
-        <target state="new">The channel is required.</target>
+        <target state="translated">Requírese a canle.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
-        <target state="new">Block reason must be at least 2 characters long.</target>
+        <target state="translated">A razón do bloqueo ten que ter 2 caracteres polo menos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="new">Block reason cannot be more than 300 characters long.</target>
+        <target state="translated">A razón do bloqueo non pode ter máis de 300 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
         <source>Video caption language is required.</source>
-        <target state="new">Video caption language is required.</target>
+        <target state="translated">Requírese o idioma para os subtítulos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3438639650276868976" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="new">Video caption file is required.</target>
+        <target state="translated">Requírese un ficheiro para os subtítulos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7365924714339585574" datatype="html">
         <source>The username is required.</source>
-        <target state="new">The username is required.</target>
+        <target state="translated">O nome de usuaria é requerido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
         <source>You can only transfer ownership to a local account</source>
-        <target state="new">You can only transfer ownership to a local account</target>
+        <target state="translated">Só podes transferir a propiedade a unha conta local</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
         <source>Name is required.</source>
-        <target state="new">Name is required.</target>
+        <target state="translated">Nome requerido.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="4006797705713167676" datatype="html">
         <source>Name must be at least 1 character long.</source>
-        <target state="new">Name must be at least 1 character long.</target>
+        <target state="translated">O nome ten que ter polo menos 1 caracter.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="2233809696503670883" datatype="html">
         <source>Name cannot be more than 50 characters long.</source>
-        <target state="new">Name cannot be more than 50 characters long.</target>
+        <target state="translated">O nome non pode ter máis de 50 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7915656854942800659" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">O nome ten que ser alfanumérico e minúsculas; puntos e trazos baixos están permitidos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="6880459830525364741" datatype="html">
         <source>Support text must be at least 3 characters long.</source>
-        <target state="new">Support text must be at least 3 characters long.</target>
+        <target state="translated">O texto de axuda ten que ter polo menos 3 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="6461548560008228165" datatype="html">
         <source>Support text cannot be more than 1000 characters long</source>
-        <target state="new">Support text cannot be more than 1000 characters long</target>
+        <target state="translated">O texto de axuda non pode ter máis de 1000 caracteres</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="4267638333776227701" datatype="html">
         <source>Comment is required.</source>
-        <target state="new">Comment is required.</target>
+        <target state="translated">Requírese un comentario.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="71132671234491945" datatype="html">
         <source>Comment must be at least 2 characters long.</source>
-        <target state="new">Comment must be at least 2 characters long.</target>
+        <target state="translated">O comentario ten que ter polo menos 2 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="4148250392704331190" datatype="html">
         <source>Comment cannot be more than 3000 characters long.</source>
-        <target state="new">Comment cannot be more than 3000 characters long.</target>
+        <target state="translated">O comentario non pode ser maior de 3000 caracteres.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6541082750381847310" datatype="html">
         <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="new">Request is too large for the server.
- Please contact you administrator if you want to increase the limit size.</target>
+        <target state="translated">A solicitude é demasiado longa para o servidor. Contacta coa Administración se queres aumentar o tamaño límite.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">61,62</context>
@@ -7015,22 +7014,22 @@
       </trans-unit>
       <trans-unit id="6854100952145697527" datatype="html">
         <source>Display name cannot be more than 120 characters long.</source>
-        <target state="new">Display name cannot be more than 120 characters long.</target>
+        <target state="translated">O nome público non pode ter máis de 120 caracteres de longo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="6198895122092095739" datatype="html">
         <source>Privacy is required.</source>
-        <target state="new">Privacy is required.</target>
+        <target state="translated">Privacidade é requerida.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
         <source>The channel is required when the playlist is public.</source>
-        <target state="new">The channel is required when the playlist is public.</target>
+        <target state="translated">A canle é requerida cando a lista de reprodución é pública.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5437132245714159662" datatype="html">
         <source>Video name is required.</source>
-        <target state="new">Video name is required.</target>
+        <target state="translated">Requírese un nome para o vídeo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="2807676084745266104" datatype="html">
