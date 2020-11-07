@@ -5,7 +5,7 @@ block title
 
 block content
   p.
-    #[a(href=accountUrl title=handle) #{accountName}] added a comment on your video 
+    #[a(href=accountUrl title=handle) #{accountName}] added a comment on your video
     "#[a(href=videoUrl) #{video.name}]":
-  blockquote #{comment.text}
+  blockquote !{commentHtml}
   br(style="display: none;")
