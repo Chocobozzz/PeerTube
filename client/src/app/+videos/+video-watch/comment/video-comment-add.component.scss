@@ -99,13 +99,22 @@ form {
   }
 }
 
-.table-emoji {
-  td {
-    &:first-child {
-      width: 20px;
-    }
+.emoji-flex {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
 
-    vertical-align: top;
+  .emoji-flex-item {
+    text-align: left;
+    margin: auto;
+    min-width: 227px;
+    flex: 1;
+
+    code {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
   }
 }
 

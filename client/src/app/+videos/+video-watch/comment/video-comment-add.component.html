@@ -85,15 +85,10 @@
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hideModals()"></my-global-icon>
   </div>
   <div class="modal-body">
-    <table class="table-emoji" *ngFor="let emojiMarkup of emojiMarkupList | keyvalue">
-      <tr>
-        <td>
-          <span>{{ emojiMarkup.value }}</span>
-        </td>
-        <td>
-          <code>:{{ emojiMarkup.key }}:</code>
-        </td>
-      </tr>
-    </table>
+    <div class="emoji-flex">
+      <div class="emoji-flex-item" *ngFor="let emojiMarkup of emojiMarkupList">
+        {{ emojiMarkup[0] }} <code>:{{ emojiMarkup[1] }}:</code>
+      </div>
+    </div>
   </div>
 </ng-template>
