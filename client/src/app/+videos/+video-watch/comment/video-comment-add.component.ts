@@ -98,7 +98,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   openEmojiModal (event: any) {
     event.preventDefault()
-    this.modalService.open(this.emojiModal, { backdrop: true })
+    this.modalService.open(this.emojiModal, { backdrop: true, size: 'lg' })
   }
 
   hideModals () {

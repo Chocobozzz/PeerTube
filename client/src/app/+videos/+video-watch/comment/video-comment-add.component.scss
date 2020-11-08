@@ -107,7 +107,8 @@ form {
   .emoji-flex-item {
     text-align: left;
     margin: auto;
-    width: 227px;
+    min-width: 227px;
+    flex: 1;
 
     code {
       display: inline-block;
