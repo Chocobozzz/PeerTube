@@ -41,11 +41,6 @@ export class MyAccountComponent implements OnInit {
           label: $localize`Abuse reports`,
           routerLink: '/my-account/abuses',
           iconName: 'flag'
-        },
-        {
-          label: $localize`Applications`,
-          routerLink: '/my-account/applications',
-          iconName: 'codesandbox'
         }
       ]
     }
@@ -59,6 +54,11 @@ export class MyAccountComponent implements OnInit {
       {
         label: $localize`Notifications`,
         routerLink: '/my-account/notifications'
+      },
+
+      {
+        label: $localize`Applications`,
+        routerLink: '/my-account/applications'
       },
 
       moderationEntries

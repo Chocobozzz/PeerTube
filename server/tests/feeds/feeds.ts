@@ -326,7 +326,7 @@ describe('Test syndication feeds', () => {
         const res = await listUserSubscriptionVideos(servers[0].url, feeduserAccessToken)
         expect(res.body.total).to.equal(0)
 
-        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: feeduserAccountId, token: feeduserFeedToken })
+        const json = await getJSONfeed(servers[0].url, 'subscriptions', { accountId: feeduserAccountId, token: feeduserFeedToken })
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(0) // no subscription, it should not list the instance's videos but list 0 videos
       }
@@ -337,7 +337,7 @@ describe('Test syndication feeds', () => {
         const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
         expect(res.body.total).to.equal(0)
 
-        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: userAccountId, token: userFeedToken })
+        const json = await getJSONfeed(servers[0].url, 'subscriptions', { accountId: userAccountId, token: userFeedToken })
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(0) // no subscription, it should not list the instance's videos but list 0 videos
       }
@@ -354,7 +354,7 @@ describe('Test syndication feeds', () => {
         expect(res.body.total).to.equal(1)
         expect(res.body.data[0].name).to.equal('user video')
 
-        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: userAccountId, token: userFeedToken, version: 1 })
+        const json = await getJSONfeed(servers[0].url, 'subscriptions', { accountId: userAccountId, token: userFeedToken, version: 1 })
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(1) // subscribed to self, it should not list the instance's videos but list john's
       }
@@ -370,7 +370,7 @@ describe('Test syndication feeds', () => {
         const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
         expect(res.body.total).to.equal(2, "there should be 2 videos part of the subscription")
 
-        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: userAccountId, token: userFeedToken, version: 2 })
+        const json = await getJSONfeed(servers[0].url, 'subscriptions', { accountId: userAccountId, token: userFeedToken, version: 2 })
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(2) // subscribed to root, it should not list the instance's videos but list root/john's
       }

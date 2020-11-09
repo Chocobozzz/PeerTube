@@ -161,7 +161,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
   getVideoEmbed (entry: VideoBlacklist) {
     return buildVideoOrPlaylistEmbed(
       buildVideoLink({
-        baseUrl: `${environment.embedUrl}/videos/embed/${entry.video.uuid}`,
+        baseUrl: `${environment.originServerUrl}/videos/embed/${entry.video.uuid}`,
         title: false,
         warningTitle: false
       })

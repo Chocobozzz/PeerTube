@@ -20,8 +20,8 @@ import { MyAccountDangerZoneComponent } from './my-account-settings/my-account-d
 import { MyAccountNotificationPreferencesComponent } from './my-account-settings/my-account-notification-preferences'
 import { MyAccountProfileComponent } from './my-account-settings/my-account-profile/my-account-profile.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
+import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountComponent } from './my-account.component'
-import { VideoChangeOwnershipComponent } from './my-account-applications/my-account-applications.component'
 
 @NgModule({
   imports: [
@@ -46,13 +46,13 @@ import { VideoChangeOwnershipComponent } from './my-account-applications/my-acco
     MyAccountChangePasswordComponent,
     MyAccountProfileComponent,
     MyAccountChangeEmailComponent,
+    MyAccountApplicationsComponent,
 
     MyAccountDangerZoneComponent,
     MyAccountBlocklistComponent,
     MyAccountAbusesListComponent,
     MyAccountServerBlocklistComponent,
     MyAccountNotificationsComponent,
-    MyAccountNotificationPreferencesComponent,
     MyAccountNotificationPreferencesComponent
   ],
 

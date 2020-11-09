@@ -11,7 +11,6 @@ import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
-import { ScopedTokenType, ScopedToken } from '@shared/models/users/user-scoped-token'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -27,7 +26,6 @@ export class AuthService {
   private static BASE_CLIENT_URL = environment.apiUrl + '/api/v1/oauth-clients/local'
   private static BASE_TOKEN_URL = environment.apiUrl + '/api/v1/users/token'
   private static BASE_REVOKE_TOKEN_URL = environment.apiUrl + '/api/v1/users/revoke-token'
-  private static BASE_SCOPED_TOKENS_URL = environment.apiUrl + '/api/v1/users/scoped-tokens'
   private static BASE_USER_INFORMATION_URL = environment.apiUrl + '/api/v1/users/me'
   private static LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
     CLIENT_ID: 'client_id',
@@ -43,7 +41,6 @@ export class AuthService {
   private loginChanged: Subject<AuthStatus>
   private user: AuthUser = null
   private refreshingTokenObservable: Observable<any>
-  private scopedTokens: ScopedToken
 
   constructor (
     private http: HttpClient,
@@ -245,48 +242,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
             this.userInformationLoaded.next(true)
           }
         )
-  }
-
-  getScopedTokens (): Promise<ScopedToken> {
-    return new Promise((res, rej) => {
-      if (this.scopedTokens) return res(this.scopedTokens)
-
-      const authHeaderValue = this.getRequestHeaderValue()
-      const headers = new HttpHeaders().set('Authorization', authHeaderValue)
-
-      this.http.get<ScopedToken>(AuthService.BASE_SCOPED_TOKENS_URL, { headers })
-              .subscribe(
-                scopedTokens => {
-                  this.scopedTokens = scopedTokens
-                  res(this.scopedTokens)
-                },
-
-                err => {
-                  console.error(err)
-                  rej(err)
-                }
-              )
-    })
-  }
-
-  renewScopedTokens (): Promise<ScopedToken> {
-    return new Promise((res, rej) => {
-      const authHeaderValue = this.getRequestHeaderValue()
-      const headers = new HttpHeaders().set('Authorization', authHeaderValue)
-
-      this.http.post<ScopedToken>(AuthService.BASE_SCOPED_TOKENS_URL, {}, { headers })
-              .subscribe(
-                scopedTokens => {
-                  this.scopedTokens = scopedTokens
-                  res(this.scopedTokens)
-                },
-
-                err => {
-                  console.error(err)
-                  rej(err)
-                }
-              )
-    })
   }
 
   private mergeUserInformation (obj: UserLoginWithUsername): Observable<UserLoginWithUserInformation> {

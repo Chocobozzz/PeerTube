@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
+import { AuthService, LocalStorageService, Notifier, ScopedTokensService, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
@@ -9,6 +9,7 @@ import { AbstractVideoList, OwnerDisplayType } from '@app/shared/shared-video-mi
 import { VideoSortField, FeedFormat } from '@shared/models'
 import { copyToClipboard } from '../../../root-helpers/utils'
 import { environment } from '../../../environments/environment'
+import { forkJoin } from 'rxjs'
 
 @Component({
   selector: 'my-videos-user-subscriptions',
@@ -32,7 +33,8 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     protected storageService: LocalStorageService,
     private userSubscription: UserSubscriptionService,
     private hooks: HooksService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private scopedTokensService: ScopedTokensService
   ) {
     super()
 
@@ -49,9 +51,19 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     super.ngOnInit()
 
     const user = this.authService.getUser()
-    let feedUrl = environment.embedUrl
-    this.videoService.getVideoSubscriptionFeedUrls(user.account.id)
-                     .then((feeds: any) => feedUrl = feedUrl + feeds.find((f: any) => f.format === FeedFormat.RSS).url)
+    let feedUrl = environment.originServerUrl
+
+    this.scopedTokensService.getScopedTokens().subscribe(
+      tokens => {
+        const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
+        feedUrl = feedUrl + feeds.find((f: any) => f.format === FeedFormat.RSS).url
+      },
+
+      err => {
+        this.notifier.error(err.message)
+      }
+    )
+
     this.actions.unshift({
       label: $localize`Feed`,
       iconName: 'syndication',

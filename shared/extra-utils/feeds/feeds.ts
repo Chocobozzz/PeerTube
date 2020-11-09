@@ -1,6 +1,6 @@
 import * as request from 'supertest'
 
-type FeedType = 'videos' | 'video-comments'
+type FeedType = 'videos' | 'video-comments' | 'subscriptions'
 
 function getXMLfeed (url: string, feed: FeedType, format?: string) {
   const path = '/feeds/' + feed + '.xml'

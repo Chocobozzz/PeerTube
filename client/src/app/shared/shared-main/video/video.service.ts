@@ -18,8 +18,7 @@ import {
   VideoFilter,
   VideoPrivacy,
   VideoSortField,
-  VideoUpdate,
-  VideoCreate
+  VideoUpdate
 } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
@@ -44,13 +43,13 @@ export interface VideosProvider {
 export class VideoService implements VideosProvider {
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
+  static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
 
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private serverService: ServerService,
-    private authService: AuthService
+    private serverService: ServerService
   ) {}
 
   getVideoViewUrl (uuid: string) {
@@ -238,22 +237,22 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  buildBaseFeedUrls (params: HttpParams) {
+  buildBaseFeedUrls (params: HttpParams, base = VideoService.BASE_FEEDS_URL) {
     const feeds = [
       {
         format: FeedFormat.RSS,
         label: 'media rss 2.0',
-        url: VideoService.BASE_FEEDS_URL + FeedFormat.RSS.toLowerCase()
+        url: base + FeedFormat.RSS.toLowerCase()
       },
       {
         format: FeedFormat.ATOM,
         label: 'atom 1.0',
-        url: VideoService.BASE_FEEDS_URL + FeedFormat.ATOM.toLowerCase()
+        url: base + FeedFormat.ATOM.toLowerCase()
       },
       {
         format: FeedFormat.JSON,
         label: 'json 1.0',
-        url: VideoService.BASE_FEEDS_URL + FeedFormat.JSON.toLowerCase()
+        url: base + FeedFormat.JSON.toLowerCase()
       }
     ]
 
@@ -294,14 +293,12 @@ export class VideoService implements VideosProvider {
     return this.buildBaseFeedUrls(params)
   }
 
-  async getVideoSubscriptionFeedUrls (accountId: number) {
+  getVideoSubscriptionFeedUrls (accountId: number, feedToken: string) {
     let params = this.restService.addRestGetParams(new HttpParams())
     params = params.set('accountId', accountId.toString())
-
-    const { feedToken } = await this.authService.getScopedTokens()
     params = params.set('token', feedToken)
 
-    return this.buildBaseFeedUrls(params)
+    return this.buildBaseFeedUrls(params, VideoService.BASE_SUBSCRIPTION_FEEDS_URL)
   }
 
   getVideoFileMetadata (metadataUrl: string) {
