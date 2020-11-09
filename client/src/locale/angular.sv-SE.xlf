@@ -392,8 +392,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/markdown-textarea.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
-        <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown&lt;/a> compatible that supports:</source>
-        <target state="translated">&lt;a href="https://sv.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener noreferrer">Markdown&lt;/a>-formatering med stöd för:</target>
+        <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
+        <target state="translated">&lt;a href="https://sv.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt;-formatering med stöd för:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
@@ -698,8 +698,7 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
         <target state="translated">Ett meddelande med instruktioner för att återställa lösenordet kommer skickas per e-post till <x id="PH"/>. Länken är giltig i en timme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
@@ -1489,7 +1488,7 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
-        <source>Already uploaded	✔</source>
+        <source>Already uploaded ✔</source>
         <target>Redan uppladdad	✔</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
@@ -2254,8 +2253,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c">
         <source>ID</source>
         <target>ID</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group>
+      </trans-unit>
       <trans-unit id="1d284acc5ec053b3cd87e4e9fcd7aaefec0c54fb">
         <source>Follower handle</source>
         <target>Hantera följare</target>
@@ -2264,13 +2263,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
         <source>State</source>
         <target>Status</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit>
-      
-      
-      
-      
-      
+        <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">19</context></context-group>
+      </trans-unit>
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
         <target>Skapad <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
@@ -3030,8 +3024,10 @@ The link will expire within 1 hour.</source>
         <source>Job state</source>
         <target state="translated">Jobbstatus</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group>
-      </trans-unit><trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
-        <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source><target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</target>
+      </trans-unit>
+      <trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
+        <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source>
+        <target state="translated">Visar jobb <x id="INTERPOLATION"/> till <x id="INTERPOLATION_1"/> av <x id="INTERPOLATION_2"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">32</context>
@@ -3040,15 +3036,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc">
         <source>Type</source>
         <target>Typ</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit><trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
-        <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source><target state="new">No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</target>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">40</context></context-group>
+      </trans-unit>
+      <trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
+        <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
+        <target state="translated">Inga <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/>-jobb hittades.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">86</context>
         </context-group>
-      </trans-unit><trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
-        <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source><target state="new">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+      </trans-unit>
+      <trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
+        <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
+        <target state="translated">Inga <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/>-jobb hittades som är <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">87</context>
@@ -3057,9 +3057,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a">
         <source>Refresh</source>
         <target>Uppdatera</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">33</context></context-group></trans-unit><trans-unit id="7f34c2aa1c5e1d4bc339995fe325e831d7fbe40a" datatype="html">
-        <source>now</source><target state="new">now</target>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">33</context></context-group>
+      </trans-unit>
+      <trans-unit id="7f34c2aa1c5e1d4bc339995fe325e831d7fbe40a" datatype="html">
+        <source>now</source>
+        <target state="translated">nu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">15</context>
@@ -3068,13 +3070,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
         <target state="translated">Laddar …</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">37</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">37</context></context-group>
+      </trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
-        <source>By <x id="INTERPOLATION"/> -></source>
-        <target state="translated">Efter <x id="INTERPOLATION"/> -></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">45</context></context-group></trans-unit>
+        <source>By <x id="INTERPOLATION"/> -&gt;</source>
+        <target state="translated">Efter <x id="INTERPOLATION"/> -&gt;</target>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">45</context></context-group>
+      </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
         <target state="translated">INSTANS</target>
@@ -3656,7 +3658,7 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">758</context></context-group>
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
-        <source><x id="START_TAG_STRONG"/>Requires ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
+        <source><x id="START_TAG_STRONG"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
         <target state="translated"><x id="START_TAG_STRONG"/>Kräver minst version 4.1<x id="CLOSE_TAG_STRONG"/> av ffmpeg <x id="START_PARAGRAPH"/>Skapa en HLS-spellista och fragmenterade mp4-filer för bättre uppspelning än med den nuvarande standardspelaren:<x id="CLOSE_PARAGRAPH"/> <x id="START_UNORDERED_LIST"/> <x id="START_LIST_ITEM"/>Mjukare byten mellan upplösningar<x id="CLOSE_LIST_ITEM"/> <x id="START_LIST_ITEM"/>Snabbare uppspelningar, särskilt för långa videor<x id="CLOSE_LIST_ITEM"/> <x id="START_LIST_ITEM"/>Stabilare uppspelning (färre buggar samt obegränsad buffert)<x id="CLOSE_LIST_ITEM"/> <x id="CLOSE_UNORDERED_LIST"/> <x id="START_PARAGRAPH"/>Om du även stöder WebTorrent kommer varje video kräva dubbelt så mycket lagringsutryme<x id="CLOSE_PARAGRAPH"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">783</context></context-group>
       </trans-unit>
@@ -3716,13 +3718,7 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">892</context></context-group>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
-        <source> Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css <x id="INTERPOLATION"/>
-      color: red;
-    <x id="INTERPOLATION_1"/>
-    <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css .logged-in-email <x id="INTERPOLATION"/>
-      color: red;
-    <x id="INTERPOLATION_1"/>
-    <x id="CLOSE_TAG_PRE"/></source>
+        <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
         <target state="translated">Skriv din CSS-kod här. Exempel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Föregå med <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> för att skriva över standardutseendet. Exempel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">911</context></context-group>
       </trans-unit>
@@ -4041,9 +4037,8 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="66ad6eb3f06251c75325b780943a07f94c949df7" datatype="html">
-        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br />&lt;br />
-    When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="translated">En kort text som berättar hur andra kan stötta din kanal (t.ex. medlemskap på någon plattform).&lt;br />&lt;br /> När du laddar upp en video till den här kanalen kommer videons supportruta fyllas i med den här texten automatiskt.</target>
+        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
+        <target state="translated">En kort text som berättar hur andra kan stötta din kanal (t.ex. medlemskap på någon plattform).&lt;br /&gt;&lt;br /&gt; När du laddar upp en video till den här kanalen kommer videons supportruta fyllas i med den här texten automatiskt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd">
@@ -4330,9 +4325,7 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
-        <source>Do you really want to delete <x id="PH"/>?
-It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another
-channel with the same name (<x id="PH_2"/>)!</source>
+        <source>Do you really want to delete <x id="PH"/>? It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2"/>)!</source>
         <target state="translated">Vill du verkligen radera <x id="PH"/>? I så fall kommer <x id="PH_1"/> videor raderas som har laddats upp till den här kanalen och du kommer inte kunna skapa en annan kanal med samma namn (<x id="PH_2"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context>
@@ -4991,8 +4984,8 @@ channel with the same name (<x id="PH_2"/>)!</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
-        <source>A &lt;code>.mp4&lt;/code> that keeps the original audio track, with no video</source>
-        <target state="translated">En &lt;code>.mp4&lt;/code> som bevarar originalets ljudspår men inte bilden</target>
+        <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
+        <target state="translated">En &lt;code&gt;.mp4&lt;/code&gt; som bevarar originalets ljudspår men inte bilden</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="3768852440495368591">
@@ -5542,32 +5535,40 @@ channel with the same name (<x id="PH_2"/>)!</source>
       <trans-unit id="4981709795568846080">
         <source>Last day</source>
         <target>Igår</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">84</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">84</context></context-group>
+      </trans-unit>
       <trans-unit id="9178360613965745088">
         <source>Last hour</source>
         <target>Senaste timmen</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit><trans-unit id="3164845764519833078" datatype="html">
-        <source>debug</source><target state="new">debug</target>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">89</context></context-group>
+      </trans-unit>
+      <trans-unit id="3164845764519833078" datatype="html">
+        <source>debug</source>
+        <target state="translated">felsök</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">101</context>
         </context-group>
-      </trans-unit><trans-unit id="4279081882680795350" datatype="html">
-        <source>info</source><target state="new">info</target>
+      </trans-unit>
+      <trans-unit id="4279081882680795350" datatype="html">
+        <source>info</source>
+        <target state="translated">info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">105</context>
         </context-group>
-      </trans-unit><trans-unit id="3379167598974960777" datatype="html">
-        <source>warning</source><target state="new">warning</target>
+      </trans-unit>
+      <trans-unit id="3379167598974960777" datatype="html">
+        <source>warning</source>
+        <target state="translated">varning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">109</context>
         </context-group>
-      </trans-unit><trans-unit id="8772116786769251214" datatype="html">
-        <source>error</source><target state="new">error</target>
+      </trans-unit>
+      <trans-unit id="8772116786769251214" datatype="html">
+        <source>error</source>
+        <target state="translated">fel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -5576,33 +5577,33 @@ channel with the same name (<x id="PH_2"/>)!</source>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
         <target state="translated">Felsökning</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/system.routes.ts</context><context context-type="linenumber">48</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/system.routes.ts</context><context context-type="linenumber">48</context></context-group>
+      </trans-unit>
       <trans-unit id="314315645942131479">
         <source>Info</source>
         <target>Information</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/core/notification/notifier.service.ts</context><context context-type="linenumber">11</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/core/notification/notifier.service.ts</context><context context-type="linenumber">11</context></context-group>
+      </trans-unit>
       <trans-unit id="6759205696902713848">
         <source>Warning</source>
         <target>Varning</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/core/routing/can-deactivate-guard.service.ts</context><context context-type="linenumber">23</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/core/routing/can-deactivate-guard.service.ts</context><context context-type="linenumber">23</context></context-group>
+      </trans-unit>
       <trans-unit id="1519954996184640001">
         <source>Error</source>
         <target>Fel</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">103</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">103</context></context-group>
+      </trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
         <target state="translated">Standardloggar</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">124</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">124</context></context-group>
+      </trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
         <target state="translated">Granska loggar</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">128</context></context-group></trans-unit>
+        <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">128</context></context-group>
+      </trans-unit>
       <trans-unit id="1886888801485703107">
         <source>User <x id="PH"/> created.</source>
         <target>Användare <x id="PH"/> har skapats.</target>
@@ -6328,8 +6329,7 @@ channel with the same name (<x id="PH_2"/>)!</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Kan inte hämta OAuth Client-uppgifter: <x id="PH"/>. Kontrollera att du har konfigurerat PeerTube korrekt (i config-katalogen), särskilt ”webserver”-delen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/auth/auth.service.ts</context>
@@ -6459,8 +6459,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6613870447286561244">
-        <source>Long (> 10 min)</source>
-        <target>Lång (> 10 min)</target>
+        <source>Long (&gt; 10 min)</source>
+        <target>Lång (&gt; 10 min)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="1787083504545967">
@@ -7001,8 +7001,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6541082750381847310" datatype="html">
-        <source>Request is too large for the server.
- Please contact you administrator if you want to increase the limit size.</source>
+        <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
         <target state="translated">Förfrågan är för stor för servern. Kontakta din administratör om du vill få gränsen höjd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context>
@@ -8441,8 +8440,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">243</context></context-group>
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
-        <source>Your video quota is exceeded with this video (
-video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
+        <source>Your video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <target state="translated">Din videokvot kommer överskridas av den här videon (filstorlek: <x id="PH"/>, använt: <x id="PH_1"/>, kvot: <x id="PH_2"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
@@ -8450,8 +8448,7 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         </context-group>
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
-        <source>Your daily video quota is exceeded with this video (
-video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
+        <source>Your daily video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <target state="translated">Din dagliga videokvot kommer överskridas av den här videon (filstorlek: <x id="PH"/>, använt: <x id="PH_1"/>, kvot: <x id="PH_2"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
@@ -8499,8 +8496,8 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
-        <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</source>
-        <target state="translated">Den här videon finns inte på din instans. Vill du bli hänvisad till ursprungsinstansen &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</target>
+        <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</source>
+        <target state="translated">Den här videon finns inte på din instans. Vill du bli hänvisad till ursprungsinstansen &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">373</context></context-group>
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
