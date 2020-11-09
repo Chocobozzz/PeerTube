@@ -31,8 +31,8 @@
     "Published": "Pubblicato",
     "To transcode": "Da codificare",
     "To import": "Da importare",
-    "Waiting for livestream": "Waiting for livestream",
-    "Livestream ended": "Livestream ended",
+    "Waiting for livestream": "In attesa del live streaming",
+    "Livestream ended": "Il live streaming è terminato",
     "Pending": "In sospeso",
     "Success": "Successo",
     "Failed": "Fallito",
@@ -244,5 +244,5 @@
     "Chinese": "Cinese",
     "Zulu": "Zulu",
     "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode"
+    "Theater mode": "Modalità teatro"
 }
