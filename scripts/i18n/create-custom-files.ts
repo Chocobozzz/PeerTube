@@ -32,7 +32,9 @@ const playerKeys = {
   'Copy embed code': 'Copy embed code',
   'Copy magnet URI': 'Copy magnet URI',
   'Total downloaded: ': 'Total downloaded: ',
-  'Total uploaded: ': 'Total uploaded: '
+  'Total uploaded: ': 'Total uploaded: ',
+  'Normal mode': 'Normal mode',
+  'Theater mode': 'Theater mode'
 }
 Object.assign(playerKeys, videojs)
 
@@ -54,9 +56,7 @@ values(VIDEO_CATEGORIES)
     'We cannot fetch the playlist. Please try again later.',
     'Playlist: {1}',
     'By {1}',
-    'Unavailable video',
-    'Normal mode',
-    'Theater mode'
+    'Unavailable video'
   ])
   .forEach(v => { serverKeys[v] = v })
 

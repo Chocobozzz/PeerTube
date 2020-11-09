@@ -48,8 +48,6 @@
     "Playlist: {1}": "Плейлист: {1}",
     "By {1}": "От {1}",
     "Unavailable video": "Видео недоступно",
-    "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode",
     "Misc": "Разное",
     "Unknown": "Неизвестно",
     "Afar": "Афарский",
@@ -244,5 +242,7 @@
     "Yoruba": "Йоруба",
     "Zhuang": "Чжуанский",
     "Chinese": "Китайский",
-    "Zulu": "Зулу"
+    "Zulu": "Зулу",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Theater mode"
 }

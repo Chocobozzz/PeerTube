@@ -48,8 +48,6 @@
     "Playlist: {1}": "Playlist: {1}",
     "By {1}": "By {1}",
     "Unavailable video": "Unavailable video",
-    "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode",
     "Misc": "その他",
     "Unknown": "不明",
     "Afar": "アファール語",
@@ -244,5 +242,7 @@
     "Yoruba": "ヨルバ語",
     "Zhuang": "チワン語",
     "Chinese": "中国語",
-    "Zulu": "ズールー語"
+    "Zulu": "ズールー語",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Theater mode"
 }

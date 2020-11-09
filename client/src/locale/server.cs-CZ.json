@@ -48,8 +48,6 @@
     "Playlist: {1}": "Playlist: {1}",
     "By {1}": "By {1}",
     "Unavailable video": "Unavailable video",
-    "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode",
     "Misc": "Různé",
     "Unknown": "Neznámé",
     "Afar": "Afarština",
@@ -244,5 +242,7 @@
     "Yoruba": "Jorubština",
     "Zhuang": "Čuangština",
     "Chinese": "Čínština",
-    "Zulu": "Zuluština"
+    "Zulu": "Zuluština",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Theater mode"
 }
