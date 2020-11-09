@@ -12,6 +12,7 @@ import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router'
 import { AuthService } from './auth'
+import { ScopedTokensService } from './scoped-tokens'
 import { ConfirmService } from './confirm'
 import { CheatSheetComponent } from './hotkeys'
 import { MenuService } from './menu'
@@ -57,6 +58,7 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
 
   providers: [
     AuthService,
+    ScopedTokensService,
     ConfirmService,
     ServerService,
     ThemeService,

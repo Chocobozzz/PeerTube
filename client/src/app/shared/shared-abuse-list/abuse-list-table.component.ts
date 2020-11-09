@@ -112,7 +112,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   getVideoEmbed (abuse: AdminAbuse) {
     return buildVideoOrPlaylistEmbed(
       buildVideoLink({
-        baseUrl: `${environment.embedUrl}/videos/embed/${abuse.video.uuid}`,
+        baseUrl: `${environment.originServerUrl}/videos/embed/${abuse.video.uuid}`,
         title: false,
         warningTitle: false,
         startTime: abuse.video.startAt,

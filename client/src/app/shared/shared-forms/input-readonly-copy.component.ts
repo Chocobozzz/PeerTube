@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core'
 import { Notifier } from '@app/core'
-import { FormGroup } from '@angular/forms'
 
 @Component({
   selector: 'my-input-readonly-copy',

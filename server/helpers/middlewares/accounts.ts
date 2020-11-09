@@ -28,8 +28,7 @@ async function doesAccountExist (p: Bluebird<MAccountDefault>, res: Response, se
   if (!account) {
     if (sendNotFound === true) {
       res.status(404)
-         .send({ error: 'Account not found' })
-         .end()
+         .json({ error: 'Account not found' })
     }
 
     return false
@@ -41,12 +40,11 @@ async function doesAccountExist (p: Bluebird<MAccountDefault>, res: Response, se
 }
 
 async function doesUserFeedTokenCorrespond (id: number | string, token: string, res: Response) {
-  const user = await UserModel.loadById(parseInt(id + '', 10))
+  const user = await UserModel.loadByIdWithChannels(parseInt(id + '', 10))
 
   if (token !== user.feedToken) {
     res.status(401)
-       .send({ error: 'User and token mismatch' })
-       .end()
+       .json({ error: 'User and token mismatch' })
 
     return false
   }

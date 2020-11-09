@@ -1,10 +1,10 @@
 
 import { Component, OnInit } from '@angular/core'
-import { AuthService, Notifier, ConfirmService } from '@app/core'
+import { AuthService, Notifier, ConfirmService, ScopedTokensService } from '@app/core'
 import { VideoService } from '@app/shared/shared-main'
 import { FeedFormat } from '@shared/models'
-import { Subject, merge } from 'rxjs'
-import { debounceTime } from 'rxjs/operators'
+import { ScopedToken } from '@shared/models/users/user-scoped-token'
+import { environment } from '../../../environments/environment'
 
 @Component({
   selector: 'my-account-applications',
@@ -15,11 +15,11 @@ export class MyAccountApplicationsComponent implements OnInit {
   feedUrl: string
   feedToken: string
 
-  private baseURL = window.location.protocol + '//' + window.location.host
-  private tokenStream = new Subject()
+  private baseURL = environment.originServerUrl
 
   constructor (
     private authService: AuthService,
+    private scopedTokensService: ScopedTokensService,
     private videoService: VideoService,
     private notifier: Notifier,
     private confirmService: ConfirmService
@@ -27,31 +27,40 @@ export class MyAccountApplicationsComponent implements OnInit {
 
   ngOnInit () {
     this.feedUrl = this.baseURL
+    this.scopedTokensService.getScopedTokens()
+      .subscribe(
+        tokens => this.regenApplications(tokens),
 
-    merge(
-      this.tokenStream,
-      this.authService.userInformationLoaded
-    ).pipe(debounceTime(400))
-     .subscribe(
-       _ => {
-         const user = this.authService.getUser()
-         this.videoService.getVideoSubscriptionFeedUrls(user.account.id)
-                          .then(feeds => this.feedUrl = this.baseURL + feeds.find(f => f.format === FeedFormat.RSS).url)
-                          .then(_ => this.authService.getScopedTokens().then(tokens => this.feedToken = tokens.feedToken))
-       },
-
-       err => {
-         this.notifier.error(err.message)
-       }
-     )
+        err => {
+          this.notifier.error(err.message)
+        }
+      )
   }
 
   async renewToken () {
-    const res = await this.confirmService.confirm('Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?', 'Renew token')
+    const res = await this.confirmService.confirm(
+      $localize`Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?`,
+      $localize`Renew token`
+    )
     if (res === false) return
 
-    await this.authService.renewScopedTokens()
-    this.notifier.success('Token renewed. Update your client configuration accordingly.')
-    this.tokenStream.next()
+    this.scopedTokensService.renewScopedTokens().subscribe(
+      tokens => {
+        this.regenApplications(tokens)
+        this.notifier.success($localize`Token renewed. Update your client configuration accordingly.`)
+      },
+
+      err => {
+        this.notifier.error(err.message)
+      }
+    )
+
+  }
+
+  private regenApplications (tokens: ScopedToken) {
+    const user = this.authService.getUser()
+    const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
+    this.feedUrl = this.baseURL + feeds.find(f => f.format === FeedFormat.RSS).url
+    this.feedToken = tokens.feedToken
   }
 }

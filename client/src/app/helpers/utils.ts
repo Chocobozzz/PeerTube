@@ -58,7 +58,7 @@ function getAbsoluteAPIUrl () {
 }
 
 function getAbsoluteEmbedUrl () {
-  let absoluteEmbedUrl = environment.embedUrl
+  let absoluteEmbedUrl = environment.originServerUrl
   if (!absoluteEmbedUrl) {
     // The Embed is on the same domain
     absoluteEmbedUrl = window.location.origin

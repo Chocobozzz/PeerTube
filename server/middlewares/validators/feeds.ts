@@ -64,8 +64,8 @@ const videoFeedsValidator = [
 ]
 
 const videoSubscriptonFeedsValidator = [
-  query('accountId').optional().custom(isIdValid),
-  query('token').optional(),
+  query('accountId').custom(isIdValid),
+  query('token'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking feeds parameters', { parameters: req.query })
@@ -74,6 +74,7 @@ const videoSubscriptonFeedsValidator = [
 
     // a token alone is erroneous
     if (req.query.token && !req.query.accountId) return
+    if (req.query.accountId && !await doesAccountIdExist(req.query.accountId, res)) return
     if (req.query.token && !await doesUserFeedTokenCorrespond(res.locals.account.userId, req.query.token, res)) return
 
     return next()
