@@ -20,6 +20,9 @@
 
     &.register-form {
       width: 450px;
+      @media screen and (max-width: 450px) {
+        width: 100%;
+      }
     }
 
     &.instance-information {
@@ -35,7 +38,9 @@
       @media screen and (max-width: 1500px) {
         width: 450px;
       }
-
+@media screen and (max-width: 450px) {
+        width: 100%;
+      }
       ngb-accordion ::ng-deep {
         .btn {
           font-weight: $font-semibold !important;
@@ -44,27 +49,36 @@
       }
     }
 
-    @media screen and (max-width: $mobile-view) {
-      width: auto;
-    }
+  
   }
 }
 
 .form-group-terms {
   margin: 30px 0;
+  @media screen and (max-width: 450px) {
+        width: 100%;
+      }
 }
 
 .input-group {
   @include peertube-input-group(400px);
+  @media screen and (max-width: 450px) {
+        width: 100%;
+      }
 }
 
 .input-group-append {
   height: 30px;
+  @media screen and (max-width: 450px) {
+        width: 100%;
+      }
 }
 
 input:not([type=submit]) {
   @include peertube-input-text(400px);
-width:100%;
+@media screen and (max-width: 450px) {
+        width: 100%;
+      }
   display: block;
 
   &#username,
@@ -78,6 +92,7 @@ input[type=submit],
 button {
   @include peertube-button;
   @include orange-button;
+  
 }
 
 .name-information {
