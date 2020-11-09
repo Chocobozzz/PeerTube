@@ -160,6 +160,7 @@ x-tagGroups:
       - Video Playlists
       - Video Ownership Change
       - Video Mirroring
+      - Live Videos
       - Feeds
   - name: Search
     tags:
@@ -1480,6 +1481,129 @@ paths:
           description: HTTP or Torrent/magnetURI import not enabled
         '400':
           description: '`magnetUri` or `targetUrl` or a torrent file missing'
+
+  /videos/live:
+    post:
+      summary: Create a live
+      security:
+        - OAuth2: []
+      tags:
+        - Live Videos
+        - Video
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+        '403':
+          description: Live is not enabled, allow replay is not enabled, or max instance/user live videos limit is exceeded
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                channelId:
+                  description: Channel id that will contain this live video
+                  type: integer
+                saveReplay:
+                  type: boolean
+                thumbnailfile:
+                  description: Live video/replay thumbnail file
+                  type: string
+                  format: binary
+                previewfile:
+                  description: Live video/replay preview file
+                  type: string
+                  format: binary
+                privacy:
+                  $ref: '#/components/schemas/VideoPrivacySet'
+                category:
+                  description: Live video/replay category
+                  type: string
+                licence:
+                  description: Live video/replay licence
+                  type: string
+                language:
+                  description: Live video/replay language
+                  type: string
+                description:
+                  description: Live video/replay description
+                  type: string
+                support:
+                  description: A text tell the audience how to support the creator
+                  example: Please support my work on <insert crowdfunding plateform>! <3
+                  type: string
+                nsfw:
+                  description: Whether or not this live video/replay contains sensitive content
+                  type: boolean
+                name:
+                  description: Live video/replay name
+                  type: string
+                tags:
+                  description: Live video/replay tags (maximum 5 tags each between 2 and 30 characters)
+                  type: array
+                  minItems: 1
+                  maxItems: 5
+                  items:
+                    type: string
+                    minLength: 2
+                    maxLength: 30
+                commentsEnabled:
+                  description: Enable or disable comments for this live video/replay
+                  type: boolean
+                downloadEnabled:
+                  description: Enable or disable downloading for the replay of this live
+                  type: boolean
+              required:
+                - channelId
+                - name
+            encoding:
+              thumbnailfile:
+                contentType: image/jpeg
+              previewfile:
+                contentType: image/jpeg
+
+  /videos/live/{id}:
+    get:
+      summary: Get a live information
+      security:
+        - OAuth2: []
+      tags:
+        - Live Videos
+        - Video
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiveVideoResponse'
+    put:
+      summary: Update a live information
+      security:
+        - OAuth2: []
+      tags:
+        - Live Videos
+        - Video
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LiveVideoUpdate'
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          description: Bad parameters or trying to update a live that has already started
+        '403':
+          description: Trying to save replay of the live but saving replay is not enabled on the instance
 
   /users/me/abuses:
     get:
@@ -3858,6 +3982,8 @@ components:
           type: string
           format: uuid
           example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+        isLive:
+          type: boolean
         createdAt:
           type: string
           format: date-time
@@ -5419,6 +5545,22 @@ components:
           maxItems: 100
           items:
             $ref: '#/components/schemas/Plugin'
+
+    LiveVideoUpdate:
+      properties:
+        saveReplay:
+          type: boolean
+
+    LiveVideoResponse:
+      properties:
+        rtmpUrl:
+          type: string
+        streamKey:
+          type: string
+          description: RTMP stream key to use to stream into this live video
+        saveReplay:
+          type: boolean
+
   callbacks:
     searchIndex:
       'https://search.example.org/api/v1/search/videos':
