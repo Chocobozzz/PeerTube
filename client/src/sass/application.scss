@@ -330,6 +330,10 @@ table {
   margin-top: 10px;
 }
 
+ngx-loading-bar {
+  z-index: z(header) + 1 !important;
+}
+
 @media screen and (max-width: #{breakpoint(xxl)}) {
   .main-col {
     &.expanded {
