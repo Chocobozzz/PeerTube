@@ -54,7 +54,9 @@ values(VIDEO_CATEGORIES)
     'We cannot fetch the playlist. Please try again later.',
     'Playlist: {1}',
     'By {1}',
-    'Unavailable video'
+    'Unavailable video',
+    'Normal mode',
+    'Theater mode'
   ])
   .forEach(v => { serverKeys[v] = v })
 
