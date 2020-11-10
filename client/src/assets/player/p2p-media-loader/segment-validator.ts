@@ -6,11 +6,14 @@ type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string
 
 const maxRetries = 3
 
-function segmentValidatorFactory (segmentsSha256Url: string) {
+function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
   let segmentsJSON = fetchSha256Segments(segmentsSha256Url)
   const regex = /bytes=(\d+)-(\d+)/
 
   return async function segmentValidator (segment: Segment, retry = 1) {
+    // Wait for hash generation from the server
+    if (isLive) await wait(1000)
+
     const filename = basename(segment.url)
 
     const segmentValue = (await segmentsJSON)[filename]
@@ -20,9 +23,9 @@ function segmentValidatorFactory (segmentsSha256Url: string) {
     }
 
     if (!segmentValue) {
-      await wait(1000)
-
       console.log('Refetching sha segments for %s.', filename)
+
+      await wait(1000)
 
       segmentsJSON = fetchSha256Segments(segmentsSha256Url)
       await segmentValidator(segment, retry + 1)

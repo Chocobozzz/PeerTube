@@ -532,6 +532,8 @@ export class PeerTubeEmbed {
         inactivityTimeout: 2500,
         videoViewUrl: this.getVideoUrl(videoInfo.uuid) + '/views',
 
+        isLive: videoInfo.isLive,
+
         playerElement: this.playerElement,
         onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
 
