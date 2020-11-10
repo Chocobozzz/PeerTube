@@ -178,7 +178,7 @@ plugins:
 
 federation:
   videos:
-    federate_unlisted: true
+    federate_unlisted: false
 
 cache:
   previews:
