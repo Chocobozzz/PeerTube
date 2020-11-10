@@ -15,14 +15,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-### Dependency versions
-
-- nginx
-- **PostgreSQL >= 9.6**
-- **Redis >= 2.8.18**
-- **NodeJS >= 10.x**
-- **yarn >= 1.x**
-- **FFmpeg >= 4.1**
+> Make sure you install the correct versions of the dependencies as mentioned in the [PeerTube README.md](https://github.com/Chocobozzz/PeerTube#dependencies)
 
 ## Debian / Ubuntu and derivatives
 
