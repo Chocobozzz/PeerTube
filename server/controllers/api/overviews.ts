@@ -114,6 +114,7 @@ async function getVideos (
     sort: '-createdAt',
     includeLocalVideos: true,
     nsfw: buildNSFWFilter(res),
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     withFiles: false,
     countVideos: false
   }, where)

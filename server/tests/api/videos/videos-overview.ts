@@ -1,15 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo, wait } from '../../../../shared/extra-utils'
-import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
+import * as chai from 'chai'
+
+import {
+  cleanupTests,
+  flushAndRunServer,
+  generateUserAccessToken,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo,
+  wait
+} from '../../../../shared/extra-utils'
+import { getVideosOverview, getVideosOverviewWithToken } from '../../../../shared/extra-utils/overviews/overviews'
 import { VideosOverview } from '../../../../shared/models/overviews'
+import { addAccountToAccountBlocklist } from '@shared/extra-utils/users/blocklist'
+import { Response } from 'superagent'
 
 const expect = chai.expect
 
 describe('Test a videos overview', function () {
   let server: ServerInfo = null
+
+  function testOverviewCount (res: Response, expected: number) {
+    const overview: VideosOverview = res.body
+
+    expect(overview.tags).to.have.lengthOf(expected)
+    expect(overview.categories).to.have.lengthOf(expected)
+    expect(overview.channels).to.have.lengthOf(expected)
+  }
 
   before(async function () {
     this.timeout(30000)
@@ -22,10 +41,7 @@ describe('Test a videos overview', function () {
   it('Should send empty overview', async function () {
     const res = await getVideosOverview(server.url, 1)
 
-    const overview: VideosOverview = res.body
-    expect(overview.tags).to.have.lengthOf(0)
-    expect(overview.categories).to.have.lengthOf(0)
-    expect(overview.channels).to.have.lengthOf(0)
+    testOverviewCount(res, 0)
   })
 
   it('Should upload 5 videos in a specific category, tag and channel but not include them in overview', async function () {
@@ -41,10 +57,7 @@ describe('Test a videos overview', function () {
 
     const res = await getVideosOverview(server.url, 1)
 
-    const overview: VideosOverview = res.body
-    expect(overview.tags).to.have.lengthOf(0)
-    expect(overview.categories).to.have.lengthOf(0)
-    expect(overview.channels).to.have.lengthOf(0)
+    testOverviewCount(res, 0)
   })
 
   it('Should upload another video and include all videos in the overview', async function () {
@@ -63,10 +76,7 @@ describe('Test a videos overview', function () {
     {
       const res = await getVideosOverview(server.url, 1)
 
-      const overview: VideosOverview = res.body
-      expect(overview.tags).to.have.lengthOf(1)
-      expect(overview.categories).to.have.lengthOf(1)
-      expect(overview.channels).to.have.lengthOf(1)
+      testOverviewCount(res, 1)
     }
 
     {
@@ -114,6 +124,24 @@ describe('Test a videos overview', function () {
     expect(overview1.categories[0].category.id).to.equal(3)
 
     expect(overview1.channels[0].channel.name).to.equal('root_channel')
+  })
+
+  it('Should hide muted accounts', async function () {
+    const token = await generateUserAccessToken(server, 'choco')
+
+    await addAccountToAccountBlocklist(server.url, token, 'root@' + server.host)
+
+    {
+      const res = await getVideosOverview(server.url, 1)
+
+      testOverviewCount(res, 1)
+    }
+
+    {
+      const res = await getVideosOverviewWithToken(server.url, 1, token)
+
+      testOverviewCount(res, 0)
+    }
   })
 
   after(async function () {
