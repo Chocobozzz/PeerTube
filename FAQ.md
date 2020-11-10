@@ -114,7 +114,7 @@ As a real life example, the PeerTube demonstration server [https://peertube.cpy.
 
 ### CPU
 
-Except for video transcoding, a PeerTube instance is not CPU bound. Neither Nginx, PeerTube itself, PpostgreSQL nor Redis require a lot of computing power. If it were only for those, one could easily get by with just one thread/vCPU.
+Except for video transcoding, a PeerTube instance is not CPU bound. Neither Nginx, PeerTube itself, PostgreSQL nor Redis require a lot of computing power. If it were only for those, one could easily get by with just one thread/vCPU.
 
 You will hugely benefit from at least a second thread though, because of transcoding. Transcoding _is_ very cpu intensive. It serves two purposes on a PeerTube instance: it ensures all videos can be played optimally in the web interface, and it generates different resolutions for the same video. PeerTube support for offloading transcoding to other machines is being discussed, but not yet implemented. See https://github.com/Chocobozzz/PeerTube/issues/947 .
 

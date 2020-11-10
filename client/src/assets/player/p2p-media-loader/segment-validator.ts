@@ -41,7 +41,7 @@ function segmentValidatorFactory (segmentsSha256Url: string) {
       throw new Error(`Unknown segment name ${filename}/${range} in segment validator`)
     }
 
-    const calculatedSha = bufferToEx(await sha256(segment.data))
+    const calculatedSha = await sha256Hex(segment.data)
     if (calculatedSha !== hashShouldBe) {
       throw new Error(
         `Hashes does not correspond for segment ${filename}/${range}` +
@@ -68,14 +68,21 @@ function fetchSha256Segments (url: string) {
     })
 }
 
-function sha256 (data?: ArrayBuffer) {
+async function sha256Hex (data?: ArrayBuffer) {
   if (!data) return undefined
 
-  return window.crypto.subtle.digest('SHA-256', data)
+  if (window.crypto.subtle) {
+    return window.crypto.subtle.digest('SHA-256', data)
+      .then(data => bufferToHex(data))
+  }
+
+  // Fallback for non HTTPS context
+  const shaModule = await import('sha.js')
+  return new shaModule.sha256().update(Buffer.from(data)).digest('hex')
 }
 
 // Thanks: https://stackoverflow.com/a/53307879
-function bufferToEx (buffer?: ArrayBuffer) {
+function bufferToHex (buffer?: ArrayBuffer) {
   if (!buffer) return ''
 
   let s = ''
