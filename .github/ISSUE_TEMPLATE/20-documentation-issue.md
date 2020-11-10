@@ -16,7 +16,9 @@ All done? Then please fill the following mandatory form to help us triage your i
 
 **Parts of the documentation concerned:**
 
+<!--
 Please provide a link to the documentation entry, for example: https://docs.joinpeertube.org/#/install-any-os
+-->
 
 **Describe the desired information/correction**
 
