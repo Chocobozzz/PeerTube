@@ -138,3 +138,7 @@ search:
     disable_local_search: false
     # If you did not disable local search, you can decide to use the search index by default
     is_default_search: true
+
+federation:
+  videos:
+    federate_unlisted: true
