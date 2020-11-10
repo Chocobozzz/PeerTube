@@ -91,6 +91,7 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: MAc
   let comment: MCommentOwnerVideo
   try {
     const resolveThreadResult = await resolveThread({ url: commentObject.id, isVideo: false })
+
     video = resolveThreadResult.video
     created = resolveThreadResult.commentCreated
     comment = resolveThreadResult.comment
@@ -104,16 +105,18 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: MAc
   }
 
   // Try to not forward unwanted commments on our videos
-  if (video.isOwned() && await isBlockedByServerOrAccount(comment.Account, video.VideoChannel.Account)) {
-    logger.info('Skip comment forward from blocked account or server %s.', comment.Account.Actor.url)
-    return
-  }
+  if (video.isOwned()) {
+    if (await isBlockedByServerOrAccount(comment.Account, video.VideoChannel.Account)) {
+      logger.info('Skip comment forward from blocked account or server %s.', comment.Account.Actor.url)
+      return
+    }
 
-  if (video.isOwned() && created === true) {
-    // Don't resend the activity to the sender
-    const exceptions = [ byActor ]
+    if (created === true) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byActor ]
 
-    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+      await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+    }
   }
 
   if (created && notify) Notifier.Instance.notifyOnNewComment(comment)
