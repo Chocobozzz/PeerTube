@@ -195,12 +195,7 @@ g++ -v # Should be >= 5.x
 ```
 sudo mkdir /etc/nginx/sites-available
 sudo mkdir /etc/nginx/sites-enabled
-```
-
-Add the following line in /etc/nginx/nginx.conf (below `include /etc/nginx/conf.d/*.conf`)
-
-```
-include /etc/nginx/sites-enabled/*;
+sudo ln -s /etc/nginx/sites-enabled/peertube /etc/nginx/conf.d/peertube.conf
 ```
 
 9. Post-installation
