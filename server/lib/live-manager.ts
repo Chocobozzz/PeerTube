@@ -1,5 +1,4 @@
 
-import { AsyncQueue, queue } from 'async'
 import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { ensureDir, stat } from 'fs-extra'
@@ -50,12 +49,6 @@ const config = {
   }
 }
 
-type SegmentSha256QueueParam = {
-  operation: 'update' | 'delete'
-  videoUUID: string
-  segmentPath: string
-}
-
 class LiveManager {
 
   private static instance: LiveManager
@@ -71,7 +64,6 @@ class LiveManager {
     return isAbleToUploadVideo(userId, 1000)
   }, { maxAge: MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD })
 
-  private segmentsSha256Queue: AsyncQueue<SegmentSha256QueueParam>
   private rtmpServer: any
 
   private constructor () {
@@ -94,18 +86,6 @@ class LiveManager {
 
     events.on('donePublish', sessionId => {
       logger.info('Live session ended.', { sessionId })
-    })
-
-    this.segmentsSha256Queue = queue<SegmentSha256QueueParam, Error>((options, cb) => {
-      const promise = options.operation === 'update'
-        ? this.addSegmentSha(options)
-        : Promise.resolve(this.removeSegmentSha(options))
-
-      promise.then(() => cb())
-        .catch(err => {
-          logger.error('Cannot update/remove sha segment %s.', options.segmentPath, { err })
-          cb()
-        })
     })
 
     registerConfigChangedHandler(() => {
@@ -294,11 +274,18 @@ class LiveManager {
 
     const tsWatcher = chokidar.watch(outPath + '/*.ts')
 
-    const updateSegment = segmentPath => this.segmentsSha256Queue.push({ operation: 'update', segmentPath, videoUUID })
+    let segmentsToProcess: string[] = []
 
     const addHandler = segmentPath => {
-      updateSegment(segmentPath)
+      // Add sha hash of previous segments, because ffmpeg should have finished generating them
+      for (const previousSegment of segmentsToProcess) {
+        this.addSegmentSha(videoUUID, previousSegment)
+          .catch(err => logger.error('Cannot add sha segment of video %s -> %s.', videoUUID, previousSegment, { err }))
+      }
 
+      segmentsToProcess = [ segmentPath ]
+
+      // Duration constraint check
       if (this.isDurationConstraintValid(startStreamDateTime) !== true) {
         logger.info('Stopping session of %s: max duration exceeded.', videoUUID)
 
@@ -323,10 +310,9 @@ class LiveManager {
       }
     }
 
-    const deleteHandler = segmentPath => this.segmentsSha256Queue.push({ operation: 'delete', segmentPath, videoUUID })
+    const deleteHandler = segmentPath => this.removeSegmentSha(videoUUID, segmentPath)
 
     tsWatcher.on('add', p => addHandler(p))
-    tsWatcher.on('change', p => updateSegment(p))
     tsWatcher.on('unlink', p => deleteHandler(p))
 
     const masterWatcher = chokidar.watch(outPath + '/master.m3u8')
@@ -399,33 +385,33 @@ class LiveManager {
     }
   }
 
-  private async addSegmentSha (options: SegmentSha256QueueParam) {
-    const segmentName = basename(options.segmentPath)
-    logger.debug('Updating live sha segment %s.', options.segmentPath)
+  private async addSegmentSha (videoUUID: string, segmentPath: string) {
+    const segmentName = basename(segmentPath)
+    logger.debug('Adding live sha segment %s.', segmentPath)
 
-    const shaResult = await buildSha256Segment(options.segmentPath)
+    const shaResult = await buildSha256Segment(segmentPath)
 
-    if (!this.segmentsSha256.has(options.videoUUID)) {
-      this.segmentsSha256.set(options.videoUUID, new Map())
+    if (!this.segmentsSha256.has(videoUUID)) {
+      this.segmentsSha256.set(videoUUID, new Map())
     }
 
-    const filesMap = this.segmentsSha256.get(options.videoUUID)
+    const filesMap = this.segmentsSha256.get(videoUUID)
     filesMap.set(segmentName, shaResult)
   }
 
-  private removeSegmentSha (options: SegmentSha256QueueParam) {
-    const segmentName = basename(options.segmentPath)
+  private removeSegmentSha (videoUUID: string, segmentPath: string) {
+    const segmentName = basename(segmentPath)
 
-    logger.debug('Removing live sha segment %s.', options.segmentPath)
+    logger.debug('Removing live sha segment %s.', segmentPath)
 
-    const filesMap = this.segmentsSha256.get(options.videoUUID)
+    const filesMap = this.segmentsSha256.get(videoUUID)
     if (!filesMap) {
-      logger.warn('Unknown files map to remove sha for %s.', options.videoUUID)
+      logger.warn('Unknown files map to remove sha for %s.', videoUUID)
       return
     }
 
     if (!filesMap.has(segmentName)) {
-      logger.warn('Unknown segment in files map for video %s and segment %s.', options.videoUUID, options.segmentPath)
+      logger.warn('Unknown segment in files map for video %s and segment %s.', videoUUID, segmentPath)
       return
     }
 
