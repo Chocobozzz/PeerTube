@@ -7,4 +7,10 @@ npm run setup:cli
 
 npm run ci -- lint
 
-mocha --exit --require ts-node/register/type-check --require tsconfig-paths/register --bail server/tests/index.ts
+npm run ci -- misc
+npm run ci -- cli
+npm run ci -- api-1
+npm run ci -- api-2
+npm run ci -- api-3
+npm run ci -- api-4
+npm run ci -- external-plugins
