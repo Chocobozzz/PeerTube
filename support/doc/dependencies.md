@@ -15,7 +15,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Make sure you install the correct versions of the dependencies as mentioned in the [PeerTube README.md](https://github.com/Chocobozzz/PeerTube#dependencies)
+Make sure you install the correct versions of the dependencies as mentioned in the PeerTube [README.md](https://github.com/Chocobozzz/PeerTube#dependencies)
 
 ## Debian / Ubuntu and derivatives
 
