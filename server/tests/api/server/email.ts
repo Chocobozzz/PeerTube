@@ -279,6 +279,11 @@ describe('Test emails', function () {
       expect(email['subject']).contains(' unblacklisted')
       expect(email['text']).contains('my super user video')
     })
+
+    it('Should have the manage preferences link in the email', async function () {
+      const email = emails[6]
+      expect(email['text']).to.contain('Manage your notification preferences')
+    })
   })
 
   describe('When verifying a user email', function () {

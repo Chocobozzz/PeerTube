@@ -83,6 +83,11 @@ describe('Test contact form', function () {
     })
   })
 
+  it('Should not have the manage preferences link in the email', async function () {
+    const email = emails[0]
+    expect(email['text']).to.not.contain('Manage your notification preferences')
+  })
+
   after(async function () {
     MockSmtpServer.Instance.kill()
 
