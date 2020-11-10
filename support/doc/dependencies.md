@@ -15,6 +15,15 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+### Dependency versions
+
+- nginx
+- **PostgreSQL >= 9.6**
+- **Redis >= 2.8.18**
+- **NodeJS >= 10.x**
+- **yarn >= 1.x**
+- **FFmpeg >= 4.1**
+
 ## Debian / Ubuntu and derivatives
 
 1. On a fresh Debian/Ubuntu, as root user, install basic utility programs needed for the installation
