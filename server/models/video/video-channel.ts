@@ -1,3 +1,5 @@
+import * as Bluebird from 'bluebird'
+import { FindOptions, literal, Op, ScopeOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -23,17 +25,8 @@ import {
   isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
-import { sendDeleteActor } from '../../lib/activitypub/send'
-import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
-import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
-import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
-import { ServerModel } from '../server/server'
-import { FindOptions, Op, literal, ScopeOptions } from 'sequelize'
-import { AvatarModel } from '../avatar/avatar'
-import { VideoPlaylistModel } from './video-playlist'
-import * as Bluebird from 'bluebird'
+import { sendDeleteActor } from '../../lib/activitypub/send'
 import {
   MChannelAccountDefault,
   MChannelActor,
@@ -42,6 +35,14 @@ import {
   MChannelFormattable,
   MChannelSummaryFormattable
 } from '../../types/models/video'
+import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
+import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
+import { ActorFollowModel } from '../activitypub/actor-follow'
+import { AvatarModel } from '../avatar/avatar'
+import { ServerModel } from '../server/server'
+import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
+import { VideoModel } from './video'
+import { VideoPlaylistModel } from './video-playlist'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -292,6 +293,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     if (!instance.Actor) {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
     }
+
+    await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
 
     if (instance.Actor.isOwned()) {
       return sendDeleteActor(instance.Actor, options.transaction)
