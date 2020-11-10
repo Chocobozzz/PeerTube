@@ -114,6 +114,8 @@ channel with the same name (${videoChannel.name})!`,
 
       $localize`Please type the display name of the video channel (${videoChannel.displayName}) to confirm`,
 
+      videoChannel.displayName,
+
       $localize`Delete`
     )
     if (res === false) return
