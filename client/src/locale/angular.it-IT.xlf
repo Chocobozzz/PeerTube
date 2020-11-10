@@ -396,8 +396,8 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-forms/markdown-textarea.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
-        <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown&lt;/a> compatible that supports:</source>
-        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown&lt;/a> compatibile supportato:</target>
+        <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
+        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatibile supportato:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
@@ -506,7 +506,7 @@
       </trans-unit>
       <trans-unit id="bc3387a5ccd470d163e6459ff017b9f2edca92f4" datatype="html">
         <source>Max parallel lives</source>
-        <target state="new">Max parallel lives</target>
+        <target state="translated">Numero massimo di dirette parallele</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">85</context>
@@ -677,7 +677,7 @@
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
         <source><x id="PH"/>h</source>
-        <target state="new"><x id="PH"/>h</target>
+        <target state="translated"><x id="PH"/>h</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">14</context>
@@ -685,7 +685,7 @@
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH"/>min</source>
-        <target state="new"><x id="PH"/>min</target>
+        <target state="translated"><x id="PH"/>min</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">16</context>
@@ -772,8 +772,7 @@
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH"/>. The link will expire within 1 hour.</source>
         <target state="translated">Una mail con le istruzioni per il reset della password sarà spedita a <x id="PH"/>. Il link scadrà fra 1 ora.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+login/login.component.ts</context>
@@ -1564,7 +1563,7 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
-        <source>Already uploaded	✔</source>
+        <source>Already uploaded ✔</source>
         <target>Già caricato	✔</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
@@ -1791,7 +1790,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1278564497286613571" datatype="html">
         <source>Cannot create live because you created too many lives</source>
-        <target state="new">Cannot create live because you created too many lives</target>
+        <target state="translated">Non puoi creare la diretta perchè ne hai create troppe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -1799,7 +1798,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2621043320678012413" datatype="html">
         <source>Live published.</source>
-        <target state="new">Live published.</target>
+        <target state="translated">Diretta pubblicata.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -1807,7 +1806,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="40e85da538414cc425f42d2b09189ce344865aa1" datatype="html">
         <source>Go Live</source>
-        <target state="new">Go Live</target>
+        <target state="translated">Andare in diretta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1815,8 +1814,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="975c4cdb9e07ef4c43e2c7aa3f787feabc9a47d2" datatype="html">
         <source>Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="new"> Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated.
-</target>
+        <target state="translated">La durata massima della diretta è <x id="INTERPOLATION"/>. Se la tua diretta raggiunge questo limite, verrà automaticamente interrotta. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">31,33</context>
@@ -1854,7 +1852,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="d90cc5777a7e16ef76f325c89fe0f9270b9fa827" datatype="html">
         <source>Go live</source>
-        <target state="new">Go live</target>
+        <target state="translated">Andare in diretta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">56</context>
@@ -1960,7 +1958,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="84e4e97b8f2abab33abeecc89f47671b07fd09cf" datatype="html">
         <source>Use origin instance URL</source>
-        <target state="new">Use origin instance URL</target>
+        <target state="translated">Usa l'URL dell'istanza di origine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">180</context>
@@ -2008,7 +2006,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="130abb70adbfbda0d03e31ce2e94dc3871e30c2f" datatype="html">
         <source>This live has not started yet.</source>
-        <target state="new"> This live has not started yet. </target>
+        <target state="translated">Questa diretta non è ancora iniziata.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -2016,7 +2014,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3f063a712571f3714b07713c139e25af8de5ad4e" datatype="html">
         <source>This live is finished.</source>
-        <target state="new"> This live is finished. </target>
+        <target state="translated">La diretta è finita.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -2900,7 +2898,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="fe8634bd713368d7971877c0e09d1869f09c924d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 rapporto} other {<x id="INTERPOLATION"/> rapporti}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} altri {<x id="INTERPOLATION"/> reports}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4">
@@ -3230,8 +3228,8 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
-        <source>By <x id="INTERPOLATION"/> -></source>
-        <target state="translated">Da <x id="INTERPOLATION"/> -></target>
+        <source>By <x id="INTERPOLATION"/> -&gt;</source>
+        <target state="translated">Da <x id="INTERPOLATION"/> -&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
@@ -3761,7 +3759,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="df754f9d47b1a072519f1c9f7f1726937f44040a" datatype="html">
         <source>LIVE</source>
-        <target state="new">LIVE</target>
+        <target state="translated">DIRETTA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">709</context>
@@ -3769,7 +3767,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="803674658cb8a3267fb8cb040bcb0b0fa953e9fb" datatype="html">
         <source>Add ability for your users to do live streaming on your instance.</source>
-        <target state="new"> Add ability for your users to do live streaming on your instance. </target>
+        <target state="translated">Aggiungi la possibilità per i tuoi utenti di fare dirette streaming sulla tua istanza.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">711,712</context>
@@ -3777,7 +3775,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="096cf20ca04c42d7a06b9c0b3730e938f7662f57" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="new"> ⚠️ Enabling live streaming requires trust in your users and extra moderation work </target>
+        <target state="translated">⚠️ L'abilitazione delle dirette streaming richiede fiducia nei tuoi utenti e un lavoro di moderazione extra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">726,727</context>
@@ -3785,7 +3783,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="0c990b9d80188dd9edbbd945dbd8c66074ee62d8" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="new">Allow your users to automatically publish a replay of their live</target>
+        <target state="translated">Consenti ai tuoi utenti di pubblicare automaticamente un replay della loro diretta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">734</context>
@@ -3793,7 +3791,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="f071c73e20463032b9e1f2ad2dacb54395a7b3bf" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
-        <target state="new"> If the user quota is reached, PeerTube will automatically terminate the live streaming </target>
+        <target state="translated">Se viene raggiunta la quota utente, PeerTube interromperà automaticamente la diretta streaming</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">737,738</context>
@@ -3801,7 +3799,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="da82c27f10ef6f1af1db305fe3f4ec29ed191878" datatype="html">
         <source>Max lives created on your instance (-1 for "unlimited")</source>
-        <target state="new">Max lives created on your instance (-1 for "unlimited")</target>
+        <target state="translated">Numero massimo di dirette create nella tua istanza (-1 for "unlimited")</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">743</context>
@@ -3809,7 +3807,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7cb03878e0d89e67d48c707512e876ddb8658a6b" datatype="html">
         <source>Max lives created per user (-1 for "unlimited")</source>
-        <target state="new">Max lives created per user (-1 for "unlimited")</target>
+        <target state="translated">Numero massimo di dirette create per utente (-1 for "unlimited")</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">748</context>
@@ -3817,7 +3815,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4bddd185b531fa5ef6a1b5cebf46de5565968cb1" datatype="html">
         <source>Max live duration</source>
-        <target state="new">Max live duration</target>
+        <target state="translated">Durata massima della diretta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">753</context>
@@ -3825,7 +3823,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="19689f977565ebbf2a7ef115905e3c681917c57b" datatype="html">
         <source>Enable live transcoding</source>
-        <target state="new">Enable live transcoding</target>
+        <target state="translated">Abilita la transcodifica della diretta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">768</context>
@@ -3833,7 +3831,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="fa4fcf11774c461346d54d0a210a20f8fbe571a2" datatype="html">
         <source>Requires a lot of CPU!</source>
-        <target state="new"> Requires a lot of CPU! </target>
+        <target state="translated">Richiede molta CPU!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">771,772</context>
@@ -3841,7 +3839,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5ff339e5bc9b41411ce6401774483b0d6f8cbca8" datatype="html">
         <source>Live transcoding threads</source>
-        <target state="new">Live transcoding threads</target>
+        <target state="translated">Thread di transcodifica della diretta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">777</context>
@@ -3849,7 +3847,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="bd9fc4914f5eeb416181cb966d98cadb94282485" datatype="html">
         <source>Live resolutions to generate</source>
-        <target state="new">Live resolutions to generate</target>
+        <target state="translated">Risoluzioni della diretta da generare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">789</context>
@@ -3857,7 +3855,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="0dcaa17190a8baac67add948a7c63671f9027a7b" datatype="html">
         <source>Allow live streaming</source>
-        <target state="new">Allow live streaming</target>
+        <target state="translated">Permetti diretta streaming</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">722</context>
@@ -3870,7 +3868,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="0a1a7d6e04056d30bb85aca5bb8bd47ced098167" datatype="html">
         <source>Live streaming</source>
-        <target state="new">Live streaming</target>
+        <target state="translated">Diretta streaming</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">703</context>
@@ -3927,8 +3925,8 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">873</context></context-group>
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
-        <source><x id="START_TAG_STRONG"/>Requires ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
-        <target state="translated"><x id="START_TAG_STRONG"/>Richiede ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Genera playlist HLS e file MP4 frammentati con conseguente migliore riproduzione rispetto al lettore predefinito corrente:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>La modifica della risoluzione è più fluida<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Riproduzione più veloce in particolare con video lunghi<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Riproduzione più stabile (meno bug/caricamento infinito)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>Se hai anche abilitato il supporto WebTorrent, moltiplicherà l'archiviazione dei video per 2<x id="CLOSE_PARAGRAPH"/></target>
+        <source><x id="START_TAG_STRONG"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
+        <target state="translated"><x id="START_TAG_STRONG"/>Richiede ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Genera playlist HLS e file MP4 frammentati con conseguente migliore riproduzione rispetto al lettore predefinito corrente:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>La modifica della risoluzione è più fluida<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Riproduzione più veloce in particolare con video lunghi<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Riproduzione più stabile (meno bug/caricamento infinito)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>Se hai anche abilitato il supporto WebTorrent, moltiplicherà l'archiviazione dei video per 2<x id="CLOSE_PARAGRAPH"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">898</context></context-group>
       </trans-unit>
       <trans-unit id="5ac527cc856e9fa02927ccb0a6172688e07c1d7a" datatype="html">
@@ -3987,19 +3985,13 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1007</context></context-group>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
-        <source> Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css <x id="INTERPOLATION"/>
-      color: red;
-    <x id="INTERPOLATION_1"/>
-    <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css .logged-in-email <x id="INTERPOLATION"/>
-      color: red;
-    <x id="INTERPOLATION_1"/>
-    <x id="CLOSE_TAG_PRE"/></source>
+        <source>Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></source>
         <target state="translated">Scrivi direttamente il codice CSS. Esempio:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> colore: rosso <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Anteponi con <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> per sovrascrivere gli stili. Esempio:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> colore: rosso; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1026</context></context-group>
       </trans-unit>
       <trans-unit id="3128766f8e9bac2f95f5413fdb810e90c6084ef0" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
-        <target state="new"> It seems like the configuration is invalid. Please search for potential errors in the different tabs. </target>
+        <target state="translated">Sembra che la configurazione non sia valida. Si prega di cercare potenziali errori nelle diverse schede.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1064,1065</context>
@@ -4007,7 +3999,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1411138433f379dbe80e0682284b2384d8e390cb" datatype="html">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="new"> You cannot allow live replay if you don't enable transcoding. </target>
+        <target state="translated">Non puoi consentire la riproduzione dal vivo se non abiliti la transcodifica.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1068,1069</context>
@@ -4323,9 +4315,8 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="66ad6eb3f06251c75325b780943a07f94c949df7" datatype="html">
-        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br />&lt;br />
-    When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="translated">Breve testo per dire alle persone come possono supportare il tuo canale (piattaforma di abbonamento...).&lt;br />&lt;br /> Quando caricherai un video in questo canale, il campo del supporto video verrà automaticamente riempito da questo testo.</target>
+        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
+        <target state="translated">Breve testo per dire alle persone come possono supportare il tuo canale (piattaforma di abbonamento...).&lt;br /&gt;&lt;br /&gt; Quando caricherai un video in questo canale, il campo del supporto video verrà automaticamente riempito da questo testo.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd" datatype="html">
@@ -4602,9 +4593,7 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
-        <source>Do you really want to delete <x id="PH"/>?
-It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another
-channel with the same name (<x id="PH_2"/>)!</source>
+        <source>Do you really want to delete <x id="PH"/>? It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2"/>)!</source>
         <target state="translated">Vuoi davvero eliminare <x id="PH"/>? It will delete <x id="PH_1"/> i video caricati in questo canale e non sarai in grado di creare un altro canale con lo stesso nome (<x id="PH_2"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context>
@@ -5253,8 +5242,8 @@ channel with the same name (<x id="PH_2"/>)!</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
-        <source>A &lt;code>.mp4&lt;/code> that keeps the original audio track, with no video</source>
-        <target state="translated">Un &lt;code>.mp4&lt;/code> che mantiene la traccia audio, senza video</target>
+        <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
+        <target state="translated">Un &lt;code&gt;.mp4&lt;/code&gt; che mantiene la traccia audio, senza video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="3768852440495368591">
@@ -5294,7 +5283,7 @@ channel with the same name (<x id="PH_2"/>)!</source>
       </trans-unit>
       <trans-unit id="931255636742351800" datatype="html">
         <source>No limit</source>
-        <target state="new">No limit</target>
+        <target state="translated">Nessun limite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">98</context>
@@ -5302,7 +5291,7 @@ channel with the same name (<x id="PH_2"/>)!</source>
       </trans-unit>
       <trans-unit id="5250062810079582285" datatype="html">
         <source>1 hour</source>
-        <target state="new">1 hour</target>
+        <target state="translated">1 ora</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -5310,7 +5299,7 @@ channel with the same name (<x id="PH_2"/>)!</source>
       </trans-unit>
       <trans-unit id="8662356672298904015" datatype="html">
         <source>3 hours</source>
-        <target state="new">3 hours</target>
+        <target state="translated">3 ore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -5318,7 +5307,7 @@ channel with the same name (<x id="PH_2"/>)!</source>
       </trans-unit>
       <trans-unit id="1794624538833178491" datatype="html">
         <source>5 hours</source>
-        <target state="new">5 hours</target>
+        <target state="translated">5 ore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -5326,7 +5315,7 @@ channel with the same name (<x id="PH_2"/>)!</source>
       </trans-unit>
       <trans-unit id="4941148355486671862" datatype="html">
         <source>10 hours</source>
-        <target state="new">10 hours</target>
+        <target state="translated">10 ore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -6409,7 +6398,7 @@ channel with the same name (<x id="PH_2"/>)!</source>
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
         <source>Change ownership</source>
-        <target state="new">Change ownership</target>
+        <target state="translated">Cambia proprietà</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -6632,8 +6621,7 @@ channel with the same name (<x id="PH_2"/>)!</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/auth/auth.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Impossibile recuperare le credenziali del client OAuth: <x id="PH"/>. Assicurati di aver configurato correttamente PeerTube (config/ directory), in particolare la sezione "webserver".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/auth/auth.service.ts</context>
@@ -6763,8 +6751,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6613870447286561244">
-        <source>Long (> 10 min)</source>
-        <target>Lungo (> 10 min)</target>
+        <source>Long (&gt; 10 min)</source>
+        <target>Lungo (&gt; 10 min)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+search/search-filters.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="1787083504545967">
@@ -7291,8 +7279,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6541082750381847310" datatype="html">
-        <source>Request is too large for the server.
- Please contact you administrator if you want to increase the limit size.</source>
+        <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
         <target state="translated">La richiesta è troppo grande per il server. Contatta il tuo amministratore se desideri aumentare la dimensione del limite.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context>
@@ -7316,7 +7303,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="d8ae45f6eb0e2d78efd70b4e80e132784aa65cf1" datatype="html">
         <source>Live information</source>
-        <target state="new">Live information</target>
+        <target state="translated">Informazione sulla diretta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7324,7 +7311,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="fc840cbc744829dee0c0d50e8d32e45beb731c36" datatype="html">
         <source>Live RTMP Url</source>
-        <target state="new">Live RTMP Url</target>
+        <target state="translated">Diretta RTMP Url</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">10</context>
@@ -7332,7 +7319,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="39d142e6915c4f2d0f9b45e76c176eec6a48c1c1" datatype="html">
         <source>Live stream key</source>
-        <target state="new">Live stream key</target>
+        <target state="translated">Chiave della diretta streaming</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">15</context>
@@ -7340,7 +7327,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="930826dd8818902aaf1300253dbee4717ceb35ee" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="new">⚠️ Never share your stream key with anyone.</target>
+        <target state="translated">⚠️ Non condividere mai la tua chiave di streaming con nessuno.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">18</context>
@@ -8295,7 +8282,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
         <source>Display live information</source>
-        <target state="new">Display live information</target>
+        <target state="translated">Visualizza informazioni della diretta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">278</context>
@@ -8317,8 +8304,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="8272123190776748811" datatype="html">
-        <source>You need to be &lt;a href="/login">logged in&lt;/a> to rate this video.</source>
-        <target state="new">You need to be &lt;a href="/login">logged in&lt;/a> to rate this video.</target>
+        <source>You need to be &lt;a href="/login"&gt;logged in&lt;/a&gt; to rate this video.</source>
+        <target state="translated">Devi essere &lt;a href="/login"&gt;connesso&lt;/a&gt; per votare questo video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">219</context>
@@ -8749,14 +8736,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">242</context></context-group>
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
-        <source>Your video quota is exceeded with this video (
-video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
+        <source>Your video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <target state="translated">La tua quota video è stata superata con questo video ( video size: <x id="PH"/>, usata: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
-        <source>Your daily video quota is exceeded with this video (
-video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
+        <source>Your daily video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <target state="translated">La tua quota video giornaliera è stata superata con questo video ( dimensione video : <x id="PH"/>, usato: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">284</context></context-group>
       </trans-unit>
@@ -8796,8 +8781,8 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</source>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch-playlist.component.ts</context><context context-type="linenumber">210</context></context-group>
       </trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
-        <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</source>
-        <target state="translated">Questo video non è disponibile su questa istanza. Vuoi essere reindirizzato sull'istanza di origine: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</target>
+        <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</source>
+        <target state="translated">Questo video non è disponibile su questa istanza. Vuoi essere reindirizzato sull'istanza di origine: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">412</context></context-group>
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
