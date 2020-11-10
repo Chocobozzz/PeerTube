@@ -1,5 +1,7 @@
 # Dependencies
 
+Follow the below guides, and check their versions match [required external dependencies versions](package.json#7). You can check them automatically via `npx engineslist`.
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 

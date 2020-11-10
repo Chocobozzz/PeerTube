@@ -159,15 +159,6 @@ Feel free to reach out if you have any questions or ideas! :speech_balloon:
 :package: Create your own instance
 ----------------------------------------------------------------
 
-#### Dependencies
-
-  * nginx
-  * **PostgreSQL >= 9.6**
-  * **Redis >= 2.8.18**
-  * **NodeJS >= 10.x**
-  * **yarn >= 1.x**
-  * **FFmpeg >= 4.1**
-
 See the [production guide](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md), which is the recommended way to install or upgrade PeerTube. For hardware requirements, see [Should I have a big server to run PeerTube?](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube) in the FAQ.
 
 See the [community packages](https://docs.joinpeertube.org/#/install-unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/docker.md)).
