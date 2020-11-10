@@ -17,7 +17,6 @@
 
 ---
 Make sure you install the correct versions of the dependencies as mentioned in the [PeerTube README.md](https://github.com/Chocobozzz/PeerTube#dependencies)
----
 
 ## Debian / Ubuntu and derivatives
 
