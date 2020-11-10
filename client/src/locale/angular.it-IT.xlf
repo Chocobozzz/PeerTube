@@ -330,7 +330,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} altri{<x id="INTERPOLATION"/> video}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> video}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582">
@@ -2899,7 +2899,7 @@
       </trans-unit>
       <trans-unit id="fe8634bd713368d7971877c0e09d1869f09c924d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 rapporto} altri <x id="INTERPOLATION"/> rapporti}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 rapporto} other {<x id="INTERPOLATION"/> rapporti}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4">
@@ -2974,7 +2974,7 @@
       </trans-unit>
       <trans-unit id="bdd37f55632abc18fb1fbf95d4b3f5f89ce3237b" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} altri {<x id="INTERPOLATION"/> reports}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc" datatype="html">
@@ -3133,7 +3133,7 @@
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {result} altri {results} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {result} other {results} }</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="b1363973a9482c7b0a7c4a1d066fd64625d40207" datatype="html">
@@ -3535,17 +3535,17 @@
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Video} altri {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="bcf8ce898a641416913d16b5dc39385e83ca069c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Channel} altri {Channels} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="8b3b364967f953009a4b83c53ed5cf0b5ff3902a" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Subscriber} altri {Subscribers} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="89f26f7ae43839fb1c983c6dc82d7bb9f559ac98" datatype="html">
@@ -3560,7 +3560,7 @@
       </trans-unit>
       <trans-unit id="8e29da1e7e8def288e5cf788c6f5ac6e5824259c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Comment} altro {Comments} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="53ddc7cf814d93205e987d607dbcfcf9cd74b59a" datatype="html">
@@ -4585,12 +4585,12 @@
       </trans-unit>
       <trans-unit id="f15780bbd2d7fa777071975f7445e98a33065e38" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 iscritto} altro {<x id="INTERPOLATION"/> iscritti}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 iscritto} other {<x id="INTERPOLATION"/> iscritti}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} altro {<x id="INTERPOLATION"/> video}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> video}}</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
