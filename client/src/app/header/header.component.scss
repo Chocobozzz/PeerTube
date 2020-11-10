@@ -5,7 +5,7 @@ my-search-typeahead {
   margin-right: 15px;
 }
 
-.upload-button {
+.publish-button {
   @include peertube-button-link;
   @include orange-button;
   @include button-with-icon(22px, 3px, -1px);
@@ -20,7 +20,7 @@ my-search-typeahead {
       margin-right: 0;
     }
 
-    .upload-button-label {
+    .publish-button-label {
       display: none;
     }
   }
