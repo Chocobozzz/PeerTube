@@ -144,8 +144,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
         baseUrl: `${environment.embedUrl}/videos/embed/${abuse.video.uuid}`,
         title: false,
         warningTitle: false,
-        startTime: abuse.startAt,
-        stopTime: abuse.endAt
+        startTime: abuse.video.startAt,
+        stopTime: abuse.video.endAt
       })
     )
   }

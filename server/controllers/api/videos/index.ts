@@ -6,6 +6,7 @@ import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
+import { LiveManager } from '@server/lib/live-manager'
 import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
@@ -57,7 +58,6 @@ import {
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { videoCaptionsRouter } from './captions'
 import { videoCommentRouter } from './comment'
@@ -66,7 +66,6 @@ import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
-import { LiveManager } from '@server/lib/live-manager'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -89,7 +88,6 @@ const reqVideoFileUpdate = createReqFiles(
   }
 )
 
-videosRouter.use('/', abuseVideoRouter)
 videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
