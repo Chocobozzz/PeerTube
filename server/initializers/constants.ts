@@ -1,5 +1,6 @@
+import { randomInt } from '../../shared/core-utils/miscs/miscs'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
-import { randomBytes, randomInt } from 'crypto'
+import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
 import {
