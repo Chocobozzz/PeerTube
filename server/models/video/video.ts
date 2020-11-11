@@ -1657,13 +1657,6 @@ export class VideoModel extends Model<VideoModel> {
         videoFilesDone.add(row.VideoFiles.id)
       }
 
-      if (row.VideoFiles?.id && !videoFilesDone.has(row.VideoFiles.id)) {
-        const videoFileModel = new VideoFileModel(pick(row.VideoFiles, videoFileKeys))
-        videoModel.VideoFiles.push(videoFileModel)
-
-        videoFilesDone.add(row.VideoFiles.id)
-      }
-
       if (row.VideoStreamingPlaylists?.id && !videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id]) {
         const streamingPlaylist = new VideoStreamingPlaylistModel(pick(row.VideoStreamingPlaylists, videoStreamingPlaylistKeys))
         streamingPlaylist.VideoFiles = []
