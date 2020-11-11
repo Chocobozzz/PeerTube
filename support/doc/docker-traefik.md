@@ -40,5 +40,5 @@ More at: https://docs.traefik.io/v1.7
 #### Run with traefik
 
 ```shell
-docker-compose -f {docker-compose.yml,docker-compose.traefik.yml} up -d
+docker-compose -f docker-compose.yml docker-compose.traefik.yml up -d
 ```

@@ -6,6 +6,7 @@ services:
   # nginx configuration file. It runs the default nginx configuration without HTTPS nor SSL,
   # so use it in production in tandem with an SSL-terminating reverse-proxy.
   webserver:
+    image: chocobozzz/peertube:webserver
     build:
       context: .
       dockerfile: Dockerfile.nginx
@@ -16,9 +17,9 @@ services:
     #  - "9000:80" # serving HTTP
     volumes:
       - type: bind
-        # Switch sources if you downloaded the nginx configuration without the whole repository
-        #source: ./peertube
-        source: ../../nginx/peertube
+        # Switch sources if you downloaded the whole repository
+        #source: ../../nginx/peertube
+        source: ./docker-volume/nginx/peertube
         target: /etc/nginx/conf.d/peertube.template
       - assets:/var/www/peertube/peertube-latest/client/dist:ro
       - ./docker-volume/data:/var/www/peertube/storage
@@ -48,7 +49,7 @@ services:
     restart: "always"
 
   postgres:
-    image: postgres:10-alpine
+    image: postgres:13-alpine
     env_file:
       - .env
     volumes:
@@ -56,7 +57,7 @@ services:
     restart: "always"
 
   redis:
-    image: redis:5-alpine
+    image: redis:6-alpine
     volumes:
       - ./docker-volume/redis:/data
     restart: "always"

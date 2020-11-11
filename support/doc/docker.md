@@ -1,7 +1,7 @@
 # Docker guide
 
 This guide requires [docker](https://www.docker.com/community-edition) and
-[docker-compose](https://docs.docker.com/compose/install/) installed.
+[docker-compose](https://docs.docker.com/compose/install/).
 
 ## Production
 
@@ -10,7 +10,9 @@ This guide requires [docker](https://www.docker.com/community-edition) and
 **PeerTube does not support webserver host change**. Keep in mind your domain 
 name is definitive after your first PeerTube start.
 
-#### Go to your peertube workdir
+#### Go to your workdir
+
+_note_: the guide that follows assumes an empty workdir, but you can also clone the repository, use the master branch and `cd support/docker/production`.
 
 ```shell
 cd /your/peertube/directory
@@ -38,7 +40,7 @@ View the source of the file you're about to download: [.env](https://github.com/
 $EDITOR ./docker-compose.yml
 ```
 
-#### Then tweak the `.env` file to change the environment variables
+#### Then tweak the `.env` file to change the environment variables settings
 
 ```shell
 $EDITOR ./.env
@@ -72,7 +74,7 @@ docker-compose up
 Now that you've installed your PeerTube instance you'll want to grep your peertube container's logs for the `root` password. You're going to want to run `docker-compose logs peertube | grep -A1 root` to search the log output for your new PeerTube's instance admin credentials which will look something like this.
 
 ```bash
-user@s:~/peertube|master⚡ ⇒  docker-compose logs peertube | grep -A1 root
+$ docker-compose logs peertube | grep -A1 root
 
 peertube_1  | [example.com:443] 2019-11-16 04:26:06.082 info: Username: root
 peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abcdefghijklmnop
@@ -85,7 +87,7 @@ peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abc
 Run `cat ./docker-volume/opendkim/keys/*/*.txt` to display your DKIM DNS TXT Record containing the public key to configure to your domain : 
 
 ```bash
-user@s:~/peertube|master⚡ ⇒  cat ./docker-volume/opendkim/keys/*/*.txt
+$ cat ./docker-volume/opendkim/keys/*/*.txt
 
 peertube._domainkey.mydomain.tld.	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
 	  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Dx7wLGPFVaxVQ4TGym/eF89aQ8oMxS9v5BCc26Hij91t2Ci8Fl12DHNVqZoIPGm+9tTIoDVDFEFrlPhMOZl8i4jU9pcFjjaIISaV2+qTa8uV1j3MyByogG8pu4o5Ill7zaySYFsYB++cHJ9pjbFSC42dddCYMfuVgrBsLNrvEi3dLDMjJF5l92Uu8YeswFe26PuHX3Avr261n"
