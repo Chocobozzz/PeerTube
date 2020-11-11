@@ -98,6 +98,8 @@ export interface CommonOptions extends CustomizationOptions {
   videoViewUrl: string
   embedUrl: string
 
+  isLive: boolean
+
   language?: string
 
   videoCaptions: VideoJSCaption[]
@@ -323,7 +325,7 @@ export class PeertubePlayerManager {
     const p2pMediaLoaderConfig = {
       loader: {
         trackerAnnounce,
-        segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url),
+        segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url, options.common.isLive),
         rtcConfig: getRtcConfig(),
         requiredSegmentsPriority: 1,
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),

@@ -44,7 +44,14 @@ function importModule (path: string) {
   })
 }
 
+function wait (ms: number) {
+  return new Promise(res => {
+    setTimeout(() => res(), ms)
+  })
+}
+
 export {
   importModule,
-  objectToUrlEncoded
+  objectToUrlEncoded,
+  wait
 }

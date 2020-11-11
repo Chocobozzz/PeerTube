@@ -9,7 +9,7 @@ import {
   FILES_CONTENT_HASH
 } from '../initializers/constants'
 import { join } from 'path'
-import { escapeHTML, sha256 } from '../helpers/core-utils'
+import { escapeHTML, isTestInstance, sha256 } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import validator from 'validator'
@@ -177,7 +177,7 @@ export class ClientHtml {
   static async getEmbedHTML () {
     const path = ClientHtml.getEmbedPath()
 
-    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
 
@@ -230,7 +230,7 @@ export class ClientHtml {
 
   private static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
     const path = ClientHtml.getIndexPath(req, res, paramLang)
-    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
 

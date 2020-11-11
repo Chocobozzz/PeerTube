@@ -85,13 +85,7 @@ abuseRouter.delete('/:id/messages/:messageId',
 // ---------------------------------------------------------------------------
 
 export {
-  abuseRouter,
-
-  // FIXME: deprecated in 2.3. Remove these exports
-  listAbusesForAdmins,
-  updateAbuse,
-  deleteAbuse,
-  reportAbuse
+  abuseRouter
 }
 
 // ---------------------------------------------------------------------------

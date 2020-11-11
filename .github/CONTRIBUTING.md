@@ -192,7 +192,7 @@ $ npm test
 If you just want to run 1 test (which is what you want to debug a specific test rapidly):
 
 ```
-$ npm run mocha -- --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/index.ts
+$ TS_NODE_FILES=true npm run mocha -- --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/single-server.ts
 ```
 
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.

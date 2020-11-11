@@ -606,7 +606,10 @@ class Emailer {
       locals: {
         fromName,
         fromEmail,
-        body
+        body,
+
+        // There are not notification preferences for the contact form
+        hideNotificationPreferences: true
       }
     }
 

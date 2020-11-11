@@ -771,6 +771,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           : null,
         embedUrl: video.embedUrl,
 
+        isLive: video.isLive,
+
         language: this.localeId,
 
         userWatching: user && user.videosHistoryEnabled === true ? {

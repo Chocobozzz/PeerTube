@@ -228,6 +228,7 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
+
     if (instance.isOwned()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }

@@ -1,6 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { invert } from 'lodash'
-import { literal, Op, QueryTypes, WhereOptions } from 'sequelize'
+import { literal, Op, QueryTypes } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -264,32 +264,6 @@ export class AbuseModel extends Model<AbuseModel> {
     onDelete: 'cascade'
   })
   VideoAbuse: VideoAbuseModel
-
-  // FIXME: deprecated in 2.3. Remove these validators
-  static loadByIdAndVideoId (id: number, videoId?: number, uuid?: string): Bluebird<MAbuseReporter> {
-    const videoWhere: WhereOptions = {}
-
-    if (videoId) videoWhere.videoId = videoId
-    if (uuid) videoWhere.deletedVideo = { uuid }
-
-    const query = {
-      include: [
-        {
-          model: VideoAbuseModel,
-          required: true,
-          where: videoWhere
-        },
-        {
-          model: AccountModel,
-          as: 'ReporterAccount'
-        }
-      ],
-      where: {
-        id
-      }
-    }
-    return AbuseModel.findOne(query)
-  }
 
   static loadByIdWithReporter (id: number): Bluebird<MAbuseReporter> {
     const query = {
@@ -561,13 +535,7 @@ export class AbuseModel extends Model<AbuseModel> {
         : null,
 
       countReportsForReporter: (countReportsForReporter || 0),
-      countReportsForReportee: (countReportsForReportee || 0),
-
-      // FIXME: deprecated in 2.3, remove this
-      startAt: null,
-      endAt: null,
-      count: countReportsForVideo || 0,
-      nth: nthReportForVideo || 0
+      countReportsForReportee: (countReportsForReportee || 0)
     })
   }
 

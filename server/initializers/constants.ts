@@ -1,29 +1,30 @@
-import { join } from 'path'
+import { randomInt } from '../../shared/core-utils/miscs/miscs'
+import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { randomBytes } from 'crypto'
-import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { FollowState } from '../../shared/models/actors'
+import { invert } from 'lodash'
+import { join } from 'path'
 import {
   AbuseState,
+  JobType,
   VideoImportState,
   VideoPrivacy,
-  VideoTranscodingFPS,
-  JobType,
   VideoRateType,
   VideoResolution,
-  VideoState
+  VideoState,
+  VideoTranscodingFPS
 } from '../../shared/models'
-// Do not use barrels, remain constants as independent as possible
-import { isTestInstance, sanitizeHost, sanitizeUrl, root } from '../helpers/core-utils'
+import { ActivityPubActorType } from '../../shared/models/activitypub'
+import { FollowState } from '../../shared/models/actors'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-import { invert } from 'lodash'
-import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
+// Do not use barrels, remain constants as independent as possible
+import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 545
+const LAST_MIGRATION_VERSION = 550
 
 // ---------------------------------------------------------------------------
 
@@ -172,7 +173,7 @@ const JOB_TTL: { [id in JobType]: number } = {
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
-    cron: '1 * * * *' // At 1 minute past the hour
+    cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   }
 }
 

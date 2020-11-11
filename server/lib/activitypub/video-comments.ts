@@ -28,21 +28,23 @@ async function resolveThread (params: ResolveThreadParams): ResolveThreadResult 
   if (params.commentCreated === undefined) params.commentCreated = false
   if (params.comments === undefined) params.comments = []
 
-  // Already have this comment?
-  if (isVideo !== true) {
+  // If it is not a video, or if we don't know if it's a video
+  if (isVideo === false || isVideo === undefined) {
     const result = await resolveCommentFromDB(params)
     if (result) return result
   }
 
   try {
-    if (isVideo !== false) return await tryResolveThreadFromVideo(params)
-
-    return resolveParentComment(params)
+    // If it is a video, or if we don't know if it's a video
+    if (isVideo === true || isVideo === undefined) {
+      // Keep await so we catch the exception
+      return await tryResolveThreadFromVideo(params)
+    }
   } catch (err) {
     logger.debug('Cannot get or create account and video and channel for reply %s, fetch comment', url, { err })
-
-    return resolveParentComment(params)
   }
+
+  return resolveParentComment(params)
 }
 
 export {
@@ -84,6 +86,10 @@ async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
   // If yes, it's done: we resolved all the thread
   const syncParam = { likes: true, dislikes: true, shares: true, comments: false, thumbnail: true, refreshVideo: false }
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: url, syncParam })
+
+  if (video.isOwned() && !video.hasPrivacyForFederation()) {
+    throw new Error('Cannot resolve thread of video with privacy that is not compatible with federation')
+  }
 
   let resultComment: MCommentOwnerVideo
   if (comments.length !== 0) {

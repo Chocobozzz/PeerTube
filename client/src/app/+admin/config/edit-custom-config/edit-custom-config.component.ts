@@ -95,7 +95,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
     ]
 
     this.liveMaxDurationOptions = [
-      { value: 0, label: $localize`No limit` },
+      { value: null, label: $localize`No limit` },
       { value: 1000 * 3600, label: $localize`1 hour` },
       { value: 1000 * 3600 * 3, label: $localize`3 hours` },
       { value: 1000 * 3600 * 5, label: $localize`5 hours` },
@@ -328,7 +328,13 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   }
 
   async formValidated () {
-    this.configService.updateCustomConfig(this.form.getRawValue())
+    const value: CustomConfig = this.form.getRawValue()
+
+    // Transform "null" to null
+    const maxDuration = value.live.maxDuration as any
+    if (maxDuration === 'null') value.live.maxDuration = null
+
+    this.configService.updateCustomConfig(value)
       .subscribe(
         res => {
           this.customConfig = res

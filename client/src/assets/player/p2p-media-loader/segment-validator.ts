@@ -1,27 +1,35 @@
+import { wait } from '@root-helpers/utils'
 import { Segment } from 'p2p-media-loader-core'
 import { basename } from 'path'
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
 
-function segmentValidatorFactory (segmentsSha256Url: string) {
+const maxRetries = 3
+
+function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
   let segmentsJSON = fetchSha256Segments(segmentsSha256Url)
   const regex = /bytes=(\d+)-(\d+)/
 
-  return async function segmentValidator (segment: Segment, canRefetchSegmentHashes = true) {
+  return async function segmentValidator (segment: Segment, retry = 1) {
+    // Wait for hash generation from the server
+    if (isLive) await wait(1000)
+
     const filename = basename(segment.url)
 
     const segmentValue = (await segmentsJSON)[filename]
 
-    if (!segmentValue && !canRefetchSegmentHashes) {
+    if (!segmentValue && retry > maxRetries) {
       throw new Error(`Unknown segment name ${filename} in segment validator`)
     }
 
     if (!segmentValue) {
-      console.log('Refetching sha segments.')
+      console.log('Refetching sha segments for %s.', filename)
 
-      // Refetch
+      await wait(1000)
+
       segmentsJSON = fetchSha256Segments(segmentsSha256Url)
-      segmentValidator(segment, false)
+      await segmentValidator(segment, retry + 1)
+
       return
     }
 

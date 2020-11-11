@@ -532,6 +532,8 @@ export class PeerTubeEmbed {
         inactivityTimeout: 2500,
         videoViewUrl: this.getVideoUrl(videoInfo.uuid) + '/views',
 
+        isLive: videoInfo.isLive,
+
         playerElement: this.playerElement,
         onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
 
@@ -556,9 +558,9 @@ export class PeerTubeEmbed {
 
       Object.assign(options, {
         p2pMediaLoader: {
-          playlistUrl: 'http://localhost:9000/live/toto/master.m3u8',
+          playlistUrl: hlsPlaylist.playlistUrl,
           segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
-          redundancyBaseUrls: [],
+          redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
           trackerAnnounce: videoInfo.trackerUrls,
           videoFiles: hlsPlaylist.files
         } as P2PMediaLoaderOptions
@@ -661,10 +663,12 @@ export class PeerTubeEmbed {
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
 
-    this.player.dock({
-      title,
-      description
-    })
+    if (title || description) {
+      this.player.dock({
+        title,
+        description
+      })
+    }
   }
 
   private buildCSS () {
