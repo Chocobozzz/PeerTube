@@ -24,7 +24,7 @@ touch ./docker-volume/traefik/acme.json
 ```
 Needs to have file mode 600:
 ```shell
-chmod 600 ./docker-volume/traefik/acme.json 
+chmod 600 ./docker-volume/traefik/acme.json
 ```
 
 #### Update the reverse proxy configuration
@@ -40,5 +40,5 @@ More at: https://docs.traefik.io/v1.7
 #### Run with traefik
 
 ```shell
-docker-compose -f docker-compose.yml docker-compose.traefik.yml up -d
+docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
 ```
