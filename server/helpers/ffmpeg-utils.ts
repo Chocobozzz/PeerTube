@@ -509,7 +509,7 @@ function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string
     command.outputOption('-hls_flags delete_segments')
   }
 
-  command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%04d.ts')}`)
+  command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%06d.ts')}`)
   command.outputOption('-master_pl_name master.m3u8')
   command.outputOption(`-f hls`)
 
