@@ -199,13 +199,15 @@ class LiveManager {
       ? computeResolutionsToTranscode(resolutionResult.videoFileResolution, 'live')
       : []
 
-    logger.info('Will mux/transcode live video of original resolution %d.', session.videoHeight, { resolutionsEnabled })
+    const allResolutions = resolutionsEnabled.concat([ session.videoHeight ])
+
+    logger.info('Will mux/transcode live video of original resolution %d.', session.videoHeight, { allResolutions })
 
     const [ videoStreamingPlaylist ] = await VideoStreamingPlaylistModel.upsert({
       videoId: video.id,
       playlistUrl,
       segmentsSha256Url: WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid, video.isLive),
-      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, resolutionsEnabled),
+      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, allResolutions),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
 
       type: VideoStreamingPlaylistType.HLS
@@ -215,10 +217,9 @@ class LiveManager {
       sessionId,
       videoLive,
       playlist: videoStreamingPlaylist,
-      originalResolution: session.videoHeight,
       rtmpUrl,
       fps,
-      resolutionsEnabled
+      allResolutions
     })
   }
 
@@ -228,12 +229,10 @@ class LiveManager {
     playlist: MStreamingPlaylist
     rtmpUrl: string
     fps: number
-    resolutionsEnabled: number[]
-    originalResolution: number
+    allResolutions: number[]
   }) {
-    const { sessionId, videoLive, playlist, resolutionsEnabled, originalResolution, fps, rtmpUrl } = options
+    const { sessionId, videoLive, playlist, allResolutions, fps, rtmpUrl } = options
     const startStreamDateTime = new Date().getTime()
-    const allResolutions = resolutionsEnabled.concat([ originalResolution ])
 
     const user = await UserModel.loadByLiveId(videoLive.id)
     if (!this.livesPerUser.has(user.id)) {
