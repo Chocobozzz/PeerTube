@@ -40,7 +40,7 @@ The vulnerability is kept private until a majority of instances known on instanc
 ## Official Channels
 
 To help us receive vulnerability submissions we use the following official reporting channels:
-- chocobozzz@cpy.re (GPG: [583A612D890159BE](https://keybase.io/chocobozzz/pgp_keys.asc?fingerprint=c44aad638367912ca93edd57583a612d890159be))
+- chocobozzz@framasoft.org (GPG: [583A612D890159BE](https://keybase.io/chocobozzz/pgp_keys.asc?fingerprint=c44aad638367912ca93edd57583a612d890159be))
 - sendmemail@rigelk.eu (GPG: [EA12971B0E438F36](https://api.github.com/users/rigelk/gpg_keys))
 
 If you think you have found a vulnerability, please include the following details with your report and be as descriptive as possible:
