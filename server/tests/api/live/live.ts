@@ -462,17 +462,17 @@ describe('Test live', function () {
       await viewVideo(servers[0].url, liveVideoId)
       await viewVideo(servers[0].url, liveVideoId)
 
-      await wait(5000)
+      await wait(7000)
 
       await waitJobs(servers)
 
       await countViews(1)
     })
 
-    it('Should wait 5 seconds and display 0 views', async function () {
+    it('Should wait and display 0 views', async function () {
       this.timeout(30000)
 
-      await wait(5000)
+      await wait(7000)
       await waitJobs(servers)
 
       await countViews(0)
@@ -485,7 +485,7 @@ describe('Test live', function () {
       await viewVideo(servers[1].url, liveVideoId)
       await viewVideo(servers[1].url, liveVideoId)
 
-      await wait(5000)
+      await wait(7000)
       await waitJobs(servers)
 
       await countViews(2)
