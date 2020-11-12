@@ -620,6 +620,7 @@ const VIDEO_LIVE = {
   CLEANUP_DELAY: 1000 * 60 * 5, // 5 minutes
   SEGMENT_TIME_SECONDS: 4, // 4 seconds
   SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
+  EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION: 3,
   RTMP: {
     CHUNK_SIZE: 60000,
     GOP_CACHE: true,
@@ -750,6 +751,7 @@ if (isTestInstance() === true) {
 
   VIDEO_LIVE.CLEANUP_DELAY = 5000
   VIDEO_LIVE.SEGMENT_TIME_SECONDS = 2
+  VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION = 1
 }
 
 updateWebserverUrls()

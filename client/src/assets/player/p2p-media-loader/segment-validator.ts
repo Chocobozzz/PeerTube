@@ -10,7 +10,7 @@ function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
   let segmentsJSON = fetchSha256Segments(segmentsSha256Url)
   const regex = /bytes=(\d+)-(\d+)/
 
-  return async function segmentValidator (segment: Segment, retry = 1) {
+  return async function segmentValidator (segment: Segment, _method: string, _peerId: string, retry = 1) {
     // Wait for hash generation from the server
     if (isLive) await wait(1000)
 
@@ -28,7 +28,7 @@ function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
       await wait(1000)
 
       segmentsJSON = fetchSha256Segments(segmentsSha256Url)
-      await segmentValidator(segment, retry + 1)
+      await segmentValidator(segment, _method, _peerId, retry + 1)
 
       return
     }

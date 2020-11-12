@@ -323,11 +323,15 @@ class LiveManager {
         await video.save()
         videoLive.Video = video
 
-        await federateVideoIfNeeded(video, false)
+        setTimeout(() => {
+          federateVideoIfNeeded(video, false)
+            .catch(err => logger.error('Cannot federate live video %s.', video.url, { err }))
 
-        PeerTubeSocket.Instance.sendVideoLiveNewState(video)
+          PeerTubeSocket.Instance.sendVideoLiveNewState(video)
+        }, VIDEO_LIVE.SEGMENT_TIME_SECONDS * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
+
       } catch (err) {
-        logger.error('Cannot federate video %d.', videoLive.videoId, { err })
+        logger.error('Cannot save/federate live video %d.', videoLive.videoId, { err })
       } finally {
         masterWatcher.close()
           .catch(err => logger.error('Cannot close master watcher of %s.', outPath, { err }))
