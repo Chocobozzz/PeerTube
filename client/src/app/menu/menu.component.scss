@@ -1,6 +1,39 @@
 @import '_variables';
 @import '_mixins';
 
+$menu-link-icon-size: 22px;
+$menu-link-icon-margin-right: 18px;
+
+@mixin menu-link {
+  display: flex;
+  align-items: center;
+  padding-left: $menu-lateral-padding;
+  color: pvar(--menuForegroundColor);
+  cursor: pointer;
+  font-size: 16px;
+  white-space: normal;
+  word-break: break-word;
+  padding-right: 20px;
+  transition: background-color .1s ease-in-out;
+
+  &.active {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  &:hover, &.focus-visible {
+    background-color: rgba(255, 255, 255, 0.10);
+  }
+
+  my-global-icon {
+    @include apply-svg-color(#808080);
+
+    display: flex;
+    width: $menu-link-icon-size;
+    height: $menu-link-icon-size;
+    margin-right: $menu-link-icon-margin-right;
+  }
+}
+
 .menu-wrapper {
   position: fixed;
   height: calc(100vh - #{$header-height});
@@ -14,14 +47,14 @@ menu {
   @include ellipsis;
 
   background-color: pvar(--menuBackgroundColor);
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow-x: hidden;
   color: pvar(--menuForegroundColor);
+
   display: flex;
   flex-direction: column;
+  height: 100%;
   width: 100%;
+  margin: 0;
+  padding: 0;
 
   &:focus, &:hover {
     overflow-y: auto;
@@ -31,7 +64,7 @@ menu {
     overflow-y: auto;
   }
 
-  &.logged-in {
+  &.is-logged-in {
     .panel-block {
       margin-bottom: 20px;
     }
@@ -40,19 +73,22 @@ menu {
       margin-bottom: 15px;
     }
   }
+}
 
-  .top-menu {
-    flex-grow: 1;
-    width: $menu-width;
-  }
+.top-menu {
+  flex-grow: 1;
+  width: $menu-width;
+}
 
-  .logged-in-block {
-    height: 100px;
-    background-color: rgba(255, 255, 255, 0.15);
+.logged-in-block {
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.15);
+
+  > div:first-child {
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
 
     .logged-in-info {
       @include ellipsis;
@@ -95,32 +131,88 @@ menu {
     }
   }
 
-  .button-block {
-    margin: 30px 25px 35px 25px;
+  .logged-in-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-top: 1px solid var(--greyForegroundColor);
 
-    .login-button {
-      @include peertube-button-link;
-      @include orange-button;
+    a {
+      @include menu-link;
+      @include disable-default-a-behaviour;
 
-      display: block;
+      $icon-size: 13px;
+      $additional-margin: ($menu-link-icon-size - $icon-size) / 2;
+
+      font-size: 14px;
       width: 100%;
-      margin-bottom: 10px;
-    }
+      min-height: 35px;
 
-    .create-account-button {
-      @include peertube-button-link;
+      my-global-icon {
+        width: $icon-size;
+        height: $icon-size;
 
-      display: block;
-      width: 100%;
+        // Keep aligned with other icons
+        margin-left: $additional-margin;
 
-      color: #fff;
-      background-color: rgba(255, 255, 255, 0.25);
+        &[iconName="channel"] {
+          margin-top: -2px;
+        }
+      }
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.28);
+      &.active,
+      &:hover,
+      &:focus-visible {
+        my-global-icon {
+          @include apply-svg-color(var(--mainBackgroundColor));
+        }
+      }
+
+      &.active {
+        $border-left-width: 4px;
+
+        font-weight: $font-semibold;
+        border-left: $border-left-width solid var(--mainColor);
+
+        my-global-icon {
+          margin-left: $additional-margin - $border-left-width;
+        }
       }
     }
   }
+}
+
+.login-buttons-block {
+  margin: 30px 25px 35px 25px;
+
+  .login-button {
+    @include peertube-button-link;
+    @include orange-button;
+
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .create-account-button {
+    @include peertube-button-link;
+
+    display: block;
+    width: 100%;
+
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.25);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.28);
+    }
+  }
+}
+
+.in-my-account,
+.on-instance,
+.footer-block {
+  margin-bottom: 15px;
 
   .block-title {
     text-transform: uppercase;
@@ -128,116 +220,86 @@ menu {
     font-size: 13px;
     margin-bottom: 25px;
     margin-left: 26px;
+
+    @include ellipsis;
+
+    margin-right: 30px;
   }
 
-  .panel-block {
-    margin-bottom: 15px;
+  a {
+    @include menu-link;
+    @include disable-default-a-behaviour;
 
-    a {
-      @include disable-default-a-behaviour;
+    min-height: 40px;
 
-      display: flex;
-      align-items: center;
-      padding-left: $menu-lateral-padding;
-      color: pvar(--menuForegroundColor);
-      cursor: pointer;
-      min-height: 40px;
-      font-size: 16px;
-      transition: background-color .1s ease-in-out;
-      white-space: normal;
-      word-break: break-word;
-      padding-right: 20px;
+    my-global-icon {
+      &[iconName="playlists"] {
+        height: 24px;
+        width: 24px;
 
-      &.active {
-        background-color: rgba(255, 255, 255, 0.15);
+        margin-right: 16px;
       }
 
-      &:hover, &.focus-visible {
-        background-color: rgba(255, 255, 255, 0.10);
-      }
-
-      my-global-icon {
-        @include apply-svg-color(#808080);
-
-        display: flex;
-        width: 22px;
-        height: 22px;
-        margin-right: 18px;
-
-        &[iconName="playlists"] {
-          height: 24px;
-          width: 24px;
-
-          margin-right: 16px;
-        }
-
-        &[iconName="videos"] {
-          position: relative;
-          right: -1px;
-        }
-      }
-
-      .icon {
-        @include icon(22px);
-
-        margin-right: 18px;
+      &[iconName="videos"] {
+        position: relative;
+        right: -1px;
       }
     }
   }
+}
 
-  .footer {
-    width: $menu-width;
-    padding-bottom: 15px;
+.footer {
+  width: $menu-width;
+  padding-bottom: 15px;
 
-    .bottom-links {
+  .bottom-links {
+    display: flex;
+    flex-direction: column;
+    padding: 0 $menu-lateral-padding;
+  }
+
+  $footer-links-base-opacity: .8;
+
+  .footer-links {
+    &, > div {
       display: flex;
-      flex-direction: column;
-      padding: 0 $menu-lateral-padding;
+      flex-wrap: wrap;
     }
 
-    $footer-links-base-opacity: .8;
-
-    .footer-links {
-      &, > div {
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-      a, span[role=button] {
-        display: inline-block;
-        text-decoration: none;
-        color: pvar(--mainBackgroundColor);
-        opacity: $footer-links-base-opacity;
-        white-space: nowrap;
-        font-size: 90%;
-        font-weight: 500;
-        line-height: 1.4rem;
-        margin-right: 8px;
-
-        &.inline-global-icon {
-          display: inline-flex;
-          align-items: center;
-          white-space: nowrap;
-          height: 1.4rem;
-
-          my-global-icon {
-            @include apply-svg-color(pvar(--mainBackgroundColor));
-
-            display: flex;
-            width: auto;
-            height: 90%;
-            margin-right: .2rem;
-          }
-        }
-      }
-    }
-
-    .footer-copyleft small a {
-      @include disable-default-a-behaviour;
-
+    a, span[role=button] {
+      display: inline-block;
+      text-decoration: none;
       color: pvar(--mainBackgroundColor);
-      opacity: $footer-links-base-opacity - .2;
+      opacity: $footer-links-base-opacity;
+      white-space: nowrap;
+      font-size: 90%;
+      font-weight: 500;
+      line-height: 1.4rem;
+      margin-right: 8px;
+
+      &.inline-global-icon {
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+        height: 1.4rem;
+
+        my-global-icon {
+          @include apply-svg-color(pvar(--mainBackgroundColor));
+
+          display: flex;
+          width: auto;
+          height: 90%;
+          margin-right: .2rem;
+        }
+      }
     }
+  }
+
+  .footer-copyleft small a {
+    @include disable-default-a-behaviour;
+
+    color: pvar(--mainBackgroundColor);
+    opacity: $footer-links-base-opacity - .2;
   }
 }
 
@@ -292,7 +354,7 @@ menu {
 
 .icon {
   @include disable-outline;
-  @include icon(22px);
+  @include icon($menu-link-icon-size);
   opacity: 0.8;
 
   &.icon-shortcuts  {

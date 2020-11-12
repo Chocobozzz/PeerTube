@@ -1,0 +1,58 @@
+<h1>
+  <span>
+    <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My videos</ng-container>
+    <span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
+  </span>
+
+  <div>
+    <a routerLink="/my-library/video-imports" class="button-link">
+      <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>My imports</ng-container>
+    </a>
+
+    <a routerLink="/my-library/ownership" class="button-link">
+      <my-global-icon iconName="users" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Ownership changes</ng-container>
+    </a>
+  </div>
+</h1>
+
+<div class="videos-header d-flex justify-content-between">
+  <div class="has-feedback has-clear">
+    <input type="text" placeholder="Search your videos" i18n-placeholder [(ngModel)]="videosSearch"
+      (ngModelChange)="onVideosSearchChanged()" />
+    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
+    <span class="sr-only" i18n>Clear filters</span>
+  </div>
+</div>
+
+<my-videos-selection
+  [pagination]="pagination"
+  [(selection)]="selection"
+  [(videosModel)]="videos"
+  [miniatureDisplayOptions]="miniatureDisplayOptions"
+  [titlePage]="titlePage"
+  [getVideosObservableFunction]="getVideosObservableFunction"
+  [ownerDisplayType]="ownerDisplayType"
+  #videosSelection
+>
+  <ng-template ptTemplate="globalButtons">
+    <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+      <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Delete</ng-container>
+    </span>
+  </ng-template>
+
+  <ng-template ptTemplate="rowButtons" let-video>
+    <div class="action-button">
+      <my-edit-button label [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
+
+      <my-action-dropdown [actions]="videoActions" [entry]="{ video: video }"></my-action-dropdown>
+    </div>
+  </ng-template>
+</my-videos-selection>
+
+
+<my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>
+<my-live-stream-information #liveStreamInformationModal></my-live-stream-information>

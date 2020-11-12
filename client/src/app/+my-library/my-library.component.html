@@ -1,0 +1,7 @@
+<div class="row">
+  <my-top-menu-dropdown [menuEntries]="menuEntries"></my-top-menu-dropdown>
+
+  <div class="margin-content pb-5" [ngClass]="{ 'offset-content': !isBroadcastMessageDisplayed }">
+    <router-outlet></router-outlet>
+  </div>
+</div>

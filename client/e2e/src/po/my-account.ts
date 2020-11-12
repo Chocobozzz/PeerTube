@@ -3,15 +3,15 @@ import { by, element, browser } from 'protractor'
 export class MyAccountPage {
 
   navigateToMyVideos () {
-    return element(by.css('a[href="/my-account/videos"]')).click()
+    return element(by.css('a[href="/my-library/videos"]')).click()
   }
 
   navigateToMyPlaylists () {
-    return element(by.css('a[href="/my-account/video-playlists"]')).click()
+    return element(by.css('a[href="/my-library/video-playlists"]')).click()
   }
 
   navigateToMyHistory () {
-    return element(by.css('a[href="/my-account/history/videos"]')).click()
+    return element(by.css('a[href="/my-library/history/videos"]')).click()
   }
 
   // My account Videos

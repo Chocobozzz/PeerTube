@@ -18,7 +18,7 @@
         </div>
 
         <div class="right-buttons">
-          <a *ngIf="isChannelManageable && !isInSmallView" [routerLink]="[ '/my-account/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-tertiary mr-2" i18n>
+          <a *ngIf="isChannelManageable && !isInSmallView" [routerLink]="[ '/my-library/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-tertiary mr-2" i18n>
             Manage channel
           </a>
           <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>

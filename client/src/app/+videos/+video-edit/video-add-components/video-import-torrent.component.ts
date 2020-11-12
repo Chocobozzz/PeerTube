@@ -128,7 +128,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
             this.isUpdatingVideo = false
             this.notifier.success($localize`Video to import updated.`)
 
-            this.router.navigate([ '/my-account', 'video-imports' ])
+            this.router.navigate([ '/my-library', 'video-imports' ])
           },
 
           err => {

@@ -18,6 +18,10 @@ const routes: Routes = [
     loadChildren: () => import('./+my-account/my-account.module').then(m => m.MyAccountModule)
   },
   {
+    path: 'my-library',
+    loadChildren: () => import('./+my-library/my-library.module').then(m => m.MyLibraryModule)
+  },
+  {
     path: 'verify-account',
     loadChildren: () => import('./+signup/+verify-account/verify-account.module').then(m => m.VerifyAccountModule)
   },

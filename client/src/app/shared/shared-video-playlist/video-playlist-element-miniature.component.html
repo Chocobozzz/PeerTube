@@ -36,7 +36,7 @@
     </div>
   </a>
 
-  <my-edit-button *ngIf="owned && touchScreenEditButton" [routerLink]="[ '/my-account', 'video-playlists', playlist.uuid ]"></my-edit-button>
+  <my-edit-button *ngIf="owned && touchScreenEditButton" [routerLink]="[ '/my-library', 'video-playlists', playlist.uuid ]"></my-edit-button>
 
   <div *ngIf="owned" class="more" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
        (openChange)="onDropdownOpenChange()" autoClose="outside"

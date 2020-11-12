@@ -61,6 +61,29 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  get language () {
+    return this.languageChooserModal.getCurrentLanguage()
+  }
+
+  get nsfwPolicy () {
+    if (!this.user) return
+
+    switch (this.user.nsfwPolicy) {
+      case 'do_not_list':
+        return $localize`hide`
+
+      case 'blur':
+        return $localize`blur`
+
+      case 'display':
+        return $localize`display`
+    }
+  }
+
+  get instanceName () {
+    return this.serverConfig.instance.name
+  }
+
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
@@ -107,25 +130,6 @@ export class MenuComponent implements OnInit {
         this.authService.userInformationLoaded
           .subscribe(() => this.buildUserLanguages())
       })
-  }
-
-  get language () {
-    return this.languageChooserModal.getCurrentLanguage()
-  }
-
-  get nsfwPolicy () {
-    if (!this.user) return
-
-    switch (this.user.nsfwPolicy) {
-      case 'do_not_list':
-        return $localize`hide`
-
-      case 'blur':
-        return $localize`blur`
-
-      case 'display':
-        return $localize`display`
-    }
   }
 
   isRegistrationAllowed () {

@@ -34,7 +34,7 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
 
     this.titlePage = $localize`Videos from your subscriptions`
     this.actions.push({
-      routerLink: '/my-account/subscriptions',
+      routerLink: '/my-library/subscriptions',
       label: $localize`Subscriptions`,
       iconName: 'cog'
     })
