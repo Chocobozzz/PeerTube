@@ -63,7 +63,16 @@ async function checkHttpSignature (req: Request, res: Response) {
   const sig = req.headers[HTTP_SIGNATURE.HEADER_NAME] as string
   if (sig && sig.startsWith('Signature ') === true) req.headers[HTTP_SIGNATURE.HEADER_NAME] = sig.replace(/^Signature /, '')
 
-  const parsed = parseHTTPSignature(req, HTTP_SIGNATURE.CLOCK_SKEW_SECONDS)
+  let parsed: any
+
+  try {
+    parsed = parseHTTPSignature(req, HTTP_SIGNATURE.CLOCK_SKEW_SECONDS)
+  } catch (err) {
+    logger.warn('Invalid signature because of exception in signature parser', { reqBody: req.body, err })
+
+    res.status(403).json({ error: err.message })
+    return false
+  }
 
   const keyId = parsed.keyId
   if (!keyId) {

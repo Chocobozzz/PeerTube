@@ -50,7 +50,11 @@ function isHTTPSignatureVerified (httpSignatureParsed: any, actor: MActor): bool
 }
 
 function parseHTTPSignature (req: Request, clockSkew?: number) {
-  return httpSignature.parse(req, { clockSkew })
+  const headers = req.method === 'POST'
+    ? HTTP_SIGNATURE.REQUIRED_HEADERS.POST
+    : HTTP_SIGNATURE.REQUIRED_HEADERS.ALL
+
+  return httpSignature.parse(req, { clockSkew, headers })
 }
 
 // JSONLD

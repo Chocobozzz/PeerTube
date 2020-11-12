@@ -99,10 +99,29 @@ describe('Test ActivityPub security', function () {
       expect(response.statusCode).to.equal(403)
     })
 
-    it('Should succeed with a valid HTTP signature', async function () {
+    it('Should reject requests without appropriate signed headers', async function () {
       await setKeysOfServer(servers[0], servers[1], keys.publicKey, keys.privateKey)
       await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
 
+      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
+      const headers = buildGlobalHeaders(body)
+
+      const signatureOptions = baseHttpSignature()
+      const badHeadersMatrix = [
+        [ '(request-target)', 'date', 'digest' ],
+        [ 'host', 'date', 'digest' ],
+        [ '(request-target)', 'host', 'digest' ]
+      ]
+
+      for (const badHeaders of badHeadersMatrix) {
+        signatureOptions.headers = badHeaders
+
+        const { response } = await makePOSTAPRequest(url, body, signatureOptions, headers)
+        expect(response.statusCode).to.equal(403)
+      }
+    })
+
+    it('Should succeed with a valid HTTP signature', async function () {
       const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
       const headers = buildGlobalHeaders(body)
 
