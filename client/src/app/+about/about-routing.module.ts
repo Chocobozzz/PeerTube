@@ -44,7 +44,7 @@ const aboutRoutes: Routes = [
         component: AboutFollowsComponent,
         data: {
           meta: {
-            title: $localize`About follows`
+            title: $localize`About this instance's network`
           }
         }
       }

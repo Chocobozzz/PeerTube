@@ -39,7 +39,7 @@ export class VideoMostLikedComponent extends AbstractVideoList implements OnInit
     this.generateSyndicationList()
 
     this.titlePage = $localize`Most liked videos`
-    this.titleTooltip = $localize`Videos that have the higher number of likes.`
+    this.titleTooltip = $localize`Videos that have the most likes.`
   }
 
   getVideosObservable (page: number) {

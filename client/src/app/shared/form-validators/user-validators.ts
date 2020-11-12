@@ -27,7 +27,7 @@ export const USER_CHANNEL_NAME_VALIDATOR: BuildFormValidator = {
     'required': $localize`Channel name is required.`,
     'minlength': $localize`Channel name must be at least 1 character long.`,
     'maxlength': $localize`Channel name cannot be more than 50 characters long.`,
-    'pattern': $localize`Channel name should be lowercase alphanumeric; dots and underscores are allowed.`
+    'pattern': $localize`Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.`
   }
 }
 

@@ -295,7 +295,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
         this.userActions.push([
           {
             label: $localize`Mute this account`,
-            description: $localize`Hide any content from that user for you.`,
+            description: $localize`Hide any content from that user from you.`,
             isDisplayed: ({ account }) => account.mutedByUser === false,
             handler: ({ account }) => this.blockAccountByUser(account)
           },
@@ -319,7 +319,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           },
           {
             label: $localize`Remove comments from your videos`,
-            description: $localize`Remove comments of this account from your videos.`,
+            description: $localize`Remove comments made by this account on your videos.`,
             handler: ({ account }) => this.bulkRemoveCommentsOf({ accountName: account.nameWithHost, scope: 'my-videos' })
           }
         ])
@@ -331,13 +331,13 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           instanceActions = instanceActions.concat([
             {
               label: $localize`Mute this account by your instance`,
-              description: $localize`Hide any content from that user for you, your instance and its users.`,
+              description: $localize`Hide any content from that user from you, your instance and its users.`,
               isDisplayed: ({ account }) => account.mutedByInstance === false,
               handler: ({ account }) => this.blockAccountByInstance(account)
             },
             {
               label: $localize`Unmute this account by your instance`,
-              description: $localize`Show back content from that user for you, your instance and its users.`,
+              description: $localize`Show this user's content to the users of this instance again.`,
               isDisplayed: ({ account }) => account.mutedByInstance === true,
               handler: ({ account }) => this.unblockAccountByInstance(account)
             }
@@ -349,7 +349,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           instanceActions = instanceActions.concat([
             {
               label: $localize`Mute the instance by your instance`,
-              description: $localize`Hide any content from that instance for you, your instance and its users.`,
+              description: $localize`Hide any content from that instance from you, your instance and its users.`,
               isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
               handler: ({ account }) => this.blockServerByInstance(account.host)
             },
@@ -366,7 +366,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           instanceActions = instanceActions.concat([
             {
               label: $localize`Remove comments from your instance`,
-              description: $localize`Remove comments of this account from your instance.`,
+              description: $localize`Remove comments made by this account from your instance.`,
               handler: ({ account }) => this.bulkRemoveCommentsOf({ accountName: account.nameWithHost, scope: 'instance' })
             }
           ])

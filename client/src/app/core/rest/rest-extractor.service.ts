@@ -58,8 +58,7 @@ export class RestExtractor {
       } else if (err.error && err.error.error) {
         errorMessage = err.error.error
       } else if (err.status === 413) {
-        errorMessage = $localize`Request is too large for the server.
- Please contact you administrator if you want to increase the limit size.`
+        errorMessage = $localize`Media is too large for the server. Please contact you administrator if you want to increase the limit size.`
       } else if (err.status === 429) {
         const secondsLeft = err.headers.get('retry-after')
         if (secondsLeft) {
