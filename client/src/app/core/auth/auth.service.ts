@@ -62,15 +62,15 @@ export class AuthService {
         return false
       }, undefined, $localize`Go to my subscriptions`),
       new Hotkey('m v', (event: KeyboardEvent): boolean => {
-        this.router.navigate([ '/my-account/videos' ])
+        this.router.navigate([ '/my-library/videos' ])
         return false
       }, undefined, $localize`Go to my videos`),
       new Hotkey('m i', (event: KeyboardEvent): boolean => {
-        this.router.navigate([ '/my-account/video-imports' ])
+        this.router.navigate([ '/my-library/video-imports' ])
         return false
       }, undefined, $localize`Go to my imports`),
       new Hotkey('m c', (event: KeyboardEvent): boolean => {
-        this.router.navigate([ '/my-account/video-channels' ])
+        this.router.navigate([ '/my-library/video-channels' ])
         return false
       }, undefined, $localize`Go to my channels`)
     ]

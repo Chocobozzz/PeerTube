@@ -211,7 +211,7 @@ export class UserNotification implements UserNotificationServer {
   }
 
   private buildVideoImportUrl () {
-    return '/my-account/video-imports'
+    return '/my-library/video-imports'
   }
 
   private buildVideoImportIdentifier (videoImport: { targetUrl?: string, magnetUri?: string, torrentName?: string }) {

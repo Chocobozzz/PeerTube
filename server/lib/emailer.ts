@@ -256,7 +256,7 @@ class Emailer {
   }
 
   myVideoImportErrorNotification (to: string[], videoImport: MVideoImport) {
-    const importUrl = WEBSERVER.URL + '/my-account/video-imports'
+    const importUrl = WEBSERVER.URL + '/my-library/video-imports'
 
     const text =
       `Your video import "${videoImport.getTargetIdentifier()}" encountered an error.` +
