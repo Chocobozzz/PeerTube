@@ -276,14 +276,14 @@
           <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">182</context></context-group></trans-unit>
-      <trans-unit id="f61b49d5729bbd138f2a083fbaee2920811d31c5" datatype="html">
-        <source>The notification points to a content now unavailable</source>
-        <target state="new">
-          The notification points to a content now unavailable
-        </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">190</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">182</context></context-group></trans-unit><trans-unit id="d60604b8e42b3e6f9612ae780b2547b537250849" datatype="html">
+        <source> The notification points to content now unavailable </source><target state="new"> The notification points to content now unavailable </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/shared/shared-main/users/user-notifications.component.html</context>
+          <context context-type="linenumber">190,191</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="3fb9a5f7268114445d8c109a8f48102e93471f5a" datatype="html">
         <source>Change your avatar</source>
         <target state="new">Change your avatar</target>
@@ -1261,37 +1261,26 @@ The link will expire within 1 hour.</target>
         
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">58</context></context-group></trans-unit>
-      <trans-unit id="bd6c91a86a18f512ade62e216efcfb5d2520711c" datatype="html">
-        <source> If you want to open registrations, please decide what are <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/>, fill your <x id="START_TAG_STRONG"/>instance terms<x id="CLOSE_TAG_STRONG"/> and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="new">
-          If you want to open registrations, please decide what are 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>your moderation rules
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, fill your 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>instance
-          terms
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
-          and specify the categories and languages you speak. This way, you will help users to register on 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>the
-          appropriate
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
-          PeerTube instance.
-        
-        </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">58</context></context-group></trans-unit><trans-unit id="2a94cfa351109b958a00ee927cd87ada8da44c1e" datatype="html">
+        <source> If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source><target state="new"> If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/modal/welcome-modal.component.html</context>
+          <context context-type="linenumber">64,67</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
         <source>Remind me later</source>
         <target state="new">Remind me later</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">76</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">74</context></context-group></trans-unit>
       <trans-unit id="b310fa17f1bbfc4dd61b80c1cfc4116a81a9c76c" datatype="html">
         <source>Configure my instance</source>
         <target state="new">
       Configure my instance
     </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">83</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/modal/welcome-modal.component.html</context><context context-type="linenumber">81</context></context-group></trans-unit>
       <trans-unit id="a9af18b4f210f5a19bb2503407923d3f25c57f98" datatype="html">
         <source>Configuration warning!</source>
         <target state="new">Configuration warning!</target>
@@ -1603,7 +1592,13 @@ The link will expire within 1 hour.</target>
         <source>See all your notifications</source>
         <target>Δείτε όλες τις ειδοποιήσεις σας</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/menu/avatar-notification.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/menu/avatar-notification.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit><trans-unit id="2971365540217107489" datatype="html">
+        <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source><target state="new">Media is too large for the server. Please contact you administrator if you want to increase the limit size.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="73216504c8903e04fdb415d876eb8969dd3afa60" datatype="html">
         <source>Search videos, channels…</source>
         <target state="new">Search videos, channels…</target>
@@ -1667,11 +1662,7 @@ The link will expire within 1 hour.</target>
         <target>Αναζήτηση...</target>
         
       <context-group purpose="location"><context context-type="sourcefile">../app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">6</context></context-group></trans-unit>
-      <trans-unit id="4b3972c3e9485218508a95f7a4ce7758e3f09ced">
-        <source>Upload</source>
-        <target>Ανεβάστε</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/header/header.component.html</context><context context-type="linenumber">5</context></context-group></trans-unit>
+      
       <trans-unit id="39ec2a3e2da523763f4db4b2227b7dbae5d70eba" datatype="html">
         <source>In this instance's network</source>
         <target state="new">In this instance's network</target>
@@ -4317,32 +4308,30 @@ The link will expire within 1 hour.</target>
         <target state="new">SEARCH</target>
         
       <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">455</context></context-group></trans-unit>
-      <trans-unit id="a97062f0bfb585b28058981d53fb047a2f2288c4" datatype="html">
-        <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="new">Allow 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>your users
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> to look up remote videos/actors by their URI, that may not be federated with your instance
-        </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">469</context></context-group></trans-unit>
+      
       <trans-unit id="273341057700e25fb8a19896b5039dcf3f14b9ba" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
         <target state="new">Allow users to do remote URI/handle search</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">466</context></context-group></trans-unit>
-      <trans-unit id="ffe92ff41a38a4407b1e1da41a015292497324c4" datatype="html">
-        <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="new">Allow 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>anonymous users
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> to look up remote videos/actors by their URI, that may not be federated with your instance
-        </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">480</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">466</context></context-group></trans-unit><trans-unit id="24abd406ad31ca317072b179321ff7a7b2d56f86" datatype="html">
+        <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source><target state="new">Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+          <context context-type="linenumber">469</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="1a1dd78b1169f98fb2120c6af13e136aec2daf69" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
         <target state="new">Allow anonymous to do remote URI/handle search</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">477</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">477</context></context-group></trans-unit><trans-unit id="0a82b1f5636ff3c47cddf9e4bffa86b5d696fe06" datatype="html">
+        <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source><target state="new">Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+          <context context-type="linenumber">480</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f3af9d2cf9a341ce634210908597e491e77e7376" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
         <target state="new">⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</target>
@@ -4486,31 +4475,21 @@ The link will expire within 1 hour.</target>
         <source>Instance allowed by Twitter</source>
         <target state="new">Instance allowed by Twitter</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">679</context></context-group></trans-unit>
-      <trans-unit id="f0d14f556321dbae66c765d6a3b0062f3a150931" datatype="html">
-        <source> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect on your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </source>
-        <target state="new">
-                        If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-                        If the instance is not, we use an image link card that will redirect on your PeerTube instance.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-                        Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on
-                        
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>https://cards-dev.twitter.com/validator
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-                        to see if you instance is allowed.
-                      
-        </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">684</context></context-group></trans-unit><trans-unit id="df754f9d47b1a072519f1c9f7f1726937f44040a" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">679</context></context-group></trans-unit><trans-unit id="00d2522709d908c52395fc1865152ad37fe7eeae" datatype="html">
+        <source> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </source><target state="new"> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+          <context context-type="linenumber">684,689</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="df754f9d47b1a072519f1c9f7f1726937f44040a" datatype="html">
         <source>LIVE</source><target state="new">LIVE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">709</context>
         </context-group>
-      </trans-unit><trans-unit id="803674658cb8a3267fb8cb040bcb0b0fa953e9fb" datatype="html">
-        <source> Add ability for your users to do live streaming on your instance. </source><target state="new"> Add ability for your users to do live streaming on your instance. </target>
+      </trans-unit><trans-unit id="1972803cc06239fe6b7791763ce89b819bd24853" datatype="html">
+        <source> Enable users of your instance to stream live. </source><target state="new"> Enable users of your instance to stream live. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">711,712</context>
@@ -5397,7 +5376,19 @@ The link will expire within 1 hour.</target>
         <source>This instance does not require email verification.</source>
         <target>Αυτός ο κόμβος δεν απαιτεί επαλήθευση e-mail.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">20</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">20</context></context-group></trans-unit><trans-unit id="248731258067914565" datatype="html">
+        <source>Verify account via email</source><target state="new">Verify account via email</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit><trans-unit id="9197112111252826229" datatype="html">
+        <source>Ask to send an email to verify you account</source><target state="new">Ask to send an email to verify you account</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bd2edf99dd6562385ccec19a7ab2d1898e626605">
         <source>Banned</source>
         <target>Σε αποκλεισμό</target>
@@ -5529,6 +5520,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
           <context context-type="sourcefile">../app/+videos/video-list/video-most-liked.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
+      </trans-unit><trans-unit id="2494835943815843060" datatype="html">
+        <source>Videos that have the most likes.</source><target state="new">Videos that have the most likes.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+videos/video-list/video-most-liked.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="5523952d0300c96cfba2ec5a693c95f923e90c40">
         <source>Created <x id="INTERPOLATION"/></source>
@@ -5555,7 +5552,13 @@ channel with the same name (<x id="PH_2"/>)!</target>
         <source>PeerTube</source>
         <target>PeerTube</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about.component.html</context><context context-type="linenumber">7</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about.component.html</context><context context-type="linenumber">7</context></context-group></trans-unit><trans-unit id="2c7cd7912f61e528f6b38d4bc28733135931042b" datatype="html">
+        <source>Network</source><target state="new">Network</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+about/about.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fc978c97e261ee6494db916622339aedb633da3a">
         <source>Follows</source>
         <target>Ακόλουθοι</target>
@@ -5696,18 +5699,14 @@ channel with the same name (<x id="PH_2"/>)!</target>
       PeerTube is a self-hosted ActivityPub-federated video streaming platform using P2P directly in your web browser.
     </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit>
-      <trans-unit id="6469b375536342370eefd959bb72a06dc3d5884b" datatype="html">
-        <source> It is a free and open-source software, under the <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-      It is a free and open-source software, under the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>AGPLv3
-      licence
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.
-    
-        </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">14</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="ccbfd56f7d72ca5055b86a35f66b7a6d0a250d03" datatype="html">
+        <source> It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source><target state="new"> It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context>
+          <context context-type="linenumber">14,16</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="7b85d0debc419e6c9c390ce02686b57d256cd139" datatype="html">
         <source> For more information, please visit <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </source>
         <target state="new">
@@ -5904,11 +5903,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
         <target state="new">Allow instance admins to disable P2P from the administration interface</target>
         
       <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">158</context></context-group></trans-unit>
-      <trans-unit id="85755719c08571f7f5b7c5b391329b7e4e7ccc7b" datatype="html">
-        <source>Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</source>
-        <target state="new">Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">159</context></context-group></trans-unit>
+      
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
         <source> Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser. </source>
         <target state="new">
@@ -5916,7 +5911,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
         WebRTC in your browser.
       </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">163</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">162</context></context-group></trans-unit>
       <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
         <source>Followers instances</source>
         <target state="new">Followers instances</target>
@@ -5926,17 +5921,19 @@ channel with the same name (<x id="PH_2"/>)!</target>
         <source>This instance does not have instances followers.</source>
         <target state="new">This instance does not have instances followers.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">6</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">6</context></context-group></trans-unit><trans-unit id="9a9dcdc62c7e0048f4f4702b0327dda350341abc" datatype="html">
+        <source>This instance is not following any other.</source><target state="new">This instance is not following any other.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
         <source>Followings instances</source>
         <target state="new">Followings instances</target>
         
       <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">14</context></context-group></trans-unit>
-      <trans-unit id="d0f0a0a5da1553964ae4891aaebd2b2c3e5ddae4" datatype="html">
-        <source>This instance does not have instances followings.</source>
-        <target state="new">This instance does not have instances followings.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit><trans-unit id="4195286790385468087" datatype="html">
+      <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source><target state="new">About this instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
@@ -5948,8 +5945,8 @@ channel with the same name (<x id="PH_2"/>)!</target>
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
-      </trans-unit><trans-unit id="5782088737558028158" datatype="html">
-        <source>About follows</source><target state="new">About follows</target>
+      </trans-unit><trans-unit id="1812900507515561988" datatype="html">
+        <source>About this instance's network</source><target state="new">About this instance's network</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -6069,14 +6066,14 @@ channel with the same name (<x id="PH_2"/>)!</target>
       The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
     </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">43</context></context-group></trans-unit>
-      <trans-unit id="60534abbe922bf9da7284c1c84d26315d695a5b7">
-        <source>Channel name cannot be the same than your account name. You can click on the first step to update your account name.</source>
-        <target>
-      Το όνομα καναλιού δεν μπορεί να είναι το ίδιο με το όνομα χρήστη. Μπορείτε να επιστρέψετε στο πρώτο βήμα για να αλλάξετε το όνομα χρήστη.
-    </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">51</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">43</context></context-group></trans-unit><trans-unit id="4b84dbfc388651c74c77bba7ee0078b5714baf00" datatype="html">
+        <source> Channel name cannot be the same as your account name. You can click on the first step to update your account name. </source><target state="new"> Channel name cannot be the same as your account name. You can click on the first step to update your account name. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
         <source>Example: jane_doe</source>
         <target>Παράδειγμα: jane_doe</target>
@@ -6300,7 +6297,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
         <source>Configuration updated.</source>
         <target>Οι ρυθμίσεις ενημερώθηκαν.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">341</context></context-group></trans-unit><trans-unit id="6284468333579755406" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">347</context></context-group></trans-unit><trans-unit id="6284468333579755406" datatype="html">
         <source>Edit custom configuration</source><target state="new">Edit custom configuration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/config.routes.ts</context>
@@ -7351,12 +7348,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
           <x id="PH"/> διαγράφηκε.
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">125</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">127</context></context-group></trans-unit>
       <trans-unit id="6450826648284332649" datatype="html">
         <source>Views for the day</source>
         <target state="new">Views for the day</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">144</context></context-group></trans-unit><trans-unit id="4707367314920217630" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context><context context-type="linenumber">146</context></context-group></trans-unit><trans-unit id="4707367314920217630" datatype="html">
         <source>Create new video channel</source><target state="new">Create new video channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/+my-account-video-channels/my-account-video-channels-routing.module.ts</context>
@@ -7573,19 +7570,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
           <x id="PH"/>.
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context><context context-type="linenumber">45</context></context-group></trans-unit><trans-unit id="8231550792139699065" datatype="html">
-        <source>Verify account email</source><target state="new">Verify account email</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit><trans-unit id="4997281272800290390" datatype="html">
-        <source>Verify account ask send email</source><target state="new">Verify account ask send email</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="4180693983967989981">
         <source>Unable to find user id or verification string.</source>
         <target>Δεν βρέθηκε το ID χρήστη ή η συμβολοσειρά επιβεβαίωσης.</target>
@@ -7609,7 +7594,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
         <target>Συνδρομή στον λογαριασμό</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">900</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">902</context></context-group></trans-unit>
       <trans-unit id="4014335318155107533" datatype="html">
         <source>VIDEO PLAYLISTS</source>
         <target state="new">VIDEO PLAYLISTS</target>
@@ -8146,12 +8131,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Channel name cannot be more than 50 characters long.</source>
         <target state="new">Channel name cannot be more than 50 characters long.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group></trans-unit>
-      <trans-unit id="7261858447215513786" datatype="html">
-        <source>Channel name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Channel name should be lowercase alphanumeric; dots and underscores are allowed.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group></trans-unit><trans-unit id="3419415520566928243" datatype="html">
+        <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source><target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="525871656034789056">
         <source>Password must be at least 6 characters long.</source>
         <target>Ο κωδικός πρέπει να είναι από τουλάχιστον 6 χαρακτήρες.</target>
@@ -8366,15 +8353,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Comment cannot be more than 3000 characters long.</source>
         <target>Το σχόλιο δε μπορεί να είναι πάνω από 3000 χαρακτήρες.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group></trans-unit><trans-unit id="6541082750381847310" datatype="html">
-        <source>Request is too large for the server.
- Please contact you administrator if you want to increase the limit size.</source><target state="new">Request is too large for the server.
- Please contact you administrator if you want to increase the limit size.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context>
-          <context context-type="linenumber">61,62</context>
-        </context-group>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group></trans-unit>
       <trans-unit id="6854100952145697527">
         <source>Display name cannot be more than 120 characters long.</source>
         <target>Το όνομα εμφάνισης δε μπορεί να είναι πάνω από 120 χαρακτήρες.</target>
@@ -9033,12 +9012,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Mute this account</source>
         <target>Σίγαση λογαριασμού</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">297</context></context-group></trans-unit>
-      <trans-unit id="2097367811254173292" datatype="html">
-        <source>Hide any content from that user for you.</source>
-        <target state="new">Hide any content from that user for you.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">298</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">297</context></context-group></trans-unit><trans-unit id="2365286519320230773" datatype="html">
+        <source>Hide any content from that user from you.</source><target state="new">Hide any content from that user from you.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
+          <context context-type="linenumber">298</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="4043508901590508211">
         <source>Unmute this account</source>
         <target>Διακοπή σίγασης λογαριασμού</target>
@@ -9073,42 +9054,50 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Remove comments from your videos</source>
         <target state="new">Remove comments from your videos</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group></trans-unit>
-      <trans-unit id="8392096263642670423" datatype="html">
-        <source>Remove comments of this account from your videos.</source>
-        <target state="new">Remove comments of this account from your videos.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">322</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group></trans-unit><trans-unit id="4810478487244286994" datatype="html">
+        <source>Remove comments made by this account on your videos.</source><target state="new">Remove comments made by this account on your videos.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
+          <context context-type="linenumber">322</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="81452583525574033">
         <source>Mute this account by your instance</source>
         <target>Σίγαση αυτού του λογαρισμού στον κόμβο σας</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">333</context></context-group></trans-unit>
-      <trans-unit id="1909103949862360506" datatype="html">
-        <source>Hide any content from that user for you, your instance and its users.</source>
-        <target state="new">Hide any content from that user for you, your instance and its users.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">334</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">333</context></context-group></trans-unit><trans-unit id="2077144178298031252" datatype="html">
+        <source>Hide any content from that user from you, your instance and its users.</source><target state="new">Hide any content from that user from you, your instance and its users.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
+          <context context-type="linenumber">334</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="884942914962310163">
         <source>Unmute this account by your instance</source>
         <target>Διακοπή σίγασης του λογαριασμού στον κόμβο σας</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">339</context></context-group></trans-unit>
-      <trans-unit id="2208303514299860142" datatype="html">
-        <source>Show back content from that user for you, your instance and its users.</source>
-        <target state="new">Show back content from that user for you, your instance and its users.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">340</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">339</context></context-group></trans-unit><trans-unit id="7675070596643104983" datatype="html">
+        <source>Show this user's content to the users of this instance again.</source><target state="new">Show this user's content to the users of this instance again.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
+          <context context-type="linenumber">340</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="3191211873505538654">
         <source>Mute the instance by your instance</source>
         <target>Σίγαση αυτού του κόμβου στον δικό σας κόμβο</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">351</context></context-group></trans-unit>
-      <trans-unit id="6642176372946562984" datatype="html">
-        <source>Hide any content from that instance for you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance for you, your instance and its users.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">352</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">351</context></context-group></trans-unit><trans-unit id="525915681688649453" datatype="html">
+        <source>Hide any content from that instance from you, your instance and its users.</source><target state="new">Hide any content from that instance from you, your instance and its users.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
+          <context context-type="linenumber">352</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="5325628963747139770">
         <source>Unmute the instance by your instance</source>
         <target>Διακοπή σίγασης του κόμβου στον κόμβο σας</target>
@@ -9123,12 +9112,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Remove comments from your instance</source>
         <target state="new">Remove comments from your instance</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">368</context></context-group></trans-unit>
-      <trans-unit id="6565153079076716427" datatype="html">
-        <source>Remove comments of this account from your instance.</source>
-        <target state="new">Remove comments of this account from your instance.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">369</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">368</context></context-group></trans-unit><trans-unit id="4809327075591089709" datatype="html">
+        <source>Remove comments made by this account from your instance.</source><target state="new">Remove comments made by this account from your instance.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
+          <context context-type="linenumber">369</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="6746743143272021955" datatype="html">
         <source>Violent or repulsive</source>
         <target state="new">Violent or repulsive</target>
@@ -9207,17 +9198,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <x id="PH"/> λεπτά.
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">67</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">66</context></context-group></trans-unit>
       <trans-unit id="4965472196059235310">
         <source>Too many attempts, please try again later.</source>
         <target>Πάρα πολλές προσπάθειες, δοκιμάστε ξανά αργότερα.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">69</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">68</context></context-group></trans-unit>
       <trans-unit id="1693549688987384699">
         <source>Server error. Please retry later.</source>
         <target>Σφάλμα κόμβου. Δοκιμάστε ξανά αργότερα.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">72</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="new">Subscribed to all current channels of 
@@ -9897,77 +9888,73 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
         <source>Enter/exit fullscreen (requires player focus)</source>
         <target state="new">Enter/exit fullscreen (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">867</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">869</context></context-group></trans-unit>
       <trans-unit id="7618388257165864759" datatype="html">
         <source>Play/Pause the video (requires player focus)</source>
         <target state="new">Play/Pause the video (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">868</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">870</context></context-group></trans-unit>
       <trans-unit id="7761890399634216630" datatype="html">
         <source>Mute/unmute the video (requires player focus)</source>
         <target state="new">Mute/unmute the video (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">869</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">871</context></context-group></trans-unit>
       <trans-unit id="5996585232248234904" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</source>
         <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">871</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">873</context></context-group></trans-unit>
       <trans-unit id="3748765405903319998" datatype="html">
         <source>Increase the volume (requires player focus)</source>
         <target state="new">Increase the volume (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">873</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">875</context></context-group></trans-unit>
       <trans-unit id="5810704036407159982" datatype="html">
         <source>Decrease the volume (requires player focus)</source>
         <target state="new">Decrease the volume (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">876</context></context-group></trans-unit>
       <trans-unit id="2622048822548065691" datatype="html">
         <source>Seek the video forward (requires player focus)</source>
         <target state="new">Seek the video forward (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">876</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">878</context></context-group></trans-unit>
       <trans-unit id="6540078205109221153" datatype="html">
         <source>Seek the video backward (requires player focus)</source>
         <target state="new">Seek the video backward (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">877</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">879</context></context-group></trans-unit>
       <trans-unit id="1956491957766210808" datatype="html">
         <source>Increase playback rate (requires player focus)</source>
         <target state="new">Increase playback rate (requires player focus)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">879</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">881</context></context-group></trans-unit>
       <trans-unit id="5495529997674803186" datatype="html">
         <source>Decrease playback rate (requires player focus)</source>
         <target state="translated">Μειώστε το ποσοστό αναπαραγωγής (απαιτεί εστίαση του προγράμματος αναπαραγωγής))</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">880</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">882</context></context-group></trans-unit>
       <trans-unit id="3178343147230721210" datatype="html">
         <source>Navigate in the video frame by frame (requires player focus)</source>
         <target state="translated">Περιήγηση στο βίντεο καρέ ανά καρέ (απαιτεί εστίαση του προγράμματος αναπαραγωγής)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">882</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">884</context></context-group></trans-unit>
       <trans-unit id="8025996572234182184">
         <source>Like the video</source>
         <target>Σας αρέσει το βίντεο</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">890</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">892</context></context-group></trans-unit>
       <trans-unit id="7692127636377222448">
         <source>Dislike the video</source>
         <target>Δε σας αρέσει το βίντεο</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">895</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">897</context></context-group></trans-unit>
       <trans-unit id="1729036051846673606" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
         <target state="translated">Όταν είναι ενεργό, το επόμενο βίντεο αναπαράγεται αυτόματα μετά το τρέχον.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/recommendations/recommended-videos.component.ts</context><context context-type="linenumber">59</context></context-group></trans-unit>
-      <trans-unit id="3215818381953526945" datatype="html">
-        <source>Videos that have the higher number of likes.</source>
-        <target state="translated">Βίντεο που έχουν τον μεγαλύτερο αριθμό σε likes.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../app/+videos/video-list/video-most-liked.component.ts</context><context context-type="linenumber">42</context></context-group></trans-unit><trans-unit id="2431286785954354122" datatype="html">
+      <trans-unit id="2431286785954354122" datatype="html">
         <source>Recently added</source><target state="new">Recently added</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/video-list/video-recently-added.component.ts</context>
