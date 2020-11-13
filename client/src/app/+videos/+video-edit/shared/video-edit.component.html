@@ -72,6 +72,16 @@
 
             <div class="form-group">
               <label i18n for="licence">Licence</label>
+
+              <my-help>
+                <ng-template ptTemplate="customHtml">
+                  <ng-container i18n>
+                    Select the appropriate license for your work. <br />
+                    <a href="https://chooser-beta.creativecommons.org/" target="_blank" rel="noopener noreferrer">CC License Chooser</a>
+                  </ng-container>
+                </ng-template>
+              </my-help>
+
               <my-select-options
                 labelForId="licence" [items]="videoLicences" formControlName="licence" [clearable]="true"
               ></my-select-options>
