@@ -273,16 +273,20 @@ class LiveManager {
 
     const tsWatcher = chokidar.watch(outPath + '/*.ts')
 
-    let segmentsToProcess: string[] = []
+    const segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
+    const playlistIdMatcher = /^([\d+])-/
 
     const addHandler = segmentPath => {
+      const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
+      const segmentsToProcess = segmentsToProcessPerPlaylist[playlistId] || []
+
       // Add sha hash of previous segments, because ffmpeg should have finished generating them
       for (const previousSegment of segmentsToProcess) {
         this.addSegmentSha(videoUUID, previousSegment)
           .catch(err => logger.error('Cannot add sha segment of video %s -> %s.', videoUUID, previousSegment, { err }))
       }
 
-      segmentsToProcess = [ segmentPath ]
+      segmentsToProcessPerPlaylist[playlistId] = [ segmentPath ]
 
       // Duration constraint check
       if (this.isDurationConstraintValid(startStreamDateTime) !== true) {
