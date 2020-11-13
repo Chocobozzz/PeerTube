@@ -988,6 +988,19 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
+  static listPublishedLiveIds () {
+    const options = {
+      attributes: [ 'id' ],
+      where: {
+        isLive: true,
+        state: VideoState.PUBLISHED
+      }
+    }
+
+    return VideoModel.findAll(options)
+      .map(v => v.id)
+  }
+
   static listUserVideosForApi (
     accountId: number,
     start: number,

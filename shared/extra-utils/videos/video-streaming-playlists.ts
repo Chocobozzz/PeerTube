@@ -41,6 +41,20 @@ async function checkSegmentHash (
   expect(sha256(res2.body)).to.equal(sha256Server)
 }
 
+async function checkLiveSegmentHash (
+  baseUrlSegment: string,
+  videoUUID: string,
+  segmentName: string,
+  hlsPlaylist: VideoStreamingPlaylist
+) {
+  const res2 = await getSegment(`${baseUrlSegment}/${videoUUID}/${segmentName}`)
+
+  const resSha = await getSegmentSha256(hlsPlaylist.segmentsSha256Url)
+
+  const sha256Server = resSha.body[segmentName]
+  expect(sha256(res2.body)).to.equal(sha256Server)
+}
+
 async function checkResolutionsInMasterPlaylist (playlistUrl: string, resolutions: number[]) {
   const res = await getPlaylist(playlistUrl)
 
@@ -62,5 +76,6 @@ export {
   getSegment,
   checkResolutionsInMasterPlaylist,
   getSegmentSha256,
+  checkLiveSegmentHash,
   checkSegmentHash
 }

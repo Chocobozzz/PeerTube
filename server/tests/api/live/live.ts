@@ -2,22 +2,28 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { FfmpegCommand } from 'fluent-ffmpeg'
 import { getLiveNotificationSocket } from '@shared/extra-utils/socket/socket-io'
 import { LiveVideo, LiveVideoCreate, Video, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import {
   addVideoToBlacklist,
   checkLiveCleanup,
+  checkLiveSegmentHash,
   checkResolutionsInMasterPlaylist,
+  checkSegmentHash,
   cleanupTests,
   createLive,
   doubleFollow,
   flushAndRunMultipleServers,
   getLive,
+  getPlaylist,
   getVideo,
   getVideoIdFromUUID,
   getVideosList,
+  killallServers,
   makeRawRequest,
   removeVideo,
+  reRunServer,
   sendRTMPStream,
   sendRTMPStreamInVideo,
   ServerInfo,
@@ -31,9 +37,9 @@ import {
   viewVideo,
   wait,
   waitJobs,
-  waitUntilLiveStarts
+  waitUntilLiveStarts,
+  waitUntilLog
 } from '../../../../shared/extra-utils'
-import { FfmpegCommand } from 'fluent-ffmpeg'
 
 const expect = chai.expect
 
@@ -316,6 +322,19 @@ describe('Test live', function () {
         expect(hlsPlaylist.files).to.have.lengthOf(0)
 
         await checkResolutionsInMasterPlaylist(hlsPlaylist.playlistUrl, resolutions)
+
+        for (let i = 0; i < resolutions.length; i++) {
+          const segmentName = `${i}-000001.ts`
+          await waitUntilLog(servers[0], `${video.uuid}/${segmentName}`, 1, false)
+
+          const res = await getPlaylist(`${servers[0].url}/static/streaming-playlists/hls/${video.uuid}/${i}.m3u8`)
+          const subPlaylist = res.text
+
+          expect(subPlaylist).to.contain(segmentName)
+
+          const baseUrlAndPath = servers[0].url + '/static/streaming-playlists/hls'
+          await checkLiveSegmentHash(baseUrlAndPath, video.uuid, segmentName, hlsPlaylist)
+        }
       }
     }
 
@@ -577,6 +596,65 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       expect(stateChanges).to.have.lengthOf(1)
+    })
+  })
+
+  describe('After a server restart', function () {
+    let liveVideoId: string
+    let liveVideoReplayId: string
+
+    async function createLiveWrapper (saveReplay: boolean) {
+      const liveAttributes = {
+        name: 'live video',
+        channelId: servers[0].videoChannel.id,
+        privacy: VideoPrivacy.PUBLIC,
+        saveReplay
+      }
+
+      const res = await createLive(servers[0].url, servers[0].accessToken, liveAttributes)
+      return res.body.video.uuid
+    }
+
+    before(async function () {
+      this.timeout(60000)
+
+      liveVideoId = await createLiveWrapper(false)
+      liveVideoReplayId = await createLiveWrapper(true)
+
+      await Promise.all([
+        sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId),
+        sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoReplayId)
+      ])
+
+      await Promise.all([
+        waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoId),
+        waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoReplayId)
+      ])
+
+      await killallServers([ servers[0] ])
+      await reRunServer(servers[0])
+
+      await wait(5000)
+    })
+
+    it('Should cleanup lives', async function () {
+      this.timeout(60000)
+
+      const res = await getVideo(servers[0].url, liveVideoId)
+      const video: VideoDetails = res.body
+
+      expect(video.state.id).to.equal(VideoState.LIVE_ENDED)
+    })
+
+    it('Should save a live replay', async function () {
+      this.timeout(60000)
+
+      await waitJobs(servers)
+
+      const res = await getVideo(servers[0].url, liveVideoReplayId)
+      const video: VideoDetails = res.body
+
+      expect(video.state.id).to.equal(VideoState.PUBLISHED)
     })
   })
 

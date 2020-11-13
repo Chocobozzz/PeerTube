@@ -99,6 +99,10 @@ class LiveManager {
       }
     })
 
+    // Cleanup broken lives, that were terminated by a server restart for example
+    this.handleBrokenLives()
+      .catch(err => logger.error('Cannot handle broken lives.', { err }))
+
     setInterval(() => this.updateLiveViews(), VIEW_LIFETIME.LIVE)
   }
 
@@ -465,6 +469,14 @@ class LiveManager {
       this.watchersPerVideo.set(videoId, newWatchers)
 
       logger.debug('New live video views for %s is %d.', video.url, numWatchers)
+    }
+  }
+
+  private async handleBrokenLives () {
+    const videoIds = await VideoModel.listPublishedLiveIds()
+
+    for (const id of videoIds) {
+      await this.onEndTransmuxing(id, true)
     }
   }
 
