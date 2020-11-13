@@ -3656,7 +3656,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="24abd406ad31ca317072b179321ff7a7b2d56f86" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="new">Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</target>
+        <target state="translated">Sta <x id="START_TAG_STRONG"/>uw gebruikers<x id="CLOSE_TAG_STRONG"/> toe om externe video's / gebruikers op te zoeken die mogelijk niet met uw instantie zijn verbonden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">469</context>
@@ -3669,7 +3669,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="0a82b1f5636ff3c47cddf9e4bffa86b5d696fe06" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="new">Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</target>
+        <target state="translated">Sta<x id="CLOSE_TAG_STRONG"/>uw gebruikers <x id="START_TAG_STRONG"/> toe om externe video's/gebruikers op te zoeken die mogelijk niet met uw instantie zijn verbonden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">480</context>
@@ -3802,7 +3802,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="00d2522709d908c52395fc1865152ad37fe7eeae" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </source>
-        <target state="new"> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </target>
+        <target state="translated">Als uw instantie expliciet is toegestaan door Twitter, wordt een videospeler ingesloten in de Twitter-feed op PeerTube-video-share. <X id="LINE_BREAK"/> Als de instantie dat niet is, gebruiken we een afbeeldingslinkkaart die doorverwijst naar uw PeerTube-instantie. <X id="LINE_BREAK"/> <x id="LINE_BREAK"/> Schakel dit selectievakje in, sla de configuratie op en test met een video-URL van uw instantie (https://example.com/videos/watch/ blabla) op <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> om te zien of jouw exemplaar is toegestaan. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">684,689</context>
@@ -3818,7 +3818,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="1972803cc06239fe6b7791763ce89b819bd24853" datatype="html">
         <source>Enable users of your instance to stream live.</source>
-        <target state="new"> Enable users of your instance to stream live. </target>
+        <target state="translated">Stel gebruikers van uw instantie in staat live te streamen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">711,712</context>
@@ -4615,7 +4615,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
         <source>Verify account via email</source>
-        <target state="new">Verify account via email</target>
+        <target state="translated">Verifieer account via e-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">17</context>
@@ -4623,7 +4623,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="9197112111252826229" datatype="html">
         <source>Ask to send an email to verify you account</source>
-        <target state="new">Ask to send an email to verify you account</target>
+        <target state="translated">Vraag om een e-mail te sturen om uw account te verifiëren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">26</context>
@@ -4747,7 +4747,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="2494835943815843060" datatype="html">
         <source>Videos that have the most likes.</source>
-        <target state="new">Videos that have the most likes.</target>
+        <target state="translated">Video's met de meeste likes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/video-list/video-most-liked.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -4775,7 +4775,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="2c7cd7912f61e528f6b38d4bc28733135931042b" datatype="html">
         <source>Network</source>
-        <target state="new">Network</target>
+        <target state="translated">Netwerk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about.component.html</context>
           <context context-type="linenumber">9</context>
@@ -4898,7 +4898,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="ccbfd56f7d72ca5055b86a35f66b7a6d0a250d03" datatype="html">
         <source>It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="new"> It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Het is gratis en open-source software, onder <x id="START_LINK"/> AGPLv3-licentie <x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -5046,7 +5046,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
         <source>Followers instances</source>
-        <target state="new">Followers instances</target>
+        <target state="translated">Volgers instanties</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
@@ -5056,7 +5056,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="9a9dcdc62c7e0048f4f4702b0327dda350341abc" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="new">This instance is not following any other.</target>
+        <target state="translated">Deze instantie volgt geen ander.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5064,7 +5064,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
         <source>Followings instances</source>
-        <target state="new">Followings instances</target>
+        <target state="translated">Volgende instanties</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
@@ -5085,7 +5085,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target state="new">About this instance's network</target>
+        <target state="translated">Over het netwerk van deze instantie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -5194,7 +5194,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="4b84dbfc388651c74c77bba7ee0078b5714baf00" datatype="html">
         <source>Channel name cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="new"> Channel name cannot be the same as your account name. You can click on the first step to update your account name. </target>
+        <target state="translated">De kanaalnaam mag niet hetzelfde zijn als uw accountnaam. U kunt op de eerste stap klikken om uw accountnaam bij te werken.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">51,52</context>
@@ -7154,7 +7154,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <target state="translated">De kanaalnaam moet kleine letters zijn en mag alleen alfanumerieke tekens, punten en onderstrepingstekens bevatten.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -7989,7 +7989,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="2365286519320230773" datatype="html">
         <source>Hide any content from that user from you.</source>
-        <target state="new">Hide any content from that user from you.</target>
+        <target state="translated">Verberg alle inhoud van die gebruiker voor jou.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">298</context>
@@ -8032,7 +8032,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
         <source>Remove comments made by this account on your videos.</source>
-        <target state="new">Remove comments made by this account on your videos.</target>
+        <target state="translated">Verwijder reacties van dit account op je video's.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">322</context>
@@ -8045,7 +8045,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
         <source>Hide any content from that user from you, your instance and its users.</source>
-        <target state="new">Hide any content from that user from you, your instance and its users.</target>
+        <target state="translated">Verberg alle inhoud van die gebruiker voor u, uw instantie en haar gebruikers.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">334</context>
@@ -8058,7 +8058,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
         <source>Show this user's content to the users of this instance again.</source>
-        <target state="new">Show this user's content to the users of this instance again.</target>
+        <target state="translated">Toon de inhoud van deze gebruiker opnieuw aan de gebruikers van deze instantie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">340</context>
@@ -8071,7 +8071,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
         <source>Hide any content from that instance from you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance from you, your instance and its users.</target>
+        <target state="translated">Verberg alle inhoud van die instantie voor u, uw instantie en zijn gebruikers.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">352</context>
@@ -8094,7 +8094,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target state="new">Remove comments made by this account from your instance.</target>
+        <target state="translated">Verwijder opmerkingen van dit account uit uw instantie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">369</context>
