@@ -58,18 +58,8 @@ server {
   }
 
   # Bypass PeerTube for performance reasons. Could be removed
-  # Must be consistent with static client-overrides list in /server/controllers/client.ts
-  location ~ ^/client/(assets/images/(logo\.svg|favicon\.png)) {
-    add_header Cache-Control "public, max-age=31536000, immutable";
-
-    root /var/www/peertube;
-
-    try_files /storage/client-overrides/$1 /peertube-latest/client/dist/$1 $uri;
-  }
-
-  # Bypass PeerTube for performance reasons. Could be removed
-  # Must be consistent with static client-overrides list in /server/controllers/client.ts
-  location ~ ^/client/(assets/images/icons/icon-(36x36|48x48|72x72|96x96|144x144|192x192|512x512)\.png)$ {
+  # Should be consistent with client-overrides assets list in /server/controllers/client.ts
+  location ~ ^/client/(assets/images/(icons/icon-36x36\.png|icons/icon-48x48\.png|icons/icon-72x72\.png|icons/icon-96x96\.png|icons/icon-144x144\.png|icons/icon-192x192\.png|icons/icon-512x512\.png|logo\.svg|favicon\.png))$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 
     root /var/www/peertube;
