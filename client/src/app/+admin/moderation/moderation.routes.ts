@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router'
+import { AbuseListComponent } from '@app/+admin/moderation/abuse-list'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
-import { AbuseListComponent } from '@app/+admin/moderation/abuse-list'
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
+import { VideoCommentListComponent } from './video-comment-list'
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@shared/models'
 
@@ -37,6 +38,7 @@ export const ModerationRoutes: Routes = [
           }
         }
       },
+
       {
         path: 'video-blacklist',
         redirectTo: 'video-blocks/list',
@@ -64,10 +66,28 @@ export const ModerationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_VIDEO_BLACKLIST,
           meta: {
-            title: $localize`Videos blocked`
+            title: $localize`Blocked videos`
           }
         }
       },
+
+      {
+        path: 'video-comments',
+        redirectTo: 'video-comments/list',
+        pathMatch: 'full'
+      },
+      {
+        path: 'video-comments/list',
+        component: VideoCommentListComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.SEE_ALL_COMMENTS,
+          meta: {
+            title: $localize`Video comments`
+          }
+        }
+      },
+
       {
         path: 'blocklist/accounts',
         component: InstanceAccountBlocklistComponent,

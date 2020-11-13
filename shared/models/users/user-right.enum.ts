@@ -32,6 +32,7 @@ export const enum UserRight {
 
   GET_ANY_LIVE,
   SEE_ALL_VIDEOS,
+  SEE_ALL_COMMENTS,
   CHANGE_VIDEO_OWNERSHIP,
 
   MANAGE_PLUGINS,

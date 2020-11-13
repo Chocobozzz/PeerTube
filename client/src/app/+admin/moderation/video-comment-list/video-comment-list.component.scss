@@ -1,0 +1,27 @@
+@import 'mixins';
+
+my-global-icon {
+  @include apply-svg-color(#7d7d7d);
+
+  width: 12px;
+  height: 12px;
+  position: relative;
+  top: -1px;
+}
+
+.input-group {
+  @include peertube-input-group(300px);
+
+  .dropdown-toggle::after {
+    margin-left: 0;
+  }
+}
+
+.caption {
+  justify-content: flex-end;
+
+  input {
+    @include peertube-input-text(250px);
+    flex-grow: 1;
+  }
+}

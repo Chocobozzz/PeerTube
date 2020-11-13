@@ -1,7 +1,7 @@
-import { VideoCommentModel } from '../../../models/video/video-comment'
 import { PickWith, PickWithOpt } from '@shared/core-utils'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 import { MAccountDefault, MAccountFormattable, MAccountUrl } from '../account'
-import { MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUrl } from './video'
+import { MVideo, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUrl } from './video'
 
 type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, M>
 
@@ -58,6 +58,11 @@ export type MCommentAPI = MComment & { totalReplies: number }
 export type MCommentFormattable =
   MCommentTotalReplies &
   Use<'Account', MAccountFormattable>
+
+export type MCommentAdminFormattable =
+  MComment &
+  Use<'Account', MAccountFormattable> &
+  Use<'Video', MVideo>
 
 export type MCommentAP =
   MComment &
