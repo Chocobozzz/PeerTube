@@ -83,8 +83,8 @@ and then clone the sources and install node modules:
 
 ```
 $ git clone https://github.com/Chocobozzz/PeerTube
-$ git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
 $ cd PeerTube
+$ git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
 $ yarn install --pure-lockfile
 ```
 
