@@ -1,15 +1,18 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { accessSync, constants } from 'fs'
 import { join } from 'path'
+import { promisify } from 'util'
+
+import * as program from 'commander'
+import { remove } from 'fs-extra'
+import { truncate } from 'lodash'
+import * as prompt from 'prompt'
+
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/extra-utils/index'
-import { truncate } from 'lodash'
-import * as prompt from 'prompt'
-import { accessSync, constants } from 'fs'
-import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
 import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getLogger, getServerCredentials } from './cli'
@@ -120,7 +123,7 @@ async function run (url: string, user: UserInfo) {
   process.exit(0)
 }
 
-function processVideo (parameters: {
+async function processVideo (parameters: {
   cwd: string
   url: string
   user: { username: string, password: string }
@@ -128,63 +131,52 @@ function processVideo (parameters: {
 }) {
   const { youtubeInfo, cwd, url, user } = parameters
 
-  return new Promise(async res => {
-    log.debug('Fetching object.', youtubeInfo)
+  log.debug('Fetching object.', youtubeInfo)
 
-    const videoInfo = await fetchObject(youtubeInfo)
-    log.debug('Fetched object.', videoInfo)
+  const videoInfo = await fetchObject(youtubeInfo)
+  log.debug('Fetched object.', videoInfo)
 
-    const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)
+  const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)
+  if (program['since'] && originallyPublishedAt && originallyPublishedAt.getTime() < program['since'].getTime()) {
+    log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
+      videoInfo.title, formatDate(program['since']))
+    return
+  }
+  if (program['until'] && originallyPublishedAt && originallyPublishedAt.getTime() > program['until'].getTime()) {
+    log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
+      videoInfo.title, formatDate(program['until']))
+    return
+  }
 
-    if (program['since'] && originallyPublishedAt && originallyPublishedAt.getTime() < program['since'].getTime()) {
-      log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
-        videoInfo.title, formatDate(program['since']))
-      return res()
-    }
+  const result = await searchVideoWithSort(url, videoInfo.title, '-match')
 
-    if (program['until'] && originallyPublishedAt && originallyPublishedAt.getTime() > program['until'].getTime()) {
-      log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
-        videoInfo.title, formatDate(program['until']))
-      return res()
-    }
+  log.info('############################################################\n')
 
-    const result = await searchVideoWithSort(url, videoInfo.title, '-match')
+  if (result.body.data.find(v => v.name === videoInfo.title)) {
+    log.info('Video "%s" already exists, don\'t reupload it.\n', videoInfo.title)
+    return
+  }
 
-    log.info('############################################################\n')
+  const path = join(cwd, sha256(videoInfo.url) + '.mp4')
 
-    if (result.body.data.find(v => v.name === videoInfo.title)) {
-      log.info('Video "%s" already exists, don\'t reupload it.\n', videoInfo.title)
-      return res()
-    }
+  log.info('Downloading video "%s"...', videoInfo.title)
 
-    const path = join(cwd, sha256(videoInfo.url) + '.mp4')
-
-    log.info('Downloading video "%s"...', videoInfo.title)
-
-    const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', ...command.args, '-o', path ]
-    try {
-      const youtubeDL = await safeGetYoutubeDL()
-      youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
-        if (err) {
-          log.error(err)
-          return res()
-        }
-
-        log.info(output.join('\n'))
-        await uploadVideoOnPeerTube({
-          cwd,
-          url,
-          user,
-          videoInfo: normalizeObject(videoInfo),
-          videoPath: path
-        })
-        return res()
-      })
-    } catch (err) {
-      log.error(err.message)
-      return res()
-    }
-  })
+  const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', ...command.args, '-o', path ]
+  try {
+    const youtubeDL = await safeGetYoutubeDL()
+    const youtubeDLExec = promisify(youtubeDL.exec).bind(youtubeDL)
+    const output = await youtubeDLExec(videoInfo.url, options, processOptions)
+    log.info(output.join('\n'))
+    await uploadVideoOnPeerTube({
+      cwd,
+      url,
+      user,
+      videoInfo: normalizeObject(videoInfo),
+      videoPath: path
+    })
+  } catch (err) {
+    log.error(err.message)
+  }
 }
 
 async function uploadVideoOnPeerTube (parameters: {
