@@ -37,6 +37,7 @@ command
   .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('--first <first>', 'Process first n elements of returned playlist')
   .option('--last <last>', 'Process last n elements of returned playlist')
+  .option('--wait-interval <waitInterval>', 'Duration between two video imports (in seconds)', convertIntoMs)
   .option('-T, --tmpdir <tmpdir>', 'Working directory', __dirname)
   .usage("[global options] [ -- youtube-dl options]")
   .parse(process.argv)
@@ -87,19 +88,23 @@ async function run (url: string, user: UserInfo) {
 
   let infoArray: any[]
 
-  // Normalize utf8 fields
   infoArray = [].concat(info)
   if (program['first']) {
     infoArray = infoArray.slice(0, program['first'])
   } else if (program['last']) {
     infoArray = infoArray.slice(-program['last'])
   }
+  // Normalize utf8 fields
   infoArray = infoArray.map(i => normalizeObject(i))
 
   log.info('Will download and upload %d videos.\n', infoArray.length)
 
-  for (const info of infoArray) {
+  for (const [ index, info ] of infoArray.entries()) {
     try {
+      if (index > 0 && program['waitInterval']) {
+        log.info("Wait for %d seconds before continuing.", program['waitInterval'] / 1000)
+        await new Promise(res => setTimeout(res, program['waitInterval']))
+      }
       await processVideo({
         cwd: program['tmpdir'],
         url,
@@ -107,7 +112,7 @@ async function run (url: string, user: UserInfo) {
         youtubeInfo: info
       })
     } catch (err) {
-      console.error('Cannot process video.', { info, url })
+      console.error('Cannot process video.', { info, url, err })
     }
   }
 
@@ -394,6 +399,14 @@ function parseDate (dateAsStr: string): Date {
 
 function formatDate (date: Date): string {
   return date.toISOString().split('T')[0]
+}
+
+function convertIntoMs (secondsAsStr: string): number {
+  const seconds = parseInt(secondsAsStr, 10)
+  if (seconds <= 0) {
+    exitError(`Invalid duration passed: ${seconds}. Expected duration to be strictly positive and in seconds`)
+  }
+  return Math.round(seconds * 1000)
 }
 
 function exitError (message: string, ...meta: any[]) {
