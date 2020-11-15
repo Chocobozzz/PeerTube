@@ -33,7 +33,7 @@ const processOptions = {
 
 function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
   return new Promise<YoutubeDLInfo>((res, rej) => {
-    let args = opts || [ '-j', '--flat-playlist' ]
+    let args = opts || [ '-j', '--flat-playlist', '--force-ipv4' ]
     args = wrapWithProxyOptions(args)
 
     safeGetYoutubeDL()
