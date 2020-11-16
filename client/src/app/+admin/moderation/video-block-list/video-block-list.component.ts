@@ -138,12 +138,6 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
     return Video.buildClientUrl(videoBlock.video.uuid)
   }
 
-  booleanToText (value: boolean) {
-    if (value === true) return $localize`yes`
-
-    return $localize`no`
-  }
-
   toHtml (text: string) {
     return this.markdownRenderer.textMarkdownToHTML(text)
   }

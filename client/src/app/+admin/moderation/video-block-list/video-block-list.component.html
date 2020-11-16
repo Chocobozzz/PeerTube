@@ -80,16 +80,17 @@
         </a>
       </td>
 
-      <ng-container *ngIf="videoBlock.reason">
-        <td class="c-hand" [pRowToggler]="videoBlock">{{ booleanToText(videoBlock.video.nsfw) }}</td>
-        <td class="c-hand" [pRowToggler]="videoBlock">{{ booleanToText(videoBlock.unfederated) }}</td>
-        <td class="c-hand" [pRowToggler]="videoBlock">{{ videoBlock.createdAt | date: 'short' }}</td>
-      </ng-container>
-      <ng-container *ngIf="!videoBlock.reason">
-        <td>{{ booleanToText(videoBlock.video.nsfw) }}</td>
-        <td>{{ booleanToText(videoBlock.unfederated) }}</td>
-        <td>{{ videoBlock.createdAt | date: 'short' }}</td>
-      </ng-container>
+      <td>
+        <span *ngIf="videoBlock.video.nsfw" class="badge badge-red" i18n>NSFW</span>
+      </td>
+
+      <td>
+        <span *ngIf="videoBlock.unfederated" class="badge badge-blue" i18n>Unfederated</span>
+      </td>
+
+      <td>
+        {{ videoBlock.createdAt | date: 'short' }}
+      </td>
     </tr>
   </ng-template>
 

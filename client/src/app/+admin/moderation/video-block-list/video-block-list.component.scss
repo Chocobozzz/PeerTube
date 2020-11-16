@@ -21,3 +21,7 @@ my-global-icon {
     flex-grow: 1;
   }
 }
+
+.badge {
+  @include table-badge;
+}
