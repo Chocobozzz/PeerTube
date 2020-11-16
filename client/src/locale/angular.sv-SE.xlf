@@ -297,7 +297,7 @@
       </trans-unit>
       <trans-unit id="a5065c0f26fbd00b6f6ac0cf948535a44fffbd45" datatype="html">
         <source>Blocking this live will automatically terminate the live stream.</source>
-        <target state="translated">Blockering kommer innebära att direktsändningen avbryts.</target>
+        <target state="translated">Blockering kommer innebära att direktsändningen bryts.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -429,7 +429,7 @@
       </trans-unit>
       <trans-unit id="7639191791633609999" datatype="html">
         <source>The live stream will be automatically terminated.</source>
-        <target state="translated">Direktsändningen kommer avbrytas automatiskt.</target>
+        <target state="translated">Direktsändningen kommer brytas automatiskt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">205</context>
@@ -1875,7 +1875,7 @@
       </trans-unit>
       <trans-unit id="d90cc5777a7e16ef76f325c89fe0f9270b9fa827" datatype="html">
         <source>Go live</source>
-        <target state="new">Go live</target>
+        <target state="translated">Starta sändning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">56</context>
@@ -1973,7 +1973,7 @@
       </trans-unit>
       <trans-unit id="84e4e97b8f2abab33abeecc89f47671b07fd09cf" datatype="html">
         <source>Use origin instance URL</source>
-        <target state="new">Use origin instance URL</target>
+        <target state="translated">Använd webbadress till ursprungsinstansen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">180</context>
@@ -2025,7 +2025,7 @@
       </trans-unit>
       <trans-unit id="130abb70adbfbda0d03e31ce2e94dc3871e30c2f" datatype="html">
         <source>This live has not started yet.</source>
-        <target state="new"> This live has not started yet. </target>
+        <target state="translated">Den här sändningen har inte startat än.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -2033,7 +2033,7 @@
       </trans-unit>
       <trans-unit id="3f063a712571f3714b07713c139e25af8de5ad4e" datatype="html">
         <source>This live is finished.</source>
-        <target state="new"> This live is finished. </target>
+        <target state="translated">Den här sändningen har avslutats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -3795,7 +3795,7 @@
       </trans-unit>
       <trans-unit id="df754f9d47b1a072519f1c9f7f1726937f44040a" datatype="html">
         <source>LIVE</source>
-        <target state="new">LIVE</target>
+        <target state="translated">DIREKT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">709</context>
@@ -3803,7 +3803,7 @@
       </trans-unit>
       <trans-unit id="1972803cc06239fe6b7791763ce89b819bd24853" datatype="html">
         <source>Enable users of your instance to stream live.</source>
-        <target state="new"> Enable users of your instance to stream live. </target>
+        <target state="translated">Låt dina användare skapa direktsändningar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">711,712</context>
@@ -3811,7 +3811,7 @@
       </trans-unit>
       <trans-unit id="096cf20ca04c42d7a06b9c0b3730e938f7662f57" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="new"> ⚠️ Enabling live streaming requires trust in your users and extra moderation work </target>
+        <target state="translated">⚠️ Att tillåta direktsändningar kräver tillit till användarna och ytterligare modereringsarbete</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">726,727</context>
@@ -3819,7 +3819,7 @@
       </trans-unit>
       <trans-unit id="0c990b9d80188dd9edbbd945dbd8c66074ee62d8" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="new">Allow your users to automatically publish a replay of their live</target>
+        <target state="translated">Låt dina användare automatiskt publicera en repris av sändningen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">734</context>
@@ -3827,7 +3827,7 @@
       </trans-unit>
       <trans-unit id="f071c73e20463032b9e1f2ad2dacb54395a7b3bf" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
-        <target state="new"> If the user quota is reached, PeerTube will automatically terminate the live streaming </target>
+        <target state="translated">Om användarkvoten uppnås kommer PeerTube bryta direktsändningen automatiskt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">737,738</context>
@@ -3835,7 +3835,7 @@
       </trans-unit>
       <trans-unit id="da82c27f10ef6f1af1db305fe3f4ec29ed191878" datatype="html">
         <source>Max lives created on your instance (-1 for "unlimited")</source>
-        <target state="new">Max lives created on your instance (-1 for "unlimited")</target>
+        <target state="translated">Maximalt antal sändningar skapade på din instans (-1 för ”obegränsat”)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">743</context>
@@ -3843,7 +3843,7 @@
       </trans-unit>
       <trans-unit id="7cb03878e0d89e67d48c707512e876ddb8658a6b" datatype="html">
         <source>Max lives created per user (-1 for "unlimited")</source>
-        <target state="new">Max lives created per user (-1 for "unlimited")</target>
+        <target state="translated">Maximalt antal sändningar skapade per användare (-1 för ”obegränsat”)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">748</context>
@@ -3851,7 +3851,7 @@
       </trans-unit>
       <trans-unit id="4bddd185b531fa5ef6a1b5cebf46de5565968cb1" datatype="html">
         <source>Max live duration</source>
-        <target state="new">Max live duration</target>
+        <target state="translated">Maximal sändningslängd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">753</context>
@@ -3859,7 +3859,7 @@
       </trans-unit>
       <trans-unit id="19689f977565ebbf2a7ef115905e3c681917c57b" datatype="html">
         <source>Enable live transcoding</source>
-        <target state="new">Enable live transcoding</target>
+        <target state="translated">Aktivera omkodning av direktsändningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">768</context>
@@ -3867,7 +3867,7 @@
       </trans-unit>
       <trans-unit id="fa4fcf11774c461346d54d0a210a20f8fbe571a2" datatype="html">
         <source>Requires a lot of CPU!</source>
-        <target state="new"> Requires a lot of CPU! </target>
+        <target state="translated">Kräver mycket hög processorkapacitet!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">771,772</context>
@@ -3875,7 +3875,7 @@
       </trans-unit>
       <trans-unit id="5ff339e5bc9b41411ce6401774483b0d6f8cbca8" datatype="html">
         <source>Live transcoding threads</source>
-        <target state="new">Live transcoding threads</target>
+        <target state="translated">Trådar för omkodning av direktsändningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">777</context>
@@ -3883,7 +3883,7 @@
       </trans-unit>
       <trans-unit id="bd9fc4914f5eeb416181cb966d98cadb94282485" datatype="html">
         <source>Live resolutions to generate</source>
-        <target state="new">Live resolutions to generate</target>
+        <target state="translated">Upplösningar för direktsändning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">789</context>
@@ -3891,7 +3891,7 @@
       </trans-unit>
       <trans-unit id="0dcaa17190a8baac67add948a7c63671f9027a7b" datatype="html">
         <source>Allow live streaming</source>
-        <target state="new">Allow live streaming</target>
+        <target state="translated">Tillåt direktsändningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">722</context>
@@ -3904,7 +3904,7 @@
       </trans-unit>
       <trans-unit id="0a1a7d6e04056d30bb85aca5bb8bd47ced098167" datatype="html">
         <source>Live streaming</source>
-        <target state="new">Live streaming</target>
+        <target state="translated">Direktsändning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">703</context>
@@ -4600,7 +4600,7 @@
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
         <source>Verify account via email</source>
-        <target state="new">Verify account via email</target>
+        <target state="translated">Bekräfta kontot via e-post</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">17</context>
