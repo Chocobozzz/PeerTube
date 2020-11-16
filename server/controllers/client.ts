@@ -64,6 +64,7 @@ for (const staticClientFile of staticClientFiles) {
 clientsRouter.get('/manifest.webmanifest', asyncMiddleware(generateManifest))
 
 // Static client overrides
+// Must be consistent with static client overrides redirections in /support/nginx/peertube
 const staticClientOverrides = [
   'assets/images/logo.svg',
   'assets/images/favicon.png',
