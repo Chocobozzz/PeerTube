@@ -31,8 +31,8 @@
     "Published": "Publicerad",
     "To transcode": "Att omkoda",
     "To import": "Att importera",
-    "Waiting for livestream": "Waiting for livestream",
-    "Livestream ended": "Livestream ended",
+    "Waiting for livestream": "Väntar på direktsändning",
+    "Livestream ended": "Sändningen har avslutats",
     "Pending": "I kö",
     "Success": "Lyckades",
     "Failed": "Misslyckades",
@@ -244,5 +244,5 @@
     "Chinese": "Kinesiska",
     "Zulu": "Zulu",
     "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode"
+    "Theater mode": "Biografläge"
 }
