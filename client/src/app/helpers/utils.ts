@@ -144,8 +144,17 @@ function sortBy (obj: any[], key1: string, key2?: string) {
   })
 }
 
-function scrollToTop () {
-  window.scroll(0, 0)
+function scrollToTop (behavior: 'auto' | 'smooth' = 'auto') {
+  window.scrollTo({
+    left: 0,
+    top: 0,
+    behavior
+  })
+}
+
+function scrollToAnchor (fragment: string, behavior: 'auto' | 'smooth' = 'auto') {
+  const anchor = document.getElementById(fragment)
+  anchor.scrollIntoView({ behavior, inline: 'nearest', block: 'start' })
 }
 
 function isInViewport (el: HTMLElement) {
@@ -182,6 +191,7 @@ export {
   objectLineFeedToHtml,
   removeElementFromArray,
   scrollToTop,
+  scrollToAnchor,
   isInViewport,
   isXPercentInViewport
 }
