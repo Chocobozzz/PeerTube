@@ -35,12 +35,13 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
 
   serverConfig: ServerConfig
 
+  initialized = false
+
   private lastScrollHash: string
 
   constructor (
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
-    private serverService: ServerService,
     private instanceService: InstanceService
   ) {}
 
@@ -57,11 +58,9 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   }
 
   async ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    const { about, languages, categories, serverConfig }: ResolverData = this.route.snapshot.data.instanceData
 
-    const { about, languages, categories }: ResolverData = this.route.snapshot.data.instanceData
+    this.serverConfig = serverConfig
 
     this.languages = languages
     this.categories = categories
@@ -73,10 +72,12 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     this.businessModel = about.instance.businessModel
 
     this.html = await this.instanceService.buildHtml(about)
+
+    this.initialized = true
   }
 
   ngAfterViewChecked () {
-    if (window.location.hash && window.location.hash !== this.lastScrollHash) {
+    if (this.initialized && window.location.hash && window.location.hash !== this.lastScrollHash) {
       this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
 
       this.lastScrollHash = window.location.hash
