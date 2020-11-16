@@ -14,6 +14,8 @@ import { FeedFormat, UserRight } from '@shared/models'
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-comment-list.component.scss' ]
 })
 export class VideoCommentListComponent extends RestTable implements OnInit, AfterViewInit {
+  baseRoute = '/admin/moderation/video-comments/list'
+
   comments: VideoCommentAdmin[]
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -44,13 +46,13 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
   }
 
   constructor (
+    protected router: Router,
+    protected route: ActivatedRoute,
     private auth: AuthService,
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private markdownRenderer: MarkdownService,
-    private route: ActivatedRoute,
-    private router: Router,
     private bulkService: BulkService
     ) {
     super()
@@ -75,38 +77,12 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
 
   ngOnInit () {
     this.initialize()
-
-    this.route.queryParams
-      .pipe(filter(params => params.search !== undefined && params.search !== null))
-      .subscribe(params => {
-        this.search = params.search
-        this.setTableFilter(params.search)
-        this.loadData()
-      })
+    this.listenToSearchChange()
   }
 
   ngAfterViewInit () {
     if (this.search) this.setTableFilter(this.search)
   }
-
-  onInputSearch (event: Event) {
-    this.onSearch(event)
-    this.setQueryParams((event.target as HTMLInputElement).value)
-  }
-
-  setQueryParams (search: string) {
-    const queryParams: Params = {}
-
-    if (search) Object.assign(queryParams, { search })
-    this.router.navigate([ '/admin/moderation/video-comments/list' ], { queryParams })
-  }
-
-  resetTableFilter () {
-    this.setTableFilter('')
-    this.setQueryParams('')
-    this.resetSearch()
-  }
-  /* END Table filter functions */
 
   getIdentifier () {
     return 'VideoCommentListComponent'

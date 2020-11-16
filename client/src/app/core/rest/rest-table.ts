@@ -1,9 +1,10 @@
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import * as debug from 'debug'
 import { LazyLoadEvent, SortMeta } from 'primeng/api'
-import { RestPagination } from './rest-pagination'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import * as debug from 'debug'
+import { ActivatedRoute, Params, Router } from '@angular/router'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { RestPagination } from './rest-pagination'
 
 const logger = debug('peertube:tables:RestTable')
 
@@ -18,7 +19,12 @@ export abstract class RestTable {
   rowsPerPage = this.rowsPerPageOptions[0]
   expandedRows = {}
 
+  baseRoute: string
+
   protected searchStream: Subject<string>
+
+  protected route: ActivatedRoute
+  protected router: Router
 
   abstract getIdentifier (): string
 
@@ -80,6 +86,33 @@ export abstract class RestTable {
   onSearch (event: Event) {
     const target = event.target as HTMLInputElement
     this.searchStream.next(target.value)
+
+    this.setQueryParams((event.target as HTMLInputElement).value)
+  }
+
+  setQueryParams (search: string) {
+    if (!this.baseRoute) return
+
+    const queryParams: Params = {}
+
+    if (search) Object.assign(queryParams, { search })
+    this.router.navigate([ this.baseRoute ], { queryParams })
+  }
+
+  resetTableFilter () {
+    this.setTableFilter('')
+    this.setQueryParams('')
+    this.resetSearch()
+  }
+
+  listenToSearchChange () {
+    this.route.queryParams
+      .subscribe(params => {
+        this.search = params.search || ''
+
+        this.setTableFilter(this.search)
+        this.loadData()
+      })
   }
 
   onPage (event: { first: number, rows: number }) {

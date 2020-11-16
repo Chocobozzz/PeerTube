@@ -35,14 +35,14 @@ export class UserListComponent extends RestTable implements OnInit {
   private serverConfig: ServerConfig
 
   constructor (
+    protected route: ActivatedRoute,
+    protected router: Router,
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private serverService: ServerService,
-    private userService: UserService,
     private auth: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
-    ) {
+    private userService: UserService
+  ) {
     super()
   }
 
@@ -68,14 +68,7 @@ export class UserListComponent extends RestTable implements OnInit {
         .subscribe(config => this.serverConfig = config)
 
     this.initialize()
-
-    this.route.queryParams
-      .subscribe(params => {
-        this.search = params.search || ''
-
-        this.setTableFilter(this.search)
-        this.loadData()
-      })
+    this.listenToSearchChange()
 
     this.bulkUserActions = [
       [
@@ -169,26 +162,6 @@ export class UserListComponent extends RestTable implements OnInit {
   onUserChanged () {
     this.loadData()
   }
-
-  /* Table filter functions */
-  onUserSearch (event: Event) {
-    this.onSearch(event)
-    this.setQueryParams((event.target as HTMLInputElement).value)
-  }
-
-  setQueryParams (search: string) {
-    const queryParams: Params = {}
-    if (search) Object.assign(queryParams, { search })
-
-    this.router.navigate([ '/admin/users/list' ], { queryParams })
-  }
-
-  resetTableFilter () {
-    this.setTableFilter('')
-    this.setQueryParams('')
-    this.resetSearch()
-  }
-  /* END Table filter functions */
 
   switchToDefaultAvatar ($event: Event) {
     ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()

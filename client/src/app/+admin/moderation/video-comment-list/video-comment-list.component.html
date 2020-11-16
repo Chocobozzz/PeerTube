@@ -31,7 +31,7 @@
           </div>
           <input
             type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-            (keyup)="onInputSearch($event)"
+            (keyup)="onSearch($event)"
           >
           <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
           <span class="sr-only" i18n>Clear filters</span>
