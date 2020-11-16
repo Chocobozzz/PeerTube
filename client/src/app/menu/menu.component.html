@@ -59,11 +59,13 @@
               <div class="dropdown-divider"></div>
 
               <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
-                <i class="icon icon-shortcuts" aria-hidden="true"></i> <ng-container i18n>Keyboard shortcuts</ng-container>
+                <my-global-icon iconName="command" aria-hidden="true"></my-global-icon>
+                <ng-container i18n>Keyboard shortcuts</ng-container>
               </a>
 
               <a ngbDropdownItem ngbDropdownToggle (click)="logout($event)" class="dropdown-item" href="#">
-                <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon> <ng-container i18n>Log out</ng-container>
+                <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon>
+                <ng-container i18n>Log out</ng-container>
               </a>
             </div>
           </div>

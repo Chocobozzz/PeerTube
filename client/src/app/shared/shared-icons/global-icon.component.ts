@@ -62,6 +62,7 @@ const icons = {
   'sensitive': require('!!raw-loader?!../../../assets/images/feather/eye.svg').default,
   'unsensitive': require('!!raw-loader?!../../../assets/images/feather/eye-off.svg').default,
   'refresh': require('!!raw-loader?!../../../assets/images/feather/refresh-cw.svg').default,
+  'command': require('!!raw-loader?!../../../assets/images/feather/command.svg').default,
   'go': require('!!raw-loader?!../../../assets/images/feather/arrow-up-right.svg').default,
   'cross': require('!!raw-loader?!../../../assets/images/feather/x.svg').default,
   'tick': require('!!raw-loader?!../../../assets/images/feather/check.svg').default,

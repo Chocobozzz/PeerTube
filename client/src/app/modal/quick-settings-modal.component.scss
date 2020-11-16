@@ -19,21 +19,6 @@
   }
 }
 
-.icon {
-  @include disable-outline;
-  @include icon(22px);
-  opacity: 0.6;
-  margin-left: -1px;
-
-  &.icon-shortcuts  {
-    position: relative;
-    top: -1px;
-    margin-right: 4px;
-
-    background-image: url('../../assets/images/misc/keyboard.png');
-  }
-}
-
 .quick-settings-title {
   @include in-content-small-title;
 }

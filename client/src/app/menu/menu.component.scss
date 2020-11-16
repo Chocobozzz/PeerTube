@@ -352,20 +352,6 @@ menu {
   color: #6c757d;
 }
 
-.icon {
-  @include disable-outline;
-  @include icon($menu-link-icon-size);
-  opacity: 0.8;
-
-  &.icon-shortcuts  {
-    position: relative;
-    top: -1px;
-    margin-right: 10px;
-
-    background-image: url('../../assets/images/misc/keyboard.png');
-  }
-}
-
 input[type=checkbox]{
   position: absolute;
   visibility: hidden;
