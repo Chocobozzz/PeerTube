@@ -43,11 +43,11 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px"></th>
+      <th style="width: 150px;"></th>
       <th style="width: 300px" i18n>Account</th>
       <th style="width: 300px" i18n>Video</th>
       <th i18n>Comment</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 150px;"></th>
     </tr>
   </ng-template>
 
@@ -57,6 +57,13 @@
         <span class="expander">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
+      </td>
+
+      <td class="action-cell">
+        <my-action-dropdown
+          [ngClass]="{ 'show': expanded }" placement="bottom-right" container="body"
+          i18n-label label="Actions" [actions]="videoCommentActions" [entry]="videoComment"
+        ></my-action-dropdown>
       </td>
 
       <td>
@@ -86,13 +93,6 @@
       </td>
 
       <td>{{ videoComment.createdAt | date: 'short' }}</td>
-
-      <td class="action-cell">
-        <my-action-dropdown
-          [ngClass]="{ 'show': expanded }" placement="bottom-right" container="body"
-          i18n-label label="Actions" [actions]="videoCommentActions" [entry]="videoComment"
-        ></my-action-dropdown>
-      </td>
     </tr>
   </ng-template>
 

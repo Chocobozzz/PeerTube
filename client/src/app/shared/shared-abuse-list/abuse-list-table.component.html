@@ -37,22 +37,29 @@
   <ng-template pTemplate="header">
     <tr> <!-- header -->
       <th style="width: 40px;"></th>
+      <th style="width: 150px;"></th>
       <th *ngIf="isAdminView()" style="width: 20%;" pResizableColumn i18n>Reporter</th>
       <th i18n>Video/Comment/Account</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th i18n style="width: 80px;">Messages</th>
       <th i18n *ngIf="isAdminView()" style="width: 100px;">Internal note</th>
-      <th style="width: 150px;"></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
     <tr>
-      <td class="c-hand" [pRowToggler]="abuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+      <td class="expand-cell c-hand" [pRowToggler]="abuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
         <span class="expander">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
+      </td>
+
+      <td class="action-cell">
+        <my-action-dropdown
+          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
+          i18n-label label="Actions" [actions]="abuseActions" [entry]="abuse"
+        ></my-action-dropdown>
       </td>
 
       <td *ngIf="isAdminView()">
@@ -162,13 +169,6 @@
 
       <td *ngIf="isAdminView()" class="internal-note" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
         {{ abuse.moderationComment }}
-      </td>
-
-      <td class="action-cell">
-        <my-action-dropdown
-          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="abuseActions" [entry]="abuse"
-        ></my-action-dropdown>
       </td>
     </tr>
   </ng-template>
