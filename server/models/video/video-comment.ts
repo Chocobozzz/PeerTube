@@ -323,14 +323,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   }) {
     const { start, count, sort, isLocal, search, searchAccount, searchVideo } = parameters
 
-    const query: FindAndCountOptions = {
-      offset: start,
-      limit: count,
-      order: getCommentSort(sort)
-    }
-
     const where: WhereOptions = {
-      isDeleted: false
+      deletedAt: null
     }
 
     const whereAccount: WhereOptions = {}
@@ -338,11 +332,11 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const whereVideo: WhereOptions = {}
 
     if (isLocal === true) {
-      Object.assign(where, {
+      Object.assign(whereActor, {
         serverId: null
       })
     } else if (isLocal === false) {
-      Object.assign(where, {
+      Object.assign(whereActor, {
         serverId: {
           [Op.ne]: null
         }
@@ -350,43 +344,57 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
 
     if (search) {
-      Object.assign(where, searchAttribute(search, 'text'))
-      Object.assign(whereActor, searchAttribute(search, 'preferredUsername'))
-      Object.assign(whereAccount, searchAttribute(search, 'name'))
-      Object.assign(whereVideo, searchAttribute(search, 'name'))
+      Object.assign(where, {
+        [Op.or]: [
+          searchAttribute(search, 'text'),
+          searchAttribute(search, '$Account.Actor.preferredUsername$'),
+          searchAttribute(search, '$Account.name$'),
+          searchAttribute(search, '$Video.name$')
+        ]
+      })
     }
 
     if (searchAccount) {
-      Object.assign(whereActor, searchAttribute(search, 'preferredUsername'))
-      Object.assign(whereAccount, searchAttribute(search, 'name'))
+      Object.assign(whereActor, {
+        [Op.or]: [
+          searchAttribute(searchAccount, '$Account.Actor.preferredUsername$'),
+          searchAttribute(searchAccount, '$Account.name$')
+        ]
+      })
     }
 
     if (searchVideo) {
-      Object.assign(whereVideo, searchAttribute(search, 'name'))
+      Object.assign(whereVideo, searchAttribute(searchVideo, 'name'))
     }
 
-    query.include = [
-      {
-        model: AccountModel.unscoped(),
-        required: !!searchAccount,
-        where: whereAccount,
-        include: [
-          {
-            attributes: {
-              exclude: unusedActorAttributesForAPI
-            },
-            model: ActorModel, // Default scope includes avatar and server
-            required: true,
-            where: whereActor
-          }
-        ]
-      },
-      {
-        model: VideoModel.unscoped(),
-        required: true,
-        where: whereVideo
-      }
-    ]
+    const query: FindAndCountOptions = {
+      offset: start,
+      limit: count,
+      order: getCommentSort(sort),
+      where,
+      include: [
+        {
+          model: AccountModel.unscoped(),
+          required: true,
+          where: whereAccount,
+          include: [
+            {
+              attributes: {
+                exclude: unusedActorAttributesForAPI
+              },
+              model: ActorModel, // Default scope includes avatar and server
+              required: true,
+              where: whereActor
+            }
+          ]
+        },
+        {
+          model: VideoModel.unscoped(),
+          required: true,
+          where: whereVideo
+        }
+      ]
+    }
 
     return VideoCommentModel
       .findAndCountAll(query)

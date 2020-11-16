@@ -1,16 +1,17 @@
 import { SortMeta } from 'primeng/api'
 import { filter } from 'rxjs/operators'
 import { AfterViewInit, Component, OnInit } from '@angular/core'
-import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Params, Router } from '@angular/router'
-import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { DropdownAction, VideoService } from '@app/shared/shared-main'
+import { AuthService, ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
+import { DropdownAction } from '@app/shared/shared-main'
+import { BulkService } from '@app/shared/shared-moderation'
 import { VideoCommentAdmin, VideoCommentService } from '@app/shared/shared-video-comment'
+import { FeedFormat, UserRight } from '@shared/models'
 
 @Component({
   selector: 'my-video-comment-list',
   templateUrl: './video-comment-list.component.html',
-  styleUrls: [ './video-comment-list.component.scss' ]
+  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-comment-list.component.scss' ]
 })
 export class VideoCommentListComponent extends RestTable implements OnInit, AfterViewInit {
   comments: VideoCommentAdmin[]
@@ -20,26 +21,54 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
 
   videoCommentActions: DropdownAction<VideoCommentAdmin>[][] = []
 
+  syndicationItems = [
+    {
+      format: FeedFormat.RSS,
+      label: 'media rss 2.0',
+      url: VideoCommentService.BASE_FEEDS_URL + FeedFormat.RSS.toLowerCase()
+    },
+    {
+      format: FeedFormat.ATOM,
+      label: 'atom 1.0',
+      url: VideoCommentService.BASE_FEEDS_URL + FeedFormat.ATOM.toLowerCase()
+    },
+    {
+      format: FeedFormat.JSON,
+      label: 'json 1.0',
+      url: VideoCommentService.BASE_FEEDS_URL + FeedFormat.JSON.toLowerCase()
+    }
+  ]
+
+  get authUser () {
+    return this.auth.getUser()
+  }
+
   constructor (
+    private auth: AuthService,
     private notifier: Notifier,
-    private serverService: ServerService,
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private markdownRenderer: MarkdownService,
-    private sanitizer: DomSanitizer,
-    private videoService: VideoService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private bulkService: BulkService
     ) {
     super()
 
     this.videoCommentActions = [
       [
+        {
+          label: $localize`Delete this comment`,
+          handler: comment => this.deleteComment(comment),
+          isDisplayed: () => this.authUser.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
+        },
 
-        // remove this comment,
-
-        // remove all comments of this account
-
+        {
+          label: $localize`Delete all comments of this account`,
+          description: $localize`Comments are deleted after a few minutes`,
+          handler: comment => this.deleteUserComments(comment),
+          isDisplayed: () => this.authUser.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
+        }
       ]
     ]
   }
@@ -60,7 +89,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
     if (this.search) this.setTableFilter(this.search)
   }
 
-  onSearch (event: Event) {
+  onInputSearch (event: Event) {
     this.onSearch(event)
     this.setQueryParams((event.target as HTMLInputElement).value)
   }
@@ -84,7 +113,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
   }
 
   toHtml (text: string) {
-    return this.markdownRenderer.textMarkdownToHTML(text)
+    return this.markdownRenderer.textMarkdownToHTML(text, true, true)
   }
 
   protected loadData () {
@@ -103,6 +132,35 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
               new VideoCommentAdmin(c, await this.toHtml(c.text))
             )
           }
+        },
+
+        err => this.notifier.error(err.message)
+      )
+  }
+
+  private deleteComment (comment: VideoCommentAdmin) {
+    this.videoCommentService.deleteVideoComment(comment.video.id, comment.id)
+      .subscribe(
+        () => this.loadData(),
+
+        err => this.notifier.error(err.message)
+      )
+  }
+
+  private async deleteUserComments (comment: VideoCommentAdmin) {
+    const message = $localize`Do you really want to delete all comments of ${comment.by}?`
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    if (res === false) return
+
+    const options = {
+      accountName: comment.by,
+      scope: 'instance' as 'instance'
+    }
+
+    this.bulkService.removeCommentsOf(options)
+      .subscribe(
+        () => {
+          this.notifier.success($localize`Comments of ${options.accountName} will be deleted in a few minutes`)
         },
 
         err => this.notifier.error(err.message)

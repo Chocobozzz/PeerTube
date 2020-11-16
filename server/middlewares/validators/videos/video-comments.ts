@@ -2,7 +2,7 @@ import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { MUserAccountUrl } from '@server/types/models'
 import { UserRight } from '../../../../shared'
-import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
+import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
   doesVideoCommentExist,
   doesVideoCommentThreadExist,
@@ -18,6 +18,7 @@ import { areValidationErrors } from '../utils'
 const listVideoCommentsValidator = [
   query('isLocal')
   .optional()
+  .customSanitizer(toBooleanOrNull)
   .custom(isBooleanValid)
   .withMessage('Should have a valid is local boolean'),
 

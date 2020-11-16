@@ -59,12 +59,14 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
   createdAt: Date | string
   updatedAt: Date | string
 
-  account: AccountInterface
+  account: AccountInterface & { localUrl?: string }
+  localUrl: string
 
   video: {
     id: number
     uuid: string
     name: string
+    localUrl: string
   }
 
   by: string
@@ -85,14 +87,19 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
     this.video = {
       id: hash.video.id,
       uuid: hash.video.uuid,
-      name: hash.video.name
+      name: hash.video.name,
+      localUrl: '/videos/watch/' + hash.video.uuid
     }
+
+    this.localUrl = this.video.localUrl + ';threadId=' + this.threadId
 
     this.account = hash.account
 
     if (this.account) {
       this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
       this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+
+      this.account.localUrl = '/accounts/' + this.by
     }
   }
 }

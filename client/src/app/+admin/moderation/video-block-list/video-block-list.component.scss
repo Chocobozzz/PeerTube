@@ -1,12 +1,8 @@
 @import 'mixins';
 
 my-global-icon {
-  @include apply-svg-color(#7d7d7d);
-
-  width: 12px;
-  height: 12px;
-  position: relative;
-  top: -1px;
+  width: 24px;
+  height: 24px;
 }
 
 .input-group {

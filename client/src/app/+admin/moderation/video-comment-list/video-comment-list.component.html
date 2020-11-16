@@ -1,9 +1,11 @@
 <h1>
-  <my-global-icon iconName="cross" aria-hidden="true"></my-global-icon>
+  <my-global-icon iconName="message-circle" aria-hidden="true"></my-global-icon>
   <ng-container i18n>Video comments</ng-container>
+
+  <my-feed [syndicationItems]="syndicationItems"></my-feed>
 </h1>
 
-this view does show comments from muted accounts so you can delete them
+<em>This view also shows comments from muted accounts.</em>
 
 <p-table
   [value]="comments" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
@@ -29,7 +31,7 @@ this view does show comments from muted accounts so you can delete them
           </div>
           <input
             type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-            (keyup)="onSearch($event)"
+            (keyup)="onInputSearch($event)"
           >
           <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
           <span class="sr-only" i18n>Clear filters</span>
@@ -41,9 +43,9 @@ this view does show comments from muted accounts so you can delete them
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px"></th>
-      <th style="width: 100px;" i18n>Account</th>
-      <th style="width: 100px;" i18n>Video</th>
-      <th style="width: 100px;" i18n>Comment</th>
+      <th style="width: 300px" i18n>Account</th>
+      <th style="width: 300px" i18n>Video</th>
+      <th i18n>Comment</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th style="width: 150px;"></th>
     </tr>
@@ -58,14 +60,28 @@ this view does show comments from muted accounts so you can delete them
       </td>
 
       <td>
-        {{ videoComment.by }}
+        <a [href]="videoComment.account.localUrl" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+          <div class="chip two-lines">
+            <img
+              class="avatar"
+              [src]="videoComment.accountAvatarUrl"
+              alt=""
+            >
+            <div>
+              {{ videoComment.account.displayName }}
+              <span>{{ videoComment.by }}</span>
+            </div>
+          </div>
+        </a>
       </td>
 
-      <td>
-        {{ videoComment.video.name }}
+      <td class="video">
+        <em i18n>Commented video</em>
+
+        <a [href]="videoComment.localUrl" target="_blank" rel="noopener noreferrer">{{ videoComment.video.name }}</a>
       </td>
 
-      <td>
+      <td class="comment-html">
         <div [innerHTML]="videoComment.textHtml"></div>
       </td>
 

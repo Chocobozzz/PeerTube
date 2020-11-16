@@ -19,8 +19,9 @@ import { SortMeta } from 'primeng/api'
 
 @Injectable()
 export class VideoCommentService {
+  static BASE_FEEDS_URL = environment.apiUrl + '/feeds/video-comments.'
+
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
-  private static BASE_FEEDS_URL = environment.apiUrl + '/feeds/video-comments.'
 
   constructor (
     private authHttp: HttpClient,
@@ -56,7 +57,7 @@ export class VideoCommentService {
     search?: string
   }): Observable<ResultList<VideoCommentAdmin>> {
     const { pagination, sort, search } = options
-    const url = VideoCommentService.BASE_VIDEO_URL + '/comments'
+    const url = VideoCommentService.BASE_VIDEO_URL + 'comments'
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -172,7 +173,7 @@ export class VideoCommentService {
 
   private buildParamsFromSearch (search: string, params: HttpParams) {
     const filters = this.restService.parseQueryStringFilter(search, {
-      state: {
+      isLocal: {
         prefix: 'local:',
         isBoolean: true,
         handler: v => {

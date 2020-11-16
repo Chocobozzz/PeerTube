@@ -41,6 +41,7 @@ import { Hooks } from '@server/lib/plugins/hooks'
 const usersListValidator = [
   query('blocked')
     .optional()
+    .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should be a valid boolean banned state'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

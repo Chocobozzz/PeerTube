@@ -296,6 +296,54 @@ describe('Test video comments API validator', function () {
     it('Should return conflict on comment thread add')
   })
 
+  describe('When listing admin comments threads', function () {
+    const path = '/api/v1/videos/comments'
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with a non authenticated user', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        statusCodeExpected: 401
+      })
+    })
+
+    it('Should fail with a non admin user', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: userAccessToken,
+        statusCodeExpected: 403
+      })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        query: {
+          isLocal: false,
+          search: 'toto',
+          searchAccount: 'toto',
+          searchVideo: 'toto'
+        },
+        statusCodeExpected: 200
+      })
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

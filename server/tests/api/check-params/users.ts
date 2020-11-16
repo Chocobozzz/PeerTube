@@ -154,18 +154,6 @@ describe('Test users API validators', function () {
       await checkBadSortPagination(server.url, path, server.accessToken)
     })
 
-    it('Should fail with a bad blocked/banned user filter', async function () {
-      await makeGetRequest({
-        url: server.url,
-        path,
-        query: {
-          blocked: 42
-        },
-        token: server.accessToken,
-        statusCodeExpected: 400
-      })
-    })
-
     it('Should fail with a non authenticated user', async function () {
       await makeGetRequest({
         url: server.url,

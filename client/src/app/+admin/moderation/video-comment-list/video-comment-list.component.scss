@@ -1,12 +1,22 @@
 @import 'mixins';
 
-my-global-icon {
-  @include apply-svg-color(#7d7d7d);
+h1 {
+  my-feed {
+    margin-left: 5px;
+    display: inline-block;
 
-  width: 12px;
-  height: 12px;
-  position: relative;
-  top: -1px;
+    ::ng-deep {
+      my-global-icon {
+        width: 15px !important;
+        top: 0 !important;
+      }
+    }
+  }
+}
+
+my-global-icon {
+   width: 24px;
+  height: 24px;
 }
 
 .input-group {
@@ -23,5 +33,34 @@ my-global-icon {
   input {
     @include peertube-input-text(250px);
     flex-grow: 1;
+  }
+}
+
+.video {
+  display: flex;
+  flex-direction: column;
+
+  em {
+    font-size: 11px;
+  }
+
+  a {
+    @include ellipsis
+  }
+}
+
+.comment-html {
+  ::ng-deep {
+    > div {
+      max-height: 22px;
+    }
+
+    div, p {
+      @include ellipsis;
+    }
+
+    p {
+      margin: 0;
+    }
   }
 }
