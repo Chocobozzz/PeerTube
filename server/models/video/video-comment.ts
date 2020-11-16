@@ -1,6 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { uniq } from 'lodash'
-import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindAndCountOptions, FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -20,13 +20,14 @@ import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
 import { VideoPrivacy } from '@shared/models'
 import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
-import { VideoComment } from '../../../shared/models/videos/video-comment.model'
+import { VideoComment, VideoCommentAdmin } from '../../../shared/models/videos/video-comment.model'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { regexpCapture } from '../../helpers/regexp'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import {
   MComment,
+  MCommentAdminFormattable,
   MCommentAP,
   MCommentFormattable,
   MCommentId,
@@ -40,7 +41,14 @@ import {
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { AccountModel } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { buildBlockedAccountSQL, buildBlockedAccountSQLOptimized, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'
+import {
+  buildBlockedAccountSQL,
+  buildBlockedAccountSQLOptimized,
+  buildLocalAccountIdsIn,
+  getCommentSort,
+  searchAttribute,
+  throwIfNotValid
+} from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 
@@ -301,6 +309,98 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     if (t !== undefined) query.transaction = t
 
     return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_ACCOUNT ]).findOne(query)
+  }
+
+  static listCommentsForApi (parameters: {
+    start: number
+    count: number
+    sort: string
+
+    isLocal?: boolean
+    search?: string
+    searchAccount?: string
+    searchVideo?: string
+  }) {
+    const { start, count, sort, isLocal, search, searchAccount, searchVideo } = parameters
+
+    const where: WhereOptions = {
+      deletedAt: null
+    }
+
+    const whereAccount: WhereOptions = {}
+    const whereActor: WhereOptions = {}
+    const whereVideo: WhereOptions = {}
+
+    if (isLocal === true) {
+      Object.assign(whereActor, {
+        serverId: null
+      })
+    } else if (isLocal === false) {
+      Object.assign(whereActor, {
+        serverId: {
+          [Op.ne]: null
+        }
+      })
+    }
+
+    if (search) {
+      Object.assign(where, {
+        [Op.or]: [
+          searchAttribute(search, 'text'),
+          searchAttribute(search, '$Account.Actor.preferredUsername$'),
+          searchAttribute(search, '$Account.name$'),
+          searchAttribute(search, '$Video.name$')
+        ]
+      })
+    }
+
+    if (searchAccount) {
+      Object.assign(whereActor, {
+        [Op.or]: [
+          searchAttribute(searchAccount, '$Account.Actor.preferredUsername$'),
+          searchAttribute(searchAccount, '$Account.name$')
+        ]
+      })
+    }
+
+    if (searchVideo) {
+      Object.assign(whereVideo, searchAttribute(searchVideo, 'name'))
+    }
+
+    const query: FindAndCountOptions = {
+      offset: start,
+      limit: count,
+      order: getCommentSort(sort),
+      where,
+      include: [
+        {
+          model: AccountModel.unscoped(),
+          required: true,
+          where: whereAccount,
+          include: [
+            {
+              attributes: {
+                exclude: unusedActorAttributesForAPI
+              },
+              model: ActorModel, // Default scope includes avatar and server
+              required: true,
+              where: whereActor
+            }
+          ]
+        },
+        {
+          model: VideoModel.unscoped(),
+          required: true,
+          where: whereVideo
+        }
+      ]
+    }
+
+    return VideoCommentModel
+      .findAndCountAll(query)
+      .then(({ rows, count }) => {
+        return { total: count, data: rows }
+      })
   }
 
   static async listThreadsForApi (parameters: {
@@ -656,17 +756,49 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       id: this.id,
       url: this.url,
       text: this.text,
+
       threadId: this.getThreadId(),
       inReplyToCommentId: this.inReplyToCommentId || null,
       videoId: this.videoId,
+
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       deletedAt: this.deletedAt,
+
       isDeleted: this.isDeleted(),
+
       totalRepliesFromVideoAuthor: this.get('totalRepliesFromVideoAuthor') || 0,
       totalReplies: this.get('totalReplies') || 0,
-      account: this.Account ? this.Account.toFormattedJSON() : null
+
+      account: this.Account
+        ? this.Account.toFormattedJSON()
+        : null
     } as VideoComment
+  }
+
+  toFormattedAdminJSON (this: MCommentAdminFormattable) {
+    return {
+      id: this.id,
+      url: this.url,
+      text: this.text,
+
+      threadId: this.getThreadId(),
+      inReplyToCommentId: this.inReplyToCommentId || null,
+      videoId: this.videoId,
+
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+
+      video: {
+        id: this.Video.id,
+        uuid: this.Video.uuid,
+        name: this.Video.name
+      },
+
+      account: this.Account
+        ? this.Account.toFormattedJSON()
+        : null
+    } as VideoCommentAdmin
   }
 
   toActivityPubObject (this: MCommentAP, threadParentComments: MCommentOwner[]): VideoCommentObject | ActivityTombstoneObject {

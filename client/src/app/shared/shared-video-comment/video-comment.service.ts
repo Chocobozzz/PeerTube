@@ -2,23 +2,26 @@ import { Observable } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
 import { objectLineFeedToHtml } from '@app/helpers'
 import {
   FeedFormat,
   ResultList,
   VideoComment as VideoCommentServerModel,
+  VideoCommentAdmin,
   VideoCommentCreate,
   VideoCommentThreadTree as VideoCommentThreadTreeServerModel
 } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
+import { SortMeta } from 'primeng/api'
 
 @Injectable()
 export class VideoCommentService {
+  static BASE_FEEDS_URL = environment.apiUrl + '/feeds/video-comments.'
+
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
-  private static BASE_FEEDS_URL = environment.apiUrl + '/feeds/video-comments.'
 
   constructor (
     private authHttp: HttpClient,
@@ -46,6 +49,27 @@ export class VideoCommentService {
                  map(data => this.extractVideoComment(data.comment)),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  getAdminVideoComments (options: {
+    pagination: RestPagination,
+    sort: SortMeta,
+    search?: string
+  }): Observable<ResultList<VideoCommentAdmin>> {
+    const { pagination, sort, search } = options
+    const url = VideoCommentService.BASE_VIDEO_URL + 'comments'
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) {
+      params = this.buildParamsFromSearch(search, params)
+    }
+
+    return this.authHttp.get<ResultList<VideoCommentAdmin>>(url, { params })
+      .pipe(
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
   getVideoCommentThreads (parameters: {
@@ -145,5 +169,25 @@ export class VideoCommentService {
     tree.children.forEach(c => this.extractVideoCommentTree(c))
 
     return tree as VideoCommentThreadTree
+  }
+
+  private buildParamsFromSearch (search: string, params: HttpParams) {
+    const filters = this.restService.parseQueryStringFilter(search, {
+      isLocal: {
+        prefix: 'local:',
+        isBoolean: true,
+        handler: v => {
+          if (v === 'true') return v
+          if (v === 'false') return v
+
+          return undefined
+        }
+      },
+
+      searchAccount: { prefix: 'account:' },
+      searchVideo: { prefix: 'video:' }
+    })
+
+    return this.restService.addObjectParams(params, filters)
   }
 }

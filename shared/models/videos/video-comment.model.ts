@@ -16,6 +16,26 @@ export interface VideoComment {
   account: Account
 }
 
+export interface VideoCommentAdmin {
+  id: number
+  url: string
+  text: string
+
+  threadId: number
+  inReplyToCommentId: number
+
+  createdAt: Date | string
+  updatedAt: Date | string
+
+  account: Account
+
+  video: {
+    id: number
+    uuid: string
+    name: string
+  }
+}
+
 export interface VideoCommentThreadTree {
   comment: VideoComment
   children: VideoCommentThreadTree[]

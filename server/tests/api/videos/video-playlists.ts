@@ -628,7 +628,7 @@ describe('Test video playlists', function () {
     let video3: string
 
     before(async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       groupUser1 = [ Object.assign({}, servers[0], { accessToken: userAccessTokenServer1 }) ]
       groupWithoutToken1 = [ Object.assign({}, servers[0], { accessToken: undefined }) ]
@@ -655,6 +655,8 @@ describe('Test video playlists', function () {
       video1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 89', token: userAccessTokenServer1 })).uuid
       video2 = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video 90' })).uuid
       video3 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 91', nsfw: true })).uuid
+
+      await waitJobs(servers)
 
       await addVideo({ videoId: video1, startTimestamp: 15, stopTimestamp: 28 })
       await addVideo({ videoId: video2, startTimestamp: 35 })

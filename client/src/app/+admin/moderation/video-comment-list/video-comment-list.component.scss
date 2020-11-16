@@ -1,0 +1,66 @@
+@import 'mixins';
+
+h1 {
+  my-feed {
+    margin-left: 5px;
+    display: inline-block;
+
+    ::ng-deep {
+      my-global-icon {
+        width: 15px !important;
+        top: 0 !important;
+      }
+    }
+  }
+}
+
+my-global-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.input-group {
+  @include peertube-input-group(300px);
+
+  .dropdown-toggle::after {
+    margin-left: 0;
+  }
+}
+
+.caption {
+  justify-content: flex-end;
+
+  input {
+    @include peertube-input-text(250px);
+    flex-grow: 1;
+  }
+}
+
+.video {
+  display: flex;
+  flex-direction: column;
+
+  em {
+    font-size: 11px;
+  }
+
+  a {
+    @include ellipsis
+  }
+}
+
+.comment-html {
+  ::ng-deep {
+    > div {
+      max-height: 22px;
+    }
+
+    div, p {
+      @include ellipsis;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}

@@ -1,7 +1,41 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import * as request from 'supertest'
-import { makeDeleteRequest } from '../requests/requests'
+import { makeDeleteRequest, makeGetRequest } from '../requests/requests'
+
+function getAdminVideoComments (options: {
+  url: string
+  token: string
+  start: number
+  count: number
+  sort?: string
+  isLocal?: boolean
+  search?: string
+  searchAccount?: string
+  searchVideo?: string
+}) {
+  const { url, token, start, count, sort, isLocal, search, searchAccount, searchVideo } = options
+  const path = '/api/v1/videos/comments'
+
+  const query = {
+    start,
+    count,
+    sort: sort || '-createdAt'
+  }
+
+  if (isLocal !== undefined) Object.assign(query, { isLocal })
+  if (search !== undefined) Object.assign(query, { search })
+  if (searchAccount !== undefined) Object.assign(query, { searchAccount })
+  if (searchVideo !== undefined) Object.assign(query, { searchVideo })
+
+  return makeGetRequest({
+    url,
+    path,
+    token,
+    query,
+    statusCodeExpected: 200
+  })
+}
 
 function getVideoCommentThreads (url: string, videoId: number | string, start: number, count: number, sort?: string, token?: string) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'
@@ -88,6 +122,7 @@ function deleteVideoComment (
 
 export {
   getVideoCommentThreads,
+  getAdminVideoComments,
   getVideoThreadComments,
   addVideoCommentThread,
   addVideoCommentReply,

@@ -10,7 +10,6 @@ import {
   checkLiveCleanup,
   checkLiveSegmentHash,
   checkResolutionsInMasterPlaylist,
-  checkSegmentHash,
   cleanupTests,
   createLive,
   doubleFollow,

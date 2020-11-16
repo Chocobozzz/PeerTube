@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { ResultList } from '../../../../shared/models'
+import { ResultList, UserRight } from '../../../../shared/models'
 import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -11,6 +11,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  ensureUserHasRight,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -19,9 +20,11 @@ import {
 import {
   addVideoCommentReplyValidator,
   addVideoCommentThreadValidator,
+  listVideoCommentsValidator,
   listVideoCommentThreadsValidator,
   listVideoThreadCommentsValidator,
   removeVideoCommentValidator,
+  videoCommentsValidator,
   videoCommentThreadsSortValidator
 } from '../../../middlewares/validators'
 import { AccountModel } from '../../../models/account/account'
@@ -61,6 +64,17 @@ videoCommentRouter.delete('/:videoId/comments/:commentId',
   asyncRetryTransactionMiddleware(removeVideoComment)
 )
 
+videoCommentRouter.get('/comments',
+  authenticate,
+  ensureUserHasRight(UserRight.SEE_ALL_COMMENTS),
+  paginationValidator,
+  videoCommentsValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  listVideoCommentsValidator,
+  asyncMiddleware(listComments)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -68,6 +82,26 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function listComments (req: express.Request, res: express.Response) {
+  const options = {
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+
+    isLocal: req.query.isLocal,
+    search: req.query.search,
+    searchAccount: req.query.searchAccount,
+    searchVideo: req.query.searchVideo
+  }
+
+  const resultList = await VideoCommentModel.listCommentsForApi(options)
+
+  return res.json({
+    total: resultList.total,
+    data: resultList.data.map(c => c.toFormattedAdminJSON())
+  })
+}
 
 async function listVideoThreads (req: express.Request, res: express.Response) {
   const video = res.locals.onlyVideo

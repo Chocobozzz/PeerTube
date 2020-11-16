@@ -1,8 +1,8 @@
 import * as express from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import { MUserAccountUrl } from '@server/types/models'
 import { UserRight } from '../../../../shared'
-import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
+import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
   doesVideoCommentExist,
   doesVideoCommentThreadExist,
@@ -14,6 +14,34 @@ import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccep
 import { Hooks } from '../../../lib/plugins/hooks'
 import { MCommentOwnerVideoReply, MVideo, MVideoFullLight } from '../../../types/models/video'
 import { areValidationErrors } from '../utils'
+
+const listVideoCommentsValidator = [
+  query('isLocal')
+  .optional()
+  .customSanitizer(toBooleanOrNull)
+  .custom(isBooleanValid)
+  .withMessage('Should have a valid is local boolean'),
+
+  query('search')
+    .optional()
+    .custom(exists).withMessage('Should have a valid search'),
+
+  query('searchAccount')
+    .optional()
+    .custom(exists).withMessage('Should have a valid account search'),
+
+  query('searchVideo')
+    .optional()
+    .custom(exists).withMessage('Should have a valid video search'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking listVideoCommentsValidator parameters.', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
 
 const listVideoCommentThreadsValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -116,6 +144,7 @@ export {
   listVideoCommentThreadsValidator,
   listVideoThreadCommentsValidator,
   addVideoCommentThreadValidator,
+  listVideoCommentsValidator,
   addVideoCommentReplyValidator,
   videoCommentGetValidator,
   removeVideoCommentValidator
