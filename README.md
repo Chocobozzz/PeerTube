@@ -50,6 +50,10 @@ Be part of a network of multiple small federated, interoperable video hosting pr
   <a href="https://automate.browserstack.com/public-build/T2g0SVQyMTJtYVRWaEZQTE9LdU9UU1ZDSkY5dTJ6dGlNRUVIajd4QlIwST0tLVdTQ1NUZ0pUTzRZT3lyZzkvWGNSZ1E9PQ==--278d3c68ae0827ce57e245e9f5a3b8c35d6e2278%">
     <img src="https://automate.browserstack.com/badge.svg?badge_key=T2g0SVQyMTJtYVRWaEZQTE9LdU9UU1ZDSkY5dTJ6dGlNRUVIajd4QlIwST0tLVdTQ1NUZ0pUTzRZT3lyZzkvWGNSZ1E9PQ==--278d3c68ae0827ce57e245e9f5a3b8c35d6e2278%"/>
   </a>
+
+  <a href="https://weblate.framasoft.org/projects/peertube/angular/">
+    <img src="https://weblate.framasoft.org/widgets/peertube/-/angular/svg-badge.svg"/>
+  </a>
 </p>
 
 <p align="center">
