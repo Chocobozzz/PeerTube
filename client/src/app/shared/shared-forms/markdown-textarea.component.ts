@@ -1,3 +1,4 @@
+import { ViewportScroller } from '@angular/common'
 import truncate from 'lodash-es/truncate'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
@@ -35,8 +36,12 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   isMaximized = false
 
   private contentChanged = new Subject<string>()
+  private scrollPosition: [number, number]
 
-  constructor (private markdownService: MarkdownService) {}
+  constructor (
+    private viewportScroller: ViewportScroller,
+    private markdownService: MarkdownService
+  ) { }
 
   ngOnInit () {
     this.contentChanged
@@ -86,11 +91,13 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   }
 
   private lockBodyScroll () {
+    this.scrollPosition = this.viewportScroller.getScrollPosition()
     document.getElementById('content').classList.add('lock-scroll')
   }
 
   private unlockBodyScroll () {
     document.getElementById('content').classList.remove('lock-scroll')
+    this.viewportScroller.scrollToPosition(this.scrollPosition)
   }
 
   private async updatePreviews () {
