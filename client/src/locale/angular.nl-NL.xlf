@@ -422,7 +422,7 @@ Annuleren</target>
       </trans-unit>
       <trans-unit id="c7e2b4c04a0459ebc4d2e54e419abb679bc713f2" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">Volgen met een account op dit exemplaar van PeerTube</target>
+        <target state="translated">Abonneren met een account op dit exemplaar van PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0">
@@ -445,7 +445,7 @@ Annuleren</target>
       </trans-unit>
       <trans-unit id="d8758664cadd6452256ca25ca0c7259074f427c1">
         <source>Using a syndication feed</source>
-        <target>Een syndicaatfeed gebruiken</target>
+        <target>Abonneren zonder account</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="d5e5bc7d213694fc0414a76f0ff3085bae44268a">
@@ -615,7 +615,7 @@ Annuleren</target>
       </trans-unit>
       <trans-unit id="0bedca44bfc0ef579be6053ffe0e8cdee9aba07d" datatype="html">
         <source>of hosted video</source>
-        <target state="translated">hosted video</target>
+        <target state="translated">aangeboden video</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="de7d61497b3dc7df0f83c57f333458a7064ac4e7" datatype="html">
@@ -726,7 +726,7 @@ Aanmelden</target>
       </trans-unit>
       <trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK"/> Find yours among multiple instances at <x id="START_LINK"/>https://joinpeertube.org/instances<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Dit exemplaar van PeerTube laat op dit moment geen inschrijving van gebruikers toe, maar je kan een ander exemplaar vinden dat je de mogelijkheid geeft je in te schrijven en daar je video's uploaden. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Zoek je een exemplaar van PeerTube uit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Dit exemplaar van PeerTube laat op dit moment geen inschrijving van gebruikers toe, maar je kan een ander exemplaar vinden dat je toelaat je in te schrijven en daar je video's uploaden. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Zoek je een exemplaar van PeerTube uit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+login/login.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453">
@@ -1289,7 +1289,7 @@ Geen resultaten gevonden</target>
       </trans-unit>
       <trans-unit id="e5a60e5f83aad776726b8b9e7ff1b69f047a8416" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="translated">Bepaalt of je eender elke inhoud van elders kan vinden, of dat dit exemplaar van PeerTube dat enkel toelaat voor exemplaren die het volgt.</target>
+        <target state="translated">Bepaalt of je eender welke inhoud van elders kan vinden, of dat dit exemplaar van PeerTube dat enkel toelaat voor exemplaren die het volgt.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/header/search-typeahead.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="648ca3b1ac41763033a412ead17c4a3dd71545be" datatype="html">
@@ -2364,8 +2364,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="968b02fbc645be799727de0d1ec3c6f9b11b20eb">
         <source>If you have an account on Mastodon or Pleroma, you can open it directly in their interface:</source>
-        <target>
-Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit hun interface:</target>
+        <target>Als je een account op Mastodon of Pleroma hebt, kan je hem direct openen vanuit hun interface:</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="413bcc4a4c824366e17673f38cb2af4619e940e2" datatype="html">
@@ -3511,7 +3510,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
-        <target>Video's op deze instantie</target>
+        <target>Video's op dit exemplaar van PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">275</context></context-group>
       </trans-unit>
       <trans-unit id="c5d4e7a320b88bdcf7fb2b670b81173048af3956" datatype="html">
@@ -3656,7 +3655,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="24abd406ad31ca317072b179321ff7a7b2d56f86" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Sta <x id="START_TAG_STRONG"/>uw gebruikers<x id="CLOSE_TAG_STRONG"/> toe om externe video's / gebruikers op te zoeken die mogelijk niet met uw instantie zijn verbonden</target>
+        <target state="translated"><x id="START_TAG_STRONG"/>Je gebruikers<x id="CLOSE_TAG_STRONG"/> toestaan om externe video's / gebruikers op te zoeken die mogelijk niet met je exemplaar van PeerTube zijn verbonden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">469</context>
@@ -3669,7 +3668,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="0a82b1f5636ff3c47cddf9e4bffa86b5d696fe06" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Sta<x id="CLOSE_TAG_STRONG"/>uw gebruikers <x id="START_TAG_STRONG"/> toe om externe video's/gebruikers op te zoeken die mogelijk niet met uw instantie zijn verbonden</target>
+        <target state="translated"><x id="CLOSE_TAG_STRONG"/>Je gebruikers <x id="START_TAG_STRONG"/> toestaan externe video's/gebruikers op te zoeken die mogelijk niet met je exemplaar van PeerTube zijn verbonden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">480</context>
@@ -3802,7 +3801,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="00d2522709d908c52395fc1865152ad37fe7eeae" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </source>
-        <target state="translated">Als uw instantie expliciet is toegestaan door Twitter, wordt een videospeler ingesloten in de Twitter-feed op PeerTube-video-share. <X id="LINE_BREAK"/> Als de instantie dat niet is, gebruiken we een afbeeldingslinkkaart die doorverwijst naar uw PeerTube-instantie. <X id="LINE_BREAK"/> <x id="LINE_BREAK"/> Schakel dit selectievakje in, sla de configuratie op en test met een video-URL van uw instantie (https://example.com/videos/watch/ blabla) op <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> om te zien of jouw exemplaar is toegestaan. </target>
+        <target state="translated">Als Twitter je exemplaar van PeerTube expliciet toestaat krijg je een ingesloten videospeler te zien in de Twitter-feed op PeerTube-video-share. <X id="LINE_BREAK"/> Als Twitter je exemplaar van PeerTube niet expliciet toestaat gebruiken we een afbeeldingslinkkaart die doorverwijst naar je exemplaar van PeerTube. <X id="LINE_BREAK"/> <x id="LINE_BREAK"/> Schakel dit selectievakje in, sla de configuratie op en test met een video-URL van uw instantie (https://example.com/videos/watch/ blabla) op <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> om te zien of jouw exemplaar is toegestaan. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">684,689</context>
@@ -3818,7 +3817,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="1972803cc06239fe6b7791763ce89b819bd24853" datatype="html">
         <source>Enable users of your instance to stream live.</source>
-        <target state="translated">Stel gebruikers van uw instantie in staat live te streamen.</target>
+        <target state="translated">De gebruikers van je exemplaar van PeerTube in staat stellen live uit te zenden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">711,712</context>
@@ -4183,7 +4182,7 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       </trans-unit>
       <trans-unit id="db930d0e3dbcb12963bec15cfec67fac6534542d" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated">In Recent toegevoegd, Populair, Lokaal, Meest geliefd and Zoeken</target>
+        <target state="translated">In Recent toegevoegd, Populair, Lokaal, Meest geliefd en Zoeken</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="984be691d289644c6d40fa2cc858093be31ab58e" datatype="html">
@@ -4898,7 +4897,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="ccbfd56f7d72ca5055b86a35f66b7a6d0a250d03" datatype="html">
         <source>It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Het is gratis en open-source software, onder <x id="START_LINK"/> AGPLv3-licentie <x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Het is vrije en open-source software, onder <x id="START_LINK"/> AGPLv3-licentie <x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -5046,7 +5045,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
         <source>Followers instances</source>
-        <target state="translated">Volgers instanties</target>
+        <target state="translated">Exemplaren van PeerTube die jouw exemplaar volgen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
@@ -5056,7 +5055,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="9a9dcdc62c7e0048f4f4702b0327dda350341abc" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="translated">Deze instantie volgt geen ander.</target>
+        <target state="translated">Dit exemplaar van Peertube volgt geen andere exemplaren.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5064,7 +5063,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
         <source>Followings instances</source>
-        <target state="translated">Volgende instanties</target>
+        <target state="translated">Exemplaren van PeerTube die je volgt met jouw exemplaar</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
@@ -5085,7 +5084,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target state="translated">Over het netwerk van deze instantie</target>
+        <target state="translated">Over het netwerk van dit exemplaar van PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -8045,7 +8044,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
         <source>Hide any content from that user from you, your instance and its users.</source>
-        <target state="translated">Verberg alle inhoud van die gebruiker voor u, uw instantie en haar gebruikers.</target>
+        <target state="translated">Alle inhoud van gebruiker verbergen voor u, uw exemplaar van PeerTube en zijn gebruikers.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">334</context>
@@ -8058,7 +8057,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
         <source>Show this user's content to the users of this instance again.</source>
-        <target state="translated">Toon de inhoud van deze gebruiker opnieuw aan de gebruikers van deze instantie.</target>
+        <target state="translated">De inhoud van deze gebruiker opnieuw zichtbaar maken voor de gebruikers van dit exemplaar van PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">340</context>
@@ -8071,7 +8070,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
         <source>Hide any content from that instance from you, your instance and its users.</source>
-        <target state="translated">Verberg alle inhoud van die instantie voor u, uw instantie en zijn gebruikers.</target>
+        <target state="translated">Alle inhoud van exemplaar van PeerTube verbergen voor u, uw exemplaar van PeerTube en zijn gebruikers.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">352</context>
@@ -8094,7 +8093,7 @@ Account aanmaken</target>
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target state="translated">Verwijder opmerkingen van dit account uit uw instantie.</target>
+        <target state="translated">Opmerkingen van deze gebruiker uit je exemplaar van PeerTube verwijderen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">369</context>
