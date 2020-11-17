@@ -108,7 +108,7 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
   const parallel = parallelTests()
 
   const internalServerNumber = parallel ? randomServer() : serverNumber
-  const rtmpPort = parallel ? randomRTMP() : null
+  const rtmpPort = parallel ? randomRTMP() : 1936
   const port = 9000 + internalServerNumber
 
   await flushTests(internalServerNumber)

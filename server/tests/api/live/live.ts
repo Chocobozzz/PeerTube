@@ -324,7 +324,7 @@ describe('Test live', function () {
 
         for (let i = 0; i < resolutions.length; i++) {
           const segmentName = `${i}-000001.ts`
-          await waitUntilLog(servers[0], `${video.uuid}/${segmentName}`, 1, false)
+          await waitUntilLog(servers[0], `${video.uuid}/${segmentName}`, 2, false)
 
           const res = await getPlaylist(`${servers[0].url}/static/streaming-playlists/hls/${video.uuid}/${i}.m3u8`)
           const subPlaylist = res.text
