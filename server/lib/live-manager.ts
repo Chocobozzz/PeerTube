@@ -280,15 +280,21 @@ class LiveManager {
     const segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
     const playlistIdMatcher = /^([\d+])-/
 
-    const addHandler = segmentPath => {
-      const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
-      const segmentsToProcess = segmentsToProcessPerPlaylist[playlistId] || []
-
+    const processHashSegments = (segmentsToProcess: string[]) => {
       // Add sha hash of previous segments, because ffmpeg should have finished generating them
       for (const previousSegment of segmentsToProcess) {
         this.addSegmentSha(videoUUID, previousSegment)
           .catch(err => logger.error('Cannot add sha segment of video %s -> %s.', videoUUID, previousSegment, { err }))
       }
+    }
+
+    const addHandler = segmentPath => {
+      logger.debug('Live add handler of %s.', segmentPath)
+
+      const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
+
+      const segmentsToProcess = segmentsToProcessPerPlaylist[playlistId] || []
+      processHashSegments(segmentsToProcess)
 
       segmentsToProcessPerPlaylist[playlistId] = [ segmentPath ]
 
@@ -352,11 +358,21 @@ class LiveManager {
       this.transSessions.delete(sessionId)
       this.watchersPerVideo.delete(videoLive.videoId)
 
-      Promise.all([ tsWatcher.close(), masterWatcher.close() ])
-        .catch(err => logger.error('Cannot close watchers of %s.', outPath, { err }))
+      setTimeout(() => {
+        // Wait latest segments generation, and close watchers
 
-      this.onEndTransmuxing(videoLive.Video.id)
-        .catch(err => logger.error('Error in closed transmuxing.', { err }))
+        Promise.all([ tsWatcher.close(), masterWatcher.close() ])
+        .then(() => {
+          // Process remaining segments hash
+          for (const key of Object.keys(segmentsToProcessPerPlaylist)) {
+            processHashSegments(segmentsToProcessPerPlaylist[key])
+          }
+        })
+        .catch(err => logger.error('Cannot close watchers of %s or process remaining hash segments.', outPath, { err }))
+
+        this.onEndTransmuxing(videoLive.Video.id)
+          .catch(err => logger.error('Error in closed transmuxing.', { err }))
+      }, 1000)
     }
 
     ffmpegExec.on('error', (err, stdout, stderr) => {
