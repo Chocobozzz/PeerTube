@@ -4,7 +4,7 @@ import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { MarkdownService } from '@app/core'
+import { MarkdownService, ScreenService } from '@app/core'
 
 @Component({
   selector: 'my-markdown-textarea',
@@ -40,6 +40,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
   constructor (
     private viewportScroller: ViewportScroller,
+    private screenService: ScreenService,
     private markdownService: MarkdownService
   ) { }
 
@@ -80,7 +81,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     this.isMaximized = !this.isMaximized
 
     // Make sure textarea have the focus
-    this.textareaElement.nativeElement.focus()
+    // Except on touchscreens devices, the virtual keyboard may move up and hide the textarea in maximized mode
+    if (!this.screenService.isInTouchScreen()) {
+      this.textareaElement.nativeElement.focus()
+    }
 
     // Make sure the window has no scrollbars
     if (!this.isMaximized) {
