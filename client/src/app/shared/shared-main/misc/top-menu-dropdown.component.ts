@@ -3,6 +3,7 @@ import { filter } from 'rxjs/operators'
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { MenuService, ScreenService } from '@app/core'
+import { scrollToTop } from '@app/helpers'
 import { GlobalIconName } from '@app/shared/shared-icons'
 import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
@@ -96,11 +97,7 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
 
   onActiveLinkScrollToTop (link: HTMLAnchorElement) {
     if (!this.isBroadcastMessageDisplayed && this.router.url.includes(link.getAttribute('href'))) {
-      window.scrollTo({
-        left: 0,
-        top: 0,
-        behavior: 'smooth'
-      })
+      scrollToTop('smooth')
     }
   }
 

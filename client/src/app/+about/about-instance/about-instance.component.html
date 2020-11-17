@@ -23,7 +23,10 @@
     <a
       *ngIf="html.administrator || maintenanceLifetime || businessModel"
       class="anchor-link"
-      routerLink="/about/instance" fragment="administrators-and-sustainability"
+      routerLink="/about/instance"
+      fragment="administrators-and-sustainability"
+      #anchorLink
+      (click)="onClickCopyLink(anchorLink)"
     >
       <h2 i18n class="middle-title">
         ADMINISTRATORS & SUSTAINABILITY
@@ -32,7 +35,12 @@
 
     <div class="block administrator" *ngIf="html.administrator">
       <div class="anchor" id="administrators"></div>
-      <a class="anchor-link" routerLink="/about/instance" fragment="administrators">
+      <a
+        class="anchor-link"
+        routerLink="/about/instance"
+        fragment="administrators"
+        #anchorLink
+        (click)="onClickCopyLink(anchorLink)">
         <h3 i18n class="section-title">Who we are</h3>
       </a>
 
@@ -41,7 +49,12 @@
 
     <div class="block creation-reason" *ngIf="creationReason">
       <div class="anchor" id="creation-reason"></div>
-      <a class="anchor-link" routerLink="/about/instance" fragment="creation-reason">
+      <a
+        class="anchor-link"
+        routerLink="/about/instance"
+        fragment="creation-reason"
+        #anchorLink
+        (click)="onClickCopyLink(anchorLink)">
         <h3 i18n class="section-title">Why we created this instance</h3>
       </a>
 
@@ -50,7 +63,12 @@
 
     <div class="block maintenance-lifetime" *ngIf="maintenanceLifetime">
       <div class="anchor" id="maintenance-lifetime"></div>
-      <a class="anchor-link" routerLink="/about/instance" fragment="maintenance-lifetime">
+      <a
+        class="anchor-link"
+        routerLink="/about/instance"
+        fragment="maintenance-lifetime"
+        #anchorLink
+        (click)="onClickCopyLink(anchorLink)">
         <h3 i18n class="section-title">How long we plan to maintain this instance</h3>
       </a>
 
@@ -58,8 +76,13 @@
     </div>
 
     <div class="block business-model" *ngIf="businessModel">
-        <div class="anchor" id="buisiness-model"></div>
-        <a class="anchor-link" routerLink="/about/instance" fragment="buisiness-model">
+        <div class="anchor" id="business-model"></div>
+        <a
+          class="anchor-link"
+          routerLink="/about/instance"
+          fragment="business-model"
+          #anchorLink
+          (click)="onClickCopyLink(anchorLink)">
           <h3 i18n class="section-title">How we will pay for this instance</h3>
         </a>
 
@@ -67,7 +90,13 @@
     </div>
 
     <div class="anchor" id="information"></div>
-    <a *ngIf="html.description" class="anchor-link" routerLink="/about/instance" fragment="information">
+    <a
+      *ngIf="html.description"
+      class="anchor-link"
+      routerLink="/about/instance"
+      fragment="information"
+      #anchorLink
+      (click)="onClickCopyLink(anchorLink)">
       <h2 i18n class="middle-title">
         INFORMATION
       </h2>
@@ -75,7 +104,12 @@
 
     <div class="block description">
       <div class="anchor" id="description"></div>
-      <a class="anchor-link" routerLink="/about/instance" fragment="description">
+      <a
+        class="anchor-link"
+        routerLink="/about/instance"
+        fragment="description"
+        #anchorLink
+        (click)="onClickCopyLink(anchorLink)">
         <h3 i18n class="section-title">Description</h3>
       </a>
 
@@ -85,8 +119,11 @@
     <div class="anchor" id="moderation"></div>
     <a
       *ngIf="html.moderationInformation || html.codeOfConduct || html.terms"
-      class="anchor-link" routerLink="/about/instance" fragment="moderation"
-    >
+      class="anchor-link"
+      routerLink="/about/instance"
+      fragment="moderation"
+      #anchorLink
+      (click)="onClickCopyLink(anchorLink)">
       <h2 i18n class="middle-title">
         MODERATION
       </h2>
@@ -94,7 +131,12 @@
 
     <div class="block moderation-information" *ngIf="html.moderationInformation">
       <div class="anchor" id="moderation-information"></div>
-      <a class="anchor-link" routerLink="/about/instance" fragment="moderation-information">
+      <a
+        class="anchor-link"
+        routerLink="/about/instance"
+        fragment="moderation-information"
+        #anchorLink
+        (click)="onClickCopyLink(anchorLink)">
         <h3 i18n class="section-title">Moderation information</h3>
       </a>
 
@@ -103,7 +145,12 @@
 
     <div class="block code-of-conduct" *ngIf="html.codeOfConduct">
       <div class="anchor" id="code-of-conduct"></div>
-      <a class="anchor-link" routerLink="/about/instance" fragment="code-of-conduct">
+      <a
+        class="anchor-link"
+        routerLink="/about/instance"
+        fragment="code-of-conduct"
+        #anchorLink
+        (click)="onClickCopyLink(anchorLink)">
         <h3 i18n class="section-title">Code of conduct</h3>
       </a>
 
@@ -112,7 +159,12 @@
 
     <div class="block terms">
       <div class="anchor" id="terms"></div>
-      <a class="anchor-link" routerLink="/about/instance" fragment="terms">
+      <a
+        class="anchor-link"
+        routerLink="/about/instance"
+        fragment="terms"
+        #anchorLink
+        (click)="onClickCopyLink(anchorLink)">
         <h3 i18n class="section-title">Terms</h3>
       </a>
 
@@ -120,7 +172,13 @@
     </div>
 
     <div class="anchor" id="other-information"></div>
-    <a *ngIf="html.hardwareInformation" class="anchor-link" routerLink="/about/instance" fragment="other-information">
+    <a
+      *ngIf="html.hardwareInformation"
+      class="anchor-link"
+      routerLink="/about/instance"
+      fragment="other-information"
+      #anchorLink
+      (click)="onClickCopyLink(anchorLink)">
       <h2 i18n class="middle-title">
         OTHER INFORMATION
       </h2>
@@ -128,7 +186,12 @@
 
     <div class="block hardware-information" *ngIf="html.hardwareInformation">
       <div class="anchor" id="hardware-information"></div>
-      <a class="anchor-link" routerLink="/about/instance" fragment="hardware-information">
+      <a
+        class="anchor-link"
+        routerLink="/about/instance"
+        fragment="hardware-information"
+        #anchorLink
+        (click)="onClickCopyLink(anchorLink)">
         <h3 i18n class="section-title">Hardware information</h3>
       </a>
 
@@ -143,7 +206,12 @@
 
   <div class="col">
     <div class="anchor" id="statistics"></div>
-    <a class="anchor-link" routerLink="/about/instance" fragment="statistics">
+    <a
+      class="anchor-link"
+      routerLink="/about/instance"
+      fragment="statistics"
+      #anchorLink
+      (click)="onClickCopyLink(anchorLink)">
       <h2 i18n class="middle-title">STATISTICS</h2>
     </a>
     <my-instance-statistics></my-instance-statistics>

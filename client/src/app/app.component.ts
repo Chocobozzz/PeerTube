@@ -121,7 +121,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       // scrollToAnchor first to preserve anchor position when using history navigation
       if (e.anchor) {
         setTimeout(() => {
-          document.getElementById(e.anchor).scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
+          this.viewportScroller.scrollToAnchor(e.anchor)
         })
 
         return

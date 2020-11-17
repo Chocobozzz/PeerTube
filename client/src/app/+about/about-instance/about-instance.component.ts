@@ -2,7 +2,8 @@ import { ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
-import { ServerService } from '@app/core'
+import { Notifier } from '@app/core'
+import { copyToClipboard } from '../../../assets/player/utils'
 import { InstanceService } from '@app/shared/shared-instance'
 import { ServerConfig } from '@shared/models'
 import { ResolverData } from './about-instance.resolver'
@@ -42,6 +43,7 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   constructor (
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
+    private notifier: Notifier,
     private instanceService: InstanceService
   ) {}
 
@@ -86,5 +88,11 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
 
   openContactModal () {
     return this.contactAdminModal.show()
+  }
+
+  onClickCopyLink (anchor: HTMLAnchorElement) {
+    const link = anchor.href
+    copyToClipboard(link)
+    this.notifier.success(link, $localize `Link copied`)
   }
 }

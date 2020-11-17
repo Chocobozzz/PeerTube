@@ -1,8 +1,10 @@
+import { ViewportScroller } from '@angular/common'
 import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
 import { switchMap } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
+import { scrollToTop } from '@app/helpers'
 import { AuthService, AuthStatus, AuthUser, MenuService, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
@@ -39,6 +41,7 @@ export class MenuComponent implements OnInit {
   }
 
   constructor (
+    private viewportScroller: ViewportScroller,
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
@@ -199,23 +202,18 @@ export class MenuComponent implements OnInit {
     return this.languages.find(lang => lang.id === localeId).label
   }
 
-  onSameUrlRestoreScrollPosition (link: HTMLAnchorElement) {
+  onActiveLinkScrollToAnchor (link: HTMLAnchorElement) {
     const linkURL = link.getAttribute('href')
     const linkHash = link.getAttribute('fragment')
 
     // On same url without fragment restore top scroll position
     if (!linkHash && this.router.url.includes(linkURL)) {
-      window.scrollTo({
-        left: 0,
-        top: 0,
-        behavior: 'smooth'
-      })
+      scrollToTop('smooth')
     }
 
     // On same url with fragment restore anchor scroll position
     if (linkHash && this.router.url === linkURL) {
-      const anchor = document.getElementById(link.getAttribute('fragment'))
-      anchor.scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
+      this.viewportScroller.scrollToAnchor(linkHash)
     }
 
     if (this.screenService.isInSmallView()) {
