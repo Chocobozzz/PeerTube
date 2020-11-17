@@ -5,6 +5,7 @@ import { join } from 'path'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
 import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
+import { SANITIZE_OPTIONS, TEXT_WITH_HTML_RULES } from '@shared/core-utils'
 import { AbuseState, EmailPayload, UserAbuse } from '@shared/models'
 import { SendEmailOptions } from '../../shared/models/server/emailer.model'
 import { isTestInstance, root } from '../helpers/core-utils'
@@ -20,14 +21,7 @@ const markdownItEmoji = require('markdown-it-emoji/light')
 const MarkdownItClass = require('markdown-it')
 const markdownIt = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
 
-markdownIt.enable([
-  'linkify',
-  'autolink',
-  'emphasis',
-  'link',
-  'newline',
-  'list'
-])
+markdownIt.enable(TEXT_WITH_HTML_RULES)
 
 markdownIt.use(markdownItEmoji)
 
@@ -39,27 +33,7 @@ const toSafeHtml = text => {
   const html = markdownIt.render(textWithLineFeed)
 
   // Convert to safe Html
-  return sanitizeHtml(html, {
-    allowedTags: [ 'a', 'p', 'span', 'br', 'strong', 'em', 'ul', 'ol', 'li' ],
-    allowedSchemes: [ 'http', 'https' ],
-    allowedAttributes: {
-      a: [ 'href', 'class', 'target', 'rel' ]
-    },
-    transformTags: {
-      a: (tagName, attribs) => {
-        let rel = 'noopener noreferrer'
-        if (attribs.rel === 'me') rel += ' me'
-
-        return {
-          tagName,
-          attribs: Object.assign(attribs, {
-            target: '_blank',
-            rel
-          })
-        }
-      }
-    }
-  })
+  return sanitizeHtml(html, SANITIZE_OPTIONS)
 }
 
 const Email = require('email-templates')
