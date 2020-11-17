@@ -5,7 +5,7 @@ export const SANITIZE_OPTIONS = {
     a: [ 'href', 'class', 'target', 'rel' ]
   },
   transformTags: {
-    a: (tagName, attribs) => {
+    a: (tagName: string, attribs: any) => {
       let rel = 'noopener noreferrer'
       if (attribs.rel === 'me') rel += ' me'
 
