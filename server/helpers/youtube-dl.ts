@@ -33,8 +33,9 @@ const processOptions = {
 
 function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
   return new Promise<YoutubeDLInfo>((res, rej) => {
-    let args = opts || [ '-j', '--flat-playlist', '--force-ipv4' ]
+    let args = opts || [ '-j', '--flat-playlist' ]
     args = wrapWithProxyOptions(args)
+    if (CONFIG.IMPORT.VIDEOS.HTTP.FORCEIPV4) args = [ '--force-ipv4' ].concat(args)
 
     safeGetYoutubeDL()
       .then(youtubeDL => {
