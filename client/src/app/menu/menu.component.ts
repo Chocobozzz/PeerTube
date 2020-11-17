@@ -40,7 +40,7 @@ export class MenuComponent implements OnInit {
     [UserRight.MANAGE_CONFIGURATION]: '/admin/config'
   }
 
-  constructor(
+  constructor (
     private viewportScroller: ViewportScroller,
     private authService: AuthService,
     private userService: UserService,
