@@ -165,6 +165,28 @@ describe('Test comments notifications', function () {
 
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, threadId, 'presence')
     })
+
+    it('Should convert markdown in comment to html', async function () {
+      this.timeout(10000)
+
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'cool video' })
+      const uuid = resVideo.body.video.uuid
+
+      const commentText = '**hello** <a href="https://joinpeertube.org">world</a>, <h1>what do you think about peertube?</h1>'
+      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, commentText)
+      const commentId = resComment.body.comment.id
+
+      await waitJobs(servers)
+      await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'presence')
+
+      const latestEmail = emails[emails.length - 1]
+
+      const expected = '<strong style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">hello</strong> ' +
+      '<a href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer" style="-ms-text-size-adjust: 100%; ' +
+      '-webkit-text-size-adjust: 100%; text-decoration: none; color: #f2690d;">world</a>, </p>what do you think about peertube?'
+
+      expect(latestEmail['html']).to.contain(expected)
+    })
   })
 
   describe('Mention notifications', function () {
