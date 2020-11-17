@@ -72,42 +72,42 @@ async function run (url: string, user: UserInfo) {
 
   const youtubeDL = await safeGetYoutubeDL()
 
-  const options = [ '-j', '--flat-playlist', '--playlist-reverse', ...command.args ]
+  let info = await getYoutubeDLInfo(youtubeDL, program['targetUrl'], command.args)
 
-  youtubeDL.getInfo(program['targetUrl'], options, processOptions, async (err, info) => {
-    if (err) {
-      exitError(err.stderr + ' ' + err.message)
+  if (info?.title === 'Uploads') {
+    console.log('Fixing URL to %s.', info.url)
+
+    info = await getYoutubeDLInfo(youtubeDL, info.url, command.args)
+  }
+
+  let infoArray: any[]
+
+  // Normalize utf8 fields
+  infoArray = [].concat(info)
+  if (program['first']) {
+    infoArray = infoArray.slice(0, program['first'])
+  } else if (program['last']) {
+    infoArray = infoArray.slice(-program['last'])
+  }
+  infoArray = infoArray.map(i => normalizeObject(i))
+
+  log.info('Will download and upload %d videos.\n', infoArray.length)
+
+  for (const info of infoArray) {
+    try {
+      await processVideo({
+        cwd: program['tmpdir'],
+        url,
+        user,
+        youtubeInfo: info
+      })
+    } catch (err) {
+      console.error('Cannot process video.', { info, url })
     }
+  }
 
-    let infoArray: any[]
-
-    // Normalize utf8 fields
-    infoArray = [].concat(info)
-    if (program['first']) {
-      infoArray = infoArray.slice(0, program['first'])
-    } else if (program['last']) {
-      infoArray = infoArray.slice(-program['last'])
-    }
-    infoArray = infoArray.map(i => normalizeObject(i))
-
-    log.info('Will download and upload %d videos.\n', infoArray.length)
-
-    for (const info of infoArray) {
-      try {
-        await processVideo({
-          cwd: program['tmpdir'],
-          url,
-          user,
-          youtubeInfo: info
-        })
-      } catch (err) {
-        console.error('Cannot process video.', { info, url })
-      }
-    }
-
-    log.info('Video/s for user %s imported: %s', user.username, program['targetUrl'])
-    process.exit(0)
-  })
+  log.info('Video/s for user %s imported: %s', user.username, program['targetUrl'])
+  process.exit(0)
 }
 
 function processVideo (parameters: {
@@ -396,4 +396,16 @@ function exitError (message: string, ...meta: any[]) {
   // use console.error instead of log.error here
   console.error(message, ...meta)
   process.exit(-1)
+}
+
+function getYoutubeDLInfo (youtubeDL: any, url: string, args: string[]) {
+  return new Promise<any>((res, rej) => {
+    const options = [ '-j', '--flat-playlist', '--playlist-reverse', ...args ]
+
+    youtubeDL.getInfo(url, options, processOptions, async (err, info) => {
+      if (err) return rej(err)
+
+      return res(info)
+    })
+  })
 }
