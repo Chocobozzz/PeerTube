@@ -1,9 +1,10 @@
+import { ViewportScroller } from '@angular/common'
 import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
 import { switchMap } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { scrollToTop, scrollToAnchor } from '@app/helpers'
+import { scrollToTop } from '@app/helpers'
 import { AuthService, AuthStatus, AuthUser, MenuService, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
@@ -39,7 +40,8 @@ export class MenuComponent implements OnInit {
     [UserRight.MANAGE_CONFIGURATION]: '/admin/config'
   }
 
-  constructor (
+  constructor(
+    private viewportScroller: ViewportScroller,
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
@@ -211,7 +213,7 @@ export class MenuComponent implements OnInit {
 
     // On same url with fragment restore anchor scroll position
     if (linkHash && this.router.url === linkURL) {
-      scrollToAnchor(linkHash, 'smooth')
+      this.viewportScroller.scrollToAnchor(linkHash)
     }
 
     if (this.screenService.isInSmallView()) {

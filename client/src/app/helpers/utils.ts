@@ -152,11 +152,6 @@ function scrollToTop (behavior: 'auto' | 'smooth' = 'auto') {
   })
 }
 
-function scrollToAnchor (fragment: string, behavior: 'auto' | 'smooth' = 'auto') {
-  const anchor = document.getElementById(fragment)
-  anchor.scrollIntoView({ behavior, inline: 'nearest', block: 'start' })
-}
-
 function isInViewport (el: HTMLElement) {
   const bounding = el.getBoundingClientRect()
   return (
@@ -191,7 +186,6 @@ export {
   objectLineFeedToHtml,
   removeElementFromArray,
   scrollToTop,
-  scrollToAnchor,
   isInViewport,
   isXPercentInViewport
 }

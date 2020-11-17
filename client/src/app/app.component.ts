@@ -16,7 +16,7 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getShortLocale, is18nPath } from '@shared/core-utils/i18n'
 import { BroadcastMessageLevel, ServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
-import { POP_STATE_MODAL_DISMISS, scrollToAnchor } from './helpers'
+import { POP_STATE_MODAL_DISMISS } from './helpers'
 import { InstanceService } from './shared/shared-instance'
 
 @Component({
@@ -121,7 +121,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       // scrollToAnchor first to preserve anchor position when using history navigation
       if (e.anchor) {
         setTimeout(() => {
-          scrollToAnchor(e.anchor)
+          this.viewportScroller.scrollToAnchor(e.anchor)
         })
 
         return
