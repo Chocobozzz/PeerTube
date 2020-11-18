@@ -3681,9 +3681,10 @@ components:
       in: query
       required: false
       description: >
-        Special filters (local for instance) which might require special rights:
+        Special filters which might require special rights:
          * `local` - only videos local to the instance
          * `all-local` - only videos local to the instance, but showing private and unlisted videos (requires Admin privileges)
+         * `all` - all videos, showing private and unlisted videos (requires Admin privileges)
       schema:
         type: string
         enum:

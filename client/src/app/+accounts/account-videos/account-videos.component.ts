@@ -6,6 +6,7 @@ import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenServi
 import { immutableAssign } from '@app/helpers'
 import { Account, AccountService, VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
+import { VideoFilter } from '@shared/models'
 
 @Component({
   selector: 'my-account-videos',
@@ -17,6 +18,8 @@ import { AbstractVideoList } from '@app/shared/shared-video-miniature'
 export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   loadOnInit = false
+
+  filter: VideoFilter = null
 
   private account: Account
   private accountSub: Subscription
@@ -40,6 +43,8 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
   ngOnInit () {
     super.ngOnInit()
 
+    this.enableAllFilterIfPossible()
+
     // Parent get the account for us
     this.accountSub = this.accountService.accountLoaded
                           .pipe(first())
@@ -59,14 +64,27 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
+    const options = {
+      account: this.account,
+      videoPagination: newPagination,
+      sort: this.sort,
+      nsfwPolicy: this.nsfwPolicy,
+      videoFilter: this.filter
+    }
 
     return this.videoService
-               .getAccountVideos(this.account, newPagination, this.sort)
+               .getAccountVideos(options)
                .pipe(
                  tap(({ total }) => {
                    this.titlePage = $localize`Published ${total} videos`
                  })
                )
+  }
+
+  toggleModerationDisplay () {
+    this.filter = this.buildLocalFilter(this.filter, null)
+
+    this.reloadVideos()
   }
 
   generateSyndicationList () {

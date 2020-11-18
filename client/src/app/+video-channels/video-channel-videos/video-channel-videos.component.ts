@@ -6,6 +6,7 @@ import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenServi
 import { immutableAssign } from '@app/helpers'
 import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
+import { VideoFilter } from '@shared/models'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -17,6 +18,8 @@ import { AbstractVideoList } from '@app/shared/shared-video-miniature'
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   loadOnInit = false
+
+  filter: VideoFilter = null
 
   private videoChannel: VideoChannel
   private videoChannelSub: Subscription
@@ -46,6 +49,8 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
   ngOnInit () {
     super.ngOnInit()
 
+    this.enableAllFilterIfPossible()
+
     // Parent get the video channel for us
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
                                .pipe(first())
@@ -65,9 +70,16 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
+    const options = {
+      videoChannel: this.videoChannel,
+      videoPagination: newPagination,
+      sort: this.sort,
+      nsfwPolicy: this.nsfwPolicy,
+      videoFilter: this.filter
+    }
 
     return this.videoService
-               .getVideoChannelVideos(this.videoChannel, newPagination, this.sort, this.nsfwPolicy)
+               .getVideoChannelVideos(options)
                .pipe(
                  tap(({ total }) => {
                    this.titlePage = total === 1
@@ -79,5 +91,11 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
 
   generateSyndicationList () {
     this.syndicationItems = this.videoService.getVideoChannelFeedUrls(this.videoChannel.id)
+  }
+
+  toggleModerationDisplay () {
+    this.filter = this.buildLocalFilter(this.filter, null)
+
+    this.reloadVideos()
   }
 }

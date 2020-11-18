@@ -3,7 +3,7 @@ import { concatMap, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, ScreenService, User, UserService } from '@app/core'
 import { Account, AccountService, Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { VideoSortField } from '@shared/models'
+import { NSFWPolicyType, VideoSortField } from '@shared/models'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -31,6 +31,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   onChannelDataSubject = new Subject<any>()
 
   userMiniature: User
+  nsfwPolicy: NSFWPolicyType
 
   private accountSub: Subscription
 
@@ -52,7 +53,11 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
         })
 
     this.userService.getAnonymousOrLoggedUser()
-      .subscribe(user => this.userMiniature = user)
+      .subscribe(user => {
+        this.userMiniature = user
+
+        this.nsfwPolicy = user.nsfwPolicy
+      })
   }
 
   ngOnDestroy () {
@@ -65,7 +70,14 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
         tap(res => this.channelPagination.totalItems = res.total),
         switchMap(res => from(res.data)),
         concatMap(videoChannel => {
-          return this.videoService.getVideoChannelVideos(videoChannel, this.videosPagination, this.videosSort)
+          const options = {
+            videoChannel,
+            videoPagination: this.videosPagination,
+            sort: this.videosSort,
+            nsfwPolicy: this.nsfwPolicy
+          }
+
+          return this.videoService.getVideoChannelVideos(options)
             .pipe(map(data => ({ videoChannel, videos: data.data })))
         })
       )

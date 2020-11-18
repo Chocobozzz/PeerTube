@@ -39,11 +39,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   ngOnInit () {
     super.ngOnInit()
 
-    if (this.authService.isLoggedIn()) {
-      const user = this.authService.getUser()
-      this.displayModerationBlock = user.hasRight(UserRight.SEE_ALL_VIDEOS)
-    }
-
+    this.enableAllFilterIfPossible()
     this.generateSyndicationList()
   }
 
@@ -77,7 +73,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   }
 
   toggleModerationDisplay () {
-    this.filter = this.filter === 'local' ? 'all-local' as 'all-local' : 'local' as 'local'
+    this.filter = this.buildLocalFilter(this.filter, 'local')
 
     this.reloadVideos()
   }

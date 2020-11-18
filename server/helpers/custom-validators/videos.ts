@@ -17,7 +17,7 @@ import * as magnetUtil from 'magnet-uri'
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
 function isVideoFilterValid (filter: VideoFilter) {
-  return filter === 'local' || filter === 'all-local'
+  return filter === 'local' || filter === 'all-local' || filter === 'all'
 }
 
 function isVideoCategoryValid (value: any) {

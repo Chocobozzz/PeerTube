@@ -116,6 +116,20 @@ describe('Test videos filter validator', function () {
         }
       }
     })
+
+    it('Should display all videos by the admin or the moderator', async function () {
+      for (const server of servers) {
+        for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
+
+          const [ channelVideos, accountVideos, videos, searchVideos ] = await getVideosNames(server, token, 'all')
+          expect(channelVideos).to.have.lengthOf(3)
+          expect(accountVideos).to.have.lengthOf(3)
+
+          expect(videos).to.have.lengthOf(5)
+          expect(searchVideos).to.have.lengthOf(5)
+        }
+      }
+    })
   })
 
   after(async function () {

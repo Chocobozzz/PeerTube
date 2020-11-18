@@ -65,6 +65,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
       opacity: .9;
     }
 
+    &:active {
+      color: pvar(--mainForegroundColor) !important;
+    }
+
     &::after {
       display: none;
     }

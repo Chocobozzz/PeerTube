@@ -78,28 +78,33 @@ describe('Test videos filters', function () {
       await testEndpoints(server, server.accessToken, 'local', 200)
     })
 
-    it('Should fail to list all-local with a simple user', async function () {
+    it('Should fail to list all-local/all with a simple user', async function () {
       await testEndpoints(server, userAccessToken, 'all-local', 401)
+      await testEndpoints(server, userAccessToken, 'all', 401)
     })
 
-    it('Should succeed to list all-local with a moderator', async function () {
+    it('Should succeed to list all-local/all with a moderator', async function () {
       await testEndpoints(server, moderatorAccessToken, 'all-local', 200)
+      await testEndpoints(server, moderatorAccessToken, 'all', 200)
     })
 
-    it('Should succeed to list all-local with an admin', async function () {
+    it('Should succeed to list all-local/all with an admin', async function () {
       await testEndpoints(server, server.accessToken, 'all-local', 200)
+      await testEndpoints(server, server.accessToken, 'all', 200)
     })
 
     // Because we cannot authenticate the user on the RSS endpoint
-    it('Should fail on the feeds endpoint with the all-local filter', async function () {
-      await makeGetRequest({
-        url: server.url,
-        path: '/feeds/videos.json',
-        statusCodeExpected: 401,
-        query: {
-          filter: 'all-local'
-        }
-      })
+    it('Should fail on the feeds endpoint with the all-local/all filter', async function () {
+      for (const filter of [ 'all', 'all-local' ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: '/feeds/videos.json',
+          statusCodeExpected: 401,
+          query: {
+            filter
+          }
+        })
+      }
     })
 
     it('Should succeed on the feeds endpoint with the local filter', async function () {

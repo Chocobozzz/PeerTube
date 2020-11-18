@@ -134,15 +134,27 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getAccountVideos (
+  getAccountVideos (parameters: {
     account: Account,
     videoPagination: ComponentPaginationLight,
     sort: VideoSortField
-  ): Observable<ResultList<Video>> {
+    nsfwPolicy?: NSFWPolicyType
+    videoFilter?: VideoFilter
+  }): Observable<ResultList<Video>> {
+    const { account, videoPagination, sort, videoFilter, nsfwPolicy } = parameters
+
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (nsfwPolicy) {
+      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    }
+
+    if (videoFilter) {
+      params = params.set('filter', videoFilter)
+    }
 
     return this.authHttp
                .get<ResultList<Video>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
@@ -152,12 +164,15 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getVideoChannelVideos (
+  getVideoChannelVideos (parameters: {
     videoChannel: VideoChannel,
     videoPagination: ComponentPaginationLight,
     sort: VideoSortField,
     nsfwPolicy?: NSFWPolicyType
-  ): Observable<ResultList<Video>> {
+    videoFilter?: VideoFilter
+  }): Observable<ResultList<Video>> {
+    const { videoChannel, videoPagination, sort, nsfwPolicy, videoFilter } = parameters
+
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -165,6 +180,10 @@ export class VideoService implements VideosProvider {
 
     if (nsfwPolicy) {
       params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    }
+
+    if (videoFilter) {
+      params = params.set('filter', videoFilter)
     }
 
     return this.authHttp

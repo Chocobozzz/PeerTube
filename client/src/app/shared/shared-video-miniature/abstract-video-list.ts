@@ -15,7 +15,7 @@ import {
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { GlobalIconName } from '@app/shared/shared-icons'
 import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@shared/core-utils/miscs/date'
-import { ServerConfig, VideoSortField } from '@shared/models'
+import { ServerConfig, UserRight, VideoFilter, VideoSortField } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 import { Syndication, Video } from '../shared-main'
 import { MiniatureDisplayOptions, OwnerDisplayType } from './video-miniature.component'
@@ -205,10 +205,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     this.loadMoreVideos(true)
   }
 
-  toggleModerationDisplay () {
-    throw new Error('toggleModerationDisplay is not implemented')
-  }
-
   removeVideoFromArray (video: Video) {
     this.videos = this.videos.filter(v => v.id !== video.id)
   }
@@ -268,6 +264,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     return this.groupedDateLabels[this.groupedDates[video.id]]
   }
 
+  toggleModerationDisplay () {
+    throw new Error('toggleModerationDisplay is not implemented')
+  }
+
   // On videos hook for children that want to do something
   protected onMoreVideos () { /* empty */ }
 
@@ -275,6 +275,28 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     this.sort = routeParams[ 'sort' ] as VideoSortField || this.defaultSort
     this.categoryOneOf = routeParams[ 'categoryOneOf' ]
     this.angularState = routeParams[ 'a-state' ]
+  }
+
+  protected buildLocalFilter (existing: VideoFilter, base: VideoFilter) {
+    if (base === 'local') {
+      return existing === 'local'
+        ? 'all-local' as 'all-local'
+        : 'local' as 'local'
+    }
+
+    return existing === 'all'
+      ? null
+      : 'all'
+  }
+
+  protected enableAllFilterIfPossible () {
+    if (!this.authService.isLoggedIn()) return
+
+    this.authService.userInformationLoaded
+      .subscribe(() => {
+        const user = this.authService.getUser()
+        this.displayModerationBlock = user.hasRight(UserRight.SEE_ALL_VIDEOS)
+      })
   }
 
   private calcPageSizes () {

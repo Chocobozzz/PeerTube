@@ -89,7 +89,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
   }
 
   // Only list public/published videos
-  if (!options.filter || options.filter !== 'all-local') {
+  if (!options.filter || (options.filter !== 'all-local' && options.filter !== 'all')) {
     and.push(
       `("video"."state" = ${VideoState.PUBLISHED} OR ` +
       `("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false))`

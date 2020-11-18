@@ -429,7 +429,10 @@ const commonVideosFiltersValidator = [
     if (areValidationErrors(req, res)) return
 
     const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
-    if (req.query.filter === 'all-local' && (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) === false)) {
+    if (
+      (req.query.filter === 'all-local' || req.query.filter === 'all') &&
+      (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) === false)
+    ) {
       res.status(401)
          .json({ error: 'You are not allowed to see all local videos.' })
 

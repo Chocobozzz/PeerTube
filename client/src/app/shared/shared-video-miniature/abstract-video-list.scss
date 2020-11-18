@@ -31,13 +31,21 @@ $iconSize: 16px;
 
   .moderation-block {
     div {
-      @include button-with-icon($iconSize, 3px, -1px);
+      @include button-with-icon($iconSize, 3px, -2px);
     }
 
-    margin-left: .2rem;
+    margin-left: .4rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+
+    .dropdown-item {
+      padding: 0;
+
+      ::ng-deep my-peertube-checkbox label {
+        padding: 3px 15px;
+      }
+    }
   }
 }
 

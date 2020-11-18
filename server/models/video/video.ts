@@ -1085,7 +1085,7 @@ export class VideoModel extends Model<VideoModel> {
     historyOfUser?: MUserId
     countVideos?: boolean
   }) {
-    if (options.filter && options.filter === 'all-local' && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
+    if ((options.filter === 'all-local' || options.filter === 'all') && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
 
