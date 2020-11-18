@@ -1,6 +1,11 @@
-import * as express from 'express'
 import 'multer'
+import * as express from 'express'
+import { logger } from '@server/helpers/logger'
+import { UserNotificationModel } from '@server/models/account/user-notification'
+import { getServerActor } from '@server/models/application/application'
+import { UserRight } from '../../../../shared/models/users'
 import { getFormattedObjects } from '../../../helpers/utils'
+import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -19,10 +24,7 @@ import {
   unblockServerByServerValidator
 } from '../../../middlewares/validators'
 import { AccountBlocklistModel } from '../../../models/account/account-blocklist'
-import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
-import { UserRight } from '../../../../shared/models/users'
-import { getServerActor } from '@server/models/application/application'
 
 const serverBlocklistRouter = express.Router()
 
@@ -100,6 +102,12 @@ async function blockAccount (req: express.Request, res: express.Response) {
 
   await addAccountInBlocklist(serverActor.Account.id, accountToBlock.id)
 
+  UserNotificationModel.removeNotificationsOf({
+    id: accountToBlock.id,
+    type: 'account',
+    forUserId: null // For all users
+  }).catch(err => logger.error('Cannot remove notifications after an account mute.', { err }))
+
   return res.status(204).end()
 }
 
@@ -130,6 +138,12 @@ async function blockServer (req: express.Request, res: express.Response) {
   const serverToBlock = res.locals.server
 
   await addServerInBlocklist(serverActor.Account.id, serverToBlock.id)
+
+  UserNotificationModel.removeNotificationsOf({
+    id: serverToBlock.id,
+    type: 'server',
+    forUserId: null // For all users
+  }).catch(err => logger.error('Cannot remove notifications after a server mute.', { err }))
 
   return res.status(204).end()
 }

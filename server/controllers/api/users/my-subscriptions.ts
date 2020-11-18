@@ -26,6 +26,7 @@ import {
 } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { VideoModel } from '../../../models/video/video'
+import { sendUndoFollow } from '@server/lib/activitypub/send'
 
 const mySubscriptionsRouter = express.Router()
 
@@ -138,6 +139,8 @@ async function deleteUserSubscription (req: express.Request, res: express.Respon
   const subscription = res.locals.subscription
 
   await sequelizeTypescript.transaction(async t => {
+    if (subscription.state === 'accepted') await sendUndoFollow(subscription, t)
+
     return subscription.destroy({ transaction: t })
   })
 

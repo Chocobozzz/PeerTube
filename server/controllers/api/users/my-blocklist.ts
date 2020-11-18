@@ -20,6 +20,8 @@ import {
 import { AccountBlocklistModel } from '../../../models/account/account-blocklist'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
+import { UserNotificationModel } from '@server/models/account/user-notification'
+import { logger } from '@server/helpers/logger'
 
 const myBlocklistRouter = express.Router()
 
@@ -91,6 +93,12 @@ async function blockAccount (req: express.Request, res: express.Response) {
 
   await addAccountInBlocklist(user.Account.id, accountToBlock.id)
 
+  UserNotificationModel.removeNotificationsOf({
+    id: accountToBlock.id,
+    type: 'account',
+    forUserId: user.id
+  }).catch(err => logger.error('Cannot remove notifications after an account mute.', { err }))
+
   return res.status(204).end()
 }
 
@@ -121,6 +129,12 @@ async function blockServer (req: express.Request, res: express.Response) {
   const serverToBlock = res.locals.server
 
   await addServerInBlocklist(user.Account.id, serverToBlock.id)
+
+  UserNotificationModel.removeNotificationsOf({
+    id: serverToBlock.id,
+    type: 'server',
+    forUserId: user.id
+  }).catch(err => logger.error('Cannot remove notifications after a server mute.', { err }))
 
   return res.status(204).end()
 }
