@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { durationToString } from '@app/helpers'
-import { Actor } from '@app/shared/shared-main'
+import { Account } from '@app/shared/shared-main'
 import { AbusePredefinedReasonsString } from '@shared/models'
 import { ProcessedAbuse } from './processed-abuse.model'
 
@@ -47,6 +47,6 @@ export class AbuseDetailsComponent {
   }
 
   switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
+    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
   }
 }

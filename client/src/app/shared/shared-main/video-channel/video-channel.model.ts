@@ -1,4 +1,4 @@
-import { VideoChannel as ServerVideoChannel, ViewsPerDate, Account } from '@shared/models'
+import { VideoChannel as ServerVideoChannel, ViewsPerDate, Account, Avatar } from '@shared/models'
 import { Actor } from '../account/actor.model'
 
 export class VideoChannel extends Actor implements ServerVideoChannel {
@@ -17,8 +17,18 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
 
   viewsPerDay?: ViewsPerDate[]
 
+  static GET_ACTOR_AVATAR_URL (actor: object) {
+    return Actor.GET_ACTOR_AVATAR_URL(actor) || this.GET_DEFAULT_AVATAR_URL()
+  }
+
+  static GET_DEFAULT_AVATAR_URL () {
+    return `${window.location.origin}/client/assets/images/default-avatar-videochannel.png`
+  }
+
   constructor (hash: ServerVideoChannel) {
     super(hash)
+
+    this.updateComputedAttributes()
 
     this.displayName = hash.displayName
     this.description = hash.description
@@ -38,5 +48,15 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
       this.ownerBy = Actor.CREATE_BY_STRING(hash.ownerAccount.name, hash.ownerAccount.host)
       this.ownerAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.ownerAccount)
     }
+  }
+
+  updateAvatar (newAvatar: Avatar) {
+    this.avatar = newAvatar
+
+    this.updateComputedAttributes()
+  }
+
+  private updateComputedAttributes () {
+    this.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this)
   }
 }

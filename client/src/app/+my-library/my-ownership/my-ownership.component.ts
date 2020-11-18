@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { Account, Actor, VideoOwnershipService } from '@app/shared/shared-main'
+import { Account, VideoOwnershipService } from '@app/shared/shared-main'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '@shared/models'
 import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
 
@@ -44,7 +44,7 @@ export class MyOwnershipComponent extends RestTable implements OnInit {
   }
 
   switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
+    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
   }
 
   openAcceptModal (videoChangeOwnership: VideoChangeOwnership) {

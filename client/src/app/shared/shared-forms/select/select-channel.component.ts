@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { Actor } from '@app/shared/shared-main/account/actor.model'
+import { VideoChannel } from '@app/shared/shared-main'
 
 export type SelectChannelItem = {
   id: number
@@ -34,7 +34,7 @@ export class SelectChannelComponent implements ControlValueAccessor {
 
   get channels () {
     return this.items.map(c => Object.assign(c, {
-      avatarPath: c.avatarPath ? c.avatarPath : Actor.GET_DEFAULT_AVATAR_URL()
+      avatarPath: c.avatarPath ? c.avatarPath : VideoChannel.GET_DEFAULT_AVATAR_URL()
     }))
   }
 

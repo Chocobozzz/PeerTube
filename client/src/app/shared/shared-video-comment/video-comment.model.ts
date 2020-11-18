@@ -1,5 +1,5 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
-import { Actor } from '@app/shared/shared-main'
+import { Account, Actor } from '@app/shared/shared-main'
 import { Account as AccountInterface, VideoComment as VideoCommentServerModel, VideoCommentAdmin as VideoCommentAdminServerModel } from '@shared/models'
 
 export class VideoComment implements VideoCommentServerModel {
@@ -38,7 +38,7 @@ export class VideoComment implements VideoCommentServerModel {
 
     if (this.account) {
       this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
-      this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+      this.accountAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.account)
 
       const absoluteAPIUrl = getAbsoluteAPIUrl()
       const thisHost = new URL(absoluteAPIUrl).host
@@ -97,7 +97,7 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
 
     if (this.account) {
       this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
-      this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+      this.accountAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.account)
 
       this.account.localUrl = '/accounts/' + this.by
     }

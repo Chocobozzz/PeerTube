@@ -1,4 +1,4 @@
-import { Account as ServerAccount } from '@shared/models/actors/account.model'
+import { Account as ServerAccount, Avatar } from '@shared/models'
 import { Actor } from './actor.model'
 
 export class Account extends Actor implements ServerAccount {
@@ -13,8 +13,18 @@ export class Account extends Actor implements ServerAccount {
 
   userId?: number
 
+  static GET_ACTOR_AVATAR_URL (actor: object) {
+    return Actor.GET_ACTOR_AVATAR_URL(actor) || this.GET_DEFAULT_AVATAR_URL()
+  }
+
+  static GET_DEFAULT_AVATAR_URL () {
+    return `${window.location.origin}/client/assets/images/default-avatar-account.png`
+  }
+
   constructor (hash: ServerAccount) {
     super(hash)
+
+    this.updateComputedAttributes()
 
     this.displayName = hash.displayName
     this.description = hash.description
@@ -26,5 +36,15 @@ export class Account extends Actor implements ServerAccount {
     this.mutedByInstance = false
     this.mutedServerByUser = false
     this.mutedServerByInstance = false
+  }
+
+  updateAvatar (newAvatar: Avatar) {
+    this.avatar = newAvatar
+
+    this.updateComputedAttributes()
+  }
+
+  private updateComputedAttributes () {
+    this.avatarUrl = Account.GET_ACTOR_AVATAR_URL(this)
   }
 }
