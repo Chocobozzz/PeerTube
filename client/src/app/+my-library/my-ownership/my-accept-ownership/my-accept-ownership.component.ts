@@ -1,3 +1,4 @@
+import { switchMap } from 'rxjs/operators'
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { OWNERSHIP_CHANGE_CHANNEL_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
@@ -36,7 +37,8 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.videoChannels = []
 
-    this.videoChannelService.listAccountVideoChannels(this.authService.getUser().account)
+    this.authService.userInformationLoaded
+      .pipe(switchMap(() => this.videoChannelService.listAccountVideoChannels(this.authService.getUser().account)))
       .subscribe(videoChannels => this.videoChannels = videoChannels.data)
 
     this.buildForm({
