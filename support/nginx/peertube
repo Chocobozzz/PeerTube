@@ -1,4 +1,8 @@
 # Minimum Nginx version required:  1.13.0 (released Apr 25, 2017)
+# Please check your Nginx installation features the following modules via 'nginx -V':
+# STANDARD HTTP MODULES: Core, Map, Proxy, Rewrite.
+# OPTIONAL HTTP MODULES: Gzip, Headers, HTTP/2, Log, Real IP, SSL, Thread Pool, Upstream.
+# THIRD PARTY MODULES:   None.
 
 # Uncomment in production to redirect HTTP to HTTPS. Leave commented for docker-compose.
 #server {
@@ -143,11 +147,6 @@ server {
 
   tcp_nopush                on; # send headers in one piece
   tcp_nodelay               on; # don't buffer data sent, good for small data bursts in real time
-
-  open_file_cache           max=2000 inactive=5m; # default is no cache
-  open_file_cache_valid     2m; # default is 60s
-  open_file_cache_min_uses  2; # default is 1
-  open_file_cache_errors    on;
 
   # If you have a small /var/lib partition, it could be interesting to store temp nginx uploads in a different place
   # See https://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_temp_path

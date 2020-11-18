@@ -142,6 +142,8 @@ $ sudo pkg install dehydrated
 
 ### TCP/IP Tuning
 
+A lot of your instance's raw performance is dependent on a properly tuned machine and more specifically, reverse-proxy. We provide support for Nginx and spent a lot of time putting sane defaults in it, but we strongly advise you to follow up with instructions in https://github.com/denji/nginx-tuning as needed.
+
 **On Linux**
 
 ```
