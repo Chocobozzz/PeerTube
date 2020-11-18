@@ -229,9 +229,7 @@ const CONFIG = {
     VIDEOS: {
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },
-        FORCEIPV4: {
-          get ENABLED () { return config.get<boolean>('import.videos.http.forceipv4.enabled') }
-        },
+        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') },
         PROXY: {
           get ENABLED () { return config.get<boolean>('import.videos.http.proxy.enabled') },
           get URL () { return config.get<string>('import.videos.http.proxy.url') }
