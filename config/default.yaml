@@ -285,8 +285,8 @@ import:
   videos:
     http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
       enabled: false
-      # IPv6 sometimes bumps into impossible to debug problems on the YouTube side.
-      forceipV4:
+      # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
+      forceipv4:
         enabled: true
       # You can use an HTTP/HTTPS/SOCKS proxy with youtube-dl
       proxy:
