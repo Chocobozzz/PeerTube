@@ -41,6 +41,7 @@ import {
   uploadVideo,
   uploadVideoAndGetId,
   userLogin,
+  wait,
   waitJobs
 } from '../../../../shared/extra-utils'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -227,6 +228,8 @@ describe('Test video playlists', function () {
       })
 
       await waitJobs(servers)
+      // Processing a playlist by the receiver could be long
+      await wait(3000)
 
       for (const server of servers) {
         const res = await getVideoPlaylistsList(server.url, 0, 5)
@@ -310,6 +313,7 @@ describe('Test video playlists', function () {
       }
 
       await waitJobs(servers)
+      await wait(3000)
 
       for (const server of [ servers[0], servers[1] ]) {
         const res = await getVideoPlaylistsList(server.url, 0, 5)
@@ -451,6 +455,7 @@ describe('Test video playlists', function () {
       })
 
       await waitJobs(servers)
+      await wait(3000)
 
       for (const server of servers) {
         const results = [
