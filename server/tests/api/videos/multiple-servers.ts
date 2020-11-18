@@ -576,7 +576,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should like and dislikes videos on different services', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like')
       await wait(500)
@@ -591,6 +591,7 @@ describe('Test multiple servers', function () {
       await rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[0], 'like')
 
       await waitJobs(servers)
+      await wait(5000)
 
       let baseVideos = null
       for (const server of servers) {
