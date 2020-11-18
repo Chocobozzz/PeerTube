@@ -8,27 +8,27 @@ export class FromNowPipe implements PipeTransform {
     const argDate = new Date(arg)
     const seconds = Math.floor((Date.now() - argDate.getTime()) / 1000)
 
-    let interval = Math.floor(seconds / 31536000)
+    let interval = Math.round(seconds / 31536000)
     if (interval > 1) return $localize`${interval} years ago`
     if (interval === 1) return $localize`${interval} year ago`
 
-    interval = Math.floor(seconds / 2592000)
+    interval = Math.round(seconds / 2592000)
     if (interval > 1) return $localize`${interval} months ago`
     if (interval === 1) return $localize`${interval} month ago`
 
-    interval = Math.floor(seconds / 604800)
+    interval = Math.round(seconds / 604800)
     if (interval > 1) return $localize`${interval} weeks ago`
     if (interval === 1) return $localize`${interval} week ago`
 
-    interval = Math.floor(seconds / 86400)
+    interval = Math.round(seconds / 86400)
     if (interval > 1) return $localize`${interval} days ago`
     if (interval === 1) return $localize`${interval} day ago`
 
-    interval = Math.floor(seconds / 3600)
+    interval = Math.round(seconds / 3600)
     if (interval > 1) return $localize`${interval} hours ago`
     if (interval === 1) return $localize`${interval} hour ago`
 
-    interval = Math.floor(seconds / 60)
+    interval = Math.round(seconds / 60)
     if (interval >= 1) return $localize`${interval} min ago`
 
     return $localize`just now`

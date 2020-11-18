@@ -14,7 +14,7 @@ import {
 } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { GlobalIconName } from '@app/shared/shared-icons'
-import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
+import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@shared/core-utils/miscs/date'
 import { ServerConfig, VideoSortField } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 import { Syndication, Video } from '../shared-main'
@@ -24,9 +24,10 @@ enum GroupDate {
   UNKNOWN = 0,
   TODAY = 1,
   YESTERDAY = 2,
-  LAST_WEEK = 3,
-  LAST_MONTH = 4,
-  OLDER = 5
+  THIS_WEEK = 3,
+  THIS_MONTH = 4,
+  LAST_MONTH = 5,
+  OLDER = 6
 }
 
 @Directive()
@@ -111,7 +112,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       [GroupDate.UNKNOWN]: null,
       [GroupDate.TODAY]: $localize`Today`,
       [GroupDate.YESTERDAY]: $localize`Yesterday`,
-      [GroupDate.LAST_WEEK]: $localize`Last week`,
+      [GroupDate.THIS_WEEK]: $localize`This week`,
+      [GroupDate.THIS_MONTH]: $localize`This month`,
       [GroupDate.LAST_MONTH]: $localize`Last month`,
       [GroupDate.OLDER]: $localize`Older`
     }
@@ -214,46 +216,48 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   buildGroupedDateLabels () {
     let currentGroupedDate: GroupDate = GroupDate.UNKNOWN
 
+    const periods = [
+      {
+        value: GroupDate.TODAY,
+        validator: (d: Date) => isToday(d)
+      },
+      {
+        value: GroupDate.YESTERDAY,
+        validator: (d: Date) => isYesterday(d)
+      },
+      {
+        value: GroupDate.THIS_WEEK,
+        validator: (d: Date) => isLastWeek(d)
+      },
+      {
+        value: GroupDate.THIS_MONTH,
+        validator: (d: Date) => isThisMonth(d)
+      },
+      {
+        value: GroupDate.LAST_MONTH,
+        validator: (d: Date) => isLastMonth(d)
+      },
+      {
+        value: GroupDate.OLDER,
+        validator: () => true
+      }
+    ]
+
     for (const video of this.videos) {
       const publishedDate = video.publishedAt
 
-      if (currentGroupedDate <= GroupDate.TODAY && isToday(publishedDate)) {
-        if (currentGroupedDate === GroupDate.TODAY) continue
+      for (let i = 0; i < periods.length; i++) {
+        const period = periods[i]
 
-        currentGroupedDate = GroupDate.TODAY
-        this.groupedDates[ video.id ] = currentGroupedDate
-        continue
-      }
+        if (currentGroupedDate <= period.value && period.validator(publishedDate)) {
 
-      if (currentGroupedDate <= GroupDate.YESTERDAY && isYesterday(publishedDate)) {
-        if (currentGroupedDate === GroupDate.YESTERDAY) continue
+          if (currentGroupedDate !== period.value) {
+            currentGroupedDate = period.value
+            this.groupedDates[ video.id ] = currentGroupedDate
+          }
 
-        currentGroupedDate = GroupDate.YESTERDAY
-        this.groupedDates[ video.id ] = currentGroupedDate
-        continue
-      }
-
-      if (currentGroupedDate <= GroupDate.LAST_WEEK && isLastWeek(publishedDate)) {
-        if (currentGroupedDate === GroupDate.LAST_WEEK) continue
-
-        currentGroupedDate = GroupDate.LAST_WEEK
-        this.groupedDates[ video.id ] = currentGroupedDate
-        continue
-      }
-
-      if (currentGroupedDate <= GroupDate.LAST_MONTH && isLastMonth(publishedDate)) {
-        if (currentGroupedDate === GroupDate.LAST_MONTH) continue
-
-        currentGroupedDate = GroupDate.LAST_MONTH
-        this.groupedDates[ video.id ] = currentGroupedDate
-        continue
-      }
-
-      if (currentGroupedDate <= GroupDate.OLDER) {
-        if (currentGroupedDate === GroupDate.OLDER) continue
-
-        currentGroupedDate = GroupDate.OLDER
-        this.groupedDates[ video.id ] = currentGroupedDate
+          break
+        }
       }
     }
   }
