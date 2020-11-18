@@ -64,7 +64,7 @@ export const VIDEO_TAGS_ARRAY_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.maxLength(5), arrayTagLengthValidator() ],
   MESSAGES: {
     'maxlength': $localize`A maximum of 5 tags can be used on a video.`,
-    'arrayTagLength': $localize`A tag should be more than 2, and less than 30 characters long.`
+    'arrayTagLength': $localize`A tag should be more than 1 and less than 30 characters long.`
   }
 }
 
@@ -92,7 +92,7 @@ function arrayTagLengthValidator (min = 2, max = 30): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
     const array = control.value as Array<string>
 
-    if (array.every(e => e.length > min && e.length < max)) {
+    if (array.every(e => e.length >= min && e.length <= max)) {
       return null
     }
 
