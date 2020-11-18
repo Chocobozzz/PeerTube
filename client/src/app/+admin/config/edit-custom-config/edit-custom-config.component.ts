@@ -20,6 +20,7 @@ import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@a
 import { FormReactive, FormValidatorService, SelectOptionsItem } from '@app/shared/shared-forms'
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
 import { CustomConfig, ServerConfig } from '@shared/models'
+import { pairwise } from 'rxjs/operators'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -40,6 +41,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
   languageItems: SelectOptionsItem[] = []
   categoryItems: SelectOptionsItem[] = []
+
+  signupAlertMessage: string
 
   private serverConfig: ServerConfig
 
@@ -293,7 +296,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
     this.buildForm(formGroupData)
     this.loadForm()
+
     this.checkTranscodingFields()
+    this.checkSignupField()
   }
 
   ngAfterViewChecked () {
@@ -427,5 +432,28 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
                   webtorrentControl.enable()
                 }
               })
+  }
+
+  private checkSignupField () {
+    const signupControl = this.form.get('signup.enabled')
+
+    signupControl.valueChanges
+      .pipe(pairwise())
+      .subscribe(([ oldValue, newValue ]) => {
+        if (oldValue !== true && newValue === true) {
+          // tslint:disable:max-line-length
+          this.signupAlertMessage = $localize`You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.`
+
+          this.form.patchValue({
+            autoBlacklist: {
+              videos: {
+                ofUsers: {
+                  enabled: true
+                }
+              }
+            }
+          })
+        }
+      })
   }
 }

@@ -351,6 +351,8 @@
                 >
                   <ng-container ngProjectAs="description">
                     <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
+
+                    <div class="alert alert-info alert-signup" *ngIf="signupAlertMessage">{{ signupAlertMessage }}</div>
                   </ng-container>
                   <ng-container ngProjectAs="extra">
                     <my-peertube-checkbox [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }"
