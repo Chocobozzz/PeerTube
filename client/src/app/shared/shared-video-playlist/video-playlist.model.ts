@@ -1,5 +1,5 @@
 import { getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
-import { Actor } from '@app/shared/shared-main'
+import { Account, Actor, VideoChannel } from '@app/shared/shared-main'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   AccountSummary,
@@ -78,12 +78,12 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
     this.ownerAccount = hash.ownerAccount
     this.ownerBy = Actor.CREATE_BY_STRING(hash.ownerAccount.name, hash.ownerAccount.host)
-    this.ownerAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.ownerAccount)
+    this.ownerAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.ownerAccount)
 
     if (hash.videoChannel) {
       this.videoChannel = hash.videoChannel
       this.videoChannelBy = Actor.CREATE_BY_STRING(hash.videoChannel.name, hash.videoChannel.host)
-      this.videoChannelAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.videoChannel)
+      this.videoChannelAvatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this.videoChannel)
     }
 
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)

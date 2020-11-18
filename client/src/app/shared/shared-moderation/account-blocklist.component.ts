@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Directive, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { Actor } from '@app/shared/shared-main'
+import { Account } from '@app/shared/shared-main'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
@@ -31,7 +31,7 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
   }
 
   switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
+    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
   }
 
   unblockAccount (accountBlock: AccountBlock) {

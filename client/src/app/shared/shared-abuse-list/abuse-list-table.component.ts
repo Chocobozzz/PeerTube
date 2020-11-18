@@ -122,7 +122,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   }
 
   switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
+    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
   }
 
   async removeAbuse (abuse: AdminAbuse) {

@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService, UserService } from '@app/core'
-import { Actor, DropdownAction } from '@app/shared/shared-main'
+import { Account, DropdownAction } from '@app/shared/shared-main'
 import { UserBanModalComponent } from '@app/shared/shared-moderation'
 import { ServerConfig, User, UserRole } from '@shared/models'
 
@@ -164,7 +164,7 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
+    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
   }
 
   async unbanUsers (users: User[]) {

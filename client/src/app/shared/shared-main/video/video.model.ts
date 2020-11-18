@@ -12,7 +12,7 @@ import {
   VideoScheduleUpdate,
   VideoState
 } from '@shared/models'
-import { Actor } from '../account/actor.model'
+import { Account, Actor, VideoChannel } from '@app/shared/shared-main'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
@@ -142,8 +142,8 @@ export class Video implements VideoServerModel {
 
     this.byAccount = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
     this.byVideoChannel = Actor.CREATE_BY_STRING(hash.channel.name, hash.channel.host)
-    this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
-    this.videoChannelAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.channel)
+    this.accountAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.account)
+    this.videoChannelAvatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this.channel)
 
     this.category.label = peertubeTranslate(this.category.label, translations)
     this.licence.label = peertubeTranslate(this.licence.label, translations)
