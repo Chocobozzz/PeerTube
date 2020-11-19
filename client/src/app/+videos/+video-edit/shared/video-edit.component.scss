@@ -150,12 +150,11 @@ p-calendar {
   display: block;
 
   ::ng-deep {
-    input,
-    .ui-calendar {
+    .p-calendar {
       width: 100%;
     }
 
-    input {
+    .p-inputtext {
       @include peertube-input-text(100%);
       color: #000;
     }

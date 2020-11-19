@@ -6,7 +6,6 @@ import { BatchDomainsModalComponent } from '@app/shared/shared-moderation'
 import { ActorFollow } from '@shared/models'
 
 @Component({
-  selector: 'my-followers-list',
   templateUrl: './following-list.component.html',
   styleUrls: [ '../follows.component.scss', './following-list.component.scss' ]
 })

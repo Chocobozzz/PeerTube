@@ -5,4 +5,6 @@ my-top-menu-dropdown {
   flex-grow: 1;
 }
 
-@include sub-menu-h1;
+.root {
+  @include sub-menu-h1;
+}

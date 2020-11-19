@@ -11,5 +11,10 @@ p-inputmask {
     &:focus {
       box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
     }
+
+    &:disabled {
+      background: pvar(--mainBackgroundColor);
+      opacity: 0.5;
+    }
   }
 }

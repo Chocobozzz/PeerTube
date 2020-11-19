@@ -5,32 +5,4 @@
   display: flex;
   justify-content: center;
   margin-bottom: 30px;
-
-  p-selectButton {
-    ::ng-deep {
-      .ui-button-text {
-        font-size: 15px;
-        font-weight: 600;
-      }
-
-      .ui-button.ui-state-default {
-        background-color: #f0f0f0;
-        border: 1px solid #f0f0f0;
-      }
-
-      .ui-button.ui-state-active {
-        background-color: pvar(--mainColor);
-        border-color: pvar(--mainColor);
-
-        &:hover {
-          background-color: pvar(--mainHoverColor);
-          border-color: pvar(--mainHoverColor);
-        }
-      }
-
-      .ui-button:not(.ui-state-active).ui-state-focus {
-        box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
-      }
-    }
-  }
 }

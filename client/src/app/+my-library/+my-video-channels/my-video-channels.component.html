@@ -42,7 +42,7 @@
       </div>
 
       <div *ngIf="!isInSmallView" class="w-100 d-flex justify-content-end">
-        <p-chart *ngIf="videoChannelsChartData && videoChannelsChartData[i]" type="line" [data]="videoChannelsChartData[i]" [options]="chartOptions" width="40vw" height="100px"></p-chart>
+        <p-chart *ngIf="chartOptions && videoChannelsChartData && videoChannelsChartData[i]" type="line" [data]="videoChannelsChartData[i]" [options]="chartOptions" width="40vw" height="100px"></p-chart>
       </div>
     </div>
   </div>

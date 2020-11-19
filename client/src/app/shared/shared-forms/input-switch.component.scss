@@ -1,0 +1,44 @@
+@import '_variables';
+@import '_mixins';
+
+input {
+  position: absolute;
+  visibility: hidden;
+
+  & + label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 35px;
+    height: 20px;
+    background: #cccccc;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+    margin: 0;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      background: pvar(--mainBackgroundColor);
+      border-radius: 50%;
+      transition: 0.3s ease-out;
+    }
+
+    &:active:after {
+      width: 40px;
+    }
+  }
+
+  &:checked + label {
+    background: pvar(--mainColor);
+
+    &:after {
+      left: calc(100% - 3px);
+      transform: translateX(-100%);
+    }
+  }
+}

@@ -3,18 +3,19 @@ import { Injectable, NgZone } from '@angular/core'
 import { LiveVideoEventPayload, LiveVideoEventType, UserNotification as UserNotificationServer } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../auth'
+import { io, Socket } from 'socket.io-client'
 
 export type NotificationEvent = 'new' | 'read' | 'read-all'
 
 @Injectable()
 export class PeerTubeSocket {
-  private io: typeof import ('socket.io-client')
+  private io: typeof io
 
   private notificationSubject = new Subject<{ type: NotificationEvent, notification?: UserNotificationServer }>()
   private liveVideosSubject = new Subject<{ type: LiveVideoEventType, payload: LiveVideoEventPayload }>()
 
-  private notificationSocket: SocketIOClient.Socket
-  private liveVideosSocket: SocketIOClient.Socket
+  private notificationSocket: Socket
+  private liveVideosSocket: Socket
 
   constructor (
     private auth: AuthService,
@@ -77,7 +78,7 @@ export class PeerTubeSocket {
   private async importIOIfNeeded () {
     if (this.io) return
 
-    this.io = (await import('socket.io-client') as any).default
+    this.io = (await import('socket.io-client')).io
   }
 
   private dispatchLiveVideoEvent (type: LiveVideoEventType, payload: LiveVideoEventPayload) {

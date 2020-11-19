@@ -13,7 +13,7 @@ type Metadata = {
   levels: Hlsjs.Level[]
 }
 
-type CustomAudioTrack = Hlsjs.AudioTrack & { name?: string, lang?: string }
+type CustomAudioTrack = Hlsjs.HlsAudioTrack & { name?: string, lang?: string }
 
 const registerSourceHandler = function (vjs: typeof videojs) {
   if (!Hlsjs.isSupported()) {

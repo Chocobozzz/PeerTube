@@ -47,7 +47,11 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
   ngOnInit () {
     super.ngOnInit()
 
-    this.videosHistoryEnabled = this.authService.getUser().videosHistoryEnabled
+    this.authService.userInformationLoaded
+      .subscribe(() => {
+        this.videosHistoryEnabled = this.authService.getUser().videosHistoryEnabled
+      })
+
   }
 
   ngOnDestroy () {

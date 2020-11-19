@@ -11,7 +11,7 @@ import { PluginService } from '@app/core/plugins/plugin.service'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getShortLocale, is18nPath } from '@shared/core-utils/i18n'
 import { BroadcastMessageLevel, ServerConfig, UserRole } from '@shared/models'
@@ -54,8 +54,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     private location: PlatformLocation,
     private modalService: NgbModal,
     private markdownService: MarkdownService,
+    private ngbConfig: NgbConfig,
     public menu: MenuService
-  ) { }
+  ) {
+    this.ngbConfig.animation = false
+  }
 
   get instanceName () {
     return this.serverConfig.instance.name

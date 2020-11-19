@@ -1,13 +1,14 @@
 
 import { InputMaskModule } from 'primeng/inputmask'
-import { InputSwitchModule } from 'primeng/inputswitch'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgSelectModule } from '@ng-select/ng-select'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
+import { DynamicFormFieldComponent } from './dynamic-form-field.component'
 import { FormValidatorService } from './form-validator.service'
 import { InputReadonlyCopyComponent } from './input-readonly-copy.component'
+import { InputSwitchComponent } from './input-switch.component'
 import { MarkdownTextareaComponent } from './markdown-textarea.component'
 import { PeertubeCheckboxComponent } from './peertube-checkbox.component'
 import { PreviewUploadComponent } from './preview-upload.component'
@@ -15,7 +16,6 @@ import { ReactiveFileComponent } from './reactive-file.component'
 import { SelectChannelComponent, SelectCheckboxComponent, SelectOptionsComponent, SelectTagsComponent } from './select'
 import { TextareaAutoResizeDirective } from './textarea-autoresize.directive'
 import { TimestampInputComponent } from './timestamp-input.component'
-import { DynamicFormFieldComponent } from './dynamic-form-field.component'
 
 @NgModule({
   imports: [
@@ -23,7 +23,6 @@ import { DynamicFormFieldComponent } from './dynamic-form-field.component'
     ReactiveFormsModule,
 
     InputMaskModule,
-    InputSwitchModule,
     NgSelectModule,
 
     SharedMainModule,
@@ -39,6 +38,8 @@ import { DynamicFormFieldComponent } from './dynamic-form-field.component'
     TextareaAutoResizeDirective,
     TimestampInputComponent,
 
+    InputSwitchComponent,
+
     SelectChannelComponent,
     SelectOptionsComponent,
     SelectTagsComponent,
@@ -52,7 +53,6 @@ import { DynamicFormFieldComponent } from './dynamic-form-field.component'
     ReactiveFormsModule,
 
     InputMaskModule,
-    InputSwitchModule,
     NgSelectModule,
 
     InputReadonlyCopyComponent,
@@ -62,6 +62,8 @@ import { DynamicFormFieldComponent } from './dynamic-form-field.component'
     ReactiveFileComponent,
     TextareaAutoResizeDirective,
     TimestampInputComponent,
+
+    InputSwitchComponent,
 
     SelectChannelComponent,
     SelectOptionsComponent,

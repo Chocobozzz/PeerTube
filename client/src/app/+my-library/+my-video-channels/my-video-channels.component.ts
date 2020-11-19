@@ -21,6 +21,8 @@ export class MyVideoChannelsComponent implements OnInit {
   channelsSearch: string
   channelsSearchChanged = new Subject<string>()
 
+  chartOptions: any
+
   private user: User
 
   constructor (
@@ -45,55 +47,6 @@ export class MyVideoChannelsComponent implements OnInit {
 
   get isInSmallView () {
     return this.screenService.isInSmallView()
-  }
-
-  get chartOptions () {
-    return {
-      legend: {
-        display: false
-      },
-      scales: {
-        xAxes: [{
-          display: false
-        }],
-        yAxes: [{
-          display: false,
-          ticks: {
-            min: Math.max(0, this.videoChannelsMinimumDailyViews - (3 * this.videoChannelsMaximumDailyViews / 100)),
-            max: Math.max(1, this.videoChannelsMaximumDailyViews)
-          }
-        }]
-      },
-      layout: {
-        padding: {
-          left: 15,
-          right: 15,
-          top: 10,
-          bottom: 0
-        }
-      },
-      elements: {
-        point: {
-          radius: 0
-        }
-      },
-      tooltips: {
-        mode: 'index',
-        intersect: false,
-        custom: function (tooltip: any) {
-          if (!tooltip) return
-          // disable displaying the color box
-          tooltip.displayColors = false
-        },
-        callbacks: {
-          label: (tooltip: any, data: any) => `${tooltip.value} views`
-        }
-      },
-      hover: {
-        mode: 'index',
-        intersect: false
-      }
-    }
   }
 
   resetSearch () {
@@ -159,6 +112,7 @@ channel with the same name (${videoChannel.name})!`,
               day => day.views
             ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
           )
+
           this.videoChannelsMaximumDailyViews = max(
             // compute local maximum daily views for each channel, by their "views" attribute
             this.videoChannels.map(v => maxBy(
@@ -166,6 +120,57 @@ channel with the same name (${videoChannel.name})!`,
               day => day.views
             ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
           )
+
+          this.buildChartOptions()
         })
+  }
+
+  private buildChartOptions () {
+    this.chartOptions = {
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          display: false
+        }],
+        yAxes: [{
+          display: false,
+          ticks: {
+            min: Math.max(0, this.videoChannelsMinimumDailyViews - (3 * this.videoChannelsMaximumDailyViews / 100)),
+            max: Math.max(1, this.videoChannelsMaximumDailyViews)
+          }
+        }]
+      },
+      layout: {
+        padding: {
+          left: 15,
+          right: 15,
+          top: 10,
+          bottom: 0
+        }
+      },
+      elements: {
+        point: {
+          radius: 0
+        }
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+        custom: function (tooltip: any) {
+          if (!tooltip) return
+          // disable displaying the color box
+          tooltip.displayColors = false
+        },
+        callbacks: {
+          label: (tooltip: any, data: any) => `${tooltip.value} views`
+        }
+      },
+      hover: {
+        mode: 'index',
+        intersect: false
+      }
+    }
   }
 }

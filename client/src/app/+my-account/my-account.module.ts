@@ -1,5 +1,4 @@
 import { AutoCompleteModule } from 'primeng/autocomplete'
-import { InputSwitchModule } from 'primeng/inputswitch'
 import { TableModule } from 'primeng/table'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { NgModule } from '@angular/core'
@@ -29,7 +28,6 @@ import { MyAccountComponent } from './my-account.component'
 
     AutoCompleteModule,
     TableModule,
-    InputSwitchModule,
     DragDropModule,
 
     SharedMainModule,

@@ -54,7 +54,8 @@
               <a ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
                 <my-global-icon iconName="p2p" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Help share videos</ng-container>
-                <input type="checkbox" [checked]="user.webTorrentEnabled"/><label class="ml-auto" for="switch">Toggle p2p</label>
+
+                <my-input-switch class="ml-auto" [checked]="user.webTorrentEnabled"></my-input-switch>
               </a>
 
               <div class="dropdown-divider"></div>
