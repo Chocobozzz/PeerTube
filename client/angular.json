@@ -168,7 +168,11 @@
               "@babel/runtime/helpers/possibleConstructorReturn",
               "@babel/runtime/helpers/inherits",
               "@babel/runtime/helpers/construct",
-              "@videojs/xhr"
+              "@videojs/xhr",
+              "htmlparser2",
+              "url",
+              "parse-srcset",
+              "postcss"
             ],
             "scripts": []
           },

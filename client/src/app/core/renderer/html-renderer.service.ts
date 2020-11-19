@@ -21,10 +21,12 @@ export class HtmlRendererService {
   }
 
   async toSafeHtml (text: string) {
-    await this.loadSanitizeHtml()
+    const [ html ] = await Promise.all([
+      // Convert possible markdown to html
+      this.linkifier.linkify(text),
 
-    // Convert possible markdown to html
-    const html = this.linkifier.linkify(text)
+      this.loadSanitizeHtml()
+    ])
 
     return this.sanitizeHtml(html, SANITIZE_OPTIONS)
   }
