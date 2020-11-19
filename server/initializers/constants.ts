@@ -291,7 +291,7 @@ const CONSTRAINTS_FIELDS = {
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
     URL: { min: 3, max: 2000 }, // Length
     AVATAR: {
-      EXTNAME: [ '.png', '.jpeg', '.jpg' ],
+      EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif' ],
       FILE_SIZE: {
         max: 2 * 1024 * 1024 // 2MB
       }

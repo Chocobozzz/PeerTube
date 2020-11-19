@@ -1,4 +1,5 @@
 import 'multer'
+import { move } from 'fs-extra'
 import { sendUpdateActor } from './activitypub/send'
 import { AVATARS_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
 import { updateActorAvatarInstance } from './activitypub/actor'
@@ -20,7 +21,13 @@ async function updateActorAvatarFile (
   const extension = extname(avatarPhysicalFile.filename)
   const avatarName = uuidv4() + extension
   const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
-  await processImage(avatarPhysicalFile.path, destination, AVATARS_SIZE)
+
+  // For gif do not resize, just move
+  if (extension === '.gif') {
+    await move(avatarPhysicalFile.path, destination)
+  } else {
+    await processImage(avatarPhysicalFile.path, destination, AVATARS_SIZE)
+  }
 
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async t => {
