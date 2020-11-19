@@ -49,6 +49,8 @@ export class MarkdownService {
     completeMarkdownIt: { rules: COMPLETE_RULES, html: true }
   }
 
+  private emojiModule: any
+
   constructor (private htmlRenderer: HtmlRendererService) {}
 
   textMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
@@ -83,9 +85,11 @@ export class MarkdownService {
       this.markdownParsers[ name ] = await this.createMarkdownIt(config)
 
       if (withEmoji) {
-        // TODO: write types
-        const emoji = require('markdown-it-emoji/light')
-        this.markdownParsers[ name ].use(emoji)
+        if (!this.emojiModule) {
+          this.emojiModule = (await import('markdown-it-emoji/light')).default
+        }
+
+        this.markdownParsers[ name ].use(this.emojiModule)
       }
     }
 
