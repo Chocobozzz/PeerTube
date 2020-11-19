@@ -1,8 +1,8 @@
 import * as express from 'express'
-import { logger } from '../helpers/logger'
 import { Socket } from 'socket.io'
-import { getAccessToken } from '../lib/oauth-model'
 import { oAuthServer } from '@server/lib/auth'
+import { logger } from '../helpers/logger'
+import { getAccessToken } from '../lib/oauth-model'
 
 function authenticate (req: express.Request, res: express.Response, next: express.NextFunction, authenticateInQuery = false) {
   const options = authenticateInQuery ? { allowBearerTokensInQueryString: true } : {}
@@ -24,7 +24,7 @@ function authenticate (req: express.Request, res: express.Response, next: expres
 }
 
 function authenticateSocket (socket: Socket, next: (err?: any) => void) {
-  const accessToken = socket.handshake.query.accessToken
+  const accessToken = socket.handshake.query['accessToken']
 
   logger.debug('Checking socket access token %s.', accessToken)
 
@@ -38,7 +38,7 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
         return next(new Error('Invalid access token.'))
       }
 
-      socket.handshake.query.user = tokenDB.User
+      socket.handshake.query['user'] = tokenDB.User
 
       return next()
     })

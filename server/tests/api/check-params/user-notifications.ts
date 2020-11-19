@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import * as io from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 import {
   cleanupTests,
@@ -235,11 +235,11 @@ describe('Test user notifications API validators', function () {
   })
 
   describe('When connecting to my notification socket', function () {
+
     it('Should fail with no token', function (next) {
       const socket = io(`http://localhost:${server.port}/user-notifications`, { reconnection: false })
 
-      socket.on('error', function () {
-        socket.removeListener('error', this)
+      socket.once('connect_error', function () {
         socket.disconnect()
         next()
       })
@@ -256,8 +256,7 @@ describe('Test user notifications API validators', function () {
         reconnection: false
       })
 
-      socket.on('error', function () {
-        socket.removeListener('error', this)
+      socket.once('connect_error', function () {
         socket.disconnect()
         next()
       })
@@ -278,10 +277,9 @@ describe('Test user notifications API validators', function () {
         next(new Error('Error in connection: ' + err))
       }
 
-      socket.on('error', errorListener)
+      socket.on('connect_error', errorListener)
 
-      socket.on('connect', async () => {
-        socket.removeListener('error', errorListener)
+      socket.once('connect', async () => {
         socket.disconnect()
 
         await wait(500)

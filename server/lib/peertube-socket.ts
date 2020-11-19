@@ -1,4 +1,3 @@
-import { Socket } from 'dgram'
 import { Server } from 'http'
 import * as SocketIO from 'socket.io'
 import { MVideo } from '@server/types/models'
@@ -18,7 +17,7 @@ class PeerTubeSocket {
   private constructor () {}
 
   init (server: Server) {
-    const io = SocketIO(server)
+    const io = new SocketIO.Server(server)
 
     io.of('/user-notifications')
       .use(authenticateSocket)
