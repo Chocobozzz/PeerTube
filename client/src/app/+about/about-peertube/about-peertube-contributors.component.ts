@@ -9,7 +9,7 @@ import { MarkdownService } from '@app/core'
 export class AboutPeertubeContributorsComponent implements OnInit {
   creditsHtml: string
 
-  private markdown = require('raw-loader!../../../../../CREDITS.md')
+  private markdown = require('raw-loader!../../../../../CREDITS.md').default
 
   constructor (private markdownService: MarkdownService) { }
 

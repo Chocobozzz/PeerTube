@@ -4,7 +4,6 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
-const PurifyCSSPlugin = require('purifycss-webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = function () {
@@ -115,17 +114,6 @@ module.exports = function () {
         filename: process.env.ANALYZE_BUNDLE === 'true'
           ? '[name].css'
           : '[name].[hash].css'
-      }),
-
-      new PurifyCSSPlugin({
-        paths: [
-          helpers.root('src/standalone/videos/embed.ts'),
-          helpers.root('src/standalone/videos/test-embed.html')
-        ],
-        purifyOptions: {
-          minify: true,
-          whitelist: [ '*vjs*', '*video-js*' ]
-        }
       }),
 
       new HtmlWebpackPlugin({
