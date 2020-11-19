@@ -1,4 +1,4 @@
-<div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
+<div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">No results.</div>
 
 <div myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()" class="videos">
   <div class="video" *ngFor="let video of videos; let i = index; trackBy: videoById">
