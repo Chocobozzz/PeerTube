@@ -2147,7 +2147,7 @@
       </trans-unit>
       <trans-unit id="d4717113115ca7106a354a5aac54d1c0126261d9" datatype="html">
         <source>NSFW</source>
-        <target state="new">NSFW</target>
+        <target state="translated">NSFW</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">84</context>
@@ -2703,7 +2703,7 @@
       </trans-unit>
       <trans-unit id="7427986413651551775" datatype="html">
         <source>Video comments</source>
-        <target state="new">Video comments</target>
+        <target state="translated">Comentarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/admin.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -2816,7 +2816,7 @@
       </trans-unit>
       <trans-unit id="8c9050c6851a9df66791ce33bc05d6daff294921" datatype="html">
         <source>Commented video</source>
-        <target state="new">Commented video</target>
+        <target state="translated">Vídeo comentado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">86</context>
@@ -2824,7 +2824,7 @@
       </trans-unit>
       <trans-unit id="0b8869949ffd1265a194490cd96c74c4ad7c234a" datatype="html">
         <source>No comments found matching current filters.</source>
-        <target state="new">No comments found matching current filters.</target>
+        <target state="translated">Sen comentarios que cumpran cos filtros actuais.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">111</context>
@@ -2832,7 +2832,7 @@
       </trans-unit>
       <trans-unit id="fc9202e5b01bd5ec813af78b5d51d1204ab0777e" datatype="html">
         <source>No comments found.</source>
-        <target state="new">No comments found.</target>
+        <target state="translated">Non hai comentarios.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">112</context>
@@ -2940,7 +2940,7 @@
       </trans-unit>
       <trans-unit id="5a5d7ee2acbfa9c91ab7f41d26bda9ff0cafe42f" datatype="html">
         <source>Comment</source>
-        <target state="new">Comment</target>
+        <target state="translated">Comentar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">49</context>
@@ -3212,7 +3212,7 @@
       </trans-unit>
       <trans-unit id="8949443215142664126" datatype="html">
         <source>Delete this comment</source>
-        <target state="new">Delete this comment</target>
+        <target state="translated">Elimina este comentario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -3220,7 +3220,7 @@
       </trans-unit>
       <trans-unit id="3327751240218085797" datatype="html">
         <source>Delete all comments of this account</source>
-        <target state="new">Delete all comments of this account</target>
+        <target state="translated">Elimina tódolos comentarios desta conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -3228,7 +3228,7 @@
       </trans-unit>
       <trans-unit id="2850960459131251840" datatype="html">
         <source>Comments are deleted after a few minutes</source>
-        <target state="new">Comments are deleted after a few minutes</target>
+        <target state="translated">Os comentarios son eliminados após poucos minutos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -3236,7 +3236,7 @@
       </trans-unit>
       <trans-unit id="379090446060940062" datatype="html">
         <source>Do you really want to delete all comments of <x id="PH"/>?</source>
-        <target state="new">Do you really want to delete all comments of <x id="PH"/>?</target>
+        <target state="translated">Queres eliminar tódolos comentarios de <x id="PH"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -3244,7 +3244,7 @@
       </trans-unit>
       <trans-unit id="4539246224625965241" datatype="html">
         <source>Comments of <x id="PH"/> will be deleted in a few minutes</source>
-        <target state="new">Comments of <x id="PH"/> will be deleted in a few minutes</target>
+        <target state="translated">Os comentarios de <x id="PH"/> eliminaranse nuns minutos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -3252,7 +3252,7 @@
       </trans-unit>
       <trans-unit id="5b8782215fc5ae41cbbb41f92509192b66ee1246" datatype="html">
         <source>Video comments</source>
-        <target state="new">Video comments</target>
+        <target state="translated">Comentarios do vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3260,7 +3260,7 @@
       </trans-unit>
       <trans-unit id="e92e448d39ae2bbd73d8f44d2f167019fe45a622" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> comments</source>
-        <target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> comments</target>
+        <target state="translated">Mostrando <x id="INTERPOLATION"/> a <x id="INTERPOLATION_1"/> de <x id="INTERPOLATION_2"/> comentarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">14</context>
@@ -3268,7 +3268,7 @@
       </trans-unit>
       <trans-unit id="ebdc173a9acc638a634724d31684849ce15778c8" datatype="html">
         <source>Advanced comments filters</source>
-        <target state="new">Advanced comments filters</target>
+        <target state="translated">Filtros avanzados para comentarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">27</context>
@@ -3276,7 +3276,7 @@
       </trans-unit>
       <trans-unit id="1f689bd2c3f3cfac3c800799545786e56aa5156d" datatype="html">
         <source>Local comments</source>
-        <target state="new">Local comments</target>
+        <target state="translated">Comentarios locais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">28</context>
@@ -3284,7 +3284,7 @@
       </trans-unit>
       <trans-unit id="3c770e01673ea017697b8c8a4feb63aefdd1f999" datatype="html">
         <source>Remote comments</source>
-        <target state="new">Remote comments</target>
+        <target state="translated">Comentarios remotos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">29</context>
@@ -4501,7 +4501,7 @@
       </trans-unit>
       <trans-unit id="7040375308762081154" datatype="html">
         <source>My video channels</source>
-        <target state="new">My video channels</target>
+        <target state="translated">As miñas canles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -4509,7 +4509,7 @@
       </trans-unit>
       <trans-unit id="7418836785553125957" datatype="html">
         <source>Create a new video channel</source>
-        <target state="new">Create a new video channel</target>
+        <target state="translated">Crear unha nova canle de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context>
           <context context-type="linenumber">22</context>
@@ -5086,7 +5086,7 @@
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
         <source>Link copied</source>
-        <target state="new">Link copied</target>
+        <target state="translated">Ligazón copiada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -5274,7 +5274,7 @@
       </trans-unit>
       <trans-unit id="e4965e47ed9cd6553d9a87a5112871a2dcbbe132" datatype="html">
         <source>Display all videos (private, unlisted or not yet published)</source>
-        <target state="new">Display all videos (private, unlisted or not yet published)</target>
+        <target state="translated">Mostra todos os vídeos (privado, non listados ou aínda non publicados)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/abstract-video-list.html</context>
           <context context-type="linenumber">24</context>
@@ -5419,7 +5419,7 @@
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="new">You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</target>
+        <target state="translated">Activaches o rexistro: activamos automáticamente a opción de "Bloquear os novos vídeos automáticamente" na sección "Vídeos" xusto abaixo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">445</context>
@@ -5997,7 +5997,7 @@
       </trans-unit>
       <trans-unit id="7098180453085889026" datatype="html">
         <source>Blocked videos</source>
-        <target state="new">Blocked videos</target>
+        <target state="translated">Vídeos bloqueados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">69</context>
@@ -6460,7 +6460,7 @@
       </trans-unit>
       <trans-unit id="73022f1676784c4f9b8cdbb322e52b02ccc800b7" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">Cambios na propiedade</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">16</context>
@@ -6536,7 +6536,7 @@
       </trans-unit>
       <trans-unit id="5983006734882925930" datatype="html">
         <source>My video history</source>
-        <target state="new">My video history</target>
+        <target state="translated">Historial de vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-library/my-library-routing.module.ts</context>
           <context context-type="linenumber">118</context>
@@ -6544,7 +6544,7 @@
       </trans-unit>
       <trans-unit id="8181077408762380407" datatype="html">
         <source>Channels</source>
-        <target state="new">Channels</target>
+        <target state="translated">Canles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-library/my-library.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -6552,7 +6552,7 @@
       </trans-unit>
       <trans-unit id="8936704404804793618" datatype="html">
         <source>Videos</source>
-        <target state="new">Videos</target>
+        <target state="translated">Vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-library/my-library.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -6560,7 +6560,7 @@
       </trans-unit>
       <trans-unit id="1823843876735462104" datatype="html">
         <source>Playlists</source>
-        <target state="new">Playlists</target>
+        <target state="translated">Listaxes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-library/my-library.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -6706,7 +6706,7 @@
       </trans-unit>
       <trans-unit id="4ecb8d97ebb2f37c5b410afccbb78003f75ac35c" datatype="html">
         <source>ON <x id="INTERPOLATION"/></source>
-        <target state="new">ON <x id="INTERPOLATION"/></target>
+        <target state="translated">EN <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/menu/menu.component.html</context>
           <context context-type="linenumber">124</context>
@@ -6754,7 +6754,7 @@
       </trans-unit>
       <trans-unit id="5073473933031004097" datatype="html">
         <source>This week</source>
-        <target state="new">This week</target>
+        <target state="translated">Nesta semana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/abstract-video-list.ts</context>
           <context context-type="linenumber">115</context>
@@ -6762,7 +6762,7 @@
       </trans-unit>
       <trans-unit id="842657237693374355" datatype="html">
         <source>This month</source>
-        <target state="new">This month</target>
+        <target state="translated">Neste mes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/abstract-video-list.ts</context>
           <context context-type="linenumber">116</context>
@@ -6913,7 +6913,7 @@
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
         <source>Abuse reports</source>
-        <target state="new">Abuse reports</target>
+        <target state="translated">Denuncias por abuso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -6921,7 +6921,7 @@
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
-        <target state="new">Settings</target>
+        <target state="translated">Axustes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -8465,7 +8465,7 @@
       </trans-unit>
       <trans-unit id="a2adc8b3bb63e13ff7adf65469f356b692bd294b" datatype="html">
         <source>LIVE ENDED</source>
-        <target state="new">LIVE ENDED</target>
+        <target state="translated">REMATOU O DIRECTO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">32</context>
@@ -8962,7 +8962,7 @@
       </trans-unit>
       <trans-unit id="186236568870281953" datatype="html">
         <source>History</source>
-        <target state="new">History</target>
+        <target state="translated">Historial</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+my-library/my-library.component.ts</context>
           <context context-type="linenumber">71</context>
