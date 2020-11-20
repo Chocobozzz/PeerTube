@@ -501,7 +501,7 @@ describe('Test video transcoding', function () {
 
     const resolutions = [ 240, 360, 480, 720, 1080 ]
     for (const r of resolutions) {
-      expect(await getServerFileSize(servers[1], `videos/${videoUUID}-${r}.mp4`)).to.be.below(43)
+      expect(await getServerFileSize(servers[1], `videos/${videoUUID}-${r}.mp4`)).to.be.below(60000)
     }
   })
 
