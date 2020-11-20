@@ -14,18 +14,17 @@
       *ngFor="let playlist of videoPlaylists"
       class="playlist dropdown-item" [ngClass]="{ 'has-optional-row': playlist.optionalRowDisplayed }"
     >
-      <div class="primary-row">
+      <div class="primary-row" (click)="toggleMainPlaylist($event, playlist)">
         <my-peertube-checkbox
           [disabled]="isPresentMultipleTimes(playlist) || playlist.optionalRowDisplayed" [inputName]="getPrimaryInputName(playlist)"
           [ngModel]="isPrimaryCheckboxChecked(playlist)" [onPushWorkaround]="true"
-          (click)="toggleMainPlaylist($event, playlist)"
         ></my-peertube-checkbox>
 
-        <label class="display-name" (click)="toggleMainPlaylist($event, playlist)">
+        <label class="display-name">
           {{ playlist.displayName }}
         </label>
 
-        <div class="optional-row-icon" *ngIf="isPrimaryCheckboxChecked(playlist)" (click)="toggleOptionalRow(playlist)">
+        <div class="optional-row-icon" *ngIf="isPrimaryCheckboxChecked(playlist)" (click)="$event.stopPropagation(); toggleOptionalRow(playlist)">
           <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
         </div>
       </div>

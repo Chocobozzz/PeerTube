@@ -37,7 +37,15 @@ $timestamp-margin-right: 10px;
 }
 
 .playlist {
-  padding: 8px 10px 8px 24px;
+  padding: 0;
+
+  > .primary-row {
+    padding: 8px 10px 8px 24px;
+  }
+
+  > .optional-rows {
+    padding-left: 24px;
+  }
 
   &.has-optional-row:hover {
     background-color: inherit;
