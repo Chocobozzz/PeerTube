@@ -4,13 +4,8 @@ import { FfmpegCommand } from 'fluent-ffmpeg'
 import { ensureDir, stat } from 'fs-extra'
 import { basename } from 'path'
 import { isTestInstance } from '@server/helpers/core-utils'
-import {
-  computeResolutionsToTranscode,
-  getVideoFileFPS,
-  getVideoFileResolution,
-  runLiveMuxing,
-  runLiveTranscoding
-} from '@server/helpers/ffmpeg-utils'
+import { runLiveMuxing, runLiveTranscoding } from '@server/helpers/ffmpeg-utils'
+import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { logger } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME, WEBSERVER } from '@server/initializers/constants'

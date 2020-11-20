@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import { join } from 'path'
 import { CONFIG } from '../../initializers/config'
-import { getVideoFileResolution } from '../../helpers/ffmpeg-utils'
+import { getVideoFileResolution } from '../../helpers/ffprobe-utils'
 import { readdir, rename } from 'fs-extra'
 
 function up (utils: {

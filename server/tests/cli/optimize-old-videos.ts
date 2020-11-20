@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { getMaxBitrate, Video, VideoDetails, VideoResolution } from '../../../shared/models/videos'
+import { join } from 'path'
 import {
   cleanupTests,
   doubleFollow,
@@ -20,9 +20,9 @@ import {
   wait
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffmpeg-utils'
+import { getMaxBitrate, Video, VideoDetails, VideoResolution } from '../../../shared/models/videos'
+import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffprobe-utils'
 import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
-import { join } from 'path'
 
 const expect = chai.expect
 

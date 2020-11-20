@@ -1,15 +1,15 @@
 import * as Bull from 'bull'
-import { logger } from '../../../helpers/logger'
-import { VideoModel } from '../../../models/video/video'
-import { publishNewResolutionIfNeeded } from './video-transcoding'
-import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { copy, stat } from 'fs-extra'
-import { VideoFileModel } from '../../../models/video/video-file'
 import { extname } from 'path'
-import { MVideoFile, MVideoWithFile } from '@server/types/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getVideoFilePath } from '@server/lib/video-paths'
+import { MVideoFile, MVideoWithFile } from '@server/types/models'
 import { VideoFileImportPayload } from '@shared/models'
+import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
+import { logger } from '../../../helpers/logger'
+import { VideoModel } from '../../../models/video/video'
+import { VideoFileModel } from '../../../models/video/video-file'
+import { publishNewResolutionIfNeeded } from './video-transcoding'
 
 async function processVideoFileImport (job: Bull.Job) {
   const payload = job.data as VideoFileImportPayload

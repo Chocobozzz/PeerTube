@@ -2,7 +2,7 @@ import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
 import { VIDEO_TRANSCODING_FPS } from '../server/initializers/constants'
-import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../server/helpers/ffmpeg-utils'
+import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../server/helpers/ffprobe-utils'
 import { getMaxBitrate } from '../shared/models/videos'
 import { VideoModel } from '../server/models/video/video'
 import { optimizeOriginalVideofile } from '../server/lib/video-transcoding'
