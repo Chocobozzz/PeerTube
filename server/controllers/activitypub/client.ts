@@ -1,8 +1,7 @@
 import * as cors from 'cors'
 import * as express from 'express'
-import { getRateUrl } from '@server/lib/activitypub/video-rates'
 import { getServerActor } from '@server/models/application/application'
-import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models'
+import { MAccountId, MActorId, MChannelId, MVideoId, MVideoUrl } from '@server/types/models'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
@@ -12,10 +11,10 @@ import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/act
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 import {
-  getVideoCommentsActivityPubUrl,
-  getVideoDislikesActivityPubUrl,
-  getVideoLikesActivityPubUrl,
-  getVideoSharesActivityPubUrl
+  getLocalVideoCommentsActivityPubUrl,
+  getLocalVideoDislikesActivityPubUrl,
+  getLocalVideoLikesActivityPubUrl,
+  getLocalVideoSharesActivityPubUrl
 } from '../../lib/activitypub/url'
 import {
   asyncMiddleware,
@@ -212,10 +211,9 @@ function getAccountVideoRateFactory (rateType: VideoRateType) {
     const accountVideoRate = res.locals.accountVideoRate
 
     const byActor = accountVideoRate.Account.Actor
-    const url = getRateUrl(rateType, byActor, accountVideoRate.Video)
     const APObject = rateType === 'like'
-      ? buildLikeActivity(url, byActor, accountVideoRate.Video)
-      : buildDislikeActivity(url, byActor, accountVideoRate.Video)
+      ? buildLikeActivity(accountVideoRate.url, byActor, accountVideoRate.Video)
+      : buildDislikeActivity(accountVideoRate.url, byActor, accountVideoRate.Video)
 
     return activityPubResponse(activityPubContextify(APObject), res)
   }
@@ -225,7 +223,7 @@ async function videoController (req: express.Request, res: express.Response) {
   // We need more attributes
   const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(res.locals.onlyVideoWithRights.id)
 
-  if (video.url.startsWith(WEBSERVER.URL) === false) return res.redirect(video.url)
+  if (redirectIfNotOwned(video.url, res)) return
 
   // We need captions to render AP object
   const captions = await VideoCaptionModel.listVideoCaptions(video.id)
@@ -245,7 +243,7 @@ async function videoController (req: express.Request, res: express.Response) {
 async function videoAnnounceController (req: express.Request, res: express.Response) {
   const share = res.locals.videoShare
 
-  if (share.url.startsWith(WEBSERVER.URL) === false) return res.redirect(share.url)
+  if (redirectIfNotOwned(share.url, res)) return
 
   const { activity } = await buildAnnounceWithVideoAudience(share.Actor, share, res.locals.videoAll, undefined)
 
@@ -255,6 +253,8 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 async function videoAnnouncesController (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
 
+  if (redirectIfNotOwned(video.url, res)) return
+
   const handler = async (start: number, count: number) => {
     const result = await VideoShareModel.listAndCountByVideoId(video.id, start, count)
     return {
@@ -262,27 +262,35 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
       data: result.rows.map(r => r.url)
     }
   }
-  const json = await activityPubCollectionPagination(getVideoSharesActivityPubUrl(video), handler, req.query.page)
+  const json = await activityPubCollectionPagination(getLocalVideoSharesActivityPubUrl(video), handler, req.query.page)
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoLikesController (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
-  const json = await videoRates(req, 'like', video, getVideoLikesActivityPubUrl(video))
+
+  if (redirectIfNotOwned(video.url, res)) return
+
+  const json = await videoRates(req, 'like', video, getLocalVideoLikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
-  const json = await videoRates(req, 'dislike', video, getVideoDislikesActivityPubUrl(video))
+
+  if (redirectIfNotOwned(video.url, res)) return
+
+  const json = await videoRates(req, 'dislike', video, getLocalVideoDislikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
+
+  if (redirectIfNotOwned(video.url, res)) return
 
   const handler = async (start: number, count: number) => {
     const result = await VideoCommentModel.listAndCountByVideoForAP(video, start, count)
@@ -291,7 +299,7 @@ async function videoCommentsController (req: express.Request, res: express.Respo
       data: result.rows.map(r => r.url)
     }
   }
-  const json = await activityPubCollectionPagination(getVideoCommentsActivityPubUrl(video), handler, req.query.page)
+  const json = await activityPubCollectionPagination(getLocalVideoCommentsActivityPubUrl(video), handler, req.query.page)
 
   return activityPubResponse(activityPubContextify(json), res)
 }
@@ -319,7 +327,7 @@ async function videoChannelFollowingController (req: express.Request, res: expre
 async function videoCommentController (req: express.Request, res: express.Response) {
   const videoComment = res.locals.videoCommentFull
 
-  if (videoComment.url.startsWith(WEBSERVER.URL) === false) return res.redirect(videoComment.url)
+  if (redirectIfNotOwned(videoComment.url, res)) return
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
   const isPublic = true // Comments are always public
@@ -340,7 +348,8 @@ async function videoCommentController (req: express.Request, res: express.Respon
 
 async function videoRedundancyController (req: express.Request, res: express.Response) {
   const videoRedundancy = res.locals.videoRedundancy
-  if (videoRedundancy.url.startsWith(WEBSERVER.URL) === false) return res.redirect(videoRedundancy.url)
+
+  if (redirectIfNotOwned(videoRedundancy.url, res)) return
 
   const serverActor = await getServerActor()
 
@@ -358,6 +367,8 @@ async function videoRedundancyController (req: express.Request, res: express.Res
 async function videoPlaylistController (req: express.Request, res: express.Response) {
   const playlist = res.locals.videoPlaylistFull
 
+  if (redirectIfNotOwned(playlist.url, res)) return
+
   // We need more attributes
   playlist.OwnerAccount = await AccountModel.load(playlist.ownerAccountId)
 
@@ -370,6 +381,8 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
 
 function videoPlaylistElementController (req: express.Request, res: express.Response) {
   const videoPlaylistElement = res.locals.videoPlaylistElementAP
+
+  if (redirectIfNotOwned(videoPlaylistElement.url, res)) return
 
   const json = videoPlaylistElement.toActivityPubObject()
   return activityPubResponse(activityPubContextify(json), res)
@@ -410,4 +423,13 @@ function videoRates (req: express.Request, rateType: VideoRateType, video: MVide
     }
   }
   return activityPubCollectionPagination(url, handler, req.query.page)
+}
+
+function redirectIfNotOwned (url: string, res: express.Response) {
+  if (url.startsWith(WEBSERVER.URL) === false) {
+    res.redirect(url)
+    return true
+  }
+
+  return false
 }

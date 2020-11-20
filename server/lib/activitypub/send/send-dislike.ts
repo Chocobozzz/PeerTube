@@ -1,5 +1,5 @@
 import { Transaction } from 'sequelize'
-import { getVideoDislikeActivityPubUrl } from '../url'
+import { getVideoDislikeActivityPubUrlByLocalActor } from '../url'
 import { logger } from '../../../helpers/logger'
 import { ActivityAudience, ActivityDislike } from '../../../../shared/models/activitypub'
 import { sendVideoRelatedActivity } from './utils'
@@ -10,7 +10,7 @@ function sendDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction
   logger.info('Creating job to dislike %s.', video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {
-    const url = getVideoDislikeActivityPubUrl(byActor, video)
+    const url = getVideoDislikeActivityPubUrlByLocalActor(byActor, video)
 
     return buildDislikeActivity(url, byActor, video, audience)
   }

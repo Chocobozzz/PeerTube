@@ -5,7 +5,7 @@ import toInt from 'validator/lib/toInt'
 import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
-import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
+import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { LiveManager } from '@server/lib/live-manager'
 import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
@@ -189,7 +189,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   videoData.duration = videoPhysicalFile['duration'] // duration was added by a previous middleware
 
   const video = new VideoModel(videoData) as MVideoFullLight
-  video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
+  video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = new VideoFileModel({
     extname: extname(videoPhysicalFile.filename),

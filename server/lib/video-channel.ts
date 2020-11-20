@@ -1,11 +1,11 @@
 import * as Sequelize from 'sequelize'
 import { v4 as uuidv4 } from 'uuid'
 import { VideoChannelCreate } from '../../shared/models'
-import { VideoChannelModel } from '../models/video/video-channel'
-import { buildActorInstance } from './activitypub/actor'
 import { VideoModel } from '../models/video/video'
+import { VideoChannelModel } from '../models/video/video-channel'
 import { MAccountId, MChannelDefault, MChannelId } from '../types/models'
-import { getVideoChannelActivityPubUrl } from './activitypub/url'
+import { buildActorInstance } from './activitypub/actor'
+import { getLocalVideoChannelActivityPubUrl } from './activitypub/url'
 import { federateVideoIfNeeded } from './activitypub/videos'
 
 type CustomVideoChannelModelAccount <T extends MAccountId> = MChannelDefault & { Account?: T }
@@ -16,7 +16,7 @@ async function createLocalVideoChannel <T extends MAccountId> (
   t: Sequelize.Transaction
 ): Promise<CustomVideoChannelModelAccount<T>> {
   const uuid = uuidv4()
-  const url = getVideoChannelActivityPubUrl(videoChannelInfo.name)
+  const url = getLocalVideoChannelActivityPubUrl(videoChannelInfo.name)
   const actorInstance = buildActorInstance('Group', url, videoChannelInfo.name, uuid)
 
   const actorInstanceCreated = await actorInstance.save({ transaction: t })

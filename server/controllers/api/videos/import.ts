@@ -28,7 +28,7 @@ import { getYoutubeDLInfo, getYoutubeDLSubs, YoutubeDLInfo } from '../../../help
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
+import { getLocalVideoActivityPubUrl } from '../../../lib/activitypub/url'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
 import { createVideoMiniatureFromExisting, createVideoMiniatureFromUrl } from '../../../lib/thumbnail'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
@@ -250,7 +250,7 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
     originallyPublishedAt: body.originallyPublishedAt || importData.originallyPublishedAt
   }
   const video = new VideoModel(videoData)
-  video.url = getVideoActivityPubUrl(video)
+  video.url = getLocalVideoActivityPubUrl(video)
 
   return video
 }

@@ -1,7 +1,7 @@
 import { Transaction } from 'sequelize'
 import { VideoShareModel } from '../../models/video/video-share'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
-import { getVideoAnnounceActivityPubUrl } from './url'
+import { getLocalVideoAnnounceActivityPubUrl } from './url'
 import * as Bluebird from 'bluebird'
 import { doRequest } from '../../helpers/requests'
 import { getOrCreateActorAndServerAndModel } from './actor'
@@ -74,7 +74,7 @@ export {
 async function shareByServer (video: MVideo, t: Transaction) {
   const serverActor = await getServerActor()
 
-  const serverShareUrl = getVideoAnnounceActivityPubUrl(serverActor, video)
+  const serverShareUrl = getLocalVideoAnnounceActivityPubUrl(serverActor, video)
   const [ serverShare ] = await VideoShareModel.findOrCreate({
     defaults: {
       actorId: serverActor.id,
@@ -91,7 +91,7 @@ async function shareByServer (video: MVideo, t: Transaction) {
 }
 
 async function shareByVideoChannel (video: MVideoAccountLight, t: Transaction) {
-  const videoChannelShareUrl = getVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
+  const videoChannelShareUrl = getLocalVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
   const [ videoChannelShare ] = await VideoShareModel.findOrCreate({
     defaults: {
       actorId: video.VideoChannel.actorId,

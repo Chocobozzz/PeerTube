@@ -12,6 +12,7 @@ import { Notifier } from '../../notifier'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { MActor, MActorFollowActors, MActorFull } from '../../../types/models'
 import { ActivitypubFollowPayload } from '@shared/models'
+import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url'
 
 async function processActivityPubFollow (job: Bull.Job) {
   const payload = job.data as ActivitypubFollowPayload
@@ -61,6 +62,7 @@ async function follow (fromActor: MActor, targetActor: MActorFull, isAutoFollow 
       },
       defaults: {
         state,
+        url: getLocalActorFollowActivityPubUrl(fromActor, targetActor),
         actorId: fromActor.id,
         targetActorId: targetActor.id
       },

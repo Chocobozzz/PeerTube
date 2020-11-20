@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { createReqFiles } from '@server/helpers/express-utils'
 import { CONFIG } from '@server/initializers/config'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
-import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
+import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
@@ -86,7 +86,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   videoData.duration = 0
 
   const video = new VideoModel(videoData) as MVideoDetails
-  video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
+  video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoLive = new VideoLiveModel()
   videoLive.saveReplay = videoInfo.saveReplay || false

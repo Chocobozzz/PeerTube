@@ -4,10 +4,10 @@ import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../shar
 import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { VideoCaptionModel } from './video-caption'
 import {
-  getVideoCommentsActivityPubUrl,
-  getVideoDislikesActivityPubUrl,
-  getVideoLikesActivityPubUrl,
-  getVideoSharesActivityPubUrl
+  getLocalVideoCommentsActivityPubUrl,
+  getLocalVideoDislikesActivityPubUrl,
+  getLocalVideoLikesActivityPubUrl,
+  getLocalVideoSharesActivityPubUrl
 } from '../../lib/activitypub/url'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
@@ -382,10 +382,10 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       height: i.height
     })),
     url,
-    likes: getVideoLikesActivityPubUrl(video),
-    dislikes: getVideoDislikesActivityPubUrl(video),
-    shares: getVideoSharesActivityPubUrl(video),
-    comments: getVideoCommentsActivityPubUrl(video),
+    likes: getLocalVideoLikesActivityPubUrl(video),
+    dislikes: getLocalVideoDislikesActivityPubUrl(video),
+    shares: getLocalVideoSharesActivityPubUrl(video),
+    comments: getLocalVideoCommentsActivityPubUrl(video),
     attributedTo: [
       {
         type: 'Person',

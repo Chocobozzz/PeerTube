@@ -11,7 +11,7 @@ import { ActorModel } from '../models/activitypub/actor'
 import { MAccountDefault, MActorDefault, MChannelActor } from '../types/models'
 import { MUser, MUserDefault, MUserId } from '../types/models/user'
 import { buildActorInstance, setAsyncActorKeys } from './activitypub/actor'
-import { getAccountActivityPubUrl } from './activitypub/url'
+import { getLocalAccountActivityPubUrl } from './activitypub/url'
 import { Emailer } from './emailer'
 import { LiveManager } from './live-manager'
 import { Redis } from './redis'
@@ -74,7 +74,7 @@ async function createLocalAccountWithoutKeys (parameters: {
   type?: ActivityPubActorType
 }) {
   const { name, displayName, userId, applicationId, t, type = 'Person' } = parameters
-  const url = getAccountActivityPubUrl(name)
+  const url = getLocalAccountActivityPubUrl(name)
 
   const actorInstance = buildActorInstance(type, url, name)
   const actorInstanceCreated: MActorDefault = await actorInstance.save({ transaction: t })

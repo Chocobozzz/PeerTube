@@ -38,7 +38,6 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
       if (!rate) {
         return res.status(404)
                   .json({ error: 'Video rate not found' })
-                  .end()
       }
 
       res.locals.accountVideoRate = rate

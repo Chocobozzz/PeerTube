@@ -1,5 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { difference, values } from 'lodash'
+import { IncludeOptions, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
   AfterCreate,
   AfterDestroy,
@@ -11,22 +12,16 @@ import {
   DataType,
   Default,
   ForeignKey,
+  Is,
   IsInt,
   Max,
   Model,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { FollowState } from '../../../shared/models/actors'
-import { ActorFollow } from '../../../shared/models/actors/follow.model'
-import { logger } from '../../helpers/logger'
-import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
-import { ServerModel } from '../server/server'
-import { createSafeIn, getFollowsSort, getSort, searchAttribute } from '../utils'
-import { ActorModel, unusedActorAttributesForAPI } from './actor'
-import { VideoChannelModel } from '../video/video-channel'
-import { AccountModel } from '../account/account'
-import { IncludeOptions, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
+import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
+import { getServerActor } from '@server/models/application/application'
+import { VideoModel } from '@server/models/video/video'
 import {
   MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
@@ -35,8 +30,15 @@ import {
   MActorFollowSubscriptions
 } from '@server/types/models'
 import { ActivityPubActorType } from '@shared/models'
-import { VideoModel } from '@server/models/video/video'
-import { getServerActor } from '@server/models/application/application'
+import { FollowState } from '../../../shared/models/actors'
+import { ActorFollow } from '../../../shared/models/actors/follow.model'
+import { logger } from '../../helpers/logger'
+import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
+import { AccountModel } from '../account/account'
+import { ServerModel } from '../server/server'
+import { createSafeIn, getFollowsSort, getSort, searchAttribute, throwIfNotValid } from '../utils'
+import { VideoChannelModel } from '../video/video-channel'
+import { ActorModel, unusedActorAttributesForAPI } from './actor'
 
 @Table({
   tableName: 'actorFollow',
@@ -53,6 +55,10 @@ import { getServerActor } from '@server/models/application/application'
     },
     {
       fields: [ 'score' ]
+    },
+    {
+      fields: [ 'url' ],
+      unique: true
     }
   ]
 })
@@ -68,6 +74,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   @Max(ACTOR_FOLLOW_SCORE.MAX)
   @Column
   score: number
+
+  // Allow null because we added this column in PeerTube v3, and don't want to generate fake URLs of remote follows
+  @AllowNull(true)
+  @Is('ActorFollowUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
+  url: string
 
   @CreatedAt
   createdAt: Date

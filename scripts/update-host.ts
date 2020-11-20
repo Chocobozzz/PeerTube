@@ -6,11 +6,11 @@ import { ActorFollowModel } from '../server/models/activitypub/actor-follow'
 import { VideoModel } from '../server/models/video/video'
 import { ActorModel } from '../server/models/activitypub/actor'
 import {
-  getAccountActivityPubUrl,
-  getVideoActivityPubUrl,
-  getVideoAnnounceActivityPubUrl,
-  getVideoChannelActivityPubUrl,
-  getVideoCommentActivityPubUrl
+  getLocalAccountActivityPubUrl,
+  getLocalVideoActivityPubUrl,
+  getLocalVideoAnnounceActivityPubUrl,
+  getLocalVideoChannelActivityPubUrl,
+  getLocalVideoCommentActivityPubUrl
 } from '../server/lib/activitypub/url'
 import { VideoShareModel } from '../server/models/video/video-share'
 import { VideoCommentModel } from '../server/models/video/video-comment'
@@ -62,8 +62,8 @@ async function run () {
     console.log('Updating actor ' + actor.url)
 
     const newUrl = actor.Account
-      ? getAccountActivityPubUrl(actor.preferredUsername)
-      : getVideoChannelActivityPubUrl(actor.preferredUsername)
+      ? getLocalAccountActivityPubUrl(actor.preferredUsername)
+      : getLocalVideoChannelActivityPubUrl(actor.preferredUsername)
 
     actor.url = newUrl
     actor.inboxUrl = newUrl + '/inbox'
@@ -85,7 +85,7 @@ async function run () {
 
     console.log('Updating video share ' + videoShare.url)
 
-    videoShare.url = getVideoAnnounceActivityPubUrl(videoShare.Actor, videoShare.Video)
+    videoShare.url = getLocalVideoAnnounceActivityPubUrl(videoShare.Actor, videoShare.Video)
     await videoShare.save()
   }
 
@@ -110,7 +110,7 @@ async function run () {
 
     console.log('Updating comment ' + comment.url)
 
-    comment.url = getVideoCommentActivityPubUrl(comment.Video, comment)
+    comment.url = getLocalVideoCommentActivityPubUrl(comment.Video, comment)
     await comment.save()
   }
 
@@ -120,7 +120,7 @@ async function run () {
   for (const video of videos) {
     console.log('Updating video ' + video.uuid)
 
-    video.url = getVideoActivityPubUrl(video)
+    video.url = getLocalVideoActivityPubUrl(video)
     await video.save()
 
     for (const file of video.VideoFiles) {

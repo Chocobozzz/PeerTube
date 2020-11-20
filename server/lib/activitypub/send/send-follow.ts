@@ -1,9 +1,8 @@
-import { ActivityFollow } from '../../../../shared/models/activitypub'
-import { getActorFollowActivityPubUrl } from '../url'
-import { unicastTo } from './utils'
-import { logger } from '../../../helpers/logger'
 import { Transaction } from 'sequelize'
+import { ActivityFollow } from '../../../../shared/models/activitypub'
+import { logger } from '../../../helpers/logger'
 import { MActor, MActorFollowActors } from '../../../types/models'
+import { unicastTo } from './utils'
 
 function sendFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const me = actorFollow.ActorFollower
@@ -14,8 +13,7 @@ function sendFollow (actorFollow: MActorFollowActors, t: Transaction) {
 
   logger.info('Creating job to send follow request to %s.', following.url)
 
-  const url = getActorFollowActivityPubUrl(me, following)
-  const data = buildFollowActivity(url, me, following)
+  const data = buildFollowActivity(actorFollow.url, me, following)
 
   t.afterCommit(() => unicastTo(data, me, following.inboxUrl))
 }

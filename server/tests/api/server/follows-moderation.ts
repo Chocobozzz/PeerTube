@@ -81,6 +81,8 @@ describe('Test follows moderation', function () {
   })
 
   it('Should remove follower on server 2', async function () {
+    this.timeout(10000)
+
     await removeFollower(servers[1].url, servers[1].accessToken, servers[0])
 
     await waitJobs(servers)
@@ -91,6 +93,8 @@ describe('Test follows moderation', function () {
   })
 
   it('Should disable followers on server 2', async function () {
+    this.timeout(10000)
+
     const subConfig = {
       followers: {
         instance: {
@@ -109,6 +113,8 @@ describe('Test follows moderation', function () {
   })
 
   it('Should re enable followers on server 2', async function () {
+    this.timeout(10000)
+
     const subConfig = {
       followers: {
         instance: {
@@ -151,6 +157,8 @@ describe('Test follows moderation', function () {
   })
 
   it('Should accept a follower', async function () {
+    this.timeout(10000)
+
     await acceptFollower(servers[1].url, servers[1].accessToken, 'peertube@localhost:' + servers[0].port)
     await waitJobs(servers)
 

@@ -168,7 +168,8 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
               model: ActorModel.unscoped(),
               required: true,
               where: {
-                preferredUsername: accountName
+                preferredUsername: accountName,
+                serverId: null
               }
             }
           ]

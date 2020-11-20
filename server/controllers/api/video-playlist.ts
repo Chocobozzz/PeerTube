@@ -1,5 +1,24 @@
 import * as express from 'express'
+import { join } from 'path'
+import { getServerActor } from '@server/models/application/application'
+import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
+import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/video-playlist-create.model'
+import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
+import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
+import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
+import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
+import { resetSequelizeInstance } from '../../helpers/database-utils'
+import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
+import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
+import { CONFIG } from '../../initializers/config'
+import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
+import { sequelizeTypescript } from '../../initializers/database'
+import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
+import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
+import { JobQueue } from '../../lib/job-queue'
+import { createPlaylistMiniatureFromExisting } from '../../lib/thumbnail'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -10,11 +29,6 @@ import {
   setDefaultSort
 } from '../../middlewares'
 import { videoPlaylistsSortValidator } from '../../middlewares/validators'
-import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
-import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
-import { logger } from '../../helpers/logger'
-import { resetSequelizeInstance } from '../../helpers/database-utils'
-import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import {
   commonVideoPlaylistFiltersValidator,
   videoPlaylistsAddValidator,
@@ -25,23 +39,9 @@ import {
   videoPlaylistsUpdateOrRemoveVideoValidator,
   videoPlaylistsUpdateValidator
 } from '../../middlewares/validators/videos/video-playlists'
-import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/video-playlist-create.model'
-import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { join } from 'path'
-import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
-import { getVideoPlaylistActivityPubUrl, getVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
-import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
-import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
-import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
-import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
 import { AccountModel } from '../../models/account/account'
-import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
-import { JobQueue } from '../../lib/job-queue'
-import { CONFIG } from '../../initializers/config'
-import { sequelizeTypescript } from '../../initializers/database'
-import { createPlaylistMiniatureFromExisting } from '../../lib/thumbnail'
-import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
-import { getServerActor } from '@server/models/application/application'
+import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -161,7 +161,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
     ownerAccountId: user.Account.id
   }) as MVideoPlaylistFull
 
-  videoPlaylist.url = getVideoPlaylistActivityPubUrl(videoPlaylist) // We use the UUID, so set the URL after building the object
+  videoPlaylist.url = getLocalVideoPlaylistActivityPubUrl(videoPlaylist) // We use the UUID, so set the URL after building the object
 
   if (videoPlaylistInfo.videoChannelId) {
     const videoChannel = res.locals.videoChannel
@@ -304,7 +304,7 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
       videoId: video.id
     }, { transaction: t })
 
-    playlistElement.url = getVideoPlaylistElementActivityPubUrl(videoPlaylist, playlistElement)
+    playlistElement.url = getLocalVideoPlaylistElementActivityPubUrl(videoPlaylist, playlistElement)
     await playlistElement.save({ transaction: t })
 
     videoPlaylist.changed('updatedAt', true)

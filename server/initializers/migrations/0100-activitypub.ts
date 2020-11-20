@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { shareVideoByServerAndChannel } from '../../lib/activitypub/share'
-import { getVideoActivityPubUrl, getVideoChannelActivityPubUrl } from '../../lib/activitypub/url'
+import { getLocalVideoActivityPubUrl, getLocalVideoChannelActivityPubUrl } from '../../lib/activitypub/url'
 import { createLocalAccountWithoutKeys } from '../../lib/user'
 import { ApplicationModel } from '../../models/application/application'
 import { SERVER_ACTOR_NAME } from '../constants'
@@ -132,7 +132,7 @@ async function up (utils: {
 
     const videos = await db.Video.findAll()
     for (const video of videos) {
-      video.url = getVideoActivityPubUrl(video)
+      video.url = getLocalVideoActivityPubUrl(video)
       await video.save()
     }
 
@@ -151,7 +151,7 @@ async function up (utils: {
 
     const videoChannels = await db.VideoChannel.findAll()
     for (const videoChannel of videoChannels) {
-      videoChannel.url = getVideoChannelActivityPubUrl(videoChannel)
+      videoChannel.url = getLocalVideoChannelActivityPubUrl(videoChannel)
       await videoChannel.save()
     }
 

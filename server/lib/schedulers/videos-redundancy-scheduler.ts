@@ -1,19 +1,10 @@
-import { AbstractScheduler } from './abstract-scheduler'
-import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT, WEBSERVER } from '../../initializers/constants'
-import { logger } from '../../helpers/logger'
-import { VideosRedundancyStrategy } from '../../../shared/models/redundancy'
-import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
-import { downloadWebTorrentVideo, generateMagnetUri } from '../../helpers/webtorrent'
-import { join } from 'path'
 import { move } from 'fs-extra'
-import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
-import { getVideoCacheFileActivityPubUrl, getVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url'
-import { removeVideoRedundancy } from '../redundancy'
-import { getOrCreateVideoAndAccountAndChannel } from '../activitypub/videos'
-import { downloadPlaylistSegments } from '../hls'
-import { CONFIG } from '../../initializers/config'
+import { join } from 'path'
+import { getServerActor } from '@server/models/application/application'
+import { VideoModel } from '@server/models/video/video'
 import {
-  MStreamingPlaylist, MStreamingPlaylistFiles,
+  MStreamingPlaylist,
+  MStreamingPlaylistFiles,
   MStreamingPlaylistVideo,
   MVideoAccountLight,
   MVideoFile,
@@ -23,9 +14,19 @@ import {
   MVideoRedundancyVideo,
   MVideoWithAllFiles
 } from '@server/types/models'
+import { VideosRedundancyStrategy } from '../../../shared/models/redundancy'
+import { logger } from '../../helpers/logger'
+import { downloadWebTorrentVideo, generateMagnetUri } from '../../helpers/webtorrent'
+import { CONFIG } from '../../initializers/config'
+import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT, WEBSERVER } from '../../initializers/constants'
+import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
+import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
+import { getLocalVideoCacheFileActivityPubUrl, getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url'
+import { getOrCreateVideoAndAccountAndChannel } from '../activitypub/videos'
+import { downloadPlaylistSegments } from '../hls'
+import { removeVideoRedundancy } from '../redundancy'
 import { getVideoFilename } from '../video-paths'
-import { VideoModel } from '@server/models/video/video'
-import { getServerActor } from '@server/models/application/application'
+import { AbstractScheduler } from './abstract-scheduler'
 
 type CandidateToDuplicate = {
   redundancy: VideosRedundancyStrategy
@@ -230,7 +231,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     const createdModel: MVideoRedundancyFileVideo = await VideoRedundancyModel.create({
       expiresOn,
-      url: getVideoCacheFileActivityPubUrl(file),
+      url: getLocalVideoCacheFileActivityPubUrl(file),
       fileUrl: video.getVideoRedundancyUrl(file, WEBSERVER.URL),
       strategy,
       videoFileId: file.id,
@@ -269,7 +270,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     const createdModel: MVideoRedundancyStreamingPlaylistVideo = await VideoRedundancyModel.create({
       expiresOn,
-      url: getVideoCacheStreamingPlaylistActivityPubUrl(video, playlist),
+      url: getLocalVideoCacheStreamingPlaylistActivityPubUrl(video, playlist),
       fileUrl: playlist.getVideoRedundancyUrl(WEBSERVER.URL),
       strategy,
       videoStreamingPlaylistId: playlist.id,

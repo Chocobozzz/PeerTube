@@ -8,7 +8,7 @@ import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { doRequest } from '../../helpers/requests'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from './url'
+import { getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from './url'
 import { sendDislike } from './send/send-dislike'
 import { MAccountActor, MActorUrl, MVideo, MVideoAccountLight, MVideoId } from '../../types/models'
 
@@ -82,14 +82,14 @@ async function sendVideoRateChange (
   if (dislikes > 0) await sendDislike(actor, video, t)
 }
 
-function getRateUrl (rateType: VideoRateType, actor: MActorUrl, video: MVideoId) {
+function getLocalRateUrl (rateType: VideoRateType, actor: MActorUrl, video: MVideoId) {
   return rateType === 'like'
-    ? getVideoLikeActivityPubUrl(actor, video)
-    : getVideoDislikeActivityPubUrl(actor, video)
+    ? getVideoLikeActivityPubUrlByLocalActor(actor, video)
+    : getVideoDislikeActivityPubUrlByLocalActor(actor, video)
 }
 
 export {
-  getRateUrl,
+  getLocalRateUrl,
   createRates,
   sendVideoRateChange
 }

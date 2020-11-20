@@ -5,9 +5,9 @@ import { sequelizeTypescript } from '@server/initializers/database'
 import { ResultList } from '../../shared/models'
 import { VideoCommentThreadTree } from '../../shared/models/videos/video-comment.model'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { MAccountDefault, MComment, MCommentOwnerVideoReply, MVideoFullLight, MCommentOwnerVideo } from '../types/models'
+import { MAccountDefault, MComment, MCommentOwnerVideo, MCommentOwnerVideoReply, MVideoFullLight } from '../types/models'
 import { sendCreateVideoComment, sendDeleteVideoComment } from './activitypub/send'
-import { getVideoCommentActivityPubUrl } from './activitypub/url'
+import { getLocalVideoCommentActivityPubUrl } from './activitypub/url'
 import { Hooks } from './plugins/hooks'
 
 async function removeComment (videoCommentInstance: MCommentOwnerVideo) {
@@ -51,7 +51,7 @@ async function createVideoComment (obj: {
     url: new Date().toISOString()
   }, { transaction: t, validate: false })
 
-  comment.url = getVideoCommentActivityPubUrl(obj.video, comment)
+  comment.url = getLocalVideoCommentActivityPubUrl(obj.video, comment)
 
   const savedComment: MCommentOwnerVideoReply = await comment.save({ transaction: t })
   savedComment.InReplyToVideoComment = obj.inReplyToComment
