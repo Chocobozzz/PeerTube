@@ -16,7 +16,7 @@ import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { buildNSFWFilter, createReqFiles, getCountVideos } from '../../../helpers/express-utils'
-import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
@@ -195,7 +195,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     extname: extname(videoPhysicalFile.filename),
     size: videoPhysicalFile.size,
     videoStreamingPlaylistId: null,
-    metadata: await getMetadataFromFile<any>(videoPhysicalFile.path)
+    metadata: await getMetadataFromFile(videoPhysicalFile.path)
   })
 
   if (videoFile.isAudio()) {

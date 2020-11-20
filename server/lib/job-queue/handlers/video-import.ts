@@ -17,7 +17,7 @@ import {
 } from '../../../../shared'
 import { VideoImportState } from '../../../../shared/models/videos'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
-import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'

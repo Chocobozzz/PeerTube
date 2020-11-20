@@ -4,15 +4,8 @@ import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models'
 import { VideoResolution } from '../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
-import {
-  canDoQuickTranscode,
-  getDurationFromVideoFile,
-  getMetadataFromFile,
-  getVideoFileFPS,
-  transcode,
-  TranscodeOptions,
-  TranscodeOptionsType
-} from '../helpers/ffmpeg-utils'
+import { transcode, TranscodeOptions, TranscodeOptionsType } from '../helpers/ffmpeg-utils'
+import { canDoQuickTranscode, getDurationFromVideoFile, getMetadataFromFile, getVideoFileFPS } from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
 import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'

@@ -34,7 +34,7 @@ import {
   isVideoTagsValid
 } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
+import { getDurationFromVideoFile } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import {
   checkUserCanManageVideo,

@@ -1,7 +1,9 @@
 import * as Bull from 'bull'
 import { readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { getDurationFromVideoFile, getVideoFileResolution, hlsPlaylistToFragmentedMP4 } from '@server/helpers/ffmpeg-utils'
+import { hlsPlaylistToFragmentedMP4 } from '@server/helpers/ffmpeg-utils'
+import { getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
 import { generateHlsPlaylist } from '@server/lib/video-transcoding'
@@ -12,7 +14,6 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
-import { generateVideoMiniature } from '@server/lib/thumbnail'
 
 async function processVideoLiveEnding (job: Bull.Job) {
   const payload = job.data as VideoLiveEndingPayload

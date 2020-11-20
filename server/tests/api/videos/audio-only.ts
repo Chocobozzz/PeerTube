@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { join } from 'path'
+import { getAudioStream, getVideoStreamSize } from '@server/helpers/ffprobe-utils'
 import {
   cleanupTests,
   doubleFollow,
@@ -14,8 +16,6 @@ import {
   waitJobs
 } from '../../../../shared/extra-utils'
 import { VideoDetails } from '../../../../shared/models/videos'
-import { join } from 'path'
-import { audio, getVideoStreamSize } from '@server/helpers/ffmpeg-utils'
 
 const expect = chai.expect
 
@@ -85,7 +85,7 @@ describe('Test audio only video transcoding', function () {
     ]
 
     for (const path of paths) {
-      const { audioStream } = await audio.get(path)
+      const { audioStream } = await getAudioStream(path)
       expect(audioStream['codec_name']).to.be.equal('aac')
       expect(audioStream['bit_rate']).to.be.at.most(384 * 8000)
 

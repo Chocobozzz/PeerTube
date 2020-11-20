@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { FfprobeData } from 'fluent-ffmpeg'
 import { omit } from 'lodash'
-import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
-import {
-  audio,
-  canDoQuickTranscode,
-  getVideoFileBitrate,
-  getVideoFileFPS,
-  getVideoFileResolution,
-  getMetadataFromFile
-} from '../../../helpers/ffmpeg-utils'
+import { join } from 'path'
+
+import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -29,14 +24,20 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   updateCustomSubConfig,
-  uploadVideo, uploadVideoAndGetId,
+  uploadVideo,
+  uploadVideoAndGetId,
   waitJobs,
   webtorrentAdd
 } from '../../../../shared/extra-utils'
-import { join } from 'path'
-import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
-import { FfprobeData } from 'fluent-ffmpeg'
-import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
+import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
+import {
+  canDoQuickTranscode,
+  getAudioStream,
+  getMetadataFromFile,
+  getVideoFileBitrate,
+  getVideoFileFPS,
+  getVideoFileResolution
+} from '../../../helpers/ffprobe-utils'
 
 const expect = chai.expect
 
@@ -136,7 +137,7 @@ describe('Test video transcoding', function () {
       expect(videoDetails.files).to.have.lengthOf(4)
 
       const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
-      const probe = await audio.get(path)
+      const probe = await getAudioStream(path)
 
       if (probe.audioStream) {
         expect(probe.audioStream['codec_name']).to.be.equal('aac')
@@ -167,7 +168,7 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
-      const probe = await audio.get(path)
+      const probe = await getAudioStream(path)
       expect(probe).to.not.have.property('audioStream')
     }
   })
@@ -192,9 +193,9 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const fixturePath = buildAbsoluteFixturePath(videoAttributes.fixture)
-      const fixtureVideoProbe = await audio.get(fixturePath)
+      const fixtureVideoProbe = await getAudioStream(fixturePath)
       const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
-      const videoProbe = await audio.get(path)
+      const videoProbe = await getAudioStream(path)
       if (videoProbe.audioStream && fixtureVideoProbe.audioStream) {
         const toOmit = [ 'max_bit_rate', 'duration', 'duration_ts', 'nb_frames', 'start_time', 'start_pts' ]
         expect(omit(videoProbe.audioStream, toOmit)).to.be.deep.equal(omit(fixtureVideoProbe.audioStream, toOmit))
@@ -513,7 +514,7 @@ describe('Test video transcoding', function () {
 
     {
       const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', videoUUID + '-240.mp4')
-      const metadata = await getMetadataFromFile<VideoFileMetadata>(path)
+      const metadata = await getMetadataFromFile(path)
 
       // expected format properties
       for (const p of [

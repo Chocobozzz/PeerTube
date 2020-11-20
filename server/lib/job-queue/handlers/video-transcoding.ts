@@ -9,7 +9,7 @@ import {
   VideoTranscodingPayload
 } from '../../../../shared'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
+import { computeResolutionsToTranscode } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
