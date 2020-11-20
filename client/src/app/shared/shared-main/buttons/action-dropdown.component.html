@@ -7,7 +7,7 @@
     <my-global-icon *ngIf="!label && buttonDirection === 'vertical'" class="more-icon" iconName="more-vertical"></my-global-icon>
 
     <span *ngIf="label" class="dropdown-toggle">{{ label }}</span>
-</button>
+  </button>
 
   <div ngbDropdownMenu class="dropdown-menu">
     <ng-container *ngFor="let actions of getActions()">
