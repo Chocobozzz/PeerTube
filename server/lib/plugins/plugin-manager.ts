@@ -1,3 +1,4 @@
+import * as express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
 import { outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'
@@ -166,18 +167,25 @@ export class PluginManager implements ServerHook {
 
   // ###################### External events ######################
 
-  onLogout (npmName: string, authName: string, user: MUser) {
+  async onLogout (npmName: string, authName: string, user: MUser, req: express.Request) {
     const auth = this.getAuth(npmName, authName)
 
     if (auth?.onLogout) {
       logger.info('Running onLogout function from auth %s of plugin %s', authName, npmName)
 
       try {
-        auth.onLogout(user)
+        // Force await, in case or onLogout returns a promise
+        const result = await auth.onLogout(user, req)
+
+        return typeof result === 'string'
+          ? result
+          : undefined
       } catch (err) {
         logger.warn('Cannot run onLogout function from auth %s of plugin %s.', authName, npmName, { err })
       }
     }
+
+    return undefined
   }
 
   onSettingsChanged (name: string, settings: any) {

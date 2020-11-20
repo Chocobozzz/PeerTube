@@ -141,13 +141,15 @@ async function getUser (usernameOrEmail?: string, password?: string) {
   return user
 }
 
-async function revokeToken (tokenInfo: { refreshToken: string }) {
+async function revokeToken (tokenInfo: { refreshToken: string }): Promise<{ success: boolean, redirectUrl?: string }> {
   const res: express.Response = this.request.res
   const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
 
   if (token) {
+    let redirectUrl: string
+
     if (res.locals.explicitLogout === true && token.User.pluginAuth && token.authName) {
-      PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName, token.User)
+      redirectUrl = await PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName, token.User, this.request)
     }
 
     clearCacheByToken(token.accessToken)
@@ -155,10 +157,10 @@ async function revokeToken (tokenInfo: { refreshToken: string }) {
     token.destroy()
          .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
 
-    return true
+    return { success: true, redirectUrl }
   }
 
-  return false
+  return { success: false }
 }
 
 async function saveToken (token: TokenInfo, client: OAuthClientModel, user: UserModel) {

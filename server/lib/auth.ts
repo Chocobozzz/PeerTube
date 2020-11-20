@@ -52,7 +52,7 @@ async function handleTokenRevocation (req: express.Request, res: express.Respons
   const token = res.locals.oauth.token
 
   res.locals.explicitLogout = true
-  await revokeToken(token)
+  const result = await revokeToken(token)
 
   // FIXME: uncomment when https://github.com/oauthjs/node-oauth2-server/pull/289 is released
   // oAuthServer.revoke(req, res, err => {
@@ -68,7 +68,7 @@ async function handleTokenRevocation (req: express.Request, res: express.Respons
   //   }
   // })
 
-  return res.json()
+  return res.json(result)
 }
 
 async function onExternalUserAuthenticated (options: {

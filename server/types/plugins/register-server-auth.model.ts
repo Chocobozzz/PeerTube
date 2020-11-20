@@ -21,7 +21,8 @@ interface RegisterServerAuthBase {
   authName: string
 
   // Called by PeerTube when a user from your plugin logged out
-  onLogout?(user: MUser): void
+  // Returns a redirectUrl sent to the client or nothing
+  onLogout?(user: MUser, req: express.Request): Promise<string>
 
   // Your plugin can hook PeerTube access/refresh token validity
   // So you can control for your plugin the user session lifetime

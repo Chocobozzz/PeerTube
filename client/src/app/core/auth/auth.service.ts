@@ -167,9 +167,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     const authHeaderValue = this.getRequestHeaderValue()
     const headers = new HttpHeaders().set('Authorization', authHeaderValue)
 
-    this.http.post<void>(AuthService.BASE_REVOKE_TOKEN_URL, {}, { headers })
+    this.http.post<{ redirectUrl?: string }>(AuthService.BASE_REVOKE_TOKEN_URL, {}, { headers })
     .subscribe(
-      () => { /* nothing to do */ },
+      res => {
+        if (res.redirectUrl) {
+          window.location.href = res.redirectUrl
+        }
+      },
 
       err => console.error(err)
     )
