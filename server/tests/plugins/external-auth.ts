@@ -73,7 +73,7 @@ describe('Test external auth plugins', function () {
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    for (const suffix of [ 'one', 'two' ]) {
+    for (const suffix of [ 'one', 'two', 'three' ]) {
       await installPlugin({
         url: server.url,
         accessToken: server.accessToken,
@@ -88,7 +88,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(6)
+    expect(auths).to.have.lengthOf(8)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.exist
@@ -301,7 +301,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(5)
+    expect(auths).to.have.lengthOf(7)
 
     const auth1 = auths.find(a => a.authName === 'external-auth-2')
     expect(auth1).to.not.exist
@@ -371,7 +371,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(4)
+    expect(auths).to.have.lengthOf(6)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.not.exist
@@ -379,5 +379,31 @@ describe('Test external auth plugins', function () {
 
   after(async function () {
     await cleanupTests([ server ])
+  })
+
+  it('Should forward the redirectUrl if the plugin returns one', async function () {
+    const resLogin = await loginExternal({
+      server,
+      npmName: 'test-external-auth-three',
+      authName: 'external-auth-7',
+      username: 'cid'
+    })
+
+    const resLogout = await logout(server.url, resLogin.access_token)
+
+    expect(resLogout.body.redirectUrl).to.equal('https://example.com/redirectUrl')
+  })
+
+  it('Should call the plugin\'s onLogout method with the request', async function () {
+    const resLogin = await loginExternal({
+      server,
+      npmName: 'test-external-auth-three',
+      authName: 'external-auth-8',
+      username: 'cid'
+    })
+
+    const resLogout = await logout(server.url, resLogin.access_token)
+
+    expect(resLogout.body.redirectUrl).to.equal('https://example.com/redirectUrl?access_token=' + resLogin.access_token)
   })
 })
