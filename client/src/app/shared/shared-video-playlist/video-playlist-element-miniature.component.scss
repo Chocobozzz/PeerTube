@@ -121,27 +121,37 @@ my-video-thumbnail,
         border: none;
       }
     }
+  }
+}
 
-    .dropdown-item {
-      @include dropdown-with-icon-item;
+.dropdown-menu {
+
+  .dropdown-item {
+    @include dropdown-with-icon-item;
+
+    cursor: pointer;
+  }
+
+  .timestamp-options {
+    padding-top: 0;
+    padding-left: 35px;
+    margin-bottom: 15px;
+
+    > div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
     }
 
-    .timestamp-options {
-      padding-top: 0;
-      padding-left: 35px;
-      margin-bottom: 15px;
+    my-peertube-checkbox {
+      margin-right: 5px;
+    }
 
-      > div {
-        display: flex;
-        align-items: center;
-      }
+    input {
+      @include peertube-button;
+      @include orange-button;
 
-      input {
-        @include peertube-button;
-        @include orange-button;
-
-        margin-top: 10px;
-      }
+      margin-top: 10px;
     }
   }
 }
