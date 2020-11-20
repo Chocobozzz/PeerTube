@@ -674,7 +674,12 @@ async function presetH264 (command: ffmpeg.FfmpegCommand, input: string, resolut
     // Constrained Encoding (VBV)
     // https://slhck.info/video/2017/03/01/rate-control.html
     // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
-    const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+    let targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+
+    // Don't transcode to an higher bitrate than the original file
+    const fileBitrate = await getVideoFileBitrate(input)
+    targetBitrate = Math.min(targetBitrate, fileBitrate)
+
     localCommand = localCommand.outputOptions([ `-maxrate ${targetBitrate}`, `-bufsize ${targetBitrate * 2}` ])
 
     // Keyframe interval of 2 seconds for faster seeking and resolution switching.

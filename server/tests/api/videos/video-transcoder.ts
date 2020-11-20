@@ -20,6 +20,7 @@ import {
   generateHighBitrateVideo,
   generateVideoWithFramerate,
   getMyVideos,
+  getServerFileSize,
   getVideo,
   getVideoFileMetadataUrl,
   getVideosList,
@@ -27,6 +28,7 @@ import {
   root,
   ServerInfo,
   setAccessTokensToServers,
+  updateCustomSubConfig,
   uploadVideo, uploadVideoAndGetId,
   waitJobs,
   webtorrentAdd
@@ -465,6 +467,41 @@ describe('Test video transcoding', function () {
         const fps = await getVideoFileFPS(path)
         expect(fps).to.be.equal(59)
       }
+    }
+  })
+
+  it('Should not transcode to an higher bitrate than the original file', async function () {
+    this.timeout(160000)
+
+    const config = {
+      transcoding: {
+        enabled: true,
+        resolutions: {
+          '240p': true,
+          '360p': true,
+          '480p': true,
+          '720p': true,
+          '1080p': true
+        },
+        webtorrent: { enabled: true },
+        hls: { enabled: true }
+      }
+    }
+    await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
+
+    const videoAttributes = {
+      name: 'low bitrate',
+      fixture: 'low-bitrate.mp4'
+    }
+
+    const resUpload = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+    const videoUUID = resUpload.body.video.uuid
+
+    await waitJobs(servers)
+
+    const resolutions = [ 240, 360, 480, 720, 1080 ]
+    for (const r of resolutions) {
+      expect(await getServerFileSize(servers[1], `videos/${videoUUID}-${r}.mp4`)).to.be.below(43)
     }
   })
 

@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import { basename, dirname, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
-import { ensureDir, pathExists, readFile } from 'fs-extra'
+import { ensureDir, pathExists, readFile, stat } from 'fs-extra'
 import * as ffmpeg from 'fluent-ffmpeg'
 
 const expect = chai.expect
@@ -130,6 +130,12 @@ async function generateVideoWithFramerate (fps = 60) {
   return tempFixturePath
 }
 
+async function getFileSize (path: string) {
+  const stats = await stat(path)
+
+  return stats.size
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -138,6 +144,7 @@ export {
   areHttpImportTestsDisabled,
   buildServerDirectory,
   webtorrentAdd,
+  getFileSize,
   immutableAssign,
   testImage,
   buildAbsoluteFixturePath,

@@ -6,7 +6,7 @@ import { copy, pathExists, readdir, readFile, remove } from 'fs-extra'
 import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
 import { VideoChannel } from '../../models/videos'
-import { root, wait } from '../miscs/miscs'
+import { getFileSize, root, wait } from '../miscs/miscs'
 
 interface ServerInfo {
   app: ChildProcess
@@ -318,11 +318,18 @@ async function waitUntilLog (server: ServerInfo, str: string, count = 1, strictC
   }
 }
 
+async function getServerFileSize (server: ServerInfo, subPath: string) {
+  const path = join(root(), 'test' + server.internalServerNumber, subPath)
+
+  return getFileSize(path)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   checkDirectoryIsEmpty,
   checkTmpIsEmpty,
+  getServerFileSize,
   ServerInfo,
   parallelTests,
   cleanupTests,
