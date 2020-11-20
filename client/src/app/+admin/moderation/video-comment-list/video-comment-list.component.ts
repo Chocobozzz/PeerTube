@@ -1,7 +1,6 @@
 import { SortMeta } from 'primeng/api'
-import { filter } from 'rxjs/operators'
 import { AfterViewInit, Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Params, Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { DropdownAction } from '@app/shared/shared-main'
 import { BulkService } from '@app/shared/shared-moderation'
@@ -41,6 +40,9 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
     }
   ]
 
+  selectedComments: VideoCommentAdmin[] = []
+  bulkCommentActions: DropdownAction<VideoCommentAdmin[]>[] = []
+
   get authUser () {
     return this.auth.getUser()
   }
@@ -78,6 +80,15 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
   ngOnInit () {
     this.initialize()
     this.listenToSearchChange()
+
+    this.bulkCommentActions = [
+      {
+        label: $localize`Delete`,
+        handler: comments => this.removeComments(comments),
+        isDisplayed: () => this.authUser.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT),
+        iconName: 'delete'
+      }
+    ]
   }
 
   ngAfterViewInit () {
@@ -90,6 +101,10 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
 
   toHtml (text: string) {
     return this.markdownRenderer.textMarkdownToHTML(text, true, true)
+  }
+
+  isInSelectionMode () {
+    return this.selectedComments.length !== 0
   }
 
   protected loadData () {
@@ -112,6 +127,21 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
 
         err => this.notifier.error(err.message)
       )
+  }
+
+  private async removeComments (comments: VideoCommentAdmin[]) {
+    const commentArgs = comments.map(c => ({ videoId: c.video.id, commentId: c.id }))
+
+    this.videoCommentService.deleteVideoComments(commentArgs).subscribe(
+      () => {
+        this.notifier.success($localize`${commentArgs.length} comments deleted.`)
+        this.loadData()
+      },
+
+      err => this.notifier.error(err.message),
+
+      () => this.selectedComments = []
+    )
   }
 
   private deleteComment (comment: VideoCommentAdmin) {

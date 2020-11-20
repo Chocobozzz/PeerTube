@@ -1,5 +1,6 @@
-import { Observable } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { SortMeta } from 'primeng/api'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, map, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
@@ -15,7 +16,6 @@ import {
 import { environment } from '../../../environments/environment'
 import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
-import { SortMeta } from 'primeng/api'
 
 @Injectable()
 export class VideoCommentService {
@@ -116,6 +116,14 @@ export class VideoCommentService {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  deleteVideoComments (comments: { videoId: number | string, commentId: number }[]) {
+    return from(comments)
+      .pipe(
+        concatMap(c => this.deleteVideoComment(c.videoId, c.commentId)),
+        toArray()
+      )
   }
 
   getVideoCommentsFeeds (videoUUID?: string) {

@@ -13,9 +13,18 @@
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} comments"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [(selection)]="selectedComments"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
+      <div>
+        <my-action-dropdown
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          [actions]="bulkCommentActions" [entry]="selectedComments"
+        >
+        </my-action-dropdown>
+      </div>
+
       <div class="ml-auto">
         <div class="input-group has-feedback has-clear">
           <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
@@ -42,6 +51,9 @@
 
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 40px">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <th style="width: 40px"></th>
       <th style="width: 150px;"></th>
       <th style="width: 300px" i18n>Account</th>
@@ -52,7 +64,12 @@
   </ng-template>
 
   <ng-template pTemplate="body" let-videoComment let-expanded="expanded">
-    <tr>
+    <tr [pSelectableRow]="videoComment">
+
+      <td class="checkbox-cell">
+        <p-tableCheckbox [value]="videoComment"></p-tableCheckbox>
+      </td>
+
       <td class="expand-cell c-hand" [pRowToggler]="videoComment" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
         <span class="expander">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
