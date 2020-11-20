@@ -8,8 +8,5 @@
     "netrc-parser": "^3.1.6",
     "webtorrent-hybrid": "^4.0.1"
   },
-  "summon": {
-    "silent": true
-  },
   "devDependencies": {}
 }

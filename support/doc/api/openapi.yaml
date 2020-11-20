@@ -306,7 +306,7 @@ paths:
         - Config
       security:
         - OAuth2:
-            - admin
+          - admin
       responses:
         '200':
           description: successful operation
@@ -320,7 +320,7 @@ paths:
         - Config
       security:
         - OAuth2:
-            - admin
+          - admin
       responses:
         '200':
           description: successful operation
@@ -336,7 +336,7 @@ paths:
         - Config
       security:
         - OAuth2:
-            - admin
+          - admin
       responses:
         '200':
           description: successful operation
@@ -345,7 +345,7 @@ paths:
       summary: List instance jobs
       security:
         - OAuth2:
-            - admin
+          - admin
       tags:
         - Job
       parameters:
@@ -455,7 +455,7 @@ paths:
     post:
       security:
         - OAuth2:
-            - admin
+          - admin
       tags:
         - Instance Follows
       summary: Follow a server
@@ -481,7 +481,7 @@ paths:
       summary: Create a user
       security:
         - OAuth2:
-            - admin
+          - admin
       tags:
         - Users
       responses:
@@ -545,7 +545,7 @@ paths:
       summary: Delete a user
       security:
         - OAuth2:
-            - admin
+          - admin
       tags:
         - Users
       operationId: delUserId
@@ -634,7 +634,7 @@ paths:
       summary: Get video imports of my user
       security:
         - OAuth2:
-            - user
+          - user
       tags:
         - Videos
         - My User
@@ -711,7 +711,7 @@ paths:
       summary: Get my user subscriptions
       security:
         - OAuth2:
-            - user
+          - user
       tags:
         - My Subscriptions
       parameters:
@@ -727,7 +727,7 @@ paths:
       summary: Add subscription to my user
       security:
         - OAuth2:
-            - user
+          - user
       requestBody:
         content:
           application/json:
@@ -752,7 +752,7 @@ paths:
       summary: Get if subscriptions exist for my user
       security:
         - OAuth2:
-            - user
+          - user
       tags:
         - My Subscriptions
       parameters:
@@ -797,7 +797,7 @@ paths:
       summary: Get subscription of my user
       security:
         - OAuth2:
-            - user
+          - user
       tags:
         - My Subscriptions
       parameters:
@@ -813,7 +813,7 @@ paths:
       summary: Delete subscription of my user
       security:
         - OAuth2:
-            - user
+          - user
       tags:
         - My Subscriptions
       parameters:
@@ -1801,8 +1801,8 @@ paths:
       summary: Delete an abuse
       security:
         - OAuth2:
-            - admin
-            - moderator
+          - admin
+          - moderator
       parameters:
         - $ref: '#/components/parameters/abuseId'
       responses:
@@ -1873,8 +1873,8 @@ paths:
       summary: Block a video
       security:
         - OAuth2:
-            - admin
-            - moderator
+          - admin
+          - moderator
       tags:
         - Video Blocks
       parameters:
@@ -1886,8 +1886,8 @@ paths:
       summary: Unblock a video by its id
       security:
         - OAuth2:
-            - admin
-            - moderator
+          - admin
+          - moderator
       tags:
         - Video Blocks
       parameters:
@@ -1904,8 +1904,8 @@ paths:
       summary: List video blocks
       security:
         - OAuth2:
-            - admin
-            - moderator
+          - admin
+          - moderator
       parameters:
         - name: type
           in: query
@@ -1968,6 +1968,9 @@ paths:
   /videos/{id}/captions/{captionLanguage}:
     put:
       summary: Add or replace a video caption
+      security:
+        - OAuth2:
+          - user
       tags:
         - Video Captions
       parameters:
@@ -1993,6 +1996,9 @@ paths:
           description: video or language not found
     delete:
       summary: Delete a video caption
+      security:
+        - OAuth2:
+          - user
       tags:
         - Video Captions
       parameters:

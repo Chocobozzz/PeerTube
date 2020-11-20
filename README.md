@@ -43,10 +43,6 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
   <br />
 
-  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client&type=dev">
-    <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
-  </a>
-
   <a href="https://automate.browserstack.com/public-build/T2g0SVQyMTJtYVRWaEZQTE9LdU9UU1ZDSkY5dTJ6dGlNRUVIajd4QlIwST0tLVdTQ1NUZ0pUTzRZT3lyZzkvWGNSZ1E9PQ==--278d3c68ae0827ce57e245e9f5a3b8c35d6e2278%">
     <img src="https://automate.browserstack.com/badge.svg?badge_key=T2g0SVQyMTJtYVRWaEZQTE9LdU9UU1ZDSkY5dTJ6dGlNRUVIajd4QlIwST0tLVdTQ1NUZ0pUTzRZT3lyZzkvWGNSZ1E9PQ==--278d3c68ae0827ce57e245e9f5a3b8c35d6e2278%"/>
   </a>
@@ -63,14 +59,6 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
   <a href="https://github.com/Chocobozzz/PeerTube/actions?query=workflow%3A%22Test+Suite%22+branch%3Adevelop">
     <img alt="test suite status" src="https://github.com/Chocobozzz/PeerTube/workflows/Test%20Suite/badge.svg" />
-  </a>
-
-  <a href="https://david-dm.org/Chocobozzz/PeerTube">
-    <img src="https://david-dm.org/Chocobozzz/PeerTube.svg" alt="Dependencies Status" />
-  </a>
-
-  <a href="https://david-dm.org/Chocobozzz/PeerTube?type=dev">
-    <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg" alt="devDependency Status" />
   </a>
 
   <a href="http://standardjs.com/">
