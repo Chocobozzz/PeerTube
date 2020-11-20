@@ -135,6 +135,5 @@ export {
   getLocalVideoSharesActivityPubUrl,
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
-  getLocalVideoDislikesActivityPubUrl,
-
+  getLocalVideoDislikesActivityPubUrl
 }
