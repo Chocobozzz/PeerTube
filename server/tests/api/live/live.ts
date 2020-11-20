@@ -424,7 +424,7 @@ describe('Test live', function () {
           const file = hlsPlaylist.files.find(f => f.resolution.id === resolution)
 
           expect(file).to.exist
-          expect(file.fps).to.equal(25)
+          expect(file.fps).to.be.oneOf([ 24, 25 ])
           expect(file.size).to.be.greaterThan(1)
 
           await makeRawRequest(file.torrentUrl, 200)
