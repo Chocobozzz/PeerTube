@@ -24,11 +24,11 @@
     </ng-container>
 
     <my-button
-      *ngIf="!isMaximized" icon="fullscreen" (click)="onMaximizeClick()"
+      *ngIf="!isMaximized" [title]="maximizeInText" className="maximize-button" icon="fullscreen" (click)="onMaximizeClick()"
     ></my-button>
 
     <my-button
-      *ngIf="isMaximized" icon="exit-fullscreen" (click)="onMaximizeClick()"
+      *ngIf="isMaximized" [title]="maximizeOutText" className="maximize-button" icon="exit-fullscreen" (click)="onMaximizeClick()"
     ></my-button>
   </div>
 
