@@ -35,6 +35,9 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   previewHTML = ''
   isMaximized = false
 
+  maximizeInText = $localize`Maximize editor`
+  maximizeOutText = $localize`Exit maximized editor`
+
   private contentChanged = new Subject<string>()
   private scrollPosition: [number, number]
 
