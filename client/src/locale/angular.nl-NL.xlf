@@ -5013,7 +5013,7 @@ Vraag e-mail voor accountverificatie aan</target>
       </trans-unit>
       <trans-unit id="278669a7857ee77786cf4578b11bb601002cf7a8" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="translated">Voor elk gedaan verzoek geeft de tracker een beperkt aantal peers terug. Als er bijvoorbeeld 1000 peers in de zwerm zijn en de tracker maar 20 peers per verzoek teruggeeft moeten er ten minste 50 verzoeken zijn gedaan om elke peer in de zwerm te kennen</target>
+        <target state="translated">De tracker geeft per ontvangen verzoek een beperkt aantal peers terug. Zijn er bijvoorbeeld 1000 peers in de zwerm en geeft de tracker maar 20 peers per verzoek terug? Dan moeten er ten minste 50 verzoeken zijn gedaan om elke peer in de zwerm te kennen</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="3f47eec5fb00ae46a0035cc8f9e428e3d549e337" datatype="html">
