@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target/>
+        <target>Informatziones in subra de cust'istàntzia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">26</context>
