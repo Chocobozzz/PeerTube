@@ -105,11 +105,11 @@
         <a [href]="videoComment.localUrl" target="_blank" rel="noopener noreferrer">{{ videoComment.video.name }}</a>
       </td>
 
-      <td class="comment-html">
+      <td class="comment-html c-hand" [pRowToggler]="videoComment">
         <div [innerHTML]="videoComment.textHtml"></div>
       </td>
 
-      <td>{{ videoComment.createdAt | date: 'short' }}</td>
+      <td class="c-hand" [pRowToggler]="videoComment">{{ videoComment.createdAt | date: 'short' }}</td>
     </tr>
   </ng-template>
 
