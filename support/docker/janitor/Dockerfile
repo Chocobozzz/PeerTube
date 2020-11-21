@@ -29,4 +29,5 @@ RUN sudo service postgresql start \
 COPY --chown=user:user supervisord.conf /tmp/supervisord-extra.conf
 RUN cat /tmp/supervisord-extra.conf | sudo tee -a /etc/supervisord.conf
 
-EXPOSE 3000 9000
+# Expose frontend, API and RTMP
+EXPOSE 3000 9000 1935

@@ -39,8 +39,8 @@ RUN yarn install --pure-lockfile \
 # Expose PeerTube sources as a volume
 VOLUME /home/user/PeerTube
 
-# Expose API and frontend
-EXPOSE 3000 9000
+# Expose frontend, API and RTMP
+EXPOSE 3000 9000 1935
 
 # Start PostgreSQL and Redis
 CMD ["service postgresql start && redis-server"]
