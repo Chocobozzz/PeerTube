@@ -355,6 +355,40 @@ function convertWebPToJPG (path: string, destination: string): Promise<void> {
   })
 }
 
+function processGIF (
+  path: string,
+  destination: string,
+  newSize: { width: number, height: number },
+  keepOriginal = false
+): Promise<void> {
+  return new Promise<void>(async (res, rej) => {
+    if (path === destination) {
+      throw new Error('FFmpeg needs an input path different that the output path.')
+    }
+
+    logger.debug('Processing gif %s to %s.', path, destination)
+
+    try {
+      const command = ffmpeg(path)
+        .fps(20)
+        .size(`${newSize.width}x${newSize.height}`)
+        .output(destination)
+
+      command.on('error', (err, stdout, stderr) => {
+        logger.error('Error in ffmpeg gif resizing process.', { stdout, stderr })
+        return rej(err)
+      })
+      .on('end', async () => {
+        if (keepOriginal !== true) await remove(path)
+        res()
+      })
+      .run()
+    } catch (err) {
+      return rej(err)
+    }
+  })
+}
+
 function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: number[], fps, deleteSegments: boolean) {
   const command = getFFmpeg(rtmpUrl)
   command.inputOption('-fflags nobuffer')
@@ -474,6 +508,7 @@ export {
   getAudioStreamCodec,
   runLiveMuxing,
   convertWebPToJPG,
+  processGIF,
   getVideoStreamSize,
   getVideoFileResolution,
   getMetadataFromFile,
