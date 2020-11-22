@@ -2,7 +2,7 @@ import { Subject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
 import { Component, EventEmitter, Output, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
-import { Notifier, PeerTubeSocket } from '@app/core'
+import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 
@@ -27,6 +27,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   constructor (
     private userNotificationService: UserNotificationService,
+    private screenService: ScreenService,
     private peertubeSocket: PeerTubeSocket,
     private notifier: Notifier,
     private router: Router
@@ -54,11 +55,15 @@ export class NotificationComponent implements OnInit, OnDestroy {
     if (this.routeSub) this.routeSub.unsubscribe()
   }
 
+  get isInMobileView () {
+    return this.screenService.isInMobileView()
+  }
+
   closePopover () {
     this.popover.close()
   }
 
-  onPopoverShown() {
+  onPopoverShown () {
     this.opened = true
   }
 
@@ -72,8 +77,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   onNavigate (link: HTMLAnchorElement) {
+    this.closePopover()
     this.navigate.emit(link)
-    this.popover.close()
   }
 
   markAllAsRead () {

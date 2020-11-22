@@ -1,12 +1,14 @@
 @import '_variables';
 @import '_mixins';
 
-.notification-inbox > my-global-icon {
+.notification-inbox-popover > my-global-icon,
+.notification-inbox-link a > my-global-icon {
   @include apply-svg-color(#808080);
 
   transition: background-color .1s ease-in-out;
   padding: 11px 7px;
   border-radius: 25px;
+  cursor: pointer;
 
   ::ng-deep {
     svg {
@@ -14,17 +16,22 @@
     }
   }
 
-  &:hover {
+  &:hover, &:active {
     background-color: rgba(255, 255, 255, 0.15);
     @include apply-svg-color(#fff);
   }
 }
 
-.notification-inbox.shown > my-global-icon {
+.notification-inbox-popover.shown > my-global-icon,
+.notification-inbox-link a.active > my-global-icon {
   @include apply-svg-color(#fff);
 
   background-color: rgba(255, 255, 255, 0.28);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
+}
+
+.notification-inbox-popover.hidden {
+  display: none;
 }
 
 ::ng-deep {
@@ -140,21 +147,5 @@
     border-radius: 15px;
     width: 15px;
     height: 15px;
-  }
-}
-
-@media screen and (max-width: $mobile-view) {
-  ::ng-deep {
-    .popover-notifications.popover {
-      left: unset !important;
-
-      .arrow {
-        left: calc(2em + 7px);
-      }
-
-      .popover-body {
-        width: 100vw;
-      }
-    }
   }
 }
