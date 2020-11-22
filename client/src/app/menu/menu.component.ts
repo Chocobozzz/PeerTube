@@ -61,9 +61,9 @@ export class MenuComponent implements OnInit {
     return this.screenService.isInMobileView()
   }
 
-  get dropdownContainer () {
+  get dropdownContainer (): string | null {
     if (this.isInMobileView) {
-      return this
+      return null
     } else {
       return 'body'
     }
