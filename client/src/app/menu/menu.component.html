@@ -3,7 +3,7 @@
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
         <div>
-          <div class="logged-in-more" ngbDropdown placement="bottom-left" container="body" autoClose="outside">
+          <div class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left" [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside">
             <div ngbDropdownToggle>
               <img [src]="user.accountAvatarUrl" alt="Avatar" />
               <div class="logged-in-info">

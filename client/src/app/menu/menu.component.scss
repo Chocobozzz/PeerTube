@@ -109,16 +109,19 @@ menu {
       }
 
       .dropdown-toggle {
+        &::after {
+          border: none;
+        }
+      }
+
+      .dropdown-toggle:first-child {
         display: inline-flex;
         align-items: center;
+
         padding-left: 7px;
         padding-right: 7px;
         padding-top: 6px;
         padding-bottom: 4px;
-
-        &::after {
-          border: none;
-        }
       }
 
       img {
@@ -388,5 +391,9 @@ menu {
 
   .top-menu, .footer {
     width: 100% !important;
+  }
+
+  .dropdown-menu {
+    width: calc(100vw - 30px);
   }
 }

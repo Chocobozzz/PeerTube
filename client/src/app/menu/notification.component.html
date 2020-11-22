@@ -1,6 +1,7 @@
 <div
-  [ngbPopover]="popContent" autoClose="outside" placement="bottom" container="body" popoverClass="popover-notifications"
-  i18n-title title="View your notifications" [ngClass]="{ 'notification-inbox-popover': true, 'shown': opened, 'hidden': isInMobileView }" #popover="ngbPopover" (shown)="onPopoverShown()" (hidden)="onPopoverHidden()"
+  [ngbPopover]="popContent" autoClose="outside" placement="bottom" container={this} popoverClass="popover-notifications"
+  i18n-title title="View your notifications" [ngClass]="{ 'notification-inbox-popover': true, 'shown': opened, 'hidden': isInMobileView }"
+  #popover="ngbPopover" (shown)="onPopoverShown()" (hidden)="onPopoverHidden()"
 >
   <div *ngIf="unreadNotifications > 0" class="unread-notifications">{{ unreadNotifications }}</div>
 

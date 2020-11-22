@@ -9,6 +9,7 @@ import { AuthService, AuthStatus, AuthUser, MenuService, RedirectService, Screen
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 
 const logger = debug('peertube:menu:MenuComponent')
 
@@ -20,6 +21,7 @@ const logger = debug('peertube:menu:MenuComponent')
 export class MenuComponent implements OnInit {
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
   @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
+  @ViewChild('dropdown') dropdown: NgbDropdown
 
   user: AuthUser
   isLoggedIn: boolean
@@ -54,6 +56,18 @@ export class MenuComponent implements OnInit {
     private menuService: MenuService,
     private router: Router
   ) { }
+
+  get isInMobileView () {
+    return this.screenService.isInMobileView()
+  }
+
+  get dropdownContainer () {
+    if (this.isInMobileView) {
+      return this
+    } else {
+      return 'body'
+    }
+  }
 
   get language () {
     return this.languageChooserModal.getCurrentLanguage()
@@ -198,6 +212,29 @@ export class MenuComponent implements OnInit {
 
     if (this.screenService.isInSmallView()) {
       this.menuService.toggleMenu()
+    }
+  }
+
+  // Lock menu scroll when menu scroll to avoid fleeing / detached dropdown
+  onMenuScrollEvent () {
+    document.querySelector('menu').scrollTo(0, 0)
+  }
+
+  onDropdownOpenChange (opened: boolean) {
+    if (this.screenService.isInMobileView()) return
+
+    // Close dropdown when window scroll to avoid dropdown quick jump for re-position
+    const onWindowScroll = () => {
+      this.dropdown.close()
+      window.removeEventListener('scroll', onWindowScroll)
+    }
+
+    if (opened) {
+      window.addEventListener('scroll', onWindowScroll)
+      document.querySelector('menu').scrollTo(0, 0) // Reset menu scroll to easy lock
+      document.querySelector('menu').addEventListener('scroll', this.onMenuScrollEvent)
+    } else {
+      document.querySelector('menu').removeEventListener('scroll', this.onMenuScrollEvent)
     }
   }
 
