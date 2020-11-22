@@ -9,7 +9,7 @@ import { AuthService, AuthStatus, AuthUser, MenuService, RedirectService, Screen
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap'
 
 const logger = debug('peertube:menu:MenuComponent')
 
@@ -54,18 +54,21 @@ export class MenuComponent implements OnInit {
     private hotkeysService: HotkeysService,
     private screenService: ScreenService,
     private menuService: MenuService,
+    private dropdownConfig: NgbDropdownConfig,
     private router: Router
-  ) { }
+  ) {
+    this.dropdownConfig.container = 'body'
+  }
 
   get isInMobileView () {
     return this.screenService.isInMobileView()
   }
 
-  get dropdownContainer (): string | null {
+  get dropdownContainer () {
     if (this.isInMobileView) {
       return null
     } else {
-      return 'body'
+      return this.dropdownConfig.container
     }
   }
 
