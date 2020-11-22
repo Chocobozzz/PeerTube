@@ -88,44 +88,64 @@ menu {
     height: 80px;
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    .logged-in-info {
-      @include ellipsis;
-
-      flex-grow: 1;
-
-      .logged-in-display-name {
-        font-size: 16px;
-        font-weight: $font-semibold;
-        color: pvar(--menuForegroundColor);
-        cursor: pointer;
-
-        @include disable-default-a-behaviour;
-      }
-
-      .logged-in-username {
-        @include ellipsis;
-
-        font-size: 13px;
-        color: #C6C6C6;
-        max-width: 140px;
-        cursor: pointer;
-      }
-    }
+    justify-content: left;
 
     .logged-in-more {
-      margin-right: 20px;
+      margin-left: 13px;
+      border-radius: 25px;
+      transition: background-color .1s ease-in-out;
+      cursor: pointer;
 
-      my-global-icon.dropdown-toggle {
-        cursor: pointer;
+      *, & {
+        line-height: 1;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      &.show {
+        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
+      }
+
+      .dropdown-toggle {
+        display: inline-flex;
+        align-items: center;
+        padding-left: 7px;
+        padding-right: 7px;
+        padding-top: 6px;
+        padding-bottom: 4px;
 
         &::after {
           border: none;
         }
+      }
 
-        ::ng-deep {
-          @include apply-svg-color(pvar(--menuForegroundColor));
+      img {
+        @include avatar(34px);
+
+        margin-right: 10px;
+      }
+
+      .logged-in-info {
+        @include ellipsis;
+
+        flex-grow: 1;
+
+        .logged-in-display-name {
+          font-size: 16px;
+          font-weight: $font-semibold;
+          color: pvar(--menuForegroundColor);
+
+          @include disable-default-a-behaviour;
+        }
+
+        .logged-in-username {
+          @include ellipsis;
+
+          font-size: 13px;
+          color: #C6C6C6;
+          max-width: 140px;
         }
       }
     }

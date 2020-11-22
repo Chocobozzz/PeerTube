@@ -3,17 +3,15 @@
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
         <div>
-          <my-avatar-notification [user]="user" (navigate)="onActiveLinkScrollToAnchor($event)"></my-avatar-notification>
+          <div class="logged-in-more" ngbDropdown placement="bottom-left" container="body" autoClose="outside">
+            <div ngbDropdownToggle>
+              <img [src]="user.accountAvatarUrl" alt="Avatar" />
+              <div class="logged-in-info">
+                <span class="logged-in-display-name">{{ user.account?.displayName }}</span>
 
-          <div class="logged-in-info">
-            <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="logged-in-display-name">{{ user.account?.displayName }}</a>
-            <a *ngIf="!user.account" routerLink="/my-account/settings" class="logged-in-display-name">{{ user.account?.displayName }}</a>
-
-            <div class="logged-in-username">@{{ user.username }}</div>
-          </div>
-
-          <div class="logged-in-more" ngbDropdown [placement]="loggedInMorePlacement" container="body" autoClose="outside">
-            <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button"></my-global-icon>
+                <div class="logged-in-username">@{{ user.username }}</div>
+              </div>
+            </div>
 
             <div ngbDropdownMenu>
               <a *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/accounts', user.account.nameWithHost ]">

@@ -30,8 +30,6 @@ export class MenuComponent implements OnInit {
   videoLanguages: string[] = []
   nsfwPolicy: string
 
-  loggedInMorePlacement: string
-
   currentInterfaceLanguage: string
 
   private languages: VideoConstant<string>[] = []
@@ -57,7 +55,11 @@ export class MenuComponent implements OnInit {
     private router: Router
   ) { }
 
-  get instanceName () {
+  get language () {
+    return this.languageChooserModal.getCurrentLanguage()
+  }
+
+  get instanceName() {
     return this.serverConfig.instance.name
   }
 
@@ -75,10 +77,6 @@ export class MenuComponent implements OnInit {
     }
 
     this.computeAdminAccess()
-
-    this.loggedInMorePlacement = this.screenService.isInMobileView()
-      ? 'left-top auto'
-      : 'right-top auto'
 
     this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
 

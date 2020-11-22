@@ -51,10 +51,10 @@
         a {
           @include disable-default-a-behaviour;
         }
-        
+
         button {
           @include peertube-button;
-        
+
           padding: 0;
           background: transparent;
         }
@@ -86,15 +86,8 @@
   cursor: pointer;
   position: relative;
 
-  img,
   .unread-notifications {
     margin-left: 20px;
-  }
-
-  img {
-    @include avatar(34px);
-
-    margin-right: 10px;
   }
 
   .unread-notifications {
