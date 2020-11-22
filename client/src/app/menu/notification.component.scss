@@ -1,17 +1,47 @@
 @import '_variables';
 @import '_mixins';
 
+.notification-inbox > my-global-icon {
+  @include apply-svg-color(#808080);
+
+  transition: background-color .1s ease-in-out;
+  padding: 11px 7px;
+  border-radius: 25px;
+
+  ::ng-deep {
+    svg {
+      transition: color .1s ease-in-out;
+    }
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    @include apply-svg-color(#fff);
+  }
+}
+
+.notification-inbox.shown > my-global-icon {
+  @include apply-svg-color(#fff);
+
+  background-color: rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
+}
+
 ::ng-deep {
   .popover-notifications.popover {
     max-width: none;
     left: 7px !important;
+
+    .arrow {
+      display: none;
+    }
 
     .popover-body {
       padding: 0;
       font-size: 14px;
       font-family: $main-fonts;
       width: 400px;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.30);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
 
       .loader {
         display: flex;
@@ -42,11 +72,14 @@
         display: flex;
         justify-content: space-between;
 
-        background-color: rgba(0, 0, 0, 0.10);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         align-items: center;
-        padding: 0 10px;
-        font-size: 16px;
-        min-height: 50px;
+        padding: 0 12px;
+        font-size: 14px;
+        font-weight: bold;
+        color: rgba(0, 0, 0, 0.5);
+        text-transform: uppercase;
+        min-height: 40px;
 
         a {
           @include disable-default-a-behaviour;
@@ -82,7 +115,7 @@
   }
 }
 
-.notification-avatar {
+.notification-inbox {
   cursor: pointer;
   position: relative;
 

@@ -11,7 +11,7 @@ import { CoreModule } from './core'
 import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { HighlightPipe } from './header/highlight.pipe'
-import { AvatarNotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
+import { NotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
 import { ConfirmComponent } from './modal/confirm.component'
 import { CustomModalComponent } from './modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from './modal/instance-config-warning-modal.component'
@@ -35,7 +35,7 @@ registerLocaleData(localeOc, 'oc')
     MenuComponent,
     LanguageChooserComponent,
     QuickSettingsModalComponent,
-    AvatarNotificationComponent,
+    NotificationComponent,
     HeaderComponent,
     SearchTypeaheadComponent,
     SuggestionComponent,

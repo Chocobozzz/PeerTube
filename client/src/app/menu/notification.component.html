@@ -1,10 +1,10 @@
 <div
-  [ngbPopover]="popContent" autoClose="outside" placement="bottom-left" container="body" popoverClass="popover-notifications"
-  i18n-title title="View your notifications" class="notification-avatar" #popover="ngbPopover" (hidden)="onPopoverHidden()"
+  [ngbPopover]="popContent" autoClose="outside" placement="bottom" container="body" popoverClass="popover-notifications"
+  i18n-title title="View your notifications" [ngClass]="{ 'notification-inbox': true, 'shown': opened }" #popover="ngbPopover" (shown)="onPopoverShown()" (hidden)="onPopoverHidden()"
 >
   <div *ngIf="unreadNotifications > 0" class="unread-notifications">{{ unreadNotifications }}</div>
 
-  <img [src]="user.accountAvatarUrl" alt="Avatar" />
+  <my-global-icon iconName="inbox-full"></my-global-icon>
 </div>
 
 <ng-template #popContent>
