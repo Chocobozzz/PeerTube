@@ -1,6 +1,6 @@
 # Minimum Nginx version required:  1.13.0 (released Apr 25, 2017)
 # Please check your Nginx installation features the following modules via 'nginx -V':
-# STANDARD HTTP MODULES: Core, Map, Proxy, Rewrite.
+# STANDARD HTTP MODULES: Core, Proxy, Rewrite.
 # OPTIONAL HTTP MODULES: Gzip, Headers, HTTP/2, Log, Real IP, SSL, Thread Pool, Upstream.
 # THIRD PARTY MODULES:   None.
 
@@ -61,13 +61,38 @@ server {
   # Application
   ##
 
-  location / {
+  location @api {
     proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
     proxy_set_header Host              $host;
     proxy_set_header X-Real-IP         $remote_addr;
 
+    client_max_body_size  100k; # default is 1M
+
+    proxy_connect_timeout 10m;
+    proxy_send_timeout    10m;
+    proxy_read_timeout    10m;
+    send_timeout          10m;
+
+    proxy_pass http://backend;
+  }
+
+  location / {
+    try_files /dev/null @api;
+  }
+
+  location = /api/v1/users/me/avatar/pick {
+    limit_except POST { deny all; }
+
+    client_max_body_size  2M; # default is 1M
+
+    try_files /dev/null @api;
+  }
+
+  location = /api/v1/videos/upload {
+    limit_except POST { deny all; }
+
     # This is the maximum upload size, which roughly matches the maximum size of a video file
-    # you can send via the API or the web interface. By default this is 8GB, but administrators
+    # you can send via the API or the web interface. By default we set it to 8GB, but administrators
     # can increase or decrease the limit. Currently there's no way to communicate this limit
     # to users automatically, so you may want to leave a note in your instance 'about' page if
     # you change this.
@@ -75,44 +100,36 @@ server {
     # Note that temporary space is needed equal to the total size of all concurrent uploads.
     # This data gets stored in /var/lib/nginx by default, so you may want to put this directory
     # on a dedicated filesystem.
-    client_max_body_size  8G;
+    client_max_body_size  8G; # default is 1M
 
-    proxy_connect_timeout 600s;
-    proxy_send_timeout    600s;
-    proxy_read_timeout    600s;
-    send_timeout          600s;
-
-    proxy_pass http://backend;
+    try_files /dev/null @api;
   }
 
   ##
   # Websocket
   ##
 
-  location /tracker/socket {
+  location @api_websocket {
     proxy_http_version 1.1;
     proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header   Host            $host;
     proxy_set_header   X-Real-IP       $remote_addr;
     proxy_set_header   Upgrade         $http_upgrade;
     proxy_set_header   Connection      "upgrade";
-
-    # Peers send a message to the tracker every 15 minutes
-    # Don't close the websocket before then
-    proxy_read_timeout 1200s; # default is 60s
 
     proxy_pass http://backend;
   }
 
   location /socket.io {
-    proxy_http_version 1.1;
-    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header   Host            $host;
-    proxy_set_header   X-Real-IP       $remote_addr;
-    proxy_set_header   Upgrade         $http_upgrade;
-    proxy_set_header   Connection      "upgrade";
+    try_files /dev/null @api_websocket;
+  }
 
-    proxy_pass http://backend;
+  location /tracker/socket {
+    # Peers send a message to the tracker every 15 minutes
+    # Don't close the websocket before then
+    proxy_read_timeout 15m; # default is 60s
+
+    try_files /dev/null @api_websocket;
   }
 
   ##
@@ -152,14 +169,14 @@ server {
   # See https://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_temp_path
   #client_body_temp_path /var/www/peertube/storage/nginx/;
 
-  # Bypass PeerTube for performance reasons. Could be removed
+  # Bypass PeerTube for performance reasons. Optional.
   # Should be consistent with client-overrides assets list in /server/controllers/client.ts
   location ~ ^/client/(assets/images/(icons/icon-36x36\.png|icons/icon-48x48\.png|icons/icon-72x72\.png|icons/icon-96x96\.png|icons/icon-144x144\.png|icons/icon-192x192\.png|icons/icon-512x512\.png|logo\.svg|favicon\.png))$ {
     add_header Cache-Control "public, max-age=31536000, immutable"; # Cache 1 year
 
     root /var/www/peertube;
 
-    try_files /storage/client-overrides/$1 /peertube-latest/client/dist/$1 /;
+    try_files /storage/client-overrides/$1 /peertube-latest/client/dist/$1 @api;
   }
 
   # Bypass PeerTube for performance reasons. Optional.
@@ -172,23 +189,23 @@ server {
   # Bypass PeerTube for performance reasons. Optional.
   location ~ ^/static/(thumbnails|avatars)/ {
     if ($request_method = 'OPTIONS') {
-      add_header 'Access-Control-Allow-Origin'  '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-      add_header 'Access-Control-Max-Age'       1728000; # Preflight request can be cached 20 days
-      add_header 'Content-Type'                 'text/plain charset=UTF-8';
-      add_header 'Content-Length'               0;
+      add_header Access-Control-Allow-Origin  '*';
+      add_header Access-Control-Allow-Methods 'GET, OPTIONS';
+      add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+      add_header Access-Control-Max-Age       1728000; # Preflight request can be cached 20 days
+      add_header Content-Type                 'text/plain charset=UTF-8';
+      add_header Content-Length               0;
       return 204;
     }
 
-    add_header 'Access-Control-Allow-Origin'    '*';
-    add_header 'Access-Control-Allow-Methods'   'GET, OPTIONS';
-    add_header 'Access-Control-Allow-Headers'   'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-    add_header Cache-Control                    "public, max-age=7200"; # Cache response 2 hours
+    add_header Access-Control-Allow-Origin    '*';
+    add_header Access-Control-Allow-Methods   'GET, OPTIONS';
+    add_header Access-Control-Allow-Headers   'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+    add_header Cache-Control                  "public, max-age=7200"; # Cache response 2 hours
 
     rewrite ^/static/(.*)$ /$1 break;
 
-    try_files $uri /;
+    try_files $uri @api;
   }
 
   # Bypass PeerTube for performance reasons. Optional.
@@ -209,19 +226,19 @@ server {
     set $limit_rate $peertube_limit_rate;
 
     if ($request_method = 'OPTIONS') {
-      add_header 'Access-Control-Allow-Origin'  '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-      add_header 'Access-Control-Max-Age'       1728000; # Preflight request can be cached 20 days
-      add_header 'Content-Type'                 'text/plain charset=UTF-8';
-      add_header 'Content-Length'               0;
+      add_header Access-Control-Allow-Origin  '*';
+      add_header Access-Control-Allow-Methods 'GET, OPTIONS';
+      add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+      add_header Access-Control-Max-Age       1728000; # Preflight request can be cached 20 days
+      add_header Content-Type                 'text/plain charset=UTF-8';
+      add_header Content-Length               0;
       return 204;
     }
 
     if ($request_method = 'GET') {
-      add_header 'Access-Control-Allow-Origin'  '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+      add_header Access-Control-Allow-Origin  '*';
+      add_header Access-Control-Allow-Methods 'GET, OPTIONS';
+      add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
 
       # Don't spam access log file with byte range requests
       access_log off;
@@ -242,6 +259,6 @@ server {
     rewrite ^/static/webseed/(.*)$ /videos/$1 break;
     rewrite ^/static/(.*)$         /$1        break;
 
-    try_files $uri /;
+    try_files $uri @api;
   }
 }
