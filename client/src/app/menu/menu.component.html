@@ -14,7 +14,8 @@
             </div>
 
             <div ngbDropdownMenu>
-              <a *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/accounts', user.account.nameWithHost ]">
+              <a *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/accounts', user.account.nameWithHost ]"
+                #profile (click)="onActiveLinkScrollToAnchor(profile)">
                 <my-global-icon iconName="go" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
               </a>
 
