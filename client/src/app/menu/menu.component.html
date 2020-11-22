@@ -59,7 +59,7 @@
 
               <div class="dropdown-divider"></div>
 
-              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
+              <a *ngIf="!isInMobileView" ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
                 <my-global-icon iconName="command" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Keyboard shortcuts</ng-container>
               </a>

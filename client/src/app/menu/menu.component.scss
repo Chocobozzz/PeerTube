@@ -407,4 +407,16 @@ menu {
   .dropdown-menu {
     width: calc(100vw - 30px);
   }
+
+  .dropdown-item:hover, .dropdown-item:active {
+    &.settings-sensitive {
+      my-global-icon {
+        ::ng-deep {
+          svg {
+            margin-top: 0px !important;
+          }
+        }
+      }
+    }
+  }
 }
