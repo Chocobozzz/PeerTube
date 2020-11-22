@@ -41,7 +41,7 @@
                 <span class="ml-auto text-muted">{{ videoLanguages.join(', ') }}</span>
               </a>
 
-              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings"
+              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item settings-sensitive" routerLink="/my-account/settings"
                 fragment="video-sensitive-content-policy" #settingsSensitiveContentPolicy
                 (click)="onActiveLinkScrollToAnchor(settingsSensitiveContentPolicy)">
                 <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy === 'display' }" iconName="sensitive" aria-hidden="true"></my-global-icon>

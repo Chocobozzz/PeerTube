@@ -372,6 +372,16 @@ menu {
     my-global-icon.hover-display-toggle {
       display: none;
     }
+
+    &.settings-sensitive {
+      my-global-icon {
+        ::ng-deep {
+          svg {
+            margin-top: 1px !important;
+          }
+        }
+      }
+    }
   }
 }
 
