@@ -42,10 +42,9 @@ async function run () {
     console.log('\n\nContributors to our 2018 crowdfunding :heart:')
     console.log('---------------------------------------------\n')
     console.log(`We ran [a crowdfunding campaign](https://www.kisskissbankbank.com/en/projects/peertube-a-free-and-federated-video-platform)
-in 2018 to pave the road to the version 1.0.0 of PeerTube, with 1,379 backers. Thanks to everyone who pitched in and shared the news around!
-`)
+in 2018 to pave the road to the version 1.0.0 of PeerTube, with 1,379 backers. Thanks to everyone who pitched in and shared the news!`)
     console.log(`
-Quonfucius, IP Solution, \_Laure\_, @lex666, 0x010C, 3dsman, 3rw4n-G3D, aallrd, Abel-Berger, Adam-Odell, adechambost, adim, adngdb, Adrien T
+Quonfucius, IP Solution, _Laure_, @lex666, 0x010C, 3dsman, 3rw4n-G3D, aallrd, Abel-Berger, Adam-Odell, adechambost, adim, adngdb, Adrien T
 hurotte, Adrien-BARAN, Adrien-Hamraoui, Adrien-Horcholle, Adrien-Luxey, Adrien-Polar, Adrien-Touminet, Agathe Begault, Agence-Différente, Ah
 med-Al-Ahmed, aiprole, akpoptro, Al-Nimr, Alain-Delgrange, Alain-Fyon, Alain-Girard, Alain-MICHEL, Aleksandar-Aleksandrov, Alex-Chancellé, A
 lex-Dufournet, Alex-Gleason, Alexander-Murray-Watters, Alexandre-Alapetite, Alexandre-Badez, Alexandre-Giuliani, Alexandre-Mercier, Alexandr
@@ -56,19 +55,19 @@ ux , Arnaud-Mounier, Arnaud-Risler, Arnaud-Vigouroux, Arnulf, Arthur-Bellier, ar
 thur.Frin, Arvi-LEFEVRE, athanael.fr, auber38, Auguste Psqr, Aurélien-Tamisier, Avel-Musicavel, axel-guegant, Axel-Plat, Aymeric-Dlv, Ayst, 
 Azenilion, Bandino, baptiste-lemoine, Baptiste-Rochez, baruica, Bastien-Dangin, batlab, bcourtine, Bea-Schaack-2, beaufils, beaumme, Belmont
 1, Ben-Geeraerts, Ben-Meijering, Benjamin-Baratta, Benjamin-Roussel, Benoît Joffre, Benoîtdd, Bernard-Legrand, Bernard-Vauquelin, Bernhard-H
-ayden, bertrand.arlabosse, bigsicret, bjg, bnjbvr, bob\_isat, bobstechsite, Bolton-Allan, Boov', Boris-ARGAUD, Brice.Francois, broz42, Bruno
+ayden, bertrand.arlabosse, bigsicret, bjg, bnjbvr, bob_isat, bobstechsite, Bolton-Allan, Boov', Boris-ARGAUD, Brice.Francois, broz42, Bruno
  Lefèvre, Bruno-Douville, Bruno-Fortabat, Bruno-Gadaleta, Bruno-VASTA, Bumblebee, Butchcassidy, Cadiou-Christophe, calendros, Candy-Ming, ca
 ppitaine, Carmen-Drocourt, carrigns, case, Cathy-Barbet, CBach, ccazin, Cecile-Obernesser, Cecilia-:), Cédric-Bleschet, Cédric.Bayle, Cestdo
 ncvrai, cgay, champ contrechamp, chapa, charlerlin, charles-jacquin, Charlie-Duclut, charlotte-cgondre78, Chris-Doe, chris-louba, Christel-B
 erthelot, Christian-FERRARIS, christiannavelot, Christophe-Bastin, christophe-beziers la fosse, Christophe-Pieret, Christophe-Verhaege, chri
 stophec, Christopher-Bero, chtfn, chud, Claire-C, clairezed, Claude-POUGHEON, Clément-Hubert, Clément-Morelle, clydeb, Comamanel, Côme Chill
-iet, Confederac.io, Consulting-AZAPTEC, Corentin3892, CryoGen, cyp, Cypher-Goat, Cyril, Cyril\_M\_, Cyril-MONMOUTON, Cyril-Waechter, Damien-
+iet, Confederac.io, Consulting-AZAPTEC, Corentin3892, CryoGen, cyp, Cypher-Goat, Cyril, Cyril_M_, Cyril-MONMOUTON, Cyril-Waechter, Damien-
 Gabard, Damien-Garaud, Dams3132, Daniel Kuebler, Daniel Waxweiler, Daniel-Bartsch, Daniel-PIPALA, Daniel-Struck, Daniel-Thul, Danny-Joerger,
- DansLeRuSH, DantSu, Dany-Marcoux, Daouzli-Adel, Darfeld, Darth\_Judge, Dashcom, David-BADOIL, David-Benoist, David-Dormoy, David-Gil-2, Dav
+ DansLeRuSH, DantSu, Dany-Marcoux, Daouzli-Adel, Darfeld, Darth_Judge, Dashcom, David-BADOIL, David-Benoist, David-Dormoy, David-Gil-2, Dav
 id-Velasco, David-Wagner, David-writ, davlgd, davyg2, dbudo72300, de Folleville -Matthieu , DeBugs, Denis-Lecourtiller, Denis-Vannier, Desmu
 , Didier-Bove, Diego-Crespo, Dimitri-Stouney, dino, Dinosaure, Doc Skellington, Dominique-Brun, dr4Ke, DreamClassier, DRogueRonin, dussydelf
 , Dylan-Moonfire, Ealhad, Edouard-SCHWEISGUTH, Elanndelh--, ElodieEtJimmy, Éloi-Rivard, Elric-Noel, Elwan-Héry, Emilie-Wietzke, Emilien-Ghom
-i, eparth, Eric-Bouhana, Eric-Hendricks, Eric.Vales, Erwan-Moreau, Erzender, ESS\_Clem, Etienne-Baqué, Etienne-Botek, Etienne-Lmn, Ex-Serv, 
+i, eparth, Eric-Bouhana, Eric-Hendricks, Eric.Vales, Erwan-Moreau, Erzender, ESS_Clem, Etienne-Baqué, Etienne-Botek, Etienne-Lmn, Ex-Serv, 
 fabeveynes, Fabien BERINI ( Rehvaro ) , Fabien Freling, Fabien-Roualdes, Fabien.Abraini, Fabien.Bonneval, fabrice-simon, farlistener, Felix-
 ROBICHON, FelixDouet, FHE, Fiamoa-McBenson, flamwenco, Flopômpôm, FloraGC, Florent-Deschamps, Florent-Fayolle, Florent-Mallet, Florent-Vasse
 ur, Florent.Duveau, Florestan Fournier, Florian Kohrt, Florian-Bellafont, Florian-Douay, Florian-LE GOFF, Florian-Siegenthaler, Florian.Frey
@@ -92,7 +91,7 @@ n-Yves-DUPARC, Jeanne-Corvellec, jeansebastien, Jelv, Jérémie -Wach, Jeremie-L
 érôme-ISNARD, jerome-simonato, JeromeD, Jery, Jezza, Jim-McDoniel, jl-M-2, jlanca, jlcpuzzle, jn-m, jnthnctt, joakim.faiss, Joe-Riche, Joévi
 n-SOULENQ, Johann-FONTAINE, John-Devor, John-Doe, Jojo-Boulix, Jonas-Aparicio, Jonathan-Dollé, Jonathan-Kohler, Jonathan-LAURENT, Jos-van de
 n Oever, Joseph-Lawson, Jozef-Knaperek, jroger, ju, jubarbu, Julianoe-G, Julie-Bultez, Julien Loudet, Julien Maulny (alcalyn), Julien-AILHAU
-D, Julien-Aubin, Julien-Biaudet, Julien-Bréchet, Julien-Cochennec, Julien-Duroure, Julien-Huon, Julien-Lemaire, Julien-Weber, jyb, K-\_, Kal
+D, Julien-Aubin, Julien-Biaudet, Julien-Bréchet, Julien-Cochennec, Julien-Duroure, Julien-Huon, Julien-Lemaire, Julien-Weber, jyb, K-_, Kal
 ambakA, Kanor, kari-kimber, Karim-Jouini, karl-bienfait, Kdecherf, Keplerpondorskell, kevin-Beranger, Kevin-Nguyen, King-Of Peons, Kioob, kl
 oh, kokoklems, Konstantin-Kovar, Kriĉjo, Kyâne-PICHOU, L'elfe-Sylvain, La Gonz, Lara-Dufour, lareinedeselfes, Laurence-Giroud, laurent-fuent
 es, Laurent-HEINTZ, Laurent-PICQUENOT, ldubost, lebidibule, LeChi, LeDivinBueno, Legrave, Les Assortis, Leyokki-Tk, LibreEnFete-en Tregor, L
@@ -110,7 +109,7 @@ anouckd, Nasser-Debruyere, Nat-Tuck, Nathan.B, nayya, nazgulz666, Neal-Wilson, n
 coD, Nicolas-Auvray, nicolas-k, Nicolas-Pinault, Nicolas-Ruffel, NicolasCARPi, nicolaslegland, niconil, Niles, nitot, Nono1965, Norbert, Nor
 de, Numcap, obergix, Obrow, Okki, Olivier-Calzi, Olivier-Ganneval, Olivier-Marouzé, Olivier-Mondoloni, olivier-pierret, Oncela-Petit Chat, Ó
 skar-Sturluson, p3n15634n7, Paindesegle, Pas De-Panique, Pascal-BLEUSE, Pascal-Larramendy, Patrice-Jabeneau, patrice-maertens, patrick-bappe
-l, PATRICK-GRANDIN, Patrick-MERCIER, Patrickl , Paul-Härle, Paul-Tardy, pbramy, Pedro-CADETE, Perrine-de Coëtlogon, Peter\_Fillgod, Petter-J
+l, PATRICK-GRANDIN, Patrick-MERCIER, Patrickl , Paul-Härle, Paul-Tardy, pbramy, Pedro-CADETE, Perrine-de Coëtlogon, Peter_Fillgod, Petter-J
 oelson, Philippe-BATTMANN, Philippe-Cabaud, Philippe-Debar, philippe-giffard, Philippe-Lallemant, Philippe-Le Van, philippe-lhardy, Philippe
 -Thébault, Philippe-VINCENT-2, PhilOGM, Pierre 'catwell' Chapuis, Pierre Gros, Pierre-Antoine-Champin, Pierre-Bresson-2, Pierre-d'Alençon, P
 ierre-Equoy, Pierre-Girardeau, Pierre-Houmeau, Pierre-Marijon, Pierre-petch, Pierrick-Couturier, Pilou-CaraGk, Piotr-Miszczak, Pla, Plastic 
@@ -123,12 +122,12 @@ YET, Samuel-Verschelde, Sanpi, Sascha-Brendel, Schwartz, Se7h, Sebastiaan-Glazen
 e, Severin-Suveren, severine-roger, shlagevuk-shlagevuk, Siegfried-Ehret, Simon-Hemery, Simon-Larcher, Simon-Reiser, Simounet, Siri-Louie, s
 issssou, skarab, Skurious, skynebula, Sohga-Sohga, Solène-Rapenne, solinux, Sophie-Imbach , Sosthen, Spiderweak, Stanislas-ANDRE, Stanislas-
 Michalak, starmatt, Steef, Stefan-Petrovski, Stéphane-Girardon, Stéphanie-Baltus, Stev-3d, Stoori, SuckyStrike, Sufflope, Sulfurax, SundownD
-EV, Swann-Fournial, Syk, Syluban, Sylv1c, Sylvain Bellone, Sylvain P, Sylvain\_M, Sylvain-Cazaux, Sylvain-GLAIZE, sylvain.arrachart, Sylvest
-re Ledru, sylvie-boutet, Sylvie-TORRES, tael67, tang35, tangi\_b, Tarulien, Taunya-Debolt, Tazimut-Khaelyor, terry-maire, Thanaen, Thatoo, T
+EV, Swann-Fournial, Syk, Syluban, Sylv1c, Sylvain Bellone, Sylvain P, Sylvain_M, Sylvain-Cazaux, Sylvain-GLAIZE, sylvain.arrachart, Sylvest
+re Ledru, sylvie-boutet, Sylvie-TORRES, tael67, tang35, tangi_b, Tarulien, Taunya-Debolt, Tazimut-Khaelyor, terry-maire, Thanaen, Thatoo, T
 héophile-Noiré, Thibault-Vlieghe, Thierry-Chancé, Thierry-Fenasse, Thomas-Aurel, Thomas-CALVEZ, thomas-constans, Thomas-Kuntz, thomassin-lou
 cas, Thosbk, ticosc, Tim-Albers, Tinapa -Itastri, TkPx, TM, tnntwister, TomR, Tomus, Tonio-Bilos, tony-carnide, Toover, toto-leroidelasaucis
-se, ToumToum, TP., trigrou, Tristan-Porteries, Tryph, Tursiops, tzilliox, U-&\_\`HbAAe4onnpN9!e+/#42\*5>k^E, Ulrich-Norbisrath, Un Sur Quatr
-e, Valerio-Paladino, Valerio-Pilo, Valeryan\_24, Valou69, Vegattitude, Velome, Vergogne, Vero-Pajot, vianneyb, Victo-Sab, Victor -Hery, Vict
+se, ToumToum, TP., trigrou, Tristan-Porteries, Tryph, Tursiops, tzilliox, U-&_\`HbAAe4onnpN9!e+/#42*5>k^E, Ulrich-Norbisrath, Un Sur Quatr
+e, Valerio-Paladino, Valerio-Pilo, Valeryan_24, Valou69, Vegattitude, Velome, Vergogne, Vero-Pajot, vianneyb, Victo-Sab, Victor -Hery, Vict
 orien-Labalette, Vincent-Corrèze, Vincent-Fromentin, Vincent-Lamy, Vincent-Lasseur, VINCENT-PEYRET, vmorel, Walter-van Holst, Watsdesign, We
 sley-Moore, williampolletdev, win100, wyk, Xaloc-Xaloc, Xavier ALT, Xavier-Chantry, Xavier-Godard, XoD, Yaaann, Yann-Delaunoy, Yann-Nave, ya
 nnick-grenzinger, yanselmetti, Ykatsot, Yohann-Bacha, yopox, Youen-Toupin, Yves-Caniou, Yves-Gerech, zar-rok, ZeBlackPearl, ZeGreg
