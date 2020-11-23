@@ -7,31 +7,35 @@ export class Notifier {
 
   constructor (private messageService: MessageService) { }
 
-  info (text: string, title?: string, timeout?: number) {
+  info (text: string, title?: string, timeout?: number, sticky?: boolean) {
     if (!title) title = $localize`Info`
 
-    return this.notify('info', text, title, timeout)
+    console.info(`${title}: ${text}`)
+    return this.notify('info', text, title, timeout, sticky)
   }
 
-  error (text: string, title?: string, timeout?: number) {
+  error (text: string, title?: string, timeout?: number, sticky?: boolean) {
     if (!title) title = $localize`Error`
 
-    return this.notify('error', text, title, timeout)
+    console.error(`${title}: ${text}`)
+    return this.notify('error', text, title, timeout, sticky)
   }
 
-  success (text: string, title?: string, timeout?: number) {
+  success (text: string, title?: string, timeout?: number, sticky?: boolean) {
     if (!title) title = $localize`Success`
 
-    return this.notify('success', text, title, timeout)
+    console.log(`${title}: ${text}`)
+    return this.notify('success', text, title, timeout, sticky)
   }
 
-  private notify (severity: 'success' | 'info' | 'warn' | 'error', text: string, title: string, timeout?: number) {
+  private notify (severity: 'success' | 'info' | 'warn' | 'error', text: string, title: string, timeout?: number, sticky?: boolean) {
     this.messageService.add({
       severity,
       summary: title,
       detail: text,
       closable: true,
-      life: timeout || this.TIMEOUT
+      life: timeout || this.TIMEOUT,
+      sticky
     })
   }
 }

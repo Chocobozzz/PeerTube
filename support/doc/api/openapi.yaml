@@ -972,6 +972,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Avatar'
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the avatar
       requestBody:
         content:
           multipart/form-data:
@@ -1308,6 +1316,14 @@ paths:
           description: user video quota is exceeded with this video
         '408':
           description: upload has timed out
+        '413':
+          description: video file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the video
         '422':
           description: invalid input file
       requestBody:

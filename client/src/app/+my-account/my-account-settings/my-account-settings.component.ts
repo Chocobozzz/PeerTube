@@ -1,6 +1,8 @@
 import { ViewportScroller } from '@angular/common'
+import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewChecked, Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
+import { uploadErrorHandler } from '@app/helpers'
 
 @Component({
   selector: 'my-account-settings',
@@ -44,7 +46,11 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
           this.user.updateAccountAvatar(data.avatar)
         },
 
-        err => this.notifier.error(err.message)
+        (err: HttpErrorResponse) => uploadErrorHandler({
+          err,
+          name: $localize`avatar`,
+          notifier: this.notifier
+        })
       )
   }
 }
