@@ -2,13 +2,26 @@ import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models'
-import { VideoResolution } from '../../shared/models/videos'
+import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
-import { transcode, TranscodeOptions, TranscodeOptionsType } from '../helpers/ffmpeg-utils'
-import { canDoQuickTranscode, getDurationFromVideoFile, getMetadataFromFile, getVideoFileFPS } from '../helpers/ffprobe-utils'
+import { AvailableEncoders, EncoderOptionsBuilder, transcode, TranscodeOptions, TranscodeOptionsType } from '../helpers/ffmpeg-utils'
+import {
+  canDoQuickTranscode,
+  getAudioStream,
+  getDurationFromVideoFile,
+  getMaxAudioBitrate,
+  getMetadataFromFile,
+  getVideoFileBitrate,
+  getVideoFileFPS
+} from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
-import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'
+import {
+  HLS_STREAMING_PLAYLIST_DIRECTORY,
+  P2P_MEDIA_LOADER_PEER_VERSION,
+  VIDEO_TRANSCODING_FPS,
+  WEBSERVER
+} from '../initializers/constants'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { updateMasterHLSPlaylist, updateSha256VODSegments } from './hls'
@@ -31,8 +44,13 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFileA
 
   const transcodeOptions: TranscodeOptions = {
     type: transcodeType,
+
     inputPath: videoInputPath,
     outputPath: videoTranscodedPath,
+
+    availableEncoders,
+    profile: 'default',
+
     resolution: inputVideoFile.resolution
   }
 
@@ -78,14 +96,23 @@ async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoR
   const transcodeOptions = resolution === VideoResolution.H_NOVIDEO
     ? {
       type: 'only-audio' as 'only-audio',
+
       inputPath: videoInputPath,
       outputPath: videoTranscodedPath,
+
+      availableEncoders,
+      profile: 'default',
+
       resolution
     }
     : {
       type: 'video' as 'video',
       inputPath: videoInputPath,
       outputPath: videoTranscodedPath,
+
+      availableEncoders,
+      profile: 'default',
+
       resolution,
       isPortraitMode: isPortrait
     }
@@ -111,8 +138,13 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
 
   const transcodeOptions = {
     type: 'merge-audio' as 'merge-audio',
+
     inputPath: tmpPreviewPath,
     outputPath: videoTranscodedPath,
+
+    availableEncoders,
+    profile: 'default',
+
     audioPath: audioInputPath,
     resolution
   }
@@ -156,8 +188,13 @@ async function generateHlsPlaylist (options: {
 
   const transcodeOptions = {
     type: 'hls' as 'hls',
+
     inputPath: videoInputPath,
     outputPath,
+
+    availableEncoders,
+    profile: 'default',
+
     resolution,
     copyCodecs,
     isPortraitMode,
@@ -213,6 +250,75 @@ async function generateHlsPlaylist (options: {
   await updateSha256VODSegments(video)
 
   return video
+}
+
+// ---------------------------------------------------------------------------
+// Available encoders profiles
+// ---------------------------------------------------------------------------
+
+const defaultX264OptionsBuilder: EncoderOptionsBuilder = async ({ input, resolution, fps }) => {
+  if (!fps) return { outputOptions: [] }
+
+  let targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+
+  // Don't transcode to an higher bitrate than the original file
+  const fileBitrate = await getVideoFileBitrate(input)
+  targetBitrate = Math.min(targetBitrate, fileBitrate)
+
+  return {
+    outputOptions: [
+      // Constrained Encoding (VBV)
+      // https://slhck.info/video/2017/03/01/rate-control.html
+      // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
+      `-maxrate ${targetBitrate}`, `-bufsize ${targetBitrate * 2}`
+    ]
+  }
+}
+
+const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input }) => {
+  const parsedAudio = await getAudioStream(input)
+
+  // we try to reduce the ceiling bitrate by making rough matches of bitrates
+  // of course this is far from perfect, but it might save some space in the end
+
+  const audioCodecName = parsedAudio.audioStream['codec_name']
+
+  const bitrate = getMaxAudioBitrate(audioCodecName, parsedAudio.bitrate)
+
+  if (bitrate !== undefined && bitrate !== -1) {
+    return { outputOptions: [ '-b:a', bitrate + 'k' ] }
+  }
+
+  return { outputOptions: [] }
+}
+
+const defaultLibFDKAACOptionsBuilder: EncoderOptionsBuilder = () => {
+  return { outputOptions: [ '-aq', '5' ] }
+}
+
+const availableEncoders: AvailableEncoders = {
+  vod: {
+    libx264: {
+      default: defaultX264OptionsBuilder
+    },
+    aac: {
+      default: defaultAACOptionsBuilder
+    },
+    libfdkAAC: {
+      default: defaultLibFDKAACOptionsBuilder
+    }
+  },
+  live: {
+    libx264: {
+      default: defaultX264OptionsBuilder
+    },
+    aac: {
+      default: defaultAACOptionsBuilder
+    },
+    libfdkAAC: {
+      default: defaultLibFDKAACOptionsBuilder
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------

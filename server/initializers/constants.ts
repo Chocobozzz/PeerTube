@@ -336,6 +336,17 @@ const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   KEEP_ORIGIN_FPS_RESOLUTION_MIN: 720 // We keep the original FPS on high resolutions (720 minimum)
 }
 
+const VIDEO_TRANSCODING_ENCODERS = {
+  VIDEO: [ 'libx264' ],
+
+  // Try the first one, if not available try the second one etc
+  AUDIO: [
+    // we favor VBR, if a good AAC encoder is available
+    'libfdk_aac',
+    'aac'
+  ]
+}
+
 const DEFAULT_AUDIO_RESOLUTION = VideoResolution.H_480P
 
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
@@ -804,6 +815,7 @@ export {
   ACTOR_FOLLOW_SCORE,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
+  VIDEO_TRANSCODING_ENCODERS,
   FOLLOW_STATES,
   DEFAULT_USER_THEME_NAME,
   SERVER_ACTOR_NAME,

@@ -4,10 +4,87 @@ import { dirname, join } from 'path'
 import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
 import { CONFIG } from '../initializers/config'
-import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
-import { getAudioStream, getClosestFramerateStandard, getMaxAudioBitrate, getVideoFileFPS } from './ffprobe-utils'
+import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_ENCODERS, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
+import { getAudioStream, getClosestFramerateStandard, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
+
+// ---------------------------------------------------------------------------
+// Encoder options
+// ---------------------------------------------------------------------------
+
+// Options builders
+
+export type EncoderOptionsBuilder = (params: {
+  input: string
+  resolution: VideoResolution
+  fps?: number
+}) => Promise<EncoderOptions> | EncoderOptions
+
+// Options types
+
+export interface EncoderOptions {
+  outputOptions: string[]
+}
+
+// All our encoders
+
+export interface EncoderProfile <T> {
+  [ profile: string ]: T
+
+  default: T
+}
+
+export type AvailableEncoders = {
+  [ id in 'live' | 'vod' ]: {
+    [ encoder in 'libx264' | 'aac' | 'libfdkAAC' ]: EncoderProfile<EncoderOptionsBuilder>
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Image manipulation
+// ---------------------------------------------------------------------------
+
+function convertWebPToJPG (path: string, destination: string): Promise<void> {
+  const command = ffmpeg(path)
+    .output(destination)
+
+  return runCommand(command)
+}
+
+function processGIF (
+  path: string,
+  destination: string,
+  newSize: { width: number, height: number },
+  keepOriginal = false
+): Promise<void> {
+  return new Promise<void>(async (res, rej) => {
+    if (path === destination) {
+      throw new Error('FFmpeg needs an input path different that the output path.')
+    }
+
+    logger.debug('Processing gif %s to %s.', path, destination)
+
+    try {
+      const command = ffmpeg(path)
+        .fps(20)
+        .size(`${newSize.width}x${newSize.height}`)
+        .output(destination)
+
+      command.on('error', (err, stdout, stderr) => {
+        logger.error('Error in ffmpeg gif resizing process.', { stdout, stderr })
+        return rej(err)
+      })
+      .on('end', async () => {
+        if (keepOriginal !== true) await remove(path)
+        res()
+      })
+      .run()
+    } catch (err) {
+      return rej(err)
+    }
+  })
+}
 
 async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {
   const pendingImageName = 'pending-' + imageName
@@ -49,9 +126,15 @@ type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio' 
 
 interface BaseTranscodeOptions {
   type: TranscodeOptionsType
+
   inputPath: string
   outputPath: string
+
+  availableEncoders: AvailableEncoders
+  profile: string
+
   resolution: VideoResolution
+
   isPortraitMode?: boolean
 }
 
@@ -94,7 +177,7 @@ const builders: {
   'hls': buildHLSVODCommand,
   'merge-audio': buildAudioMergeCommand,
   'only-audio': buildOnlyAudioCommand,
-  'video': buildx264Command
+  'video': buildx264VODCommand
 }
 
 async function transcode (options: TranscodeOptions) {
@@ -110,58 +193,11 @@ async function transcode (options: TranscodeOptions) {
   await fixHLSPlaylistIfNeeded(options)
 }
 
-function convertWebPToJPG (path: string, destination: string): Promise<void> {
-  return new Promise<void>(async (res, rej) => {
-    try {
-      const command = ffmpeg(path).output(destination)
+// ---------------------------------------------------------------------------
+// Live muxing/transcoding functions
+// ---------------------------------------------------------------------------
 
-      command.on('error', (err, stdout, stderr) => {
-        logger.error('Error in ffmpeg webp convert process.', { stdout, stderr })
-        return rej(err)
-      })
-      .on('end', () => res())
-      .run()
-    } catch (err) {
-      return rej(err)
-    }
-  })
-}
-
-function processGIF (
-  path: string,
-  destination: string,
-  newSize: { width: number, height: number },
-  keepOriginal = false
-): Promise<void> {
-  return new Promise<void>(async (res, rej) => {
-    if (path === destination) {
-      throw new Error('FFmpeg needs an input path different that the output path.')
-    }
-
-    logger.debug('Processing gif %s to %s.', path, destination)
-
-    try {
-      const command = ffmpeg(path)
-        .fps(20)
-        .size(`${newSize.width}x${newSize.height}`)
-        .output(destination)
-
-      command.on('error', (err, stdout, stderr) => {
-        logger.error('Error in ffmpeg gif resizing process.', { stdout, stderr })
-        return rej(err)
-      })
-      .on('end', async () => {
-        if (keepOriginal !== true) await remove(path)
-        res()
-      })
-      .run()
-    } catch (err) {
-      return rej(err)
-    }
-  })
-}
-
-function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: number[], fps, deleteSegments: boolean) {
+function getLiveTranscodingCommand (rtmpUrl: string, outPath: string, resolutions: number[], fps: number, deleteSegments: boolean) {
   const command = getFFmpeg(rtmpUrl)
   command.inputOption('-fflags nobuffer')
 
@@ -183,14 +219,9 @@ function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: numb
     }))
   ])
 
-  command.outputOption('-b_strategy 1')
-  command.outputOption('-bf 16')
+  addEncoderDefaultParams(command, 'libx264', fps)
+
   command.outputOption('-preset superfast')
-  command.outputOption('-level 3.1')
-  command.outputOption('-map_metadata -1')
-  command.outputOption('-pix_fmt yuv420p')
-  command.outputOption('-max_muxing_queue_size 1024')
-  command.outputOption('-g ' + (fps * 2))
 
   for (let i = 0; i < resolutions.length; i++) {
     const resolution = resolutions[i]
@@ -209,12 +240,10 @@ function runLiveTranscoding (rtmpUrl: string, outPath: string, resolutions: numb
 
   command.outputOption('-var_stream_map', varStreamMap.join(' '))
 
-  command.run()
-
   return command
 }
 
-function runLiveMuxing (rtmpUrl: string, outPath: string, deleteSegments: boolean) {
+function getLiveMuxingCommand (rtmpUrl: string, outPath: string, deleteSegments: boolean) {
   const command = getFFmpeg(rtmpUrl)
   command.inputOption('-fflags nobuffer')
 
@@ -224,8 +253,6 @@ function runLiveMuxing (rtmpUrl: string, outPath: string, deleteSegments: boolea
   command.outputOption('-map 0:v?')
 
   addDefaultLiveHLSParams(command, outPath, deleteSegments)
-
-  command.run()
 
   return command
 }
@@ -255,32 +282,13 @@ async function hlsPlaylistToFragmentedMP4 (hlsDirectory: string, segmentFiles: s
   return runCommand(command, cleaner)
 }
 
-async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
-  return new Promise<string>((res, rej) => {
-    command.on('error', (err, stdout, stderr) => {
-      if (onEnd) onEnd()
-
-      logger.error('Error in transcoding job.', { stdout, stderr })
-      rej(err)
-    })
-
-    command.on('end', () => {
-      if (onEnd) onEnd()
-
-      res()
-    })
-
-    command.run()
-  })
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  runLiveMuxing,
+  getLiveTranscodingCommand,
+  getLiveMuxingCommand,
   convertWebPToJPG,
   processGIF,
-  runLiveTranscoding,
   generateImageFromVideoFile,
   TranscodeOptions,
   TranscodeOptionsType,
@@ -290,12 +298,23 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addDefaultX264Params (command: ffmpeg.FfmpegCommand) {
+// ---------------------------------------------------------------------------
+// Default options
+// ---------------------------------------------------------------------------
+
+function addEncoderDefaultParams (command: ffmpeg.FfmpegCommand, encoder: 'libx264' | string, fps?: number) {
+  if (encoder !== 'libx264') return
+
   command.outputOption('-level 3.1') // 3.1 is the minimal resource allocation for our highest supported resolution
          .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
          .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
          .outputOption('-pix_fmt yuv420p') // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
          .outputOption('-map_metadata -1') // strip all metadata
+         .outputOption('-max_muxing_queue_size 1024') // avoid issues when transcoding some files: https://trac.ffmpeg.org/ticket/6375
+         // Keyframe interval of 2 seconds for faster seeking and resolution switching.
+         // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
+         // https://superuser.com/a/908325
+         .outputOption('-g ' + (fps * 2))
 }
 
 function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string, deleteSegments: boolean) {
@@ -313,7 +332,11 @@ function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string
   command.output(join(outPath, '%v.m3u8'))
 }
 
-async function buildx264Command (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
+// ---------------------------------------------------------------------------
+// Transcode VOD command builders
+// ---------------------------------------------------------------------------
+
+async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
   let fps = await getVideoFileFPS(options.inputPath)
   if (
     // On small/medium resolutions, limit FPS
@@ -325,7 +348,7 @@ async function buildx264Command (command: ffmpeg.FfmpegCommand, options: Transco
     fps = getClosestFramerateStandard(fps, 'STANDARD')
   }
 
-  command = await presetH264(command, options.inputPath, options.resolution, fps)
+  command = await presetVideo(command, options.inputPath, options, fps)
 
   if (options.resolution !== undefined) {
     // '?x720' or '720x?' for example
@@ -347,7 +370,16 @@ async function buildx264Command (command: ffmpeg.FfmpegCommand, options: Transco
 async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: MergeAudioTranscodeOptions) {
   command = command.loop(undefined)
 
-  command = await presetH264VeryFast(command, options.audioPath, options.resolution)
+  command = await presetVideo(command, options.audioPath, options)
+
+  /*
+  MAIN reference: https://slhck.info/video/2017/03/01/rate-control.html
+  Our target situation is closer to a livestream than a stream,
+  since we want to reduce as much a possible the encoding burden,
+  although not to the point of a livestream where there is a hard
+  constraint on the frames per second to be encoded.
+  */
+  command.outputOption('-preset:v veryfast')
 
   command = command.input(options.audioPath)
                    .videoFilter('scale=trunc(iw/2)*2:trunc(ih/2)*2') // Avoid "height not divisible by 2" error
@@ -377,7 +409,7 @@ async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTr
 
   if (options.copyCodecs) command = presetCopy(command)
   else if (options.resolution === VideoResolution.H_NOVIDEO) command = presetOnlyAudio(command)
-  else command = await buildx264Command(command, options)
+  else command = await buildx264VODCommand(command, options)
 
   command = command.outputOption('-hls_time 4')
                    .outputOption('-hls_list_size 0')
@@ -388,10 +420,6 @@ async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTr
                    .outputOption('-hls_flags single_file')
 
   return command
-}
-
-function getHLSVideoPath (options: HLSTranscodeOptions) {
-  return `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
 }
 
 async function fixHLSPlaylistIfNeeded (options: TranscodeOptions) {
@@ -409,75 +437,70 @@ async function fixHLSPlaylistIfNeeded (options: TranscodeOptions) {
   await writeFile(options.outputPath, newContent)
 }
 
-/**
- * A slightly customised version of the 'veryfast' x264 preset
- *
- * The veryfast preset is right in the sweet spot of performance
- * and quality. Superfast and ultrafast will give you better
- * performance, but then quality is noticeably worse.
- */
-async function presetH264VeryFast (command: ffmpeg.FfmpegCommand, input: string, resolution: VideoResolution, fps?: number) {
-  let localCommand = await presetH264(command, input, resolution, fps)
-
-  localCommand = localCommand.outputOption('-preset:v veryfast')
-
-  /*
-  MAIN reference: https://slhck.info/video/2017/03/01/rate-control.html
-  Our target situation is closer to a livestream than a stream,
-  since we want to reduce as much a possible the encoding burden,
-  although not to the point of a livestream where there is a hard
-  constraint on the frames per second to be encoded.
-  */
-
-  return localCommand
+function getHLSVideoPath (options: HLSTranscodeOptions) {
+  return `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
 }
 
-/**
- * Standard profile, with variable bitrate audio and faststart.
- *
- * As for the audio, quality '5' is the highest and ensures 96-112kbps/channel
- * See https://trac.ffmpeg.org/wiki/Encode/AAC#fdk_vbr
- */
-async function presetH264 (command: ffmpeg.FfmpegCommand, input: string, resolution: VideoResolution, fps?: number) {
+// ---------------------------------------------------------------------------
+// Transcoding presets
+// ---------------------------------------------------------------------------
+
+async function presetVideo (
+  command: ffmpeg.FfmpegCommand,
+  input: string,
+  transcodeOptions: TranscodeOptions,
+  fps?: number
+) {
   let localCommand = command
     .format('mp4')
-    .videoCodec('libx264')
     .outputOption('-movflags faststart')
 
-  addDefaultX264Params(localCommand)
-
+  // Audio encoder
   const parsedAudio = await getAudioStream(input)
+
+  let streamsToProcess = [ 'AUDIO', 'VIDEO' ]
+  const streamsFound = {
+    AUDIO: '',
+    VIDEO: ''
+  }
 
   if (!parsedAudio.audioStream) {
     localCommand = localCommand.noAudio()
-  } else if ((await checkFFmpegEncoders()).get('libfdk_aac')) { // we favor VBR, if a good AAC encoder is available
-    localCommand = localCommand
-      .audioCodec('libfdk_aac')
-      .audioQuality(5)
-  } else {
-    // we try to reduce the ceiling bitrate by making rough matches of bitrates
-    // of course this is far from perfect, but it might save some space in the end
-    localCommand = localCommand.audioCodec('aac')
-
-    const audioCodecName = parsedAudio.audioStream['codec_name']
-
-    const bitrate = getMaxAudioBitrate(audioCodecName, parsedAudio.bitrate)
-
-    if (bitrate !== undefined && bitrate !== -1) localCommand = localCommand.audioBitrate(bitrate)
+    streamsToProcess = [ 'VIDEO' ]
   }
 
-  if (fps) {
-    // Constrained Encoding (VBV)
-    // https://slhck.info/video/2017/03/01/rate-control.html
-    // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
-    const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
-    localCommand = localCommand.outputOptions([ `-maxrate ${targetBitrate}`, `-bufsize ${targetBitrate * 2}` ])
+  for (const stream of streamsToProcess) {
+    const encodersToTry: string[] = VIDEO_TRANSCODING_ENCODERS[stream]
 
-    // Keyframe interval of 2 seconds for faster seeking and resolution switching.
-    // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
-    // https://superuser.com/a/908325
-    localCommand = localCommand.outputOption(`-g ${fps * 2}`)
+    for (const encoder of encodersToTry) {
+      if (!(await checkFFmpegEncoders()).get(encoder)) continue
+
+      const builderProfiles: EncoderProfile<EncoderOptionsBuilder> = transcodeOptions.availableEncoders.vod[encoder]
+      let builder = builderProfiles[transcodeOptions.profile]
+
+      if (!builder) {
+        logger.debug('Profile %s for encoder %s not available. Fallback to default.', transcodeOptions.profile, encoder)
+        builder = builderProfiles.default
+      }
+
+      const builderResult = await builder({ input, resolution: transcodeOptions.resolution, fps })
+
+      logger.debug('Apply ffmpeg params from %s.', encoder, builderResult)
+
+      localCommand.outputOptions(builderResult.outputOptions)
+
+      addEncoderDefaultParams(localCommand, encoder)
+
+      streamsFound[stream] = encoder
+      break
+    }
+
+    if (!streamsFound[stream]) {
+      throw new Error('No available encoder found ' + encodersToTry.join(', '))
+    }
   }
+
+  localCommand.videoCodec(streamsFound.VIDEO)
 
   return localCommand
 }
@@ -496,6 +519,10 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
     .noVideo()
 }
 
+// ---------------------------------------------------------------------------
+// Utils
+// ---------------------------------------------------------------------------
+
 function getFFmpeg (input: string) {
   // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
   const command = ffmpeg(input, { niceness: FFMPEG_NICE.TRANSCODING, cwd: CONFIG.STORAGE.TMP_DIR })
@@ -506,4 +533,23 @@ function getFFmpeg (input: string) {
   }
 
   return command
+}
+
+async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
+  return new Promise<void>((res, rej) => {
+    command.on('error', (err, stdout, stderr) => {
+      if (onEnd) onEnd()
+
+      logger.error('Error in transcoding job.', { stdout, stderr })
+      rej(err)
+    })
+
+    command.on('end', () => {
+      if (onEnd) onEnd()
+
+      res()
+    })
+
+    command.run()
+  })
 }
