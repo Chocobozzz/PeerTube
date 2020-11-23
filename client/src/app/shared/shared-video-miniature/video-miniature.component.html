@@ -28,7 +28,13 @@
 
             <span class="views">
               <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
-              <ng-container i18n *ngIf="displayOptions.views">{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
+              <ng-container i18n *ngIf="displayOptions.views"
+                            title="{{ (video.views >= 1000 && displayOptions.views)
+                              ? (video.views + ' ' + (video.isLive ? 'views' : 'viewers'))
+                              : ''}}"
+              >
+                {video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}
+              </ng-container>
             </span>
           </span>
 

@@ -54,7 +54,12 @@
             <div class="video-info-date-views">
               <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
 
-              <span i18n class="views">
+              <span i18n i18n-title
+                    title="{{
+                      (video.views >= 1000)
+                      ? (video.views + ' ' + (video.isLive ? 'views' : 'viewers'))
+                      : ''}}"
+                    class="views">
                 • {{ video.views | myNumberFormatter }}
                 <ng-container *ngIf="!video.isLive">views</ng-container>
                 <ng-container *ngIf="video.isLive">viewers</ng-container>
@@ -71,7 +76,12 @@
               <div class="d-none d-md-block video-info-date-views">
                 <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
 
-                <span i18n class="views">
+                <span i18n i18n-title
+                      title="{{
+                      (video.views >= 1000)
+                      ? (video.views + ' ' + (video.isLive ? 'views' : 'viewers'))
+                      : ''}}"
+                      class="views">
                   • {{ video.views | myNumberFormatter }}
                   <ng-container *ngIf="!video.isLive">views</ng-container>
                   <ng-container *ngIf="video.isLive">viewers</ng-container>
