@@ -4,7 +4,7 @@ import { FfmpegCommand } from 'fluent-ffmpeg'
 import { ensureDir, stat } from 'fs-extra'
 import { basename } from 'path'
 import { isTestInstance } from '@server/helpers/core-utils'
-import { runLiveMuxing, runLiveTranscoding } from '@server/helpers/ffmpeg-utils'
+import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers/ffmpeg-utils'
 import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { logger } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
@@ -264,8 +264,8 @@ class LiveManager {
     const deleteSegments = videoLive.saveReplay === false
 
     const ffmpegExec = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? runLiveTranscoding(rtmpUrl, outPath, allResolutions, fps, deleteSegments)
-      : runLiveMuxing(rtmpUrl, outPath, deleteSegments)
+      ? getLiveTranscodingCommand(rtmpUrl, outPath, allResolutions, fps, deleteSegments)
+      : getLiveMuxingCommand(rtmpUrl, outPath, deleteSegments)
 
     logger.info('Running live muxing/transcoding for %s.', videoUUID)
     this.transSessions.set(sessionId, ffmpegExec)
@@ -382,6 +382,8 @@ class LiveManager {
     })
 
     ffmpegExec.on('end', () => onFFmpegEnded())
+
+    ffmpegExec.run()
   }
 
   private async onEndTransmuxing (videoId: number, cleanupNow = false) {

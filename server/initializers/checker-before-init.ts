@@ -82,6 +82,8 @@ function checkMissedConfig () {
 async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
   if (CONFIG.TRANSCODING.ENABLED === false) return undefined
 
+  checkFFmpegEncoders()
+
   const Ffmpeg = require('fluent-ffmpeg')
   const getAvailableCodecsPromise = promisify0(Ffmpeg.getAvailableCodecs)
   const codecs = await getAvailableCodecsPromise()
@@ -100,25 +102,30 @@ async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
   return checkFFmpegEncoders()
 }
 
-// Optional encoders, if present, can be used to improve transcoding
-// Here we ask ffmpeg if it detects their presence on the system, so that we can later use them
-let supportedOptionalEncoders: Map<string, boolean>
+// Detect supported encoders by ffmpeg
+let supportedEncoders: Map<string, boolean>
 async function checkFFmpegEncoders (): Promise<Map<string, boolean>> {
-  if (supportedOptionalEncoders !== undefined) {
-    return supportedOptionalEncoders
+  if (supportedEncoders !== undefined) {
+    return supportedEncoders
   }
 
   const Ffmpeg = require('fluent-ffmpeg')
   const getAvailableEncodersPromise = promisify0(Ffmpeg.getAvailableEncoders)
-  const encoders = await getAvailableEncodersPromise()
-  const optionalEncoders = [ 'libfdk_aac' ]
-  supportedOptionalEncoders = new Map<string, boolean>()
+  const availableEncoders = await getAvailableEncodersPromise()
 
-  for (const encoder of optionalEncoders) {
-    supportedOptionalEncoders.set(encoder, encoders[encoder] !== undefined)
+  const searchEncoders = [
+    'aac',
+    'libfdk_aac',
+    'libx264'
+  ]
+
+  supportedEncoders = new Map<string, boolean>()
+
+  for (const searchEncoder of searchEncoders) {
+    supportedEncoders.set(searchEncoder, availableEncoders[searchEncoder] !== undefined)
   }
 
-  return supportedOptionalEncoders
+  return supportedEncoders
 }
 
 function checkNodeVersion () {
