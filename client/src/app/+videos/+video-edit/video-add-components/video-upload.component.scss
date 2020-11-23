@@ -16,27 +16,27 @@
   }
 }
 
+.upload-progress-retry,
 .upload-progress-cancel {
   display: flex;
-  margin-top: 25px;
   margin-bottom: 40px;
 
   .progress {
     @include progressbar;
     flex-grow: 1;
     height: 30px;
-    font-size: 15px;
+    font-size: 14px;
     background-color: rgba(11, 204, 41, 0.16);
 
     .progress-bar {
       background-color: $green;
       line-height: 30px;
       text-align: left;
-      font-weight: $font-bold;
+      font-weight: $font-semibold;
 
       span {
         color: pvar(--mainBackgroundColor);
-        margin-left: 18px;
+        margin-left: 13px;
       }
     }
   }
@@ -46,5 +46,9 @@
     @include grey-button;
 
     margin-left: 10px;
+  }
+
+  .btn-group > input:not(:first-child) {
+    margin-left: 0;
   }
 }
