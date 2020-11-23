@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { ScreenService } from '@app/core'
 
 @Component({
   selector: 'my-header',
@@ -6,4 +7,14 @@ import { Component } from '@angular/core'
   styleUrls: [ './header.component.scss' ]
 })
 
-export class HeaderComponent {}
+export class HeaderComponent {
+  aboutText = $localize`About`
+
+  constructor (
+    private screenService: ScreenService
+  ) { }
+
+  get isInMobileView () {
+    return this.screenService.isInMobileView()
+  }
+}

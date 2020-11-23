@@ -4,3 +4,7 @@
   <my-global-icon iconName="upload" aria-hidden="true"></my-global-icon>
   <span i18n class="publish-button-label">Publish</span>
 </a>
+
+<a *ngIf="!isInMobileView" class="about-button" routerLink="/about" routerLinkActive="active" [ngbTooltip]="aboutText">
+  <my-global-icon iconName="help" aria-hidden="true"></my-global-icon>
+</a>

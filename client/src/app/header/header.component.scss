@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+:host {
+  align-items: center;
+}
+
 my-search-typeahead {
   margin-right: 15px;
 }
@@ -10,10 +14,9 @@ my-search-typeahead {
   @include orange-button;
   @include button-with-icon(22px, 3px, -1px);
 
-  margin-right: 25px;
+  margin-right: 10px;
 
-  @media screen and (max-width: 600px) {
-    margin-right: 10px;
+  @media screen and (max-width: $small-view) {
     padding: 0 10px;
 
     .icon.icon-upload {
@@ -24,4 +27,24 @@ my-search-typeahead {
       display: none;
     }
   }
+}
+
+.about-button {
+  @include apply-svg-color(rgba(0, 0, 0, 0.75));
+
+  &:hover, &:active {
+    @include apply-svg-color(pvar(--mainColorLighter));
+  }
+
+  &.active {
+    @include apply-svg-color(pvar(--mainColor));
+  }
+
+  ::ng-deep {
+    svg {
+      transition: color 0.15s;
+    }
+  }
+
+  margin-right: 25px;
 }

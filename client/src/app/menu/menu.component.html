@@ -158,7 +158,7 @@
           <ng-container i18n>Settings</ng-container>
         </a>
 
-        <a routerLink="/about" routerLinkActive="active">
+        <a *ngIf="isInMobileView" routerLink="/about" routerLinkActive="active">
           <my-global-icon iconName="help" aria-hidden="true"></my-global-icon>
           <ng-container i18n>About</ng-container>
         </a>
