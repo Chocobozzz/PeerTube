@@ -3838,7 +3838,7 @@
       </trans-unit>
       <trans-unit id="06119c0230042048f8a3fd6aa9260934b6fa5878" datatype="html">
         <source>Moderation information</source>
-        <target state="new">Moderation information</target>
+        <target state="translated">ข้อมูลเกี่ยวกับการดูแล</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="d635f94dd3214d8e5fb83a2af04e7b96c861e91f" datatype="html">
@@ -5282,7 +5282,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="2c7cd7912f61e528f6b38d4bc28733135931042b" datatype="html">
         <source>Network</source>
-        <target state="new">Network</target>
+        <target state="translated">เครือข่าย</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about.component.html</context>
           <context context-type="linenumber">9</context>
@@ -5366,9 +5366,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="2a422d9f181480a3199d18e7d5d616ad4e75530a" datatype="html">
         <source>INFORMATION</source>
-        <target state="new">
-        INFORMATION
-      </target>
+        <target state="translated">ข้อมูล</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="c47227276184c2145c8ca1161ce08075df573568" datatype="html">
@@ -5380,9 +5378,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="e00d53801f276434a03bbfd4a8443651f46ef91a" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target state="new">
-        OTHER INFORMATION
-      </target>
+        <target state="translated">ข้อมูลอื่น ๆ</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="3624f527ba5d5ed005a4ff2540d1a210233aa320" datatype="html">
@@ -5643,7 +5639,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target state="new">About this instance</target>
+        <target state="translated">เกี่ยวกับเว็บไซต์นี้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">26</context>
@@ -5651,7 +5647,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
         <source>About PeerTube</source>
-        <target state="new">About PeerTube</target>
+        <target state="translated">เกี่ยวกับ PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">38</context>
@@ -5659,7 +5655,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target state="new">About this instance's network</target>
+        <target state="translated">เกี่ยวกับเครือข่ายของเว็บไซต์นี้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -5667,7 +5663,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
         <source>Link copied</source>
-        <target state="new">Link copied</target>
+        <target state="translated">คัดลอกลิงก์แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -8058,7 +8054,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="d8ae45f6eb0e2d78efd70b4e80e132784aa65cf1" datatype="html">
         <source>Live information</source>
-        <target state="new">Live information</target>
+        <target state="translated">ข้อมูลวิดีโอสด</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">3</context>
@@ -8831,7 +8827,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target state="new">Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</target>
+        <target state="translated">มีเนื้อหาการตลาด สแปม ข่าวปลอมที่จงใจสร้างขึ้น หรือมีภาพตัวอย่าง/ข้อความ/แท็ก ที่ทำให้เกิดความเข้าใจผิด โปรดเพิ่มแหล่งข้อมูลที่น่าเชื่อถือเพื่อรายงานเนื้อหาหลอกลวง</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
@@ -8841,7 +8837,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="new">Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</target>
+        <target state="translated">มีข้อมูลส่วนตัวที่สามารถใช้เพื่อติดตาม ระบุตัวตน ติดต่อ หรือปลอมเป็นบุคคลอื่น (เช่น ชื่อ ที่อยู่ หมายเลขโทรศัพท์ อีเมล หรือข้อมูลบัตรเครดิต)</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
@@ -8879,9 +8875,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="968295009933361070" datatype="html">
         <source>Too many attempts, please try again after <x id="PH"/> minutes.</source>
-        <target state="translated">พยายามหลายครั้งติดต่อกัน โปรดลองอีกครั้งในอีก 
-          <x id="PH"/> นาที
-        </target>
+        <target state="translated">พยายามหลายครั้งติดต่อกัน โปรดลองอีกครั้งในอีก <x id="PH"/> นาที</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="4965472196059235310" datatype="html">
@@ -8896,16 +8890,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">ติดตามทุกช่องในปัจจุบันของ 
-          <x id="PH"/> แล้ว คุณจะได้รับการแจ้งเตือนสำหรับวิดีโอใหม่ทุกวิดีโอ
-        </target>
+        <target state="translated">ติดตามทุกช่องในปัจจุบันของ <x id="PH"/> แล้ว คุณจะได้รับการแจ้งเตือนสำหรับวิดีโอใหม่ทุกวิดีโอ</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">ติดตาม 
-          <x id="PH"/> แล้ว คุณจะได้รับการแจ้งเตือนสำหรับวิดีโอใหม่ทุกวิดีโอ
-        </target>
+        <target state="translated">ติดตาม <x id="PH"/> แล้ว คุณจะได้รับการแจ้งเตือนสำหรับวิดีโอใหม่ทุกวิดีโอ</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="7019115336138470191" datatype="html">
@@ -9080,7 +9070,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
         <source>Display live information</source>
-        <target state="new">Display live information</target>
+        <target state="translated">แสดงข้อมูลวิดีโอสด</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">278</context>
