@@ -6,7 +6,7 @@ import { copy, pathExists, readdir, readFile, remove } from 'fs-extra'
 import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
 import { VideoChannel } from '../../models/videos'
-import { getFileSize, root, wait } from '../miscs/miscs'
+import { buildServerDirectory, getFileSize, root, wait } from '../miscs/miscs'
 
 interface ServerInfo {
   app: ChildProcess
@@ -309,7 +309,7 @@ function cleanupTests (servers: ServerInfo[]) {
 }
 
 async function waitUntilLog (server: ServerInfo, str: string, count = 1, strictCount = true) {
-  const logfile = join(root(), 'test' + server.internalServerNumber, 'logs/peertube.log')
+  const logfile = buildServerDirectory(server, 'logs/peertube.log')
 
   while (true) {
     const buf = await readFile(logfile)
@@ -323,7 +323,7 @@ async function waitUntilLog (server: ServerInfo, str: string, count = 1, strictC
 }
 
 async function getServerFileSize (server: ServerInfo, subPath: string) {
-  const path = join(root(), 'test' + server.internalServerNumber, subPath)
+  const path = buildServerDirectory(server, subPath)
 
   return getFileSize(path)
 }

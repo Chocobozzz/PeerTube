@@ -38,7 +38,8 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution
   return {
     outputOptions: [
       `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`,
-      `-maxrate ${targetBitrate}`, `-bufsize ${targetBitrate * 2}`
+      `-maxrate ${targetBitrate}`,
+      `-bufsize ${targetBitrate * 2}`
     ]
   }
 }

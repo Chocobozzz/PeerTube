@@ -3,10 +3,13 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
+import { join } from 'path'
+import { ffprobePromise, getVideoStreamFromFile } from '@server/helpers/ffprobe-utils'
 import { getLiveNotificationSocket } from '@shared/extra-utils/socket/socket-io'
 import { LiveVideo, LiveVideoCreate, Video, VideoDetails, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import {
   addVideoToBlacklist,
+  buildServerDirectory,
   checkLiveCleanup,
   checkLiveSegmentHash,
   checkResolutionsInMasterPlaylist,
@@ -396,10 +399,11 @@ describe('Test live', function () {
       this.timeout(60000)
 
       const resolutions = [ 240, 360, 720 ]
+
       await updateConf(resolutions)
       liveVideoId = await createLiveWrapper(true)
 
-      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId, 'video_short2.webm')
       await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoId)
       await waitJobs(servers)
 
@@ -408,6 +412,12 @@ describe('Test live', function () {
       await stopFfmpeg(command)
 
       await waitJobs(servers)
+
+      const bitrateLimits = {
+        720: 2800 * 1000,
+        360: 780 * 1000,
+        240: 320 * 1000
+      }
 
       for (const server of servers) {
         const resVideo = await getVideo(server.url, liveVideoId)
@@ -424,8 +434,16 @@ describe('Test live', function () {
           const file = hlsPlaylist.files.find(f => f.resolution.id === resolution)
 
           expect(file).to.exist
-          expect(file.fps).to.be.oneOf([ 24, 25 ])
+          expect(file.fps).to.be.approximately(30, 5)
           expect(file.size).to.be.greaterThan(1)
+
+          const filename = `${video.uuid}-${resolution}-fragmented.mp4`
+          const segmentPath = buildServerDirectory(servers[0], join('streaming-playlists', 'hls', video.uuid, filename))
+
+          const probe = await ffprobePromise(segmentPath)
+          const videoStream = await getVideoStreamFromFile(segmentPath, probe)
+          console.log(videoStream)
+          expect(probe.format.bit_rate).to.be.below(bitrateLimits[videoStream.height])
 
           await makeRawRequest(file.torrentUrl, 200)
           await makeRawRequest(file.fileUrl, 200)

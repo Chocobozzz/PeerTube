@@ -53,15 +53,15 @@ function createLive (url: string, token: string, fields: LiveVideoCreate, status
   })
 }
 
-async function sendRTMPStreamInVideo (url: string, token: string, videoId: number | string) {
+async function sendRTMPStreamInVideo (url: string, token: string, videoId: number | string, fixtureName?: string) {
   const res = await getLive(url, token, videoId)
   const videoLive = res.body as LiveVideo
 
-  return sendRTMPStream(videoLive.rtmpUrl, videoLive.streamKey)
+  return sendRTMPStream(videoLive.rtmpUrl, videoLive.streamKey, fixtureName)
 }
 
-function sendRTMPStream (rtmpBaseUrl: string, streamKey: string) {
-  const fixture = buildAbsoluteFixturePath('video_short.mp4')
+function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, fixtureName = 'video_short.mp4') {
+  const fixture = buildAbsoluteFixturePath(fixtureName)
 
   const command = ffmpeg(fixture)
   command.inputOption('-stream_loop -1')
@@ -140,7 +140,7 @@ async function waitUntilLiveStarts (url: string, token: string, videoId: number 
 }
 
 async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resolutions: number[] = []) {
-  const basePath = buildServerDirectory(server.internalServerNumber, 'streaming-playlists')
+  const basePath = buildServerDirectory(server, 'streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
 
   if (resolutions.length === 0) {
