@@ -268,8 +268,7 @@ class LiveManager {
       ? await getLiveTranscodingCommand({
         rtmpUrl,
         outPath,
-        resolutions:
-        allResolutions,
+        resolutions: allResolutions,
         fps,
         deleteSegments,
         availableEncoders,

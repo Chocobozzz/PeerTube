@@ -37,38 +37,37 @@ async function getAudioStream (videoPath: string, existingProbe?: ffmpeg.Ffprobe
 }
 
 function getMaxAudioBitrate (type: 'aac' | 'mp3' | string, bitrate: number) {
-  const baseKbitrate = 384
-  const toBits = (kbits: number) => kbits * 8000
+  const maxKBitrate = 384
+  const kToBits = (kbits: number) => kbits * 1000
+
+  // If we did not manage to get the bitrate, use an average value
+  if (!bitrate) return 256
 
   if (type === 'aac') {
     switch (true) {
-      case bitrate > toBits(baseKbitrate):
-        return baseKbitrate
+      case bitrate > kToBits(maxKBitrate):
+        return maxKBitrate
 
       default:
         return -1 // we interpret it as a signal to copy the audio stream as is
     }
   }
 
-  if (type === 'mp3') {
-    /*
-      a 192kbit/sec mp3 doesn't hold as much information as a 192kbit/sec aac.
-      That's why, when using aac, we can go to lower kbit/sec. The equivalences
-      made here are not made to be accurate, especially with good mp3 encoders.
-      */
-    switch (true) {
-      case bitrate <= toBits(192):
-        return 128
+  /*
+    a 192kbit/sec mp3 doesn't hold as much information as a 192kbit/sec aac.
+    That's why, when using aac, we can go to lower kbit/sec. The equivalences
+    made here are not made to be accurate, especially with good mp3 encoders.
+    */
+  switch (true) {
+    case bitrate <= kToBits(192):
+      return 128
 
-      case bitrate <= toBits(384):
-        return 256
+    case bitrate <= kToBits(384):
+      return 256
 
-      default:
-        return baseKbitrate
-    }
+    default:
+      return maxKBitrate
   }
-
-  return undefined
 }
 
 async function getVideoStreamSize (path: string, existingProbe?: ffmpeg.FfprobeData) {
@@ -208,6 +207,9 @@ async function canDoQuickVideoTranscode (path: string, probe?: ffmpeg.FfprobeDat
   const bitRate = await getVideoFileBitrate(path, probe)
   const resolution = await getVideoFileResolution(path, probe)
 
+  // If ffprobe did not manage to guess the bitrate
+  if (!bitRate) return false
+
   // check video params
   if (videoStream == null) return false
   if (videoStream['codec_name'] !== 'h264') return false
@@ -221,15 +223,15 @@ async function canDoQuickVideoTranscode (path: string, probe?: ffmpeg.FfprobeDat
 async function canDoQuickAudioTranscode (path: string, probe?: ffmpeg.FfprobeData): Promise<boolean> {
   const parsedAudio = await getAudioStream(path, probe)
 
-  // check audio params (if audio stream exists)
-  if (parsedAudio.audioStream) {
-    if (parsedAudio.audioStream['codec_name'] !== 'aac') return false
+  if (!parsedAudio.audioStream) return true
 
-    const audioBitrate = parsedAudio.bitrate
+  if (parsedAudio.audioStream['codec_name'] !== 'aac') return false
 
-    const maxAudioBitrate = getMaxAudioBitrate('aac', audioBitrate)
-    if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
-  }
+  const audioBitrate = parsedAudio.bitrate
+  if (!audioBitrate) return false
+
+  const maxAudioBitrate = getMaxAudioBitrate('aac', audioBitrate)
+  if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
 
   return true
 }
