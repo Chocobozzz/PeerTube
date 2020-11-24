@@ -9,15 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 import validator from 'validator'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
-import {
-  buildAbsoluteFixturePath,
-  buildServerDirectory,
-  dateIsValid,
-  immutableAssign,
-  root,
-  testImage,
-  webtorrentAdd
-} from '../miscs/miscs'
+import { buildAbsoluteFixturePath, buildServerDirectory, dateIsValid, immutableAssign, testImage, webtorrentAdd } from '../miscs/miscs'
 import { makeGetRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
 import { waitJobs } from '../server/jobs'
 import { ServerInfo } from '../server/servers'
@@ -335,7 +327,7 @@ async function checkVideoFilesWereRemoved (
   ]
 ) {
   for (const directory of directories) {
-    const directoryPath = buildServerDirectory(serverNumber, directory)
+    const directoryPath = buildServerDirectory({ internalServerNumber: serverNumber }, directory)
 
     const directoryExists = await pathExists(directoryPath)
     if (directoryExists === false) continue
@@ -489,7 +481,8 @@ function rateVideo (url: string, accessToken: string, id: number, rating: string
 function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: number) {
   return new Promise<any>((res, rej) => {
     const torrentName = videoUUID + '-' + resolution + '.torrent'
-    const torrentPath = join(root(), 'test' + server.internalServerNumber, 'torrents', torrentName)
+    const torrentPath = buildServerDirectory(server, join('torrents', torrentName))
+
     readFile(torrentPath, (err, data) => {
       if (err) return rej(err)
 

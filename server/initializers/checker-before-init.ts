@@ -82,8 +82,6 @@ function checkMissedConfig () {
 async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
   if (CONFIG.TRANSCODING.ENABLED === false) return undefined
 
-  checkFFmpegEncoders()
-
   const Ffmpeg = require('fluent-ffmpeg')
   const getAvailableCodecsPromise = promisify0(Ffmpeg.getAvailableCodecs)
   const codecs = await getAvailableCodecsPromise()

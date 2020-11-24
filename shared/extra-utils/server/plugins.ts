@@ -1,10 +1,10 @@
-import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
-import { PluginType } from '../../models/plugins/plugin.type'
-import { PeertubePluginIndexList } from '../../models/plugins/peertube-plugin-index-list.model'
 import { readJSON, writeJSON } from 'fs-extra'
-import { ServerInfo } from './servers'
-import { root } from '../miscs/miscs'
 import { join } from 'path'
+import { PeertubePluginIndexList } from '../../models/plugins/peertube-plugin-index-list.model'
+import { PluginType } from '../../models/plugins/plugin.type'
+import { buildServerDirectory, root } from '../miscs/miscs'
+import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
+import { ServerInfo } from './servers'
 
 function listPlugins (parameters: {
   url: string
@@ -216,7 +216,7 @@ function getPluginsCSS (url: string) {
 }
 
 function getPackageJSONPath (server: ServerInfo, npmName: string) {
-  return join(root(), 'test' + server.internalServerNumber, 'plugins', 'node_modules', npmName, 'package.json')
+  return buildServerDirectory(server, join('plugins', 'node_modules', npmName, 'package.json'))
 }
 
 function updatePluginPackageJSON (server: ServerInfo, npmName: string, json: any) {
