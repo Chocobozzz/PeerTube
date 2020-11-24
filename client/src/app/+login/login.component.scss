@@ -17,6 +17,33 @@ input[type=submit] {
   @include orange-button;
 }
 
+.modal-body {
+  text-align: left;
+
+  .forgot-password-instructions {
+    margin-bottom: 20px;
+  }
+
+  #forgot-password-email {
+    width: 100%;
+
+    @media screen and (min-width: #{map-get($container-max-widths, sm)}) {
+      width: 350px;
+    }
+  }
+}
+
+.modal-footer.inputs {
+  .action-button.action-button-cancel {
+    display: none;
+
+    @media screen and (min-width: #{map-get($container-max-widths, sm)}) {
+      width: auto !important;
+      display: inline-block;
+    }
+  }
+}
+
 .create-an-account, .forgot-password-button {
   color: pvar(--mainForegroundColor);
   cursor: pointer;
