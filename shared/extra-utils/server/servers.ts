@@ -104,7 +104,7 @@ function randomRTMP () {
   return randomInt(low, high)
 }
 
-async function flushAndRunServer (serverNumber: number, configOverride?: Object, args = []) {
+async function flushAndRunServer (serverNumber: number, configOverride?: Object, args = [], silent = true) {
   const parallel = parallelTests()
 
   const internalServerNumber = parallel ? randomServer() : serverNumber
@@ -133,10 +133,10 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
     }
   }
 
-  return runServer(server, configOverride, args)
+  return runServer(server, configOverride, args, silent)
 }
 
-async function runServer (server: ServerInfo, configOverrideArg?: any, args = []) {
+async function runServer (server: ServerInfo, configOverrideArg?: any, args = [], silent?: boolean) {
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
     'Server listening': false
@@ -240,7 +240,11 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
       // If no, there is maybe one thing not already initialized (client/user credentials generation...)
       if (dontContinue === true) return
 
-      server.app.stdout.removeListener('data', onStdout)
+      if (silent === false) {
+        console.log(data.toString())
+      } else {
+        server.app.stdout.removeListener('data', onStdout)
+      }
 
       process.on('exit', () => {
         try {

@@ -198,9 +198,12 @@ function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod'
 async function canDoQuickTranscode (path: string): Promise<boolean> {
   const probe = await ffprobePromise(path)
 
-  // NOTE: This could be optimized by running ffprobe only once (but it runs fast anyway)
+  return await canDoQuickVideoTranscode(path, probe) &&
+         await canDoQuickAudioTranscode(path, probe)
+}
+
+async function canDoQuickVideoTranscode (path: string, probe?: ffmpeg.FfprobeData): Promise<boolean> {
   const videoStream = await getVideoStreamFromFile(path, probe)
-  const parsedAudio = await getAudioStream(path, probe)
   const fps = await getVideoFileFPS(path, probe)
   const bitRate = await getVideoFileBitrate(path, probe)
   const resolution = await getVideoFileResolution(path, probe)
@@ -211,6 +214,12 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
   if (videoStream['pix_fmt'] !== 'yuv420p') return false
   if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) return false
   if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)) return false
+
+  return true
+}
+
+async function canDoQuickAudioTranscode (path: string, probe?: ffmpeg.FfprobeData): Promise<boolean> {
+  const parsedAudio = await getAudioStream(path, probe)
 
   // check audio params (if audio stream exists)
   if (parsedAudio.audioStream) {
@@ -239,11 +248,15 @@ export {
   getVideoFileResolution,
   getMetadataFromFile,
   getMaxAudioBitrate,
+  getVideoStreamFromFile,
   getDurationFromVideoFile,
   getAudioStream,
   getVideoFileFPS,
+  ffprobePromise,
   getClosestFramerateStandard,
   computeResolutionsToTranscode,
   getVideoFileBitrate,
-  canDoQuickTranscode
+  canDoQuickTranscode,
+  canDoQuickVideoTranscode,
+  canDoQuickAudioTranscode
 }
