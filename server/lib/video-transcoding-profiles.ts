@@ -1,11 +1,22 @@
+import { logger } from '@server/helpers/logger'
 import { getTargetBitrate } from '../../shared/models/videos'
 import { AvailableEncoders, buildStreamSuffix, EncoderOptionsBuilder } from '../helpers/ffmpeg-utils'
-import { ffprobePromise, getAudioStream, getMaxAudioBitrate, getVideoFileBitrate, getVideoStreamFromFile } from '../helpers/ffprobe-utils'
+import {
+  canDoQuickAudioTranscode,
+  ffprobePromise,
+  getAudioStream,
+  getMaxAudioBitrate,
+  getVideoFileBitrate,
+  getVideoStreamFromFile
+} from '../helpers/ffprobe-utils'
 import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 
-// ---------------------------------------------------------------------------
-// Available encoders profiles
-// ---------------------------------------------------------------------------
+/**
+ *
+ * Available encoders and profiles for the transcoding jobs
+ * These functions are used by ffmpeg-utils that will get the encoders and options depending on the chosen profile
+ *
+ */
 
 // Resources:
 //  * https://slhck.info/video/2017/03/01/rate-control.html
@@ -27,7 +38,8 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, reso
 
   return {
     outputOptions: [
-      `-maxrate ${targetBitrate}`, `-bufsize ${targetBitrate * 2}`
+      `-maxrate ${targetBitrate}`,
+      `-bufsize ${targetBitrate * 2}`
     ]
   }
 }
@@ -45,7 +57,14 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution
 }
 
 const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum }) => {
-  const parsedAudio = await getAudioStream(input)
+  const probe = await ffprobePromise(input)
+
+  if (await canDoQuickAudioTranscode(input, probe)) {
+    logger.debug('Copy audio stream %s by AAC encoder.', input)
+    return { copy: true, outputOptions: [] }
+  }
+
+  const parsedAudio = await getAudioStream(input, probe)
 
   // We try to reduce the ceiling bitrate by making rough matches of bitrates
   // Of course this is far from perfect, but it might save some space in the end
@@ -54,11 +73,13 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
 
   const bitrate = getMaxAudioBitrate(audioCodecName, parsedAudio.bitrate)
 
+  logger.debug('Calculating audio bitrate of %s by AAC encoder.', input, { bitrate: parsedAudio.bitrate, audioCodecName })
+
   if (bitrate !== undefined && bitrate !== -1) {
     return { outputOptions: [ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ] }
   }
 
-  return { copy: true, outputOptions: [] }
+  return { outputOptions: [ ] }
 }
 
 const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum }) => {
