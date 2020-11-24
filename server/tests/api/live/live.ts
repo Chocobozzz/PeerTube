@@ -39,6 +39,7 @@ import {
   viewVideo,
   wait,
   waitJobs,
+  waitUntilLivePublished,
   waitUntilLiveStarts,
   waitUntilLog
 } from '../../../../shared/extra-utils'
@@ -396,7 +397,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions and correctly save them', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const resolutions = [ 240, 360, 720 ]
 
@@ -410,13 +411,14 @@ describe('Test live', function () {
       await testVideoResolutions(liveVideoId, resolutions)
 
       await stopFfmpeg(command)
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoId)
 
       await waitJobs(servers)
 
       const bitrateLimits = {
-        720: 2800 * 1000,
-        360: 780 * 1000,
-        240: 320 * 1000
+        720: 3000 * 1000,
+        360: 1100 * 1000,
+        240: 600 * 1000
       }
 
       for (const server of servers) {
@@ -442,7 +444,7 @@ describe('Test live', function () {
 
           const probe = await ffprobePromise(segmentPath)
           const videoStream = await getVideoStreamFromFile(segmentPath, probe)
-          console.log(videoStream)
+
           expect(probe.format.bit_rate).to.be.below(bitrateLimits[videoStream.height])
 
           await makeRawRequest(file.torrentUrl, 200)

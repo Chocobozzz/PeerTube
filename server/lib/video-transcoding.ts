@@ -16,8 +16,13 @@ import { generateVideoStreamingPlaylistName, getVideoFilename, getVideoFilePath 
 import { availableEncoders } from './video-transcoding-profiles'
 
 /**
- * Optimize the original video file and replace it. The resolution is not changed.
+ *
+ * Functions that run transcoding functions, update the database, cleanup files, create torrent files...
+ * Mainly called by the job queue
+ *
  */
+
+// Optimize the original video file and replace it. The resolution is not changed.
 async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFileArg?: MVideoFile) {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
@@ -62,9 +67,7 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFileA
   }
 }
 
-/**
- * Transcode the original video file to a lower resolution.
- */
+// Transcode the original video file to a lower resolution.
 async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoResolution, isPortrait: boolean) {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const extname = '.mp4'
@@ -110,6 +113,7 @@ async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoR
   return onVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, videoOutputPath)
 }
 
+// Merge an image with an audio file to create a video
 async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: VideoResolution) {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
@@ -159,6 +163,7 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
   return onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
 }
 
+// Generate an HLS playlist from an input file, and update the master playlist
 async function generateHlsPlaylist (options: {
   video: MVideoWithFile
   videoInputPath: string

@@ -128,7 +128,15 @@ async function stopFfmpeg (command: ffmpeg.FfmpegCommand) {
   await wait(500)
 }
 
-async function waitUntilLiveStarts (url: string, token: string, videoId: number | string) {
+function waitUntilLiveStarts (url: string, token: string, videoId: number | string) {
+  return waitWhileLiveState(url, token, videoId, VideoState.WAITING_FOR_LIVE)
+}
+
+function waitUntilLivePublished (url: string, token: string, videoId: number | string) {
+  return waitWhileLiveState(url, token, videoId, VideoState.PUBLISHED)
+}
+
+async function waitWhileLiveState (url: string, token: string, videoId: number | string, state: VideoState) {
   let video: VideoDetails
 
   do {
@@ -136,7 +144,7 @@ async function waitUntilLiveStarts (url: string, token: string, videoId: number 
     video = res.body
 
     await wait(500)
-  } while (video.state.id === VideoState.WAITING_FOR_LIVE)
+  } while (video.state.id === state)
 }
 
 async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resolutions: number[] = []) {
@@ -168,6 +176,7 @@ async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resoluti
 
 export {
   getLive,
+  waitUntilLivePublished,
   updateLive,
   waitUntilLiveStarts,
   createLive,

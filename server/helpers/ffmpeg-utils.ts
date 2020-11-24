@@ -9,6 +9,13 @@ import { getAudioStream, getClosestFramerateStandard, getVideoFileFPS } from './
 import { processImage } from './image-utils'
 import { logger } from './logger'
 
+/**
+ *
+ * Functions that run transcoding/muxing ffmpeg processes
+ * Mainly called by lib/video-transcoding.ts and lib/live-manager.ts
+ *
+ */
+
 // ---------------------------------------------------------------------------
 // Encoder options
 // ---------------------------------------------------------------------------

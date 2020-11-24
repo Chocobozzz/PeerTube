@@ -5,6 +5,12 @@ import { CONFIG } from '../initializers/config'
 import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { logger } from './logger'
 
+/**
+ *
+ * Helpers to run ffprobe and extract data from the JSON output
+ *
+ */
+
 function ffprobePromise (path: string) {
   return new Promise<ffmpeg.FfprobeData>((res, rej) => {
     ffmpeg.ffprobe(path, (err, data) => {
