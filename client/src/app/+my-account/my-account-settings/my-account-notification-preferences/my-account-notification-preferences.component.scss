@@ -12,16 +12,14 @@
 
   & > div {
     padding: 10px;
-    width: 350px;
 
-    &:nth-child(2) {
-      max-width: 60px !important;
+    &:first-child {
+      width: 350px;
     }
 
-    @media screen and (max-width: $small-view) {
-      width: auto;
-
+    @media screen and (max-width: #{breakpoint(sm)}) {
       &:first-child {
+        width: auto;
         flex-grow: 1;
       }
     }
