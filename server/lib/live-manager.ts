@@ -22,6 +22,7 @@ import { JobQueue } from './job-queue'
 import { PeerTubeSocket } from './peertube-socket'
 import { isAbleToUploadVideo } from './user'
 import { getHLSDirectory } from './video-paths'
+import { availableEncoders } from './video-transcoding-profiles'
 
 import memoizee = require('memoizee')
 const NodeRtmpServer = require('node-media-server/node_rtmp_server')
@@ -264,7 +265,16 @@ class LiveManager {
     const deleteSegments = videoLive.saveReplay === false
 
     const ffmpegExec = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? getLiveTranscodingCommand(rtmpUrl, outPath, allResolutions, fps, deleteSegments)
+      ? await getLiveTranscodingCommand({
+        rtmpUrl,
+        outPath,
+        resolutions:
+        allResolutions,
+        fps,
+        deleteSegments,
+        availableEncoders,
+        profile: 'default'
+      })
       : getLiveMuxingCommand(rtmpUrl, outPath, deleteSegments)
 
     logger.info('Running live muxing/transcoding for %s.', videoUUID)

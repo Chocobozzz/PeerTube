@@ -2,30 +2,18 @@ import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models'
-import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
+import { VideoResolution } from '../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
-import { AvailableEncoders, EncoderOptionsBuilder, transcode, TranscodeOptions, TranscodeOptionsType } from '../helpers/ffmpeg-utils'
-import {
-  canDoQuickTranscode,
-  getAudioStream,
-  getDurationFromVideoFile,
-  getMaxAudioBitrate,
-  getMetadataFromFile,
-  getVideoFileBitrate,
-  getVideoFileFPS
-} from '../helpers/ffprobe-utils'
+import { transcode, TranscodeOptions, TranscodeOptionsType } from '../helpers/ffmpeg-utils'
+import { canDoQuickTranscode, getDurationFromVideoFile, getMetadataFromFile, getVideoFileFPS } from '../helpers/ffprobe-utils'
 import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
-import {
-  HLS_STREAMING_PLAYLIST_DIRECTORY,
-  P2P_MEDIA_LOADER_PEER_VERSION,
-  VIDEO_TRANSCODING_FPS,
-  WEBSERVER
-} from '../initializers/constants'
+import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { updateMasterHLSPlaylist, updateSha256VODSegments } from './hls'
 import { generateVideoStreamingPlaylistName, getVideoFilename, getVideoFilePath } from './video-paths'
+import { availableEncoders } from './video-transcoding-profiles'
 
 /**
  * Optimize the original video file and replace it. The resolution is not changed.
@@ -250,75 +238,6 @@ async function generateHlsPlaylist (options: {
   await updateSha256VODSegments(video)
 
   return video
-}
-
-// ---------------------------------------------------------------------------
-// Available encoders profiles
-// ---------------------------------------------------------------------------
-
-const defaultX264OptionsBuilder: EncoderOptionsBuilder = async ({ input, resolution, fps }) => {
-  if (!fps) return { outputOptions: [] }
-
-  let targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
-
-  // Don't transcode to an higher bitrate than the original file
-  const fileBitrate = await getVideoFileBitrate(input)
-  targetBitrate = Math.min(targetBitrate, fileBitrate)
-
-  return {
-    outputOptions: [
-      // Constrained Encoding (VBV)
-      // https://slhck.info/video/2017/03/01/rate-control.html
-      // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
-      `-maxrate ${targetBitrate}`, `-bufsize ${targetBitrate * 2}`
-    ]
-  }
-}
-
-const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input }) => {
-  const parsedAudio = await getAudioStream(input)
-
-  // we try to reduce the ceiling bitrate by making rough matches of bitrates
-  // of course this is far from perfect, but it might save some space in the end
-
-  const audioCodecName = parsedAudio.audioStream['codec_name']
-
-  const bitrate = getMaxAudioBitrate(audioCodecName, parsedAudio.bitrate)
-
-  if (bitrate !== undefined && bitrate !== -1) {
-    return { outputOptions: [ '-b:a', bitrate + 'k' ] }
-  }
-
-  return { outputOptions: [] }
-}
-
-const defaultLibFDKAACOptionsBuilder: EncoderOptionsBuilder = () => {
-  return { outputOptions: [ '-aq', '5' ] }
-}
-
-const availableEncoders: AvailableEncoders = {
-  vod: {
-    libx264: {
-      default: defaultX264OptionsBuilder
-    },
-    aac: {
-      default: defaultAACOptionsBuilder
-    },
-    libfdkAAC: {
-      default: defaultLibFDKAACOptionsBuilder
-    }
-  },
-  live: {
-    libx264: {
-      default: defaultX264OptionsBuilder
-    },
-    aac: {
-      default: defaultAACOptionsBuilder
-    },
-    libfdkAAC: {
-      default: defaultLibFDKAACOptionsBuilder
-    }
-  }
 }
 
 // ---------------------------------------------------------------------------

@@ -1,10 +1,10 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
-import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
+import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_ENCODERS, VIDEO_TRANSCODING_FPS } from '@server/initializers/constants'
+import { VideoResolution } from '../../shared/models/videos'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
 import { CONFIG } from '../initializers/config'
-import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_ENCODERS, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { getAudioStream, getClosestFramerateStandard, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -19,11 +19,13 @@ export type EncoderOptionsBuilder = (params: {
   input: string
   resolution: VideoResolution
   fps?: number
+  streamNum?: number
 }) => Promise<EncoderOptions> | EncoderOptions
 
 // Options types
 
 export interface EncoderOptions {
+  copy?: boolean
   outputOptions: string[]
 }
 
@@ -37,7 +39,7 @@ export interface EncoderProfile <T> {
 
 export type AvailableEncoders = {
   [ id in 'live' | 'vod' ]: {
-    [ encoder in 'libx264' | 'aac' | 'libfdkAAC' ]: EncoderProfile<EncoderOptionsBuilder>
+    [ encoder in 'libx264' | 'aac' | 'libfdk_aac' ]?: EncoderProfile<EncoderOptionsBuilder>
   }
 }
 
@@ -197,8 +199,20 @@ async function transcode (options: TranscodeOptions) {
 // Live muxing/transcoding functions
 // ---------------------------------------------------------------------------
 
-function getLiveTranscodingCommand (rtmpUrl: string, outPath: string, resolutions: number[], fps: number, deleteSegments: boolean) {
-  const command = getFFmpeg(rtmpUrl)
+async function getLiveTranscodingCommand (options: {
+  rtmpUrl: string
+  outPath: string
+  resolutions: number[]
+  fps: number
+  deleteSegments: boolean
+
+  availableEncoders: AvailableEncoders
+  profile: string
+}) {
+  const { rtmpUrl, outPath, resolutions, fps, deleteSegments, availableEncoders, profile } = options
+  const input = rtmpUrl
+
+  const command = getFFmpeg(input)
   command.inputOption('-fflags nobuffer')
 
   const varStreamMap: string[] = []
@@ -219,19 +233,43 @@ function getLiveTranscodingCommand (rtmpUrl: string, outPath: string, resolution
     }))
   ])
 
-  addEncoderDefaultParams(command, 'libx264', fps)
-
   command.outputOption('-preset superfast')
 
   for (let i = 0; i < resolutions.length; i++) {
     const resolution = resolutions[i]
+    const baseEncoderBuilderParams = { input, availableEncoders, profile, fps, resolution, streamNum: i, videoType: 'live' as 'live' }
 
-    command.outputOption(`-map [vout${resolution}]`)
-    command.outputOption(`-c:v:${i} libx264`)
-    command.outputOption(`-b:v:${i} ${getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)}`)
+    {
+      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType: 'VIDEO' }))
+      if (!builderResult) {
+        throw new Error('No available live video encoder found')
+      }
 
-    command.outputOption(`-map a:0`)
-    command.outputOption(`-c:a:${i} aac`)
+      command.outputOption(`-map [vout${resolution}]`)
+
+      addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps, streamNum: i })
+
+      logger.debug('Apply ffmpeg live video params from %s.', builderResult.encoder, builderResult)
+
+      command.outputOption(`${buildStreamSuffix('-c:v', i)} ${builderResult.encoder}`)
+      command.addOutputOptions(builderResult.result.outputOptions)
+    }
+
+    {
+      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType: 'AUDIO' }))
+      if (!builderResult) {
+        throw new Error('No available live audio encoder found')
+      }
+
+      command.outputOption('-map a:0')
+
+      addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps, streamNum: i })
+
+      logger.debug('Apply ffmpeg live audio params from %s.', builderResult.encoder, builderResult)
+
+      command.outputOption(`${buildStreamSuffix('-c:a', i)} ${builderResult.encoder}`)
+      command.addOutputOptions(builderResult.result.outputOptions)
+    }
 
     varStreamMap.push(`v:${i},a:${i}`)
   }
@@ -282,11 +320,20 @@ async function hlsPlaylistToFragmentedMP4 (hlsDirectory: string, segmentFiles: s
   return runCommand(command, cleaner)
 }
 
+function buildStreamSuffix (base: string, streamNum?: number) {
+  if (streamNum !== undefined) {
+    return `${base}:${streamNum}`
+  }
+
+  return base
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getLiveTranscodingCommand,
   getLiveMuxingCommand,
+  buildStreamSuffix,
   convertWebPToJPG,
   processGIF,
   generateImageFromVideoFile,
@@ -302,19 +349,35 @@ export {
 // Default options
 // ---------------------------------------------------------------------------
 
-function addEncoderDefaultParams (command: ffmpeg.FfmpegCommand, encoder: 'libx264' | string, fps?: number) {
-  if (encoder !== 'libx264') return
+function addDefaultEncoderParams (options: {
+  command: ffmpeg.FfmpegCommand
+  encoder: 'libx264' | string
+  streamNum?: number
+  fps?: number
+}) {
+  const { command, encoder, fps, streamNum } = options
 
-  command.outputOption('-level 3.1') // 3.1 is the minimal resource allocation for our highest supported resolution
-         .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
-         .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
-         .outputOption('-pix_fmt yuv420p') // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
-         .outputOption('-map_metadata -1') // strip all metadata
-         .outputOption('-max_muxing_queue_size 1024') // avoid issues when transcoding some files: https://trac.ffmpeg.org/ticket/6375
-         // Keyframe interval of 2 seconds for faster seeking and resolution switching.
-         // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
-         // https://superuser.com/a/908325
-         .outputOption('-g ' + (fps * 2))
+  if (encoder === 'libx264') {
+    // 3.1 is the minimal resource allocation for our highest supported resolution
+    command.outputOption('-level 3.1')
+        // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
+        .outputOption('-b_strategy 1')
+        // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
+        .outputOption('-bf 16')
+        // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
+        .outputOption(buildStreamSuffix('-pix_fmt', streamNum) + ' yuv420p')
+        // strip all metadata
+        .outputOption('-map_metadata -1')
+        // avoid issues when transcoding some files: https://trac.ffmpeg.org/ticket/6375
+        .outputOption(buildStreamSuffix('-max_muxing_queue_size', streamNum) + ' 1024')
+
+    if (fps) {
+      // Keyframe interval of 2 seconds for faster seeking and resolution switching.
+      // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
+      // https://superuser.com/a/908325
+      command.outputOption('-g ' + (fps * 2))
+    }
+  }
 }
 
 function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string, deleteSegments: boolean) {
@@ -352,17 +415,18 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
 
   if (options.resolution !== undefined) {
     // '?x720' or '720x?' for example
-    const size = options.isPortraitMode === true ? `${options.resolution}x?` : `?x${options.resolution}`
+    const size = options.isPortraitMode === true
+      ? `${options.resolution}x?`
+      : `?x${options.resolution}`
+
     command = command.size(size)
   }
 
-  if (fps) {
-    // Hard FPS limits
-    if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard(fps, 'HD_STANDARD')
-    else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
+  // Hard FPS limits
+  if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard(fps, 'HD_STANDARD')
+  else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
 
-    command = command.withFPS(fps)
-  }
+  command = command.withFPS(fps)
 
   return command
 }
@@ -445,6 +509,49 @@ function getHLSVideoPath (options: HLSTranscodeOptions) {
 // Transcoding presets
 // ---------------------------------------------------------------------------
 
+async function getEncoderBuilderResult (options: {
+  streamType: string
+  input: string
+
+  availableEncoders: AvailableEncoders
+  profile: string
+
+  videoType: 'vod' | 'live'
+
+  resolution: number
+  fps?: number
+  streamNum?: number
+}) {
+  const { availableEncoders, input, profile, resolution, streamType, fps, streamNum, videoType } = options
+
+  const encodersToTry: string[] = VIDEO_TRANSCODING_ENCODERS[streamType]
+
+  for (const encoder of encodersToTry) {
+    if (!(await checkFFmpegEncoders()).get(encoder) || !availableEncoders[videoType][encoder]) continue
+
+    const builderProfiles: EncoderProfile<EncoderOptionsBuilder> = availableEncoders[videoType][encoder]
+    let builder = builderProfiles[profile]
+
+    if (!builder) {
+      logger.debug('Profile %s for encoder %s not available. Fallback to default.', profile, encoder)
+      builder = builderProfiles.default
+    }
+
+    const result = await builder({ input, resolution: resolution, fps, streamNum })
+
+    return {
+      result,
+
+      // If we don't have output options, then copy the input stream
+      encoder: result.copy === true
+        ? 'copy'
+        : encoder
+    }
+  }
+
+  return null
+}
+
 async function presetVideo (
   command: ffmpeg.FfmpegCommand,
   input: string,
@@ -459,48 +566,40 @@ async function presetVideo (
   const parsedAudio = await getAudioStream(input)
 
   let streamsToProcess = [ 'AUDIO', 'VIDEO' ]
-  const streamsFound = {
-    AUDIO: '',
-    VIDEO: ''
-  }
 
   if (!parsedAudio.audioStream) {
     localCommand = localCommand.noAudio()
     streamsToProcess = [ 'VIDEO' ]
   }
 
-  for (const stream of streamsToProcess) {
-    const encodersToTry: string[] = VIDEO_TRANSCODING_ENCODERS[stream]
+  for (const streamType of streamsToProcess) {
+    const { profile, resolution, availableEncoders } = transcodeOptions
 
-    for (const encoder of encodersToTry) {
-      if (!(await checkFFmpegEncoders()).get(encoder)) continue
+    const builderResult = await getEncoderBuilderResult({
+      streamType,
+      input,
+      resolution,
+      availableEncoders,
+      profile,
+      fps,
+      videoType: 'vod' as 'vod'
+    })
 
-      const builderProfiles: EncoderProfile<EncoderOptionsBuilder> = transcodeOptions.availableEncoders.vod[encoder]
-      let builder = builderProfiles[transcodeOptions.profile]
-
-      if (!builder) {
-        logger.debug('Profile %s for encoder %s not available. Fallback to default.', transcodeOptions.profile, encoder)
-        builder = builderProfiles.default
-      }
-
-      const builderResult = await builder({ input, resolution: transcodeOptions.resolution, fps })
-
-      logger.debug('Apply ffmpeg params from %s.', encoder, builderResult)
-
-      localCommand.outputOptions(builderResult.outputOptions)
-
-      addEncoderDefaultParams(localCommand, encoder)
-
-      streamsFound[stream] = encoder
-      break
+    if (!builderResult) {
+      throw new Error('No available encoder found for stream ' + streamType)
     }
 
-    if (!streamsFound[stream]) {
-      throw new Error('No available encoder found ' + encodersToTry.join(', '))
+    logger.debug('Apply ffmpeg params from %s.', builderResult.encoder, builderResult)
+
+    if (streamType === 'VIDEO') {
+      localCommand.videoCodec(builderResult.encoder)
+    } else if (streamType === 'AUDIO') {
+      localCommand.audioCodec(builderResult.encoder)
     }
+
+    command.addOutputOptions(builderResult.result.outputOptions)
+    addDefaultEncoderParams({ command: localCommand, encoder: builderResult.encoder, fps })
   }
-
-  localCommand.videoCodec(streamsFound.VIDEO)
 
   return localCommand
 }
