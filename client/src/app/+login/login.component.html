@@ -91,6 +91,10 @@
       We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
     </div>
 
+    <div *ngIf="!isEmailDisabled()" class="forgot-password-instructions" i18n>
+      Enter your email address and we will send you a link to reset your password.
+    </div>
+
     <div class="form-group" [hidden]="isEmailDisabled()">
       <label i18n for="forgot-password-email">Email</label>
       <input
@@ -107,7 +111,7 @@
     >
 
     <input
-      type="submit" i18n-value value="Send me an email to reset my password" class="action-button-submit"
+      type="submit" i18n-value="Password reset button" value="Reset" class="action-button-submit"
       (click)="askResetPassword()" [disabled]="!forgotPasswordEmailInput.validity.valid"
     >
   </div>
