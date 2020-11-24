@@ -23,23 +23,25 @@ input[type=submit] {
   .forgot-password-instructions {
     margin-bottom: 20px;
   }
-
-  #forgot-password-email {
-    width: 100%;
-
-    @media screen and (min-width: #{map-get($container-max-widths, sm)}) {
-      width: 350px;
-    }
-  }
 }
 
 .modal-footer.inputs {
   .action-button.action-button-cancel {
-    display: none;
+    width: auto !important;
+    display: inline-block;
+  }
+}
 
-    @media screen and (min-width: #{map-get($container-max-widths, sm)}) {
-      width: auto !important;
-      display: inline-block;
+@media screen and (max-width: #{map-get($container-max-widths, sm)}) {
+  .modal-body {
+    #forgot-password-email {
+      width: 100%;
+    }
+  }
+
+  .modal-footer.inputs {
+    .action-button.action-button-cancel {
+      display: none;
     }
   }
 }
