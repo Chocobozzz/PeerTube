@@ -9,13 +9,15 @@ async function up (utils: {
 }): Promise<void> {
   const q = utils.queryInterface
 
-  // Create uuid column for users
-  const userFeedTokenUUID = {
-    type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV4,
-    allowNull: true
+  {
+    // Create uuid column for users
+    const userFeedTokenUUID = {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      allowNull: true
+    }
+    await q.addColumn('user', 'feedToken', userFeedTokenUUID)
   }
-  await q.addColumn('user', 'feedToken', userFeedTokenUUID)
 
   // Set UUID to previous users
   {
@@ -27,6 +29,15 @@ async function up (utils: {
       const queryUpdate = `UPDATE "user" SET "feedToken" = '${uuidv4()}' WHERE id = ${user.id}`
       await utils.sequelize.query(queryUpdate)
     }
+  }
+
+  {
+    const userFeedTokenUUID = {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      allowNull: false
+    }
+    await q.changeColumn('user', 'feedToken', userFeedTokenUUID)
   }
 }
 

@@ -1,17 +1,17 @@
 import * as express from 'express'
 import { param, query } from 'express-validator'
-import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
-import { doesVideoExist } from '../../helpers/middlewares/videos'
+import { exists, isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
+import { logger } from '../../helpers/logger'
 import {
   doesAccountIdExist,
   doesAccountNameWithHostExist,
+  doesUserFeedTokenCorrespond,
   doesVideoChannelIdExist,
-  doesVideoChannelNameWithHostExist,
-  doesUserFeedTokenCorrespond
+  doesVideoChannelNameWithHostExist
 } from '../../helpers/middlewares'
+import { doesVideoExist } from '../../helpers/middlewares/videos'
+import { areValidationErrors } from './utils'
 
 const feedsFormatValidator = [
   param('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
@@ -35,19 +35,31 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
   if (req.accepts(acceptableContentTypes)) {
     res.set('Content-Type', req.accepts(acceptableContentTypes) as string)
   } else {
-    return res.status(406).send({
-      message: `You should accept at least one of the following content-types: ${acceptableContentTypes.join(', ')}`
-    }).end()
+    return res.status(406)
+              .json({
+                message: `You should accept at least one of the following content-types: ${acceptableContentTypes.join(', ')}`
+              })
   }
 
   return next()
 }
 
 const videoFeedsValidator = [
-  query('accountId').optional().custom(isIdValid),
-  query('accountName').optional(),
-  query('videoChannelId').optional().custom(isIdValid),
-  query('videoChannelName').optional(),
+  query('accountId')
+    .optional()
+    .custom(isIdValid)
+    .withMessage('Should have a valid account id'),
+
+  query('accountName')
+    .optional(),
+
+  query('videoChannelId')
+    .optional()
+    .custom(isIdValid)
+    .withMessage('Should have a valid channel id'),
+
+  query('videoChannelName')
+    .optional(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking feeds parameters', { parameters: req.query })
@@ -63,19 +75,22 @@ const videoFeedsValidator = [
   }
 ]
 
-const videoSubscriptonFeedsValidator = [
-  query('accountId').custom(isIdValid),
-  query('token'),
+const videoSubscriptionFeedsValidator = [
+  query('accountId')
+    .custom(isIdValid)
+    .withMessage('Should have a valid account id'),
+
+  query('token')
+    .custom(exists)
+    .withMessage('Should have a token'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking feeds parameters', { parameters: req.query })
+    logger.debug('Checking subscription feeds parameters', { parameters: req.query })
 
     if (areValidationErrors(req, res)) return
 
-    // a token alone is erroneous
-    if (req.query.token && !req.query.accountId) return
-    if (req.query.accountId && !await doesAccountIdExist(req.query.accountId, res)) return
-    if (req.query.token && !await doesUserFeedTokenCorrespond(res.locals.account.userId, req.query.token, res)) return
+    if (!await doesAccountIdExist(req.query.accountId, res)) return
+    if (!await doesUserFeedTokenCorrespond(res.locals.account.userId, req.query.token, res)) return
 
     return next()
   }
@@ -90,9 +105,10 @@ const videoCommentsFeedsValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.videoId && (req.query.videoChannelId || req.query.videoChannelName)) {
-      return res.status(400).send({
-        message: 'videoId cannot be mixed with a channel filter'
-      }).end()
+      return res.status(400)
+                .json({
+                  message: 'videoId cannot be mixed with a channel filter'
+                })
     }
 
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res)) return
@@ -107,6 +123,6 @@ export {
   feedsFormatValidator,
   setFeedFormatContentType,
   videoFeedsValidator,
-  videoSubscriptonFeedsValidator,
+  videoSubscriptionFeedsValidator,
   videoCommentsFeedsValidator
 }

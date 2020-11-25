@@ -1,3 +1,4 @@
+
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, ScopedTokensService, ScreenService, ServerService, UserService } from '@app/core'
@@ -6,10 +7,9 @@ import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
 import { AbstractVideoList, OwnerDisplayType } from '@app/shared/shared-video-miniature'
-import { VideoSortField, FeedFormat } from '@shared/models'
-import { copyToClipboard } from '../../../root-helpers/utils'
+import { FeedFormat, VideoSortField } from '@shared/models'
 import { environment } from '../../../environments/environment'
-import { forkJoin } from 'rxjs'
+import { copyToClipboard } from '../../../root-helpers/utils'
 
 @Component({
   selector: 'my-videos-user-subscriptions',
@@ -56,7 +56,7 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     this.scopedTokensService.getScopedTokens().subscribe(
       tokens => {
         const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
-        feedUrl = feedUrl + feeds.find((f: any) => f.format === FeedFormat.RSS).url
+        feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
       },
 
       err => {

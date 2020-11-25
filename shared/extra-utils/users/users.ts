@@ -1,12 +1,12 @@
+import { omit } from 'lodash'
 import * as request from 'supertest'
-import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
+import { UserUpdateMe } from '../../models/users'
 import { UserAdminFlag } from '../../models/users/user-flag.model'
 import { UserRegister } from '../../models/users/user-register.model'
 import { UserRole } from '../../models/users/user-role'
+import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 import { userLogin } from './login'
-import { UserUpdateMe } from '../../models/users'
-import { omit } from 'lodash'
 
 type CreateUserArgs = {
   url: string
@@ -109,15 +109,26 @@ function getMyUserInformation (url: string, accessToken: string, specialStatus =
           .expect('Content-Type', /json/)
 }
 
-function getUserScopedTokens (url: string, accessToken: string, specialStatus = 200) {
+function getUserScopedTokens (url: string, token: string, statusCodeExpected = 200) {
   const path = '/api/v1/users/scoped-tokens'
 
-  return request(url)
-          .get(path)
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + accessToken)
-          .expect(specialStatus)
-          .expect('Content-Type', /json/)
+  return makeGetRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
+}
+
+function renewUserScopedTokens (url: string, token: string, statusCodeExpected = 200) {
+  const path = '/api/v1/users/scoped-tokens'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
 }
 
 function deleteMe (url: string, accessToken: string, specialStatus = 204) {
@@ -359,6 +370,7 @@ export {
   unblockUser,
   askResetPassword,
   resetPassword,
+  renewUserScopedTokens,
   updateMyAvatar,
   askSendVerifyEmail,
   generateUserAccessToken,

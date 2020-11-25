@@ -12,7 +12,7 @@ import {
   videoCommentsFeedsValidator,
   videoFeedsValidator,
   videosSortValidator,
-  videoSubscriptonFeedsValidator
+  videoSubscriptionFeedsValidator
 } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache'
 import { VideoModel } from '../models/video/video'
@@ -60,7 +60,7 @@ feedsRouter.get('/feeds/subscriptions.:format',
     ]
   })(ROUTE_CACHE_LIFETIME.FEEDS)),
   commonVideosFiltersValidator,
-  asyncMiddleware(videoSubscriptonFeedsValidator),
+  asyncMiddleware(videoSubscriptionFeedsValidator),
   asyncMiddleware(generateVideoFeedForSubscriptions)
 )
 
@@ -198,20 +198,17 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
 
-  const options = {
-    followerActorId: res.locals.user.Account.Actor.id,
-    user: res.locals.user
-  }
-
   const resultList = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
-    includeLocalVideos: true,
+    includeLocalVideos: false,
     nsfw,
     filter: req.query.filter as VideoFilter,
     withFiles: true,
-    ...options
+
+    followerActorId: res.locals.user.Account.Actor.id,
+    user: res.locals.user
   })
 
   addVideosToFeed(feed, resultList.data)
