@@ -952,7 +952,7 @@ paths:
               type: object
               properties:
                 beforeDate:
-                  description: If passed, history before this date will be deleted
+                  description: history before this date will be deleted
                   type: string
                   format: date-time
       responses:
