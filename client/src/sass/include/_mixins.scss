@@ -121,6 +121,7 @@
   min-height: $button-height;
   padding-top: 0;
   padding-bottom: 0;
+  flex-wrap: nowrap;
 
   .input-group-text{
     font-size: 14px;

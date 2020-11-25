@@ -79,7 +79,6 @@ input:not([type=submit]) {
 @media screen and (max-width: $mobile-view) {
   .form-group-terms,
   .input-group,
-  .input-group-append,
   input:not([type=submit]) {
     width: 100%;
   }
