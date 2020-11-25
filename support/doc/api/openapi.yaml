@@ -153,6 +153,7 @@ x-tagGroups:
       - My User
       - My Subscriptions
       - My Notifications
+      - My History
   - name: Videos
     tags:
       - Video
