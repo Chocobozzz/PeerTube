@@ -70,6 +70,9 @@ tags:
     description: >
       Operations related to your subscriptions to video channels, their
       new videos, and how to keep up to date with their latest publications!
+  - name: My History
+    description: >
+      Operations related to your watch history. 
   - name: My Notifications
     description: >
       Notifications following new videos, follows or reports. They allow you
@@ -914,6 +917,43 @@ paths:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 autoInstanceFollowing:
                   $ref: '#/components/schemas/NotificationSettingValue'
+      responses:
+        '204':
+          description: successful operation
+  /users/me/history/videos:
+    get:
+      summary: List watched videos history
+      security:
+        - OAuth2: []
+      tags:
+        - My History
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+  /users/me/history/videos/remove:
+    post:
+      summary: Clear video history
+      security:
+        - OAuth2: []
+      tags:
+        - My History
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                beforeDate:
+                  description: If passed, history before this date will be deleted
+                  type: string
+                  format: date-time
       responses:
         '204':
           description: successful operation
