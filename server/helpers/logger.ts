@@ -18,6 +18,8 @@ function getLoggerReplacer () {
 
   // Thanks: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value#Examples
   return (key: string, value: any) => {
+    if (key === 'cert') return 'Replaced by the logger to avoid large log message'
+
     if (typeof value === 'object' && value !== null) {
       if (seen.has(value)) return
 
