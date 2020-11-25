@@ -39,11 +39,11 @@ async function doesAccountExist (p: Bluebird<MAccountDefault>, res: Response, se
   return true
 }
 
-async function doesUserFeedTokenCorrespond (id: number | string, token: string, res: Response) {
+async function doesUserFeedTokenCorrespond (id: number, token: string, res: Response) {
   const user = await UserModel.loadByIdWithChannels(parseInt(id + '', 10))
 
   if (token !== user.feedToken) {
-    res.status(401)
+    res.status(403)
        .json({ error: 'User and token mismatch' })
 
     return false

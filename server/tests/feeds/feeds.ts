@@ -8,28 +8,29 @@ import {
   addAccountToServerBlocklist,
   removeAccountFromServerBlocklist
 } from '@shared/extra-utils/users/blocklist'
+import { addUserSubscription, listUserSubscriptionVideos } from '@shared/extra-utils/users/user-subscriptions'
 import { VideoPrivacy } from '@shared/models'
+import { ScopedToken } from '@shared/models/users/user-scoped-token'
 import {
   cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
+  flushAndRunServer,
   getJSONfeed,
   getMyUserInformation,
+  getUserScopedTokens,
   getXMLfeed,
+  renewUserScopedTokens,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   uploadVideoAndGetId,
-  userLogin,
-  flushAndRunServer,
-  getUserScopedTokens
+  userLogin
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
 import { User } from '../../../shared/models/users'
-import { ScopedToken } from '@shared/models/users/user-scoped-token'
-import { listUserSubscriptionVideos, addUserSubscription } from '@shared/extra-utils/users/user-subscriptions'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -298,14 +299,10 @@ describe('Test syndication feeds', () => {
   })
 
   describe('Video feed from my subscriptions', function () {
-    /**
-     * use the 'version' query parameter to bust cache between tests
-     */
+    let feeduserAccountId: number
+    let feeduserFeedToken: string
 
     it('Should list no videos for a user with no videos and no subscriptions', async function () {
-      let feeduserAccountId: number
-      let feeduserFeedToken: string
-
       const attr = { username: 'feeduser', password: 'password' }
       await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: attr.username, password: attr.password })
       const feeduserAccessToken = await userLogin(servers[0], attr)
@@ -332,15 +329,21 @@ describe('Test syndication feeds', () => {
       }
     })
 
-    it('Should list no videos for a user with videos but no subscriptions', async function () {
-      {
-        const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
-        expect(res.body.total).to.equal(0)
+    it('Should fail with an invalid token', async function () {
+      await getJSONfeed(servers[0].url, 'subscriptions', { accountId: feeduserAccountId, token: 'toto' }, 403)
+    })
 
-        const json = await getJSONfeed(servers[0].url, 'subscriptions', { accountId: userAccountId, token: userFeedToken })
-        const jsonObj = JSON.parse(json.text)
-        expect(jsonObj.items.length).to.be.equal(0) // no subscription, it should not list the instance's videos but list 0 videos
-      }
+    it('Should fail with a token of another user', async function () {
+      await getJSONfeed(servers[0].url, 'subscriptions', { accountId: feeduserAccountId, token: userFeedToken }, 403)
+    })
+
+    it('Should list no videos for a user with videos but no subscriptions', async function () {
+      const res = await listUserSubscriptionVideos(servers[0].url, userAccessToken)
+      expect(res.body.total).to.equal(0)
+
+      const json = await getJSONfeed(servers[0].url, 'subscriptions', { accountId: userAccountId, token: userFeedToken })
+      const jsonObj = JSON.parse(json.text)
+      expect(jsonObj.items.length).to.be.equal(0) // no subscription, it should not list the instance's videos but list 0 videos
     })
 
     it('Should list self videos for a user with a subscription to themselves', async function () {
@@ -374,6 +377,20 @@ describe('Test syndication feeds', () => {
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(2) // subscribed to root, it should not list the instance's videos but list root/john's
       }
+    })
+
+    it('Should renew the token, and so have an invalid old token', async function () {
+      await renewUserScopedTokens(servers[0].url, userAccessToken)
+
+      await getJSONfeed(servers[0].url, 'subscriptions', { accountId: userAccountId, token: userFeedToken, version: 3 }, 403)
+    })
+
+    it('Should succeed with the new token', async function () {
+      const res2 = await getUserScopedTokens(servers[0].url, userAccessToken)
+      const token: ScopedToken = res2.body
+      userFeedToken = token.feedToken
+
+      await getJSONfeed(servers[0].url, 'subscriptions', { accountId: userAccountId, token: userFeedToken, version: 4 })
     })
 
   })

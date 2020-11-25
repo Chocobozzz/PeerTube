@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, ConfirmService, ScopedTokensService } from '@app/core'
 import { VideoService } from '@app/shared/shared-main'

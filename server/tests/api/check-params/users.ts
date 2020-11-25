@@ -14,6 +14,7 @@ import {
   flushAndRunServer,
   getMyUserInformation,
   getMyUserVideoRating,
+  getUserScopedTokens,
   getUsersList,
   immutableAssign,
   killallServers,
@@ -23,6 +24,7 @@ import {
   makeUploadRequest,
   registerUser,
   removeUser,
+  renewUserScopedTokens,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
@@ -38,7 +40,7 @@ import {
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { getMagnetURI, getMyVideoImports, getGoodVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
+import { getGoodVideoUrl, getMagnetURI, getMyVideoImports, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 
@@ -606,6 +608,34 @@ describe('Test users API validators', function () {
         attaches,
         statusCodeExpected: 200
       })
+    })
+  })
+
+  describe('When managing my scoped tokens', function () {
+
+    it('Should fail to get my scoped tokens with an non authenticated user', async function () {
+      await getUserScopedTokens(server.url, null, 401)
+    })
+
+    it('Should fail to get my scoped tokens with a bad token', async function () {
+      await getUserScopedTokens(server.url, 'bad', 401)
+
+    })
+
+    it('Should succeed to get my scoped tokens', async function () {
+      await getUserScopedTokens(server.url, server.accessToken)
+    })
+
+    it('Should fail to renew my scoped tokens with an non authenticated user', async function () {
+      await renewUserScopedTokens(server.url, null, 401)
+    })
+
+    it('Should fail to renew my scoped tokens with a bad token', async function () {
+      await renewUserScopedTokens(server.url, 'bad', 401)
+    })
+
+    it('Should succeed to renew my scoped tokens', async function () {
+      await renewUserScopedTokens(server.url, server.accessToken)
     })
   })
 
