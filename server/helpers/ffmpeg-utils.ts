@@ -64,35 +64,14 @@ function convertWebPToJPG (path: string, destination: string): Promise<void> {
 function processGIF (
   path: string,
   destination: string,
-  newSize: { width: number, height: number },
-  keepOriginal = false
+  newSize: { width: number, height: number }
 ): Promise<void> {
-  return new Promise<void>(async (res, rej) => {
-    if (path === destination) {
-      throw new Error('FFmpeg needs an input path different that the output path.')
-    }
+  const command = ffmpeg(path)
+    .fps(20)
+    .size(`${newSize.width}x${newSize.height}`)
+    .output(destination)
 
-    logger.debug('Processing gif %s to %s.', path, destination)
-
-    try {
-      const command = ffmpeg(path)
-        .fps(20)
-        .size(`${newSize.width}x${newSize.height}`)
-        .output(destination)
-
-      command.on('error', (err, stdout, stderr) => {
-        logger.error('Error in ffmpeg gif resizing process.', { stdout, stderr })
-        return rej(err)
-      })
-      .on('end', async () => {
-        if (keepOriginal !== true) await remove(path)
-        res()
-      })
-      .run()
-    } catch (err) {
-      return rej(err)
-    }
-  })
+  return runCommand(command)
 }
 
 async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {

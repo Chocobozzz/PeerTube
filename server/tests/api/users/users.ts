@@ -602,8 +602,8 @@ describe('Test users', function () {
       expect(user.account.description).to.be.null
     })
 
-    it('Should be able to update my avatar', async function () {
-      const fixture = 'avatar.png'
+    it('Should be able to update my avatar with a gif', async function () {
+      const fixture = 'avatar.gif'
 
       await updateMyAvatar({
         url: server.url,
@@ -614,7 +614,24 @@ describe('Test users', function () {
       const res = await getMyUserInformation(server.url, accessTokenUser)
       const user = res.body
 
-      await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
+      await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.gif')
+    })
+
+    it('Should be able to update my avatar with a gif, and then a png', async function () {
+      for (const extension of [ '.png', '.gif' ]) {
+        const fixture = 'avatar' + extension
+
+        await updateMyAvatar({
+          url: server.url,
+          accessToken: accessTokenUser,
+          fixture
+        })
+
+        const res = await getMyUserInformation(server.url, accessTokenUser)
+        const user = res.body
+
+        await testImage(server.url, 'avatar-resized', user.account.avatar.path, extension)
+      }
     })
 
     it('Should be able to update my display name', async function () {

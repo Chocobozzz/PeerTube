@@ -1,5 +1,5 @@
-import { extname } from 'path'
 import { remove, rename } from 'fs-extra'
+import { extname } from 'path'
 import { convertWebPToJPG, processGIF } from './ffmpeg-utils'
 import { logger } from './logger'
 
@@ -13,17 +13,31 @@ async function processImage (
 ) {
   const extension = extname(path)
 
-  // Use FFmpeg to process GIF
-  if (extension === '.gif') {
-    return processGIF(path, destination, newSize, keepOriginal)
-  }
-
   if (path === destination) {
-    throw new Error('Jimp needs an input path different that the output path.')
+    throw new Error('Jimp/FFmpeg needs an input path different that the output path.')
   }
 
   logger.debug('Processing image %s to %s.', path, destination)
 
+  // Use FFmpeg to process GIF
+  if (extension === '.gif') {
+    await processGIF(path, destination, newSize)
+  } else {
+    await jimpProcessor(path, destination, newSize)
+  }
+
+  if (keepOriginal !== true) await remove(path)
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  processImage
+}
+
+// ---------------------------------------------------------------------------
+
+async function jimpProcessor (path: string, destination: string, newSize: { width: number, height: number }) {
   let jimpInstance: any
 
   try {
@@ -44,12 +58,4 @@ async function processImage (
     .resize(newSize.width, newSize.height)
     .quality(80)
     .writeAsync(destination)
-
-  if (keepOriginal !== true) await remove(path)
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  processImage
 }
