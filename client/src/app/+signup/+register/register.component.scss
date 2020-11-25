@@ -20,6 +20,10 @@
 
     &.register-form {
       width: 450px;
+
+      @media screen and (max-width: $mobile-view) {
+        width: 100%;
+      }
     }
 
     &.instance-information {
@@ -35,6 +39,9 @@
       @media screen and (max-width: 1500px) {
         width: 450px;
       }
+      @media screen and (max-width: $mobile-view) {
+        width: 100%;
+      }
 
       ngb-accordion ::ng-deep {
         .btn {
@@ -42,10 +49,6 @@
           color: pvar(--mainForegroundColor) !important;
         }
       }
-    }
-
-    @media screen and (max-width: $mobile-view) {
-      width: auto;
     }
   }
 }
@@ -64,7 +67,6 @@
 
 input:not([type=submit]) {
   @include peertube-input-text(400px);
-
   display: block;
 
   &#username,
@@ -74,10 +76,19 @@ input:not([type=submit]) {
   }
 }
 
+@media screen and (max-width: $mobile-view) {
+  .form-group-terms,
+  .input-group,
+  input:not([type=submit]) {
+    width: 100%;
+  }
+}
+
 input[type=submit],
 button {
   @include peertube-button;
   @include orange-button;
+  
 }
 
 .name-information {
