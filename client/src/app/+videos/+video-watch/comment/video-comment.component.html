@@ -21,18 +21,20 @@
 
         <div class="comment-account-date">
           <div class="comment-account">
-            <a
-              [routerLink]="[ '/accounts', comment.by ]"
-              class="comment-account-name" [ngClass]="{ 'video-author': video.account.id === comment.account.id }"
-            >
-              {{ comment.account.displayName }}
-            </a>
+            <a [routerLink]="[ '/accounts', comment.by ]">
+              <span class="comment-account-name" [ngClass]="{ 'video-author': video.account.id === comment.account.id }">
+                {{ comment.account.displayName }}
+              </span>
 
-            <a [href]="comment.account.url" target="_blank" rel="noopener noreferrer" class="comment-account-fid ml-1">{{ comment.by }}</a>
+              <span class="comment-account-fid ml-1">{{ comment.by }}</span>
+            </a>
           </div>
-          <a [routerLink]="['/videos/watch', video.uuid, { 'threadId': comment.threadId }]"
-             class="comment-date" [title]="comment.createdAt">{{ comment.createdAt | myFromNow }}</a>
+
+          <a [routerLink]="['/videos/watch', video.uuid, { 'threadId': comment.threadId }]" class="comment-date" [title]="comment.createdAt">
+            {{ comment.createdAt | myFromNow }}
+          </a>
         </div>
+
         <div
           class="comment-html"
           [innerHTML]="sanitizedCommentHTML"

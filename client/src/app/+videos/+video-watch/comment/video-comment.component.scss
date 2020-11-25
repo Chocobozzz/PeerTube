@@ -71,6 +71,10 @@
           @include disable-default-a-behaviour;
 
           color: pvar(--mainForegroundColor);
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
 
         .comment-account-fid {
@@ -83,6 +87,10 @@
         color: pvar(--greyForegroundColor);
         margin-left: 5px;
         text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
 

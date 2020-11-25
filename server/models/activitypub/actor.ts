@@ -62,7 +62,6 @@ export const unusedActorAttributesForAPI = [
   'sharedInboxUrl',
   'followersUrl',
   'followingUrl',
-  'url',
   'createdAt',
   'updatedAt'
 ]
