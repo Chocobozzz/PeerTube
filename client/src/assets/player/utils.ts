@@ -68,7 +68,7 @@ function buildVideoLink (options: {
 
   const params = generateParams(window.location.search)
 
-  if (options.startTime) {
+  if (options.startTime !== undefined && options.startTime !== null) {
     const startTimeInt = Math.floor(options.startTime)
     params.set('start', secondsToTime(startTimeInt))
   }
@@ -145,6 +145,8 @@ function timeToInt (time: number | string) {
 
 function secondsToTime (seconds: number, full = false, symbol?: string) {
   let time = ''
+
+  if (seconds === 0 && !full) return '0s'
 
   const hourSymbol = (symbol || 'h')
   const minuteSymbol = (symbol || 'm')

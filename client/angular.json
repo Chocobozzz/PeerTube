@@ -150,6 +150,7 @@
               "linkifyjs/html",
               "linkifyjs",
               "markdown-it",
+              "markdown-it-emoji/light",
               "sanitize-html",
               "socket.io-client",
               "socket.io-parser",
