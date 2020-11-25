@@ -14,7 +14,7 @@ import {
   NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
 import { SharedGlobalIconModule } from '../shared-icons'
-import { AccountService, ActorAvatarInfoComponent, AvatarComponent } from './account'
+import { AccountService, ActorAvatarInfoComponent, VideoAvatarChannelComponent } from './account'
 import {
   BytesPipe,
   DurationFormatterPipe,
@@ -57,7 +57,7 @@ import { VideoChannelService } from './video-channel'
   ],
 
   declarations: [
-    AvatarComponent,
+    VideoAvatarChannelComponent,
     ActorAvatarInfoComponent,
 
     FromNowPipe,
@@ -106,7 +106,7 @@ import { VideoChannelService } from './video-channel'
 
     PrimeSharedModule,
 
-    AvatarComponent,
+    VideoAvatarChannelComponent,
     ActorAvatarInfoComponent,
 
     FromNowPipe,

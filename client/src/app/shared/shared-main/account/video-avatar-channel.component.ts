@@ -2,12 +2,14 @@ import { Component, Input, OnInit } from '@angular/core'
 import { Video } from '../video/video.model'
 
 @Component({
-  selector: 'avatar-channel',
-  templateUrl: './avatar.component.html',
-  styleUrls: [ './avatar.component.scss' ]
+  selector: 'my-video-avatar-channel',
+  templateUrl: './video-avatar-channel.component.html',
+  styleUrls: [ './video-avatar-channel.component.scss' ]
 })
-export class AvatarComponent implements OnInit {
+export class VideoAvatarChannelComponent implements OnInit {
   @Input() video: Video
+  @Input() byAccount: string
+
   @Input() size: 'md' | 'sm' = 'md'
   @Input() genericChannel: boolean
 

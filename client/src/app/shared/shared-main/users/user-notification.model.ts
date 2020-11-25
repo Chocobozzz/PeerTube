@@ -1,14 +1,16 @@
+import { AuthUser } from '@app/core'
+import { Account } from '@app/shared/shared-main/account/account.model'
+import { Actor } from '@app/shared/shared-main/account/actor.model'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import {
   AbuseState,
   ActorInfo,
   FollowState,
   UserNotification as UserNotificationServer,
   UserNotificationType,
-  VideoInfo,
-  UserRight
+  UserRight,
+  VideoInfo
 } from '@shared/models'
-import { Account, Actor, VideoChannel } from '@app/shared/shared-main'
-import { AuthUser } from '@app/core'
 
 export class UserNotification implements UserNotificationServer {
   id: number

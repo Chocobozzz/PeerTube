@@ -1,6 +1,9 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
 import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { Account } from '@app/shared/shared-main/account/account.model'
+import { Actor } from '@app/shared/shared-main/account/actor.model'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   Avatar,
@@ -12,7 +15,6 @@ import {
   VideoScheduleUpdate,
   VideoState
 } from '@shared/models'
-import { Account, Actor, VideoChannel } from '@app/shared/shared-main'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
