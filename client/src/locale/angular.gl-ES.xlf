@@ -2230,7 +2230,7 @@
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
         <source>Delete and re-draft</source>
-        <target state="translated">Borrar e voltar a escribir</target>
+        <target state="translated">Borrar e volver a escribir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -2238,7 +2238,7 @@
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="translated">Tes a certeza de que queres borrar e voltar a escribir o comentario?</target>
+        <target state="translated">Tes a certeza de que queres borrar e volver a escribir o comentario?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -4667,7 +4667,7 @@
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH"/>? It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2"/>)!</source>
-        <target state="translated">Tes a certeza de querer eliminar <x id="PH"/>? Eliminarás <x id="PH_1"/> vídeos subidos a esta canle, e non poderás voltar a crear outra canle co mesmo nome (<x id="PH_2"/>)!</target>
+        <target state="translated">Tes a certeza de querer eliminar <x id="PH"/>? Eliminarás <x id="PH_1"/> vídeos subidos a esta canle, e non poderás volver a crear outra canle co mesmo nome (<x id="PH_2"/>)!</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="d5f0913d08d01648d7e6165c168a99ccd06d1f4c" datatype="html">
@@ -5194,7 +5194,7 @@
       </trans-unit>
       <trans-unit id="4b84dbfc388651c74c77bba7ee0078b5714baf00" datatype="html">
         <source>Channel name cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="translated">O nome da canle non pode ser igual ó teu nome de usuaria. Podes voltar ó primeiro paso para cambiar o nome da conta.</target>
+        <target state="translated">O nome da canle non pode ser igual ó teu nome de usuaria. Podes volver ó primeiro paso para cambiar o nome da conta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">51,52</context>
@@ -5786,7 +5786,7 @@
       </trans-unit>
       <trans-unit id="7293356040886494773" datatype="html">
         <source>Do you really want to unblock this video? It will be available again in the videos list.</source>
-        <target state="translated">Queres desbloquear este vídeo? Voltará a estar dispoñible na lista de vídeos.</target>
+        <target state="translated">Queres desbloquear este vídeo? Volverá a estar dispoñible na lista de vídeos.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="4859202148272511129" datatype="html">
@@ -7964,7 +7964,7 @@
       </trans-unit>
       <trans-unit id="2843593344827160627" datatype="html">
         <source>Show back content from that user for you.</source>
-        <target state="translated">Voltar a mostrar para ti contido desta conta.</target>
+        <target state="translated">Volver a mostrar para ti contido desta conta.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">304</context></context-group>
       </trans-unit>
       <trans-unit id="6198109035280957164" datatype="html">
@@ -7984,7 +7984,7 @@
       </trans-unit>
       <trans-unit id="4024846984475742259" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="translated">Voltar a mostrarche contido desta instancia.</target>
+        <target state="translated">Volver a mostrarche contido desta instancia.</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">316</context></context-group>
       </trans-unit>
       <trans-unit id="3108200185023875257" datatype="html">
@@ -8020,7 +8020,7 @@
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
         <source>Show this user's content to the users of this instance again.</source>
-        <target state="translated">Voltar a mostrar os contidos desta usuaria ás usuarias da túa instancia.</target>
+        <target state="translated">Volver a mostrar os contidos desta usuaria ás usuarias da túa instancia.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">340</context>
@@ -8367,7 +8367,7 @@
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
         <source>Remove &amp; re-draft</source>
-        <target state="translated">Eliminar &amp; voltar a escribir</target>
+        <target state="translated">Eliminar &amp; volver a escribir</target>
         <context-group purpose="location"><context context-type="sourcefile">../app/+videos/+video-watch/comment/video-comment.component.ts</context><context context-type="linenumber">189</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
