@@ -43,6 +43,7 @@
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "fullTemplateTypeCheck": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "enableI18nLegacyMessageIdFormat": true
   }
 }
