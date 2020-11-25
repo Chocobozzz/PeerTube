@@ -4,7 +4,8 @@
       <img [src]="actor.avatarUrl" alt="Avatar" />
 
       <div class="actor-img-edit-container">
-        <div class="actor-img-edit-button" [ngbTooltip]="'(extensions: '+ avatarExtensions +', '+ maxSizeText +': '+ maxAvatarSizeInBytes +')'" placement="right" container="body">
+        <div class="actor-img-edit-button" [ngbTooltip]="avatarFormat"
+          placement="right" container="body">
           <my-global-icon iconName="edit"></my-global-icon>
           <label for="avatarfile" i18n>Change your avatar</label>
           <input #avatarfileInput type="file" title=" " name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange()"/>

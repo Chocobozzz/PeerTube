@@ -17,16 +17,12 @@ export class ActorAvatarInfoComponent implements OnInit {
 
   @Output() avatarChange = new EventEmitter<FormData>()
 
-  maxSizeText: string
-
   private serverConfig: ServerConfig
 
   constructor (
     private serverService: ServerService,
     private notifier: Notifier
-  ) {
-    this.maxSizeText = $localize`max size`
-  }
+  ) { }
 
   ngOnInit (): void {
     this.serverConfig = this.serverService.getTmpConfig()
@@ -57,5 +53,9 @@ export class ActorAvatarInfoComponent implements OnInit {
 
   get avatarExtensions () {
     return this.serverConfig.avatar.file.extensions.join(', ')
+  }
+
+  get avatarFormat () {
+    return `${$localize`max size`}: 192*192px, ${this.maxAvatarSizeInBytes} ${$localize`extensions`}: ${this.avatarExtensions}`
   }
 }
