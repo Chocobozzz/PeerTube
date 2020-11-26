@@ -208,15 +208,6 @@
                 }
               ]
             },
-            "i18n": {
-              "optimization": false,
-              "outputHashing": "none",
-              "sourceMap": true,
-              "namedChunks": true,
-              "aot": true,
-              "buildOptimizer": false,
-              "budgets": []
-            },
             "hmr": {
               "localize": false,
               "budgets": [

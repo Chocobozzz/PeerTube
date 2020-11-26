@@ -41,7 +41,7 @@ cd client
 rm -rf ./dist ./compiled
 
 # Don't build other languages if --light arg is provided
-if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ] && [ "$1" != "--i18n" ]); then
+if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
     npm run ng build -- --prod --output-path "dist/build"
 
     for key in "${!languages[@]}"; do
@@ -63,11 +63,6 @@ else
     additionalParams=""
     if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then
         additionalParams="--namedChunks=true --outputHashing=none"
-        export ANALYZE_BUNDLE=true
-    fi
-
-    if [ ! -z ${1+x} ] && [ "$1" == "--i18n" ]; then
-        additionalParams="--configuration=i18n"
         export ANALYZE_BUNDLE=true
     fi
 
