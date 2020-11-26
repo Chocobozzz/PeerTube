@@ -221,6 +221,8 @@ async function getLiveTranscodingCommand (options: {
 
   command.outputOption('-preset superfast')
 
+  addDefaultEncoderGlobalParams({ command })
+
   for (let i = 0; i < resolutions.length; i++) {
     const resolution = resolutions[i]
     const resolutionFPS = computeFPS(fps, resolution)
@@ -345,6 +347,23 @@ export {
 // Default options
 // ---------------------------------------------------------------------------
 
+function addDefaultEncoderGlobalParams (options: {
+  command: ffmpeg.FfmpegCommand
+}) {
+  const { command } = options
+
+  // avoid issues when transcoding some files: https://trac.ffmpeg.org/ticket/6375
+  command.outputOption('-max_muxing_queue_size 1024')
+         // strip all metadata
+         .outputOption('-map_metadata -1')
+         // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
+         .outputOption('-b_strategy 1')
+         // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
+         .outputOption('-bf 16')
+         // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
+         .outputOption('-pix_fmt yuv420p')
+}
+
 function addDefaultEncoderParams (options: {
   command: ffmpeg.FfmpegCommand
   encoder: 'libx264' | string
@@ -355,23 +374,13 @@ function addDefaultEncoderParams (options: {
 
   if (encoder === 'libx264') {
     // 3.1 is the minimal resource allocation for our highest supported resolution
-    command.outputOption('-level 3.1')
-        // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
-        .outputOption('-b_strategy 1')
-        // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
-        .outputOption('-bf 16')
-        // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
-        .outputOption(buildStreamSuffix('-pix_fmt', streamNum) + ' yuv420p')
-        // strip all metadata
-        .outputOption('-map_metadata -1')
-        // avoid issues when transcoding some files: https://trac.ffmpeg.org/ticket/6375
-        .outputOption(buildStreamSuffix('-max_muxing_queue_size', streamNum) + ' 1024')
+    command.outputOption(buildStreamSuffix('-level:v', streamNum) + ' 3.1')
 
     if (fps) {
       // Keyframe interval of 2 seconds for faster seeking and resolution switching.
       // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
       // https://superuser.com/a/908325
-      command.outputOption('-g ' + (fps * 2))
+      command.outputOption(buildStreamSuffix('-g:v', streamNum) + ' ' + (fps * 2))
     }
   }
 }
@@ -536,6 +545,8 @@ async function presetVideo (
   let localCommand = command
     .format('mp4')
     .outputOption('-movflags faststart')
+
+  addDefaultEncoderGlobalParams({ command })
 
   // Audio encoder
   const parsedAudio = await getAudioStream(input)
