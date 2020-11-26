@@ -61,9 +61,36 @@ input[type=submit] {
   display: flex;
   flex-wrap: wrap;
   font-size: 15px;
+  width: 450px;
+
+  @media screen and (max-width: $mobile-view) {
+    width: 100%;
+  }
 
   form {
-    margin: 0 50px 20px 0;
+    margin: 0;
+
+    &, input {
+      width: 100%;
+    }
+
+    .additionnal-links {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+
+      .forgot-password-button,
+      .create-an-account {
+        padding: 4px;
+        display: inline-block;
+
+        color: var(--mainColor);
+
+        &:hover, &:active {
+          color: var(--mainHoverColor);
+        }
+      }
+    }
   }
 
   .external-login-blocks {

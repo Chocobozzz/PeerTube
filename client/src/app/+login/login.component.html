@@ -37,9 +37,6 @@
               type="text" id="username" i18n-placeholder placeholder="Username or email address" required tabindex="1"
               formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }" #usernameInput
             >
-            <a i18n *ngIf="signupAllowed === true" routerLink="/signup" class="create-an-account">
-              or create an account
-            </a>
           </div>
 
           <div *ngIf="formErrors.username" class="form-error">
@@ -54,7 +51,6 @@
                                     i18n-placeholder placeholder="Password"
                                     [ngClass]="{ 'input-error': formErrors['password'] }"
                                     autocomplete="current-password"></my-input-toggle-hidden>
-            <a i18n-title class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>
           </div>
           <div *ngIf="formErrors.password" class="form-error">
             {{ formErrors.password }}
@@ -62,6 +58,11 @@
         </div>
 
         <input type="submit" i18n-value value="Login" [disabled]="!form.valid">
+        <div class="additionnal-links">
+          <a i18n-title class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>
+          ·
+          <a i18n routerLink="/signup" class="create-an-account">Create an account</a>
+        </div>
       </form>
 
       <div class="external-login-blocks" *ngIf="getExternalLogins().length !== 0">
