@@ -2,7 +2,7 @@
 <div class="form-row"> <!-- preview -->
   <div class="form-group col-12 col-lg-4 col-xl-3"></div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group col-12 col-lg-8 col-xl-9">
     <my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
   </div>
 </div>
@@ -12,7 +12,7 @@
     <h2 i18n class="account-title">PROFILE SETTINGS</h2>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group col-12 col-lg-8 col-xl-9">
 
     <my-user-quota [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
 
@@ -26,7 +26,7 @@
     <h2 i18n class="account-title">VIDEO SETTINGS</h2>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group col-12 col-lg-8 col-xl-9">
     <my-user-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-video-settings>
   </div>
 </div>
@@ -37,7 +37,7 @@
     <h2 i18n class="account-title">NOTIFICATIONS</h2>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group col-12 col-lg-8 col-xl-9">
     <my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
   </div>
 </div>
@@ -47,7 +47,7 @@
     <h2 i18n class="account-title">INTERFACE</h2>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group col-12 col-lg-8 col-xl-9">
     <my-user-interface-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-interface-settings>
   </div>
 </div>
@@ -57,7 +57,7 @@
     <h2 i18n class="account-title">PASSWORD</h2>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group col-12 col-lg-8 col-xl-9">
     <my-account-change-password></my-account-change-password>
   </div>
 </div>
@@ -67,7 +67,7 @@
     <h2 i18n class="account-title">EMAIL</h2>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group col-12 col-lg-8 col-xl-9">
     <my-account-change-email></my-account-change-email>
   </div>
 </div>
@@ -77,7 +77,7 @@
     <h2 i18n class="account-title account-title-danger">DANGER ZONE</h2>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group col-12 col-lg-8 col-xl-9">
     <my-account-danger-zone [user]="user"></my-account-danger-zone>
   </div>
 </div>

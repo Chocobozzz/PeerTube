@@ -24,7 +24,7 @@ input[type=submit] {
 }
 
 textarea {
-  @include peertube-textarea(500px, 150px);
+  @include peertube-textarea(100%, 150px);
   max-width: 100%;
 
   display: block;
