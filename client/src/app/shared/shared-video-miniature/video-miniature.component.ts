@@ -192,7 +192,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   getExactNumberOfViews () {
     return (this.video.views >= 1000 && this.displayOptions.views)
-        ? (this.video.views + ' ' + (this.video.isLive ? 'viewers' : 'views'))
+        ? (this.video.views + ' ' + (this.video.isLive ? $localize`viewers` : $localize`views`))
         : ''
   }
 
