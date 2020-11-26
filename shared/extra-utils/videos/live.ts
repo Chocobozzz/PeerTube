@@ -69,6 +69,7 @@ function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, fixtureName = '
   command.outputOption('-c:v libx264')
   command.outputOption('-g 50')
   command.outputOption('-keyint_min 2')
+  command.outputOption('-r 60')
   command.outputOption('-f flv')
 
   const rtmpUrl = rtmpBaseUrl + '/' + streamKey

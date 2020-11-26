@@ -1,11 +1,11 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
-import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_ENCODERS, VIDEO_TRANSCODING_FPS } from '@server/initializers/constants'
+import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_ENCODERS } from '@server/initializers/constants'
 import { VideoResolution } from '../../shared/models/videos'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
 import { CONFIG } from '../initializers/config'
-import { getAudioStream, getClosestFramerateStandard, getVideoFileFPS } from './ffprobe-utils'
+import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 
@@ -223,7 +223,17 @@ async function getLiveTranscodingCommand (options: {
 
   for (let i = 0; i < resolutions.length; i++) {
     const resolution = resolutions[i]
-    const baseEncoderBuilderParams = { input, availableEncoders, profile, fps, resolution, streamNum: i, videoType: 'live' as 'live' }
+    const resolutionFPS = computeFPS(fps, resolution)
+
+    const baseEncoderBuilderParams = {
+      input,
+      availableEncoders,
+      profile,
+      fps: resolutionFPS,
+      resolution,
+      streamNum: i,
+      videoType: 'live' as 'live'
+    }
 
     {
       const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType: 'VIDEO' }))
@@ -233,7 +243,7 @@ async function getLiveTranscodingCommand (options: {
 
       command.outputOption(`-map [vout${resolution}]`)
 
-      addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps, streamNum: i })
+      addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps: resolutionFPS, streamNum: i })
 
       logger.debug('Apply ffmpeg live video params from %s.', builderResult.encoder, builderResult)
 
@@ -249,7 +259,7 @@ async function getLiveTranscodingCommand (options: {
 
       command.outputOption('-map a:0')
 
-      addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps, streamNum: i })
+      addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps: resolutionFPS, streamNum: i })
 
       logger.debug('Apply ffmpeg live audio params from %s.', builderResult.encoder, builderResult)
 
@@ -387,15 +397,7 @@ function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string
 
 async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
   let fps = await getVideoFileFPS(options.inputPath)
-  if (
-    // On small/medium resolutions, limit FPS
-    options.resolution !== undefined &&
-    options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
-    fps > VIDEO_TRANSCODING_FPS.AVERAGE
-  ) {
-    // Get closest standard framerate by modulo: downsampling has to be done to a divisor of the nominal fps value
-    fps = getClosestFramerateStandard(fps, 'STANDARD')
-  }
+  fps = computeFPS(fps, options.resolution)
 
   command = await presetVideo(command, options.inputPath, options, fps)
 
@@ -408,12 +410,6 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
     command = command.size(size)
   }
 
-  // Hard FPS limits
-  if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard(fps, 'HD_STANDARD')
-  else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
-
-  command = command.withFPS(fps)
-
   return command
 }
 
@@ -422,13 +418,6 @@ async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: M
 
   command = await presetVideo(command, options.audioPath, options)
 
-  /*
-  MAIN reference: https://slhck.info/video/2017/03/01/rate-control.html
-  Our target situation is closer to a livestream than a stream,
-  since we want to reduce as much a possible the encoding burden,
-  although not to the point of a livestream where there is a hard
-  constraint on the frames per second to be encoded.
-  */
   command.outputOption('-preset:v veryfast')
 
   command = command.input(options.audioPath)

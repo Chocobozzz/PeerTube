@@ -1,5 +1,5 @@
 import { logger } from '@server/helpers/logger'
-import { getTargetBitrate } from '../../shared/models/videos'
+import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
 import { AvailableEncoders, buildStreamSuffix, EncoderOptionsBuilder } from '../helpers/ffmpeg-utils'
 import {
   canDoQuickAudioTranscode,
@@ -23,21 +23,12 @@ import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 //  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
 
 const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, resolution, fps }) => {
-  let targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
-
-  const probe = await ffprobePromise(input)
-
-  const videoStream = await getVideoStreamFromFile(input, probe)
-  if (!videoStream) {
-    return { outputOptions: [ ] }
-  }
-
-  // Don't transcode to an higher bitrate than the original file
-  const fileBitrate = await getVideoFileBitrate(input, probe)
-  targetBitrate = Math.min(targetBitrate, fileBitrate)
+  const targetBitrate = await buildTargetBitrate({ input, resolution, fps })
+  if (!targetBitrate) return { outputOptions: [ ] }
 
   return {
     outputOptions: [
+      `-r ${fps}`,
       `-maxrate ${targetBitrate}`,
       `-bufsize ${targetBitrate * 2}`
     ]
@@ -49,6 +40,7 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution
 
   return {
     outputOptions: [
+      `${buildStreamSuffix('-r:v', streamNum)} ${fps}`,
       `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`,
       `-maxrate ${targetBitrate}`,
       `-bufsize ${targetBitrate * 2}`
@@ -115,3 +107,21 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+async function buildTargetBitrate (options: {
+  input: string
+  resolution: VideoResolution
+  fps: number
+
+}) {
+  const { input, resolution, fps } = options
+  const probe = await ffprobePromise(input)
+
+  const videoStream = await getVideoStreamFromFile(input, probe)
+  if (!videoStream) return undefined
+
+  const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+
+  // Don't transcode to an higher bitrate than the original file
+  const fileBitrate = await getVideoFileBitrate(input, probe)
+  return Math.min(targetBitrate, fileBitrate)
+}

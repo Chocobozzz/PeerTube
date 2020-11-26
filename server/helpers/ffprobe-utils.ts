@@ -247,6 +247,26 @@ function getClosestFramerateStandard (fps: number, type: 'HD_STANDARD' | 'STANDA
                                     .sort((a, b) => fps % a - fps % b)[0]
 }
 
+function computeFPS (fpsArg: number, resolution: VideoResolution) {
+  let fps = fpsArg
+
+  if (
+    // On small/medium resolutions, limit FPS
+    resolution !== undefined &&
+    resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
+    fps > VIDEO_TRANSCODING_FPS.AVERAGE
+  ) {
+    // Get closest standard framerate by modulo: downsampling has to be done to a divisor of the nominal fps value
+    fps = getClosestFramerateStandard(fps, 'STANDARD')
+  }
+
+  // Hard FPS limits
+  if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard(fps, 'HD_STANDARD')
+  else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
+
+  return fps
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -259,6 +279,7 @@ export {
   getVideoStreamFromFile,
   getDurationFromVideoFile,
   getAudioStream,
+  computeFPS,
   getVideoFileFPS,
   ffprobePromise,
   getClosestFramerateStandard,

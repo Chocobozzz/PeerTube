@@ -416,7 +416,7 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       const bitrateLimits = {
-        720: 3000 * 1000,
+        720: 4000 * 1000, // 60FPS
         360: 1100 * 1000,
         240: 600 * 1000
       }
@@ -436,8 +436,13 @@ describe('Test live', function () {
           const file = hlsPlaylist.files.find(f => f.resolution.id === resolution)
 
           expect(file).to.exist
-          expect(file.fps).to.be.approximately(30, 5)
           expect(file.size).to.be.greaterThan(1)
+
+          if (resolution >= 720) {
+            expect(file.fps).to.be.approximately(60, 2)
+          } else {
+            expect(file.fps).to.be.approximately(30, 2)
+          }
 
           const filename = `${video.uuid}-${resolution}-fragmented.mp4`
           const segmentPath = buildServerDirectory(servers[0], join('streaming-playlists', 'hls', video.uuid, filename))
