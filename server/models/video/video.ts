@@ -1195,7 +1195,10 @@ export class VideoModel extends Model<VideoModel> {
     const options = {
       where: {
         remote: false,
-        isLive: true
+        isLive: true,
+        state: {
+          [Op.ne]: VideoState.LIVE_ENDED
+        }
       },
       include: [
         {
