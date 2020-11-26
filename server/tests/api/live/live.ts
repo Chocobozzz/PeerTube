@@ -39,6 +39,7 @@ import {
   viewVideo,
   wait,
   waitJobs,
+  waitUntilLiveEnded,
   waitUntilLivePublished,
   waitUntilLiveStarts,
   waitUntilLog
@@ -587,6 +588,8 @@ describe('Test live', function () {
       }
 
       await stopFfmpeg(command)
+      await waitUntilLiveEnded(servers[0].url, servers[0].accessToken, liveVideoUUID)
+
       await waitJobs(servers)
 
       for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {

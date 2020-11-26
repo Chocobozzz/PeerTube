@@ -137,6 +137,10 @@ function waitUntilLivePublished (url: string, token: string, videoId: number | s
   return waitWhileLiveState(url, token, videoId, VideoState.PUBLISHED)
 }
 
+function waitUntilLiveEnded (url: string, token: string, videoId: number | string) {
+  return waitWhileLiveState(url, token, videoId, VideoState.LIVE_ENDED)
+}
+
 async function waitWhileLiveState (url: string, token: string, videoId: number | string, state: VideoState) {
   let video: VideoDetails
 
@@ -185,6 +189,7 @@ export {
   checkLiveCleanup,
   stopFfmpeg,
   sendRTMPStreamInVideo,
+  waitUntilLiveEnded,
   waitFfmpegUntilError,
   sendRTMPStream,
   testFfmpegStreamError
