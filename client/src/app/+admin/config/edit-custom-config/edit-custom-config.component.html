@@ -647,15 +647,7 @@
           </div>
         </div>
 
-      </ng-template>
-    </ng-container>
-
-    <ng-container ngbNavItem="services">
-      <a ngbNavLink i18n>Services</a>
-
-      <ng-template ngbNavContent>
-
-        <div class="form-row mt-5"> <!-- twitter grid -->
+        <div class="form-row mt-4"> <!-- Twitter grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
             <div i18n class="inner-form-title">TWITTER</div>
             <div i18n class="inner-form-description">
@@ -704,7 +696,147 @@
       </ng-template>
     </ng-container>
 
-    <div ngbNavItem="live">
+    <ng-container ngbNavItem="transcoding">
+      <a ngbNavLink i18n>Transcoding</a>
+
+      <ng-template ngbNavContent>
+
+        <div class="form-row mt-5"> <!-- transcoding grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">TRANSCODING</div>
+            <div i18n class="inner-form-description">
+              Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
+              resources, this is a critical part of PeerTube, so tread carefully.
+            </div>
+          </div>
+
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+            <ng-container formGroupName="transcoding">
+
+              <div class="form-group">
+                <my-peertube-checkbox inputName="transcodingEnabled" formControlName="enabled">
+                  <ng-template ptTemplate="label">
+                    <ng-container i18n>Transcoding enabled</ng-container>
+                  </ng-template>
+
+                  <ng-template ptTemplate="help">
+                    <ng-container i18n>If you disable transcoding, many videos from your users will not work!</ng-container>
+                  </ng-template>
+
+                  <ng-container ngProjectAs="extra">
+
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                      <my-peertube-checkbox
+                        inputName="transcodingAllowAdditionalExtensions" formControlName="allowAdditionalExtensions"
+                        i18n-labelText labelText="Allow additional extensions"
+                      >
+                        <ng-container ngProjectAs="description">
+                          <span i18n>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos.</span>
+                        </ng-container>
+                      </my-peertube-checkbox>
+                    </div>
+
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                      <my-peertube-checkbox
+                        inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
+                        i18n-labelText labelText="Allow audio files upload"
+                      >
+                        <ng-container ngProjectAs="description">
+                          <span i18n>Allows users to upload audio files that will be merged with the preview file on upload.</span>
+                        </ng-container>
+                      </my-peertube-checkbox>
+                    </div>
+
+                    <ng-container formGroupName="webtorrent">
+                      <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                        <my-peertube-checkbox
+                          inputName="transcodingWebTorrentEnabled" formControlName="enabled"
+                          i18n-labelText labelText="WebTorrent support enabled"
+                        >
+                          <ng-template ptTemplate="help">
+                            <ng-container i18n>
+                              <p>If you also enabled HLS support, it will multiply videos storage by 2</p>
+
+                              <br />
+
+                              <strong>If disabled, breaks federation with PeerTube instances < 2.1</strong>
+                            </ng-container>
+                          </ng-template>
+                        </my-peertube-checkbox>
+                      </div>
+                    </ng-container>
+
+                    <ng-container formGroupName="hls">
+                      <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                        <my-peertube-checkbox
+                          inputName="transcodingHlsEnabled" formControlName="enabled"
+                          i18n-labelText labelText="HLS with P2P support enabled"
+                        >
+                          <ng-template ptTemplate="help">
+                            <ng-container i18n>
+                              <strong>Requires ffmpeg >= 4.1</strong>
+
+                              <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:</p>
+                              <ul>
+                                <li>Resolution change is smoother</li>
+                                <li>Faster playback in particular with long videos</li>
+                                <li>More stable playback (less bugs/infinite loading)</li>
+                              </ul>
+
+                              <p>If you also enabled WebTorrent support, it will multiply videos storage by 2</p>
+                            </ng-container>
+                          </ng-template>
+                        </my-peertube-checkbox>
+                      </div>
+                    </ng-container>
+
+                  </ng-container>
+                </my-peertube-checkbox>
+              </div>
+
+              <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                <label i18n for="transcodingThreads">Transcoding threads</label>
+                <div class="peertube-select-container">
+                  <select id="transcodingThreads" formControlName="threads" class="form-control">
+                    <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
+                      {{ transcodingThreadOption.label }} {transcodingThreadOption.value, plural, =0 {} =1 {thread} other {threads}}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
+              </div>
+
+              <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+
+                <label i18n>Resolutions to generate</label>
+
+                <div class="ml-2 mt-2 d-flex flex-column">
+                  <ng-container formGroupName="resolutions">
+                    <div class="form-group" *ngFor="let resolution of resolutions">
+                      <my-peertube-checkbox
+                        [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                        labelText="{{resolution.label}}"
+                      >
+                        <ng-template *ngIf="resolution.description" ptTemplate="help">
+                          <div [innerHTML]="resolution.description"></div>
+                        </ng-template>
+                      </my-peertube-checkbox>
+                    </div>
+                  </ng-container>
+                </div>
+
+              </div>
+
+            </ng-container>
+
+          </div>
+        </div>
+
+      </ng-template>
+    </ng-container>
+
+    <ng-container ngbNavItem="live">
       <a ngbNavLink i18n>Live streaming</a>
 
       <ng-template ngbNavContent>
@@ -824,146 +956,12 @@
         </div>
 
       </ng-template>
-    </div>
+    </ng-container>
 
     <ng-container ngbNavItem="advanced-configuration">
       <a ngbNavLink i18n>Advanced configuration</a>
 
       <ng-template ngbNavContent>
-
-        <div class="form-row mt-5"> <!-- transcoding grid -->
-          <div class="form-group col-12 col-lg-4 col-xl-3">
-            <div i18n class="inner-form-title">TRANSCODING</div>
-            <div i18n class="inner-form-description">
-              Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
-              resources, this is a critical part of PeerTube, so tread carefully.
-            </div>
-          </div>
-
-          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
-
-            <ng-container formGroupName="transcoding">
-
-              <div class="form-group">
-                <my-peertube-checkbox inputName="transcodingEnabled" formControlName="enabled">
-                  <ng-template ptTemplate="label">
-                    <ng-container i18n>Transcoding enabled</ng-container>
-                  </ng-template>
-
-                  <ng-template ptTemplate="help">
-                    <ng-container i18n>If you disable transcoding, many videos from your users will not work!</ng-container>
-                  </ng-template>
-
-                  <ng-container ngProjectAs="extra">
-
-                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
-                      <my-peertube-checkbox
-                        inputName="transcodingAllowAdditionalExtensions" formControlName="allowAdditionalExtensions"
-                        i18n-labelText labelText="Allow additional extensions"
-                      >
-                        <ng-container ngProjectAs="description">
-                          <span i18n>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos.</span>
-                        </ng-container>
-                      </my-peertube-checkbox>
-                    </div>
-
-                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
-                      <my-peertube-checkbox
-                        inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
-                        i18n-labelText labelText="Allow audio files upload"
-                      >
-                        <ng-container ngProjectAs="description">
-                          <span i18n>Allows users to upload audio files that will be merged with the preview file on upload.</span>
-                        </ng-container>
-                      </my-peertube-checkbox>
-                    </div>
-
-                    <ng-container formGroupName="webtorrent">
-                      <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
-                        <my-peertube-checkbox
-                          inputName="transcodingWebTorrentEnabled" formControlName="enabled"
-                          i18n-labelText labelText="WebTorrent support enabled"
-                        >
-                          <ng-template ptTemplate="help">
-                            <ng-container i18n>
-                              <strong>Experimental, we suggest you to not disable webtorrent support for now</strong>
-
-                              <p>If you also enabled HLS support, it will multiply videos storage by 2</p>
-
-                              <br />
-
-                              <strong>If disabled, breaks federation with PeerTube instances < 2.1</strong>
-                            </ng-container>
-                          </ng-template>
-                        </my-peertube-checkbox>
-                      </div>
-                    </ng-container>
-
-                    <ng-container formGroupName="hls">
-                      <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
-                        <my-peertube-checkbox
-                          inputName="transcodingHlsEnabled" formControlName="enabled"
-                          i18n-labelText labelText="HLS with P2P support enabled"
-                        >
-                          <ng-template ptTemplate="help">
-                            <ng-container i18n>
-                              <strong>Requires ffmpeg >= 4.1</strong>
-
-                              <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:</p>
-                              <ul>
-                                <li>Resolution change is smoother</li>
-                                <li>Faster playback in particular with long videos</li>
-                                <li>More stable playback (less bugs/infinite loading)</li>
-                              </ul>
-
-                              <p>If you also enabled WebTorrent support, it will multiply videos storage by 2</p>
-                            </ng-container>
-                          </ng-template>
-                        </my-peertube-checkbox>
-                      </div>
-                    </ng-container>
-
-                  </ng-container>
-                </my-peertube-checkbox>
-              </div>
-
-              <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
-                <label i18n for="transcodingThreads">Transcoding threads</label>
-                <div class="peertube-select-container">
-                  <select id="transcodingThreads" formControlName="threads" class="form-control">
-                    <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
-                      {{ transcodingThreadOption.label }} {transcodingThreadOption.value, plural, =0 {} =1 {thread} other {threads}}
-                    </option>
-                  </select>
-                </div>
-                <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
-              </div>
-
-              <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
-
-                <label i18n>Resolutions to generate</label>
-
-                <div class="ml-2 mt-2 d-flex flex-column">
-                  <ng-container formGroupName="resolutions">
-                    <div class="form-group" *ngFor="let resolution of resolutions">
-                      <my-peertube-checkbox
-                        [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
-                        labelText="{{resolution.label}}"
-                      >
-                        <ng-template *ngIf="resolution.description" ptTemplate="help">
-                          <div [innerHTML]="resolution.description"></div>
-                        </ng-template>
-                      </my-peertube-checkbox>
-                    </div>
-                  </ng-container>
-                </div>
-
-              </div>
-
-            </ng-container>
-
-          </div>
-        </div>
 
         <div class="form-row mt-4"> <!-- cache grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
