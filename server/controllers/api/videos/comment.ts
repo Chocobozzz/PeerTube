@@ -160,6 +160,10 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
     }
   }
 
+  if (resultList.data.length === 0) {
+    return res.sendStatus(404)
+  }
+
   return res.json(buildFormattedCommentTree(resultList))
 }
 
