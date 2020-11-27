@@ -132,9 +132,14 @@ menu {
       }
 
       .logged-in-info {
-        @include ellipsis;
+        max-width: 105px;
 
         flex-grow: 1;
+
+        .logged-in-display-name,
+        .logged-in-username {
+          @include ellipsis;
+        }
 
         .logged-in-display-name {
           font-size: 16px;
@@ -145,11 +150,8 @@ menu {
         }
 
         .logged-in-username {
-          @include ellipsis;
-
           font-size: 13px;
           color: #C6C6C6;
-          max-width: 140px;
         }
       }
     }
