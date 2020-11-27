@@ -142,3 +142,8 @@ search:
 federation:
   videos:
     federate_unlisted: true
+
+views:
+  videos:
+    remote:
+      max_age: -1
