@@ -76,7 +76,7 @@ export class MenuComponent implements OnInit {
     return this.languageChooserModal.getCurrentLanguage()
   }
 
-  get instanceName() {
+  get instanceName () {
     return this.serverConfig.instance.name
   }
 
