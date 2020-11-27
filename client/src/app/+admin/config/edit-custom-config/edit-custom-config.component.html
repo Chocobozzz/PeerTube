@@ -162,11 +162,11 @@
             <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
               <div class="form-group">
-                <label i18n for="instanceAdministrator">Who is behind the instance?</label>
+                <label i18n for="instanceAdministrator">Who is behind the instance?</label><my-help helpType="markdownText"></my-help>
                 <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
 
                 <my-markdown-textarea
-                  name="instanceAdministrator" formControlName="administrator" textareaMaxWidth="500px" textareaHeight="75px"
+                  name="instanceAdministrator" formControlName="administrator" textareaMaxWidth="500px"
                   [classes]="{ 'input-error': formErrors['instance.administrator'] }"
                 ></my-markdown-textarea>
 
@@ -174,35 +174,35 @@
               </div>
 
               <div class="form-group">
-                <label i18n for="instanceCreationReason">Why did you create this instance?</label>
+                <label i18n for="instanceCreationReason">Why did you create this instance?</label><my-help helpType="markdownText"></my-help>
                 <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
 
-                <textarea
-                  id="instanceCreationReason" formControlName="creationReason" class="small" class="form-control"
+                <my-markdown-textarea
+                  id="instanceCreationReason" formControlName="creationReason" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
-                ></textarea>
+                ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
               </div>
 
               <div class="form-group">
-                <label i18n for="instanceMaintenanceLifetime">How long do you plan to maintain this instance?</label>
+                <label i18n for="instanceMaintenanceLifetime">How long do you plan to maintain this instance?</label><my-help helpType="markdownText"></my-help>
                 <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
 
-                <textarea
-                  id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" class="form-control small"
+                <my-markdown-textarea
+                  id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
-                ></textarea>
+                ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
               </div>
 
               <div class="form-group">
-                <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label>
+                <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label><my-help helpType="markdownText"></my-help>
                 <div i18n class="label-small-info">With your own funds? With user donations? Advertising?</div>
 
-                <textarea
-                  id="instanceBusinessModel" formControlName="businessModel" class="form-control small"
+                <my-markdown-textarea
+                  id="instanceBusinessModel" formControlName="businessModel" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
-                ></textarea>
+                ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
               </div>
 

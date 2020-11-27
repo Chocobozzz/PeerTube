@@ -58,7 +58,7 @@
         <h3 i18n class="section-title">Why we created this instance</h3>
       </a>
 
-      <p>{{ creationReason }}</p>
+      <div [innerHTML]="html.creationReason"></div>
     </div>
 
     <div class="block maintenance-lifetime" *ngIf="maintenanceLifetime">
@@ -72,7 +72,7 @@
         <h3 i18n class="section-title">How long we plan to maintain this instance</h3>
       </a>
 
-      <p>{{ maintenanceLifetime }}</p>
+      <div [innerHTML]="html.maintenanceLifetime"></div>
     </div>
 
     <div class="block business-model" *ngIf="businessModel">
@@ -86,7 +86,7 @@
           <h3 i18n class="section-title">How we will pay for this instance</h3>
         </a>
 
-      <p>{{ businessModel }}</p>
+      <div [innerHTML]="html.businessModel"></div>
     </div>
 
     <div class="anchor" id="information"></div>
