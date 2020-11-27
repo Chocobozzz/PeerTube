@@ -13350,7 +13350,7 @@
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
-        <target/>
+        <target>Modìfica unu vìdeu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">106</context>
@@ -13358,7 +13358,7 @@
       </trans-unit>
       <trans-unit id="3432004930068835151" datatype="html">
         <source>Trending for the last 24 hours</source>
-        <target/>
+        <target>De tendèntzia in is ùrtimas 24 oras</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -13366,7 +13366,7 @@
       </trans-unit>
       <trans-unit id="6716379522893509803" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last 24 hours</source>
-        <target/>
+        <target>Is vìdeos de tendèntzia sunt is chi ant totaladu su nùmeru prus mannu de visualizatziones in is ùrtimas 24 oras</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/+videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">47</context>
