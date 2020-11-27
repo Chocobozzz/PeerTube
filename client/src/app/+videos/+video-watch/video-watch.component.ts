@@ -219,12 +219,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return $localize`You need to be <a href="/login">logged in</a> to rate this video.`
   }
 
-  getExactNumberOfViews () {
-    return (this.video.views >= 1000)
-      ? `${this.video.views} ${this.video.isLive ? $localize`viewers` : $localize`views`}`
-      : ''
-  }
-
   showMoreDescription () {
     if (this.completeVideoDescription === undefined) {
       return this.loadCompleteDescription()

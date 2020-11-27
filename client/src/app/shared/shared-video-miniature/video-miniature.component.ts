@@ -190,12 +190,6 @@ export class VideoMiniatureComponent implements OnInit {
     return this.video.videoChannelAvatarUrl
   }
 
-  getExactNumberOfViews () {
-    return (this.video.views >= 1000 && this.displayOptions.views)
-        ? `${this.video.views} ${this.video.isLive ? $localize`viewers` : $localize`views`}`
-        : ''
-  }
-
   loadActions () {
     if (this.displayVideoActions) this.showActions = true
 

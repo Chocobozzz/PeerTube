@@ -203,4 +203,14 @@ export class Video implements VideoServerModel {
   canBeDuplicatedBy (user: AuthUser) {
     return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
   }
+
+  getExactNumberOfViews () {
+    if (this.views < 1000) return ''
+
+    if (this.isLive) {
+      return $localize`${this.views} viewers`
+    }
+
+    return $localize`${this.views} views`
+  }
 }
