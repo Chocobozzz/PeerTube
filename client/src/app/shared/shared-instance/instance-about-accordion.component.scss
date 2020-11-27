@@ -1,0 +1,19 @@
+@import '_variables';
+@import '_mixins';
+@import "./_bootstrap-variables";
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+.block {
+  font-size: 15px;
+  margin-bottom: 15px;
+  padding: 0 $btn-padding-x;
+}
+
+ngb-accordion ::ng-deep {
+  .btn {
+    font-weight: $font-semibold !important;
+    color: pvar(--mainForegroundColor) !important;
+  }
+}

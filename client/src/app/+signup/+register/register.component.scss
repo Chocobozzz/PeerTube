@@ -1,9 +1,5 @@
 @import '_variables';
 @import '_mixins';
-@import "./_bootstrap-variables";
-
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
 
 .alert {
   font-size: 15px;
@@ -15,40 +11,24 @@
   justify-content: space-between;
   flex-wrap: wrap;
 
-  & > div {
-    margin-bottom: 40px;
-
-    &.register-form {
-      width: 450px;
-
-      @media screen and (max-width: $mobile-view) {
-        width: 100%;
-      }
-    }
-
-    &.instance-information {
-      width: 600px;
+  .register-form {
+    width: 450px;
       margin-bottom: 40px;
 
-      .block {
-        font-size: 15px;
-        margin-bottom: 15px;
-        padding: 0 $btn-padding-x;
-      }
+    @media screen and (max-width: $mobile-view) {
+      width: 100%;
+    }
+  }
 
-      @media screen and (max-width: 1500px) {
-        width: 450px;
-      }
-      @media screen and (max-width: $mobile-view) {
-        width: 100%;
-      }
+  .instance-information {
+    width: 600px;
+    margin-bottom: 40px;
 
-      ngb-accordion ::ng-deep {
-        .btn {
-          font-weight: $font-semibold !important;
-          color: pvar(--mainForegroundColor) !important;
-        }
-      }
+    @media screen and (max-width: 1500px) {
+      width: 450px;
+    }
+    @media screen and (max-width: $mobile-view) {
+      width: 100%;
     }
   }
 }
@@ -88,7 +68,7 @@ input[type=submit],
 button {
   @include peertube-button;
   @include orange-button;
-  
+
 }
 
 .name-information {

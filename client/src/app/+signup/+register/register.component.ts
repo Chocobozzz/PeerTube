@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, Notifier, UserService } from '@app/core'
+import { AuthService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { InstanceService } from '@app/shared/shared-instance'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { UserRegister } from '@shared/models'
-import { About, ServerConfig } from '@shared/models/server'
+import { ServerConfig } from '@shared/models/server'
+import { InstanceAboutAccordion } from '@app/shared/shared-instance'
 
 @Component({
   selector: 'my-register',
@@ -14,35 +14,27 @@ import { About, ServerConfig } from '@shared/models/server'
   styleUrls: [ './register.component.scss' ]
 })
 export class RegisterComponent implements OnInit {
-  @ViewChild('accordion', { static: true }) accordion: NgbAccordion
-
+  accordion: NgbAccordion
   info: string = null
   error: string = null
   success: string = null
   signupDone = false
-
-  about: About
-  aboutHtml = {
-    description: '',
-    terms: '',
-    codeOfConduct: '',
-    moderationInformation: '',
-    administrator: ''
-  }
 
   videoUploadDisabled: boolean
 
   formStepUser: FormGroup
   formStepChannel: FormGroup
 
+  aboutHtml = {
+    codeOfConduct: ''
+  }
+
   private serverConfig: ServerConfig
 
   constructor (
     private route: ActivatedRoute,
     private authService: AuthService,
-    private notifier: Notifier,
     private userService: UserService,
-    private instanceService: InstanceService,
     private hooks: HooksService
     ) {
   }
@@ -55,17 +47,6 @@ export class RegisterComponent implements OnInit {
     this.serverConfig = this.route.snapshot.data.serverConfig
 
     this.videoUploadDisabled = this.serverConfig.user.videoQuota === 0
-
-    this.instanceService.getAbout()
-      .subscribe(
-        async about => {
-          this.about = about
-
-          this.aboutHtml = await this.instanceService.buildHtml(about)
-        },
-
-        err => this.notifier.error(err.message)
-      )
 
     this.hooks.runAction('action:signup.register.init', 'signup')
   }
@@ -94,12 +75,17 @@ export class RegisterComponent implements OnInit {
     this.formStepChannel = form
   }
 
-  onTermsClick () {
-    if (this.accordion) this.accordion.toggle('terms')
+  get onTermsClick () {
+    if (this.accordion) return this.accordion.toggle('terms')
   }
 
-  onCodeOfConductClick () {
-    if (this.accordion) this.accordion.toggle('code-of-conduct')
+  get onCodeOfConductClick () {
+    if (this.accordion) return this.accordion.toggle('code-of-conduct')
+  }
+
+  onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordion) {
+    this.accordion = instanceAboutAccordion.accordion
+    this.aboutHtml = instanceAboutAccordion.aboutHtml
   }
 
   async signup () {

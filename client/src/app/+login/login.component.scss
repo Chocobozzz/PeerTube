@@ -1,5 +1,8 @@
 @import '_variables';
 @import '_mixins';
+@import './_bootstrap-variables';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 
 label {
   display: block;
@@ -57,66 +60,90 @@ input[type=submit] {
   }
 }
 
-.login-form-and-externals {
+.wrapper {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  font-size: 15px;
-  width: 450px;
 
-  @media screen and (max-width: $mobile-view) {
-    width: 100%;
-  }
+  .login-form-and-externals {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 15px;
+    width: 450px;
+    margin-bottom: 40px;
 
-  form {
-    margin: 0;
-
-    &, input {
+    @media screen and (max-width: $mobile-view) {
       width: 100%;
     }
 
-    .additionnal-links {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
+    form {
+      margin: 0;
 
-      .forgot-password-button,
-      .create-an-account {
-        padding: 4px;
-        display: inline-block;
+      &, input {
+        width: 100%;
+      }
 
-        color: var(--mainColor);
+      .additionnal-links {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
 
-        &:hover, &:active {
-          color: var(--mainHoverColor);
+        .forgot-password-button,
+        .create-an-account {
+          padding: 4px;
+          display: inline-block;
+
+          color: var(--mainColor);
+
+          &:hover, &:active {
+            color: var(--mainHoverColor);
+          }
         }
       }
     }
-  }
 
-  .external-login-blocks {
-    min-width: 200px;
+    .external-login-blocks {
+      min-width: 200px;
 
-    .block-title {
-      font-weight: $font-semibold;
+      .block-title {
+        font-weight: $font-semibold;
+      }
+
+      .external-login-block {
+        @include disable-default-a-behaviour;
+
+        cursor: pointer;
+        border: 1px solid #d1d7e0;
+        border-radius: 5px;
+        color: pvar(--mainForegroundColor);
+        margin: 10px 10px 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 35px;
+        min-width: 100px;
+
+        &:hover {
+          background-color: rgba(209, 215, 224, 0.5)
+        }
+      }
     }
 
-    .external-login-block {
-      @include disable-default-a-behaviour;
+    .signup-link {
+      display: inline-block;
+    }
+  }
 
-      cursor: pointer;
-      border: 1px solid #d1d7e0;
-      border-radius: 5px;
-      color: pvar(--mainForegroundColor);
-      margin: 10px 10px 0 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 35px;
-      min-width: 100px;
+  .instance-information {
+    width: 600px;
+    margin-bottom: 40px;
 
-      &:hover {
-        background-color: rgba(209, 215, 224, 0.5)
-      }
+    @media screen and (max-width: 1500px) {
+      width: 450px;
+    }
+
+    @media screen and (max-width: $mobile-view) {
+      width: 100%;
     }
   }
 }
