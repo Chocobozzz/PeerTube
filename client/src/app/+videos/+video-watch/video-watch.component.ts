@@ -221,7 +221,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   getExactNumberOfViews () {
     return (this.video.views >= 1000)
-      ? (this.video.views + ' ' + (this.video.isLive ? $localize`viewers` : $localize`views`))
+      ? `${this.video.views} ${this.video.isLive ? $localize`viewers` : $localize`views`}`
       : ''
   }
 
