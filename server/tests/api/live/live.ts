@@ -583,8 +583,8 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {
-        expect(stateChanges).to.have.lengthOf(1)
-        expect(stateChanges[0]).to.equal(VideoState.PUBLISHED)
+        expect(stateChanges).to.have.length.at.least(1)
+        expect(stateChanges[stateChanges.length - 1]).to.equal(VideoState.PUBLISHED)
       }
 
       await stopFfmpeg(command)
@@ -593,8 +593,8 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {
-        expect(stateChanges).to.have.lengthOf(2)
-        expect(stateChanges[1]).to.equal(VideoState.LIVE_ENDED)
+        expect(stateChanges).to.have.length.at.least(2)
+        expect(stateChanges[stateChanges.length - 1]).to.equal(VideoState.LIVE_ENDED)
       }
     })
 
