@@ -5,6 +5,8 @@
 
   <input *ngIf="setting.type === 'input'" type="text" [id]="setting.name" [formControlName]="setting.name" />
 
+  <input *ngIf="setting.type === 'input-password'" type="password" [id]="setting.name" [formControlName]="setting.name" />
+
   <textarea *ngIf="setting.type === 'input-textarea'" type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
 
   <my-help *ngIf="setting.type === 'markdown-text'" helpType="markdownText"></my-help>

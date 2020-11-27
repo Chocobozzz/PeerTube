@@ -1,7 +1,7 @@
 export interface RegisterClientFormFieldOptions {
   name: string
   label: string
-  type: 'input' | 'input-checkbox' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced'
+  type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced'
 
   descriptionHTML?: string
 
