@@ -310,19 +310,27 @@
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
         <target state="translated">{VAR_PLURAL, plural, =1 {1 visning} other {<x id="INTERPOLATION"/> visningar}}</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">31</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit><trans-unit id="966a63453b7b12a8e6a275f21266c23bfe7dfe9b" datatype="html">
+        <source> <x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}
+              "/> </source><target state="new"> <x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}
+              "/> </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
+          <context context-type="linenumber">32,33</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1d3781d7296d4b4e04e7f023aec1052fb2955c4d" datatype="html">
         <source>Blocked</source>
         <target state="translated">Blockerad</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">51</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">53</context></context-group></trans-unit>
       <trans-unit id="fb8ccb136ab0ad1ff1dfbce739198be16a814f87">
         <source>Sensitive</source>
         <target>
         Känsligt
       </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">56</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">58</context></context-group></trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
         <target>{VAR_PLURAL, plural, =0 {Inga videor} =1 {1 video} other {<x id="INTERPOLATION"/> videor}}</target>
@@ -1013,11 +1021,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Känsligt:</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">50</context></context-group></trans-unit>
-      <trans-unit id="5a69be913ebcc70f300060cf1be0c7f8827159d6" datatype="html">
-        <source>Interface: <x id="INTERPOLATION"/></source>
-        <target state="translated">Gränssnitt: <x id="INTERPOLATION"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">171</context></context-group></trans-unit>
+      
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
         <source>Help share videos</source>
         <target state="translated">Hjälp till att sprida videor</target>
@@ -1101,7 +1105,13 @@ The link will expire within 1 hour.</source>
         <source>Videos</source>
         <target>Videor</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">104</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">104</context></context-group></trans-unit><trans-unit id="2a95ee9e381f834e55527edcbb3cb882ff0aef79" datatype="html">
+        <source>Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></source><target state="new">Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/menu.component.html</context>
+          <context context-type="linenumber">171</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="47546e45bbb476baaaad38244db444c427ddc502">
         <source>Playlists</source>
         <target>Spellistor</target>
@@ -1653,12 +1663,12 @@ The link will expire within 1 hour.</source>
         <source>Scheduled</source>
         <target>Schemalagd</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">185</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">195</context></context-group></trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
         <target state="translated">Dölj videon fram till ett datum</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">186</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">196</context></context-group></trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d">
         <source>Video background image</source>
         <target>Videons bakgrundsbild</target>
@@ -2295,7 +2305,7 @@ The link will expire within 1 hour.</source>
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
-      </trans-unit><trans-unit id="b008e7aaf088bc346158605400cbf7252e9e0842" datatype="html">
+      </trans-unit><trans-unit id="c6536b56d511323d91cdea2afb96247e019f41e6" datatype="html">
         <source> Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to. Make sure to keep your token private. </source><target state="new"> Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to. Make sure to keep your token private. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
@@ -3691,251 +3701,241 @@ The link will expire within 1 hour.</source>
         <source>Basic configuration</source>
         <target>Grundläggande inställningar</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">239</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">239</context></context-group></trans-unit><trans-unit id="fe22d2c0020e913ee4b75ec22a3abc8814810490" datatype="html">
+        <source>Transcoding</source><target state="new">Transcoding</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+          <context context-type="linenumber">700</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="51d86d65a52d00976c7cce4bdf8e144f956ef888" datatype="html">
         <source>TWITTER</source>
         <target state="translated">TWITTER</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">660</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">652</context></context-group></trans-unit>
       <trans-unit id="31f11266d05b7a427477a8a9056a717ce332cfe3" datatype="html">
         <source>Optional. If any, provide the Twitter account representing your instance to improve link previews.</source>
         <target state="translated">Valfritt. Om du har ett Twitter-konto som representerar din instans, kan du ange det för att förbättra förhandsvisningar av videolänkar.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">662</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">654</context></context-group></trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
         <source>Your Twitter username</source>
         <target>Ditt användarnamn på Twitter</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">672</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">664</context></context-group></trans-unit>
       <trans-unit id="fcad8bedb9a3a3600c4f5c13e9f404e788dbf327" datatype="html">
         <source>Instance allowed by Twitter</source>
         <target state="translated">Instans godkänd av Twitter</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">684</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">676</context></context-group></trans-unit>
       <trans-unit id="00d2522709d908c52395fc1865152ad37fe7eeae" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </source>
         <target state="new"> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK"/><x id="LINE_BREAK"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK"/> to see if you instance is allowed. </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">689</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">681</context></context-group></trans-unit>
       <trans-unit id="df754f9d47b1a072519f1c9f7f1726937f44040a" datatype="html">
         <source>LIVE</source>
         <target state="translated">DIREKT</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">714</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">846</context></context-group></trans-unit>
       <trans-unit id="1972803cc06239fe6b7791763ce89b819bd24853" datatype="html">
         <source>Enable users of your instance to stream live.</source>
         <target state="translated">Låt dina användare skapa direktsändningar.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">716</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">848</context></context-group></trans-unit>
       <trans-unit id="096cf20ca04c42d7a06b9c0b3730e938f7662f57" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
         <target state="translated">⚠️ Att tillåta direktsändningar kräver tillit till användarna och ytterligare modereringsarbete</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">731</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">863</context></context-group></trans-unit>
       <trans-unit id="0c990b9d80188dd9edbbd945dbd8c66074ee62d8" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
         <target state="translated">Låt dina användare automatiskt publicera en repris av sändningen</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">739</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">871</context></context-group></trans-unit>
       <trans-unit id="f071c73e20463032b9e1f2ad2dacb54395a7b3bf" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
         <target state="translated">Om användarkvoten uppnås kommer PeerTube bryta direktsändningen automatiskt</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">742</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">874</context></context-group></trans-unit>
       <trans-unit id="da82c27f10ef6f1af1db305fe3f4ec29ed191878" datatype="html">
         <source>Max lives created on your instance (-1 for "unlimited")</source>
         <target state="translated">Maximalt antal sändningar skapade på din instans (-1 för ”obegränsat”)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">748</context></context-group></trans-unit><trans-unit id="0ba5a92f3fcf3c32561c73cd7e100776967d920b" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">880</context></context-group></trans-unit><trans-unit id="0ba5a92f3fcf3c32561c73cd7e100776967d920b" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source><target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
-          <context context-type="linenumber">751</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">883</context></context-group></trans-unit>
       <trans-unit id="7cb03878e0d89e67d48c707512e876ddb8658a6b" datatype="html">
         <source>Max lives created per user (-1 for "unlimited")</source>
         <target state="translated">Maximalt antal sändningar skapade per användare (-1 för ”obegränsat”)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">756</context></context-group></trans-unit><trans-unit id="9f667199fbfe1db90e4f3b1a6634f6036db93ad0" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">888</context></context-group></trans-unit><trans-unit id="9f667199fbfe1db90e4f3b1a6634f6036db93ad0" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source><target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
-          <context context-type="linenumber">759</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">891</context></context-group></trans-unit>
       <trans-unit id="4bddd185b531fa5ef6a1b5cebf46de5565968cb1" datatype="html">
         <source>Max live duration</source>
         <target state="translated">Maximal sändningslängd</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">764</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">896</context></context-group></trans-unit>
       <trans-unit id="19689f977565ebbf2a7ef115905e3c681917c57b" datatype="html">
         <source>Enable live transcoding</source>
         <target state="translated">Aktivera omkodning av direktsändningar</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">780</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">912</context></context-group></trans-unit>
       <trans-unit id="fa4fcf11774c461346d54d0a210a20f8fbe571a2" datatype="html">
         <source>Requires a lot of CPU!</source>
         <target state="translated">Kräver mycket hög processorkapacitet!</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">783</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">915</context></context-group></trans-unit>
       <trans-unit id="5ff339e5bc9b41411ce6401774483b0d6f8cbca8" datatype="html">
         <source>Live transcoding threads</source>
         <target state="translated">Trådar för omkodning av direktsändningar</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">789</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">921</context></context-group></trans-unit>
       <trans-unit id="bd9fc4914f5eeb416181cb966d98cadb94282485" datatype="html">
         <source>Live resolutions to generate</source>
         <target state="translated">Upplösningar för direktsändning</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">801</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">933</context></context-group></trans-unit>
       <trans-unit id="0dcaa17190a8baac67add948a7c63671f9027a7b" datatype="html">
         <source>Allow live streaming</source>
         <target state="translated">Tillåt direktsändningar</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">727</context></context-group></trans-unit><trans-unit id="54ffeb00b5c4525b0fe6deecb093e3db97d259f6" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">859</context></context-group></trans-unit><trans-unit id="54ffeb00b5c4525b0fe6deecb093e3db97d259f6" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {} =1 {thread} other {threads}}</source><target state="new">{VAR_PLURAL, plural, =0 {} =1 {thread} other {threads}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
-          <context context-type="linenumber">793</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
-          <context context-type="linenumber">935</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
-        <source>Services</source>
-        <target>Tjänster</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">654</context></context-group></trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">803</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">925</context></context-group></trans-unit>
+      
       <trans-unit id="0a1a7d6e04056d30bb85aca5bb8bd47ced098167" datatype="html">
         <source>Live streaming</source>
         <target state="translated">Direktsändning</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">708</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">840</context></context-group></trans-unit>
       <trans-unit id="9a6dbeb95c096daa71967ac36a043de69d0cf72b" datatype="html">
         <source>TRANSCODING</source>
         <target state="translated">OMKODNING</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">836</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">706</context></context-group></trans-unit>
       <trans-unit id="ee4b28ab2d3293d453dec75c6654c6425705283c" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
         <target state="translated">Behandla uppladdade videor till ett format som går att strömma från vilken apparat som helst. Det är dock mycket resurskrävande av servern och en mycket viktig del av PeerTube, så gå varsamt.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">838</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">708</context></context-group></trans-unit>
       <trans-unit id="fca29003c4ea1226ff8cbee89481758aab0e2be9">
         <source>Transcoding enabled</source>
         <target>Omkodning aktiverad</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">850</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">720</context></context-group></trans-unit>
       <trans-unit id="6ef2ab819d4441fa8bddf6759b6936783d06616f">
         <source>If you disable transcoding, many videos from your users will not work!</source>
         <target>Om du avaktiverar omkodning, kommer många av dina användares videor inte fungera!</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">854</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">724</context></context-group></trans-unit><trans-unit id="f0310168e8e770e38348719e8c8ea17db59c30e4" datatype="html">
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />
+
+                              "/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/></source><target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />
+
+                              "/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+          <context context-type="linenumber">759,763</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="89b449293480a19f931439c5064d53879176fc17" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos.</source>
         <target state="translated">Låt användare ladda upp videor i följande format: mkv, mov, avi, wmv, flv, f4v, 3g2, 3gp, mts, m2ts, mxf och nut.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">865</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">735</context></context-group></trans-unit>
       <trans-unit id="0050a55afb9c565df1f9b3f750c2d4adb697698f">
         <source>Allow additional extensions</source>
         <target>Tillåt ytterligare filändelser</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">862</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">732</context></context-group></trans-unit>
       <trans-unit id="abdec139a0b513ddbd4549284c38dc60e96bb477" datatype="html">
         <source>Allows users to upload audio files that will be merged with the preview file on upload.</source>
         <target state="translated">Låt användare ladda upp ljudfiler som slås ihop med förhandsgranskningens bild till en video.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">876</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">746</context></context-group></trans-unit>
       <trans-unit id="88cfa6e185dd938361d1d9c04314bbd3afb54fb6">
         <source>Allow audio files upload</source>
         <target>Tillåt uppladdning av ljudfiler</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">873</context></context-group></trans-unit>
-      <trans-unit id="1f83d0ff227c35b5631a2b2f78067b3e915cdb59" datatype="html">
-        <source><x id="START_TAG_STRONG"/>Experimental, we suggest you to not disable webtorrent support for now<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/><x id="LINE_BREAK"/><x id="START_TAG_STRONG"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG"/></source>
-        <target state="translated"><x id="START_TAG_STRONG"/>Experimentellt, vi råder dig att behålla webtorrent-stödet ett tag till<x id="CLOSE_TAG_STRONG"/> <x id="START_PARAGRAPH"/>Om du även har HLS aktiverat kommer videorna kräva dubbelt så mycket lagringsutrymme<x id="CLOSE_PARAGRAPH"/> <x id="LINE_BREAK"/> <x id="START_TAG_STRONG"/>Utan webtorrent kan du inte federera med PeerTube-instanser med lägre versionsnummer än 2.1<x id="CLOSE_TAG_STRONG"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">889</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">743</context></context-group></trans-unit>
+      
       <trans-unit id="ff852c5a22beaff7a8c62447b0a96f9ced7c3ed6" datatype="html">
         <source>WebTorrent support enabled</source>
         <target state="translated">WebTorrent-stöd påslaget</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">885</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">755</context></context-group></trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
         <source><x id="START_TAG_STRONG"/>Requires ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG"/><x id="START_PARAGRAPH"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH"/><x id="START_UNORDERED_LIST"/><x id="START_LIST_ITEM"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM"/><x id="START_LIST_ITEM"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM"/><x id="CLOSE_UNORDERED_LIST"/><x id="START_PARAGRAPH"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH"/></source>
         <target state="translated"><x id="START_TAG_STRONG"/>Kräver minst version 4.1<x id="CLOSE_TAG_STRONG"/> av ffmpeg <x id="START_PARAGRAPH"/>Skapa en HLS-spellista och fragmenterade mp4-filer för bättre uppspelning än med den nuvarande standardspelaren:<x id="CLOSE_PARAGRAPH"/> <x id="START_UNORDERED_LIST"/> <x id="START_LIST_ITEM"/>Mjukare byten mellan upplösningar<x id="CLOSE_LIST_ITEM"/> <x id="START_LIST_ITEM"/>Snabbare uppspelningar, särskilt för långa videor<x id="CLOSE_LIST_ITEM"/> <x id="START_LIST_ITEM"/>Stabilare uppspelning (färre buggar samt obegränsad buffert)<x id="CLOSE_LIST_ITEM"/> <x id="CLOSE_UNORDERED_LIST"/> <x id="START_PARAGRAPH"/>Om du även stöder WebTorrent kommer varje video kräva dubbelt så mycket lagringsutryme<x id="CLOSE_PARAGRAPH"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">910</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">778</context></context-group></trans-unit>
       <trans-unit id="5ac527cc856e9fa02927ccb0a6172688e07c1d7a" datatype="html">
         <source>HLS with P2P support enabled</source>
         <target state="translated">HLS med P2P-stöd är aktiverat</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">906</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">774</context></context-group></trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
         <source>Transcoding threads</source>
         <target>Omkodningstrådar</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">931</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">799</context></context-group></trans-unit>
       <trans-unit id="4f9162543288be617b88ad6fcae84325f11e31b6" datatype="html">
         <source>Resolutions to generate</source>
         <target state="translated">Upplösningar som ska genereras</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">944</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">812</context></context-group></trans-unit>
       <trans-unit id="f05f4a8b97269a2da6d7fcc6e86fbfafd16e30bd" datatype="html">
         <source>CACHE</source>
         <target state="translated">CACHE</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">970</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">968</context></context-group></trans-unit>
       <trans-unit id="3469b0eb5bd7b7f0e85c029cd82ae1912bb51677" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
         <target state="translated">Vissa filer federeras inte utan hämtas när så krävs. Ange deras cache-policy här.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">972</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">970</context></context-group></trans-unit>
       <trans-unit id="e7845bb59f7887d60f1cf3b7b9fe5cfdb0b7e915" datatype="html">
         <source>Number of previews to keep in cache</source>
         <target state="translated">Antal förhandsvisningar som sparas i cachen</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">980</context></context-group></trans-unit><trans-unit id="85d060be6823b8207e82fbc75429753f1beb06ce" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">978</context></context-group></trans-unit><trans-unit id="85d060be6823b8207e82fbc75429753f1beb06ce" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source><target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
-          <context context-type="linenumber">986</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">984</context></context-group></trans-unit>
       <trans-unit id="478d017e2701ae21cefab20e7226702d77f15727" datatype="html">
         <source>Number of video captions to keep in cache</source>
         <target state="translated">Antal textningar som sparas i cachen</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">992</context></context-group></trans-unit><trans-unit id="05c5e2816638b3916627b407da27f08c4f0668d4" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">990</context></context-group></trans-unit><trans-unit id="05c5e2816638b3916627b407da27f08c4f0668d4" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source><target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
-          <context context-type="linenumber">998</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">996</context></context-group></trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
         <source>CUSTOMIZATIONS</source>
         <target state="translated">ANPASSNINGAR</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1010</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1008</context></context-group></trans-unit>
       <trans-unit id="7473fbca4ff699b020fc8894bad4c88611c76f5c" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
         <target state="translated">Att göra mindre ändringar av PeerTube med ett tillägg eller tema är onödigt bekymmer.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1012</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1010</context></context-group></trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>JavaScript</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1021</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1019</context></context-group></trans-unit>
       <trans-unit id="782afa7c58d912592d73fce888ffce8542a4acf3" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK"/>Example: <x id="START_TAG_PRE"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE"/></source>
         <target state="translated">Skriv ditt JavaScript här. <x id="LINE_BREAK"/>Exempel: <x id="START_TAG_PRE"/>console.log('min instans är fantastisk'); <x id="CLOSE_TAG_PRE"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1025</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1023</context></context-group></trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source> Write CSS code directly. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/>    #custom-css <x id="INTERPOLATION"/>
       color: red;
@@ -3946,27 +3946,27 @@ The link will expire within 1 hour.</source>
     <x id="CLOSE_TAG_PRE"/></source>
         <target state="translated">Skriv din CSS-kod här. Exempel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Föregå med <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> för att skriva över standardutseendet. Exempel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1044</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1042</context></context-group></trans-unit>
       <trans-unit id="3128766f8e9bac2f95f5413fdb810e90c6084ef0" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
         <target state="new"> It seems like the configuration is invalid. Please search for potential errors in the different tabs. </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1082</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1080</context></context-group></trans-unit>
       <trans-unit id="1411138433f379dbe80e0682284b2384d8e390cb" datatype="html">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="new"> You cannot allow live replay if you don't enable transcoding. </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1086</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1084</context></context-group></trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
         <source>Advanced configuration</source>
         <target>Avancerade inställningar</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">830</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">962</context></context-group></trans-unit>
       <trans-unit id="dad5a5283e4c853c011a0f03d5a52310338bbff8">
         <source>Update configuration</source>
         <target>Uppdatera inställningar</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1089</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1087</context></context-group></trans-unit>
       <trans-unit id="e09928fe11389fd1ea310890ba5dc9df05d53509" datatype="html">
         <source>VIDEO SETTINGS</source>
         <target state="translated">VIDEOINSTÄLLNINGAR</target>
@@ -6471,7 +6471,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>any language</source>
         <target state="translated">vilket språk som helst</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">231</context></context-group></trans-unit><trans-unit id="4ecb8d97ebb2f37c5b410afccbb78003f75ac35c" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">213</context></context-group></trans-unit><trans-unit id="4ecb8d97ebb2f37c5b410afccbb78003f75ac35c" datatype="html">
         <source>ON <x id="INTERPOLATION"/></source><target state="new">ON <x id="INTERPOLATION"/></target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">125</context></context-group></trans-unit>
@@ -6479,22 +6479,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>hide</source>
         <target state="translated">dölj</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">76</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">246</context></context-group></trans-unit>
       <trans-unit id="8603861867909474404" datatype="html">
         <source>blur</source>
         <target state="translated">gör suddig</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">79</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">250</context></context-group></trans-unit>
       <trans-unit id="4534458451100881847" datatype="html">
         <source>display</source>
         <target state="translated">visa</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">82</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">254</context></context-group></trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
         <source>Unknown</source>
         <target state="translated">Okänd</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">200</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">182</context></context-group></trans-unit>
       <trans-unit id="8781423666414310853">
         <source>Your password has been successfully reset!</source>
         <target>Ditt lösenord har återställts!</target>
@@ -7483,12 +7483,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Instance languages</source>
         <target state="translated">Instansens språk</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">173</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">183</context></context-group></trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
         <source>All languages</source>
         <target state="translated">Alla språk</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">38</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">174</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">38</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">184</context></context-group></trans-unit>
       <trans-unit id="996392855508119363">
         <source>Hidden</source>
         <target>Dold</target>
@@ -8218,7 +8218,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Only users of this instance can see this video</source>
         <target state="translated">Den här videon kan endast ses av användare på den här instansen</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">382</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">382</context></context-group></trans-unit><trans-unit id="8312101634344200207" datatype="html">
+        <source><x id="PH" equiv-text="this.views"/> viewers</source><target state="new"><x id="PH" equiv-text="this.views"/> viewers</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
+          <context context-type="linenumber">211</context>
+        </context-group>
+      </trans-unit><trans-unit id="7756087706411154095" datatype="html">
+        <source><x id="PH" equiv-text="this.views"/> views</source><target state="new"><x id="PH" equiv-text="this.views"/> views</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
         <target state="translated">Stäng</target>
