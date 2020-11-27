@@ -262,7 +262,7 @@ code {
     opacity: 0.6;
 
     &.active {
-      background-color: #f0f0f0;
+      background-color: pvar(--submenuColor);
     }
 
     &.active, &:hover, &:active, &:focus {
