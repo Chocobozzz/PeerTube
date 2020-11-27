@@ -10,7 +10,6 @@ import {
   getMyUserInformation,
   getPlugin,
   getPluginPackageJSON,
-  getPluginRegisteredSettings,
   getPublicSettings,
   installPlugin,
   killallServers,
@@ -20,6 +19,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   setPluginVersion,
+  testHelloWorldRegisteredSettings,
   uninstallPlugin,
   updateCustomSubConfig,
   updateMyUser,
@@ -34,7 +34,6 @@ import { PeerTubePlugin } from '../../../../shared/models/plugins/peertube-plugi
 import { PluginPackageJson } from '../../../../shared/models/plugins/plugin-package-json.model'
 import { PluginType } from '../../../../shared/models/plugins/plugin.type'
 import { PublicServerSetting } from '../../../../shared/models/plugins/public-server.setting'
-import { RegisteredServerSettings } from '../../../../shared/models/plugins/register-server-setting.model'
 import { ServerConfig } from '../../../../shared/models/server'
 import { User } from '../../../../shared/models/users'
 
@@ -209,18 +208,7 @@ describe('Test plugins', function () {
   })
 
   it('Should get registered settings', async function () {
-    const res = await getPluginRegisteredSettings({
-      url: server.url,
-      accessToken: server.accessToken,
-      npmName: 'peertube-plugin-hello-world'
-    })
-
-    const registeredSettings = (res.body as RegisteredServerSettings).registeredSettings
-
-    expect(registeredSettings).to.have.length.at.least(1)
-
-    const adminNameSettings = registeredSettings.find(s => s.name === 'admin-name')
-    expect(adminNameSettings).to.not.be.undefined
+    await testHelloWorldRegisteredSettings(server)
   })
 
   it('Should get public settings', async function () {

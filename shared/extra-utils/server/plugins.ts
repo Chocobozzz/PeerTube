@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+
+import { expect } from 'chai'
 import { readJSON, writeJSON } from 'fs-extra'
 import { join } from 'path'
+import { RegisteredServerSettings } from '@shared/models'
 import { PeertubePluginIndexList } from '../../models/plugins/peertube-plugin-index-list.model'
 import { PluginType } from '../../models/plugins/plugin.type'
 import { buildServerDirectory, root } from '../miscs/miscs'
@@ -117,6 +121,21 @@ function getPluginRegisteredSettings (parameters: {
     token: accessToken,
     statusCodeExpected: expectedStatus
   })
+}
+
+async function testHelloWorldRegisteredSettings (server: ServerInfo) {
+  const res = await getPluginRegisteredSettings({
+    url: server.url,
+    accessToken: server.accessToken,
+    npmName: 'peertube-plugin-hello-world'
+  })
+
+  const registeredSettings = (res.body as RegisteredServerSettings).registeredSettings
+
+  expect(registeredSettings).to.have.length.at.least(1)
+
+  const adminNameSettings = registeredSettings.find(s => s.name === 'admin-name')
+  expect(adminNameSettings).to.not.be.undefined
 }
 
 function getPublicSettings (parameters: {
@@ -265,6 +284,7 @@ export {
   updatePlugin,
   getPlugin,
   uninstallPlugin,
+  testHelloWorldRegisteredSettings,
   updatePluginSettings,
   getPluginRegisteredSettings,
   getPackageJSONPath,

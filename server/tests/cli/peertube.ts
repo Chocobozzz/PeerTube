@@ -19,6 +19,7 @@ import {
   removeVideo,
   ServerInfo,
   setAccessTokensToServers,
+  testHelloWorldRegisteredSettings,
   uploadVideoAndGetId,
   userLogin,
   waitJobs
@@ -203,6 +204,10 @@ describe('Test CLI wrapper', function () {
 
       const env = getEnvCli(server)
       await execCLI(`${env} ${cmd} plugins install --npm-name peertube-plugin-hello-world`)
+    })
+
+    it('Should have registered settings', async function () {
+      await testHelloWorldRegisteredSettings(server)
     })
 
     it('Should list installed plugins', async function () {
