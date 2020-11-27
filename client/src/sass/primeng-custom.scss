@@ -876,6 +876,7 @@ p-toast {
   .p-toast {
     width: auto;
     max-width: 300px;
+    min-width: 200px;
     z-index: z(notification) !important;
 
     .p-toast-icon-close {
@@ -924,6 +925,7 @@ p-toast {
     .notification-block {
       display: flex;
       align-items: center;
+      width: 100%;
       padding: 10px 20px;
 
       .message {
