@@ -165,7 +165,7 @@ registerSetting({
   name: 'admin-name',
   label: 'Admin name',
   type: 'input',
-  // type: input | input-checkbox | input-textarea | markdown-text | markdown-enhanced
+  // type: input | input-checkbox | input-password | input-textarea | markdown-text | markdown-enhanced
   default: 'my super name'
 })
 
