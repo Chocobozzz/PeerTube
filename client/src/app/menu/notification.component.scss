@@ -1,20 +1,19 @@
 @import '_variables';
 @import '_mixins';
 
-.notification-inbox-popover > my-global-icon,
-.notification-inbox-link a > my-global-icon {
+.notification-inbox-popover,
+.notification-inbox-link a {
   @include apply-svg-color(#808080);
-
-  transition: background-color .1s ease-in-out;
-  padding: 11px 7px;
-  border-radius: 25px;
-  cursor: pointer;
-
   ::ng-deep {
     svg {
       transition: color .1s ease-in-out;
     }
   }
+
+  transition: all .1s ease-in-out;
+  padding: 10px;
+  border-radius: 25px;
+  cursor: pointer;
 
   &:hover, &:active {
     background-color: rgba(255, 255, 255, 0.15);
@@ -22,8 +21,8 @@
   }
 }
 
-.notification-inbox-popover.shown > my-global-icon,
-.notification-inbox-link a.active > my-global-icon {
+.notification-inbox-popover.shown,
+.notification-inbox-link a.active {
   @include apply-svg-color(#fff);
 
   background-color: rgba(255, 255, 255, 0.28);
@@ -37,6 +36,7 @@
 ::ng-deep {
   .popover-notifications.popover {
     max-width: none;
+    top: -6px !important;
     left: 7px !important;
 
     .arrow {
@@ -132,8 +132,8 @@
 
   .unread-notifications {
     position: absolute;
-    top: -5px;
-    left: -5px;
+    top: 6px;
+    left: 0;
 
     display: flex;
     align-items: center;
