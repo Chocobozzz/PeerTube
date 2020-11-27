@@ -12,7 +12,7 @@
             <div class="logged-in-username">@{{ user.username }}</div>
           </div>
 
-          <div class="logged-in-more" ngbDropdown [placement]="placement" container="body" autoClose="outside">
+          <div class="logged-in-more" ngbDropdown [placement]="loggedInMorePlacement" container="body" autoClose="outside">
             <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button"></my-global-icon>
 
             <div ngbDropdownMenu>
@@ -32,7 +32,7 @@
               <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()">
                 <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
                 <span i18n>Interface:</span>
-                <span class="ml-auto text-muted">{{ language }}</span>
+                <span class="ml-auto text-muted">{{ currentInterfaceLanguage }}</span>
               </a>
 
               <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
@@ -168,7 +168,7 @@
 
         <div class="footer-links">
           <div *ngIf="isLoggedIn === false">
-            <span role="button" (click)="openLanguageChooser()" class="c-hand" i18n>Interface: {{ language }}</span>
+            <span role="button" (click)="openLanguageChooser()" class="c-hand" i18n>Interface: {{ currentInterfaceLanguage }}</span>
           </div>
 
           <div>

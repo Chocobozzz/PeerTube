@@ -11,6 +11,8 @@ export class RedirectService {
   private previousUrl: string
   private currentUrl: string
 
+  private redirectingToHomepage = false
+
   constructor (
     private router: Router,
     private serverService: ServerService
@@ -56,10 +58,17 @@ export class RedirectService {
   }
 
   redirectToHomepage (skipLocationChange = false) {
+    if (this.redirectingToHomepage) return
+
+    this.redirectingToHomepage = true
+
     console.log('Redirecting to %s...', RedirectService.DEFAULT_ROUTE)
 
     this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { skipLocationChange })
+        .then(() => this.redirectingToHomepage = false)
         .catch(() => {
+          this.redirectingToHomepage = false
+
           console.error(
             'Cannot navigate to %s, resetting default route to %s.',
             RedirectService.DEFAULT_ROUTE,

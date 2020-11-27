@@ -28,6 +28,11 @@ export class MenuComponent implements OnInit {
   helpVisible = false
 
   videoLanguages: string[] = []
+  nsfwPolicy: string
+
+  loggedInMorePlacement: string
+
+  currentInterfaceLanguage: string
 
   private languages: VideoConstant<string>[] = []
   private serverConfig: ServerConfig
@@ -52,37 +57,6 @@ export class MenuComponent implements OnInit {
     private router: Router
   ) { }
 
-  get isInMobileView () {
-    return this.screenService.isInMobileView()
-  }
-
-  get placement () {
-    if (this.isInMobileView) {
-      return 'left-top auto'
-    } else {
-      return 'right-top auto'
-    }
-  }
-
-  get language () {
-    return this.languageChooserModal.getCurrentLanguage()
-  }
-
-  get nsfwPolicy () {
-    if (!this.user) return
-
-    switch (this.user.nsfwPolicy) {
-      case 'do_not_list':
-        return $localize`hide`
-
-      case 'blur':
-        return $localize`blur`
-
-      case 'display':
-        return $localize`display`
-    }
-  }
-
   get instanceName () {
     return this.serverConfig.instance.name
   }
@@ -95,10 +69,18 @@ export class MenuComponent implements OnInit {
     this.isLoggedIn = this.authService.isLoggedIn()
     if (this.isLoggedIn === true) {
       this.user = this.authService.getUser()
+
+      this.computeNSFWPolicy()
       this.computeVideosLink()
     }
 
     this.computeAdminAccess()
+
+    this.loggedInMorePlacement = this.screenService.isInMobileView()
+      ? 'left-top auto'
+      : 'right-top auto'
+
+    this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
 
     this.authService.loginChangedSource.subscribe(
       status => {
@@ -251,5 +233,26 @@ export class MenuComponent implements OnInit {
         if (res === true) logger('User can see videos link.')
         else logger('User cannot see videos link.')
       })
+  }
+
+  private computeNSFWPolicy () {
+    if (!this.user) {
+      this.nsfwPolicy = null
+      return
+    }
+
+    switch (this.user.nsfwPolicy) {
+      case 'do_not_list':
+        this.nsfwPolicy = $localize`hide`
+        break
+
+      case 'blur':
+        this.nsfwPolicy = $localize`blur`
+        break
+
+      case 'display':
+        this.nsfwPolicy = $localize`display`
+        break
+    }
   }
 }

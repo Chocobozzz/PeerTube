@@ -7,7 +7,7 @@ import { FromNowPipe } from '../angular/from-now.pipe'
   templateUrl: './date-toggle.component.html',
   styleUrls: [ './date-toggle.component.scss' ]
 })
-export class DateToggleComponent implements OnInit, OnChanges {
+export class DateToggleComponent implements OnChanges {
   @Input() date: Date
   @Input() toggled = false
 
@@ -19,10 +19,6 @@ export class DateToggleComponent implements OnInit, OnChanges {
     private fromNowPipe: FromNowPipe
   ) { }
 
-  ngOnInit () {
-    this.updateDates()
-  }
-
   ngOnChanges () {
     this.updateDates()
   }
@@ -32,15 +28,19 @@ export class DateToggleComponent implements OnInit, OnChanges {
   }
 
   getTitle () {
-    return this.toggled ? this.dateRelative : this.dateAbsolute
+    return this.toggled
+      ? this.dateRelative
+      : this.dateAbsolute
   }
 
   getContent () {
-    return this.toggled ? this.dateAbsolute : this.dateRelative
+    return this.toggled
+      ? this.dateAbsolute
+      : this.dateRelative
   }
 
   private updateDates () {
     this.dateRelative = this.fromNowPipe.transform(this.date)
-    this.dateAbsolute = this.datePipe.transform(this.date, 'long')
+    this.dateAbsolute = this.date.toLocaleDateString()
   }
 }
