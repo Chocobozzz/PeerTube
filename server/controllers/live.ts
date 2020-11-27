@@ -1,3 +1,4 @@
+import * as cors from 'cors'
 import * as express from 'express'
 import { mapToJSON } from '@server/helpers/core-utils'
 import { LiveManager } from '@server/lib/live-manager'
@@ -5,6 +6,7 @@ import { LiveManager } from '@server/lib/live-manager'
 const liveRouter = express.Router()
 
 liveRouter.use('/segments-sha256/:videoUUID',
+  cors(),
   getSegmentsSha256
 )
 
