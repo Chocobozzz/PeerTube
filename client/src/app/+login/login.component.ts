@@ -6,7 +6,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { InstanceAboutAccordion } from '@app/shared/shared-instance'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 
 @Component({
@@ -19,6 +19,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   @ViewChild('usernameInput', { static: false }) usernameInput: ElementRef
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
 
+  accordion: NgbAccordion
   error: string = null
   forgotPasswordEmail = ''
 
@@ -44,6 +45,12 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
   get signupAllowed () {
     return this.serverConfig.signup.allowed === true
+  }
+
+  onTermsClick (event: Event) {
+    event.preventDefault()
+
+    if (this.accordion) return this.accordion.toggle('terms')
   }
 
   isEmailDisabled () {
@@ -124,7 +131,7 @@ The link will expire within 1 hour.`
   }
 
   onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordion) {
-    //
+    this.accordion = instanceAboutAccordion.accordion
   }
 
   private loadExternalAuthToken (username: string, token: string) {
