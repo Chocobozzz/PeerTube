@@ -8,27 +8,37 @@
 
 .wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
 
+  & > div {
+    flex: 1 1;
+  }
+
   .register-form {
-    width: 450px;
-      margin-bottom: 40px;
+    max-width: 450px;
+    margin-bottom: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
 
     @media screen and (max-width: $mobile-view) {
       width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 
   .instance-information {
-    width: 600px;
+    max-width: 600px;
+    min-width: 350px;
     margin-bottom: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
 
-    @media screen and (max-width: 1500px) {
-      width: 450px;
-    }
     @media screen and (max-width: $mobile-view) {
       width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 }
