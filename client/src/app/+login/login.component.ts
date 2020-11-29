@@ -47,10 +47,13 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     return this.serverConfig.signup.allowed === true
   }
 
-  onTermsClick (event: Event) {
+  onTermsClick (event: Event, instanceInformation: HTMLElement) {
     event.preventDefault()
 
-    if (this.accordion) return this.accordion.toggle('terms')
+    if (this.accordion) {
+      this.accordion.expand('terms')
+      instanceInformation.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   isEmailDisabled () {

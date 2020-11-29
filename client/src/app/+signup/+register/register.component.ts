@@ -75,12 +75,22 @@ export class RegisterComponent implements OnInit {
     this.formStepChannel = form
   }
 
-  get onTermsClick () {
-    if (this.accordion) return this.accordion.toggle('terms')
+  onTermsClick (instanceInformationElement: HTMLElement) {
+    if (this.accordion) {
+      this.accordion.expand('terms')
+      // make sure scroll position is near to the expanded panel especially on mobile screens
+      instanceInformationElement.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
   }
 
-  get onCodeOfConductClick () {
-    if (this.accordion) return this.accordion.toggle('code-of-conduct')
+  onCodeOfConductClick (instanceInformationElement: HTMLElement) {
+    if (this.accordion) {
+      this.accordion.expand('code-of-conduct')
+      // make sure scroll position is near to the expanded panel especially on mobile screens
+      instanceInformationElement.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
   }
 
   onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordion) {

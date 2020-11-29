@@ -14,7 +14,7 @@
           <my-register-step-user
             [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
             [videoUploadDisabled]="videoUploadDisabled"
-            (formBuilt)="onUserFormBuilt($event)" (termsClick)="onTermsClick" (codeOfConductClick)="onCodeOfConductClick"
+            (formBuilt)="onUserFormBuilt($event)" (termsClick)="onTermsClick(instanceInformation)" (codeOfConductClick)="onCodeOfConductClick(instanceInformation)"
           >
           </my-register-step-user>
 
@@ -44,7 +44,7 @@
       </my-custom-stepper>
     </div>
 
-    <div class="instance-information">
+    <div #instanceInformation class="instance-information">
       <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)"></my-instance-about-accordion>
     </div>
   </div>
