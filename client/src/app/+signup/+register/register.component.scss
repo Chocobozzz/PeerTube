@@ -37,6 +37,7 @@
 
     @media screen and (max-width: $mobile-view) {
       width: 100%;
+      min-width: 320px;
       margin-left: 0;
       margin-right: 0;
     }
