@@ -345,7 +345,7 @@
       </trans-unit>
       <trans-unit id="966a63453b7b12a8e6a275f21266c23bfe7dfe9b" datatype="html">
         <source><x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}               "/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}               "/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}               "/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -844,7 +844,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">Una mail con le istruzioni per il reset della password sarà spedita a <x id="PH"/>. Il link scadrà fra 1 ora.</target>
+        <target state="translated">Una mail con le istruzioni per il reset della password sarà spedita a <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Il link scadrà fra 1 ora.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -875,7 +875,7 @@
       </trans-unit>
       <trans-unit id="406b08e859ab668ff07056881dcc4390109d4e1d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}} "/> </source>
-        <target state="translated"><x id="INTERPOLATION"/> <x id="ICU"/> </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/><x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}} "/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="26b0b148ff87e083300fa9ca213f8ada7fa6211d" datatype="html">
@@ -2501,7 +2501,7 @@
       </trans-unit>
       <trans-unit id="70b989779eb53e6ff14d810336677dbc3bde4202" datatype="html">
         <source>Feed URL</source>
-        <target state="new">Feed URL</target>
+        <target state="translated">URL del Feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2509,7 +2509,7 @@
       </trans-unit>
       <trans-unit id="87752e8ea0b8d9cc97d85d89a74b828c031242d2" datatype="html">
         <source>Feed Token</source>
-        <target state="new">Feed Token</target>
+        <target state="translated">Token del Feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3111,7 +3111,7 @@
       </trans-unit>
       <trans-unit id="fd7b8e728c25b616934661747224b1b2e7d9ea5c" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated"><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></target>
+        <target state="translated"><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="fe8634bd713368d7971877c0e09d1869f09c924d" datatype="html">
@@ -3198,7 +3198,7 @@
       </trans-unit>
       <trans-unit id="da3ebfaee320ad7a8a41c75d6ee19e687f9b484d" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReportee, plural, =1 {1 report} other {{{ abuse.countReportsForReportee }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated"><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></target>
+        <target state="translated"><x id="ICU" equiv-text="{abuse.countReportsForReportee, plural, =1 {1 report} other {{{ abuse.countReportsForReportee }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="bdd37f55632abc18fb1fbf95d4b3f5f89ce3237b" datatype="html">
@@ -3375,7 +3375,7 @@
       </trans-unit>
       <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="      {{ pagination.totalIt"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="translated"><x id="INTERPOLATION"/> <x id="ICU"/> per "<x id="INTERPOLATION_1"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="      {{ pagination.totalIt"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> per "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
@@ -3835,7 +3835,7 @@
       </trans-unit>
       <trans-unit id="b4d3a94d4c67e02c861a8c7c66c34b74ad2ddf0d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {user} other {users}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {utente} other {utenti}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">370</context>
@@ -4063,7 +4063,7 @@
       </trans-unit>
       <trans-unit id="fe22d2c0020e913ee4b75ec22a3abc8814810490" datatype="html">
         <source>Transcoding</source>
-        <target state="new">Transcoding</target>
+        <target state="translated">Transcodifica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">700</context>
@@ -4127,7 +4127,7 @@
       </trans-unit>
       <trans-unit id="0ba5a92f3fcf3c32561c73cd7e100776967d920b" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {diretta} other {dirette}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">883</context></context-group>
       </trans-unit>
       <trans-unit id="7cb03878e0d89e67d48c707512e876ddb8658a6b" datatype="html">
@@ -4137,7 +4137,7 @@
       </trans-unit>
       <trans-unit id="9f667199fbfe1db90e4f3b1a6634f6036db93ad0" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {diretta} other {dirette}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">891</context></context-group>
       </trans-unit>
       <trans-unit id="4bddd185b531fa5ef6a1b5cebf46de5565968cb1" datatype="html">
@@ -4272,7 +4272,7 @@
       </trans-unit>
       <trans-unit id="85d060be6823b8207e82fbc75429753f1beb06ce" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {immagine memorizzata nella cache} other {immagini memorizzate nella cache}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">984</context></context-group>
       </trans-unit>
       <trans-unit id="478d017e2701ae21cefab20e7226702d77f15727" datatype="html">
@@ -4282,7 +4282,7 @@
       </trans-unit>
       <trans-unit id="05c5e2816638b3916627b407da27f08c4f0668d4" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {immagine memorizzata nella cache} other {immagini memorizzate nella cache}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">996</context></context-group>
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
@@ -4307,7 +4307,7 @@
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">Scrivi direttamente il codice CSS. Esempio:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> colore: rosso <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Anteponi con <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> per sovrascrivere gli stili. Esempio:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> colore: rosso; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
+        <target state="translated">Scrivi direttamente il codice CSS. Esempio:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> colore: rosso; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Anteponi <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> per sovrascrivere gli stili. Esempio:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> colore: rosso; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1042</context></context-group>
       </trans-unit>
       <trans-unit id="3128766f8e9bac2f95f5413fdb810e90c6084ef0" datatype="html">
@@ -4916,7 +4916,7 @@
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>? It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">Vuoi davvero eliminare <x id="PH"/>? It will delete <x id="PH_1"/> i video caricati in questo canale e non sarai in grado di creare un altro canale con lo stesso nome (<x id="PH_2"/>)!</target>
+        <target state="translated">Vuoi davvero eliminare <x id="PH" equiv-text="videoChannel.displayName"/>? Verranno eliminati <x id="PH_1" equiv-text="videoChannel.videosCount"/> i video caricati in questo canale e non potrai creare un altro canale con lo stesso nome <x id="PH_2" equiv-text="videoChannel.name"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="d5f0913d08d01648d7e6165c168a99ccd06d1f4c" datatype="html">
@@ -6894,7 +6894,7 @@
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="error.text"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="translated">Impossibile recuperare le credenziali del client OAuth: <x id="PH"/>. Assicurati di aver configurato correttamente PeerTube (config/ directory), in particolare la sezione "webserver".</target>
+        <target state="translated">Impossibile recuperare le credenziali del Client OAuth: <x id="PH" equiv-text="error.text"/>. Assicurati di aver configurato correttamente PeerTube (config/ directory), in particolare la sezione "webserver".</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544">
@@ -8717,7 +8717,7 @@
       </trans-unit>
       <trans-unit id="8312101634344200207" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> viewers</source>
-        <target state="new"><x id="PH" equiv-text="this.views"/> viewers</target>
+        <target state="translated"><x id="PH" equiv-text="this.views"/> spettatori</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">211</context>
@@ -8725,7 +8725,7 @@
       </trans-unit>
       <trans-unit id="7756087706411154095" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> views</source>
-        <target state="new"><x id="PH" equiv-text="this.views"/> views</target>
+        <target state="translated"><x id="PH" equiv-text="this.views"/> spettatori</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">214</context>
@@ -8739,7 +8739,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
+        <target state="translated">Diapositiva <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> di <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
@@ -8943,12 +8943,12 @@
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
         <source>Your video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">La tua quota video è stata superata con questo video ( video size: <x id="PH"/>, usata: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
+        <target state="translated">La tua quota video è stata superata con questo video ( dimensione del video: <x id="PH" equiv-text="videoSizeBytes"/>, usato: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
         <source>Your daily video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="translated">La tua quota video giornaliera è stata superata con questo video ( dimensione video : <x id="PH"/>, usato: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
+        <target state="translated">La tua quota video giornaliera è stata superata con questo video ( dimensione del video : <x id="PH" equiv-text="videoSizeBytes"/>, usato: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">284</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119">
@@ -9113,7 +9113,7 @@
       </trans-unit>
       <trans-unit id="642534594356440342" datatype="html">
         <source>Feed</source>
-        <target state="new">Feed</target>
+        <target state="translated">Feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">68</context>
