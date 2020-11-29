@@ -11,7 +11,7 @@
       <div class="peertube-select-container">
         <select formControlName="channel" id="channel" class="form-control">
           <option i18n value="undefined" disabled>Channel that will receive the video</option>
-          <option *ngFor="let channel of videoChannels" [value]="channel.id">{{ channel.displayName }}
+          <option *ngFor="let channel of videoChannels; let i = index;" [value]="channel.id" [selected]="i == 0">{{ channel.displayName }}
           </option>
         </select>
       </div>
@@ -28,7 +28,7 @@
 
       <input
           type="submit" i18n-value value="Accept" class="action-button-submit"
-          [disabled]="!form.valid"
+          [disabled]="!form.valid && videoChannels.length != 1"
           (click)="close()"
       >
     </div>
