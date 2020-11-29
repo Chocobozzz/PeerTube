@@ -9,9 +9,9 @@ import { About } from '@shared/models/server'
   templateUrl: './instance-about-accordion.component.html',
   styleUrls: ['./instance-about-accordion.component.scss']
 })
-export class InstanceAboutAccordion implements OnInit {
+export class InstanceAboutAccordionComponent implements OnInit {
   @ViewChild('accordion', { static: true }) accordion: NgbAccordion
-  @Output() init: EventEmitter<InstanceAboutAccordion> = new EventEmitter<InstanceAboutAccordion>()
+  @Output() init: EventEmitter<InstanceAboutAccordionComponent> = new EventEmitter<InstanceAboutAccordionComponent>()
 
   about: About
   aboutHtml = {

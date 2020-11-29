@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, Notifier, RedirectService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { InstanceAboutAccordion } from '@app/shared/shared-instance'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
@@ -133,7 +133,7 @@ The link will expire within 1 hour.`
     this.openedForgotPasswordModal.close()
   }
 
-  onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordion) {
+  onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordionComponent) {
     this.accordion = instanceAboutAccordion.accordion
   }
 

@@ -6,7 +6,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { UserRegister } from '@shared/models'
 import { ServerConfig } from '@shared/models/server'
-import { InstanceAboutAccordion } from '@app/shared/shared-instance'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 
 @Component({
   selector: 'my-register',
@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordion) {
+  onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordionComponent) {
     this.accordion = instanceAboutAccordion.accordion
     this.aboutHtml = instanceAboutAccordion.aboutHtml
   }
