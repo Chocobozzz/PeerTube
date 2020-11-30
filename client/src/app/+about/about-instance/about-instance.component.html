@@ -21,7 +21,7 @@
 
     <div class="anchor" id="administrators-and-sustainability"></div>
     <a
-      *ngIf="html.administrator || maintenanceLifetime || businessModel"
+      *ngIf="html.administrator || html.maintenanceLifetime || html.businessModel"
       class="anchor-link"
       routerLink="/about/instance"
       fragment="administrators-and-sustainability"
@@ -47,7 +47,7 @@
       <div [innerHTML]="html.administrator"></div>
     </div>
 
-    <div class="block creation-reason" *ngIf="creationReason">
+    <div class="block creation-reason" *ngIf="html.creationReason">
       <div class="anchor" id="creation-reason"></div>
       <a
         class="anchor-link"
@@ -58,10 +58,10 @@
         <h3 i18n class="section-title">Why we created this instance</h3>
       </a>
 
-      <p>{{ creationReason }}</p>
+      <div [innerHTML]="html.creationReason"></div>
     </div>
 
-    <div class="block maintenance-lifetime" *ngIf="maintenanceLifetime">
+    <div class="block maintenance-lifetime" *ngIf="html.maintenanceLifetime">
       <div class="anchor" id="maintenance-lifetime"></div>
       <a
         class="anchor-link"
@@ -72,10 +72,10 @@
         <h3 i18n class="section-title">How long we plan to maintain this instance</h3>
       </a>
 
-      <p>{{ maintenanceLifetime }}</p>
+      <div [innerHTML]="html.maintenanceLifetime"></div>
     </div>
 
-    <div class="block business-model" *ngIf="businessModel">
+    <div class="block business-model" *ngIf="html.businessModel">
         <div class="anchor" id="business-model"></div>
         <a
           class="anchor-link"
@@ -86,7 +86,7 @@
           <h3 i18n class="section-title">How we will pay for this instance</h3>
         </a>
 
-      <p>{{ businessModel }}</p>
+      <div [innerHTML]="html.businessModel"></div>
     </div>
 
     <div class="anchor" id="information"></div>

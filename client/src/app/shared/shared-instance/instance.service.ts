@@ -45,6 +45,9 @@ export class InstanceService {
       codeOfConduct: '',
       moderationInformation: '',
       administrator: '',
+      creationReason: '',
+      maintenanceLifetime: '',
+      businessModel: '',
       hardwareInformation: ''
     }
 

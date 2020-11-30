@@ -24,12 +24,11 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     codeOfConduct: '',
     moderationInformation: '',
     administrator: '',
+    creationReason: '',
+    maintenanceLifetime: '',
+    businessModel: '',
     hardwareInformation: ''
   }
-
-  creationReason = ''
-  maintenanceLifetime = ''
-  businessModel = ''
 
   languages: string[] = []
   categories: string[] = []
@@ -68,10 +67,6 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     this.categories = categories
 
     this.shortDescription = about.instance.shortDescription
-
-    this.creationReason = about.instance.creationReason
-    this.maintenanceLifetime = about.instance.maintenanceLifetime
-    this.businessModel = about.instance.businessModel
 
     this.html = await this.instanceService.buildHtml(about)
 
