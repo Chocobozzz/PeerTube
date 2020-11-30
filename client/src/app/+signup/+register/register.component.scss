@@ -46,13 +46,13 @@
 
 }
 
-@media screen and (max-width: breakpoint(xl)) {
+@media screen and (max-width: breakpoint(lg)) {
   .wrapper {
     @include columnReverseDisplay();
   }
 }
 
-@media screen and (max-width: breakpoint(xl) + $menu-width) {
+@media screen and (max-width: breakpoint(lg) + $menu-width) {
   :host-context(.main-col:not(.expanded)) {
     .wrapper {
       @include columnReverseDisplay();
@@ -65,15 +65,19 @@
 }
 
 .input-group {
-  @include peertube-input-group(400px);
+  @include peertube-input-group(100%);
 }
 
 .input-group-append {
   height: 30px;
 }
 
+.form-group-terms {
+  width: 100% !important;
+}
+
 input:not([type=submit]) {
-  @include peertube-input-text(400px);
+  @include peertube-input-text(100%);
   display: block;
 
   &#username,
@@ -83,19 +87,10 @@ input:not([type=submit]) {
   }
 }
 
-@media screen and (max-width: $mobile-view) {
-  .form-group-terms,
-  .input-group,
-  input:not([type=submit]) {
-    width: 100%;
-  }
-}
-
 input[type=submit],
 button {
   @include peertube-button;
   @include orange-button;
-
 }
 
 .name-information {
