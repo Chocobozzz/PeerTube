@@ -1,3 +1,7 @@
+<h2 class="instance-name">{{ about.instance.name }}</h2>
+
+<div class="instance-short-description">{{ about.instance.shortDescription }}</div>
+
 <ngb-accordion #accordion="ngbAccordion" [closeOthers]="true">
   <ngb-panel *ngIf="panels.features" id="instance-features" i18n-title title="Features found on this instance">
     <ng-template ngbPanelContent>
