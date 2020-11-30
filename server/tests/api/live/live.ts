@@ -579,7 +579,11 @@ describe('Test live', function () {
       }
 
       const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
-      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+
+      for (const server of servers) {
+        await waitUntilLiveStarts(server.url, server.accessToken, liveVideoUUID)
+      }
+
       await waitJobs(servers)
 
       for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {
@@ -588,7 +592,10 @@ describe('Test live', function () {
       }
 
       await stopFfmpeg(command)
-      await waitUntilLiveEnded(servers[0].url, servers[0].accessToken, liveVideoUUID)
+
+      for (const server of servers) {
+        await waitUntilLiveEnded(server.url, server.accessToken, liveVideoUUID)
+      }
 
       await waitJobs(servers)
 

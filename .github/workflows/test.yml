@@ -95,6 +95,11 @@ jobs:
         if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
         run: NODE_PENDING_JOB_WAIT=2000 npm run ci -- ${{ matrix.test_suite }}
 
+      - name: Display directories state
+        if: failure()
+        run: |
+          ls -l
+
       - name: Upload logs
         uses: actions/upload-artifact@v2
         if: failure()
