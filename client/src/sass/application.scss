@@ -105,6 +105,7 @@ label {
 
 code {
   background-color: pvar(--greyBackgroundColor);
+  color: pvar(--greyForegroundColor);
   border-radius: 3px;
   padding: .2em .4em;
   margin: auto .4em;
@@ -261,7 +262,7 @@ code {
     opacity: 0.6;
 
     &.active {
-      background-color: #f0f0f0;
+      background-color: pvar(--submenuColor);
     }
 
     &.active, &:hover, &:active, &:focus {
