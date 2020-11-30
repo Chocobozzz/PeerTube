@@ -1,5 +1,5 @@
 import * as Bull from 'bull'
-import { readdir, remove } from 'fs-extra'
+import { move, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { hlsPlaylistToFragmentedMP4 } from '@server/helpers/ffmpeg-utils'
 import { getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
@@ -14,6 +14,7 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
+import { VIDEO_LIVE } from '@server/initializers/constants'
 
 async function processVideoLiveEnding (job: Bull.Job) {
   const payload = job.data as VideoLiveEndingPayload
@@ -53,24 +54,40 @@ export {
 
 async function saveLive (video: MVideo, live: MVideoLive) {
   const hlsDirectory = getHLSDirectory(video, false)
-  const files = await readdir(hlsDirectory)
+  const replayDirectory = join(hlsDirectory, VIDEO_LIVE.REPLAY_DIRECTORY)
 
-  const playlistFiles = files.filter(f => f.endsWith('.m3u8') && f !== 'master.m3u8')
+  const rootFiles = await readdir(hlsDirectory)
+
+  const playlistFiles: string[] = []
+
+  for (const file of rootFiles) {
+    if (file.endsWith('.m3u8') !== true) continue
+
+    await move(join(hlsDirectory, file), join(replayDirectory, file))
+
+    if (file !== 'master.m3u8') {
+      playlistFiles.push(file)
+    }
+  }
+
+  const replayFiles = await readdir(replayDirectory)
+
   const resolutions: number[] = []
   let duration: number
 
   for (const playlistFile of playlistFiles) {
-    const playlistPath = join(hlsDirectory, playlistFile)
+    const playlistPath = join(replayDirectory, playlistFile)
     const { videoFileResolution } = await getVideoFileResolution(playlistPath)
 
+    // Put the final mp4 in the hls directory, and not in the replay directory
     const mp4TmpPath = buildMP4TmpPath(hlsDirectory, videoFileResolution)
 
     // Playlist name is for example 3.m3u8
     // Segments names are 3-0.ts 3-1.ts etc
     const shouldStartWith = playlistFile.replace(/\.m3u8$/, '') + '-'
 
-    const segmentFiles = files.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
-    await hlsPlaylistToFragmentedMP4(hlsDirectory, segmentFiles, mp4TmpPath)
+    const segmentFiles = replayFiles.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
+    await hlsPlaylistToFragmentedMP4(replayDirectory, segmentFiles, mp4TmpPath)
 
     if (!duration) {
       duration = await getDurationFromVideoFile(mp4TmpPath)
@@ -143,7 +160,8 @@ async function cleanupLiveFiles (hlsDirectory: string) {
       filename.endsWith('.m3u8') ||
       filename.endsWith('.mpd') ||
       filename.endsWith('.m4s') ||
-      filename.endsWith('.tmp')
+      filename.endsWith('.tmp') ||
+      filename === VIDEO_LIVE.REPLAY_DIRECTORY
     ) {
       const p = join(hlsDirectory, filename)
 

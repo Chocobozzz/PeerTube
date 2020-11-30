@@ -1,8 +1,8 @@
 
 import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { ensureDir, stat } from 'fs-extra'
-import { basename } from 'path'
+import { copy, ensureDir, stat } from 'fs-extra'
+import { basename, join } from 'path'
 import { isTestInstance } from '@server/helpers/core-utils'
 import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers/ffmpeg-utils'
 import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
@@ -25,6 +25,7 @@ import { getHLSDirectory } from './video-paths'
 import { availableEncoders } from './video-transcoding-profiles'
 
 import memoizee = require('memoizee')
+import { mkdir } from 'fs'
 const NodeRtmpServer = require('node-media-server/node_rtmp_server')
 const context = require('node-media-server/node_core_ctx')
 const nodeMediaServerLogger = require('node-media-server/node_core_logger')
@@ -261,8 +262,13 @@ class LiveManager {
     const outPath = getHLSDirectory(videoLive.Video)
     await ensureDir(outPath)
 
+    const replayDirectory = join(outPath, VIDEO_LIVE.REPLAY_DIRECTORY)
+
+    if (videoLive.saveReplay === true) {
+      await ensureDir(replayDirectory)
+    }
+
     const videoUUID = videoLive.Video.uuid
-    const deleteSegments = videoLive.saveReplay === false
 
     const ffmpegExec = CONFIG.LIVE.TRANSCODING.ENABLED
       ? await getLiveTranscodingCommand({
@@ -270,11 +276,10 @@ class LiveManager {
         outPath,
         resolutions: allResolutions,
         fps,
-        deleteSegments,
         availableEncoders,
         profile: 'default'
       })
-      : getLiveMuxingCommand(rtmpUrl, outPath, deleteSegments)
+      : getLiveMuxingCommand(rtmpUrl, outPath)
 
     logger.info('Running live muxing/transcoding for %s.', videoUUID)
     this.transSessions.set(sessionId, ffmpegExec)
@@ -284,11 +289,18 @@ class LiveManager {
     const segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
     const playlistIdMatcher = /^([\d+])-/
 
-    const processHashSegments = (segmentsToProcess: string[]) => {
+    const processSegments = (segmentsToProcess: string[]) => {
       // Add sha hash of previous segments, because ffmpeg should have finished generating them
       for (const previousSegment of segmentsToProcess) {
         this.addSegmentSha(videoUUID, previousSegment)
           .catch(err => logger.error('Cannot add sha segment of video %s -> %s.', videoUUID, previousSegment, { err }))
+
+        if (videoLive.saveReplay) {
+          const segmentName = basename(previousSegment)
+
+          copy(previousSegment, join(outPath, VIDEO_LIVE.REPLAY_DIRECTORY, segmentName))
+            .catch(err => logger.error('Cannot copy segment %s to repay directory.', previousSegment, { err }))
+        }
       }
     }
 
@@ -298,7 +310,7 @@ class LiveManager {
       const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
 
       const segmentsToProcess = segmentsToProcessPerPlaylist[playlistId] || []
-      processHashSegments(segmentsToProcess)
+      processSegments(segmentsToProcess)
 
       segmentsToProcessPerPlaylist[playlistId] = [ segmentPath ]
 
@@ -369,7 +381,7 @@ class LiveManager {
         .then(() => {
           // Process remaining segments hash
           for (const key of Object.keys(segmentsToProcessPerPlaylist)) {
-            processHashSegments(segmentsToProcessPerPlaylist[key])
+            processSegments(segmentsToProcessPerPlaylist[key])
           }
         })
         .catch(err => logger.error('Cannot close watchers of %s or process remaining hash segments.', outPath, { err }))

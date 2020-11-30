@@ -634,6 +634,7 @@ const VIDEO_LIVE = {
   CLEANUP_DELAY: 1000 * 60 * 5, // 5 minutes
   SEGMENT_TIME_SECONDS: 4, // 4 seconds
   SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
+  REPLAY_DIRECTORY: 'replay',
   EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION: 4,
   RTMP: {
     CHUNK_SIZE: 60000,

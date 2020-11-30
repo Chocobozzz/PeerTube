@@ -190,12 +190,11 @@ async function getLiveTranscodingCommand (options: {
   outPath: string
   resolutions: number[]
   fps: number
-  deleteSegments: boolean
 
   availableEncoders: AvailableEncoders
   profile: string
 }) {
-  const { rtmpUrl, outPath, resolutions, fps, deleteSegments, availableEncoders, profile } = options
+  const { rtmpUrl, outPath, resolutions, fps, availableEncoders, profile } = options
   const input = rtmpUrl
 
   const command = getFFmpeg(input)
@@ -272,14 +271,14 @@ async function getLiveTranscodingCommand (options: {
     varStreamMap.push(`v:${i},a:${i}`)
   }
 
-  addDefaultLiveHLSParams(command, outPath, deleteSegments)
+  addDefaultLiveHLSParams(command, outPath)
 
   command.outputOption('-var_stream_map', varStreamMap.join(' '))
 
   return command
 }
 
-function getLiveMuxingCommand (rtmpUrl: string, outPath: string, deleteSegments: boolean) {
+function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
   const command = getFFmpeg(rtmpUrl)
   command.inputOption('-fflags nobuffer')
 
@@ -288,17 +287,17 @@ function getLiveMuxingCommand (rtmpUrl: string, outPath: string, deleteSegments:
   command.outputOption('-map 0:a?')
   command.outputOption('-map 0:v?')
 
-  addDefaultLiveHLSParams(command, outPath, deleteSegments)
+  addDefaultLiveHLSParams(command, outPath)
 
   return command
 }
 
-async function hlsPlaylistToFragmentedMP4 (hlsDirectory: string, segmentFiles: string[], outputPath: string) {
-  const concatFilePath = join(hlsDirectory, 'concat.txt')
+async function hlsPlaylistToFragmentedMP4 (replayDirectory: string, segmentFiles: string[], outputPath: string) {
+  const concatFilePath = join(replayDirectory, 'concat.txt')
 
   function cleaner () {
     remove(concatFilePath)
-      .catch(err => logger.error('Cannot remove concat file in %s.', hlsDirectory, { err }))
+      .catch(err => logger.error('Cannot remove concat file in %s.', replayDirectory, { err }))
   }
 
   // First concat the ts files to a mp4 file
@@ -385,14 +384,10 @@ function addDefaultEncoderParams (options: {
   }
 }
 
-function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string, deleteSegments: boolean) {
+function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string) {
   command.outputOption('-hls_time ' + VIDEO_LIVE.SEGMENT_TIME_SECONDS)
   command.outputOption('-hls_list_size ' + VIDEO_LIVE.SEGMENTS_LIST_SIZE)
-
-  if (deleteSegments === true) {
-    command.outputOption('-hls_flags delete_segments')
-  }
-
+  command.outputOption('-hls_flags delete_segments')
   command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%06d.ts')}`)
   command.outputOption('-master_pl_name master.m3u8')
   command.outputOption(`-f hls`)
