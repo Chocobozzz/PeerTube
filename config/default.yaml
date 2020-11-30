@@ -313,16 +313,16 @@ instance:
   moderation_information: '' # Supports markdown
 
   # Why did you create this instance?
-  creation_reason: ''
+  creation_reason: '' # Supports Markdown
 
   # Who is behind the instance? A single person? A non profit?
-  administrator: ''
+  administrator: '' # Supports Markdown
 
   # How long do you plan to maintain this instance?
-  maintenance_lifetime: ''
+  maintenance_lifetime: '' # Supports Markdown
 
   # How will you pay the PeerTube instance server? With your own funds? With users donations? Advertising?
-  business_model: ''
+  business_model: '' # Supports Markdown
 
   # If you want to explain on what type of hardware your PeerTube instance runs
   # Example: "2 vCore, 2GB RAM..."
