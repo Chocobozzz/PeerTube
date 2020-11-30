@@ -39,9 +39,11 @@
     width: 100%;
     margin-left: 0;
     margin-right: 0;
-    max-width: initial;
-    min-width: initial;
+    max-width: 450px;
+    min-width: unset;
+    align-self: center;
   }
+
 }
 
 @media screen and (max-width: breakpoint(md)) {
