@@ -164,7 +164,7 @@ menu {
       &:hover,
       &:focus-visible {
         my-global-icon {
-          @include apply-svg-color(var(--mainForegroundColor));
+          @include apply-svg-color(var(--menuForegroundColor));
         }
       }
 
@@ -269,7 +269,7 @@ menu {
     a, span[role=button] {
       display: inline-block;
       text-decoration: none;
-      color: pvar(--mainForegroundColor);
+      color: pvar(--menuForegroundColor);
       opacity: $footer-links-base-opacity;
       white-space: nowrap;
       font-size: 90%;
@@ -284,7 +284,7 @@ menu {
         height: 1.4rem;
 
         my-global-icon {
-          @include apply-svg-color(pvar(--mainForegroundColor));
+          @include apply-svg-color(pvar(--menuForegroundColor));
 
           display: flex;
           width: auto;
@@ -298,7 +298,7 @@ menu {
   .footer-copyleft small a {
     @include disable-default-a-behaviour;
 
-    color: pvar(--mainForegroundColor);
+    color: pvar(--menuForegroundColor);
     opacity: $footer-links-base-opacity - .2;
   }
 }
