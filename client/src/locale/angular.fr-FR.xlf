@@ -2209,7 +2209,7 @@
       </trans-unit>
       <trans-unit id="89707647cc7c304e499ae46a5a0c5b508c3c80a0" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">le système de partage utilisé pour cette vidéo implique que certaines informations techniques à propos de votre système (telle que votre adresse IP publique) soit envoyées à d'autres pairs.</target>
+        <target state="translated">le système de partage utilisé pour cette vidéo implique que certaines informations techniques à propos de votre système (telle que votre adresse IP publique) soient envoyées à d'autres pairs.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">309</context></context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
