@@ -1,5 +1,6 @@
 import { Job } from 'bull'
 import * as ffmpeg from 'fluent-ffmpeg'
+import * as Bull from 'bull'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_ENCODERS } from '@server/initializers/constants'
@@ -9,6 +10,7 @@ import { CONFIG } from '../initializers/config'
 import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 /**
  *
@@ -56,10 +58,10 @@ export type AvailableEncoders = {
 // ---------------------------------------------------------------------------
 
 function convertWebPToJPG (path: string, destination: string): Promise<void> {
-  const command = ffmpeg(path, { niceness: FFMPEG_NICE.THUMBNAIL })
+  const command = getImageFfmpegCommand(path)
     .output(destination)
 
-  return runCommand(command)
+  return runCommand({ command })
 }
 
 function processGIF (
@@ -67,12 +69,12 @@ function processGIF (
   destination: string,
   newSize: { width: number, height: number }
 ): Promise<void> {
-  const command = ffmpeg(path, { niceness: FFMPEG_NICE.THUMBNAIL })
+  const command = getImageFfmpegCommand(path)
     .fps(20)
     .size(`${newSize.width}x${newSize.height}`)
     .output(destination)
 
-  return runCommand(command)
+  return runCommand({ command })
 }
 
 async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {
@@ -88,7 +90,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
 
   try {
     await new Promise<string>((res, rej) => {
-      ffmpeg(fromPath, { niceness: FFMPEG_NICE.THUMBNAIL })
+      getImageFfmpegCommand(fromPath)
         .on('error', rej)
         .on('end', () => res(imageName))
         .thumbnail(options)
@@ -183,15 +185,17 @@ const builders: {
   'video': buildx264VODCommand
 }
 
-async function transcode (options: TranscodeOptions) {
-  logger.debug('Will run transcode.', { options })
+async function transcode (options: TranscodeOptions, job?: Bull.Job) {
+  logger.debug('Now transcoding.', { options, job })
 
-  let command = getFFmpeg(options.inputPath, 'vod')
+  const shouldBeExecutedLocally = !job || options.type === 'merge-audio'
+
+  let command = getVideoFfmpegCommand(options.inputPath, 'vod', shouldBeExecutedLocally)
     .output(options.outputPath)
 
   command = await builders[options.type](command, options)
 
-  await runCommand(command, options.job)
+  await runCommand({ command, job })
 
   await fixHLSPlaylistIfNeeded(options)
 }
@@ -212,7 +216,8 @@ async function getLiveTranscodingCommand (options: {
   const { rtmpUrl, outPath, resolutions, fps, availableEncoders, profile } = options
   const input = rtmpUrl
 
-  const command = getFFmpeg(input, 'live')
+  const command = getVideoFfmpegCommand(input, 'live', true)
+  command.inputOption('-fflags nobuffer')
 
   const varStreamMap: string[] = []
 
@@ -294,7 +299,8 @@ async function getLiveTranscodingCommand (options: {
 }
 
 function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
-  const command = getFFmpeg(rtmpUrl, 'live')
+  const command = getVideoFfmpegCommand(rtmpUrl, 'live', true)
+  command.inputOption('-fflags nobuffer')
 
   command.outputOption('-c:v copy')
   command.outputOption('-c:a copy')
@@ -595,12 +601,32 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
 // Utils
 // ---------------------------------------------------------------------------
 
-function getFFmpeg (input: string, type: 'live' | 'vod') {
+/**
+ * Ffmpeg for processing images. Only local = using default ffmpeg.
+ */
+function getImageFfmpegCommand (input: string) {
+  const command = ffmpeg(input, { niceness: FFMPEG_NICE.THUMBNAIL })
+
+  return command
+}
+
+/**
+ * Ffmpeg for processing videos. Can be:
+ * - local or 3rd-party = using default ffmpeg unless a REMOTE_FFMPEG_PATH env var is set
+ * - only local = using default ffmpeg
+ *
+ * Defaults to 'local or 3rd-party'.
+ */
+function getVideoFfmpegCommand (input: string, type: 'live' | 'vod', onlyLocal = false) {
   // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
   const command = ffmpeg(input, {
     niceness: type === 'live' ? FFMPEG_NICE.LIVE : FFMPEG_NICE.VOD,
     cwd: CONFIG.STORAGE.TMP_DIR
   })
+
+  if (process.env.REMOTE_FFMPEG_PATH && !onlyLocal) {
+    command.setFfmpegPath(process.env.REMOTE_FFMPEG_PATH)
+  }
 
   const threads = type === 'live'
     ? CONFIG.LIVE.TRANSCODING.THREADS
@@ -614,16 +640,43 @@ function getFFmpeg (input: string, type: 'live' | 'vod') {
   return command
 }
 
-async function runCommand (command: ffmpeg.FfmpegCommand, job?: Job) {
-  return new Promise<void>((res, rej) => {
+/**
+ * Run the Ffmpeg command, bind event listeners and inject/restore env variables
+ * in the case the underlying ffmpeg is a wrapper which might need such variables
+ * to access the REST API related to the current job:
+ *
+ * https://docs.joinpeertube.org/api-rest-reference.html#tag/Running-Jobs/paths/~1jobs~1video-transcoding~1{jobId}/get
+ */
+async function runCommand (options: {
+  command: ffmpeg.FfmpegCommand
+  onEnd?: Function
+  job?: Bull.Job
+}) {
+  let { command, onEnd, job } = options
+  const env = process.env
+
+  return new Promise<void>(async (res, rej) => {
+    // modify environment right before spawning the transcoding process
+    process.env.JOB_ID = job?.id?.toString();
+    ({ command, env: process.env } = await Hooks.wrapObject(
+      { command, env },
+      'filter:transcoding.beforerun.command'
+    ))
+
+    command.on('start', _ => {
+      // reset environment right after spawning the transcoding process
+      process.env = env
+    })
+
     command.on('error', (err, stdout, stderr) => {
+      if (onEnd) onEnd()
       logger.error('Error in transcoding job.', { stdout, stderr })
       rej(err)
     })
 
     command.on('end', (stdout, stderr) => {
+      if (onEnd) onEnd()
       logger.debug('FFmpeg command ended.', { stdout, stderr })
-
       res()
     })
 

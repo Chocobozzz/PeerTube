@@ -18,6 +18,7 @@ import { MVideoImportDefault } from '@server/types/models/video/video-import'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate'
 import { UserRole } from '@shared/models'
+import { Job } from 'bull'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
   MAccountDefault,
@@ -134,6 +135,8 @@ declare module 'express' {
       externalAuth?: RegisterServerAuthExternalOptions
 
       plugin?: MPlugin
+
+      job?: Job
     }
   }
 }

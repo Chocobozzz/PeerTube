@@ -102,7 +102,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
     const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
 
-    const outputPath = await generateHlsPlaylistResolutionFromTS({
+    await generateHlsPlaylistResolutionFromTS({
       video: videoWithFiles,
       concatenatedTsFilePath,
       resolution: videoFileResolution,
@@ -111,7 +111,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     })
 
     if (!durationDone) {
-      videoWithFiles.duration = await getDurationFromVideoFile(outputPath)
+      videoWithFiles.duration = await getDurationFromVideoFile(concatenatedTsFilePath)
       await videoWithFiles.save()
 
       durationDone = true

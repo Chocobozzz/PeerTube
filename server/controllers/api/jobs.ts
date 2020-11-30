@@ -12,8 +12,14 @@ import {
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares'
-import { paginationValidator } from '../../middlewares/validators'
+import {
+  paginationValidator,
+  videoTranscodingFileValidator
+} from '../../middlewares/validators'
 import { listJobsValidator } from '../../middlewares/validators/jobs'
+import { getVideoFilePath } from '@server/lib/video-paths'
+import { VideoTranscodingPayload } from '@shared/models'
+import { VideoModel } from '../../models/video/video'
 
 const jobsRouter = express.Router()
 
@@ -26,6 +32,14 @@ jobsRouter.get('/:state?',
   setDefaultPagination,
   listJobsValidator,
   asyncMiddleware(listJobs)
+)
+
+/**
+ * Get source file for a video transcoding job
+ */
+jobsRouter.get('/video-transcoding/:jobId',
+  asyncMiddleware(videoTranscodingFileValidator),
+  asyncMiddleware(downloadVideoTranscodingFile)
 )
 
 // ---------------------------------------------------------------------------
@@ -75,4 +89,30 @@ async function formatJob (job: any, state?: JobState): Promise<Job> {
     finishedOn: new Date(job.finishedOn),
     processedOn: new Date(job.processedOn)
   }
+}
+
+async function downloadVideoTranscodingFile (req: express.Request, res: express.Response) {
+  const job = res.locals.job
+  const payload = job.data as VideoTranscodingPayload
+
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
+  if (!video) return res.status(404).end()
+
+  let videoFile = video.getMaxQualityFile()
+  switch (payload.type) {
+    case 'new-resolution-to-hls':
+      videoFile = payload.copyCodecs
+        ? video.getWebTorrentFile(payload.resolution)
+        : video.getMaxQualityFile()
+      break
+    case 'merge-audio-to-webtorrent':
+      videoFile = video.getMinQualityFile()
+      break
+    case 'new-resolution-to-webtorrent':
+    case 'optimize-to-webtorrent':
+    default:
+      break
+  }
+
+  return res.download(getVideoFilePath(video, videoFile), `${video.name}${videoFile.extname}`)
 }

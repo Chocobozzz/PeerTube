@@ -83,10 +83,14 @@ tags:
     description: >
       Each server exposes public information regarding supported videos and
       options.
-  - name: Job
+  - name: Jobs
     description: >
       Jobs are long-running tasks enqueued and processed by the instance
       itself. No additional worker registration is currently available.
+  - name: Running Jobs
+    description: >
+      Running jobs, in particular video transcoding jobs, have specific endpoints
+      that allow external services to integrate with their operation.
   - name: Instance Follows
     description: >
       Managing servers which the instance interacts with is crucial to the
@@ -183,7 +187,8 @@ x-tagGroups:
       - Plugins
   - name: Jobs
     tags:
-      - Job
+      - Jobs
+      - Running Jobs
 paths:
   '/accounts/{name}':
     get:
@@ -351,7 +356,7 @@ paths:
         - OAuth2:
           - admin
       tags:
-        - Job
+        - Jobs
       parameters:
         - name: state
           in: path
@@ -386,6 +391,30 @@ paths:
                     maxItems: 100
                     items:
                       $ref: '#/components/schemas/Job'
+  /jobs/video-transcoding/{jobId}:
+    get:
+      summary: Download video file of a transcoding job
+      tags:
+        - Running Jobs
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: id of a running transcoding job
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            video/*:
+             schema: 
+               type: string
+               format: binary
+        '404':
+          description: video transcoding job not found
+        '410':
+          description: job is not running anymore
   '/server/following/{host}':
     delete:
       security:

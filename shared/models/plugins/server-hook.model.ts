@@ -50,7 +50,10 @@ export const serverFilterHookObject = {
   'filter:video.auto-blacklist.result': true,
 
   // Filter result used to check if a user can register on the instance
-  'filter:api.user.signup.allowed.result': true
+  'filter:api.user.signup.allowed.result': true,
+
+  // Filter fluent-ffmpeg command/env right before transcoding
+  'filter:transcoding.beforerun.command': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

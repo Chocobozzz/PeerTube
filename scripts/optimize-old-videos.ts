@@ -57,7 +57,7 @@ async function run () {
         const backupFile = `${currentFile}_backup`
         await copy(currentFile, backupFile)
 
-        await optimizeOriginalVideofile(video, file)
+        await optimizeOriginalVideofile({ video, inputVideoFileArg: file })
 
         const originalDuration = await getDurationFromVideoFile(backupFile)
         const newDuration = await getDurationFromVideoFile(currentFile)

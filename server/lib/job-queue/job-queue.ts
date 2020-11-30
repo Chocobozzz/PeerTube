@@ -88,8 +88,7 @@ class JobQueue {
   private initialized = false
   private jobRedisPrefix: string
 
-  private constructor () {
-  }
+  private constructor () { }
 
   init () {
     // Already initialized
@@ -154,6 +153,18 @@ class JobQueue {
     }
 
     return queue.add(obj.payload, jobArgs)
+  }
+
+  async loadById (jobId: string | number): Promise<Bull.Job | null> {
+    const promises = []
+
+    for (const jobType in this.queues) {
+      const queue: Bull.Queue = this.queues[jobType]
+      promises.push(queue.getJob(jobId))
+    }
+
+    const results = await Promise.all(promises) as Bull.Job[]
+    return results.find((x): x is Bull.Job => x !== null) || null
   }
 
   async listForApi (options: {

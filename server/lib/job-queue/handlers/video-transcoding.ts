@@ -23,7 +23,7 @@ import {
   generateHlsPlaylistResolution,
   mergeAudioVideofile,
   optimizeOriginalVideofile,
-  transcodeNewWebTorrentResolution
+  transcodeNewResolution
 } from '../../video-transcoding'
 import { JobQueue } from '../job-queue'
 import { UserModel } from '@server/models/account/user'
@@ -60,7 +60,6 @@ async function processVideoTranscoding (job: Bull.Job) {
   }
 
   const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
-
   const handler = handlers[payload.type]
 
   if (!handler) {
@@ -102,7 +101,7 @@ async function handleNewWebTorrentResolutionJob (
   video: MVideoFullLight,
   user: MUserId
 ) {
-  await transcodeNewWebTorrentResolution(video, payload.resolution, payload.isPortraitMode || false, job)
+  await transcodeNewResolution(video, payload.resolution, payload.isPortraitMode || false, job)
 
   await retryTransactionWrapper(onNewWebTorrentFileResolution, video, user, payload)
 }
@@ -114,7 +113,7 @@ async function handleWebTorrentMergeAudioJob (job: Bull.Job, payload: MergeAudio
 }
 
 async function handleWebTorrentOptimizeJob (job: Bull.Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
-  const transcodeType = await optimizeOriginalVideofile(video, video.getMaxQualityFile(), job)
+  const transcodeType = await optimizeOriginalVideofile({ video, inputVideoFileArg: video.getMaxQualityFile(), job })
 
   await retryTransactionWrapper(onVideoFileOptimizer, video, payload, transcodeType, user)
 }
