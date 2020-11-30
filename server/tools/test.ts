@@ -39,7 +39,7 @@ async function run () {
 
   console.log('Starting server.')
 
-  const server = await flushAndRunServer(1, {}, [], false)
+  const server = await flushAndRunServer(1, {}, [], { hideLogs: false, execArgv: [ '--inspect' ] })
 
   const cleanup = () => {
     console.log('Killing server')
