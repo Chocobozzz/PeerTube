@@ -378,13 +378,13 @@ class LiveManager {
         // Wait latest segments generation, and close watchers
 
         Promise.all([ tsWatcher.close(), masterWatcher.close() ])
-        .then(() => {
-          // Process remaining segments hash
-          for (const key of Object.keys(segmentsToProcessPerPlaylist)) {
-            processSegments(segmentsToProcessPerPlaylist[key])
-          }
-        })
-        .catch(err => logger.error('Cannot close watchers of %s or process remaining hash segments.', outPath, { err }))
+          .then(() => {
+            // Process remaining segments hash
+            for (const key of Object.keys(segmentsToProcessPerPlaylist)) {
+              processSegments(segmentsToProcessPerPlaylist[key])
+            }
+          })
+          .catch(err => logger.error('Cannot close watchers of %s or process remaining hash segments.', outPath, { err }))
 
         this.onEndTransmuxing(videoLive.Video.id)
           .catch(err => logger.error('Error in closed transmuxing.', { err }))

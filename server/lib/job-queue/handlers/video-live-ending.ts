@@ -1,8 +1,9 @@
 import * as Bull from 'bull'
-import { move, readdir, remove } from 'fs-extra'
+import { copy, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { hlsPlaylistToFragmentedMP4 } from '@server/helpers/ffmpeg-utils'
 import { getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import { VIDEO_LIVE } from '@server/initializers/constants'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
@@ -14,7 +15,6 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
-import { VIDEO_LIVE } from '@server/initializers/constants'
 
 async function processVideoLiveEnding (job: Bull.Job) {
   const payload = job.data as VideoLiveEndingPayload
@@ -61,11 +61,12 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   const playlistFiles: string[] = []
 
   for (const file of rootFiles) {
-    if (file.endsWith('.m3u8') !== true) continue
+    // Move remaining files in the replay directory
+    if (file.endsWith('.ts') || file.endsWith('.m3u8')) {
+      await copy(join(hlsDirectory, file), join(replayDirectory, file))
+    }
 
-    await move(join(hlsDirectory, file), join(replayDirectory, file))
-
-    if (file !== 'master.m3u8') {
+    if (file.endsWith('.m3u8') && file !== 'master.m3u8') {
       playlistFiles.push(file)
     }
   }
