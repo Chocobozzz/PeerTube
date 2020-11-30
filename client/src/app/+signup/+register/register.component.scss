@@ -20,12 +20,6 @@
     margin-bottom: 40px;
     margin-left: 10px;
     margin-right: 10px;
-
-    @media screen and (max-width: $mobile-view) {
-      width: 100%;
-      margin-left: 0;
-      margin-right: 0;
-    }
   }
 
   .instance-information {
@@ -34,12 +28,32 @@
     margin-bottom: 40px;
     margin-left: 10px;
     margin-right: 10px;
+  }
+}
 
-    @media screen and (max-width: $mobile-view) {
-      width: 100%;
-      min-width: 320px;
-      margin-left: 0;
-      margin-right: 0;
+@mixin columnReverseDisplay {
+  flex-direction: column-reverse;
+
+  .register-form,
+  .instance-information {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: initial;
+    min-width: initial;
+  }
+}
+
+@media screen and (max-width: breakpoint(md)) {
+  .wrapper {
+    @include columnReverseDisplay();
+  }
+}
+
+@media screen and (max-width: breakpoint(md) + $menu-width) {
+  :host-context(.main-col:not(.expanded)) {
+    .wrapper {
+      @include columnReverseDisplay();
     }
   }
 }
