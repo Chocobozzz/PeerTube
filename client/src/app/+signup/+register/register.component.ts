@@ -31,7 +31,10 @@ export class RegisterComponent implements OnInit {
 
   instanceInformationPanels = {
     codeOfConduct: true,
-    terms: true
+    terms: true,
+    administrators: false,
+    features: false,
+    moderation: false
   }
 
   private serverConfig: ServerConfig

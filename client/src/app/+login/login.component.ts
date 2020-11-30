@@ -28,7 +28,11 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   externalLogins: string[] = []
 
   instanceInformationPanels = {
-    terms: true
+    terms: true,
+    administrators: false,
+    features: false,
+    moderation: false,
+    codeOfConduct: false
   }
 
   private openedForgotPasswordModal: NgbModalRef
