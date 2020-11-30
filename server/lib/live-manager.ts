@@ -25,7 +25,7 @@ import { getHLSDirectory } from './video-paths'
 import { availableEncoders } from './video-transcoding-profiles'
 
 import memoizee = require('memoizee')
-import { mkdir } from 'fs'
+
 const NodeRtmpServer = require('node-media-server/node_rtmp_server')
 const context = require('node-media-server/node_core_ctx')
 const nodeMediaServerLogger = require('node-media-server/node_core_logger')
