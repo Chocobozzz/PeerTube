@@ -29,6 +29,11 @@ export class RegisterComponent implements OnInit {
     codeOfConduct: ''
   }
 
+  instanceInformationPanels = {
+    codeOfConduct: true,
+    terms: true
+  }
+
   private serverConfig: ServerConfig
 
   constructor (

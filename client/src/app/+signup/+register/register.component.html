@@ -45,7 +45,7 @@
     </div>
 
     <div #instanceInformation class="instance-information">
-      <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)"></my-instance-about-accordion>
+      <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"></my-instance-about-accordion>
     </div>
   </div>
 

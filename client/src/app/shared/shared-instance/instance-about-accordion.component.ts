@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { InstanceService } from './instance.service'
 import { Notifier } from '@app/core'
@@ -12,6 +12,14 @@ import { About } from '@shared/models/server'
 export class InstanceAboutAccordionComponent implements OnInit {
   @ViewChild('accordion', { static: true }) accordion: NgbAccordion
   @Output() init: EventEmitter<InstanceAboutAccordionComponent> = new EventEmitter<InstanceAboutAccordionComponent>()
+
+  @Input() panels = {
+    features: true,
+    administrators: true,
+    moderation: true,
+    codeOfConduct: true,
+    terms: true
+  }
 
   about: About
   aboutHtml = {
@@ -40,5 +48,23 @@ export class InstanceAboutAccordionComponent implements OnInit {
 
         err => this.notifier.error(err.message)
       )
+  }
+
+  get administratorsPanel () {
+    if (!this.panels.administrators) return false
+
+    return !!(this.aboutHtml.administrator || this.about.instance.maintenanceLifetime || this.about.instance.businessModel)
+  }
+
+  get moderationPanel () {
+    return this.panels.moderation && !!this.aboutHtml.moderationInformation
+  }
+
+  get codeOfConductPanel () {
+    return this.panels.codeOfConduct && !!this.aboutHtml.codeOfConduct
+  }
+
+  get termsPanel () {
+    return this.panels.terms && !!this.aboutHtml.terms
   }
 }

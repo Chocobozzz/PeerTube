@@ -27,6 +27,10 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   externalAuthError = false
   externalLogins: string[] = []
 
+  instanceInformationPanels = {
+    terms: true
+  }
+
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
 
