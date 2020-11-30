@@ -206,6 +206,8 @@ describe('Videos workflow', () => {
 
     await myAccountPage.goOnAssociatedPlaylistEmbed()
 
+    await playerPage.waitUntilPlayerWrapper()
+
     await browser.executeScript(`window.localStorage.setItem('access_token', '${accessToken}');`)
     await browser.executeScript(`window.localStorage.setItem('refresh_token', '${refreshToken}');`)
     await browser.executeScript(`window.localStorage.setItem('token_type', 'Bearer');`)

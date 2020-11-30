@@ -1,6 +1,6 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { concat } from 'rxjs'
-import { filter, first, map, pairwise, tap } from 'rxjs/operators'
+import { filter, first, map, pairwise } from 'rxjs/operators'
 import { DOCUMENT, PlatformLocation, ViewportScroller } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'

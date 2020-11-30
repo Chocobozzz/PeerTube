@@ -16,8 +16,15 @@ export class MyAccountPage {
 
   // My account Videos
 
-  removeVideo (name: string) {
-    return this.getVideoElement(name).element(by.css('my-delete-button')).click()
+  async removeVideo (name: string) {
+    const container = this.getVideoElement(name)
+
+    await container.element(by.css('.dropdown-toggle')).click()
+
+    const dropdownMenu = container.element(by.css('.dropdown-menu .dropdown-item:nth-child(2)'))
+    await browser.wait(browser.ExpectedConditions.presenceOf(dropdownMenu))
+
+    return dropdownMenu.click()
   }
 
   validRemove () {

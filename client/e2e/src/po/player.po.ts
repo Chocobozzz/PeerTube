@@ -16,6 +16,12 @@ export class PlayerPage {
     return browser.wait(browser.ExpectedConditions.textToBePresentInElement(elem, text))
   }
 
+  waitUntilPlayerWrapper () {
+    const elem = element(by.css('#video-wrapper'))
+
+    return browser.wait(browser.ExpectedConditions.presenceOf(elem))
+  }
+
   async playAndPauseVideo (isAutoplay: boolean) {
     const videojsEl = element(by.css('div.video-js'))
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
