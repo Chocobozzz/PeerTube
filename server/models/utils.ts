@@ -1,7 +1,7 @@
+import { literal, Op, OrderItem } from 'sequelize'
 import { Model, Sequelize } from 'sequelize-typescript'
-import validator from 'validator'
 import { Col } from 'sequelize/types/lib/utils'
-import { literal, OrderItem, Op } from 'sequelize'
+import validator from 'validator'
 
 type SortType = { sortModel: string, sortValue: string }
 
@@ -20,6 +20,16 @@ function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderIt
   }
 
   return [ [ finalField, direction ], lastSort ]
+}
+
+function getPlaylistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const { direction, field } = buildDirectionAndField(value)
+
+  if (field.toLowerCase() === 'name') {
+    return [ [ 'displayName', direction ], lastSort ]
+  }
+
+  return getSort(value, lastSort)
 }
 
 function getCommentSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
@@ -227,6 +237,7 @@ export {
   buildBlockedAccountSQL,
   buildBlockedAccountSQLOptimized,
   buildLocalActorIdsIn,
+  getPlaylistSort,
   SortType,
   buildLocalAccountIdsIn,
   getSort,

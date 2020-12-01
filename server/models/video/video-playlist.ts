@@ -16,7 +16,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid } from '../utils'
+import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getPlaylistSort, getPlaylistSort, isOutdated, throwIfNotValid } from '../utils'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
@@ -312,7 +312,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     const query = {
       offset: options.start,
       limit: options.count,
-      order: getSort(options.sort)
+      order: getPlaylistSort(options.sort)
     }
 
     const scopes: (string | ScopeOptions)[] = [
