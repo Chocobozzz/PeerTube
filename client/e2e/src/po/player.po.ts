@@ -17,7 +17,7 @@ export class PlayerPage {
   }
 
   waitUntilPlayerWrapper () {
-    const elem = element(by.css('#video-wrapper'))
+    const elem = element(by.css('#placeholder-preview'))
 
     return browser.wait(browser.ExpectedConditions.presenceOf(elem))
   }
