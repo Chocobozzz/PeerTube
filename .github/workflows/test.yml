@@ -98,11 +98,11 @@ jobs:
       - name: Display directories state
         if: failure()
         run: |
-          ls -l
+          ls -l test*
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: test-storages-${{ matrix.test_suite }}
-          path: test*/logs
+          path: test*/logs/*

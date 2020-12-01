@@ -88,6 +88,7 @@ async function generateHighBitrateVideo () {
 
   const exists = await pathExists(tempFixturePath)
   if (!exists) {
+    console.log('Generating high bitrate video.')
 
     // Generate a random, high bitrate video on the fly, so we don't have to include
     // a large file in the repo. The video needs to have a certain minimum length so
@@ -115,6 +116,8 @@ async function generateVideoWithFramerate (fps = 60) {
 
   const exists = await pathExists(tempFixturePath)
   if (!exists) {
+    console.log('Generating video with framerate %d.', fps)
+
     return new Promise<string>((res, rej) => {
       ffmpeg()
         .outputOptions([ '-f rawvideo', '-video_size 1280x720', '-i /dev/urandom' ])
