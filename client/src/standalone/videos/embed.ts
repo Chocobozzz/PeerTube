@@ -125,10 +125,9 @@ export class PeerTubeEmbed {
             this.setHeadersFromTokens()
 
             resolve()
+          }).catch((refreshTokenError: any) => {
+            reject(refreshTokenError)
           })
-            .catch((refreshTokenError: any) => {
-              reject(refreshTokenError)
-            })
         })
 
         return refreshingTokenPromise
@@ -339,7 +338,7 @@ export class PeerTubeEmbed {
 
     try {
       playlistResponse = await playlistPromise
-      isResponseOk = true
+      isResponseOk = playlistResponse.status === 200
     } catch (err) {
       console.error(err)
       isResponseOk = false
@@ -368,7 +367,7 @@ export class PeerTubeEmbed {
 
     try {
       videoResponse = await videoPromise
-      isResponseOk = true
+      isResponseOk = videoResponse.status === 200
     } catch (err) {
       console.error(err)
 
