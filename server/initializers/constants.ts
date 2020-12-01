@@ -85,7 +85,7 @@ const SORTABLE_COLUMNS = {
 
   USER_NOTIFICATIONS: [ 'createdAt', 'read' ],
 
-  VIDEO_PLAYLISTS: [ 'displayName', 'createdAt', 'updatedAt' ],
+  VIDEO_PLAYLISTS: [ 'name', 'createdAt', 'updatedAt' ],
 
   PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
 
