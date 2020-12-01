@@ -47,6 +47,11 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   }
 
   show (videoChangeOwnership: VideoChangeOwnership) {
+    // Select the first available channel by default
+    this.form.patchValue({
+      channel: this.videoChannels[0].id
+    })
+
     this.videoChangeOwnership = videoChangeOwnership
     this.modalService
       .open(this.modal, { centered: true })
