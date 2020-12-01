@@ -178,7 +178,7 @@
                 <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
 
                 <my-markdown-textarea
-                  id="instanceCreationReason" formControlName="creationReason" textareaMaxWidth="500px"
+                  name="instanceCreationReason" formControlName="creationReason" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
                 ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
@@ -189,7 +189,7 @@
                 <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
 
                 <my-markdown-textarea
-                  id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" textareaMaxWidth="500px"
+                  name="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
                 ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
@@ -200,7 +200,7 @@
                 <div i18n class="label-small-info">With your own funds? With user donations? Advertising?</div>
 
                 <my-markdown-textarea
-                  id="instanceBusinessModel" formControlName="businessModel" textareaMaxWidth="500px"
+                  name="instanceBusinessModel" formControlName="businessModel" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
                 ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
