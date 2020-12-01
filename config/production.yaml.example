@@ -283,7 +283,7 @@ live:
 
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:
-    enabled: false
+    enabled: true
     threads: 2
 
     resolutions:
