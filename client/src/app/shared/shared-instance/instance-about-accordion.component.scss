@@ -10,6 +10,8 @@
 }
 
 .instance-short-description {
+  @include ellipsis-multiline(1rem, 3);
+
   margin-top: 20px;
   margin-bottom: 20px;
 }

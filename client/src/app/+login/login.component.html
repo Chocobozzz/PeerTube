@@ -59,7 +59,7 @@
             </h6>
 
             <div *ngIf="signupAllowed === true" i18n>
-              This instance allows registration. However, be careful to check the <a (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a> before creating an account.
+              This instance allows registration. However, be careful to check the <a class="terms-anchor" (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
               You may also search for another instance to match your exact needs at: <br /><a class="alert-link" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
             </div>
 

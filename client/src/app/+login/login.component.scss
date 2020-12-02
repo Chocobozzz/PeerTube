@@ -144,6 +144,14 @@ input[type=submit] {
     margin-left: 10px;
     margin-right: 10px;
   }
+
+  .terms-anchor {
+    display: inline;
+  }
+
+  .terms-link {
+    display: none;
+  }
 }
 
 @mixin columnReverseDisplay {
@@ -157,6 +165,20 @@ input[type=submit] {
     max-width: 450px;
     min-width: unset;
     align-self: center;
+  }
+
+  .instance-information {
+    ::ng-deep .accordion {
+      display: none;
+    }
+  }
+
+  .terms-anchor {
+    display: none;
+  }
+
+  .terms-link {
+    display: inline;
   }
 }
 
