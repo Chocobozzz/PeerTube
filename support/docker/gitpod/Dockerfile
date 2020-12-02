@@ -1,6 +1,6 @@
 FROM gitpod/workspace-postgres
 
-# Gitpod does not rebuild dev images unless *some* change is made to the Dockerfile.
+# Gitpod will not rebuild PeerTube's dev image unless *some* change is made to this Dockerfile.
 # To trigger a rebuild, simply increase this counter:
 ENV TRIGGER_REBUILD 1
 
