@@ -110,7 +110,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
 // Transcode meta function
 // ---------------------------------------------------------------------------
 
-type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio' | 'only-audio'
+type TranscodeOptionsType = 'hls' | 'hls-from-ts' | 'quick-transcode' | 'video' | 'merge-audio' | 'only-audio'
 
 interface BaseTranscodeOptions {
   type: TranscodeOptionsType
@@ -129,6 +129,14 @@ interface BaseTranscodeOptions {
 interface HLSTranscodeOptions extends BaseTranscodeOptions {
   type: 'hls'
   copyCodecs: boolean
+  hlsPlaylist: {
+    videoFilename: string
+  }
+}
+
+interface HLSFromTSTranscodeOptions extends BaseTranscodeOptions {
+  type: 'hls-from-ts'
+
   hlsPlaylist: {
     videoFilename: string
   }
@@ -153,6 +161,7 @@ interface OnlyAudioTranscodeOptions extends BaseTranscodeOptions {
 
 type TranscodeOptions =
   HLSTranscodeOptions
+  | HLSFromTSTranscodeOptions
   | VideoTranscodeOptions
   | MergeAudioTranscodeOptions
   | OnlyAudioTranscodeOptions
@@ -163,6 +172,7 @@ const builders: {
 } = {
   'quick-transcode': buildQuickTranscodeCommand,
   'hls': buildHLSVODCommand,
+  'hls-from-ts': buildHLSVODFromTSCommand,
   'merge-audio': buildAudioMergeCommand,
   'only-audio': buildOnlyAudioCommand,
   'video': buildx264VODCommand
@@ -292,31 +302,6 @@ function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
   return command
 }
 
-async function hlsPlaylistToFragmentedMP4 (replayDirectory: string, segmentFiles: string[], outputPath: string) {
-  const concatFilePath = join(replayDirectory, 'concat.txt')
-
-  function cleaner () {
-    remove(concatFilePath)
-      .catch(err => logger.error('Cannot remove concat file in %s.', replayDirectory, { err }))
-  }
-
-  // First concat the ts files to a mp4 file
-  const content = segmentFiles.map(f => 'file ' + f)
-                              .join('\n')
-
-  await writeFile(concatFilePath, content + '\n')
-
-  const command = getFFmpeg(concatFilePath)
-  command.inputOption('-safe 0')
-  command.inputOption('-f concat')
-
-  command.outputOption('-c:v copy')
-  command.audioFilter('aresample=async=1:first_pts=0')
-  command.output(outputPath)
-
-  return runCommand(command, cleaner)
-}
-
 function buildStreamSuffix (base: string, streamNum?: number) {
   if (streamNum !== undefined) {
     return `${base}:${streamNum}`
@@ -336,8 +321,7 @@ export {
   generateImageFromVideoFile,
   TranscodeOptions,
   TranscodeOptionsType,
-  transcode,
-  hlsPlaylistToFragmentedMP4
+  transcode
 }
 
 // ---------------------------------------------------------------------------
@@ -447,6 +431,16 @@ function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
   return command
 }
 
+function addCommonHLSVODCommandOptions (command: ffmpeg.FfmpegCommand, outputPath: string) {
+  return command.outputOption('-hls_time 4')
+                .outputOption('-hls_list_size 0')
+                .outputOption('-hls_playlist_type vod')
+                .outputOption('-hls_segment_filename ' + outputPath)
+                .outputOption('-hls_segment_type fmp4')
+                .outputOption('-f hls')
+                .outputOption('-hls_flags single_file')
+}
+
 async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
@@ -454,19 +448,27 @@ async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTr
   else if (options.resolution === VideoResolution.H_NOVIDEO) command = presetOnlyAudio(command)
   else command = await buildx264VODCommand(command, options)
 
-  command = command.outputOption('-hls_time 4')
-                   .outputOption('-hls_list_size 0')
-                   .outputOption('-hls_playlist_type vod')
-                   .outputOption('-hls_segment_filename ' + videoPath)
-                   .outputOption('-hls_segment_type fmp4')
-                   .outputOption('-f hls')
-                   .outputOption('-hls_flags single_file')
+  addCommonHLSVODCommandOptions(command, videoPath)
+
+  return command
+}
+
+async function buildHLSVODFromTSCommand (command: ffmpeg.FfmpegCommand, options: HLSFromTSTranscodeOptions) {
+  const videoPath = getHLSVideoPath(options)
+
+  command.inputOption('-safe 0')
+  command.inputOption('-f concat')
+
+  command.outputOption('-c:v copy')
+  command.audioFilter('aresample=async=1:first_pts=0')
+
+  addCommonHLSVODCommandOptions(command, videoPath)
 
   return command
 }
 
 async function fixHLSPlaylistIfNeeded (options: TranscodeOptions) {
-  if (options.type !== 'hls') return
+  if (options.type !== 'hls' && options.type !== 'hls-from-ts') return
 
   const fileContent = await readFile(options.outputPath)
 
@@ -480,7 +482,7 @@ async function fixHLSPlaylistIfNeeded (options: TranscodeOptions) {
   await writeFile(options.outputPath, newContent)
 }
 
-function getHLSVideoPath (options: HLSTranscodeOptions) {
+function getHLSVideoPath (options: HLSTranscodeOptions | HLSFromTSTranscodeOptions) {
   return `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
 }
 

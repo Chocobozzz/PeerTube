@@ -1,4 +1,4 @@
-import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
+import { copyFile, ensureDir, move, remove, stat, writeFile } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models'
@@ -163,15 +163,104 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
   return onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
 }
 
+// Concat TS segments from a live video to a fragmented mp4 HLS playlist
+async function generateHlsPlaylistFromTS (options: {
+  video: MVideoWithFile
+  replayDirectory: string
+  segmentFiles: string[]
+  resolution: VideoResolution
+  isPortraitMode: boolean
+}) {
+  const concatFilePath = join(options.replayDirectory, 'concat.txt')
+
+  function cleaner () {
+    remove(concatFilePath)
+      .catch(err => logger.error('Cannot remove concat file in %s.', options.replayDirectory, { err }))
+  }
+
+  // First concat the ts files to a mp4 file
+  const content = options.segmentFiles.map(f => 'file ' + f)
+                                      .join('\n')
+
+  await writeFile(concatFilePath, content + '\n')
+
+  try {
+    const outputPath = await generateHlsPlaylistCommon({
+      video: options.video,
+      resolution: options.resolution,
+      isPortraitMode: options.isPortraitMode,
+      inputPath: concatFilePath,
+      type: 'hls-from-ts' as 'hls-from-ts'
+    })
+
+    cleaner()
+
+    return outputPath
+  } catch (err) {
+    cleaner()
+
+    throw err
+  }
+}
+
 // Generate an HLS playlist from an input file, and update the master playlist
-async function generateHlsPlaylist (options: {
+function generateHlsPlaylist (options: {
   video: MVideoWithFile
   videoInputPath: string
   resolution: VideoResolution
   copyCodecs: boolean
   isPortraitMode: boolean
 }) {
-  const { video, videoInputPath, resolution, copyCodecs, isPortraitMode } = options
+  return generateHlsPlaylistCommon({
+    video: options.video,
+    resolution: options.resolution,
+    copyCodecs: options.copyCodecs,
+    isPortraitMode: options.isPortraitMode,
+    inputPath: options.videoInputPath,
+    type: 'hls' as 'hls'
+  })
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  generateHlsPlaylist,
+  generateHlsPlaylistFromTS,
+  optimizeOriginalVideofile,
+  transcodeNewResolution,
+  mergeAudioVideofile
+}
+
+// ---------------------------------------------------------------------------
+
+async function onVideoFileTranscoding (video: MVideoWithFile, videoFile: MVideoFile, transcodingPath: string, outputPath: string) {
+  const stats = await stat(transcodingPath)
+  const fps = await getVideoFileFPS(transcodingPath)
+  const metadata = await getMetadataFromFile(transcodingPath)
+
+  await move(transcodingPath, outputPath, { overwrite: true })
+
+  videoFile.size = stats.size
+  videoFile.fps = fps
+  videoFile.metadata = metadata
+
+  await createTorrentAndSetInfoHash(video, videoFile)
+
+  await VideoFileModel.customUpsert(videoFile, 'video', undefined)
+  video.VideoFiles = await video.$get('VideoFiles')
+
+  return video
+}
+
+async function generateHlsPlaylistCommon (options: {
+  type: 'hls' | 'hls-from-ts'
+  video: MVideoWithFile
+  inputPath: string
+  resolution: VideoResolution
+  copyCodecs?: boolean
+  isPortraitMode: boolean
+}) {
+  const { type, video, inputPath, resolution, copyCodecs, isPortraitMode } = options
 
   const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
   await ensureDir(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
@@ -180,9 +269,9 @@ async function generateHlsPlaylist (options: {
   const videoFilename = generateVideoStreamingPlaylistName(video.uuid, resolution)
 
   const transcodeOptions = {
-    type: 'hls' as 'hls',
+    type,
 
-    inputPath: videoInputPath,
+    inputPath,
     outputPath,
 
     availableEncoders,
@@ -242,35 +331,5 @@ async function generateHlsPlaylist (options: {
   await updateMasterHLSPlaylist(video)
   await updateSha256VODSegments(video)
 
-  return video
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  generateHlsPlaylist,
-  optimizeOriginalVideofile,
-  transcodeNewResolution,
-  mergeAudioVideofile
-}
-
-// ---------------------------------------------------------------------------
-
-async function onVideoFileTranscoding (video: MVideoWithFile, videoFile: MVideoFile, transcodingPath: string, outputPath: string) {
-  const stats = await stat(transcodingPath)
-  const fps = await getVideoFileFPS(transcodingPath)
-  const metadata = await getMetadataFromFile(transcodingPath)
-
-  await move(transcodingPath, outputPath, { overwrite: true })
-
-  videoFile.size = stats.size
-  videoFile.fps = fps
-  videoFile.metadata = metadata
-
-  await createTorrentAndSetInfoHash(video, videoFile)
-
-  await VideoFileModel.customUpsert(videoFile, 'video', undefined)
-  video.VideoFiles = await video.$get('VideoFiles')
-
-  return video
+  return outputPath
 }

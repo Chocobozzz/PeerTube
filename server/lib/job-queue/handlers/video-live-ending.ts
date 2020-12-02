@@ -1,13 +1,12 @@
 import * as Bull from 'bull'
 import { copy, readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { hlsPlaylistToFragmentedMP4 } from '@server/helpers/ffmpeg-utils'
 import { getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { VIDEO_LIVE } from '@server/initializers/constants'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
-import { generateHlsPlaylist } from '@server/lib/video-transcoding'
+import { generateHlsPlaylistFromTS } from '@server/lib/video-transcoding'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -71,32 +70,6 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     }
   }
 
-  const replayFiles = await readdir(replayDirectory)
-
-  const resolutions: number[] = []
-  let duration: number
-
-  for (const playlistFile of playlistFiles) {
-    const playlistPath = join(replayDirectory, playlistFile)
-    const { videoFileResolution } = await getVideoFileResolution(playlistPath)
-
-    // Put the final mp4 in the hls directory, and not in the replay directory
-    const mp4TmpPath = buildMP4TmpPath(hlsDirectory, videoFileResolution)
-
-    // Playlist name is for example 3.m3u8
-    // Segments names are 3-0.ts 3-1.ts etc
-    const shouldStartWith = playlistFile.replace(/\.m3u8$/, '') + '-'
-
-    const segmentFiles = replayFiles.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
-    await hlsPlaylistToFragmentedMP4(replayDirectory, segmentFiles, mp4TmpPath)
-
-    if (!duration) {
-      duration = await getDurationFromVideoFile(mp4TmpPath)
-    }
-
-    resolutions.push(videoFileResolution)
-  }
-
   await cleanupLiveFiles(hlsDirectory)
 
   await live.destroy()
@@ -105,7 +78,6 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   // Reinit views
   video.views = 0
   video.state = VideoState.TO_TRANSCODE
-  video.duration = duration
 
   await video.save()
 
@@ -116,20 +88,34 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
   hlsPlaylist.VideoFiles = []
 
-  for (const resolution of resolutions) {
-    const videoInputPath = buildMP4TmpPath(hlsDirectory, resolution)
-    const { isPortraitMode } = await getVideoFileResolution(videoInputPath)
+  const replayFiles = await readdir(replayDirectory)
+  let duration: number
 
-    await generateHlsPlaylist({
+  for (const playlistFile of playlistFiles) {
+    const playlistPath = join(replayDirectory, playlistFile)
+    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(playlistPath)
+
+    // Playlist name is for example 3.m3u8
+    // Segments names are 3-0.ts 3-1.ts etc
+    const shouldStartWith = playlistFile.replace(/\.m3u8$/, '') + '-'
+
+    const segmentFiles = replayFiles.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
+
+    const outputPath = await generateHlsPlaylistFromTS({
       video: videoWithFiles,
-      videoInputPath,
-      resolution: resolution,
-      copyCodecs: true,
+      replayDirectory,
+      segmentFiles,
+      resolution: videoFileResolution,
       isPortraitMode
     })
 
-    await remove(videoInputPath)
+    if (!duration) {
+      videoWithFiles.duration = await getDurationFromVideoFile(outputPath)
+      await videoWithFiles.save()
+    }
   }
+
+  await remove(replayDirectory)
 
   // Regenerate the thumbnail & preview?
   if (videoWithFiles.getMiniature().automaticallyGenerated === true) {
@@ -161,8 +147,7 @@ async function cleanupLiveFiles (hlsDirectory: string) {
       filename.endsWith('.m3u8') ||
       filename.endsWith('.mpd') ||
       filename.endsWith('.m4s') ||
-      filename.endsWith('.tmp') ||
-      filename === VIDEO_LIVE.REPLAY_DIRECTORY
+      filename.endsWith('.tmp')
     ) {
       const p = join(hlsDirectory, filename)
 
@@ -170,8 +155,4 @@ async function cleanupLiveFiles (hlsDirectory: string) {
         .catch(err => logger.error('Cannot remove %s.', p, { err }))
     }
   }
-}
-
-function buildMP4TmpPath (basePath: string, resolution: number) {
-  return join(basePath, resolution + '-tmp.mp4')
 }

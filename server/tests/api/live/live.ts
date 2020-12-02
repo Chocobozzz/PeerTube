@@ -430,6 +430,8 @@ describe('Test live', function () {
         expect(video.files).to.have.lengthOf(0)
 
         const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)
+        await makeRawRequest(hlsPlaylist.playlistUrl, 200)
+        await makeRawRequest(hlsPlaylist.segmentsSha256Url, 200)
 
         expect(hlsPlaylist.files).to.have.lengthOf(resolutions.length)
 

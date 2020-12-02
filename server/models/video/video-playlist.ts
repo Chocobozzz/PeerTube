@@ -1,3 +1,6 @@
+import * as Bluebird from 'bluebird'
+import { join } from 'path'
+import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -15,14 +18,19 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { MAccountId, MChannelId } from '@server/types/models'
+import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
+import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getPlaylistSort, getPlaylistSort, isOutdated, throwIfNotValid } from '../utils'
+import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
+import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
+import { activityPubCollectionPagination } from '../../helpers/activitypub'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
   isVideoPlaylistPrivacyValid
 } from '../../helpers/custom-validators/video-playlists'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
   ACTIVITY_PUB,
   CONSTRAINTS_FIELDS,
@@ -32,18 +40,7 @@ import {
   VIDEO_PLAYLIST_TYPES,
   WEBSERVER
 } from '../../initializers/constants'
-import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
-import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
-import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
-import { join } from 'path'
-import { VideoPlaylistElementModel } from './video-playlist-element'
-import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
-import { activityPubCollectionPagination } from '../../helpers/activitypub'
-import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
-import { ThumbnailModel } from './thumbnail'
-import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
-import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
-import * as Bluebird from 'bluebird'
+import { MThumbnail } from '../../types/models/video/thumbnail'
 import {
   MVideoPlaylistAccountThumbnail,
   MVideoPlaylistAP,
@@ -52,8 +49,11 @@ import {
   MVideoPlaylistFullSummary,
   MVideoPlaylistIdWithElements
 } from '../../types/models/video/video-playlist'
-import { MThumbnail } from '../../types/models/video/thumbnail'
-import { MAccountId, MChannelId } from '@server/types/models'
+import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
+import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getPlaylistSort, isOutdated, throwIfNotValid } from '../utils'
+import { ThumbnailModel } from './thumbnail'
+import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
+import { VideoPlaylistElementModel } from './video-playlist-element'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
