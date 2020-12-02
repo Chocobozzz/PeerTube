@@ -13,10 +13,6 @@
   .register-form {
     max-width: 600px;
     align-self: center;
-
-    .container {
-      max-width: unset !important;
-    }
   }
 
   .register-form,
@@ -25,7 +21,6 @@
   }
 
   .instance-information {
-    min-width: 350px;
     margin-bottom: 15px;
   }
 }
