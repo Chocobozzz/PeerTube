@@ -32,6 +32,12 @@
       </ng-template>
     </ngb-panel>
 
+    <ngb-panel *ngIf="termsPanel" id="terms" i18n-title title="Terms">
+      <ng-template ngbPanelContent>
+        <div class="block" [innerHTML]="aboutHtml.terms"></div>
+      </ng-template>
+    </ngb-panel>
+
     <ngb-panel *ngIf="moderationPanel" id="moderation-information" i18n-title title="Moderation information">
       <ng-template ngbPanelContent>
         <div class="block" [innerHTML]="aboutHtml.moderationInformation"></div>
@@ -41,12 +47,6 @@
     <ngb-panel *ngIf="codeOfConductPanel" id="code-of-conduct" i18n-title title="Code of conduct">
       <ng-template ngbPanelContent>
         <div class="block" [innerHTML]="aboutHtml.codeOfConduct"></div>
-      </ng-template>
-    </ngb-panel>
-
-    <ngb-panel *ngIf="termsPanel" id="terms" i18n-title title="Terms">
-      <ng-template ngbPanelContent>
-        <div class="block" [innerHTML]="aboutHtml.terms"></div>
       </ng-template>
     </ngb-panel>
   </ng-container>
