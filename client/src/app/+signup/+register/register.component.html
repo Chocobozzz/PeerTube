@@ -10,13 +10,20 @@
   <div class="wrapper" [hidden]="signupDone">
     <div class="register-form">
       <my-custom-stepper linear *ngIf="!signupDone">
-        <cdk-step [stepControl]="formStepUser" i18n-label label="User">
-          <my-register-step-user
+        <cdk-step [stepControl]="formStepTerms" i18n-label="label-signup-step-terms" label="Terms">
+          <div class="instance-information">
+            <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"></my-instance-about-accordion>
+          </div>
+          <my-register-step-terms
             [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
-            [videoUploadDisabled]="videoUploadDisabled"
-            (formBuilt)="onUserFormBuilt($event)" (termsClick)="onTermsClick(instanceInformation)" (codeOfConductClick)="onCodeOfConductClick(instanceInformation)"
+            (formBuilt)="onUserFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
           >
-          </my-register-step-user>
+          </my-register-step-terms>
+          <button i18n cdkStepperNext [disabled]="!formStepTerms || !formStepTerms.valid">Next</button>
+        </cdk-step>
+
+        <cdk-step [stepControl]="formStepUser" i18n-label label="User">
+          <my-register-step-user (formBuilt)="onUserFormBuilt($event)" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-user>
 
           <button i18n cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid"
             (click)="signup()">{{ videoUploadDisabled ? 'Signup' : 'Next' }}</button>
@@ -42,10 +49,6 @@
           <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
         </cdk-step>
       </my-custom-stepper>
-    </div>
-
-    <div #instanceInformation class="instance-information">
-      <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"></my-instance-about-accordion>
     </div>
   </div>
 

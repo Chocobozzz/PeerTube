@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit {
 
   videoUploadDisabled: boolean
 
+  formStepTerms: FormGroup
   formStepUser: FormGroup
   formStepChannel: FormGroup
 
@@ -75,6 +76,10 @@ export class RegisterComponent implements OnInit {
     return this.formStepChannel.value['name']
   }
 
+  onTermsFormBuilt (form: FormGroup) {
+    this.formStepTerms = form
+  }
+
   onUserFormBuilt (form: FormGroup) {
     this.formStepUser = form
   }
@@ -83,22 +88,12 @@ export class RegisterComponent implements OnInit {
     this.formStepChannel = form
   }
 
-  onTermsClick (instanceInformationElement: HTMLElement) {
-    if (this.accordion) {
-      this.accordion.expand('terms')
-      // make sure scroll position is near to the expanded panel especially on mobile screens
-      instanceInformationElement.scrollIntoView({ behavior: 'smooth' })
-      return
-    }
+  onTermsClick () {
+    if (this.accordion) this.accordion.toggle('terms')
   }
 
-  onCodeOfConductClick (instanceInformationElement: HTMLElement) {
-    if (this.accordion) {
-      this.accordion.expand('code-of-conduct')
-      // make sure scroll position is near to the expanded panel especially on mobile screens
-      instanceInformationElement.scrollIntoView({ behavior: 'smooth' })
-      return
-    }
+  onCodeOfConductClick () {
+    if (this.accordion) this.accordion.toggle('code-of-conduct')
   }
 
   onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordionComponent) {

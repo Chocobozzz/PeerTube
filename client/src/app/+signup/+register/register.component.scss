@@ -8,55 +8,25 @@
 
 .wrapper {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-
-  & > div {
-    flex: 1 1;
-  }
+  flex-direction: column;
 
   .register-form {
-    max-width: 450px;
-    margin-bottom: 40px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
-  .instance-information {
     max-width: 600px;
-    min-width: 350px;
-    margin-bottom: 40px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-}
+    align-self: center;
 
-@mixin columnReverseDisplay {
-  flex-direction: column-reverse;
+    .container {
+      max-width: unset !important;
+    }
+  }
 
   .register-form,
   .instance-information {
     width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 450px;
-    min-width: unset;
-    align-self: center;
   }
 
-}
-
-@media screen and (max-width: breakpoint(lg)) {
-  .wrapper {
-    @include columnReverseDisplay();
-  }
-}
-
-@media screen and (max-width: breakpoint(lg) + $menu-width) {
-  :host-context(.main-col:not(.expanded)) {
-    .wrapper {
-      @include columnReverseDisplay();
-    }
+  .instance-information {
+    min-width: 350px;
+    margin-bottom: 15px;
   }
 }
 

@@ -5,6 +5,7 @@ import { SharedInstanceModule } from '@app/shared/shared-instance'
 import { CustomStepperComponent } from './custom-stepper.component'
 import { RegisterRoutingModule } from './register-routing.module'
 import { RegisterStepChannelComponent } from './register-step-channel.component'
+import { RegisterStepTermsComponent } from './register-step-terms.component'
 import { RegisterStepUserComponent } from './register-step-user.component'
 import { RegisterComponent } from './register.component'
 
@@ -23,6 +24,7 @@ import { RegisterComponent } from './register.component'
     RegisterComponent,
     CustomStepperComponent,
     RegisterStepChannelComponent,
+    RegisterStepTermsComponent,
     RegisterStepUserComponent
   ],
 
