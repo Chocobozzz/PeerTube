@@ -1,5 +1,9 @@
 FROM gitpod/workspace-postgres
 
+# Gitpod does not rebuild dev images unless *some* change is made to the Dockerfile.
+# To trigger a rebuild, simply increase this counter:
+ENV TRIGGER_REBUILD 1
+
 # Install PeerTube's dependencies.
 RUN sudo apt-get update -q && sudo apt-get install -qy \
  ffmpeg \
