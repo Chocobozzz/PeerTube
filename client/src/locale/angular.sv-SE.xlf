@@ -349,7 +349,7 @@
       </trans-unit>
       <trans-unit id="966a63453b7b12a8e6a275f21266c23bfe7dfe9b" datatype="html">
         <source><x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}               "/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}               "/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {1 visning} other {{{ video.views | myNumberFormatter }} visningar}}               "/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -842,7 +842,7 @@
       </trans-unit>
       <trans-unit id="fd184f028267a379c6af2d6e6cce86fda172f827" datatype="html">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="translated">Ange din e-postadress så skickar vi dig en länk för att återskapa till lösenord.</target>
+        <target state="translated">Ange din e-postadress så skickar vi dig en länk för att återställa till lösenord.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">95,96</context>
@@ -872,7 +872,7 @@
       </trans-unit>
       <trans-unit id="06c663bf1474713f57551123a46b34318543b67d" datatype="html">
         <source>Reset</source>
-        <target state="new">Reset</target>
+        <target state="translated">Återställ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">114</context>
@@ -1151,7 +1151,7 @@
       </trans-unit>
       <trans-unit id="0e2434e7d84145c4e8a930ccc4c26c3cb2887e0d" datatype="html">
         <source>My notifications</source>
-        <target state="new">My notifications</target>
+        <target state="translated">Mina notifikationer</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
@@ -1166,12 +1166,12 @@
       </trans-unit>
       <trans-unit id="e4825b5d86d89ae0f4c797ba256f66fd8abd4ee6" datatype="html">
         <source>My account</source>
-        <target state="new">My account</target>
+        <target state="translated">Mitt konto</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="4ef4f031c147fb9ee0168bc6eacb78de180d7432" datatype="html">
         <source>My library</source>
-        <target state="new">My library</target>
+        <target state="translated">Mitt bibliotek</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
@@ -1181,7 +1181,7 @@
       </trans-unit>
       <trans-unit id="618ca563e3091faf22978665282787c282a867b8" datatype="html">
         <source>IN MY LIBRARY</source>
-        <target state="new">IN MY LIBRARY</target>
+        <target state="translated">I MITT BIBLIOTEK</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
@@ -1192,7 +1192,7 @@
       </trans-unit>
       <trans-unit id="3108704604266608109" datatype="html">
         <source>My video imports</source>
-        <target state="new">My video imports</target>
+        <target state="translated">Mina video-importer</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
@@ -1202,7 +1202,7 @@
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
         <source>Create a new playlist</source>
-        <target state="new">Create a new playlist</target>
+        <target state="translated">Skapa en ny spellista</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
@@ -1217,7 +1217,7 @@
       </trans-unit>
       <trans-unit id="2a95ee9e381f834e55527edcbb3cb882ff0aef79" datatype="html">
         <source>Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></source>
-        <target state="new">Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
+        <target state="translated">Gränssnitt: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">171</context>
@@ -1555,12 +1555,12 @@
       </trans-unit>
       <trans-unit id="a88fe23bc2b322c909b3e1374d351bc775569357" datatype="html">
         <source>• <x id="INTERPOLATION"/> <x id="START_TAG_NG_CONTAINER"/>views<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>viewers<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="new"> • <x id="INTERPOLATION"/> <x id="START_TAG_NG_CONTAINER"/>views<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>viewers<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">• <x id="INTERPOLATION"/> <x id="START_TAG_NG_CONTAINER"/>visningar<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>tittare<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="e32cbd4a8eba138fd51142b3eedf245b8a07f52d" datatype="html">
         <source>• <x id="INTERPOLATION"/> <x id="START_TAG_NG_CONTAINER"/>views<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>viewers<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="new"> • <x id="INTERPOLATION"/> <x id="START_TAG_NG_CONTAINER"/>views<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>viewers<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">• <x id="INTERPOLATION"/> <x id="START_TAG_NG_CONTAINER"/>visningar<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>tittare<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="554a78c6ac043b4a9058c39d63e4475a454e4dc2" datatype="html">
@@ -1575,7 +1575,7 @@
       </trans-unit>
       <trans-unit id="6179532215548637839" datatype="html">
         <source>extensions</source>
-        <target state="new">extensions</target>
+        <target state="translated">tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -1607,7 +1607,7 @@
       </trans-unit>
       <trans-unit id="ef0f544578470cd6dd75432d0f1ba0e27914d2cc" datatype="html">
         <source><x id="START_LINK"/>Choose<x id="CLOSE_LINK"/> the appropriate license for your work. </source>
-        <target state="new"><x id="START_LINK"/>Choose<x id="CLOSE_LINK"/> the appropriate license for your work. </target>
+        <target state="translated"><x id="START_LINK"/>Välj<x id="CLOSE_LINK"/> en lämplig licens för ditt arbete.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
