@@ -403,7 +403,7 @@ function saveActorAndServerAndModelIfNotExist (
     // Try to fix non HTTPS accounts of remote instances that fixed their URL afterwards
     if (created !== true && actorCreated.url !== actor.url) {
       // Only fix http://example.com/account/djidane to https://example.com/account/djidane
-      if (actorCreated.url.replace('http://', '') !== actor.url.replace('https://', '')) {
+      if (actorCreated.url.replace(/^http:\/\//, '') !== actor.url.replace(/^https:\/\//, '')) {
         throw new Error(`Actor from DB with URL ${actorCreated.url} does not correspond to actor ${actor.url}`)
       }
 

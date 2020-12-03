@@ -4,7 +4,6 @@ import 'mocha'
 import * as chai from 'chai'
 import { LiveVideoCreate, VideoDetails, VideoPrivacy, VideoState } from '@shared/models'
 import {
-  checkLiveCleanup,
   cleanupTests,
   createLive,
   doubleFollow,
