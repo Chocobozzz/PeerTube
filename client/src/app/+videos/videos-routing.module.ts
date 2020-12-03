@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+import { LoginGuard } from '@app/core'
 import { MetaGuard } from '@ngx-meta/core'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 import { VideoLocalComponent } from './video-list/video-local.component'
@@ -65,6 +66,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'subscriptions',
+        canActivate: [ LoginGuard ],
         component: VideoUserSubscriptionsComponent,
         data: {
           meta: {
