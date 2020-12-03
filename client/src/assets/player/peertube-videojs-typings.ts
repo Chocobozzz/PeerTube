@@ -175,6 +175,8 @@ type AutoResolutionUpdateData = {
 }
 
 type PlayerNetworkInfo = {
+  source: 'webtorrent' | 'p2p-media-loader'
+
   http: {
     downloadSpeed: number
     uploadSpeed: number
