@@ -1,17 +1,48 @@
+@import '_variables';
+@import '_mixins';
+
 .root {
   height: 100%;
-  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
   padding-top: 150px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column-reverse;
+
+  .box {
+    text-align: left;
+    font-size: 120%;
+    padding: 0 15px;
+  }
 
   img {
-    margin-bottom: 75px;
+    margin-left: auto;
     width: 220px;
     height: auto;
   }
 
-  .text {
-    font-size: 30px;
+  @media screen and (max-width: $mobile-view) {
+    img {
+      margin-right: auto;
+    }
+  }
+
+  @media screen and (min-width: $mobile-view) {
+    width: 400px;
+  }
+
+  @media screen and (min-width: #{breakpoint(lg)}) {
+    width: 600px;
+  }
+
+  @media screen and (min-width: #{breakpoint(xl)}) {
+    width: 700px;
+  }
+
+  @media screen and (min-width: #{breakpoint(xxl)}) {
+    width: 800px;
   }
 
   @media screen and (max-height: 600px) {

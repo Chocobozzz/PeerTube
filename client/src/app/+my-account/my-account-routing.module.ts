@@ -124,7 +124,7 @@ const myAccountRoutes: Routes = [
         component: MyAccountApplicationsComponent,
         data: {
           meta: {
-            title: 'Applications'
+            title: $localize`Applications`
           }
         }
       }
