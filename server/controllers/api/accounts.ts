@@ -2,6 +2,7 @@ import * as express from 'express'
 import { getServerActor } from '@server/models/application/application'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
+import { Hooks } from '../../lib/plugins/hooks'
 import { JobQueue } from '../../lib/job-queue'
 import {
   asyncMiddleware,
@@ -158,7 +159,7 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
   const countVideos = getCountVideos(req)
 
-  const resultList = await VideoModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     followerActorId,
     start: req.query.start,
     count: req.query.count,
@@ -175,7 +176,13 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
-  })
+  }, 'filter:api.videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi,
+    apiOptions,
+    'filter:api.videos.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
