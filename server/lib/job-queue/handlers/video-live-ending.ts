@@ -1,5 +1,5 @@
 import * as Bull from 'bull'
-import { copy, readdir, remove } from 'fs-extra'
+import { copy, pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { VIDEO_LIVE } from '@server/initializers/constants'
@@ -14,6 +14,7 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
+import { LiveManager } from '@server/lib/live-manager'
 
 async function processVideoLiveEnding (job: Bull.Job) {
   const payload = job.data as VideoLiveEndingPayload
@@ -36,6 +37,8 @@ async function processVideoLiveEnding (job: Bull.Job) {
     return
   }
 
+  LiveManager.Instance.cleanupShaSegments(video.uuid)
+
   if (live.saveReplay !== true) {
     return cleanupLive(video, streamingPlaylist)
   }
@@ -43,10 +46,19 @@ async function processVideoLiveEnding (job: Bull.Job) {
   return saveLive(video, live)
 }
 
+async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
+  const hlsDirectory = getHLSDirectory(video)
+
+  await remove(hlsDirectory)
+
+  await streamingPlaylist.destroy()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  processVideoLiveEnding
+  processVideoLiveEnding,
+  cleanupLive
 }
 
 // ---------------------------------------------------------------------------
@@ -131,16 +143,9 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   await publishAndFederateIfNeeded(videoWithFiles, true)
 }
 
-async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
-  const hlsDirectory = getHLSDirectory(video)
-
-  await remove(hlsDirectory)
-
-  streamingPlaylist.destroy()
-    .catch(err => logger.error('Cannot remove live streaming playlist.', { err }))
-}
-
 async function cleanupLiveFiles (hlsDirectory: string) {
+  if (!await pathExists(hlsDirectory)) return
+
   const files = await readdir(hlsDirectory)
 
   for (const filename of files) {

@@ -19,6 +19,7 @@ import { VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { buildSha256Segment } from './hls'
 import { JobQueue } from './job-queue'
+import { cleanupLive } from './job-queue/handlers/video-live-ending'
 import { PeerTubeSocket } from './peertube-socket'
 import { isAbleToUploadVideo } from './user'
 import { getHLSDirectory } from './video-paths'
@@ -153,6 +154,10 @@ class LiveManager {
     watchers.push(new Date().getTime())
   }
 
+  cleanupShaSegments (videoUUID: string) {
+    this.segmentsSha256.delete(videoUUID)
+  }
+
   private getContext () {
     return context
   }
@@ -182,6 +187,14 @@ class LiveManager {
     if (video.isBlacklisted()) {
       logger.warn('Video is blacklisted. Refusing stream %s.', streamKey)
       return this.abortSession(sessionId)
+    }
+
+    // Cleanup old potential live files (could happen with a permanent live)
+    this.cleanupShaSegments(video.uuid)
+
+    const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id)
+    if (oldStreamingPlaylist) {
+      await cleanupLive(video, oldStreamingPlaylist)
     }
 
     this.videoSessions.set(video.id, sessionId)
@@ -372,7 +385,13 @@ class LiveManager {
       logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', rtmpUrl)
 
       this.transSessions.delete(sessionId)
+
       this.watchersPerVideo.delete(videoLive.videoId)
+      this.videoSessions.delete(videoLive.videoId)
+
+      const newLivesPerUser = this.livesPerUser.get(user.id)
+                                               .filter(o => o.liveId !== videoLive.id)
+      this.livesPerUser.set(user.id, newLivesPerUser)
 
       setTimeout(() => {
         // Wait latest segments generation, and close watchers
@@ -412,14 +431,21 @@ class LiveManager {
       const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
       if (!fullVideo) return
 
-      JobQueue.Instance.createJob({
-        type: 'video-live-ending',
-        payload: {
-          videoId: fullVideo.id
-        }
-      }, { delay: cleanupNow ? 0 : VIDEO_LIVE.CLEANUP_DELAY })
+      const live = await VideoLiveModel.loadByVideoId(videoId)
 
-      fullVideo.state = VideoState.LIVE_ENDED
+      if (!live.permanentLive) {
+        JobQueue.Instance.createJob({
+          type: 'video-live-ending',
+          payload: {
+            videoId: fullVideo.id
+          }
+        }, { delay: cleanupNow ? 0 : VIDEO_LIVE.CLEANUP_DELAY })
+
+        fullVideo.state = VideoState.LIVE_ENDED
+      } else {
+        fullVideo.state = VideoState.WAITING_FOR_LIVE
+      }
+
       await fullVideo.save()
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)

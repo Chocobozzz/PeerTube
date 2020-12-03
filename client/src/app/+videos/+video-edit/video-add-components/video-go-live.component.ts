@@ -107,7 +107,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
     video.uuid = this.videoUUID
 
     const liveVideoUpdate: LiveVideoUpdate = {
-      saveReplay: this.form.value.saveReplay
+      saveReplay: this.form.value.saveReplay,
+      permanentLive: this.form.value.permanentLive
     }
 
     // Update the video

@@ -84,7 +84,8 @@ describe('Test video lives API validator', function () {
         tags: [ 'tag1', 'tag2' ],
         privacy: VideoPrivacy.PUBLIC,
         channelId,
-        saveReplay: false
+        saveReplay: false,
+        permanentLive: false
       }
     })
 
@@ -209,6 +210,12 @@ describe('Test video lives API validator', function () {
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with save replay and permanent live set to true', async function () {
+      const fields = immutableAssign(baseCorrectParams, { saveReplay: true, permanentLive: true })
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -370,6 +377,12 @@ describe('Test video lives API validator', function () {
 
     it('Should fail with a non live video', async function () {
       await updateLive(server.url, server.accessToken, videoIdNotLive, {}, 404)
+    })
+
+    it('Should fail with save replay and permanent live set to true', async function () {
+      const fields = { saveReplay: true, permanentLive: true }
+
+      await updateLive(server.url, server.accessToken, videoId, fields, 400)
     })
 
     it('Should succeed with the correct params', async function () {

@@ -72,7 +72,7 @@ tags:
       new videos, and how to keep up to date with their latest publications!
   - name: My History
     description: >
-      Operations related to your watch history. 
+      Operations related to your watch history.
   - name: My Notifications
     description: >
       Notifications following new videos, follows or reports. They allow you
@@ -1566,6 +1566,9 @@ paths:
                   description: Channel id that will contain this live video
                   type: integer
                 saveReplay:
+                  type: boolean
+                permanentLive:
+                  description: User can stream multiple times in a permanent live
                   type: boolean
                 thumbnailfile:
                   description: Live video/replay thumbnail file
@@ -5614,6 +5617,9 @@ components:
       properties:
         saveReplay:
           type: boolean
+        permanentLive:
+          description: User can stream multiple times in a permanent live
+          type: boolean
 
     LiveVideoResponse:
       properties:
@@ -5623,6 +5629,9 @@ components:
           type: string
           description: RTMP stream key to use to stream into this live video
         saveReplay:
+          type: boolean
+        permanentLive:
+          description: User can stream multiple times in a permanent live
           type: boolean
 
   callbacks:

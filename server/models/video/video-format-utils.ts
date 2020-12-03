@@ -360,6 +360,10 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       ? video.VideoLive.saveReplay
       : null,
 
+    permanentLive: video.isLive
+      ? video.VideoLive.permanentLive
+      : null,
+
     state: video.state,
     commentsEnabled: video.commentsEnabled,
     downloadEnabled: video.downloadEnabled,

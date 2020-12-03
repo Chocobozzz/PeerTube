@@ -177,10 +177,20 @@ async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resoluti
   expect(files).to.contain('segments-sha256.json')
 }
 
+async function getPlaylistsCount (server: ServerInfo, videoUUID: string) {
+  const basePath = buildServerDirectory(server, 'streaming-playlists')
+  const hlsPath = join(basePath, 'hls', videoUUID)
+
+  const files = await readdir(hlsPath)
+
+  return files.filter(f => f.endsWith('.m3u8')).length
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getLive,
+  getPlaylistsCount,
   waitUntilLivePublished,
   updateLive,
   waitUntilLiveStarts,

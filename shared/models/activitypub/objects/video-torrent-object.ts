@@ -24,6 +24,7 @@ export interface VideoObject {
 
   isLiveBroadcast: boolean
   liveSaveReplay: boolean
+  permanentLive: boolean
 
   commentsEnabled: boolean
   downloadEnabled: boolean

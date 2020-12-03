@@ -64,7 +64,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
             if (this.liveVideo) {
               this.form.patchValue({
-                saveReplay: this.liveVideo.saveReplay
+                saveReplay: this.liveVideo.saveReplay,
+                permanentLive: this.liveVideo.permanentLive
               })
             }
           })
@@ -114,7 +115,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.video.patch(this.form.value)
 
     const liveVideoUpdate: LiveVideoUpdate = {
-      saveReplay: this.form.value.saveReplay
+      saveReplay: this.form.value.saveReplay,
+      permanentLive: this.form.value.permanentLive
     }
 
     this.loadingBar.useRef().start()
