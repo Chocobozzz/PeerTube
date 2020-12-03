@@ -132,7 +132,7 @@ export enum HttpStatusCode {
    * @deprecated
    * SINCE HTTP/1.1
    * The requested resource is available only through a proxy, the address for which is provided in the response.
-   * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status 
+   * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status
    * code, primarily for security reasons.
    */
   USE_PROXY_305 = 305,
