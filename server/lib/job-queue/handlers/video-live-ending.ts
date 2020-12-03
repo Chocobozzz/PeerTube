@@ -89,7 +89,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   hlsPlaylist.VideoFiles = []
 
   const replayFiles = await readdir(replayDirectory)
-  let duration: number
+  let durationDone: boolean
 
   for (const playlistFile of playlistFiles) {
     const playlistPath = join(replayDirectory, playlistFile)
@@ -109,9 +109,11 @@ async function saveLive (video: MVideo, live: MVideoLive) {
       isPortraitMode
     })
 
-    if (!duration) {
+    if (!durationDone) {
       videoWithFiles.duration = await getDurationFromVideoFile(outputPath)
       await videoWithFiles.save()
+
+      durationDone = true
     }
   }
 
@@ -126,7 +128,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     await generateVideoMiniature(videoWithFiles, videoWithFiles.getMaxQualityFile(), ThumbnailType.PREVIEW)
   }
 
-  await publishAndFederateIfNeeded(video, true)
+  await publishAndFederateIfNeeded(videoWithFiles, true)
 }
 
 async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
