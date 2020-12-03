@@ -1,5 +1,9 @@
 <form role="form" [formGroup]="form">
 
+  <div class="capability-information alert alert-info" i18n *ngIf="videoUploadDisabled">
+    Video uploads are disabled on this instance, hence your account won't be able to upload videos.
+  </div>
+
   <div class="form-group">
     <label for="displayName" i18n>Display name</label>
 

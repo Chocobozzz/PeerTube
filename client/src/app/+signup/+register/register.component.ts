@@ -30,6 +30,8 @@ export class RegisterComponent implements OnInit {
     administrator: ''
   }
 
+  videoUploadDisabled: boolean
+
   formStepUser: FormGroup
   formStepChannel: FormGroup
 
@@ -51,6 +53,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit (): void {
     this.serverConfig = this.route.snapshot.data.serverConfig
+
+    this.videoUploadDisabled = this.serverConfig.user.videoQuota === 0
 
     this.instanceService.getAbout()
       .subscribe(
@@ -102,7 +106,7 @@ export class RegisterComponent implements OnInit {
     this.error = null
 
     const body: UserRegister = await this.hooks.wrapObject(
-      Object.assign(this.formStepUser.value, { channel: this.formStepChannel.value }),
+      Object.assign(this.formStepUser.value, { channel: this.videoUploadDisabled ? undefined : this.formStepChannel.value }),
       'signup',
       'filter:api.signup.registration.create.params'
     )

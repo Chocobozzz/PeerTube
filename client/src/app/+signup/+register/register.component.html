@@ -13,14 +13,16 @@
         <cdk-step [stepControl]="formStepUser" i18n-label label="User">
           <my-register-step-user
             [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
+            [videoUploadDisabled]="videoUploadDisabled"
             (formBuilt)="onUserFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
           >
           </my-register-step-user>
 
-          <button i18n cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid">Next</button>
+          <button i18n cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid"
+            (click)="signup()">{{ videoUploadDisabled ? 'Signup' : 'Next' }}</button>
         </cdk-step>
 
-        <cdk-step [stepControl]="formStepChannel" i18n-label label="Channel">
+        <cdk-step [stepControl]="formStepChannel" i18n-label label="Channel" *ngIf="!videoUploadDisabled">
           <my-register-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-register-step-channel>
 
           <button i18n cdkStepperNext (click)="signup()"
