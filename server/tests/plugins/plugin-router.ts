@@ -53,7 +53,7 @@ describe('Test plugin helpers', function () {
         statusCodeExpected: 200
       })
 
-      expect(res.body.isAuthenticated).to.equal(undefined)
+      expect(res.body.isAuthenticated).to.equal(true)
 
       const secRes = await makeGetRequest({
         url: server.url,

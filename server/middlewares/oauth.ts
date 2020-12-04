@@ -20,6 +20,8 @@ function authenticate (req: express.Request, res: express.Response, next: expres
         .end()
     }
 
+    res.locals.authenticated = true
+
     return next()
   })
 }
