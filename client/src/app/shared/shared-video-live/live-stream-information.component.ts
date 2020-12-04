@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { LiveVideo } from '@shared/models'
 import { LiveVideoService } from './live-video.service'
 
 @Component({
@@ -12,8 +13,7 @@ export class LiveStreamInformationComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
   video: Video
-  rtmpUrl = ''
-  streamKey = ''
+  live: LiveVideo
 
   constructor (
     private modalService: NgbModal,
@@ -22,8 +22,7 @@ export class LiveStreamInformationComponent {
 
   show (video: Video) {
     this.video = video
-    this.rtmpUrl = ''
-    this.streamKey = ''
+    this.live = undefined
 
     this.loadLiveInfo(video)
 
@@ -33,9 +32,6 @@ export class LiveStreamInformationComponent {
 
   private loadLiveInfo (video: Video) {
     this.liveVideoService.getVideoLive(video.id)
-      .subscribe(live => {
-        this.rtmpUrl = live.rtmpUrl
-        this.streamKey = live.streamKey
-      })
+      .subscribe(live => this.live = live)
   }
 }
