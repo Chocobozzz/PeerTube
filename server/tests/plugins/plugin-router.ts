@@ -43,6 +43,27 @@ describe('Test plugin helpers', function () {
     }
   })
 
+  it('Should check if authenticated', async function () {
+    for (const path of basePaths) {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: path + 'is-authenticated',
+        token: server.accessToken,
+        statusCodeExpected: 200
+      })
+
+      expect(res.body.isAuthenticated).to.equal(undefined)
+
+      const secRes = await makeGetRequest({
+        url: server.url,
+        path: path + 'is-authenticated',
+        statusCodeExpected: 200
+      })
+
+      expect(secRes.body.isAuthenticated).to.equal(false)
+    }
+  })
+
   it('Should mirror post body', async function () {
     const body = {
       hello: 'world',

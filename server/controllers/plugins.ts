@@ -8,6 +8,7 @@ import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { isTestInstance } from '../helpers/core-utils'
 import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
 import { logger } from '@server/helpers/logger'
+import { optionalAuthenticate } from '@server/middlewares/oauth'
 
 const sendFileOptions = {
   maxAge: '30 days',
@@ -44,11 +45,13 @@ pluginsRouter.get('/plugins/:pluginName/:pluginVersion/client-scripts/:staticEnd
 
 pluginsRouter.use('/plugins/:pluginName/router',
   getPluginValidator(PluginType.PLUGIN, false),
+  optionalAuthenticate,
   servePluginCustomRoutes
 )
 
 pluginsRouter.use('/plugins/:pluginName/:pluginVersion/router',
   getPluginValidator(PluginType.PLUGIN),
+  optionalAuthenticate,
   servePluginCustomRoutes
 )
 
