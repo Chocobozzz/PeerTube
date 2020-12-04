@@ -91,8 +91,8 @@ class P2pInfoButton extends Button {
         const downloadedFromPeers = bytes(p2pStats.downloaded).join(' ')
 
         subDivWebtorrent.title +=
-          '* ' + this.player().localize('From the server: ') + downloadedFromServer + '\n' +
-          '* ' + this.player().localize('From peers: ') + downloadedFromPeers + '\n'
+          ' * ' + this.player().localize('From servers: ') + downloadedFromServer + '\n' +
+          ' * ' + this.player().localize('From peers: ') + downloadedFromPeers + '\n'
       }
       subDivWebtorrent.title += this.player().localize('Total uploaded: ') + totalUploaded.join(' ')
 
