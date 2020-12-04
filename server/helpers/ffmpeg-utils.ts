@@ -181,7 +181,7 @@ const builders: {
 async function transcode (options: TranscodeOptions) {
   logger.debug('Will run transcode.', { options })
 
-  let command = getFFmpeg(options.inputPath)
+  let command = getFFmpeg(options.inputPath, 'vod')
     .output(options.outputPath)
 
   command = await builders[options.type](command, options)
@@ -207,7 +207,7 @@ async function getLiveTranscodingCommand (options: {
   const { rtmpUrl, outPath, resolutions, fps, availableEncoders, profile } = options
   const input = rtmpUrl
 
-  const command = getFFmpeg(input)
+  const command = getFFmpeg(input, 'live')
   command.inputOption('-fflags nobuffer')
 
   const varStreamMap: string[] = []
@@ -289,7 +289,7 @@ async function getLiveTranscodingCommand (options: {
 }
 
 function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
-  const command = getFFmpeg(rtmpUrl)
+  const command = getFFmpeg(rtmpUrl, 'live')
   command.inputOption('-fflags nobuffer')
 
   command.outputOption('-c:v copy')
@@ -605,13 +605,17 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
 // Utils
 // ---------------------------------------------------------------------------
 
-function getFFmpeg (input: string) {
+function getFFmpeg (input: string, type: 'live' | 'vod') {
   // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
   const command = ffmpeg(input, { niceness: FFMPEG_NICE.TRANSCODING, cwd: CONFIG.STORAGE.TMP_DIR })
 
-  if (CONFIG.TRANSCODING.THREADS > 0) {
+  const threads = type === 'live'
+    ? CONFIG.LIVE.TRANSCODING.THREADS
+    : CONFIG.TRANSCODING.THREADS
+
+  if (threads > 0) {
     // If we don't set any threads ffmpeg will chose automatically
-    command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
+    command.outputOption('-threads ' + threads)
   }
 
   return command
