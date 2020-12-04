@@ -137,6 +137,8 @@ interface HLSTranscodeOptions extends BaseTranscodeOptions {
 interface HLSFromTSTranscodeOptions extends BaseTranscodeOptions {
   type: 'hls-from-ts'
 
+  isAAC: boolean
+
   hlsPlaylist: {
     videoFilename: string
   }
@@ -456,9 +458,12 @@ async function buildHLSVODFromTSCommand (command: ffmpeg.FfmpegCommand, options:
   const videoPath = getHLSVideoPath(options)
 
   command.outputOption('-c copy')
-  // Required for example when copying an AAC stream from an MPEG-TS
-  // Since it's a bitstream filter, we don't need to reencode the audio
-  command.outputOption('-bsf:a aac_adtstoasc')
+
+  if (options.isAAC) {
+    // Required for example when copying an AAC stream from an MPEG-TS
+    // Since it's a bitstream filter, we don't need to reencode the audio
+    command.outputOption('-bsf:a aac_adtstoasc')
+  }
 
   addCommonHLSVODCommandOptions(command, videoPath)
 

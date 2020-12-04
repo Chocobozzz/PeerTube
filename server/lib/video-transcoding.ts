@@ -169,13 +169,15 @@ async function generateHlsPlaylistFromTS (options: {
   concatenatedTsFilePath: string
   resolution: VideoResolution
   isPortraitMode: boolean
+  isAAC: boolean
 }) {
   return generateHlsPlaylistCommon({
     video: options.video,
     resolution: options.resolution,
     isPortraitMode: options.isPortraitMode,
     inputPath: options.concatenatedTsFilePath,
-    type: 'hls-from-ts' as 'hls-from-ts'
+    type: 'hls-from-ts' as 'hls-from-ts',
+    isAAC: options.isAAC
   })
 }
 
@@ -234,9 +236,10 @@ async function generateHlsPlaylistCommon (options: {
   inputPath: string
   resolution: VideoResolution
   copyCodecs?: boolean
+  isAAC?: boolean
   isPortraitMode: boolean
 }) {
-  const { type, video, inputPath, resolution, copyCodecs, isPortraitMode } = options
+  const { type, video, inputPath, resolution, copyCodecs, isPortraitMode, isAAC } = options
 
   const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
   await ensureDir(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
@@ -256,6 +259,8 @@ async function generateHlsPlaylistCommon (options: {
     resolution,
     copyCodecs,
     isPortraitMode,
+
+    isAAC,
 
     hlsPlaylist: {
       videoFilename

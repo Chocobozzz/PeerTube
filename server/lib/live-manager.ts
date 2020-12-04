@@ -1,7 +1,8 @@
 
+import * as Bluebird from 'bluebird'
 import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { appendFile, copy, ensureDir, readFile, stat } from 'fs-extra'
+import { appendFile, ensureDir, readFile, stat } from 'fs-extra'
 import { basename, join } from 'path'
 import { isTestInstance } from '@server/helpers/core-utils'
 import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers/ffmpeg-utils'
@@ -24,7 +25,6 @@ import { PeerTubeSocket } from './peertube-socket'
 import { isAbleToUploadVideo } from './user'
 import { getHLSDirectory } from './video-paths'
 import { availableEncoders } from './video-transcoding-profiles'
-import * as Bluebird from 'bluebird'
 
 import memoizee = require('memoizee')
 

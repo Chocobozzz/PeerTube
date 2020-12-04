@@ -1,8 +1,9 @@
 import * as Bull from 'bull'
-import { copy, pathExists, readdir, remove } from 'fs-extra'
+import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import { ffprobePromise, getAudioStream, getAudioStreamCodec, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { VIDEO_LIVE } from '@server/initializers/constants'
+import { LiveManager } from '@server/lib/live-manager'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
@@ -14,7 +15,6 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
-import { LiveManager } from '@server/lib/live-manager'
 
 async function processVideoLiveEnding (job: Bull.Job) {
   const payload = job.data as VideoLiveEndingPayload
@@ -106,13 +106,17 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     const concatenatedTsFile = LiveManager.Instance.buildConcatenatedName(playlistFile)
     const concatenatedTsFilePath = join(replayDirectory, concatenatedTsFile)
 
-    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath)
+    const probe = await ffprobePromise(concatenatedTsFilePath)
+    const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
+
+    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
 
     const outputPath = await generateHlsPlaylistFromTS({
       video: videoWithFiles,
       concatenatedTsFilePath,
       resolution: videoFileResolution,
-      isPortraitMode
+      isPortraitMode,
+      isAAC: audioStream?.codec_name === 'aac'
     })
 
     if (!durationDone) {

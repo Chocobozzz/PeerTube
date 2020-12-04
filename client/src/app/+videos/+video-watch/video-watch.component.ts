@@ -607,6 +607,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         }
       })
 
+      this.player.one('ended', () => {
+        if (this.video.isLive) {
+          this.video.state.id = VideoState.LIVE_ENDED
+        }
+      })
+
       this.player.on('theaterChange', (_: any, enabled: boolean) => {
         this.zone.run(() => this.theaterEnabled = enabled)
       })
@@ -844,7 +850,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!this.liveVideosSub) {
       this.liveVideosSub = this.peertubeSocket.getLiveVideosObservable()
         .subscribe(({ payload }) => {
-          if (payload.state !== VideoState.PUBLISHED || this.video.state.id !== VideoState.WAITING_FOR_LIVE) return
+          if (payload.state !== VideoState.PUBLISHED) return
+
+          const videoState = this.video.state.id
+          if (videoState !== VideoState.WAITING_FOR_LIVE && videoState !== VideoState.LIVE_ENDED) return
+
+          console.log('Loading video after live update.')
 
           const videoUUID = this.video.uuid
 
