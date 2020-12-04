@@ -487,6 +487,7 @@ class WebTorrentPlugin extends Plugin {
       if (this.webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(this.webtorrent.downloadSpeed)
 
       return this.player.trigger('p2pInfo', {
+        source: 'webtorrent',
         http: {
           downloadSpeed: 0,
           uploadSpeed: 0,
