@@ -208,7 +208,6 @@ async function getLiveTranscodingCommand (options: {
   const input = rtmpUrl
 
   const command = getFFmpeg(input, 'live')
-  command.inputOption('-fflags nobuffer')
 
   const varStreamMap: string[] = []
 
@@ -229,6 +228,7 @@ async function getLiveTranscodingCommand (options: {
   ])
 
   command.outputOption('-preset superfast')
+  command.outputOption('-sc_threshold 0')
 
   addDefaultEncoderGlobalParams({ command })
 
@@ -290,7 +290,6 @@ async function getLiveTranscodingCommand (options: {
 
 function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
   const command = getFFmpeg(rtmpUrl, 'live')
-  command.inputOption('-fflags nobuffer')
 
   command.outputOption('-c:v copy')
   command.outputOption('-c:a copy')
@@ -371,7 +370,7 @@ function addDefaultEncoderParams (options: {
 function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string) {
   command.outputOption('-hls_time ' + VIDEO_LIVE.SEGMENT_TIME_SECONDS)
   command.outputOption('-hls_list_size ' + VIDEO_LIVE.SEGMENTS_LIST_SIZE)
-  command.outputOption('-hls_flags delete_segments')
+  command.outputOption('-hls_flags delete_segments+independent_segments')
   command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%06d.ts')}`)
   command.outputOption('-master_pl_name master.m3u8')
   command.outputOption(`-f hls`)
