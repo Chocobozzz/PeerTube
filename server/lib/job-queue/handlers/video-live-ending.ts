@@ -1,7 +1,7 @@
 import * as Bull from 'bull'
 import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { ffprobePromise, getAudioStream, getAudioStreamCodec, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import { ffprobePromise, getAudioStream, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { VIDEO_LIVE } from '@server/initializers/constants'
 import { LiveManager } from '@server/lib/live-manager'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
