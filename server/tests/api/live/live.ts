@@ -417,7 +417,7 @@ describe('Test live', function () {
       await waitJobs(servers)
 
       const bitrateLimits = {
-        720: 4000 * 1000, // 60FPS
+        720: 5000 * 1000, // 60FPS
         360: 1100 * 1000,
         240: 600 * 1000
       }
