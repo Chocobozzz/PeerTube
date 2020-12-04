@@ -73,8 +73,8 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   for (const file of rootFiles) {
     // Move remaining files in the replay directory
-    if (file.endsWith('.ts') || file.endsWith('.m3u8')) {
-      await copy(join(hlsDirectory, file), join(replayDirectory, file))
+    if (file.endsWith('.ts')) {
+      await LiveManager.Instance.addSegmentToReplay(hlsDirectory, join(hlsDirectory, file))
     }
 
     if (file.endsWith('.m3u8') && file !== 'master.m3u8') {
@@ -100,23 +100,17 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
   hlsPlaylist.VideoFiles = []
 
-  const replayFiles = await readdir(replayDirectory)
   let durationDone: boolean
 
   for (const playlistFile of playlistFiles) {
-    const playlistPath = join(replayDirectory, playlistFile)
-    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(playlistPath)
+    const concatenatedTsFile = LiveManager.Instance.buildConcatenatedName(playlistFile)
+    const concatenatedTsFilePath = join(replayDirectory, concatenatedTsFile)
 
-    // Playlist name is for example 3.m3u8
-    // Segments names are 3-0.ts 3-1.ts etc
-    const shouldStartWith = playlistFile.replace(/\.m3u8$/, '') + '-'
-
-    const segmentFiles = replayFiles.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
+    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath)
 
     const outputPath = await generateHlsPlaylistFromTS({
       video: videoWithFiles,
-      replayDirectory,
-      segmentFiles,
+      concatenatedTsFilePath,
       resolution: videoFileResolution,
       isPortraitMode
     })

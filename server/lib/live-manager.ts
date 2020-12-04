@@ -1,7 +1,7 @@
 
 import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { copy, ensureDir, stat } from 'fs-extra'
+import { appendFile, copy, ensureDir, readFile, stat } from 'fs-extra'
 import { basename, join } from 'path'
 import { isTestInstance } from '@server/helpers/core-utils'
 import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers/ffmpeg-utils'
@@ -24,6 +24,7 @@ import { PeerTubeSocket } from './peertube-socket'
 import { isAbleToUploadVideo } from './user'
 import { getHLSDirectory } from './video-paths'
 import { availableEncoders } from './video-transcoding-profiles'
+import * as Bluebird from 'bluebird'
 
 import memoizee = require('memoizee')
 
@@ -156,6 +157,32 @@ class LiveManager {
 
   cleanupShaSegments (videoUUID: string) {
     this.segmentsSha256.delete(videoUUID)
+  }
+
+  addSegmentToReplay (hlsVideoPath: string, segmentPath: string) {
+    const segmentName = basename(segmentPath)
+    const dest = join(hlsVideoPath, VIDEO_LIVE.REPLAY_DIRECTORY, this.buildConcatenatedName(segmentName))
+
+    return readFile(segmentPath)
+      .then(data => appendFile(dest, data))
+      .catch(err => logger.error('Cannot copy segment %s to repay directory.', segmentPath, { err }))
+  }
+
+  buildConcatenatedName (segmentOrPlaylistPath: string) {
+    const num = basename(segmentOrPlaylistPath).match(/^(\d+)(-|\.)/)
+
+    return 'concat-' + num[1] + '.ts'
+  }
+
+  private processSegments (hlsVideoPath: string, videoUUID: string, videoLive: MVideoLive, segmentPaths: string[]) {
+    Bluebird.mapSeries(segmentPaths, async previousSegment => {
+      // Add sha hash of previous segments, because ffmpeg should have finished generating them
+      await this.addSegmentSha(videoUUID, previousSegment)
+
+      if (videoLive.saveReplay) {
+        await this.addSegmentToReplay(hlsVideoPath, previousSegment)
+      }
+    }).catch(err => logger.error('Cannot process segments in %s', hlsVideoPath, { err }))
   }
 
   private getContext () {
@@ -302,28 +329,13 @@ class LiveManager {
     const segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
     const playlistIdMatcher = /^([\d+])-/
 
-    const processSegments = (segmentsToProcess: string[]) => {
-      // Add sha hash of previous segments, because ffmpeg should have finished generating them
-      for (const previousSegment of segmentsToProcess) {
-        this.addSegmentSha(videoUUID, previousSegment)
-          .catch(err => logger.error('Cannot add sha segment of video %s -> %s.', videoUUID, previousSegment, { err }))
-
-        if (videoLive.saveReplay) {
-          const segmentName = basename(previousSegment)
-
-          copy(previousSegment, join(outPath, VIDEO_LIVE.REPLAY_DIRECTORY, segmentName))
-            .catch(err => logger.error('Cannot copy segment %s to repay directory.', previousSegment, { err }))
-        }
-      }
-    }
-
     const addHandler = segmentPath => {
       logger.debug('Live add handler of %s.', segmentPath)
 
       const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
 
       const segmentsToProcess = segmentsToProcessPerPlaylist[playlistId] || []
-      processSegments(segmentsToProcess)
+      this.processSegments(outPath, videoUUID, videoLive, segmentsToProcess)
 
       segmentsToProcessPerPlaylist[playlistId] = [ segmentPath ]
 
@@ -400,7 +412,7 @@ class LiveManager {
           .then(() => {
             // Process remaining segments hash
             for (const key of Object.keys(segmentsToProcessPerPlaylist)) {
-              processSegments(segmentsToProcessPerPlaylist[key])
+              this.processSegments(outPath, videoUUID, videoLive, segmentsToProcessPerPlaylist[key])
             }
           })
           .catch(err => logger.error('Cannot close watchers of %s or process remaining hash segments.', outPath, { err }))

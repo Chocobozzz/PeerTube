@@ -455,11 +455,10 @@ async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTr
 async function buildHLSVODFromTSCommand (command: ffmpeg.FfmpegCommand, options: HLSFromTSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
-  command.inputOption('-safe 0')
-  command.inputOption('-f concat')
-
-  command.outputOption('-c:v copy')
-  command.audioFilter('aresample=async=1:first_pts=0')
+  command.outputOption('-c copy')
+  // Required for example when copying an AAC stream from an MPEG-TS
+  // Since it's a bitstream filter, we don't need to reencode the audio
+  command.outputOption('-bsf:a aac_adtstoasc')
 
   addCommonHLSVODCommandOptions(command, videoPath)
 

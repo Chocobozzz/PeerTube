@@ -1,4 +1,4 @@
-import { copyFile, ensureDir, move, remove, stat, writeFile } from 'fs-extra'
+import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models'
@@ -166,41 +166,17 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
 // Concat TS segments from a live video to a fragmented mp4 HLS playlist
 async function generateHlsPlaylistFromTS (options: {
   video: MVideoWithFile
-  replayDirectory: string
-  segmentFiles: string[]
+  concatenatedTsFilePath: string
   resolution: VideoResolution
   isPortraitMode: boolean
 }) {
-  const concatFilePath = join(options.replayDirectory, 'concat.txt')
-
-  function cleaner () {
-    remove(concatFilePath)
-      .catch(err => logger.error('Cannot remove concat file in %s.', options.replayDirectory, { err }))
-  }
-
-  // First concat the ts files to a mp4 file
-  const content = options.segmentFiles.map(f => 'file ' + f)
-                                      .join('\n')
-
-  await writeFile(concatFilePath, content + '\n')
-
-  try {
-    const outputPath = await generateHlsPlaylistCommon({
-      video: options.video,
-      resolution: options.resolution,
-      isPortraitMode: options.isPortraitMode,
-      inputPath: concatFilePath,
-      type: 'hls-from-ts' as 'hls-from-ts'
-    })
-
-    cleaner()
-
-    return outputPath
-  } catch (err) {
-    cleaner()
-
-    throw err
-  }
+  return generateHlsPlaylistCommon({
+    video: options.video,
+    resolution: options.resolution,
+    isPortraitMode: options.isPortraitMode,
+    inputPath: options.concatenatedTsFilePath,
+    type: 'hls-from-ts' as 'hls-from-ts'
+  })
 }
 
 // Generate an HLS playlist from an input file, and update the master playlist
