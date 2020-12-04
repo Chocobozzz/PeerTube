@@ -523,12 +523,12 @@
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="new">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</target>
+        <target state="translated">Compatible amb &lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt;, i amb:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
         <source>Recommended</source>
-        <target state="new">Recommended</target>
+        <target state="translated">Recomanat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/peertube-checkbox.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="9b3287f52c239cad05ec98391553e5052ba1aa66" datatype="html">
@@ -548,7 +548,7 @@
       </trans-unit>
       <trans-unit id="7639191791633609999" datatype="html">
         <source>The live stream will be automatically terminated.</source>
-        <target state="new">The live stream will be automatically terminated.</target>
+        <target state="translated">L'emissió en directe finalitzarà automàticament.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="5047522cc670b1f4a288bce07f9b1c5061e913ed" datatype="html">
@@ -568,7 +568,7 @@
       </trans-unit>
       <trans-unit id="3e486bad6576aa445ccb6051069e45a3658e4160" datatype="html">
         <source>PROFILE SETTINGS</source>
-        <target state="new">PROFILE SETTINGS</target>
+        <target state="translated">CONFIGURACIÓ DEL PERFIL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3" datatype="html">
@@ -614,7 +614,7 @@
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c" datatype="html">
         <source>User registration allowed</source>
-        <target state="new">User registration allowed</target>
+        <target state="translated">Inscripcions permeses</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2" datatype="html">
@@ -630,17 +630,17 @@
       </trans-unit>
       <trans-unit id="5e84ff80421724dc306284a6330c0910fb95c64d" datatype="html">
         <source>Live streaming enabled</source>
-        <target state="new">Live streaming enabled</target>
+        <target state="translated">Emissió en directe activada</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="855e1ff3acad516b927095d3990aeff917f75fa3" datatype="html">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="new">Transcode live video in multiple resolutions</target>
+        <target state="translated">Transcodificació de vídeo en directe en diverses resolucions</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="bc3387a5ccd470d163e6459ff017b9f2edca92f4" datatype="html">
         <source>Max parallel lives</source>
-        <target state="new">Max parallel lives</target>
+        <target state="translated">Màx. de directes paral·lels</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1be38e8cd37e921dd4af3b6f6251168cc5536f24" datatype="html">
