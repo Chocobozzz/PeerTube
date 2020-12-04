@@ -18,7 +18,7 @@
           <ng-template ngbNavContent>
             <div class="nav-content">
 
-              <my-input-readonly-copy [value]="getPlaylistUrl()"></my-input-readonly-copy>
+              <my-input-toggle-hidden [value]="getPlaylistUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
             </div>
           </ng-template>
         </ng-container>
@@ -38,7 +38,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-readonly-copy [value]="getPlaylistIframeCode()"></my-input-readonly-copy>
+              <my-input-toggle-hidden [value]="getPlaylistIframeCode()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
@@ -72,7 +72,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-readonly-copy [value]="getVideoUrl()"></my-input-readonly-copy>
+              <my-input-toggle-hidden [value]="getVideoUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
             </div>
           </ng-template>
         </ng-container>
@@ -92,7 +92,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-readonly-copy [value]="getVideoIframeCode()"></my-input-readonly-copy>
+              <my-input-toggle-hidden [value]="getVideoIframeCode()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).

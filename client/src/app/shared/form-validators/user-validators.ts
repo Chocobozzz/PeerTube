@@ -39,6 +39,15 @@ export const USER_EMAIL_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const USER_EXISTING_PASSWORD_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [
+    Validators.required
+  ],
+  MESSAGES: {
+    'required': $localize`Password is required.`
+  }
+}
+
 export const USER_PASSWORD_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
     Validators.required,

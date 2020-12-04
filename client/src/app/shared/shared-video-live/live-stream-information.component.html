@@ -13,12 +13,12 @@
 
     <div class="form-group">
       <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
-      <my-input-readonly-copy id="liveVideoRTMPUrl" [value]="live.rtmpUrl"></my-input-readonly-copy>
+      <my-input-toggle-hidden id="liveVideoRTMPUrl" [value]="live.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
     </div>
 
     <div class="form-group">
       <label for="liveVideoStreamKey" i18n>Live stream key</label>
-      <my-input-readonly-copy id="liveVideoStreamKey" [value]="live.streamKey"></my-input-readonly-copy>
+      <my-input-toggle-hidden id="liveVideoStreamKey" [value]="live.streamKey" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
 
       <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
     </div>

@@ -6,7 +6,11 @@ label {
   font-size: 100%;
 }
 
-input[type=password],
+my-input-toggle-hidden {
+  width: 340px;
+  display: block;
+}
+
 input[type=email] {
   @include peertube-input-text(340px);
 
@@ -20,10 +24,13 @@ input[type=submit] {
 
 .current-email,
 .pending-email {
-  font-size: 16px;
   margin-bottom: 15px;
 
   .email {
     font-weight: $font-semibold;
   }
+}
+
+.form-group {
+  width: max-content;
 }
