@@ -2074,7 +2074,7 @@
       </trans-unit>
       <trans-unit id="7860848084471862305" datatype="html">
         <source>Cannot create live because this instance have too many created lives</source>
-        <target state="translated">Kan inte skapa liveströmming för att denna instans har för måga skapade liveströmmingar</target>
+        <target state="translated">Kan inte skapa live-sändning på grund av att denna instans har för många skapade live-sändningar.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="1278564497286613571" datatype="html">
