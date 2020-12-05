@@ -10,7 +10,11 @@ ports:
 - port: 9000
   onOpen: ignore
 tasks:
-- command: redis-server
-- before: export NODE_CONFIG="{\"import\":{\"videos\":{\"torrent\":{\"enabled\":false}}},\"webserver\":{\"hostname\":\"$(gp url 3000 | cut -d/ -f3)\",\"port\":\"443\",\"https\":true}}"
-  init: yarn install --pure-lockfile
+- name: Redis
+  command: redis-server
+- name: PeerTube
+  before: export NODE_CONFIG="{\"import\":{\"videos\":{\"torrent\":{\"enabled\":false}}},\"webserver\":{\"hostname\":\"$(gp url 3000 | cut -d/ -f3)\",\"port\":\"443\",\"https\":true}}"
+  init: >
+    psql -h localhost -d postgres --file=support/docker/gitpod/setup_postgres.sql &&
+    yarn install --pure-lockfile
   command: npm run dev
