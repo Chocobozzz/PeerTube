@@ -1847,7 +1847,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="a3ecb8ed851e54c72dd44723d9fc3117e49ea498" datatype="html">
         <source>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</source>
-        <target state="translated">Puede transmitir varias veces en vivo de forma permanente. La URL de sus espectadores no cambiará, pero no puede guardar repeticiones de sus vidas.</target>
+        <target state="translated">Puede transmitir varias veces en vivo de forma permanente. La URL de sus espectadores no cambiará, pero no puede guardar repeticiones de sus vidas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">233</context>
