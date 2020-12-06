@@ -226,6 +226,7 @@ class Html5Hlsjs {
 
     if (this.errorCounts[ Hlsjs.ErrorTypes.MEDIA_ERROR ] > 2) {
       console.info('bubbling media error up to VIDEOJS')
+      this.hls.destroy()
       this.tech.error = () => error
       this.tech.trigger('error')
       return
