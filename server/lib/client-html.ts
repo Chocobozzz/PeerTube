@@ -35,6 +35,7 @@ type Tags = {
   siteName: string
   title: string
   url: string
+  originUrl: string
   description: string
 
   embed?: {
@@ -94,6 +95,7 @@ export class ClientHtml {
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(video.description))
 
     const url = WEBSERVER.URL + video.getWatchStaticPath()
+    const originUrl = video.url
     const title = escapeHTML(video.name)
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const description = escapeHTML(video.description)
@@ -113,7 +115,9 @@ export class ClientHtml {
     const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary_large_image'
     const schemaType = 'VideoObject'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, siteName, title, description, image, embed, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, {
+      url, originUrl, siteName, title, description, image, embed, ogType, twitterCard, schemaType
+    })
 
     return customHtml
   }
@@ -140,6 +144,7 @@ export class ClientHtml {
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(videoPlaylist.description))
 
     const url = videoPlaylist.getWatchUrl()
+    const originUrl = videoPlaylist.url
     const title = escapeHTML(videoPlaylist.name)
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const description = escapeHTML(videoPlaylist.description)
@@ -161,7 +166,9 @@ export class ClientHtml {
     const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary'
     const schemaType = 'ItemList'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, siteName, embed, title, description, image, list, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, {
+      url, originUrl, siteName, embed, title, description, image, list, ogType, twitterCard, schemaType
+    })
 
     return customHtml
   }
@@ -209,6 +216,7 @@ export class ClientHtml {
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(entity.description))
 
     const url = entity.Actor.url
+    const originUrl = entity.Actor.url
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const title = escapeHTML(entity.getDisplayName())
     const description = escapeHTML(entity.description)
@@ -223,7 +231,7 @@ export class ClientHtml {
     const twitterCard = 'summary'
     const schemaType = 'ProfilePage'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, title, siteName, description, image, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, { url, originUrl, title, siteName, description, image, ogType, twitterCard, schemaType })
 
     return customHtml
   }
@@ -416,7 +424,7 @@ export class ClientHtml {
     const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
     const schemaTags = this.generateSchemaTags(tagsValues)
 
-    const { url, title, embed } = tagsValues
+    const { url, title, embed, originUrl } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, title: string }[] = []
 
@@ -462,7 +470,7 @@ export class ClientHtml {
     }
 
     // SEO, use origin URL
-    tagsString += `<link rel="canonical" href="${url}" />`
+    tagsString += `<link rel="canonical" href="${originUrl}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsString)
   }
