@@ -12,7 +12,9 @@ label {
 
 input[type=text] {
   @include peertube-input-text(340px);
-
+ @media screen and (max-width: $mobile-view) {
+        width: 100%;
+      }
   display: block;
 }
 
@@ -23,6 +25,9 @@ textarea {
 }
 
 .peertube-select-container {
+     @media screen and (max-width: $mobile-view) {
+        width: 100%;
+      }
   @include peertube-select-container(340px);
 }
 

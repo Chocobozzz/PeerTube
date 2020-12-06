@@ -44,7 +44,9 @@ input {
 
 textarea {
   @include peertube-textarea(500px, 150px);
-
+  @media screen and (max-width: $mobile-view) {
+        width: 100%;
+      }
   display: block;
 }
 

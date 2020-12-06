@@ -7,6 +7,9 @@
 
 input[type=text] {
   @include peertube-input-text(300px);
+   @media screen and (max-width: $mobile-view) {
+        width: 100%;
+      }
 }
 
 ::ng-deep .action-button {

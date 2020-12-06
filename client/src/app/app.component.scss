@@ -101,6 +101,9 @@ $assets-path: '../assets';
   display: grid;
   grid-template-columns: 1fr 30px;
   column-gap: 10px;
+   @media screen and (max-width: $mobile-view) {
+        width: 100%;
+      }
 
   my-global-icon {
     justify-self: center;
