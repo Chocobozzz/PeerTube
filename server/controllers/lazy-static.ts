@@ -6,6 +6,7 @@ import { asyncMiddleware } from '../middlewares'
 import { AvatarModel } from '../models/avatar/avatar'
 import { logger } from '../helpers/logger'
 import { avatarPathUnsafeCache, pushAvatarProcessInQueue } from '../lib/avatar'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 
 const lazyStaticRouter = express.Router()
 
@@ -44,10 +45,10 @@ async function getAvatar (req: express.Request, res: express.Response) {
   }
 
   const avatar = await AvatarModel.loadByName(filename)
-  if (!avatar) return res.sendStatus(404)
+  if (!avatar) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   if (avatar.onDisk === false) {
-    if (!avatar.fileUrl) return res.sendStatus(404)
+    if (!avatar.fileUrl) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
     logger.info('Lazy serve remote avatar image %s.', avatar.fileUrl)
 
@@ -55,7 +56,7 @@ async function getAvatar (req: express.Request, res: express.Response) {
       await pushAvatarProcessInQueue({ filename: avatar.filename, fileUrl: avatar.fileUrl })
     } catch (err) {
       logger.warn('Cannot process remote avatar %s.', avatar.fileUrl, { err })
-      return res.sendStatus(404)
+      return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
     }
 
     avatar.onDisk = true
@@ -71,7 +72,7 @@ async function getAvatar (req: express.Request, res: express.Response) {
 
 async function getPreview (req: express.Request, res: express.Response) {
   const result = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
-  if (!result) return res.sendStatus(404)
+  if (!result) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.SERVER })
 }
@@ -81,7 +82,7 @@ async function getVideoCaption (req: express.Request, res: express.Response) {
     videoId: req.params.videoId,
     language: req.params.captionLanguage
   })
-  if (!result) return res.sendStatus(404)
+  if (!result) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.SERVER })
 }

@@ -1,7 +1,8 @@
 import { VideoChannelsSearchQuery } from '@shared/models'
 import { makeGetRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function searchVideoChannel (url: string, search: string, token?: string, statusCodeExpected = 200) {
+function searchVideoChannel (url: string, search: string, token?: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/search/video-channels'
 
   return makeGetRequest({
@@ -23,7 +24,7 @@ function advancedVideoChannelSearch (url: string, search: VideoChannelsSearchQue
     url,
     path,
     query: search,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 

@@ -27,6 +27,7 @@ import { listAvailablePluginsFromIndex } from '../../lib/plugins/plugin-index'
 import { PeertubePluginIndexList } from '../../../shared/models/plugins/peertube-plugin-index-list.model'
 import { RegisteredServerSettings } from '../../../shared/models/plugins/register-server-setting.model'
 import { PublicServerSetting } from '../../../shared/models/plugins/public-server.setting'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const pluginRouter = express.Router()
 
@@ -140,7 +141,7 @@ async function installPlugin (req: express.Request, res: express.Response) {
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
     logger.warn('Cannot install plugin %s.', toInstall, { err })
-    return res.sendStatus(400)
+    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
   }
 }
 
@@ -155,7 +156,7 @@ async function updatePlugin (req: express.Request, res: express.Response) {
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
     logger.warn('Cannot update plugin %s.', toUpdate, { err })
-    return res.sendStatus(400)
+    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
   }
 }
 
@@ -164,7 +165,7 @@ async function uninstallPlugin (req: express.Request, res: express.Response) {
 
   await PluginManager.Instance.uninstall(body.npmName)
 
-  return res.sendStatus(204)
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 function getPublicPluginSettings (req: express.Request, res: express.Response) {
@@ -193,7 +194,7 @@ async function updatePluginSettings (req: express.Request, res: express.Response
 
   await PluginManager.Instance.onSettingsChanged(plugin.name, plugin.settings)
 
-  return res.sendStatus(204)
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function listAvailablePlugins (req: express.Request, res: express.Response) {
@@ -202,7 +203,7 @@ async function listAvailablePlugins (req: express.Request, res: express.Response
   const resultList = await listAvailablePluginsFromIndex(query)
 
   if (!resultList) {
-    return res.status(503)
+    return res.status(HttpStatusCode.SERVICE_UNAVAILABLE_503)
       .json({ error: 'Plugin index unavailable. Please retry later' })
       .end()
   }

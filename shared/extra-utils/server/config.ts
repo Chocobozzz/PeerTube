@@ -1,6 +1,6 @@
 import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../requests/requests'
 import { CustomConfig } from '../../models/server/custom-config.model'
-import { DeepPartial } from '@shared/core-utils'
+import { DeepPartial, HttpStatusCode } from '@shared/core-utils'
 import { merge } from 'lodash'
 
 function getConfig (url: string) {
@@ -9,7 +9,7 @@ function getConfig (url: string) {
   return makeGetRequest({
     url,
     path,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -19,11 +19,11 @@ function getAbout (url: string) {
   return makeGetRequest({
     url,
     path,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
-function getCustomConfig (url: string, token: string, statusCodeExpected = 200) {
+function getCustomConfig (url: string, token: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/config/custom'
 
   return makeGetRequest({
@@ -34,7 +34,7 @@ function getCustomConfig (url: string, token: string, statusCodeExpected = 200) 
   })
 }
 
-function updateCustomConfig (url: string, token: string, newCustomConfig: CustomConfig, statusCodeExpected = 200) {
+function updateCustomConfig (url: string, token: string, newCustomConfig: CustomConfig, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/config/custom'
 
   return makePutBodyRequest({
@@ -204,7 +204,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
   return updateCustomConfig(url, token, updateParams)
 }
 
-function deleteCustomConfig (url: string, token: string, statusCodeExpected = 200) {
+function deleteCustomConfig (url: string, token: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/config/custom'
 
   return makeDeleteRequest({

@@ -7,6 +7,7 @@ import { body } from 'express-validator'
 import { isUserDisplayNameValid } from '../../helpers/custom-validators/users'
 import { Redis } from '../../lib/redis'
 import { CONFIG, isEmailEnabled } from '../../initializers/config'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const serverGetValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),
@@ -18,9 +19,9 @@ const serverGetValidator = [
 
     const server = await ServerModel.loadByHost(req.body.host)
     if (!server) {
-      return res.status(404)
-         .send({ error: 'Server host not found.' })
-         .end()
+      return res.status(HttpStatusCode.NOT_FOUND_404)
+                .send({ error: 'Server host not found.' })
+                .end()
     }
 
     res.locals.server = server
@@ -44,14 +45,14 @@ const contactAdministratorValidator = [
 
     if (CONFIG.CONTACT_FORM.ENABLED === false) {
       return res
-        .status(409)
+        .status(HttpStatusCode.CONFLICT_409)
         .send({ error: 'Contact form is not enabled on this instance.' })
         .end()
     }
 
     if (isEmailEnabled() === false) {
       return res
-        .status(409)
+        .status(HttpStatusCode.CONFLICT_409)
         .send({ error: 'Emailer is not enabled on this instance.' })
         .end()
     }
@@ -60,7 +61,7 @@ const contactAdministratorValidator = [
       logger.info('Refusing a contact form by %s: already sent one recently.', req.ip)
 
       return res
-        .status(403)
+        .status(HttpStatusCode.FORBIDDEN_403)
         .send({ error: 'You already sent a contact form recently.' })
         .end()
     }

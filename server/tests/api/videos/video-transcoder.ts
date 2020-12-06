@@ -37,6 +37,7 @@ import {
   getVideoFileFPS,
   getVideoFileResolution
 } from '../../../helpers/ffprobe-utils'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -280,7 +281,7 @@ describe('Test video transcoding', function () {
       expect(videoToFindInList).to.be.undefined
 
       // Server 1 should not have the video yet
-      await getVideo(servers[0].url, videoId, 404)
+      await getVideo(servers[0].url, videoId, HttpStatusCode.NOT_FOUND_404)
     }
 
     await waitJobs(servers)
@@ -400,8 +401,8 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(1)
 
-      await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: 200 })
-      await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: HttpStatusCode.OK_200 })
 
       const magnetUri = videoDetails.files[0].magnetUri
       expect(magnetUri).to.contain('.mp4')
@@ -425,8 +426,8 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(1)
 
-      await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: 200 })
-      await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: HttpStatusCode.OK_200 })
 
       const magnetUri = videoDetails.files[0].magnetUri
       expect(magnetUri).to.contain('.mp4')

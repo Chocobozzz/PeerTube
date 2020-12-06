@@ -1,4 +1,5 @@
 import * as request from 'supertest'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getOEmbed (url: string, oembedUrl: string, format?: string, maxHeight?: number, maxWidth?: number) {
   const path = '/services/oembed'
@@ -13,7 +14,7 @@ function getOEmbed (url: string, oembedUrl: string, format?: string, maxHeight?:
           .get(path)
           .query(query)
           .set('Accept', 'application/json')
-          .expect(200)
+          .expect(HttpStatusCode.OK_200)
 }
 
 // ---------------------------------------------------------------------------

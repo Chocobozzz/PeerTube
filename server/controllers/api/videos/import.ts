@@ -36,6 +36,7 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoIm
 import { VideoModel } from '../../../models/video/video'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { VideoImportModel } from '../../../models/video/video-import'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -146,7 +147,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   } catch (err) {
     logger.info('Cannot fetch information from import for URL %s.', targetUrl, { err })
 
-    return res.status(400).json({
+    return res.status(HttpStatusCode.BAD_REQUEST_400).json({
       error: 'Cannot fetch remote information of this URL.'
     }).end()
   }

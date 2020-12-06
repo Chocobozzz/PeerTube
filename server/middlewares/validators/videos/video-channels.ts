@@ -15,6 +15,7 @@ import { doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } fro
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors } from '../utils'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
@@ -29,7 +30,7 @@ const videoChannelsAddValidator = [
 
     const actor = await ActorModel.loadLocalByName(req.body.name)
     if (actor) {
-      res.status(409)
+      res.status(HttpStatusCode.CONFLICT_409)
          .send({ error: 'Another actor (account/channel) with this name on this instance already exists or has already existed.' })
          .end()
       return false
@@ -37,7 +38,7 @@ const videoChannelsAddValidator = [
 
     const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
     if (count >= VIDEO_CHANNELS.MAX_PER_USER) {
-      res.status(400)
+      res.status(HttpStatusCode.BAD_REQUEST_400)
         .send({ error: `You cannot create more than ${VIDEO_CHANNELS.MAX_PER_USER} channels` })
         .end()
       return false
@@ -70,13 +71,13 @@ const videoChannelsUpdateValidator = [
 
     // We need to make additional checks
     if (res.locals.videoChannel.Actor.isOwned() === false) {
-      return res.status(403)
+      return res.status(HttpStatusCode.FORBIDDEN_403)
         .json({ error: 'Cannot update video channel of another server' })
         .end()
     }
 
     if (res.locals.videoChannel.Account.userId !== res.locals.oauth.token.User.id) {
-      return res.status(403)
+      return res.status(HttpStatusCode.FORBIDDEN_403)
         .json({ error: 'Cannot update video channel of another user' })
         .end()
     }
@@ -155,7 +156,7 @@ export {
 
 function checkUserCanDeleteVideoChannel (user: MUser, videoChannel: MChannelAccountDefault, res: express.Response) {
   if (videoChannel.Actor.isOwned() === false) {
-    res.status(403)
+    res.status(HttpStatusCode.FORBIDDEN_403)
               .json({ error: 'Cannot remove video channel of another server.' })
               .end()
 
@@ -166,7 +167,7 @@ function checkUserCanDeleteVideoChannel (user: MUser, videoChannel: MChannelAcco
   // The user can delete it if s/he is an admin
   // Or if s/he is the video channel's account
   if (user.hasRight(UserRight.REMOVE_ANY_VIDEO_CHANNEL) === false && videoChannel.Account.userId !== user.id) {
-    res.status(403)
+    res.status(HttpStatusCode.FORBIDDEN_403)
               .json({ error: 'Cannot remove video channel of another user' })
               .end()
 
@@ -180,9 +181,9 @@ async function checkVideoChannelIsNotTheLastOne (res: express.Response) {
   const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
 
   if (count <= 1) {
-    res.status(409)
-      .json({ error: 'Cannot remove the last channel of this user' })
-      .end()
+    res.status(HttpStatusCode.CONFLICT_409)
+       .json({ error: 'Cannot remove the last channel of this user' })
+       .end()
 
     return false
   }

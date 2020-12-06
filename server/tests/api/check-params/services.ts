@@ -13,6 +13,7 @@ import {
   setDefaultVideoChannel
 } from '../../../../shared/extra-utils'
 import { VideoPlaylistPrivacy } from '@shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test services API validators', function () {
   let server: ServerInfo
@@ -66,7 +67,7 @@ describe('Test services API validators', function () {
 
     it('Should fail with an unknown element', async function () {
       const embedUrl = `http://localhost:${server.port}/videos/watch/88fc0165-d1f0-4a35-a51a-3b47f668689c`
-      await checkParamEmbed(server, embedUrl, 404)
+      await checkParamEmbed(server, embedUrl, HttpStatusCode.NOT_FOUND_404)
     })
 
     it('Should fail with an invalid path', async function () {
@@ -78,25 +79,25 @@ describe('Test services API validators', function () {
     it('Should fail with an invalid max height', async function () {
       const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
 
-      await checkParamEmbed(server, embedUrl, 400, { maxheight: 'hello' })
+      await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { maxheight: 'hello' })
     })
 
     it('Should fail with an invalid max width', async function () {
       const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
 
-      await checkParamEmbed(server, embedUrl, 400, { maxwidth: 'hello' })
+      await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { maxwidth: 'hello' })
     })
 
     it('Should fail with an invalid format', async function () {
       const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
 
-      await checkParamEmbed(server, embedUrl, 400, { format: 'blabla' })
+      await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { format: 'blabla' })
     })
 
     it('Should fail with a non supported format', async function () {
       const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
 
-      await checkParamEmbed(server, embedUrl, 501, { format: 'xml' })
+      await checkParamEmbed(server, embedUrl, HttpStatusCode.NOT_IMPLEMENTED_501, { format: 'xml' })
     })
 
     it('Should succeed with the correct params with a video', async function () {
@@ -107,7 +108,7 @@ describe('Test services API validators', function () {
         maxwidth: 400
       }
 
-      await checkParamEmbed(server, embedUrl, 200, query)
+      await checkParamEmbed(server, embedUrl, HttpStatusCode.OK_200, query)
     })
 
     it('Should succeed with the correct params with a playlist', async function () {
@@ -118,7 +119,7 @@ describe('Test services API validators', function () {
         maxwidth: 400
       }
 
-      await checkParamEmbed(server, embedUrl, 200, query)
+      await checkParamEmbed(server, embedUrl, HttpStatusCode.OK_200, query)
     })
   })
 
@@ -127,7 +128,7 @@ describe('Test services API validators', function () {
   })
 })
 
-function checkParamEmbed (server: ServerInfo, embedUrl: string, statusCodeExpected = 400, query = {}) {
+function checkParamEmbed (server: ServerInfo, embedUrl: string, statusCodeExpected = HttpStatusCode.BAD_REQUEST_400, query = {}) {
   const path = '/services/oembed'
 
   return makeGetRequest({

@@ -2,6 +2,7 @@ import * as cors from 'cors'
 import * as express from 'express'
 import { mapToJSON } from '@server/helpers/core-utils'
 import { LiveManager } from '@server/lib/live-manager'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const liveRouter = express.Router()
 
@@ -24,7 +25,7 @@ function getSegmentsSha256 (req: express.Request, res: express.Response) {
   const result = LiveManager.Instance.getSegmentsSha256(videoUUID)
 
   if (!result) {
-    return res.sendStatus(404)
+    return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
   }
 
   return res.json(mapToJSON(result))

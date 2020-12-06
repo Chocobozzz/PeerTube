@@ -5,6 +5,7 @@ import { logger } from '../../../helpers/logger'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { areValidationErrors } from '../utils'
 import { doesVideoExist } from '../../../helpers/middlewares'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videosShareValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -20,7 +21,7 @@ const videosShareValidator = [
 
     const share = await VideoShareModel.load(req.params.actorId, video.id)
     if (!share) {
-      return res.status(404)
+      return res.status(HttpStatusCode.NOT_FOUND_404)
                 .end()
     }
 

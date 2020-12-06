@@ -66,6 +66,7 @@ import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -178,7 +179,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Set timeout to 10 minutes, as Express's default is 2 minutes
   req.setTimeout(1000 * 60 * 10, () => {
     logger.error('Upload video has timed out.')
-    return res.sendStatus(408)
+    return res.sendStatus(HttpStatusCode.REQUEST_TIMEOUT_408)
   })
 
   const videoPhysicalFile = req.files['videofile'][0]
@@ -394,7 +395,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
     throw err
   }
 
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }
 
 async function getVideo (req: express.Request, res: express.Response) {
@@ -421,7 +424,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const exists = await Redis.Instance.doesVideoIPViewExist(ip, immutableVideoAttrs.uuid)
   if (exists) {
     logger.debug('View for ip %s and video %s already exists.', ip, immutableVideoAttrs.uuid)
-    return res.sendStatus(204)
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   }
 
   const video = await VideoModel.load(immutableVideoAttrs.id)
@@ -454,7 +457,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.video.viewed', { video, ip })
 
-  return res.sendStatus(204)
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function getVideoDescription (req: express.Request, res: express.Response) {
@@ -517,5 +520,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.video.deleted', { video: videoInstance })
 
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }

@@ -51,6 +51,7 @@ import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -75,7 +76,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     if (await isAbleToUploadVideo(user.id, videoFile.size) === false) {
-      res.status(403)
+      res.status(HttpStatusCode.FORBIDDEN_403)
          .json({ error: 'The user video quota is exceeded with this video.' })
 
       return cleanUpReqFiles(req)
@@ -87,7 +88,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
       duration = await getDurationFromVideoFile(videoFile.path)
     } catch (err) {
       logger.error('Invalid input file in videosAddValidator.', { err })
-      res.status(400)
+      res.status(HttpStatusCode.BAD_REQUEST_400)
          .json({ error: 'Invalid input file.' })
 
       return cleanUpReqFiles(req)
@@ -147,7 +148,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
   const serverActor = await getServerActor()
   if (await VideoModel.checkVideoHasInstanceFollow(video.id, serverActor.id) === true) return next()
 
-  return res.status(403)
+  return res.status(HttpStatusCode.FORBIDDEN_403)
             .json({
               errorCode: ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS,
               error: 'Cannot get this video regarding follow constraints.',
@@ -182,7 +183,7 @@ const videosCustomGetValidator = (
 
         // Only the owner or a user that have blacklist rights can see the video
         if (!user || !user.canGetVideo(videoAll)) {
-          return res.status(403)
+          return res.status(HttpStatusCode.FORBIDDEN_403)
                     .json({ error: 'Cannot get this private/internal or blacklisted video.' })
         }
 
@@ -197,7 +198,7 @@ const videosCustomGetValidator = (
         if (isUUIDValid(req.params.id)) return next()
 
         // Don't leak this unlisted video
-        return res.status(404).end()
+        return res.status(HttpStatusCode.NOT_FOUND_404).end()
       }
     }
   ]
@@ -250,7 +251,7 @@ const videosChangeOwnershipValidator = [
 
     const nextOwner = await AccountModel.loadLocalByName(req.body.username)
     if (!nextOwner) {
-      res.status(400)
+      res.status(HttpStatusCode.BAD_REQUEST_400)
         .json({ error: 'Changing video ownership to a remote account is not supported yet' })
 
       return
@@ -276,7 +277,7 @@ const videosTerminateChangeOwnershipValidator = [
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
     if (videoChangeOwnership.status !== VideoChangeOwnershipStatus.WAITING) {
-      res.status(403)
+      res.status(HttpStatusCode.FORBIDDEN_403)
          .json({ error: 'Ownership already accepted or refused' })
       return
     }
@@ -294,7 +295,7 @@ const videosAcceptChangeOwnershipValidator = [
     const videoChangeOwnership = res.locals.videoChangeOwnership
     const isAble = await isAbleToUploadVideo(user.id, videoChangeOwnership.Video.getMaxQualityFile().size)
     if (isAble === false) {
-      res.status(403)
+      res.status(HttpStatusCode.FORBIDDEN_403)
         .json({ error: 'The user video quota is exceeded with this video.' })
 
       return
@@ -433,7 +434,7 @@ const commonVideosFiltersValidator = [
       (req.query.filter === 'all-local' || req.query.filter === 'all') &&
       (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) === false)
     ) {
-      res.status(401)
+      res.status(HttpStatusCode.UNAUTHORIZED_401)
          .json({ error: 'You are not allowed to see all local videos.' })
 
       return
@@ -473,7 +474,7 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
     if (!req.body.scheduleUpdate.updateAt) {
       logger.warn('Invalid parameters: scheduleUpdate.updateAt is mandatory.')
 
-      res.status(400)
+      res.status(HttpStatusCode.BAD_REQUEST_400)
          .json({ error: 'Schedule update at is mandatory.' })
 
       return true
@@ -498,7 +499,7 @@ async function isVideoAccepted (req: express.Request, res: express.Response, vid
 
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused local video.', { acceptedResult, acceptParameters })
-    res.status(403)
+    res.status(HttpStatusCode.FORBIDDEN_403)
        .json({ error: acceptedResult.errorMessage || 'Refused local video' })
 
     return false

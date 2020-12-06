@@ -8,6 +8,7 @@ import { logger } from '../helpers/logger'
 import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers/constants'
 import { ClientHtml } from '../lib/client-html'
 import { asyncMiddleware, embedCSP } from '../middlewares'
+import { HttpStatusCode } from '@shared/core-utils'
 
 const clientsRouter = express.Router()
 
@@ -87,7 +88,7 @@ clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE.C
 
 // 404 for static files not found
 clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => {
-  res.sendStatus(404)
+  res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 })
 
 // Always serve index client page (the client is a single page application, let it handle routing)
@@ -114,7 +115,7 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
     return res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
   }
 
-  return res.sendStatus(404)
+  return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 }
 
 async function serveIndexHTML (req: express.Request, res: express.Response) {
@@ -127,7 +128,7 @@ async function serveIndexHTML (req: express.Request, res: express.Response) {
     }
   }
 
-  return res.status(404).end()
+  return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
 }
 
 async function generateEmbedHtmlPage (req: express.Request, res: express.Response) {

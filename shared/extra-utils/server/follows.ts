@@ -3,6 +3,7 @@ import { ServerInfo } from './servers'
 import { waitJobs } from './jobs'
 import { makePostBodyRequest } from '../requests/requests'
 import { ActivityPubActorType, FollowState } from '@shared/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getFollowersListPaginationAndSort (options: {
   url: string
@@ -29,11 +30,11 @@ function getFollowersListPaginationAndSort (options: {
     .get(path)
     .query(query)
     .set('Accept', 'application/json')
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
-function acceptFollower (url: string, token: string, follower: string, statusCodeExpected = 204) {
+function acceptFollower (url: string, token: string, follower: string, statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/server/followers/' + follower + '/accept'
 
   return makePostBodyRequest({
@@ -44,7 +45,7 @@ function acceptFollower (url: string, token: string, follower: string, statusCod
   })
 }
 
-function rejectFollower (url: string, token: string, follower: string, statusCodeExpected = 204) {
+function rejectFollower (url: string, token: string, follower: string, statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/server/followers/' + follower + '/reject'
 
   return makePostBodyRequest({
@@ -80,11 +81,11 @@ function getFollowingListPaginationAndSort (options: {
     .get(path)
     .query(query)
     .set('Accept', 'application/json')
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
-function follow (follower: string, following: string[], accessToken: string, expectedStatus = 204) {
+function follow (follower: string, following: string[], accessToken: string, expectedStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/server/following'
 
   const followingHosts = following.map(f => f.replace(/^http:\/\//, ''))
@@ -96,7 +97,7 @@ function follow (follower: string, following: string[], accessToken: string, exp
     .expect(expectedStatus)
 }
 
-async function unfollow (url: string, accessToken: string, target: ServerInfo, expectedStatus = 204) {
+async function unfollow (url: string, accessToken: string, target: ServerInfo, expectedStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/server/following/' + target.host
 
   return request(url)
@@ -106,7 +107,7 @@ async function unfollow (url: string, accessToken: string, target: ServerInfo, e
     .expect(expectedStatus)
 }
 
-function removeFollower (url: string, accessToken: string, follower: ServerInfo, expectedStatus = 204) {
+function removeFollower (url: string, accessToken: string, follower: ServerInfo, expectedStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/server/followers/peertube@' + follower.host
 
   return request(url)

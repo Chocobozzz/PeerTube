@@ -13,6 +13,7 @@ import {
 } from '@server/types/plugins/register-server-auth.model'
 import * as express from 'express'
 import * as OAuthServer from 'express-oauth-server'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const oAuthServer = new OAuthServer({
   useErrorHandler: true,
@@ -215,7 +216,7 @@ function proxifyExternalAuthBypass (req: express.Request, res: express.Response)
   const obj = authBypassTokens.get(req.body.externalAuthToken)
   if (!obj) {
     logger.error('Cannot authenticate user with unknown bypass token')
-    return res.sendStatus(400)
+    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
   }
 
   const { expires, user, authName, npmName } = obj
@@ -223,12 +224,12 @@ function proxifyExternalAuthBypass (req: express.Request, res: express.Response)
   const now = new Date()
   if (now.getTime() > expires.getTime()) {
     logger.error('Cannot authenticate user with an expired external auth token')
-    return res.sendStatus(400)
+    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
   }
 
   if (user.username !== req.body.username) {
     logger.error('Cannot authenticate user %s with invalid username %s.', req.body.username)
-    return res.sendStatus(400)
+    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
   }
 
   // Bypass oauth library validation

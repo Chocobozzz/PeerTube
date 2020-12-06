@@ -7,6 +7,7 @@ import { UserRole } from '../../models/users/user-role'
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 import { userLogin } from './login'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 type CreateUserArgs = {
   url: string
@@ -29,7 +30,7 @@ function createUser (parameters: CreateUserArgs) {
     videoQuota = 1000000,
     videoQuotaDaily = -1,
     role = UserRole.USER,
-    specialStatus = 200
+    specialStatus = HttpStatusCode.OK_200
   } = parameters
 
   const path = '/api/v1/users'
@@ -58,7 +59,7 @@ async function generateUserAccessToken (server: ServerInfo, username: string) {
   return userLogin(server, { username, password })
 }
 
-function registerUser (url: string, username: string, password: string, specialStatus = 204) {
+function registerUser (url: string, username: string, password: string, specialStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/users/register'
   const body = {
     username,
@@ -94,11 +95,11 @@ function registerUserWithChannel (options: {
     url: options.url,
     path,
     fields: body,
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 
-function getMyUserInformation (url: string, accessToken: string, specialStatus = 200) {
+function getMyUserInformation (url: string, accessToken: string, specialStatus = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/me'
 
   return request(url)
@@ -109,7 +110,7 @@ function getMyUserInformation (url: string, accessToken: string, specialStatus =
           .expect('Content-Type', /json/)
 }
 
-function getUserScopedTokens (url: string, token: string, statusCodeExpected = 200) {
+function getUserScopedTokens (url: string, token: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/scoped-tokens'
 
   return makeGetRequest({
@@ -120,7 +121,7 @@ function getUserScopedTokens (url: string, token: string, statusCodeExpected = 2
   })
 }
 
-function renewUserScopedTokens (url: string, token: string, statusCodeExpected = 200) {
+function renewUserScopedTokens (url: string, token: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/scoped-tokens'
 
   return makePostBodyRequest({
@@ -131,7 +132,7 @@ function renewUserScopedTokens (url: string, token: string, statusCodeExpected =
   })
 }
 
-function deleteMe (url: string, accessToken: string, specialStatus = 204) {
+function deleteMe (url: string, accessToken: string, specialStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/users/me'
 
   return request(url)
@@ -141,7 +142,7 @@ function deleteMe (url: string, accessToken: string, specialStatus = 204) {
     .expect(specialStatus)
 }
 
-function getMyUserVideoQuotaUsed (url: string, accessToken: string, specialStatus = 200) {
+function getMyUserVideoQuotaUsed (url: string, accessToken: string, specialStatus = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/me/video-quota-used'
 
   return request(url)
@@ -160,11 +161,11 @@ function getUserInformation (url: string, accessToken: string, userId: number, w
     .query({ withStats })
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
-function getMyUserVideoRating (url: string, accessToken: string, videoId: number | string, specialStatus = 200) {
+function getMyUserVideoRating (url: string, accessToken: string, videoId: number | string, specialStatus = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/me/videos/' + videoId + '/rating'
 
   return request(url)
@@ -182,7 +183,7 @@ function getUsersList (url: string, accessToken: string) {
           .get(path)
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + accessToken)
-          .expect(200)
+          .expect(HttpStatusCode.OK_200)
           .expect('Content-Type', /json/)
 }
 
@@ -210,11 +211,11 @@ function getUsersListPaginationAndSort (
           .query(query)
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + accessToken)
-          .expect(200)
+          .expect(HttpStatusCode.OK_200)
           .expect('Content-Type', /json/)
 }
 
-function removeUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204) {
+function removeUser (url: string, userId: number | string, accessToken: string, expectedStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/users'
 
   return request(url)
@@ -224,7 +225,13 @@ function removeUser (url: string, userId: number | string, accessToken: string, 
           .expect(expectedStatus)
 }
 
-function blockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204, reason?: string) {
+function blockUser (
+  url: string,
+  userId: number | string,
+  accessToken: string,
+  expectedStatus = HttpStatusCode.NO_CONTENT_204,
+  reason?: string
+) {
   const path = '/api/v1/users'
   let body: any
   if (reason) body = { reason }
@@ -237,7 +244,7 @@ function blockUser (url: string, userId: number | string, accessToken: string, e
     .expect(expectedStatus)
 }
 
-function unblockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204) {
+function unblockUser (url: string, userId: number | string, accessToken: string, expectedStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/users'
 
   return request(url)
@@ -247,7 +254,7 @@ function unblockUser (url: string, userId: number | string, accessToken: string,
     .expect(expectedStatus)
 }
 
-function updateMyUser (options: { url: string, accessToken: string, statusCodeExpected?: number } & UserUpdateMe) {
+function updateMyUser (options: { url: string, accessToken: string, statusCodeExpected?: HttpStatusCode } & UserUpdateMe) {
   const path = '/api/v1/users/me'
 
   const toSend: UserUpdateMe = omit(options, 'url', 'accessToken')
@@ -257,7 +264,7 @@ function updateMyUser (options: { url: string, accessToken: string, statusCodeEx
     path,
     token: options.accessToken,
     fields: toSend,
-    statusCodeExpected: options.statusCodeExpected || 204
+    statusCodeExpected: options.statusCodeExpected || HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -299,7 +306,7 @@ function updateUser (options: {
     path,
     token: options.accessToken,
     fields: toSend,
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -310,11 +317,17 @@ function askResetPassword (url: string, email: string) {
     url,
     path,
     fields: { email },
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 
-function resetPassword (url: string, userId: number, verificationString: string, password: string, statusCodeExpected = 204) {
+function resetPassword (
+  url: string,
+  userId: number,
+  verificationString: string,
+  password: string,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/users/' + userId + '/reset-password'
 
   return makePostBodyRequest({
@@ -332,11 +345,17 @@ function askSendVerifyEmail (url: string, email: string) {
     url,
     path,
     fields: { email },
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 
-function verifyEmail (url: string, userId: number, verificationString: string, isPendingEmail = false, statusCodeExpected = 204) {
+function verifyEmail (
+  url: string,
+  userId: number,
+  verificationString: string,
+  isPendingEmail = false,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/users/' + userId + '/verify-email'
 
   return makePostBodyRequest({

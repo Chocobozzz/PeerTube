@@ -19,6 +19,7 @@ import { doesAbuseExist, doesAccountIdExist, doesVideoExist } from '@server/help
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { AbuseCreate, UserRight } from '@shared/models'
 import { areValidationErrors } from './utils'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const abuseReportValidator = [
   body('account.id')
@@ -70,8 +71,8 @@ const abuseReportValidator = [
     if (body.comment?.id && !await doesCommentIdExist(body.comment.id, res)) return
 
     if (!body.video?.id && !body.account?.id && !body.comment?.id) {
-      res.status(400)
-        .json({ error: 'video id or account id or comment id is required.' })
+      res.status(HttpStatusCode.BAD_REQUEST_400)
+         .json({ error: 'video id or account id or comment id is required.' })
 
       return
     }
@@ -194,7 +195,8 @@ const getAbuseValidator = [
       const message = `User ${user.username} does not have right to get abuse ${abuse.id}`
       logger.warn(message)
 
-      return res.status(403).json({ error: message })
+      return res.status(HttpStatusCode.FORBIDDEN_403)
+                .json({ error: message })
     }
 
     return next()
@@ -207,9 +209,10 @@ const checkAbuseValidForMessagesValidator = [
 
     const abuse = res.locals.abuse
     if (abuse.ReporterAccount.isOwned() === false) {
-      return res.status(400).json({
-        error: 'This abuse was created by a user of your instance.'
-      })
+      return res.status(HttpStatusCode.BAD_REQUEST_400)
+                .json({
+                  error: 'This abuse was created by a user of your instance.'
+                })
     }
 
     return next()
@@ -243,11 +246,13 @@ const deleteAbuseMessageValidator = [
     const abuseMessage = await AbuseMessageModel.loadByIdAndAbuseId(messageId, abuse.id)
 
     if (!abuseMessage) {
-      return res.status(404).json({ error: 'Abuse message not found' })
+      return res.status(HttpStatusCode.NOT_FOUND_404)
+                .json({ error: 'Abuse message not found' })
     }
 
     if (user.hasRight(UserRight.MANAGE_ABUSES) !== true && abuseMessage.accountId !== user.Account.id) {
-      return res.status(403).json({ error: 'Cannot delete this abuse message' })
+      return res.status(HttpStatusCode.FORBIDDEN_403)
+                .json({ error: 'Cannot delete this abuse message' })
     }
 
     res.locals.abuseMessage = abuseMessage

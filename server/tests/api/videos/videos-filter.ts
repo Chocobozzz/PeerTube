@@ -15,10 +15,11 @@ import {
 } from '../../../../shared/extra-utils'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { UserRole } from '../../../../shared/models/users'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
-async function getVideosNames (server: ServerInfo, token: string, filter: string, statusCodeExpected = 200) {
+async function getVideosNames (server: ServerInfo, token: string, filter: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',

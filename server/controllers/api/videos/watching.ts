@@ -2,6 +2,7 @@ import * as express from 'express'
 import { UserWatchingVideo } from '../../../../shared'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoWatchingValidator } from '../../../middlewares'
 import { UserVideoHistoryModel } from '../../../models/account/user-video-history'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const watchingRouter = express.Router()
 
@@ -31,5 +32,7 @@ async function userWatchVideo (req: express.Request, res: express.Response) {
     currentTime: body.currentTime
   })
 
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }

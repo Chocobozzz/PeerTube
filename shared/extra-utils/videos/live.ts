@@ -10,8 +10,9 @@ import { buildAbsoluteFixturePath, buildServerDirectory, wait } from '../miscs/m
 import { makeGetRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 import { getVideoWithToken } from './videos'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function getLive (url: string, token: string, videoId: number | string, statusCodeExpected = 200) {
+function getLive (url: string, token: string, videoId: number | string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/videos/live'
 
   return makeGetRequest({
@@ -22,7 +23,13 @@ function getLive (url: string, token: string, videoId: number | string, statusCo
   })
 }
 
-function updateLive (url: string, token: string, videoId: number | string, fields: LiveVideoUpdate, statusCodeExpected = 204) {
+function updateLive (
+  url: string,
+  token: string,
+  videoId: number | string,
+  fields: LiveVideoUpdate,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/videos/live'
 
   return makePutBodyRequest({
@@ -34,7 +41,7 @@ function updateLive (url: string, token: string, videoId: number | string, field
   })
 }
 
-function createLive (url: string, token: string, fields: LiveVideoCreate, statusCodeExpected = 200) {
+function createLive (url: string, token: string, fields: LiveVideoCreate, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/videos/live'
 
   const attaches: any = {}

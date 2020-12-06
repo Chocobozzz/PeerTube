@@ -1,6 +1,7 @@
 import { makeGetRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function getVideosOverview (url: string, page: number, statusCodeExpected = 200) {
+function getVideosOverview (url: string, page: number, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/overviews/videos'
 
   const query = { page }
@@ -13,7 +14,7 @@ function getVideosOverview (url: string, page: number, statusCodeExpected = 200)
   })
 }
 
-function getVideosOverviewWithToken (url: string, page: number, token: string, statusCodeExpected = 200) {
+function getVideosOverviewWithToken (url: string, page: number, token: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/overviews/videos'
 
   const query = { page }

@@ -1,6 +1,7 @@
 
 import { VideoImportCreate } from '../../models/videos'
 import { makeGetRequest, makeUploadRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getYoutubeVideoUrl () {
   return 'http://www.youtube.com/watch?v=msX3jv1XdvM'
@@ -19,7 +20,12 @@ function getGoodVideoUrl () {
   return 'https://download.cpy.re/peertube/good_video.mp4'
 }
 
-function importVideo (url: string, token: string, attributes: VideoImportCreate & { torrentfile?: string }, statusCodeExpected = 200) {
+function importVideo (
+  url: string,
+  token: string,
+  attributes: VideoImportCreate & { torrentfile?: string },
+  statusCodeExpected = HttpStatusCode.OK_200
+) {
   const path = '/api/v1/videos/imports'
 
   let attaches: any = {}
@@ -46,7 +52,7 @@ function getMyVideoImports (url: string, token: string, sort?: string) {
     query,
     path,
     token,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 

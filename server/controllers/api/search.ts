@@ -6,6 +6,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '@server/lib/activitypub/vi
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
 import { getServerActor } from '@server/models/application/application'
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { ResultList, Video, VideoChannel } from '@shared/models'
 import { SearchTargetQuery } from '@shared/models/search/search-target-query.model'
 import { VideoChannelsSearchQuery, VideosSearchQuery } from '../../../shared/models/search'
@@ -99,7 +100,7 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: e
   } catch (err) {
     logger.warn('Cannot use search index to make video channels search.', { err })
 
-    return res.sendStatus(500)
+    return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
   }
 }
 
@@ -191,7 +192,7 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
   } catch (err) {
     logger.warn('Cannot use search index to make video search.', { err })
 
-    return res.sendStatus(500)
+    return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
   }
 }
 

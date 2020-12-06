@@ -2,8 +2,9 @@ import * as express from 'express'
 import { asyncMiddleware, authenticate } from '../../middlewares'
 import { bulkRemoveCommentsOfValidator } from '@server/middlewares/validators/bulk'
 import { VideoCommentModel } from '@server/models/video/video-comment'
-import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
 import { removeComment } from '@server/lib/video-comment'
+import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const bulkRouter = express.Router()
 
@@ -33,7 +34,7 @@ async function bulkRemoveCommentsOf (req: express.Request, res: express.Response
   const comments = await VideoCommentModel.listForBulkDelete(account, filter)
 
   // Don't wait result
-  res.sendStatus(204)
+  res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 
   for (const comment of comments) {
     await removeComment(comment)

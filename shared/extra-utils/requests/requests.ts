@@ -5,12 +5,13 @@ import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
 import { isAbsolute, join } from 'path'
 import { URL } from 'url'
 import { decode } from 'querystring'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function get4KFileUrl () {
   return 'https://download.cpy.re/peertube/4k_file.txt'
 }
 
-function makeRawRequest (url: string, statusCodeExpected?: number, range?: string) {
+function makeRawRequest (url: string, statusCodeExpected?: HttpStatusCode, range?: string) {
   const { host, protocol, pathname } = new URL(url)
 
   return makeGetRequest({ url: `${protocol}//${host}`, path: pathname, statusCodeExpected, range })
@@ -21,12 +22,12 @@ function makeGetRequest (options: {
   path?: string
   query?: any
   token?: string
-  statusCodeExpected?: number
+  statusCodeExpected?: HttpStatusCode
   contentType?: string
   range?: string
   redirects?: number
 }) {
-  if (!options.statusCodeExpected) options.statusCodeExpected = 400
+  if (!options.statusCodeExpected) options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
   if (options.contentType === undefined) options.contentType = 'application/json'
 
   const req = request(options.url).get(options.path)
@@ -44,9 +45,9 @@ function makeDeleteRequest (options: {
   url: string
   path: string
   token?: string
-  statusCodeExpected?: number
+  statusCodeExpected?: HttpStatusCode
 }) {
-  if (!options.statusCodeExpected) options.statusCodeExpected = 400
+  if (!options.statusCodeExpected) options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
 
   const req = request(options.url)
     .delete(options.path)
@@ -64,9 +65,9 @@ function makeUploadRequest (options: {
   token?: string
   fields: { [ fieldName: string ]: any }
   attaches?: { [ attachName: string ]: any | any[] }
-  statusCodeExpected?: number
+  statusCodeExpected?: HttpStatusCode
 }) {
-  if (!options.statusCodeExpected) options.statusCodeExpected = 400
+  if (!options.statusCodeExpected) options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
 
   let req: request.Test
   if (options.method === 'PUT') {
@@ -110,10 +111,10 @@ function makePostBodyRequest (options: {
   path: string
   token?: string
   fields?: { [ fieldName: string ]: any }
-  statusCodeExpected?: number
+  statusCodeExpected?: HttpStatusCode
 }) {
   if (!options.fields) options.fields = {}
-  if (!options.statusCodeExpected) options.statusCodeExpected = 400
+  if (!options.statusCodeExpected) options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
 
   const req = request(options.url)
                 .post(options.path)
@@ -130,9 +131,9 @@ function makePutBodyRequest (options: {
   path: string
   token?: string
   fields: { [ fieldName: string ]: any }
-  statusCodeExpected?: number
+  statusCodeExpected?: HttpStatusCode
 }) {
-  if (!options.statusCodeExpected) options.statusCodeExpected = 400
+  if (!options.statusCodeExpected) options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
 
   const req = request(options.url)
                 .put(options.path)
@@ -148,7 +149,7 @@ function makeHTMLRequest (url: string, path: string) {
   return request(url)
     .get(path)
     .set('Accept', 'text/html')
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
 }
 
 function updateAvatarRequest (options: {
@@ -170,7 +171,7 @@ function updateAvatarRequest (options: {
     token: options.accessToken,
     fields: {},
     attaches: { avatarfile: filePath },
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 

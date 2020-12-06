@@ -1,4 +1,5 @@
 import { makeGetRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getStats (url: string, useCache = false) {
   const path = '/api/v1/server/stats'
@@ -11,7 +12,7 @@ function getStats (url: string, useCache = false) {
     url,
     path,
     query,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 

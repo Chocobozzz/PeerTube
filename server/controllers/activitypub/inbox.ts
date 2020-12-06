@@ -7,6 +7,7 @@ import { asyncMiddleware, checkSignature, localAccountValidator, localVideoChann
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
 import { queue } from 'async'
 import { MActorDefault, MActorSignature } from '../../types/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const inboxRouter = express.Router()
 
@@ -79,5 +80,5 @@ function inboxController (req: express.Request, res: express.Response) {
     inboxActor: accountOrChannel ? accountOrChannel.Actor : undefined
   })
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

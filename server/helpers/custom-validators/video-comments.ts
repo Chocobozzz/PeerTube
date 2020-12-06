@@ -3,6 +3,7 @@ import validator from 'validator'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { MVideoId } from '@server/types/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const VIDEO_COMMENTS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_COMMENTS
 
@@ -15,7 +16,7 @@ async function doesVideoCommentThreadExist (idArg: number | string, video: MVide
   const videoComment = await VideoCommentModel.loadById(id)
 
   if (!videoComment) {
-    res.status(404)
+    res.status(HttpStatusCode.NOT_FOUND_404)
       .json({ error: 'Video comment thread not found' })
       .end()
 
@@ -23,7 +24,7 @@ async function doesVideoCommentThreadExist (idArg: number | string, video: MVide
   }
 
   if (videoComment.videoId !== video.id) {
-    res.status(400)
+    res.status(HttpStatusCode.BAD_REQUEST_400)
       .json({ error: 'Video comment is not associated to this video.' })
       .end()
 
@@ -31,7 +32,7 @@ async function doesVideoCommentThreadExist (idArg: number | string, video: MVide
   }
 
   if (videoComment.inReplyToCommentId !== null) {
-    res.status(400)
+    res.status(HttpStatusCode.BAD_REQUEST_400)
       .json({ error: 'Video comment is not a thread.' })
       .end()
 
@@ -47,7 +48,7 @@ async function doesVideoCommentExist (idArg: number | string, video: MVideoId, r
   const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {
-    res.status(404)
+    res.status(HttpStatusCode.NOT_FOUND_404)
       .json({ error: 'Video comment thread not found' })
       .end()
 
@@ -55,7 +56,7 @@ async function doesVideoCommentExist (idArg: number | string, video: MVideoId, r
   }
 
   if (videoComment.videoId !== video.id) {
-    res.status(400)
+    res.status(HttpStatusCode.BAD_REQUEST_400)
       .json({ error: 'Video comment is not associated to this video.' })
       .end()
 
@@ -71,7 +72,7 @@ async function doesCommentIdExist (idArg: number | string, res: express.Response
   const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {
-    res.status(404)
+    res.status(HttpStatusCode.NOT_FOUND_404)
       .json({ error: 'Video comment thread not found' })
 
     return false

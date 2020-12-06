@@ -12,6 +12,7 @@ import {
 } from '../../helpers/middlewares'
 import { doesVideoExist } from '../../helpers/middlewares/videos'
 import { areValidationErrors } from './utils'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const feedsFormatValidator = [
   param('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
@@ -35,7 +36,7 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
   if (req.accepts(acceptableContentTypes)) {
     res.set('Content-Type', req.accepts(acceptableContentTypes) as string)
   } else {
-    return res.status(406)
+    return res.status(HttpStatusCode.NOT_ACCEPTABLE_406)
               .json({
                 message: `You should accept at least one of the following content-types: ${acceptableContentTypes.join(', ')}`
               })
@@ -105,7 +106,7 @@ const videoCommentsFeedsValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.videoId && (req.query.videoChannelId || req.query.videoChannelName)) {
-      return res.status(400)
+      return res.status(HttpStatusCode.BAD_REQUEST_400)
                 .json({
                   message: 'videoId cannot be mixed with a channel filter'
                 })

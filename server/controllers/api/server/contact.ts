@@ -3,6 +3,7 @@ import { asyncMiddleware, contactAdministratorValidator } from '../../../middlew
 import { Redis } from '../../../lib/redis'
 import { Emailer } from '../../../lib/emailer'
 import { ContactForm } from '../../../../shared/models/server'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const contactRouter = express.Router()
 
@@ -18,7 +19,7 @@ async function contactAdministrator (req: express.Request, res: express.Response
 
   await Redis.Instance.setContactFormIp(req.ip)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 // ---------------------------------------------------------------------------

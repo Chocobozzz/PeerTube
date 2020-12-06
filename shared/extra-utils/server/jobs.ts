@@ -3,6 +3,7 @@ import { Job, JobState, JobType } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
 import { makeGetRequest } from '../../../shared/extra-utils'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getJobsList (url: string, accessToken: string, state: JobState) {
   const path = '/api/v1/jobs/' + state
@@ -11,7 +12,7 @@ function getJobsList (url: string, accessToken: string, state: JobState) {
     .get(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
@@ -38,7 +39,7 @@ function getJobsListPaginationAndSort (options: {
     url,
     path,
     token: accessToken,
-    statusCodeExpected: 200,
+    statusCodeExpected: HttpStatusCode.OK_200,
     query
   })
 }

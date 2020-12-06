@@ -2,6 +2,7 @@
 
 import * as request from 'supertest'
 import { makeDeleteRequest, makeGetRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getAdminVideoComments (options: {
   url: string
@@ -33,7 +34,7 @@ function getAdminVideoComments (options: {
     path,
     token,
     query,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -49,7 +50,7 @@ function getVideoCommentThreads (url: string, videoId: number | string, start: n
   if (token) req.set('Authorization', 'Bearer ' + token)
 
   return req.set('Accept', 'application/json')
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
@@ -62,11 +63,17 @@ function getVideoThreadComments (url: string, videoId: number | string, threadId
 
   if (token) req.set('Authorization', 'Bearer ' + token)
 
-  return req.expect(200)
+  return req.expect(HttpStatusCode.OK_200)
             .expect('Content-Type', /json/)
 }
 
-function addVideoCommentThread (url: string, token: string, videoId: number | string, text: string, expectedStatus = 200) {
+function addVideoCommentThread (
+  url: string,
+  token: string,
+  videoId: number | string,
+  text: string,
+  expectedStatus = HttpStatusCode.OK_200
+) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
   return request(url)
@@ -83,7 +90,7 @@ function addVideoCommentReply (
   videoId: number | string,
   inReplyToCommentId: number,
   text: string,
-  expectedStatus = 200
+  expectedStatus = HttpStatusCode.OK_200
 ) {
   const path = '/api/v1/videos/' + videoId + '/comments/' + inReplyToCommentId
 
@@ -106,7 +113,7 @@ function deleteVideoComment (
   token: string,
   videoId: number | string,
   commentId: number,
-  statusCodeExpected = 204
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
 ) {
   const path = '/api/v1/videos/' + videoId + '/comments/' + commentId
 

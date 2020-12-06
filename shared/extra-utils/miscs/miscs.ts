@@ -6,6 +6,7 @@ import { ensureDir, pathExists, readFile, stat } from 'fs-extra'
 import { basename, dirname, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 let webtorrent: WebTorrent.Instance
@@ -51,7 +52,7 @@ function buildServerDirectory (server: { internalServerNumber: number }, directo
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
   const res = await request(url)
     .get(imagePath)
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
 
   const body = res.body
 

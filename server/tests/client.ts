@@ -22,6 +22,7 @@ import {
   updateMyUser,
   updateVideoChannel
 } from '../../shared/extra-utils'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -100,7 +101,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get(path)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       const port = server.port
 
@@ -115,7 +116,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/videos/watch/playlist/' + playlistUUID)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       const port = server.port
 
@@ -133,7 +134,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/accounts/' + server.user.username)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain(`<meta property="og:title" content="${account.displayName}" />`)
       expect(res.text).to.contain(`<meta property="og:description" content="${account.description}" />`)
@@ -145,7 +146,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/video-channels/' + server.videoChannel.name)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain(`<meta property="og:title" content="${server.videoChannel.displayName}" />`)
       expect(res.text).to.contain(`<meta property="og:description" content="${channelDescription}" />`)
@@ -157,7 +158,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/videos/watch/' + server.video.id)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain(`<meta property="og:title" content="${videoName}" />`)
       expect(res.text).to.contain(`<meta property="og:description" content="${videoDescription}" />`)
@@ -169,7 +170,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/videos/watch/' + server.video.uuid)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain(`<meta property="og:title" content="${videoName}" />`)
       expect(res.text).to.contain(`<meta property="og:description" content="${videoDescription}" />`)
@@ -181,7 +182,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/videos/watch/playlist/' + playlistUUID)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain(`<meta property="og:title" content="${playlistName}" />`)
       expect(res.text).to.contain(`<meta property="og:description" content="${playlistDescription}" />`)
@@ -196,7 +197,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/videos/watch/' + server.video.uuid)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain('<meta property="twitter:card" content="summary_large_image" />')
       expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
@@ -208,7 +209,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/videos/watch/playlist/' + playlistUUID)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
       expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
@@ -220,7 +221,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/accounts/' + account.name)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
       expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
@@ -232,7 +233,7 @@ describe('Test a client controllers', function () {
       const res = await request(server.url)
         .get('/video-channels/' + server.videoChannel.name)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
       expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
@@ -252,7 +253,7 @@ describe('Test a client controllers', function () {
       const resVideoRequest = await request(server.url)
         .get('/videos/watch/' + server.video.uuid)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(resVideoRequest.text).to.contain('<meta property="twitter:card" content="player" />')
       expect(resVideoRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
@@ -260,7 +261,7 @@ describe('Test a client controllers', function () {
       const resVideoPlaylistRequest = await request(server.url)
         .get('/videos/watch/playlist/' + playlistUUID)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(resVideoPlaylistRequest.text).to.contain('<meta property="twitter:card" content="player" />')
       expect(resVideoPlaylistRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
@@ -268,7 +269,7 @@ describe('Test a client controllers', function () {
       const resAccountRequest = await request(server.url)
         .get('/accounts/' + account.name)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(resAccountRequest.text).to.contain('<meta property="twitter:card" content="summary" />')
       expect(resAccountRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
@@ -276,7 +277,7 @@ describe('Test a client controllers', function () {
       const resChannelRequest = await request(server.url)
         .get('/video-channels/' + server.videoChannel.name)
         .set('Accept', 'text/html')
-        .expect(200)
+        .expect(HttpStatusCode.OK_200)
 
       expect(resChannelRequest.text).to.contain('<meta property="twitter:card" content="summary" />')
       expect(resChannelRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')

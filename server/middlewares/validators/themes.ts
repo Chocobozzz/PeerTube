@@ -5,6 +5,7 @@ import { areValidationErrors } from './utils'
 import { isPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { isSafePath } from '../../helpers/custom-validators/misc'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const serveThemeCSSValidator = [
   param('themeName').custom(isPluginNameValid).withMessage('Should have a valid theme name'),
@@ -19,11 +20,11 @@ const serveThemeCSSValidator = [
     const theme = PluginManager.Instance.getRegisteredThemeByShortName(req.params.themeName)
 
     if (!theme || theme.version !== req.params.themeVersion) {
-      return res.sendStatus(404)
+      return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
     }
 
     if (theme.css.includes(req.params.staticEndpoint) === false) {
-      return res.sendStatus(404)
+      return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
     }
 
     res.locals.registeredPlugin = theme

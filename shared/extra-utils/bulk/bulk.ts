@@ -1,5 +1,6 @@
 import { BulkRemoveCommentsOfBody } from "@shared/models/bulk/bulk-remove-comments-of-body.model"
 import { makePostBodyRequest } from "../requests/requests"
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function bulkRemoveCommentsOf (options: {
   url: string
@@ -15,7 +16,7 @@ function bulkRemoveCommentsOf (options: {
     path,
     token,
     fields: attributes,
-    statusCodeExpected: expectedStatus || 204
+    statusCodeExpected: expectedStatus || HttpStatusCode.NO_CONTENT_204
   })
 }
 
