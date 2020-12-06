@@ -1847,7 +1847,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="a3ecb8ed851e54c72dd44723d9fc3117e49ea498" datatype="html">
         <source>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</source>
-        <target state="translated">Puede transmitir varias veces en vivo de forma permanente. La URL de sus espectadores no cambiará, pero no puede guardar repeticiones de sus vidas</target>
+        <target state="translated">Puede transmitir varias veces en directo permanente. La URL de sus espectadores no cambiará, pero no puede guardar reproducciones de sus directos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">233</context>
@@ -1855,7 +1855,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="223e01b44f68af4522e390bae9d584b4cbbdfebe" datatype="html">
         <source>This is a permanent live</source>
-        <target state="translated">Esta es una vida permanente</target>
+        <target state="translated">Este es un directo permanente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">229</context>
@@ -1863,12 +1863,12 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="4b5b87d3c8366afa8bd2e40e0b07cc3102133250" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="translated">⚠️Si habilita esta opción, su transmisión en vivo se cancelará si excede su cuota de video</target>
+        <target state="translated">⚠️Si habilita esta opción, su transmisión en directo se cancelará si excede su cuota de video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="e495a796f252097a77a501a99db7cb30d1019296" datatype="html">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="translated">Publica automáticamente una repetición cuando finaliza tu transmisión</target>
+        <target state="translated">Publica automáticamente una reproducción cuando finaliza tu transmisión</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">241</context></context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
