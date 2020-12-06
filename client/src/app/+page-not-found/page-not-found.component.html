@@ -1,7 +1,32 @@
 <div class="root">
-  <img src="/client/assets/images/mascot/defeated.svg" alt="404 mascot">
+  <div *ngIf="status === 404" class="box">
+    <strong>{{ status }}.</strong>
+    <span class="ml-1 text-muted" i18n>That's an error.</span>
 
-  <div class="text" i18n>
-    Sorry, we couldn't find the page you were looking for.
+    <div class="text mt-4" i18n>
+      We couldn't find any ressource tied to the URL {{ pathname }} you were looking for.
+    </div>
+
+    <div class="text-muted mt-4">
+      <span i18n="Possible reasons preceding a list of reasons a `Not Found` error page may occur">Possible reasons:</span>
+
+      <ul>
+        <li i18n>The page may have been moved or deleted</li>
+        <li i18n>You may have used an outdated or broken link</li>
+        <li i18n>You may have typed the address or URL incorrectly</li>
+      </ul>
+    </div>
   </div>
+
+  <div *ngIf="status === 418" class="box">
+    <strong>{{ status }}.</strong>
+    <span class="ml-1 text-muted">I'm a teapot.</span>
+
+    <div class="text mt-4" i18n="Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request">
+      The requested entity body blends sweet bits with a mellow earthiness.
+    </div>
+    <div class="text-muted" i18n="This is about Sepia's tea">Sepia seems to like it.</div>
+  </div>
+
+  <img src='/client/assets/images/mascot/{{ getMascotName() }}.svg' alt='{{ status }} mascot'>
 </div>

@@ -164,7 +164,7 @@ describe('Test live constraints', function () {
   })
 
   it('Should have max duration limit', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
       live: {

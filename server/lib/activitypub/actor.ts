@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { Transaction } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 import { URL } from 'url'
 import { v4 as uuidv4 } from 'uuid'
 import { ActivityPubActor, ActivityPubActorType, ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
@@ -384,13 +384,32 @@ function saveActorAndServerAndModelIfNotExist (
 
     // Force the actor creation, sometimes Sequelize skips the save() when it thinks the instance already exists
     // (which could be false in a retried query)
-    const [ actorCreated ] = await ActorModel.findOrCreate<MActorFullActor>({
+    const [ actorCreated, created ] = await ActorModel.findOrCreate<MActorFullActor>({
       defaults: actor.toJSON(),
       where: {
-        url: actor.url
+        [Op.or]: [
+          {
+            url: actor.url
+          },
+          {
+            serverId: actor.serverId,
+            preferredUsername: actor.preferredUsername
+          }
+        ]
       },
       transaction: t
     })
+
+    // Try to fix non HTTPS accounts of remote instances that fixed their URL afterwards
+    if (created !== true && actorCreated.url !== actor.url) {
+      // Only fix http://example.com/account/djidane to https://example.com/account/djidane
+      if (actorCreated.url.replace(/^http:\/\//, '') !== actor.url.replace(/^https:\/\//, '')) {
+        throw new Error(`Actor from DB with URL ${actorCreated.url} does not correspond to actor ${actor.url}`)
+      }
+
+      actorCreated.url = actor.url
+      await actorCreated.save({ transaction: t })
+    }
 
     if (actorCreated.type === 'Person' || actorCreated.type === 'Application') {
       actorCreated.Account = await saveAccount(actorCreated, result, t) as MAccountDefault

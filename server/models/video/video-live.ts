@@ -38,6 +38,10 @@ export class VideoLiveModel extends Model<VideoLiveModel> {
   @Column
   saveReplay: boolean
 
+  @AllowNull(false)
+  @Column
+  permanentLive: boolean
+
   @CreatedAt
   createdAt: Date
 
@@ -99,6 +103,7 @@ export class VideoLiveModel extends Model<VideoLiveModel> {
         : null,
 
       streamKey: this.streamKey,
+      permanentLive: this.permanentLive,
       saveReplay: this.saveReplay
     }
   }

@@ -137,6 +137,8 @@ interface HLSTranscodeOptions extends BaseTranscodeOptions {
 interface HLSFromTSTranscodeOptions extends BaseTranscodeOptions {
   type: 'hls-from-ts'
 
+  isAAC: boolean
+
   hlsPlaylist: {
     videoFilename: string
   }
@@ -181,7 +183,7 @@ const builders: {
 async function transcode (options: TranscodeOptions) {
   logger.debug('Will run transcode.', { options })
 
-  let command = getFFmpeg(options.inputPath)
+  let command = getFFmpeg(options.inputPath, 'vod')
     .output(options.outputPath)
 
   command = await builders[options.type](command, options)
@@ -207,8 +209,7 @@ async function getLiveTranscodingCommand (options: {
   const { rtmpUrl, outPath, resolutions, fps, availableEncoders, profile } = options
   const input = rtmpUrl
 
-  const command = getFFmpeg(input)
-  command.inputOption('-fflags nobuffer')
+  const command = getFFmpeg(input, 'live')
 
   const varStreamMap: string[] = []
 
@@ -229,6 +230,7 @@ async function getLiveTranscodingCommand (options: {
   ])
 
   command.outputOption('-preset superfast')
+  command.outputOption('-sc_threshold 0')
 
   addDefaultEncoderGlobalParams({ command })
 
@@ -289,8 +291,7 @@ async function getLiveTranscodingCommand (options: {
 }
 
 function getLiveMuxingCommand (rtmpUrl: string, outPath: string) {
-  const command = getFFmpeg(rtmpUrl)
-  command.inputOption('-fflags nobuffer')
+  const command = getFFmpeg(rtmpUrl, 'live')
 
   command.outputOption('-c:v copy')
   command.outputOption('-c:a copy')
@@ -371,7 +372,7 @@ function addDefaultEncoderParams (options: {
 function addDefaultLiveHLSParams (command: ffmpeg.FfmpegCommand, outPath: string) {
   command.outputOption('-hls_time ' + VIDEO_LIVE.SEGMENT_TIME_SECONDS)
   command.outputOption('-hls_list_size ' + VIDEO_LIVE.SEGMENTS_LIST_SIZE)
-  command.outputOption('-hls_flags delete_segments')
+  command.outputOption('-hls_flags delete_segments+independent_segments')
   command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%06d.ts')}`)
   command.outputOption('-master_pl_name master.m3u8')
   command.outputOption(`-f hls`)
@@ -456,11 +457,13 @@ async function buildHLSVODCommand (command: ffmpeg.FfmpegCommand, options: HLSTr
 async function buildHLSVODFromTSCommand (command: ffmpeg.FfmpegCommand, options: HLSFromTSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
-  command.inputOption('-safe 0')
-  command.inputOption('-f concat')
+  command.outputOption('-c copy')
 
-  command.outputOption('-c:v copy')
-  command.audioFilter('aresample=async=1:first_pts=0')
+  if (options.isAAC) {
+    // Required for example when copying an AAC stream from an MPEG-TS
+    // Since it's a bitstream filter, we don't need to reencode the audio
+    command.outputOption('-bsf:a aac_adtstoasc')
+  }
 
   addCommonHLSVODCommandOptions(command, videoPath)
 
@@ -605,13 +608,17 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
 // Utils
 // ---------------------------------------------------------------------------
 
-function getFFmpeg (input: string) {
+function getFFmpeg (input: string, type: 'live' | 'vod') {
   // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
   const command = ffmpeg(input, { niceness: FFMPEG_NICE.TRANSCODING, cwd: CONFIG.STORAGE.TMP_DIR })
 
-  if (CONFIG.TRANSCODING.THREADS > 0) {
+  const threads = type === 'live'
+    ? CONFIG.LIVE.TRANSCODING.THREADS
+    : CONFIG.TRANSCODING.THREADS
+
+  if (threads > 0) {
     // If we don't set any threads ffmpeg will chose automatically
-    command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
+    command.outputOption('-threads ' + threads)
   }
 
   return command

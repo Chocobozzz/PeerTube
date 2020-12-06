@@ -164,7 +164,7 @@ async function getVideoFileBitrate (path: string, existingProbe?: ffmpeg.Ffprobe
 async function getDurationFromVideoFile (path: string, existingProbe?: ffmpeg.FfprobeData) {
   const metadata = await getMetadataFromFile(path, existingProbe)
 
-  return Math.floor(metadata.format.duration)
+  return Math.round(metadata.format.duration)
 }
 
 async function getVideoStreamFromFile (path: string, existingProbe?: ffmpeg.FfprobeData) {

@@ -8,7 +8,7 @@
     <h2 i18n class="applications-title">SUBSCRIPTION FEED</h2>
     <div i18n class="applications-description">
       Use third-party feed aggregators to retrieve the list of videos from
-      channels you subscribed to. Make sure to keep your token private.
+      channels you subscribed to.
     </div>
   </div>
 
@@ -16,12 +16,14 @@
 
     <div class="form-group">
       <label i18n for="feed-url">Feed URL</label>
-      <my-input-readonly-copy [value]="feedUrl"></my-input-readonly-copy>
+      <my-input-toggle-hidden [value]="feedUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
     </div>
 
     <div class="form-group">
       <label i18n for="feed-token">Feed Token</label>
-      <my-input-readonly-copy [value]="feedToken"></my-input-readonly-copy>
+      <my-input-toggle-hidden [value]="feedToken" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
+
+      <div class="form-group-description" i18n>⚠️ Never share your feed token with anyone.</div>
     </div>
 
   </div>

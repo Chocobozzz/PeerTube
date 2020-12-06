@@ -50,10 +50,10 @@
         <div class="form-group">
           <label i18n for="password">Password</label>
           <div>
-            <input
-              type="password" name="password" id="password" i18n-placeholder placeholder="Password" required tabindex="2" autocomplete="current-password"
-              formControlName="password" class="form-control" [ngClass]="{ 'input-error': formErrors['password'] }"
-            >
+            <my-input-toggle-hidden formControlName="password" id="password"
+                                    i18n-placeholder placeholder="Password"
+                                    [ngClass]="{ 'input-error': formErrors['password'] }"
+                                    autocomplete="current-password"></my-input-toggle-hidden>
             <a i18n-title class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>
           </div>
           <div *ngIf="formErrors.password" class="form-error">

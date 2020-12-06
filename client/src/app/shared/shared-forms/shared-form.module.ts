@@ -7,7 +7,7 @@ import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
 import { DynamicFormFieldComponent } from './dynamic-form-field.component'
 import { FormValidatorService } from './form-validator.service'
-import { InputReadonlyCopyComponent } from './input-readonly-copy.component'
+import { InputToggleHiddenComponent } from './input-toggle-hidden.component'
 import { InputSwitchComponent } from './input-switch.component'
 import { MarkdownTextareaComponent } from './markdown-textarea.component'
 import { PeertubeCheckboxComponent } from './peertube-checkbox.component'
@@ -30,7 +30,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
   ],
 
   declarations: [
-    InputReadonlyCopyComponent,
+    InputToggleHiddenComponent,
     MarkdownTextareaComponent,
     PeertubeCheckboxComponent,
     PreviewUploadComponent,
@@ -55,7 +55,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
     InputMaskModule,
     NgSelectModule,
 
-    InputReadonlyCopyComponent,
+    InputToggleHiddenComponent,
     MarkdownTextareaComponent,
     PeertubeCheckboxComponent,
     PreviewUploadComponent,

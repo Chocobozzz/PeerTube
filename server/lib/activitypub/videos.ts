@@ -429,6 +429,7 @@ async function updateVideoFromAP (options: {
         if (video.isLive) {
           const [ videoLive ] = await VideoLiveModel.upsert({
             saveReplay: videoObject.liveSaveReplay,
+            permanentLive: videoObject.permanentLive,
             videoId: video.id
           }, { transaction: t, returning: true })
 
@@ -631,6 +632,7 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
       const videoLive = new VideoLiveModel({
         streamKey: null,
         saveReplay: videoObject.liveSaveReplay,
+        permanentLive: videoObject.permanentLive,
         videoId: videoCreated.id
       })
 

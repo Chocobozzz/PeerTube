@@ -120,7 +120,8 @@ code {
   margin-top: 5px;
 }
 
-.input-error {
+.input-error
+my-input-toggle-hidden ::ng-deep input {
   border-color: $red !important;
 }
 

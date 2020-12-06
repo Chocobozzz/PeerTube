@@ -1,7 +1,10 @@
 import { DatePipe } from '@angular/common'
+import { HttpErrorResponse } from '@angular/common/http'
+import { Notifier } from '@app/core'
 import { SelectChannelItem } from '@app/shared/shared-forms'
 import { environment } from '../../environments/environment'
 import { AuthService } from '../core/auth'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 // Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 function getParameterByName (name: string, url: string) {
@@ -172,6 +175,33 @@ function isXPercentInViewport (el: HTMLElement, percentVisible: number) {
   )
 }
 
+function uploadErrorHandler (parameters: {
+  err: HttpErrorResponse
+  name: string
+  notifier: Notifier
+  sticky?: boolean
+}) {
+  const { err, name, notifier, sticky } = { sticky: false, ...parameters }
+  const title = $localize`The upload failed`
+  let message = err.message
+
+  if (err instanceof ErrorEvent) { // network error
+    message = $localize`The connection was interrupted`
+    notifier.error(message, title, null, sticky)
+  } else if (err.status === HttpStatusCode.REQUEST_TIMEOUT_408) {
+    message = $localize`Your ${name} file couldn't be transferred before the set timeout (usually 10min)`
+    notifier.error(message, title, null, sticky)
+  } else if (err.status === HttpStatusCode.PAYLOAD_TOO_LARGE_413) {
+    const maxFileSize = err.headers?.get('X-File-Maximum-Size') || '8G'
+    message = $localize`Your ${name} file was too large (max. size: ${maxFileSize})`
+    notifier.error(message, title, null, sticky)
+  } else {
+    notifier.error(err.message, title)
+  }
+
+  return message
+}
+
 export {
   sortBy,
   durationToString,
@@ -187,5 +217,6 @@ export {
   removeElementFromArray,
   scrollToTop,
   isInViewport,
-  isXPercentInViewport
+  isXPercentInViewport,
+  uploadErrorHandler
 }

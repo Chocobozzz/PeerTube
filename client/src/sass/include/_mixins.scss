@@ -732,6 +732,10 @@
     &.secondary {
       background-color: pvar(--secondaryColor);
     }
+
+    &.red {
+      background-color: lighten($color: #c54130, $amount: 10);
+    }
   }
 }
 

@@ -49,8 +49,15 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid saveReplay attribute'),
 
+  body('permanentLive')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid permanentLive attribute'),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoLiveAddValidator parameters', { parameters: req.body })
+
+    if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     if (CONFIG.LIVE.ENABLED !== true) {
       cleanUpReqFiles(req)
@@ -66,7 +73,12 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
         .json({ error: 'Saving live replay is not allowed instance' })
     }
 
-    if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (req.body.permanentLive && req.body.saveReplay) {
+      cleanUpReqFiles(req)
+
+      return res.status(400)
+        .json({ error: 'Cannot set this live as permanent while saving its replay' })
+    }
 
     const user = res.locals.oauth.token.User
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
@@ -115,6 +127,11 @@ const videoLiveUpdateValidator = [
     logger.debug('Checking videoLiveUpdateValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
+
+    if (req.body.permanentLive && req.body.saveReplay) {
+      return res.status(400)
+        .json({ error: 'Cannot set this live as permanent while saving its replay' })
+    }
 
     if (CONFIG.LIVE.ALLOW_REPLAY !== true && req.body.saveReplay === true) {
       return res.status(403)

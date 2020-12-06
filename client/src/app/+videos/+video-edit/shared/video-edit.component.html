@@ -213,14 +213,26 @@
 
             <div class="form-group">
               <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
-              <my-input-readonly-copy id="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl"></my-input-readonly-copy>
+              <my-input-toggle-hidden id="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
             </div>
 
             <div class="form-group">
               <label for="liveVideoStreamKey" i18n>Live stream key</label>
-              <my-input-readonly-copy id="liveVideoStreamKey" [value]="liveVideo.streamKey"></my-input-readonly-copy>
+              <my-input-toggle-hidden id="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
 
               <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
+            </div>
+
+            <div class="form-group">
+              <my-peertube-checkbox inputName="liveVideoPermanentLive" formControlName="permanentLive">
+                <ng-template ptTemplate="label">
+                  <ng-container i18n>This is a permanent live</ng-container>
+                </ng-template>
+
+                <ng-container ngProjectAs="description">
+                  <span i18n>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</span>
+                </ng-container>
+              </my-peertube-checkbox>
             </div>
 
             <div class="form-group" *ngIf="isSaveReplayEnabled()">

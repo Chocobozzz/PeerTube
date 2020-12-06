@@ -1,8 +1,9 @@
 import * as Bull from 'bull'
-import { copy, readdir, remove } from 'fs-extra'
+import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import { ffprobePromise, getAudioStream, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { VIDEO_LIVE } from '@server/initializers/constants'
+import { LiveManager } from '@server/lib/live-manager'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
@@ -36,6 +37,8 @@ async function processVideoLiveEnding (job: Bull.Job) {
     return
   }
 
+  LiveManager.Instance.cleanupShaSegments(video.uuid)
+
   if (live.saveReplay !== true) {
     return cleanupLive(video, streamingPlaylist)
   }
@@ -43,10 +46,19 @@ async function processVideoLiveEnding (job: Bull.Job) {
   return saveLive(video, live)
 }
 
+async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
+  const hlsDirectory = getHLSDirectory(video)
+
+  await remove(hlsDirectory)
+
+  await streamingPlaylist.destroy()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  processVideoLiveEnding
+  processVideoLiveEnding,
+  cleanupLive
 }
 
 // ---------------------------------------------------------------------------
@@ -61,8 +73,8 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   for (const file of rootFiles) {
     // Move remaining files in the replay directory
-    if (file.endsWith('.ts') || file.endsWith('.m3u8')) {
-      await copy(join(hlsDirectory, file), join(replayDirectory, file))
+    if (file.endsWith('.ts')) {
+      await LiveManager.Instance.addSegmentToReplay(hlsDirectory, join(hlsDirectory, file))
     }
 
     if (file.endsWith('.m3u8') && file !== 'master.m3u8') {
@@ -88,30 +100,30 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
   hlsPlaylist.VideoFiles = []
 
-  const replayFiles = await readdir(replayDirectory)
-  let duration: number
+  let durationDone: boolean
 
   for (const playlistFile of playlistFiles) {
-    const playlistPath = join(replayDirectory, playlistFile)
-    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(playlistPath)
+    const concatenatedTsFile = LiveManager.Instance.buildConcatenatedName(playlistFile)
+    const concatenatedTsFilePath = join(replayDirectory, concatenatedTsFile)
 
-    // Playlist name is for example 3.m3u8
-    // Segments names are 3-0.ts 3-1.ts etc
-    const shouldStartWith = playlistFile.replace(/\.m3u8$/, '') + '-'
+    const probe = await ffprobePromise(concatenatedTsFilePath)
+    const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
 
-    const segmentFiles = replayFiles.filter(f => f.startsWith(shouldStartWith) && f.endsWith('.ts'))
+    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
 
     const outputPath = await generateHlsPlaylistFromTS({
       video: videoWithFiles,
-      replayDirectory,
-      segmentFiles,
+      concatenatedTsFilePath,
       resolution: videoFileResolution,
-      isPortraitMode
+      isPortraitMode,
+      isAAC: audioStream?.codec_name === 'aac'
     })
 
-    if (!duration) {
+    if (!durationDone) {
       videoWithFiles.duration = await getDurationFromVideoFile(outputPath)
       await videoWithFiles.save()
+
+      durationDone = true
     }
   }
 
@@ -126,19 +138,12 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     await generateVideoMiniature(videoWithFiles, videoWithFiles.getMaxQualityFile(), ThumbnailType.PREVIEW)
   }
 
-  await publishAndFederateIfNeeded(video, true)
-}
-
-async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
-  const hlsDirectory = getHLSDirectory(video)
-
-  await remove(hlsDirectory)
-
-  streamingPlaylist.destroy()
-    .catch(err => logger.error('Cannot remove live streaming playlist.', { err }))
+  await publishAndFederateIfNeeded(videoWithFiles, true)
 }
 
 async function cleanupLiveFiles (hlsDirectory: string) {
+  if (!await pathExists(hlsDirectory)) return
+
   const files = await readdir(hlsDirectory)
 
   for (const filename of files) {

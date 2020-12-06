@@ -1,0 +1,11 @@
+@import '_variables';
+@import '_mixins';
+
+input {
+  @include peertube-input-text(auto);
+
+  // set again properties of peertube-input-text that are overriden by .input-group
+  font-size: 15px !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}

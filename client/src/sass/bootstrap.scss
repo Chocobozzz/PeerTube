@@ -44,6 +44,11 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   z-index: inherit !important;
 }
 
+.btn-group > .btn:not(:first-child) {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
 .dropdown-menu {
   z-index: z(dropdown) + 1 !important;
 

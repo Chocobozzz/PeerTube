@@ -138,6 +138,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       schedulePublicationAt: VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR,
       originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
       liveStreamKey: null,
+      permanentLive: null,
       saveReplay: null
     }
 
@@ -158,6 +159,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.trackChannelChange()
     this.trackPrivacyChange()
+    this.trackLivePermanentFieldChange()
   }
 
   ngOnInit () {
@@ -252,6 +254,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   isSaveReplayEnabled () {
     return this.serverConfig.live.allowReplay
+  }
+
+  isPermanentLiveEnabled () {
+    return this.form.value['permanentLive'] === true
   }
 
   private sortVideoCaptions () {
@@ -358,6 +364,24 @@ export class VideoEditComponent implements OnInit, OnDestroy {
             // Update the support text with our new channel
             this.updateSupportField(newChannel.support)
           })
+        }
+      )
+  }
+
+  private trackLivePermanentFieldChange () {
+    // We will update the "support" field depending on the channel
+    this.form.controls['permanentLive']
+      .valueChanges
+      .subscribe(
+        permanentLive => {
+          const saveReplayControl = this.form.controls['saveReplay']
+
+          if (permanentLive === true) {
+            saveReplayControl.setValue(false)
+            saveReplayControl.disable()
+          } else {
+            saveReplayControl.enable()
+          }
         }
       )
   }

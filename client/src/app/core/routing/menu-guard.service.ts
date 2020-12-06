@@ -27,22 +27,48 @@ export class OpenMenuGuard extends MenuGuard {
 }
 
 @Injectable()
+export class OpenMenuAlwaysGuard extends MenuGuard {
+  constructor (menu: MenuService, screen: ScreenService) { super(menu, screen, true) }
+
+  canActivate (): boolean {
+    this.menu.setMenuDisplay(this.display)
+    return true
+  }
+}
+
+@Injectable()
 export class CloseMenuGuard extends MenuGuard {
   constructor (menu: MenuService, screen: ScreenService) { super(menu, screen, false) }
+}
+
+@Injectable()
+export class CloseMenuAlwaysGuard extends MenuGuard {
+  constructor (menu: MenuService, screen: ScreenService) { super(menu, screen, false) }
+
+  canActivate (): boolean {
+    this.menu.setMenuDisplay(this.display)
+    return true
+  }
 }
 
 @Injectable()
 export class MenuGuards {
   public static guards = [
     OpenMenuGuard,
-    CloseMenuGuard
+    OpenMenuAlwaysGuard,
+    CloseMenuGuard,
+    CloseMenuAlwaysGuard
   ]
 
-  static open () {
-    return OpenMenuGuard
+  static open (always?: boolean) {
+    return always
+      ? OpenMenuAlwaysGuard
+      : OpenMenuGuard
   }
 
-  static close () {
-    return CloseMenuGuard
+  static close (always?: boolean) {
+    return always
+      ? CloseMenuAlwaysGuard
+      : CloseMenuGuard
   }
 }

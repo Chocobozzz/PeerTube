@@ -67,7 +67,9 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
   const video = res.locals.videoAll
   const videoLive = res.locals.videoLive
+
   videoLive.saveReplay = body.saveReplay || false
+  videoLive.permanentLive = body.permanentLive || false
 
   video.VideoLive = await videoLive.save()
 
@@ -90,6 +92,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
 
   const videoLive = new VideoLiveModel()
   videoLive.saveReplay = videoInfo.saveReplay || false
+  videoLive.permanentLive = videoInfo.permanentLive || false
   videoLive.streamKey = uuidv4()
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({

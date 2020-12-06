@@ -72,7 +72,7 @@ tags:
       new videos, and how to keep up to date with their latest publications!
   - name: My History
     description: >
-      Operations related to your watch history. 
+      Operations related to your watch history.
   - name: My Notifications
     description: >
       Notifications following new videos, follows or reports. They allow you
@@ -972,6 +972,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Avatar'
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the avatar
       requestBody:
         content:
           multipart/form-data:
@@ -1308,6 +1316,14 @@ paths:
           description: user video quota is exceeded with this video
         '408':
           description: upload has timed out
+        '413':
+          description: video file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the video
         '422':
           description: invalid input file
       requestBody:
@@ -1550,6 +1566,9 @@ paths:
                   description: Channel id that will contain this live video
                   type: integer
                 saveReplay:
+                  type: boolean
+                permanentLive:
+                  description: User can stream multiple times in a permanent live
                   type: boolean
                 thumbnailfile:
                   description: Live video/replay thumbnail file
@@ -5598,6 +5617,9 @@ components:
       properties:
         saveReplay:
           type: boolean
+        permanentLive:
+          description: User can stream multiple times in a permanent live
+          type: boolean
 
     LiveVideoResponse:
       properties:
@@ -5607,6 +5629,9 @@ components:
           type: string
           description: RTMP stream key to use to stream into this live video
         saveReplay:
+          type: boolean
+        permanentLive:
+          description: User can stream multiple times in a permanent live
           type: boolean
 
   callbacks:
