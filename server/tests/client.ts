@@ -8,19 +8,20 @@ import {
   addVideoInPlaylist,
   cleanupTests,
   createVideoPlaylist,
-  flushAndRunServer,
   getAccount,
   getCustomConfig,
   getVideosList,
   makeHTMLRequest,
   ServerInfo,
-  serverLogin,
   setDefaultVideoChannel,
   updateCustomConfig,
   updateCustomSubConfig,
   uploadVideo,
   updateMyUser,
-  updateVideoChannel
+  updateVideoChannel,
+  doubleFollow,
+  flushAndRunMultipleServers,
+  setAccessTokensToServers
 } from '../../shared/extra-utils'
 
 const expect = chai.expect
@@ -32,8 +33,11 @@ function checkIndexTags (html: string, title: string, description: string, css: 
 }
 
 describe('Test a client controllers', function () {
+  let servers: ServerInfo[] = []
   let server: ServerInfo
   let account: Account
+  let videoUUID: string
+  let videoOriginalUrl: string
 
   const videoName = 'my super name for server 1'
   const videoDescription = 'my super description for server 1'
@@ -47,8 +51,19 @@ describe('Test a client controllers', function () {
   before(async function () {
     this.timeout(120000)
 
-    server = await flushAndRunServer(1)
-    server.accessToken = await serverLogin(server)
+    servers = await flushAndRunMultipleServers(2)
+    const server = servers[0]
+
+    await setAccessTokensToServers(servers)
+
+    {
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
+      videoUUID = res.body.video.uuid
+      videoOriginalUrl = res.body.video.url
+    }
+
+    await doubleFollow(servers[0], servers[1])
+
     await setDefaultVideoChannel([ server ])
 
     await updateVideoChannel(server.url, server.accessToken, server.videoChannel.name, { description: channelDescription })
@@ -317,6 +332,11 @@ describe('Test a client controllers', function () {
       const res = await makeHTMLRequest(server.url, '/videos/trending')
 
       checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
+    })
+
+    it('Should use the original video URL for the canonical tag', async function () {
+      const res = await makeHTMLRequest(servers[1].url, '/videos/watch/' + videoUUID)
+      expect(res.text).to.contain(`<link rel="canonical" href="${videoOriginalUrl}" />`)
     })
   })
 
