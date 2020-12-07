@@ -44,7 +44,7 @@
           <input type="submit" i18n-value value="Login" [disabled]="!form.valid">
           
           <div class="additionnal-links">
-            <a i18n-title class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>
+            <a class="forgot-password-button" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
             <div *ngIf="signupAllowed" class="signup-link">
               <span>·</span>
               <a i18n routerLink="/signup" class="create-an-account">Create an account</a>
@@ -56,12 +56,12 @@
               Logging into an account lets you publish content
             </h6>
 
-            <div *ngIf="signupAllowed === true" i18n>
+            <div *ngIf="signupAllowed" i18n>
               This instance allows registration. However, be careful to check the <a class="terms-anchor" (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
               You may also search for another instance to match your exact needs at: <br /><a class="alert-link" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
             </div>
 
-            <div *ngIf="signupAllowed === false" i18n>
+            <div *ngIf="!signupAllowed" i18n>
               Currently this instance doesn't allow for user registration, you may check the <a (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
               Find yours among multiple instances at: <br /> <a class="alert-link" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
             </div>
