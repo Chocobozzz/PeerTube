@@ -20,6 +20,7 @@ import {
 } from '../../../../shared/extra-utils'
 import { Video, VideoDetails } from '../../../../shared/models/videos'
 import { listMyVideosHistory, removeMyVideosHistory, userWatchVideo } from '../../../../shared/extra-utils/videos/video-history'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -171,7 +172,7 @@ describe('Test videos history', function () {
       videosHistoryEnabled: false
     })
 
-    await userWatchVideo(server.url, server.accessToken, video2UUID, 8, 409)
+    await userWatchVideo(server.url, server.accessToken, video2UUID, 8, HttpStatusCode.CONFLICT_409)
   })
 
   it('Should re-enable videos history', async function () {

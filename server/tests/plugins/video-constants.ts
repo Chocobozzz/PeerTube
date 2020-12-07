@@ -16,6 +16,7 @@ import {
   uploadVideo
 } from '../../../shared/extra-utils'
 import { VideoDetails, VideoPlaylistPrivacy } from '../../../shared/models/videos'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -89,12 +90,17 @@ describe('Test plugin altering video constants', function () {
 
   it('Should not be able to create a video with this privacy', async function () {
     const attrs = { name: 'video', privacy: 2 }
-    await uploadVideo(server.url, server.accessToken, attrs, 400)
+    await uploadVideo(server.url, server.accessToken, attrs, HttpStatusCode.BAD_REQUEST_400)
   })
 
   it('Should not be able to create a video with this privacy', async function () {
     const attrs = { displayName: 'video playlist', privacy: VideoPlaylistPrivacy.PRIVATE }
-    await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attrs, expectedStatus: 400 })
+    await createVideoPlaylist({
+      url: server.url,
+      token: server.accessToken,
+      playlistAttrs: attrs,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
   })
 
   it('Should be able to upload a video with these values', async function () {

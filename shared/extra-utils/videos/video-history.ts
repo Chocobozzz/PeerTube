@@ -1,7 +1,13 @@
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function userWatchVideo (url: string, token: string, videoId: number | string, currentTime: number, statusCodeExpected = 204) {
+function userWatchVideo (
+  url: string,
+  token: string,
+  videoId: number | string,
+  currentTime: number,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/videos/' + videoId + '/watching'
   const fields = { currentTime }
 

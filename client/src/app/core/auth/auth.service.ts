@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -94,7 +95,7 @@ export class AuthService {
           error => {
             let errorMessage = error.message
 
-            if (error.status === 403) {
+            if (error.status === HttpStatusCode.FORBIDDEN_403) {
               errorMessage = $localize`Cannot retrieve OAuth Client credentials: ${error.text}.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.`
             }

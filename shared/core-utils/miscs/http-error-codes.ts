@@ -1,6 +1,8 @@
 /**
  * Hypertext Transfer Protocol (HTTP) response status codes.
  * @see {@link https://en.wikipedia.org/wiki/List_of_HTTP_status_codes}
+ *
+ * WebDAV and other codes useless with regards to PeerTube are not listed.
  */
 export enum HttpStatusCode {
 
@@ -48,15 +50,6 @@ export enum HttpStatusCode {
   ACCEPTED_202 = 202,
 
   /**
-   * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.3.4
-   *
-   * SINCE HTTP/1.1
-   * The server is a transforming proxy that received a 200 OK from its origin,
-   * but is returning a modified version of the origin's response.
-   */
-  NON_AUTHORITATIVE_INFORMATION_203 = 203,
-
-  /**
    * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.3.5
    *
    * There is no content to send for this request, but the headers may be useful.
@@ -76,18 +69,6 @@ export enum HttpStatusCode {
    * or split a download into multiple simultaneous streams.
    */
   PARTIAL_CONTENT_206 = 206,
-
-  /**
-   * The message body that follows is an XML message and can contain a number of separate response codes,
-   * depending on how many sub-requests were made.
-   */
-  MULTI_STATUS_207 = 207,
-
-  /**
-   * The server has fulfilled a request for the resource,
-   * and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
-   */
-  IM_USED_226 = 226,
 
   /**
    * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
@@ -129,20 +110,6 @@ export enum HttpStatusCode {
   NOT_MODIFIED_304 = 304,
 
   /**
-   * @deprecated
-   * SINCE HTTP/1.1
-   * The requested resource is available only through a proxy, the address for which is provided in the response.
-   * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status
-   * code, primarily for security reasons.
-   */
-  USE_PROXY_305 = 305,
-
-  /**
-   * No longer used. Originally meant "Subsequent requests should use the specified proxy."
-   */
-  SWITCH_PROXY_306 = 306,
-
-  /**
    * SINCE HTTP/1.1
    * In this case, the request should be repeated with another URI; however, future requests should still use the original URI.
    * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the
@@ -175,6 +142,8 @@ export enum HttpStatusCode {
   UNAUTHORIZED_401 = 401,
 
   /**
+   * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.2
+   *
    * Reserved for future use. The original intention was that this code might be used as part of some form of digital
    * cash or micro payment scheme, but that has not happened, and this code is not usually used.
    * Google Developers API uses this status if a particular developer has exceeded the daily limit on requests.
@@ -211,21 +180,20 @@ export enum HttpStatusCode {
   NOT_ACCEPTABLE_406 = 406,
 
   /**
-   * The client must first authenticate itself with the proxy.
-   */
-  PROXY_AUTHENTICATION_REQUIRED_407 = 407,
-
-  /**
    * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.7
    *
    * This response is sent on an idle connection by some servers, even without any previous request by the client.
    * It means that the server would like to shut down this unused connection. This response is used much more since
    * some browsers, like Chrome, Firefox 27+, or IE9, use HTTP pre-connection mechanisms to speed up surfing. Also
    * note that some servers merely shut down the connection without sending this message.
+   *
+   * @
    */
   REQUEST_TIMEOUT_408 = 408,
 
   /**
+   * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.5.8
+   *
    * Indicates that the request could not be processed because of conflict in the request,
    * such as an edit conflict between multiple simultaneous updates.
    */
@@ -284,7 +252,7 @@ export enum HttpStatusCode {
   RANGE_NOT_SATISFIABLE_416 = 416,
 
   /**
-   * The server cannot meet the requirements of the Expect request-header field.
+   * The server cannot meet the requirements of the `Expect` request-header field.
    */
   EXPECTATION_FAILED_417 = 417,
 
@@ -296,39 +264,24 @@ export enum HttpStatusCode {
   I_AM_A_TEAPOT_418 = 418,
 
   /**
-   * The request was directed at a server that is not able to produce a response (for example because a connection reuse).
-   */
-  MISDIRECTED_REQUEST_421 = 421,
-
-  /**
    * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.3
    *
    * The request was well-formed but was unable to be followed due to semantic errors.
+   *
+   * @see HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 if the `Content-Type` was not supported.
+   * @see HttpStatusCode.BAD_REQUEST_400 if the request was not parsable (broken JSON, XML)
    */
   UNPROCESSABLE_ENTITY_422 = 422,
 
   /**
-   * The resource that is being accessed is locked.
+   * Official Documentation @ https://tools.ietf.org/html/rfc4918#section-11.3
+   *
+   * The resource that is being accessed is locked. WebDAV-specific but used by some HTTP services.
+   *
+   * @deprecated use `If-Match` / `If-None-Match` instead
+   * @see {@link https://evertpot.com/http/423-locked}
    */
   LOCKED_423 = 423,
-
-  /**
-   * The request failed due to failure of a previous request (e.g., a PROPPATCH).
-   */
-  FAILED_DEPENDENCY_424 = 424,
-
-  /**
-   * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
-   */
-  UPGRADE_REQUIRED_426 = 426,
-
-  /**
-   * The origin server requires the request to be conditional.
-   * Intended to prevent "the 'lost update' problem, where a client
-   * GETs a resource's state, modifies it, and PUTs it back to the server,
-   * when meanwhile a third party has modified the state on the server, leading to a conflict."
-   */
-  PRECONDITION_REQUIRED_428 = 428,
 
   /**
    * Official Documentation @ https://tools.ietf.org/html/rfc6585#section-4
@@ -359,6 +312,8 @@ export enum HttpStatusCode {
   INTERNAL_SERVER_ERROR_500 = 500,
 
   /**
+   * Official Documentation @ https://tools.ietf.org/html/rfc7231#section-6.6.2
+   *
    * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
    * Usually this implies future availability (e.g., a new feature of a web-service API).
    */
@@ -386,34 +341,14 @@ export enum HttpStatusCode {
   HTTP_VERSION_NOT_SUPPORTED_505 = 505,
 
   /**
-   * Transparent content negotiation for the request results in a circular reference.
-   */
-  VARIANT_ALSO_NEGOTIATES_506 = 506,
-
-  /**
    * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.6
    *
    * The 507 (Insufficient Storage) status code means the method could not be performed on the resource because the
    * server is unable to store the representation needed to successfully complete the request. This condition is
    * considered to be temporary. If the request which received this status code was the result of a user action,
    * the request MUST NOT be repeated until it is requested by a separate user action.
+   *
+   * @see HttpStatusCode.PAYLOAD_TOO_LARGE_413 for quota errors
    */
   INSUFFICIENT_STORAGE_507 = 507,
-
-  /**
-   * The server detected an infinite loop while processing the request.
-   */
-  LOOP_DETECTED_508 = 508,
-
-  /**
-   * Further extensions to the request are required for the server to fulfill it.
-   */
-  NOT_EXTENDED_510 = 510,
-
-  /**
-   * The client needs to authenticate to gain network access.
-   * Intended for use by intercepting proxies used to control access to the network (e.g., "captive portals" used
-   * to require agreement to Terms of Service before granting full Internet access via a Wi-Fi hotspot).
-   */
-  NETWORK_AUTHENTICATION_REQUIRED_511 = 511
 }

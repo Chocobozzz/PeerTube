@@ -26,6 +26,7 @@ import {
 import { VideoDetails } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -57,8 +58,8 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
       )
       expect(file.resolution.label).to.equal(resolution + 'p')
 
-      await makeRawRequest(file.torrentUrl, 200)
-      await makeRawRequest(file.fileUrl, 200)
+      await makeRawRequest(file.torrentUrl, HttpStatusCode.OK_200)
+      await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
 
       const torrent = await webtorrentAdd(file.magnetUri, true)
       expect(torrent.files).to.be.an('array')
@@ -144,8 +145,8 @@ describe('Test HLS videos', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await getVideo(server.url, videoUUID, 404)
-        await getVideo(server.url, videoAudioUUID, 404)
+        await getVideo(server.url, videoUUID, HttpStatusCode.NOT_FOUND_404)
+        await getVideo(server.url, videoAudioUUID, HttpStatusCode.NOT_FOUND_404)
       }
     })
 

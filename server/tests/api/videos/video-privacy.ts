@@ -18,6 +18,7 @@ import { createUser } from '../../../../shared/extra-utils/users/users'
 import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../../../shared/extra-utils/videos/videos'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { Video } from '@shared/models'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -110,8 +111,8 @@ describe('Test video privacy', function () {
   })
 
   it('Should not be able to watch the private/internal video with non authenticated user', async function () {
-    await getVideo(servers[0].url, privateVideoUUID, 401)
-    await getVideo(servers[0].url, internalVideoUUID, 401)
+    await getVideo(servers[0].url, privateVideoUUID, HttpStatusCode.UNAUTHORIZED_401)
+    await getVideo(servers[0].url, internalVideoUUID, HttpStatusCode.UNAUTHORIZED_401)
   })
 
   it('Should not be able to watch the private video with another user', async function () {
@@ -124,15 +125,15 @@ describe('Test video privacy', function () {
     await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
     anotherUserToken = await userLogin(servers[0], user)
-    await getVideoWithToken(servers[0].url, anotherUserToken, privateVideoUUID, 403)
+    await getVideoWithToken(servers[0].url, anotherUserToken, privateVideoUUID, HttpStatusCode.FORBIDDEN_403)
   })
 
   it('Should be able to watch the internal video with another user', async function () {
-    await getVideoWithToken(servers[0].url, anotherUserToken, internalVideoUUID, 200)
+    await getVideoWithToken(servers[0].url, anotherUserToken, internalVideoUUID, HttpStatusCode.OK_200)
   })
 
   it('Should be able to watch the private video with the correct user', async function () {
-    await getVideoWithToken(servers[0].url, servers[0].accessToken, privateVideoUUID, 200)
+    await getVideoWithToken(servers[0].url, servers[0].accessToken, privateVideoUUID, HttpStatusCode.OK_200)
   })
 
   it('Should upload an unlisted video on server 2', async function () {
@@ -202,7 +203,7 @@ describe('Test video privacy', function () {
   })
 
   it('Should not be able to get non-federated unlisted video from federated server', async function () {
-    await getVideo(servers[1].url, nonFederatedUnlistedVideoUUID, 404)
+    await getVideo(servers[1].url, nonFederatedUnlistedVideoUUID, HttpStatusCode.NOT_FOUND_404)
   })
 
   it('Should update the private and internal videos to public on server 1', async function () {

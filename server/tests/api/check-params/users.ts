@@ -1102,7 +1102,7 @@ describe('Test users API validators', function () {
         videoQuota: 42
       })
 
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.FORBIDDEN_403)
+      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
     })
 
     it('Should fail with a registered user having too many videos', async function () {
@@ -1120,7 +1120,7 @@ describe('Test users API validators', function () {
       await uploadVideo(server.url, userAccessToken, videoAttributes)
       await uploadVideo(server.url, userAccessToken, videoAttributes)
       await uploadVideo(server.url, userAccessToken, videoAttributes)
-      await uploadVideo(server.url, userAccessToken, videoAttributes, HttpStatusCode.FORBIDDEN_403)
+      await uploadVideo(server.url, userAccessToken, videoAttributes, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
     })
 
     it('Should fail to import with HTTP/Torrent/magnet', async function () {
@@ -1151,7 +1151,7 @@ describe('Test users API validators', function () {
   })
 
   describe('When having a daily video quota', function () {
-    it('Should fail with a user having too many videos', async function () {
+    it('Should fail with a user having too many videos daily', async function () {
       await updateUser({
         url: server.url,
         userId: rootId,
@@ -1159,7 +1159,7 @@ describe('Test users API validators', function () {
         videoQuotaDaily: 42
       })
 
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.FORBIDDEN_403)
+      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
     })
   })
 
@@ -1173,7 +1173,7 @@ describe('Test users API validators', function () {
         videoQuotaDaily: 1024 * 1024 * 1024
       })
 
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.FORBIDDEN_403)
+      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
     })
 
     it('Should fail if exceeding daily quota', async function () {
@@ -1185,7 +1185,7 @@ describe('Test users API validators', function () {
         videoQuotaDaily: 42
       })
 
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.FORBIDDEN_403)
+      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
     })
   })
 

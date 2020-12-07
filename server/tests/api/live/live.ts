@@ -44,6 +44,7 @@ import {
   waitUntilLiveStarts,
   waitUntilLog
 } from '../../../../shared/extra-utils'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -164,8 +165,8 @@ describe('Test live', function () {
         expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
         expect(video.nsfw).to.be.true
 
-        await makeRawRequest(server.url + video.thumbnailPath, 200)
-        await makeRawRequest(server.url + video.previewPath, 200)
+        await makeRawRequest(server.url + video.thumbnailPath, HttpStatusCode.OK_200)
+        await makeRawRequest(server.url + video.previewPath, HttpStatusCode.OK_200)
       }
     })
 
@@ -179,7 +180,7 @@ describe('Test live', function () {
     })
 
     it('Should not be able to update a live of another server', async function () {
-      await updateLive(servers[1].url, servers[1].accessToken, liveVideoUUID, { saveReplay: false }, 403)
+      await updateLive(servers[1].url, servers[1].accessToken, liveVideoUUID, { saveReplay: false }, HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should update the live', async function () {
@@ -215,8 +216,8 @@ describe('Test live', function () {
 
     it('Should have the live deleted', async function () {
       for (const server of servers) {
-        await getVideo(server.url, liveVideoUUID, 404)
-        await getLive(server.url, server.accessToken, liveVideoUUID, 404)
+        await getVideo(server.url, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
+        await getLive(server.url, server.accessToken, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
       }
     })
   })
@@ -430,8 +431,8 @@ describe('Test live', function () {
         expect(video.files).to.have.lengthOf(0)
 
         const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)
-        await makeRawRequest(hlsPlaylist.playlistUrl, 200)
-        await makeRawRequest(hlsPlaylist.segmentsSha256Url, 200)
+        await makeRawRequest(hlsPlaylist.playlistUrl, HttpStatusCode.OK_200)
+        await makeRawRequest(hlsPlaylist.segmentsSha256Url, HttpStatusCode.OK_200)
 
         expect(hlsPlaylist.files).to.have.lengthOf(resolutions.length)
 
@@ -455,8 +456,8 @@ describe('Test live', function () {
 
           expect(probe.format.bit_rate).to.be.below(bitrateLimits[videoStream.height])
 
-          await makeRawRequest(file.torrentUrl, 200)
-          await makeRawRequest(file.fileUrl, 200)
+          await makeRawRequest(file.torrentUrl, HttpStatusCode.OK_200)
+          await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
         }
       }
     })

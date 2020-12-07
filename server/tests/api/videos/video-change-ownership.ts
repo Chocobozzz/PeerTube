@@ -23,6 +23,7 @@ import {
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { User } from '../../../../shared/models/users'
 import { VideoDetails } from '../../../../shared/models/videos'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -140,7 +141,7 @@ describe('Test video change ownership - nominal', function () {
   it('Should not be possible to refuse the change of ownership from first user', async function () {
     this.timeout(10000)
 
-    await refuseChangeOwnership(servers[0].url, firstUserAccessToken, lastRequestChangeOwnershipId, 403)
+    await refuseChangeOwnership(servers[0].url, firstUserAccessToken, lastRequestChangeOwnershipId, HttpStatusCode.FORBIDDEN_403)
   })
 
   it('Should be possible to refuse the change of ownership from second user', async function () {
@@ -177,7 +178,7 @@ describe('Test video change ownership - nominal', function () {
     const secondUserInformationResponse = await getMyUserInformation(servers[0].url, secondUserAccessToken)
     const secondUserInformation: User = secondUserInformationResponse.body
     const channelId = secondUserInformation.videoChannels[0].id
-    await acceptChangeOwnership(servers[0].url, firstUserAccessToken, lastRequestChangeOwnershipId, channelId, 403)
+    await acceptChangeOwnership(servers[0].url, firstUserAccessToken, lastRequestChangeOwnershipId, channelId, HttpStatusCode.FORBIDDEN_403)
   })
 
   it('Should be possible to accept the change of ownership from second user', async function () {
@@ -294,7 +295,14 @@ describe('Test video change ownership - quota too small', function () {
     const secondUserInformationResponse = await getMyUserInformation(server.url, secondUserAccessToken)
     const secondUserInformation: User = secondUserInformationResponse.body
     const channelId = secondUserInformation.videoChannels[0].id
-    await acceptChangeOwnership(server.url, secondUserAccessToken, lastRequestChangeOwnershipId, channelId, 403)
+
+    await acceptChangeOwnership(
+      server.url,
+      secondUserAccessToken,
+      lastRequestChangeOwnershipId,
+      channelId,
+      HttpStatusCode.PAYLOAD_TOO_LARGE_413
+    )
   })
 
   after(async function () {

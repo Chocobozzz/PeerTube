@@ -7,6 +7,7 @@ import { ensureDir, remove, writeFile } from 'fs-extra'
 import * as request from 'request'
 import { createWriteStream } from 'fs'
 import { CONFIG } from '@server/initializers/config'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 
 export type YoutubeDLInfo = {
   name?: string
@@ -154,7 +155,7 @@ async function updateYoutubeDLBinary () {
         return res()
       }
 
-      if (result.statusCode !== 302) {
+      if (result.statusCode !== HttpStatusCode.FOUND_302) {
         logger.error('youtube-dl update error: did not get redirect for the latest version link. Status %d', result.statusCode)
         return res()
       }
@@ -164,7 +165,7 @@ async function updateYoutubeDLBinary () {
       const newVersion = /yt-dl\.org\/downloads\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl/.exec(url)[1]
 
       downloadFile.on('response', result => {
-        if (result.statusCode !== 200) {
+        if (result.statusCode !== HttpStatusCode.OK_200) {
           logger.error('Cannot update youtube-dl: new version response is not 200, it\'s %d.', result.statusCode)
           return res()
         }

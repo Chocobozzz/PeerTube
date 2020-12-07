@@ -6,6 +6,7 @@ import { AuthService, Notifier, RedirectService, RestExtractor, ScreenService, U
 import { Account, AccountService, DropdownAction, ListOverflowItem, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { AccountReportComponent } from '@app/shared/shared-moderation'
 import { User, UserRight } from '@shared/models'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -47,7 +48,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
                           switchMap(accountId => this.accountService.getAccount(accountId)),
                           tap(account => this.onAccount(account)),
                           switchMap(account => this.videoChannelService.listAccountVideoChannels(account)),
-                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
+                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [
+                            HttpStatusCode.BAD_REQUEST_400,
+                            HttpStatusCode.NOT_FOUND_404
+                          ]))
                         )
                         .subscribe(
                           videoChannels => this.videoChannels = videoChannels.data,

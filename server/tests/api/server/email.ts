@@ -22,6 +22,7 @@ import {
 } from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -116,7 +117,7 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with an invalid verification string', async function () {
-      await resetPassword(server.url, userId, verificationString + 'b', 'super_password2', 403)
+      await resetPassword(server.url, userId, verificationString + 'b', 'super_password2', HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should reset the password', async function () {
@@ -124,7 +125,7 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with the same verification string', async function () {
-      await resetPassword(server.url, userId, verificationString, 'super_password3', 403)
+      await resetPassword(server.url, userId, verificationString, 'super_password3', HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should login with this new password', async function () {
@@ -169,7 +170,7 @@ describe('Test emails', function () {
     })
 
     it('Should not reset the password with an invalid verification string', async function () {
-      await resetPassword(server.url, userId2, verificationString2 + 'c', 'newly_created_password', 403)
+      await resetPassword(server.url, userId2, verificationString2 + 'c', 'newly_created_password', HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should reset the password', async function () {
@@ -210,7 +211,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await blockUser(server.url, userId, server.accessToken, 204, reason)
+      await blockUser(server.url, userId, server.accessToken, HttpStatusCode.NO_CONTENT_204, reason)
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(4)
@@ -228,7 +229,7 @@ describe('Test emails', function () {
     it('Should send the notification email when unblocking a user', async function () {
       this.timeout(10000)
 
-      await unblockUser(server.url, userId, server.accessToken, 204)
+      await unblockUser(server.url, userId, server.accessToken, HttpStatusCode.NO_CONTENT_204)
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(5)
@@ -317,7 +318,7 @@ describe('Test emails', function () {
     })
 
     it('Should not verify the email with an invalid verification string', async function () {
-      await verifyEmail(server.url, userId, verificationString + 'b', false, 403)
+      await verifyEmail(server.url, userId, verificationString + 'b', false, HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should verify the email', async function () {

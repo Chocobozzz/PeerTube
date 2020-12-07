@@ -8,6 +8,7 @@ import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/vid
 import {
   isBooleanValid,
   isDateValid,
+  isFileFieldValid,
   isIdOrUUIDValid,
   isIdValid,
   isUUIDValid,
@@ -22,7 +23,8 @@ import {
   isScheduleVideoUpdatePrivacyValid,
   isVideoCategoryValid,
   isVideoDescriptionValid,
-  isVideoFile,
+  isVideoFileMimeTypeValid,
+  isVideoFileSizeValid,
   isVideoFilterValid,
   isVideoImage,
   isVideoLanguageValid,
@@ -55,11 +57,11 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
-    .custom((value, { req }) => isVideoFile(req.files)).withMessage(
-      'This file is not supported or too large. Please, make sure it is of the following type: ' +
-      CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
-    ),
-  body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
+    .custom((value, { req }) => isFileFieldValid(req.files, 'videofile'))
+    .withMessage('Should have a file'),
+  body('name')
+    .custom(isVideoNameValid)
+    .withMessage('Should have a valid name'),
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid).withMessage('Should have correct video channel id'),
@@ -75,8 +77,27 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
 
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
+    if (!isVideoFileMimeTypeValid(req.files)) {
+      res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+         .json({
+           error: 'This file is not supported. Please, make sure it is of the following type: ' +
+                  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
+         })
+
+      return cleanUpReqFiles(req)
+    }
+
+    if (!isVideoFileSizeValid(videoFile.size.toString())) {
+      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+         .json({
+           error: 'This file is too large.'
+         })
+
+      return cleanUpReqFiles(req)
+    }
+
     if (await isAbleToUploadVideo(user.id, videoFile.size) === false) {
-      res.status(HttpStatusCode.FORBIDDEN_403)
+      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
          .json({ error: 'The user video quota is exceeded with this video.' })
 
       return cleanUpReqFiles(req)
@@ -88,8 +109,8 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
       duration = await getDurationFromVideoFile(videoFile.path)
     } catch (err) {
       logger.error('Invalid input file in videosAddValidator.', { err })
-      res.status(HttpStatusCode.BAD_REQUEST_400)
-         .json({ error: 'Invalid input file.' })
+      res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
+         .json({ error: 'Video file unreadable.' })
 
       return cleanUpReqFiles(req)
     }
@@ -295,7 +316,7 @@ const videosAcceptChangeOwnershipValidator = [
     const videoChangeOwnership = res.locals.videoChangeOwnership
     const isAble = await isAbleToUploadVideo(user.id, videoChangeOwnership.Video.getMaxQualityFile().size)
     if (isAble === false) {
-      res.status(HttpStatusCode.FORBIDDEN_403)
+      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
         .json({ error: 'The user video quota is exceeded with this video.' })
 
       return

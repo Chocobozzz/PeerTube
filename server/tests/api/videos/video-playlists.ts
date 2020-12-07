@@ -61,6 +61,7 @@ import {
   removeServerFromAccountBlocklist,
   removeServerFromServerBlocklist
 } from '../../../../shared/extra-utils/users/blocklist'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -1091,7 +1092,7 @@ describe('Test video playlists', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await getVideoPlaylist(server.url, videoPlaylistIds.uuid, 200)
+        await getVideoPlaylist(server.url, videoPlaylistIds.uuid, HttpStatusCode.OK_200)
       }
 
       const playlistAttrs = { privacy: VideoPlaylistPrivacy.PRIVATE }
@@ -1100,11 +1101,11 @@ describe('Test video playlists', function () {
       await waitJobs(servers)
 
       for (const server of [ servers[1], servers[2] ]) {
-        await getVideoPlaylist(server.url, videoPlaylistIds.uuid, 404)
+        await getVideoPlaylist(server.url, videoPlaylistIds.uuid, HttpStatusCode.NOT_FOUND_404)
       }
-      await getVideoPlaylist(servers[0].url, videoPlaylistIds.uuid, 401)
+      await getVideoPlaylist(servers[0].url, videoPlaylistIds.uuid, HttpStatusCode.UNAUTHORIZED_401)
 
-      await getVideoPlaylistWithToken(servers[0].url, servers[0].accessToken, videoPlaylistIds.uuid, 200)
+      await getVideoPlaylistWithToken(servers[0].url, servers[0].accessToken, videoPlaylistIds.uuid, HttpStatusCode.OK_200)
     })
   })
 
@@ -1118,7 +1119,7 @@ describe('Test video playlists', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await getVideoPlaylist(server.url, playlistServer1UUID, 404)
+        await getVideoPlaylist(server.url, playlistServer1UUID, HttpStatusCode.NOT_FOUND_404)
       }
     })
 
@@ -1178,7 +1179,7 @@ describe('Test video playlists', function () {
       expect(res3.body.displayName).to.equal('channel playlist')
       expect(res3.body.privacy.id).to.equal(VideoPlaylistPrivacy.PRIVATE)
 
-      await getVideoPlaylist(servers[1].url, videoPlaylistUUID, 404)
+      await getVideoPlaylist(servers[1].url, videoPlaylistUUID, HttpStatusCode.NOT_FOUND_404)
     })
 
     it('Should delete an account and delete its playlists', async function () {

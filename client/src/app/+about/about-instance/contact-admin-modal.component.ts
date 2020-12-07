@@ -10,6 +10,7 @@ import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { ServerConfig } from '@shared/models'
 
 @Component({
@@ -78,7 +79,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
           },
 
           err => {
-            this.error = err.status === 403
+            this.error = err.status === HttpStatusCode.FORBIDDEN_403
               ? $localize`You already sent this form recently`
               : err.message
           }
