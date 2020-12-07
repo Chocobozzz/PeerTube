@@ -117,7 +117,7 @@
               <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
               <p-calendar
                 id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
-                [locale]="calendarLocale" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
+                [firstDayOfWeek]="0" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
               >
               </p-calendar>
 
@@ -299,8 +299,8 @@
                 </ng-template>
               </my-help>
               <p-calendar
-                id="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat"
-                [locale]="calendarLocale" [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
+                id="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
+                [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
               >
               </p-calendar>
 
