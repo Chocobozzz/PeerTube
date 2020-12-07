@@ -68,7 +68,7 @@ class WebTorrentPlugin extends Plugin {
 
   private downloadSpeeds: number[] = []
 
-  constructor (player: videojs.Player, options: WebtorrentPluginOptions) {
+  constructor (player: videojs.Player, options?: WebtorrentPluginOptions) {
     super(player)
 
     this.startTime = timeToInt(options.startTime)
@@ -129,7 +129,7 @@ class WebTorrentPlugin extends Plugin {
       : this.pickAverageVideoFile()
 }
 
-  private updateVideoFile (
+  updateVideoFile (
     videoFile: VideoFile,
     options: {
       forcePlay?: boolean,
