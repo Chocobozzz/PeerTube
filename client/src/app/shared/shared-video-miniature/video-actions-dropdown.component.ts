@@ -167,7 +167,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   canVideoBeDuplicated () {
-    return this.video.canBeDuplicatedBy(this.user)
+    return !this.video.isLive && this.video.canBeDuplicatedBy(this.user)
   }
 
   isVideoAccountMutable () {

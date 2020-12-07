@@ -130,8 +130,12 @@ const addVideoRedundancyValidator = [
 
     if (res.locals.onlyVideo.remote === false) {
       return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Cannot create a redundancy on a local video' })
-                .end()
+        .json({ error: 'Cannot create a redundancy on a local video' })
+    }
+
+    if (res.locals.onlyVideo.isLive) {
+      return res.status(HttpStatusCode.BAD_REQUEST_400)
+        .json({ error: 'Cannot create a redundancy of a live video' })
     }
 
     const alreadyExists = await VideoRedundancyModel.isLocalByVideoUUIDExists(res.locals.onlyVideo.uuid)
