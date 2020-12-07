@@ -69,18 +69,9 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   const rootFiles = await readdir(hlsDirectory)
 
-  const playlistFiles: string[] = []
-
-  for (const file of rootFiles) {
-    // Move remaining files in the replay directory
-    if (file.endsWith('.ts')) {
-      await LiveManager.Instance.addSegmentToReplay(hlsDirectory, join(hlsDirectory, file))
-    }
-
-    if (file.endsWith('.m3u8') && file !== 'master.m3u8') {
-      playlistFiles.push(file)
-    }
-  }
+  const playlistFiles = rootFiles.filter(file => {
+    return file.endsWith('.m3u8') && file !== 'master.m3u8'
+  })
 
   await cleanupLiveFiles(hlsDirectory)
 
