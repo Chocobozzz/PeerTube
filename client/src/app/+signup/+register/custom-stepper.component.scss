@@ -4,6 +4,12 @@
 $grey-color: #9CA3AB;
 $index-block-height: 32px;
 
+.container {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: unset !important;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -16,6 +22,10 @@ header {
     flex-direction: column;
     align-items: center;
     width: $index-block-height;
+
+    &:not(.c-hand) {
+      cursor: default;
+    }
 
     .step-index {
       display: flex;

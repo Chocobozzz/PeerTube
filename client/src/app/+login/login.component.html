@@ -8,73 +8,81 @@
   </div>
 
   <ng-container *ngIf="!externalAuthError && !isAuthenticatedWithExternalAuth">
-    <div class="looking-for-account alert alert-info" *ngIf="signupAllowed === false" role="alert">
-      <h6 class="alert-heading" i18n>
-        If you are looking for an account…
-      </h6>
-
-      <div i18n>
-        Currently this instance doesn't allow for user registration, but you can find an instance
-        that gives you the possibility to sign up for an account and upload your videos there.
-
-        <br />
-
-        Find yours among multiple instances at <a class="alert-link" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
-      </div>
-    </div>
-
     <div *ngIf="error" class="alert alert-danger">{{ error }}
       <span *ngIf="error === 'User email is not verified.'"> <a i18n routerLink="/verify-account/ask-send-email">Request new verification email.</a></span>
     </div>
 
-    <div class="login-form-and-externals">
+    <div class="wrapper">
+      <div class="login-form-and-externals">
 
-      <form role="form" (ngSubmit)="login()" [formGroup]="form">
-        <div class="form-group">
-          <div>
-            <label i18n for="username">User</label>
-            <input
-              type="text" id="username" i18n-placeholder placeholder="Username or email address" required tabindex="1"
-              formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }" #usernameInput
-            >
-            <a i18n *ngIf="signupAllowed === true" routerLink="/signup" class="create-an-account">
-              or create an account
-            </a>
+        <form role="form" (ngSubmit)="login()" [formGroup]="form">
+          <div class="form-group">
+            <div>
+              <label i18n for="username">User</label>
+              <input
+                type="text" id="username" i18n-placeholder placeholder="Username or email address" required tabindex="1"
+                formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }" #usernameInput
+              >
+            </div>
+
+            <div *ngIf="formErrors.username" class="form-error">
+              {{ formErrors.username }}
+            </div>
           </div>
 
-          <div *ngIf="formErrors.username" class="form-error">
-            {{ formErrors.username }}
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label i18n for="password">Password</label>
-          <div>
+          <div class="form-group">
+            <label i18n for="password">Password</label>
             <my-input-toggle-hidden formControlName="password" id="password"
                                     i18n-placeholder placeholder="Password"
                                     [ngClass]="{ 'input-error': formErrors['password'] }"
-                                    autocomplete="current-password"></my-input-toggle-hidden>
-            <a i18n-title class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>
+                                    autocomplete="current-password" tabindex="2"></my-input-toggle-hidden>
+            <div *ngIf="formErrors.password" class="form-error">
+              {{ formErrors.password }}
+            </div>
           </div>
-          <div *ngIf="formErrors.password" class="form-error">
-            {{ formErrors.password }}
+
+          <input type="submit" i18n-value value="Login" [disabled]="!form.valid">
+          
+          <div class="additionnal-links">
+            <a class="forgot-password-button" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
+            <div *ngIf="signupAllowed" class="signup-link">
+              <span>·</span>
+              <a i18n routerLink="/signup" class="create-an-account">Create an account</a>
+            </div>
           </div>
-        </div>
 
-        <input type="submit" i18n-value value="Login" [disabled]="!form.valid">
-      </form>
+          <div class="looking-for-account alert alert-info"  role="alert">
+            <h6 class="alert-heading" i18n>
+              Logging into an account lets you publish content
+            </h6>
 
-      <div class="external-login-blocks" *ngIf="getExternalLogins().length !== 0">
-        <div class="block-title" i18n>Or sign in with</div>
+            <div *ngIf="signupAllowed" i18n>
+              This instance allows registration. However, be careful to check the <a class="terms-anchor" (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
+              You may also search for another instance to match your exact needs at: <br /><a class="alert-link" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
+            </div>
 
-        <div>
-          <a class="external-login-block" *ngFor="let auth of getExternalLogins()" [href]="getAuthHref(auth)" role="button">
-            {{ auth.authDisplayName }}
-          </a>
+            <div *ngIf="!signupAllowed" i18n>
+              Currently this instance doesn't allow for user registration, you may check the <a (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
+              Find yours among multiple instances at: <br /> <a class="alert-link" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
+            </div>
+          </div>
+        </form>
+
+        <div class="external-login-blocks" *ngIf="getExternalLogins().length !== 0">
+          <div class="block-title" i18n>Or sign in with</div>
+
+          <div>
+            <a class="external-login-block" *ngFor="let auth of getExternalLogins()" [href]="getAuthHref(auth)" role="button">
+              {{ auth.authDisplayName }}
+            </a>
+          </div>
         </div>
       </div>
-    </div>
 
+      <div #instanceInformation class="instance-information">
+        <my-instance-about-accordion (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"></my-instance-about-accordion>
+      </div>
+    </div>
   </ng-container>
 </div>
 

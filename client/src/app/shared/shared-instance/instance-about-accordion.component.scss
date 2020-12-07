@@ -1,0 +1,46 @@
+@import '_variables';
+@import '_mixins';
+@import "./_bootstrap-variables";
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+.instance-name {
+  line-height: 1.7rem;
+}
+
+.instance-short-description {
+  @include ellipsis-multiline(1rem, 3);
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.block {
+  font-size: 15px;
+  margin-bottom: 15px;
+  padding: 0 $btn-padding-x;
+}
+
+ngb-accordion ::ng-deep {
+  .card {
+    border-color: var(--mainBackgroundColor);
+
+    .card-header {
+      background-color: unset;
+      padding: 0;
+
+      & + .collapse.show {
+        background-color: var(--submenuColor);
+      }
+    }
+  }
+
+  .btn {
+    @include peertube-button;
+    @include grey-button;
+
+    border-radius: unset;
+    width: 100%;
+  }
+}
