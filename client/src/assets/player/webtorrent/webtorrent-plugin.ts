@@ -132,14 +132,14 @@ class WebTorrentPlugin extends Plugin {
     done: () => void = () => { /* empty */ }
   ) {
     // Automatically choose the adapted video file
-    if (videoFile === undefined) {
+    if (!videoFile) {
       const savedAverageBandwidth = getAverageBandwidthInStore()
       videoFile = savedAverageBandwidth
         ? this.getAppropriateFile(savedAverageBandwidth)
         : this.pickAverageVideoFile()
     }
 
-    if (!!videoFile) {
+    if (!videoFile) {
       throw Error(`Can't update video file since videoFile is undefined.`)
     }
 
@@ -149,7 +149,7 @@ class WebTorrentPlugin extends Plugin {
     }
 
     // Do not display error to user because we will have multiple fallback
-    this.disableErrorDisplay();
+    this.disableErrorDisplay()
 
     // Hack to "simulate" src link in video.js >= 6
     // Without this, we can't play the video after pausing it
