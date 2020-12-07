@@ -32,12 +32,10 @@
 
           <div class="form-group">
             <label i18n for="password">Password</label>
-            <div>
-              <input
-                type="password" name="password" id="password" i18n-placeholder placeholder="Password" required tabindex="2" autocomplete="current-password"
-                formControlName="password" class="form-control" [ngClass]="{ 'input-error': formErrors['password'] }"
-              >
-            </div>
+            <my-input-toggle-hidden formControlName="password" id="password"
+                                    i18n-placeholder placeholder="Password"
+                                    [ngClass]="{ 'input-error': formErrors['password'] }"
+                                    autocomplete="current-password" tabindex="2"></my-input-toggle-hidden>
             <div *ngIf="formErrors.password" class="form-error">
               {{ formErrors.password }}
             </div>

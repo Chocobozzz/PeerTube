@@ -23,6 +23,10 @@ header {
     align-items: center;
     width: $index-block-height;
 
+    &:not(.c-hand) {
+      cursor: default;
+    }
+
     .step-index {
       display: flex;
       justify-content: center;

@@ -38,6 +38,9 @@ export class RegisterComponent implements OnInit {
     moderation: false
   }
 
+  defaultNextStepButtonLabel = $localize`Next`
+  stepUserButtonLabel = this.defaultNextStepButtonLabel
+
   private serverConfig: ServerConfig
 
   constructor (
@@ -56,8 +59,12 @@ export class RegisterComponent implements OnInit {
     this.serverConfig = this.route.snapshot.data.serverConfig
 
     this.videoUploadDisabled = this.serverConfig.user.videoQuota === 0
+    this.stepUserButtonLabel = this.videoUploadDisabled
+      ? $localize`Signup`
+      : this.defaultNextStepButtonLabel
 
     this.hooks.runAction('action:signup.register.init', 'signup')
+
   }
 
   hasSameChannelAndAccountNames () {

@@ -50,10 +50,11 @@ export class InstanceAboutAccordionComponent implements OnInit {
       )
   }
 
-  get administratorsPanel () {
+  getAdministratorsPanel () {
+    if (!this.about) return false
     if (!this.panels.administrators) return false
 
-    return !!(this.aboutHtml.administrator || this.about.instance.maintenanceLifetime || this.about.instance.businessModel)
+    return !!(this.aboutHtml?.administrator || this.about?.instance.maintenanceLifetime || this.about?.instance.businessModel)
   }
 
   get moderationPanel () {
