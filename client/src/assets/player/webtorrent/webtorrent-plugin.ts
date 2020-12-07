@@ -139,7 +139,7 @@ class WebTorrentPlugin extends Plugin {
         : this.pickAverageVideoFile()
     }
 
-    if (videoFile === undefined) {
+    if (!!videoFile) {
       throw Error(`Can't update video file since videoFile is undefined.`)
     }
 
