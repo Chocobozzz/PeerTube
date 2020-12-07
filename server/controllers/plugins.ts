@@ -4,9 +4,10 @@ import { join } from 'path'
 import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager'
 import { getPluginValidator, pluginStaticDirectoryValidator, getExternalAuthValidator } from '../middlewares/validators/plugins'
 import { serveThemeCSSValidator } from '../middlewares/validators/themes'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { isTestInstance } from '../helpers/core-utils'
-import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
 import { logger } from '@server/helpers/logger'
 
 const sendFileOptions = {
@@ -96,7 +97,7 @@ function getPluginTranslations (req: express.Request, res: express.Response) {
     return res.json(json)
   }
 
-  return res.sendStatus(404)
+  return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 }
 
 function servePluginStaticDirectory (req: express.Request, res: express.Response) {
@@ -106,7 +107,7 @@ function servePluginStaticDirectory (req: express.Request, res: express.Response
   const [ directory, ...file ] = staticEndpoint.split('/')
 
   const staticPath = plugin.staticDirs[directory]
-  if (!staticPath) return res.sendStatus(404)
+  if (!staticPath) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   const filepath = file.join('/')
   return res.sendFile(join(plugin.path, staticPath, filepath), sendFileOptions)
@@ -116,7 +117,7 @@ function servePluginCustomRoutes (req: express.Request, res: express.Response, n
   const plugin: RegisteredPlugin = res.locals.registeredPlugin
   const router = PluginManager.Instance.getRouter(plugin.npmName)
 
-  if (!router) return res.sendStatus(404)
+  if (!router) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   return router(req, res, next)
 }
@@ -126,7 +127,7 @@ function servePluginClientScripts (req: express.Request, res: express.Response) 
   const staticEndpoint = req.params.staticEndpoint
 
   const file = plugin.clientScripts[staticEndpoint]
-  if (!file) return res.sendStatus(404)
+  if (!file) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   return res.sendFile(join(plugin.path, staticEndpoint), sendFileOptions)
 }
@@ -136,7 +137,7 @@ function serveThemeCSSDirectory (req: express.Request, res: express.Response) {
   const staticEndpoint = req.params.staticEndpoint
 
   if (plugin.css.includes(staticEndpoint) === false) {
-    return res.sendStatus(404)
+    return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
   }
 
   return res.sendFile(join(plugin.path, staticEndpoint), sendFileOptions)

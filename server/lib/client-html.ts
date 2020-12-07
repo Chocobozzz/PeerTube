@@ -22,6 +22,7 @@ import * as Bluebird from 'bluebird'
 import { CONFIG } from '../initializers/config'
 import { logger } from '../helpers/logger'
 import { MAccountActor, MChannelActor } from '../types/models'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 
 type Tags = {
   ogType: string
@@ -75,7 +76,7 @@ export class ClientHtml {
   static async getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
     // Let Angular application handle errors
     if (!validator.isInt(videoId) && !validator.isUUID(videoId, 4)) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return ClientHtml.getIndexHTML(req, res)
     }
 
@@ -86,7 +87,7 @@ export class ClientHtml {
 
     // Let Angular application handle errors
     if (!video || video.privacy === VideoPrivacy.PRIVATE || video.privacy === VideoPrivacy.INTERNAL || video.VideoBlacklist) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
 
@@ -121,7 +122,7 @@ export class ClientHtml {
   static async getWatchPlaylistHTMLPage (videoPlaylistId: string, req: express.Request, res: express.Response) {
     // Let Angular application handle errors
     if (!validator.isInt(videoPlaylistId) && !validator.isUUID(videoPlaylistId, 4)) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return ClientHtml.getIndexHTML(req, res)
     }
 
@@ -132,7 +133,7 @@ export class ClientHtml {
 
     // Let Angular application handle errors
     if (!videoPlaylist || videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
 
@@ -201,7 +202,7 @@ export class ClientHtml {
 
     // Let Angular application handle errors
     if (!entity) {
-      res.status(404)
+      res.status(HttpStatusCode.NOT_FOUND_404)
       return ClientHtml.getIndexHTML(req, res)
     }
 

@@ -5,6 +5,7 @@ import { logger } from '../../helpers/logger'
 import { ActorModel } from '../../models/activitypub/actor'
 import { areValidationErrors } from './utils'
 import { getHostWithPort } from '../../helpers/express-utils'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const webfingerValidator = [
   query('resource').custom(isWebfingerLocalResourceValid).withMessage('Should have a valid webfinger resource'),
@@ -20,9 +21,9 @@ const webfingerValidator = [
 
     const actor = await ActorModel.loadLocalUrlByName(name)
     if (!actor) {
-      return res.status(404)
-        .send({ error: 'Actor not found' })
-        .end()
+      return res.status(HttpStatusCode.NOT_FOUND_404)
+                .send({ error: 'Actor not found' })
+                .end()
     }
 
     res.locals.actorUrl = actor

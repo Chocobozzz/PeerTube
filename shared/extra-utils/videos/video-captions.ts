@@ -2,6 +2,7 @@ import { makeDeleteRequest, makeGetRequest, makeUploadRequest } from '../request
 import * as request from 'supertest'
 import * as chai from 'chai'
 import { buildAbsoluteFixturePath } from '../miscs/miscs'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -28,7 +29,7 @@ function createVideoCaption (args: {
     attaches: {
       captionfile: captionfileAttach
     },
-    statusCodeExpected: args.statusCodeExpected || 204
+    statusCodeExpected: args.statusCodeExpected || HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -38,7 +39,7 @@ function listVideoCaptions (url: string, videoId: string | number) {
   return makeGetRequest({
     url,
     path,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -49,14 +50,14 @@ function deleteVideoCaption (url: string, token: string, videoId: string | numbe
     url,
     token,
     path,
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 
 async function testCaptionFile (url: string, captionPath: string, containsString: string) {
   const res = await request(url)
     .get(captionPath)
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
 
   expect(res.text).to.contain(containsString)
 }

@@ -121,7 +121,8 @@ import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
 import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
-import { LiveManager } from '@server/lib/live-manager'
+import { LiveManager } from './server/lib/live-manager'
+import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
 
 // ----------- Command line -----------
 
@@ -210,7 +211,7 @@ if (cli.client) app.use('/', clientsRouter)
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error('Not Found')
-  err['status'] = 404
+  err['status'] = HttpStatusCode.NOT_FOUND_404
   next(err)
 })
 
@@ -224,7 +225,7 @@ app.use(function (err, req, res, next) {
   const sql = err.parent ? err.parent.sql : undefined
 
   logger.error('Error in controller.', { err: error, sql })
-  return res.status(err.status || 500).end()
+  return res.status(err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
 })
 
 const server = createWebsocketTrackerServer(app)

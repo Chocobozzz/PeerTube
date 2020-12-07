@@ -29,6 +29,7 @@ import {
 } from '../../../middlewares/validators'
 import { AccountModel } from '../../../models/account/account'
 import { VideoCommentModel } from '../../../models/video/video-comment'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -161,7 +162,7 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
   }
 
   if (resultList.data.length === 0) {
-    return res.sendStatus(404)
+    return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
   }
 
   return res.json(buildFormattedCommentTree(resultList))
@@ -218,5 +219,7 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
 
   auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(videoCommentInstance.toFormattedJSON()))
 
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }

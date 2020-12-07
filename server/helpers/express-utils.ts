@@ -7,6 +7,7 @@ import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
 import { CONFIG } from '../initializers/config'
 import { getExtFromMimetype } from './video'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 
 function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -61,7 +62,9 @@ function getHostWithPort (host: string) {
 }
 
 function badRequest (req: express.Request, res: express.Response) {
-  return res.type('json').status(400).end()
+  return res.type('json')
+            .status(HttpStatusCode.BAD_REQUEST_400)
+            .end()
 }
 
 function createReqFiles (

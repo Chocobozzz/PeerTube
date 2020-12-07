@@ -28,6 +28,7 @@ import { removeRedundanciesOfServer } from '../../../lib/redundancy'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { autoFollowBackIfNeeded } from '../../../lib/activitypub/follow'
 import { getServerActor } from '@server/models/application/application'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
@@ -138,7 +139,7 @@ async function followInstance (req: express.Request, res: express.Response) {
     JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
   }
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function removeFollowing (req: express.Request, res: express.Response) {
@@ -159,7 +160,7 @@ async function removeFollowing (req: express.Request, res: express.Response) {
     await follow.destroy({ transaction: t })
   })
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function removeOrRejectFollower (req: express.Request, res: express.Response) {
@@ -169,7 +170,7 @@ async function removeOrRejectFollower (req: express.Request, res: express.Respon
 
   await follow.destroy()
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function acceptFollower (req: express.Request, res: express.Response) {
@@ -182,5 +183,5 @@ async function acceptFollower (req: express.Request, res: express.Response) {
 
   await autoFollowBackIfNeeded(follow)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

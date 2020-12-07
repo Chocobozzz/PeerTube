@@ -7,6 +7,7 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoUp
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const rateVideoRouter = express.Router()
 
@@ -78,5 +79,7 @@ async function rateVideo (req: express.Request, res: express.Response) {
     logger.info('Account video rate for video %s of account %s updated.', videoInstance.name, accountInstance.name)
   })
 
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }

@@ -13,6 +13,7 @@ import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { areValidationErrors } from '../utils'
 import { getCommonVideoEditAttributes } from './videos'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
@@ -44,14 +45,14 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
 
     if (req.body.targetUrl && CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true) {
       cleanUpReqFiles(req)
-      return res.status(409)
+      return res.status(HttpStatusCode.CONFLICT_409)
         .json({ error: 'HTTP import is not enabled on this instance.' })
         .end()
     }
 
     if (CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED !== true && (req.body.magnetUri || torrentFile)) {
       cleanUpReqFiles(req)
-      return res.status(409)
+      return res.status(HttpStatusCode.CONFLICT_409)
                 .json({ error: 'Torrent/magnet URI import is not enabled on this instance.' })
                 .end()
     }
@@ -62,7 +63,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     if (!req.body.targetUrl && !req.body.magnetUri && !torrentFile) {
       cleanUpReqFiles(req)
 
-      return res.status(400)
+      return res.status(HttpStatusCode.BAD_REQUEST_400)
         .json({ error: 'Should have a magnetUri or a targetUrl or a torrent file.' })
         .end()
     }
@@ -100,7 +101,7 @@ async function isImportAccepted (req: express.Request, res: express.Response) {
 
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused to import video.', { acceptedResult, acceptParameters })
-    res.status(403)
+    res.status(HttpStatusCode.FORBIDDEN_403)
        .json({ error: acceptedResult.errorMessage || 'Refused to import video' })
 
     return false

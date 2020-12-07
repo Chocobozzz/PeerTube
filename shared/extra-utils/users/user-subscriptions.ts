@@ -1,6 +1,7 @@
 import { makeDeleteRequest, makeGetRequest, makePostBodyRequest } from '../requests/requests'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function addUserSubscription (url: string, token: string, targetUri: string, statusCodeExpected = 204) {
+function addUserSubscription (url: string, token: string, targetUri: string, statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/users/me/subscriptions'
 
   return makePostBodyRequest({
@@ -19,7 +20,7 @@ function listUserSubscriptions (parameters: {
   search?: string
   statusCodeExpected?: number
 }) {
-  const { url, token, sort = '-createdAt', search, statusCodeExpected = 200 } = parameters
+  const { url, token, sort = '-createdAt', search, statusCodeExpected = HttpStatusCode.OK_200 } = parameters
   const path = '/api/v1/users/me/subscriptions'
 
   return makeGetRequest({
@@ -34,7 +35,7 @@ function listUserSubscriptions (parameters: {
   })
 }
 
-function listUserSubscriptionVideos (url: string, token: string, sort = '-createdAt', statusCodeExpected = 200) {
+function listUserSubscriptionVideos (url: string, token: string, sort = '-createdAt', statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/me/subscriptions/videos'
 
   return makeGetRequest({
@@ -46,7 +47,7 @@ function listUserSubscriptionVideos (url: string, token: string, sort = '-create
   })
 }
 
-function getUserSubscription (url: string, token: string, uri: string, statusCodeExpected = 200) {
+function getUserSubscription (url: string, token: string, uri: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/me/subscriptions/' + uri
 
   return makeGetRequest({
@@ -57,7 +58,7 @@ function getUserSubscription (url: string, token: string, uri: string, statusCod
   })
 }
 
-function removeUserSubscription (url: string, token: string, uri: string, statusCodeExpected = 204) {
+function removeUserSubscription (url: string, token: string, uri: string, statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/users/me/subscriptions/' + uri
 
   return makeDeleteRequest({
@@ -68,7 +69,7 @@ function removeUserSubscription (url: string, token: string, uri: string, status
   })
 }
 
-function areSubscriptionsExist (url: string, token: string, uris: string[], statusCodeExpected = 200) {
+function areSubscriptionsExist (url: string, token: string, uris: string[], statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/users/me/subscriptions/exist'
 
   return makeGetRequest({

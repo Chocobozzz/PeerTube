@@ -11,6 +11,7 @@ import {
   userLogin
 } from '../../../../shared/extra-utils'
 import { makeGetRequest } from '../../../../shared/extra-utils/requests/requests'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test debug API validators', function () {
   const path = '/api/v1/server/debug'
@@ -40,7 +41,7 @@ describe('Test debug API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -49,7 +50,7 @@ describe('Test debug API validators', function () {
         url: server.url,
         path,
         token: userAccessToken,
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -59,7 +60,7 @@ describe('Test debug API validators', function () {
         path,
         token: server.accessToken,
         query: { startDate: new Date().toISOString() },
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })

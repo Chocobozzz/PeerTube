@@ -9,6 +9,7 @@ import * as chai from 'chai'
 import { activityPubContextify, buildSignedActivity } from '../../../helpers/activitypub'
 import { makeFollowRequest, makePOSTAPRequest } from '../../../../shared/extra-utils/requests/activitypub'
 import { buildDigest } from '@server/helpers/peertube-crypto'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -74,7 +75,7 @@ describe('Test ActivityPub security', function () {
 
       const { response } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
 
-      expect(response.statusCode).to.equal(403)
+      expect(response.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should fail with an invalid date', async function () {
@@ -84,7 +85,7 @@ describe('Test ActivityPub security', function () {
 
       const { response } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
 
-      expect(response.statusCode).to.equal(403)
+      expect(response.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should fail with bad keys', async function () {
@@ -96,7 +97,7 @@ describe('Test ActivityPub security', function () {
 
       const { response } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
 
-      expect(response.statusCode).to.equal(403)
+      expect(response.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should reject requests without appropriate signed headers', async function () {
@@ -117,7 +118,7 @@ describe('Test ActivityPub security', function () {
         signatureOptions.headers = badHeaders
 
         const { response } = await makePOSTAPRequest(url, body, signatureOptions, headers)
-        expect(response.statusCode).to.equal(403)
+        expect(response.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
       }
     })
 
@@ -127,7 +128,7 @@ describe('Test ActivityPub security', function () {
 
       const { response } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
 
-      expect(response.statusCode).to.equal(204)
+      expect(response.statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
     })
   })
 
@@ -156,7 +157,7 @@ describe('Test ActivityPub security', function () {
 
       const { response } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
 
-      expect(response.statusCode).to.equal(403)
+      expect(response.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should fail with an altered body', async function () {
@@ -177,7 +178,7 @@ describe('Test ActivityPub security', function () {
 
       const { response } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
 
-      expect(response.statusCode).to.equal(403)
+      expect(response.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should succeed with a valid signature', async function () {
@@ -193,7 +194,7 @@ describe('Test ActivityPub security', function () {
 
       const { response } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
 
-      expect(response.statusCode).to.equal(204)
+      expect(response.statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
     })
   })
 

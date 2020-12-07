@@ -4,6 +4,7 @@ import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_IMPORT_STATES } from '../../initia
 import { exists, isFileValid } from './misc'
 import * as express from 'express'
 import { VideoImportModel } from '../../models/video/video-import'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function isVideoImportTargetUrlValid (url: string) {
   const isURLOptions = {
@@ -35,7 +36,7 @@ async function doesVideoImportExist (id: number, res: express.Response) {
   const videoImport = await VideoImportModel.loadAndPopulateVideo(id)
 
   if (!videoImport) {
-    res.status(404)
+    res.status(HttpStatusCode.NOT_FOUND_404)
        .json({ error: 'Video import not found' })
        .end()
 

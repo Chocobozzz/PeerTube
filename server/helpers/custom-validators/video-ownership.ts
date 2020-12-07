@@ -2,13 +2,14 @@ import { Response } from 'express'
 import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
 import { MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership'
 import { MUserId } from '@server/types/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 export async function doesChangeVideoOwnershipExist (idArg: number | string, res: Response) {
   const id = parseInt(idArg + '', 10)
   const videoChangeOwnership = await VideoChangeOwnershipModel.load(id)
 
   if (!videoChangeOwnership) {
-    res.status(404)
+    res.status(HttpStatusCode.NOT_FOUND_404)
       .json({ error: 'Video change ownership not found' })
       .end()
 
@@ -24,7 +25,7 @@ export function checkUserCanTerminateOwnershipChange (user: MUserId, videoChange
     return true
   }
 
-  res.status(403)
+  res.status(HttpStatusCode.FORBIDDEN_403)
     .json({ error: 'Cannot terminate an ownership change of another user' })
     .end()
   return false

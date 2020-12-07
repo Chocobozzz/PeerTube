@@ -19,6 +19,7 @@ import {
 } from '../../../middlewares/validators/user-notifications'
 import { UserNotificationSetting } from '../../../../shared/models/users'
 import { UserNotificationSettingModel } from '../../../models/account/user-notification-setting'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const myNotificationsRouter = express.Router()
 
@@ -84,7 +85,7 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
 
   await UserNotificationSettingModel.update(values, query)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function listUserNotifications (req: express.Request, res: express.Response) {
@@ -100,7 +101,7 @@ async function markAsReadUserNotifications (req: express.Request, res: express.R
 
   await UserNotificationModel.markAsRead(user.id, req.body.ids)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function markAsReadAllUserNotifications (req: express.Request, res: express.Response) {
@@ -108,5 +109,5 @@ async function markAsReadAllUserNotifications (req: express.Request, res: expres
 
   await UserNotificationModel.markAllAsRead(user.id)
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

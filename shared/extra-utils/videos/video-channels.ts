@@ -7,6 +7,7 @@ import { makeGetRequest, updateAvatarRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 import { User } from '../../models/users/user.model'
 import { getMyUserInformation } from '../users/users'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getVideoChannelsList (url: string, start: number, count: number, sort?: string, withStats?: boolean) {
   const path = '/api/v1/video-channels'
@@ -20,7 +21,7 @@ function getVideoChannelsList (url: string, start: number, count: number, sort?:
   if (withStats) req.query({ withStats })
 
   return req.set('Accept', 'application/json')
-            .expect(200)
+            .expect(HttpStatusCode.OK_200)
             .expect('Content-Type', /json/)
 }
 
@@ -30,11 +31,20 @@ function getAccountVideoChannelsList (parameters: {
   start?: number
   count?: number
   sort?: string
-  specialStatus?: number
+  specialStatus?: HttpStatusCode
   withStats?: boolean
   search?: string
 }) {
-  const { url, accountName, start, count, sort = 'createdAt', specialStatus = 200, withStats = false, search } = parameters
+  const {
+    url,
+    accountName,
+    start,
+    count,
+    sort = 'createdAt',
+    specialStatus = HttpStatusCode.OK_200,
+    withStats = false,
+    search
+  } = parameters
 
   const path = '/api/v1/accounts/' + accountName + '/video-channels'
 
@@ -56,7 +66,7 @@ function addVideoChannel (
   url: string,
   token: string,
   videoChannelAttributesArg: VideoChannelCreate,
-  expectedStatus = 200
+  expectedStatus = HttpStatusCode.OK_200
 ) {
   const path = '/api/v1/video-channels/'
 
@@ -81,7 +91,7 @@ function updateVideoChannel (
   token: string,
   channelName: string,
   attributes: VideoChannelUpdate,
-  expectedStatus = 204
+  expectedStatus = HttpStatusCode.NO_CONTENT_204
 ) {
   const body: any = {}
   const path = '/api/v1/video-channels/' + channelName
@@ -99,7 +109,7 @@ function updateVideoChannel (
     .expect(expectedStatus)
 }
 
-function deleteVideoChannel (url: string, token: string, channelName: string, expectedStatus = 204) {
+function deleteVideoChannel (url: string, token: string, channelName: string, expectedStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/video-channels/' + channelName
 
   return request(url)
@@ -115,7 +125,7 @@ function getVideoChannel (url: string, channelName: string) {
   return request(url)
     .get(path)
     .set('Accept', 'application/json')
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 

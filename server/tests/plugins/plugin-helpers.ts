@@ -16,6 +16,7 @@ import {
 } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 import { expect } from 'chai'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
   const body = { command }
@@ -25,7 +26,7 @@ function postCommand (server: ServerInfo, command: string, bodyArg?: object) {
     url: server.url,
     path: '/plugins/test-four/router/commander',
     fields: body,
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 

@@ -4,6 +4,7 @@ import { isIdOrUUIDValid, toIntOrNull } from '../../../helpers/custom-validators
 import { areValidationErrors } from '../utils'
 import { logger } from '../../../helpers/logger'
 import { doesVideoExist } from '../../../helpers/middlewares'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videoWatchingValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -20,7 +21,7 @@ const videoWatchingValidator = [
     const user = res.locals.oauth.token.User
     if (user.videosHistoryEnabled === false) {
       logger.warn('Cannot set videos to watch by user %d: videos history is disabled.', user.id)
-      return res.status(409).end()
+      return res.status(HttpStatusCode.CONFLICT_409).end()
     }
 
     return next()

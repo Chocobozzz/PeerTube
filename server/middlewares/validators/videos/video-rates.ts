@@ -9,6 +9,7 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { VideoRateType } from '../../../../shared/models/videos'
 import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
 import { doesVideoExist } from '../../../helpers/middlewares'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videoUpdateRateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -36,7 +37,7 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
 
       const rate = await AccountVideoRateModel.loadLocalAndPopulateVideo(rateType, req.params.name, req.params.videoId)
       if (!rate) {
-        return res.status(404)
+        return res.status(HttpStatusCode.NOT_FOUND_404)
                   .json({ error: 'Video rate not found' })
       }
 

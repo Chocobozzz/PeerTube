@@ -14,6 +14,7 @@ import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccep
 import { Hooks } from '../../../lib/plugins/hooks'
 import { MCommentOwnerVideoReply, MVideo, MVideoFullLight } from '../../../types/models/video'
 import { areValidationErrors } from '../utils'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const listVideoCommentsValidator = [
   query('isLocal')
@@ -154,8 +155,8 @@ export {
 
 function isVideoCommentsEnabled (video: MVideo, res: express.Response) {
   if (video.commentsEnabled !== true) {
-    res.status(409)
-      .json({ error: 'Video comments are disabled for this video.' })
+    res.status(HttpStatusCode.CONFLICT_409)
+       .json({ error: 'Video comments are disabled for this video.' })
 
     return false
   }
@@ -165,8 +166,8 @@ function isVideoCommentsEnabled (video: MVideo, res: express.Response) {
 
 function checkUserCanDeleteVideoComment (user: MUserAccountUrl, videoComment: MCommentOwnerVideoReply, res: express.Response) {
   if (videoComment.isDeleted()) {
-    res.status(409)
-      .json({ error: 'This comment is already deleted' })
+    res.status(HttpStatusCode.CONFLICT_409)
+       .json({ error: 'This comment is already deleted' })
 
     return false
   }
@@ -178,7 +179,7 @@ function checkUserCanDeleteVideoComment (user: MUserAccountUrl, videoComment: MC
     videoComment.accountId !== userAccount.id && // Not the comment owner
     videoComment.Video.VideoChannel.accountId !== userAccount.id // Not the video owner
   ) {
-    res.status(403)
+    res.status(HttpStatusCode.FORBIDDEN_403)
       .json({ error: 'Cannot remove video comment of another user' })
 
     return false
@@ -214,7 +215,7 @@ async function isVideoCommentAccepted (req: express.Request, res: express.Respon
 
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused local comment.', { acceptedResult, acceptParameters })
-    res.status(403)
+    res.status(HttpStatusCode.FORBIDDEN_403)
        .json({ error: acceptedResult.errorMessage || 'Refused local comment' })
 
     return false

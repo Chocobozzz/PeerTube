@@ -20,6 +20,7 @@ import {
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../../shared/models/users'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test user notifications API validators', function () {
   let server: ServerInfo
@@ -57,7 +58,7 @@ describe('Test user notifications API validators', function () {
           unread: 'toto'
         },
         token: server.accessToken,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
 
@@ -65,7 +66,7 @@ describe('Test user notifications API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -74,7 +75,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })
@@ -90,7 +91,7 @@ describe('Test user notifications API validators', function () {
           ids: [ 'hello' ]
         },
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePostBodyRequest({
@@ -100,7 +101,7 @@ describe('Test user notifications API validators', function () {
           ids: [ ]
         },
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePostBodyRequest({
@@ -110,7 +111,7 @@ describe('Test user notifications API validators', function () {
           ids: 5
         },
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -121,7 +122,7 @@ describe('Test user notifications API validators', function () {
         fields: {
           ids: [ 5 ]
         },
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -133,7 +134,7 @@ describe('Test user notifications API validators', function () {
           ids: [ 5 ]
         },
         token: server.accessToken,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -145,7 +146,7 @@ describe('Test user notifications API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -154,7 +155,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -184,7 +185,7 @@ describe('Test user notifications API validators', function () {
         path,
         token: server.accessToken,
         fields: { newVideoFromSubscription: UserNotificationSettingValue.WEB },
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -197,7 +198,7 @@ describe('Test user notifications API validators', function () {
           path,
           token: server.accessToken,
           fields,
-          statusCodeExpected: 400
+          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
         })
       }
 
@@ -209,7 +210,7 @@ describe('Test user notifications API validators', function () {
           path,
           fields,
           token: server.accessToken,
-          statusCodeExpected: 400
+          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
         })
       }
     })
@@ -219,7 +220,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         fields: correctFields,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -229,7 +230,7 @@ describe('Test user notifications API validators', function () {
         path,
         token: server.accessToken,
         fields: correctFields,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

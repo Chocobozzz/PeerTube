@@ -19,6 +19,7 @@ import { removeRedundanciesOfServer, removeVideoRedundancy } from '../../../lib/
 import { logger } from '../../../helpers/logger'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
 import { JobQueue } from '@server/lib/job-queue'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const serverRedundancyRouter = express.Router()
 
@@ -89,13 +90,13 @@ async function addVideoRedundancy (req: express.Request, res: express.Response) 
     payload
   })
 
-  return res.sendStatus(204)
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function removeVideoRedundancyController (req: express.Request, res: express.Response) {
   await removeVideoRedundancy(res.locals.videoRedundancy)
 
-  return res.sendStatus(204)
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function updateRedundancy (req: express.Request, res: express.Response) {
@@ -109,5 +110,5 @@ async function updateRedundancy (req: express.Request, res: express.Response) {
   removeRedundanciesOfServer(server.id)
     .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, { err }))
 
-  return res.sendStatus(204)
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

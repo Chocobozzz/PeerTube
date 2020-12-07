@@ -27,6 +27,7 @@ import {
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { VideoModel } from '../../../models/video/video'
 import { sendUndoFollow } from '@server/lib/activitypub/send'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const mySubscriptionsRouter = express.Router()
 
@@ -126,7 +127,7 @@ function addUserSubscription (req: express.Request, res: express.Response) {
 
   JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
 
-  return res.status(204).end()
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 function getUserSubscription (req: express.Request, res: express.Response) {
@@ -144,7 +145,9 @@ async function deleteUserSubscription (req: express.Request, res: express.Respon
     return subscription.destroy({ transaction: t })
   })
 
-  return res.type('json').status(204).end()
+  return res.type('json')
+            .status(HttpStatusCode.NO_CONTENT_204)
+            .end()
 }
 
 async function getUserSubscriptions (req: express.Request, res: express.Response) {

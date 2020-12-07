@@ -25,6 +25,7 @@ import {
   reRunServer,
   ServerInfo
 } from '../../../shared/extra-utils/server/servers'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Official plugin auto-mute', function () {
   const autoMuteListPath = '/plugins/auto-mute/router/api/v1/mute-list'
@@ -178,7 +179,7 @@ describe('Official plugin auto-mute', function () {
     await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: 403
+      statusCodeExpected: HttpStatusCode.FORBIDDEN_403
     })
   })
 
@@ -197,7 +198,7 @@ describe('Official plugin auto-mute', function () {
     await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: 200
+      statusCodeExpected: HttpStatusCode.OK_200
     })
   })
 
@@ -221,7 +222,7 @@ describe('Official plugin auto-mute', function () {
     const res = await makeGetRequest({
       url: servers[0].url,
       path: '/plugins/auto-mute/router/api/v1/mute-list',
-      statusCodeExpected: 200
+      statusCodeExpected: HttpStatusCode.OK_200
     })
 
     const data = res.body.data

@@ -1,5 +1,6 @@
 import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 import { VideoRedundanciesTarget } from '@shared/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function updateRedundancy (url: string, accessToken: string, host: string, redundancyAllowed: boolean, expectedStatus = 204) {
   const path = '/api/v1/server/redundancy/' + host
@@ -20,7 +21,7 @@ function listVideoRedundancies (options: {
   start?: number
   count?: number
   sort?: string
-  statusCodeExpected?: number
+  statusCodeExpected?: HttpStatusCode
 }) {
   const path = '/api/v1/server/redundancy/videos'
 
@@ -36,7 +37,7 @@ function listVideoRedundancies (options: {
       sort: sort ?? 'name',
       target
     },
-    statusCodeExpected: statusCodeExpected || 200
+    statusCodeExpected: statusCodeExpected || HttpStatusCode.OK_200
   })
 }
 
@@ -53,7 +54,7 @@ function addVideoRedundancy (options: {
     token: accessToken,
     path,
     fields: { videoId },
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 
@@ -69,7 +70,7 @@ function removeVideoRedundancy (options: {
     url,
     token: accessToken,
     path,
-    statusCodeExpected: 204
+    statusCodeExpected: HttpStatusCode.NO_CONTENT_204
   })
 }
 

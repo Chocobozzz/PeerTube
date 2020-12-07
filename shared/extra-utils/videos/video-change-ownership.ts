@@ -1,6 +1,13 @@
 import * as request from 'supertest'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function changeVideoOwnership (url: string, token: string, videoId: number | string, username, expectedStatus = 204) {
+function changeVideoOwnership (
+  url: string,
+  token: string,
+  videoId: number | string,
+  username,
+  expectedStatus = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/videos/' + videoId + '/give-ownership'
 
   return request(url)
@@ -19,11 +26,17 @@ function getVideoChangeOwnershipList (url: string, token: string) {
     .query({ sort: '-createdAt' })
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + token)
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
-function acceptChangeOwnership (url: string, token: string, ownershipId: string, channelId: number, expectedStatus = 204) {
+function acceptChangeOwnership (
+  url: string,
+  token: string,
+  ownershipId: string,
+  channelId: number,
+  expectedStatus = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/videos/ownership/' + ownershipId + '/accept'
 
   return request(url)
@@ -34,7 +47,12 @@ function acceptChangeOwnership (url: string, token: string, ownershipId: string,
     .expect(expectedStatus)
 }
 
-function refuseChangeOwnership (url: string, token: string, ownershipId: string, expectedStatus = 204) {
+function refuseChangeOwnership (
+  url: string,
+  token: string,
+  ownershipId: string,
+  expectedStatus = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/videos/ownership/' + ownershipId + '/refuse'
 
   return request(url)

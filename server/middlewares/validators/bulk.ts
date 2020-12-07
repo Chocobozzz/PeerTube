@@ -6,6 +6,7 @@ import { UserRight } from '@shared/models'
 import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const bulkRemoveCommentsOfValidator = [
   body('accountName').exists().withMessage('Should have an account name with host'),
@@ -22,7 +23,7 @@ const bulkRemoveCommentsOfValidator = [
     const body = req.body as BulkRemoveCommentsOfBody
 
     if (body.scope === 'instance' && user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT) !== true) {
-      return res.status(403)
+      return res.status(HttpStatusCode.FORBIDDEN_403)
       .json({
         error: 'User cannot remove any comments of this instance.'
       })

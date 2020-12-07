@@ -9,6 +9,7 @@ import { PluginType } from '../../models/plugins/plugin.type'
 import { buildServerDirectory, root } from '../miscs/miscs'
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 import { ServerInfo } from './servers'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function listPlugins (parameters: {
   url: string
@@ -18,9 +19,9 @@ function listPlugins (parameters: {
   sort?: string
   pluginType?: PluginType
   uninstalled?: boolean
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, accessToken, start, count, sort, pluginType, uninstalled, expectedStatus = 200 } = parameters
+  const { url, accessToken, start, count, sort, pluginType, uninstalled, expectedStatus = HttpStatusCode.OK_200 } = parameters
   const path = '/api/v1/plugins'
 
   return makeGetRequest({
@@ -47,9 +48,19 @@ function listAvailablePlugins (parameters: {
   pluginType?: PluginType
   currentPeerTubeEngine?: string
   search?: string
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, accessToken, start, count, sort, pluginType, search, currentPeerTubeEngine, expectedStatus = 200 } = parameters
+  const {
+    url,
+    accessToken,
+    start,
+    count,
+    sort,
+    pluginType,
+    search,
+    currentPeerTubeEngine,
+    expectedStatus = HttpStatusCode.OK_200
+  } = parameters
   const path = '/api/v1/plugins/available'
 
   const query: PeertubePluginIndexList = {
@@ -74,9 +85,9 @@ function getPlugin (parameters: {
   url: string
   accessToken: string
   npmName: string
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, accessToken, npmName, expectedStatus = 200 } = parameters
+  const { url, accessToken, npmName, expectedStatus = HttpStatusCode.OK_200 } = parameters
   const path = '/api/v1/plugins/' + npmName
 
   return makeGetRequest({
@@ -92,9 +103,9 @@ function updatePluginSettings (parameters: {
   accessToken: string
   npmName: string
   settings: any
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, accessToken, npmName, settings, expectedStatus = 204 } = parameters
+  const { url, accessToken, npmName, settings, expectedStatus = HttpStatusCode.NO_CONTENT_204 } = parameters
   const path = '/api/v1/plugins/' + npmName + '/settings'
 
   return makePutBodyRequest({
@@ -110,9 +121,9 @@ function getPluginRegisteredSettings (parameters: {
   url: string
   accessToken: string
   npmName: string
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, accessToken, npmName, expectedStatus = 200 } = parameters
+  const { url, accessToken, npmName, expectedStatus = HttpStatusCode.OK_200 } = parameters
   const path = '/api/v1/plugins/' + npmName + '/registered-settings'
 
   return makeGetRequest({
@@ -141,9 +152,9 @@ async function testHelloWorldRegisteredSettings (server: ServerInfo) {
 function getPublicSettings (parameters: {
   url: string
   npmName: string
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, npmName, expectedStatus = 200 } = parameters
+  const { url, npmName, expectedStatus = HttpStatusCode.OK_200 } = parameters
   const path = '/api/v1/plugins/' + npmName + '/public-settings'
 
   return makeGetRequest({
@@ -156,9 +167,9 @@ function getPublicSettings (parameters: {
 function getPluginTranslations (parameters: {
   url: string
   locale: string
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, locale, expectedStatus = 200 } = parameters
+  const { url, locale, expectedStatus = HttpStatusCode.OK_200 } = parameters
   const path = '/plugins/translations/' + locale + '.json'
 
   return makeGetRequest({
@@ -173,9 +184,9 @@ function installPlugin (parameters: {
   accessToken: string
   path?: string
   npmName?: string
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, accessToken, npmName, path, expectedStatus = 200 } = parameters
+  const { url, accessToken, npmName, path, expectedStatus = HttpStatusCode.OK_200 } = parameters
   const apiPath = '/api/v1/plugins/install'
 
   return makePostBodyRequest({
@@ -192,9 +203,9 @@ function updatePlugin (parameters: {
   accessToken: string
   path?: string
   npmName?: string
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, accessToken, npmName, path, expectedStatus = 200 } = parameters
+  const { url, accessToken, npmName, path, expectedStatus = HttpStatusCode.OK_200 } = parameters
   const apiPath = '/api/v1/plugins/update'
 
   return makePostBodyRequest({
@@ -210,9 +221,9 @@ function uninstallPlugin (parameters: {
   url: string
   accessToken: string
   npmName: string
-  expectedStatus?: number
+  expectedStatus?: HttpStatusCode
 }) {
-  const { url, accessToken, npmName, expectedStatus = 204 } = parameters
+  const { url, accessToken, npmName, expectedStatus = HttpStatusCode.NO_CONTENT_204 } = parameters
   const apiPath = '/api/v1/plugins/uninstall'
 
   return makePostBodyRequest({
@@ -230,7 +241,7 @@ function getPluginsCSS (url: string) {
   return makeGetRequest({
     url,
     path,
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -260,7 +271,7 @@ function getExternalAuth (options: {
   npmVersion: string
   authName: string
   query?: any
-  statusCodeExpected?: number
+  statusCodeExpected?: HttpStatusCode
 }) {
   const { url, npmName, npmVersion, authName, statusCodeExpected, query } = options
 
@@ -270,7 +281,7 @@ function getExternalAuth (options: {
     url,
     path,
     query,
-    statusCodeExpected: statusCodeExpected || 200,
+    statusCodeExpected: statusCodeExpected || HttpStatusCode.OK_200,
     redirects: 0
   })
 }

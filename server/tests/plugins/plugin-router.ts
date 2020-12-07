@@ -10,6 +10,7 @@ import {
   setAccessTokensToServers, uninstallPlugin
 } from '../../../shared/extra-utils'
 import { expect } from 'chai'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test plugin helpers', function () {
   let server: ServerInfo
@@ -36,7 +37,7 @@ describe('Test plugin helpers', function () {
       const res = await makeGetRequest({
         url: server.url,
         path: path + 'ping',
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
 
       expect(res.body.message).to.equal('pong')
@@ -55,7 +56,7 @@ describe('Test plugin helpers', function () {
         url: server.url,
         path: path + 'form/post/mirror',
         fields: body,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
 
       expect(res.body).to.deep.equal(body)
@@ -73,14 +74,14 @@ describe('Test plugin helpers', function () {
       await makeGetRequest({
         url: server.url,
         path: path + 'ping',
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
 
       await makePostBodyRequest({
         url: server.url,
         path: path + 'ping',
         fields: {},
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     }
   })

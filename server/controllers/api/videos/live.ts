@@ -16,6 +16,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const liveRouter = express.Router()
 
@@ -75,7 +76,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
   await federateVideoIfNeeded(video, false)
 
-  return res.sendStatus(204)
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function addLiveVideo (req: express.Request, res: express.Response) {

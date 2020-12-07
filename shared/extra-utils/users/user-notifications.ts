@@ -11,8 +11,14 @@ import { flushAndRunMultipleServers, ServerInfo } from '../server/servers'
 import { getUserNotificationSocket } from '../socket/socket-io'
 import { setAccessTokensToServers, userLogin } from './login'
 import { createUser, getMyUserInformation } from './users'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function updateMyNotificationSettings (url: string, token: string, settings: UserNotificationSetting, statusCodeExpected = 204) {
+function updateMyNotificationSettings (
+  url: string,
+  token: string,
+  settings: UserNotificationSetting,
+  statusCodeExpected = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/users/me/notification-settings'
 
   return makePutBodyRequest({
@@ -31,7 +37,7 @@ async function getUserNotifications (
   count: number,
   unread?: boolean,
   sort = '-createdAt',
-  statusCodeExpected = 200
+  statusCodeExpected = HttpStatusCode.OK_200
 ) {
   const path = '/api/v1/users/me/notifications'
 
@@ -49,7 +55,7 @@ async function getUserNotifications (
   })
 }
 
-function markAsReadNotifications (url: string, token: string, ids: number[], statusCodeExpected = 204) {
+function markAsReadNotifications (url: string, token: string, ids: number[], statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/users/me/notifications/read'
 
   return makePostBodyRequest({
@@ -61,7 +67,7 @@ function markAsReadNotifications (url: string, token: string, ids: number[], sta
   })
 }
 
-function markAsReadAllNotifications (url: string, token: string, statusCodeExpected = 204) {
+function markAsReadAllNotifications (url: string, token: string, statusCodeExpected = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/users/me/notifications/read-all'
 
   return makePostBodyRequest({

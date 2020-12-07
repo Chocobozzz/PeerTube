@@ -1,6 +1,7 @@
 import * as request from 'supertest'
 import { VideoBlacklistType } from '../../models/videos'
 import { makeGetRequest } from '..'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function addVideoToBlacklist (
   url: string,
@@ -8,7 +9,7 @@ function addVideoToBlacklist (
   videoId: number | string,
   reason?: string,
   unfederate?: boolean,
-  specialStatus = 204
+  specialStatus = HttpStatusCode.NO_CONTENT_204
 ) {
   const path = '/api/v1/videos/' + videoId + '/blacklist'
 
@@ -20,7 +21,13 @@ function addVideoToBlacklist (
     .expect(specialStatus)
 }
 
-function updateVideoBlacklist (url: string, token: string, videoId: number, reason?: string, specialStatus = 204) {
+function updateVideoBlacklist (
+  url: string,
+  token: string,
+  videoId: number,
+  reason?: string,
+  specialStatus = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/videos/' + videoId + '/blacklist'
 
   return request(url)
@@ -31,7 +38,7 @@ function updateVideoBlacklist (url: string, token: string, videoId: number, reas
     .expect(specialStatus)
 }
 
-function removeVideoFromBlacklist (url: string, token: string, videoId: number | string, specialStatus = 204) {
+function removeVideoFromBlacklist (url: string, token: string, videoId: number | string, specialStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/videos/' + videoId + '/blacklist'
 
   return request(url)
@@ -46,9 +53,9 @@ function getBlacklistedVideosList (parameters: {
   token: string
   sort?: string
   type?: VideoBlacklistType
-  specialStatus?: number
+  specialStatus?: HttpStatusCode
 }) {
-  const { url, token, sort, type, specialStatus = 200 } = parameters
+  const { url, token, sort, type, specialStatus = HttpStatusCode.OK_200 } = parameters
   const path = '/api/v1/videos/blacklist/'
 
   const query = { sort, type }

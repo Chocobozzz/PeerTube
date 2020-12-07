@@ -1,5 +1,6 @@
 import { makeGetRequest } from '../requests/requests'
 import { LogLevel } from '../../models/server/log-level.type'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getLogs (url: string, accessToken: string, startDate: Date, endDate?: Date, level?: LogLevel) {
   const path = '/api/v1/server/logs'
@@ -9,7 +10,7 @@ function getLogs (url: string, accessToken: string, startDate: Date, endDate?: D
     path,
     token: accessToken,
     query: { startDate, endDate, level },
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 
@@ -21,7 +22,7 @@ function getAuditLogs (url: string, accessToken: string, startDate: Date, endDat
     path,
     token: accessToken,
     query: { startDate, endDate },
-    statusCodeExpected: 200
+    statusCodeExpected: HttpStatusCode.OK_200
   })
 }
 

@@ -1,4 +1,5 @@
 import * as request from 'supertest'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 type FeedType = 'videos' | 'video-comments' | 'subscriptions'
 
@@ -9,11 +10,11 @@ function getXMLfeed (url: string, feed: FeedType, format?: string) {
           .get(path)
           .query((format) ? { format: format } : {})
           .set('Accept', 'application/xml')
-          .expect(200)
+          .expect(HttpStatusCode.OK_200)
           .expect('Content-Type', /xml/)
 }
 
-function getJSONfeed (url: string, feed: FeedType, query: any = {}, statusCodeExpected = 200) {
+function getJSONfeed (url: string, feed: FeedType, query: any = {}, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/feeds/' + feed + '.json'
 
   return request(url)

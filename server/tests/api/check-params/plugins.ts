@@ -18,6 +18,7 @@ import {
 } from '../../../../shared/extra-utils'
 import { PluginType } from '../../../../shared/models/plugins/plugin.type'
 import { PeerTubePlugin } from '../../../../shared/models/plugins/peertube-plugin.model'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test server plugins API validators', function () {
   let server: ServerInfo
@@ -73,7 +74,7 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: 404 })
+        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
@@ -81,7 +82,7 @@ describe('Test server plugins API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: '/themes/' + pluginName + '/' + npmVersion + '/static/images/chocobo.png',
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -96,7 +97,7 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: 400 })
+        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
       }
     })
 
@@ -110,14 +111,14 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: 400 })
+        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.BAD_REQUEST_400 })
       }
     })
 
     it('Should fail with an unknown auth name', async function () {
       const path = '/plugins/' + pluginName + '/' + npmVersion + '/auth/bad-auth'
 
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: 404 })
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with an unknown static file', async function () {
@@ -129,7 +130,7 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: 404 })
+        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
@@ -137,7 +138,7 @@ describe('Test server plugins API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: '/themes/' + themeName + '/' + themeVersion + '/css/assets/fake.css',
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -151,11 +152,11 @@ describe('Test server plugins API validators', function () {
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: 200 })
+        await makeGetRequest({ url: server.url, path: p, statusCodeExpected: HttpStatusCode.OK_200 })
       }
 
       const authPath = '/plugins/' + pluginName + '/' + npmVersion + '/auth/fake-auth'
-      await makeGetRequest({ url: server.url, path: authPath, statusCodeExpected: 302 })
+      await makeGetRequest({ url: server.url, path: authPath, statusCodeExpected: HttpStatusCode.FOUND_302 })
     })
   })
 
@@ -173,7 +174,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: 'fake_token',
         query: baseQuery,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -183,7 +184,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: userAccessToken,
         query: baseQuery,
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -227,7 +228,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: server.accessToken,
         query: baseQuery,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })
@@ -244,7 +245,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: 'fake_token',
         query: baseQuery,
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -254,7 +255,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: userAccessToken,
         query: baseQuery,
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -287,7 +288,7 @@ describe('Test server plugins API validators', function () {
         path,
         token: server.accessToken,
         query: baseQuery,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     })
   })
@@ -301,7 +302,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: 'fake_token',
-          statusCodeExpected: 401
+          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
         })
       }
     })
@@ -312,7 +313,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: userAccessToken,
-          statusCodeExpected: 403
+          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
         })
       }
     })
@@ -323,7 +324,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: server.accessToken,
-          statusCodeExpected: 400
+          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
         })
       }
 
@@ -332,7 +333,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: server.accessToken,
-          statusCodeExpected: 400
+          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
         })
       }
     })
@@ -343,7 +344,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: server.accessToken,
-          statusCodeExpected: 404
+          statusCodeExpected: HttpStatusCode.NOT_FOUND_404
         })
       }
     })
@@ -354,7 +355,7 @@ describe('Test server plugins API validators', function () {
           url: server.url,
           path: path + suffix,
           token: server.accessToken,
-          statusCodeExpected: 200
+          statusCodeExpected: HttpStatusCode.OK_200
         })
       }
     })
@@ -370,7 +371,7 @@ describe('Test server plugins API validators', function () {
         path: path + npmPlugin + '/settings',
         fields: { settings },
         token: 'fake_token',
-        statusCodeExpected: 401
+        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -380,7 +381,7 @@ describe('Test server plugins API validators', function () {
         path: path + npmPlugin + '/settings',
         fields: { settings },
         token: userAccessToken,
-        statusCodeExpected: 403
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -390,7 +391,7 @@ describe('Test server plugins API validators', function () {
         path: path + 'toto/settings',
         fields: { settings },
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
 
       await makePutBodyRequest({
@@ -398,7 +399,7 @@ describe('Test server plugins API validators', function () {
         path: path + 'peertube-plugin-TOTO/settings',
         fields: { settings },
         token: server.accessToken,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -408,7 +409,7 @@ describe('Test server plugins API validators', function () {
         path: path + 'peertube-plugin-toto/settings',
         fields: { settings },
         token: server.accessToken,
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -418,7 +419,7 @@ describe('Test server plugins API validators', function () {
         path: path + npmPlugin + '/settings',
         fields: { settings },
         token: server.accessToken,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -433,7 +434,7 @@ describe('Test server plugins API validators', function () {
           path: path + suffix,
           fields: { npmName: npmPlugin },
           token: 'fake_token',
-          statusCodeExpected: 401
+          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
         })
       }
     })
@@ -445,7 +446,7 @@ describe('Test server plugins API validators', function () {
           path: path + suffix,
           fields: { npmName: npmPlugin },
           token: userAccessToken,
-          statusCodeExpected: 403
+          statusCodeExpected: HttpStatusCode.FORBIDDEN_403
         })
       }
     })
@@ -457,7 +458,7 @@ describe('Test server plugins API validators', function () {
           path: path + suffix,
           fields: { npmName: 'toto' },
           token: server.accessToken,
-          statusCodeExpected: 400
+          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
         })
       }
 
@@ -467,7 +468,7 @@ describe('Test server plugins API validators', function () {
           path: path + suffix,
           fields: { npmName: 'peertube-plugin-TOTO' },
           token: server.accessToken,
-          statusCodeExpected: 400
+          statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
         })
       }
     })
@@ -476,9 +477,9 @@ describe('Test server plugins API validators', function () {
       this.timeout(10000)
 
       const it = [
-        { suffix: 'install', status: 200 },
-        { suffix: 'update', status: 200 },
-        { suffix: 'uninstall', status: 204 }
+        { suffix: 'install', status: HttpStatusCode.OK_200 },
+        { suffix: 'update', status: HttpStatusCode.OK_200 },
+        { suffix: 'uninstall', status: HttpStatusCode.NO_CONTENT_204 }
       ]
 
       for (const obj of it) {

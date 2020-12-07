@@ -1,6 +1,7 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import * as RateLimit from 'express-rate-limit'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { badRequest } from '../../helpers/express-utils'
 import { CONFIG } from '../../initializers/config'
 import { abuseRouter } from './abuse'
@@ -56,5 +57,5 @@ export { apiRouter }
 // ---------------------------------------------------------------------------
 
 function pong (req: express.Request, res: express.Response) {
-  return res.send('pong').status(200).end()
+  return res.send('pong').status(HttpStatusCode.OK_200).end()
 }

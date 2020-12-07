@@ -26,6 +26,7 @@ import { MVideoFile, MVideoFullLight } from '@server/types/models'
 import { getTorrentFilePath, getVideoFilePath } from '@server/lib/video-paths'
 import { getThemeOrDefault } from '../lib/plugins/theme-utils'
 import { getEnabledResolutions, getRegisteredPlugins, getRegisteredThemes } from '@server/controllers/api/config'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const staticRouter = express.Router()
 
@@ -121,7 +122,7 @@ staticRouter.get('/robots.txt',
 // security.txt service
 staticRouter.get('/security.txt',
   (_, res: express.Response) => {
-    return res.redirect(301, '/.well-known/security.txt')
+    return res.redirect(HttpStatusCode.MOVED_PERMANENTLY_301, '/.well-known/security.txt')
   }
 )
 
@@ -331,7 +332,7 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
     res.contentType('application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.0#"')
   } else {
     json = { error: 'Nodeinfo schema version not handled' }
-    res.status(404)
+    res.status(HttpStatusCode.NOT_FOUND_404)
   }
 
   return res.send(json).end()
@@ -341,7 +342,7 @@ function downloadTorrent (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
   const videoFile = getVideoFile(req, video.VideoFiles)
-  if (!videoFile) return res.status(404).end()
+  if (!videoFile) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   return res.download(getTorrentFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p.torrent`)
 }
@@ -350,10 +351,10 @@ function downloadHLSVideoFileTorrent (req: express.Request, res: express.Respons
   const video = res.locals.videoAll
 
   const playlist = getHLSPlaylist(video)
-  if (!playlist) return res.status(404).end
+  if (!playlist) return res.status(HttpStatusCode.NOT_FOUND_404).end
 
   const videoFile = getVideoFile(req, playlist.VideoFiles)
-  if (!videoFile) return res.status(404).end()
+  if (!videoFile) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   return res.download(getTorrentFilePath(playlist, videoFile), `${video.name}-${videoFile.resolution}p-hls.torrent`)
 }
@@ -362,7 +363,7 @@ function downloadVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
   const videoFile = getVideoFile(req, video.VideoFiles)
-  if (!videoFile) return res.status(404).end()
+  if (!videoFile) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   return res.download(getVideoFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p${videoFile.extname}`)
 }
@@ -370,10 +371,10 @@ function downloadVideoFile (req: express.Request, res: express.Response) {
 function downloadHLSVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const playlist = getHLSPlaylist(video)
-  if (!playlist) return res.status(404).end
+  if (!playlist) return res.status(HttpStatusCode.NOT_FOUND_404).end
 
   const videoFile = getVideoFile(req, playlist.VideoFiles)
-  if (!videoFile) return res.status(404).end()
+  if (!videoFile) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   const filename = `${video.name}-${videoFile.resolution}p-${playlist.getStringType()}${videoFile.extname}`
   return res.download(getVideoFilePath(playlist, videoFile), filename)

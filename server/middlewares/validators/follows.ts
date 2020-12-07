@@ -12,6 +12,7 @@ import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-valid
 import { MActorFollowActorsDefault } from '@server/types/models'
 import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
 import { getServerActor } from '@server/models/application/application'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const listFollowsValidator = [
   query('state')
@@ -34,7 +35,8 @@ const followValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Force https if the administrator wants to make friends
     if (isTestInstance() === false && WEBSERVER.SCHEME === 'http') {
-      return res.status(500)
+      return res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
         .json({
           error: 'Cannot follow on a non HTTPS web server.'
         })
@@ -62,7 +64,7 @@ const removeFollowingValidator = [
 
     if (!follow) {
       return res
-        .status(404)
+        .status(HttpStatusCode.NOT_FOUND_404)
         .json({
           error: `Following ${req.params.host} not found.`
         })
@@ -95,7 +97,7 @@ const getFollowerValidator = [
 
     if (!follow) {
       return res
-        .status(404)
+        .status(HttpStatusCode.NOT_FOUND_404)
         .json({
           error: `Follower ${req.params.nameWithHost} not found.`
         })
@@ -113,7 +115,12 @@ const acceptOrRejectFollowerValidator = [
 
     const follow = res.locals.follow
     if (follow.state !== 'pending') {
-      return res.status(400).json({ error: 'Follow is not in pending state.' }).end()
+      return res
+        .status(HttpStatusCode.BAD_REQUEST_400)
+        .json({
+          error: 'Follow is not in pending state.'
+        })
+        .end()
     }
 
     return next()

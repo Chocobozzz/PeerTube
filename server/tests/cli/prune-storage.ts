@@ -24,6 +24,7 @@ import { Account, VideoPlaylistPrivacy } from '../../../shared/models'
 import { createFile, readdir } from 'fs-extra'
 import { v4 as uuidv4 } from 'uuid'
 import { join } from 'path'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -98,7 +99,7 @@ describe('Test prune storage scripts', function () {
       await makeGetRequest({
         url: servers[0].url,
         path: account.avatar.path,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     }
 
@@ -108,7 +109,7 @@ describe('Test prune storage scripts', function () {
       await makeGetRequest({
         url: servers[1].url,
         path: account.avatar.path,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
     }
 

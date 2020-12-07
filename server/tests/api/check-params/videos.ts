@@ -28,6 +28,7 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -76,11 +77,11 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a bad skipVideos query', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200, query: { skipCount: 'toto' } })
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200, query: { skipCount: 'toto' } })
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200, query: { skipCount: false } })
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200, query: { skipCount: false } })
     })
   })
 
@@ -90,7 +91,7 @@ describe('Test videos API validator', function () {
       await makeGetRequest({
         url: server.url,
         path: join(path, 'search'),
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -107,7 +108,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200 })
     })
   })
 
@@ -127,7 +128,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, token: server.accessToken, path, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, token: server.accessToken, path, statusCodeExpected: HttpStatusCode.OK_200 })
     })
   })
 
@@ -151,7 +152,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200 })
     })
   })
 
@@ -175,7 +176,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: HttpStatusCode.OK_200 })
     })
   })
 
@@ -408,7 +409,7 @@ describe('Test videos API validator', function () {
           token: server.accessToken,
           fields,
           attaches,
-          statusCodeExpected: 200
+          statusCodeExpected: HttpStatusCode.OK_200
         })
       }
 
@@ -423,7 +424,7 @@ describe('Test videos API validator', function () {
           token: server.accessToken,
           fields,
           attaches,
-          statusCodeExpected: 200
+          statusCodeExpected: HttpStatusCode.OK_200
         })
       }
 
@@ -438,7 +439,7 @@ describe('Test videos API validator', function () {
           token: server.accessToken,
           fields,
           attaches,
-          statusCodeExpected: 200
+          statusCodeExpected: HttpStatusCode.OK_200
         })
       }
     })
@@ -481,7 +482,7 @@ describe('Test videos API validator', function () {
         path: path + '4da6fde3-88f7-4d16-b119-108df5630b06',
         token: server.accessToken,
         fields,
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -630,7 +631,13 @@ describe('Test videos API validator', function () {
     it('Should fail with a video of another user without the appropriate right', async function () {
       const fields = baseCorrectParams
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: userAccessToken, fields, statusCodeExpected: 403 })
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + videoId,
+        token: userAccessToken,
+        fields,
+        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should fail with a video of another server')
@@ -638,7 +645,13 @@ describe('Test videos API validator', function () {
     it('Should succeed with the correct parameters', async function () {
       const fields = baseCorrectParams
 
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields, statusCodeExpected: 204 })
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + videoId,
+        token: server.accessToken,
+        fields,
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+      })
     })
   })
 
@@ -647,7 +660,7 @@ describe('Test videos API validator', function () {
       const res = await makeGetRequest({
         url: server.url,
         path,
-        statusCodeExpected: 200
+        statusCodeExpected: HttpStatusCode.OK_200
       })
 
       expect(res.body.data).to.be.an('array')
@@ -655,11 +668,11 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail without a correct uuid', async function () {
-      await getVideo(server.url, 'coucou', 400)
+      await getVideo(server.url, 'coucou', HttpStatusCode.BAD_REQUEST_400)
     })
 
     it('Should return 404 with an incorrect video', async function () {
-      await getVideo(server.url, '4da6fde3-88f7-4d16-b119-108df5630b06', 404)
+      await getVideo(server.url, '4da6fde3-88f7-4d16-b119-108df5630b06', HttpStatusCode.NOT_FOUND_404)
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -691,7 +704,7 @@ describe('Test videos API validator', function () {
         path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/rate',
         token: server.accessToken,
         fields,
-        statusCodeExpected: 404
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -711,7 +724,7 @@ describe('Test videos API validator', function () {
         path: path + videoId + '/rate',
         token: server.accessToken,
         fields,
-        statusCodeExpected: 204
+        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
       })
     })
   })
@@ -721,20 +734,20 @@ describe('Test videos API validator', function () {
       await makeDeleteRequest({
         url: server.url,
         path,
-        statusCodeExpected: 400
+        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
     it('Should fail without a correct uuid', async function () {
-      await removeVideo(server.url, server.accessToken, 'hello', 400)
+      await removeVideo(server.url, server.accessToken, 'hello', HttpStatusCode.BAD_REQUEST_400)
     })
 
     it('Should fail with a video which does not exist', async function () {
-      await removeVideo(server.url, server.accessToken, '4da6fde3-88f7-4d16-b119-108df5630b06', 404)
+      await removeVideo(server.url, server.accessToken, '4da6fde3-88f7-4d16-b119-108df5630b06', HttpStatusCode.NOT_FOUND_404)
     })
 
     it('Should fail with a video of another user without the appropriate right', async function () {
-      await removeVideo(server.url, userAccessToken, videoId, 403)
+      await removeVideo(server.url, userAccessToken, videoId, HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should fail with a video of another server')

@@ -9,6 +9,7 @@ import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { areValidationErrors } from './utils'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const startVideoPlaylistsURL = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch', 'playlist') + '/'
 const startVideosURL = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch') + '/'
@@ -36,7 +37,7 @@ const oembedValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.format !== undefined && req.query.format !== 'json') {
-      return res.status(501)
+      return res.status(HttpStatusCode.NOT_IMPLEMENTED_501)
         .json({ error: 'Requested format is not implemented on server.' })
     }
 
@@ -50,13 +51,13 @@ const oembedValidator = [
     const matches = watchRegex.exec(url)
 
     if (startIsOk === false || matches === null) {
-      return res.status(400)
+      return res.status(HttpStatusCode.BAD_REQUEST_400)
         .json({ error: 'Invalid url.' })
     }
 
     const elementId = matches[1]
     if (isIdOrUUIDValid(elementId) === false) {
-      return res.status(400)
+      return res.status(HttpStatusCode.BAD_REQUEST_400)
         .json({ error: 'Invalid video or playlist id.' })
     }
 
@@ -64,12 +65,12 @@ const oembedValidator = [
       const video = await fetchVideo(elementId, 'all')
 
       if (!video) {
-        return res.status(404)
+        return res.status(HttpStatusCode.NOT_FOUND_404)
           .json({ error: 'Video not found' })
       }
 
       if (video.privacy !== VideoPrivacy.PUBLIC) {
-        return res.status(403)
+        return res.status(HttpStatusCode.FORBIDDEN_403)
           .json({ error: 'Video is not public' })
       }
 
@@ -81,12 +82,12 @@ const oembedValidator = [
 
     const videoPlaylist = await VideoPlaylistModel.loadWithAccountAndChannelSummary(elementId, undefined)
     if (!videoPlaylist) {
-      return res.status(404)
+      return res.status(HttpStatusCode.NOT_FOUND_404)
         .json({ error: 'Video playlist not found' })
     }
 
     if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC) {
-      return res.status(403)
+      return res.status(HttpStatusCode.FORBIDDEN_403)
         .json({ error: 'Playlist is not public' })
     }
 

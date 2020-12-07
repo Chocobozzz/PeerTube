@@ -8,8 +8,9 @@ import { Account } from '../../models/actors'
 import { root } from '../miscs/miscs'
 import { makeGetRequest } from '../requests/requests'
 import { VideoRateType } from '../../models/videos'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function getAccountsList (url: string, sort = '-createdAt', statusCodeExpected = 200) {
+function getAccountsList (url: string, sort = '-createdAt', statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/accounts'
 
   return makeGetRequest({
@@ -20,7 +21,7 @@ function getAccountsList (url: string, sort = '-createdAt', statusCodeExpected =
   })
 }
 
-function getAccount (url: string, accountName: string, statusCodeExpected = 200) {
+function getAccount (url: string, accountName: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/accounts/' + accountName
 
   return makeGetRequest({
@@ -55,7 +56,13 @@ async function checkActorFilesWereRemoved (filename: string, serverNumber: numbe
   }
 }
 
-function getAccountRatings (url: string, accountName: string, accessToken: string, rating?: VideoRateType, statusCodeExpected = 200) {
+function getAccountRatings (
+  url: string,
+  accountName: string,
+  accessToken: string,
+  rating?: VideoRateType,
+  statusCodeExpected = HttpStatusCode.OK_200
+) {
   const path = '/api/v1/accounts/' + accountName + '/ratings'
 
   const query = rating ? { rating } : {}
