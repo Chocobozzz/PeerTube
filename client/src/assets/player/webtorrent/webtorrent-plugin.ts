@@ -122,15 +122,8 @@ class WebTorrentPlugin extends Plugin {
     return this.currentVideoFile ? this.currentVideoFile.resolution.id : -1
   }
 
-  private getVideoFile(): VideoFile {
-    const savedAverageBandwidth = getAverageBandwidthInStore()
-    return savedAverageBandwidth
-      ? this.getAppropriateFile(savedAverageBandwidth)
-      : this.pickAverageVideoFile()
-}
-
   updateVideoFile (
-    videoFile: VideoFile,
+    videoFile?: VideoFile,
     options: {
       forcePlay?: boolean,
       seek?: number,
@@ -138,6 +131,14 @@ class WebTorrentPlugin extends Plugin {
     } = {},
     done: () => void = () => { /* empty */ }
   ) {
+    // Automatically choose the adapted video file
+    if (videoFile === undefined) {
+      const savedAverageBandwidth = getAverageBandwidthInStore()
+      videoFile = savedAverageBandwidth
+        ? this.getAppropriateFile(savedAverageBandwidth)
+        : this.pickAverageVideoFile()
+    }
+
     if (videoFile === undefined) {
       throw Error(`Can't update video file since videoFile is undefined.`)
     }
@@ -426,7 +427,7 @@ class WebTorrentPlugin extends Plugin {
     if (this.autoplay) {
       this.player.posterImage.hide()
 
-      return this.updateVideoFile(this.getVideoFile(), { forcePlay: true, seek: this.startTime })
+      return this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })
     }
 
     // Proxy first play
@@ -435,7 +436,7 @@ class WebTorrentPlugin extends Plugin {
       this.player.addClass('vjs-has-big-play-button-clicked')
       this.player.play = oldPlay
 
-      this.updateVideoFile(this.getVideoFile(), { forcePlay: true, seek: this.startTime })
+      this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })
     }
   }
 
