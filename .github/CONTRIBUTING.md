@@ -74,13 +74,12 @@ link your PR to the issues it solves by using the GitHub syntax: "fixes #issue_n
 
 First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead to crashes.
 
-Make sure that you have followed
+1) Make sure that you have followed
 [the steps](/support/doc/dependencies.md)
 to install the dependencies.
-
-Fork the github repository,
-and then clone the sources and install node modules:
-
+1) Install [parallel](https://www.gnu.org/software/parallel/) to be able to run tests.
+1) Fork the Github repository.
+1) Run the following commands.
 ```
 $ git clone https://github.com/Chocobozzz/PeerTube
 $ cd PeerTube
