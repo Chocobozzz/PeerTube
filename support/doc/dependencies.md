@@ -9,6 +9,7 @@ Follow the below guides, and check their versions match [required external depen
 - [Debian / Ubuntu and derivatives](#debian--ubuntu-and-derivatives)
 - [Arch Linux](#arch-linux)
 - [CentOS 7](#centos-7)
+- [CentOS 8](#centos-8)
 - [Fedora](#fedora)
 - [FreeBSD](#freebsd)
 - [macOS](#macos)
