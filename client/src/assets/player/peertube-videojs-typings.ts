@@ -106,6 +106,8 @@ type PeerTubePluginOptions = {
   videoCaptions: VideoJSCaption[]
 
   stopTime: number | string
+
+  isLive: boolean
 }
 
 type PlaylistPluginOptions = {

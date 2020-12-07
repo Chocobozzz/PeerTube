@@ -229,7 +229,8 @@ export class PeertubePlayerManager {
         userWatching: commonOptions.userWatching,
         subtitle: commonOptions.subtitle,
         videoCaptions: commonOptions.videoCaptions,
-        stopTime: commonOptions.stopTime
+        stopTime: commonOptions.stopTime,
+        isLive: commonOptions.isLive
       }
     }
 
