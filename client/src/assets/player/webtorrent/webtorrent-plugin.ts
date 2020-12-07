@@ -149,7 +149,7 @@ class WebTorrentPlugin extends Plugin {
     }
 
     // Do not display error to user because we will have multiple fallback
-    this.disableErrorDisplay()
+    this.disableErrorDisplay();
 
     // Hack to "simulate" src link in video.js >= 6
     // Without this, we can't play the video after pausing it
