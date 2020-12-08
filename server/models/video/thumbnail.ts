@@ -34,7 +34,7 @@ import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
     }
   ]
 })
-export class ThumbnailModel extends Model<ThumbnailModel> {
+export class ThumbnailModel extends Model {
 
   @AllowNull(false)
   @Column

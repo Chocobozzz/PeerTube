@@ -18,7 +18,7 @@ import { MAvatarFormattable } from '@server/types/models'
     }
   ]
 })
-export class AvatarModel extends Model<AvatarModel> {
+export class AvatarModel extends Model {
 
   @AllowNull(false)
   @Column

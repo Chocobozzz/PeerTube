@@ -113,7 +113,8 @@ function throwIfNotValid (value: any, validator: (value: any) => boolean, fieldN
 function buildTrigramSearchIndex (indexName: string, attribute: string) {
   return {
     name: indexName,
-    fields: [ Sequelize.literal('lower(immutable_unaccent(' + attribute + '))') as any ],
+    // FIXME: gin_trgm_ops is not taken into account in Sequelize 6, so adding it ourselves in the literal function
+    fields: [ Sequelize.literal('lower(immutable_unaccent(' + attribute + ')) gin_trgm_ops') as any ],
     using: 'gin',
     operator: 'gin_trgm_ops'
   }

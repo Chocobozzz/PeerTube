@@ -1,5 +1,6 @@
 import { values } from 'lodash'
 import { extname } from 'path'
+import { literal, Op, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -16,6 +17,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { ModelCache } from '@server/models/model-cache'
 import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import { activityPubContextify } from '../../helpers/activitypub'
@@ -28,13 +30,6 @@ import {
 } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
-import { AccountModel } from '../account/account'
-import { AvatarModel } from '../avatar/avatar'
-import { ServerModel } from '../server/server'
-import { isOutdated, throwIfNotValid } from '../utils'
-import { VideoChannelModel } from '../video/video-channel'
-import { ActorFollowModel } from './actor-follow'
-import { VideoModel } from '../video/video'
 import {
   MActor,
   MActorAccountChannelId,
@@ -43,12 +38,17 @@ import {
   MActorFull,
   MActorHost,
   MActorServer,
-  MActorSummaryFormattable, MActorUrl,
+  MActorSummaryFormattable,
+  MActorUrl,
   MActorWithInboxes
 } from '../../types/models'
-import * as Bluebird from 'bluebird'
-import { Op, Transaction, literal } from 'sequelize'
-import { ModelCache } from '@server/models/model-cache'
+import { AccountModel } from '../account/account'
+import { AvatarModel } from '../avatar/avatar'
+import { ServerModel } from '../server/server'
+import { isOutdated, throwIfNotValid } from '../utils'
+import { VideoModel } from '../video/video'
+import { VideoChannelModel } from '../video/video-channel'
+import { ActorFollowModel } from './actor-follow'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -146,7 +146,7 @@ export const unusedActorAttributesForAPI = [
     }
   ]
 })
-export class ActorModel extends Model<ActorModel> {
+export class ActorModel extends Model {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...values(ACTIVITY_PUB_ACTOR_TYPES)))
@@ -276,15 +276,15 @@ export class ActorModel extends Model<ActorModel> {
   })
   VideoChannel: VideoChannelModel
 
-  static load (id: number): Bluebird<MActor> {
+  static load (id: number): Promise<MActor> {
     return ActorModel.unscoped().findByPk(id)
   }
 
-  static loadFull (id: number): Bluebird<MActorFull> {
+  static loadFull (id: number): Promise<MActorFull> {
     return ActorModel.scope(ScopeNames.FULL).findByPk(id)
   }
 
-  static loadFromAccountByVideoId (videoId: number, transaction: Transaction): Bluebird<MActor> {
+  static loadFromAccountByVideoId (videoId: number, transaction: Transaction): Promise<MActor> {
     const query = {
       include: [
         {
@@ -328,7 +328,7 @@ export class ActorModel extends Model<ActorModel> {
       .then(a => !!a)
   }
 
-  static listByFollowersUrls (followersUrls: string[], transaction?: Transaction): Bluebird<MActorFull[]> {
+  static listByFollowersUrls (followersUrls: string[], transaction?: Transaction): Promise<MActorFull[]> {
     const query = {
       where: {
         followersUrl: {
@@ -341,7 +341,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findAll(query)
   }
 
-  static loadLocalByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorFull> {
+  static loadLocalByName (preferredUsername: string, transaction?: Transaction): Promise<MActorFull> {
     const fun = () => {
       const query = {
         where: {
@@ -364,7 +364,7 @@ export class ActorModel extends Model<ActorModel> {
     })
   }
 
-  static loadLocalUrlByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorUrl> {
+  static loadLocalUrlByName (preferredUsername: string, transaction?: Transaction): Promise<MActorUrl> {
     const fun = () => {
       const query = {
         attributes: [ 'url' ],
@@ -388,7 +388,7 @@ export class ActorModel extends Model<ActorModel> {
     })
   }
 
-  static loadByNameAndHost (preferredUsername: string, host: string): Bluebird<MActorFull> {
+  static loadByNameAndHost (preferredUsername: string, host: string): Promise<MActorFull> {
     const query = {
       where: {
         preferredUsername
@@ -407,7 +407,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MActorAccountChannelId> {
+  static loadByUrl (url: string, transaction?: Transaction): Promise<MActorAccountChannelId> {
     const query = {
       where: {
         url
@@ -430,7 +430,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.unscoped().findOne(query)
   }
 
-  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Transaction): Bluebird<MActorFull> {
+  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Transaction): Promise<MActorFull> {
     const query = {
       where: {
         url
@@ -461,7 +461,7 @@ export class ActorModel extends Model<ActorModel> {
     }, { where, transaction })
   }
 
-  static loadAccountActorByVideoId (videoId: number): Bluebird<MActor> {
+  static loadAccountActorByVideoId (videoId: number): Promise<MActor> {
     const query = {
       include: [
         {

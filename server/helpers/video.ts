@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { Response } from 'express'
 import { CONFIG } from '@server/initializers/config'
 import { DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants'
@@ -20,21 +19,21 @@ import { VideoModel } from '../models/video/video'
 
 type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
 
-function fetchVideo (id: number | string, fetchType: 'all', userId?: number): Bluebird<MVideoFullLight>
-function fetchVideo (id: number | string, fetchType: 'only-immutable-attributes'): Bluebird<MVideoImmutable>
-function fetchVideo (id: number | string, fetchType: 'only-video', userId?: number): Bluebird<MVideoThumbnail>
-function fetchVideo (id: number | string, fetchType: 'only-video-with-rights', userId?: number): Bluebird<MVideoWithRights>
-function fetchVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Bluebird<MVideoIdThumbnail>
+function fetchVideo (id: number | string, fetchType: 'all', userId?: number): Promise<MVideoFullLight>
+function fetchVideo (id: number | string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
+function fetchVideo (id: number | string, fetchType: 'only-video', userId?: number): Promise<MVideoThumbnail>
+function fetchVideo (id: number | string, fetchType: 'only-video-with-rights', userId?: number): Promise<MVideoWithRights>
+function fetchVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Promise<MVideoIdThumbnail>
 function fetchVideo (
   id: number | string,
   fetchType: VideoFetchType,
   userId?: number
-): Bluebird<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable>
+): Promise<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable>
 function fetchVideo (
   id: number | string,
   fetchType: VideoFetchType,
   userId?: number
-): Bluebird<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable> {
+): Promise<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable> {
   if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id, undefined, userId)
 
   if (fetchType === 'only-immutable-attributes') return VideoModel.loadImmutableAttributes(id)
@@ -48,17 +47,17 @@ function fetchVideo (
 
 type VideoFetchByUrlType = 'all' | 'only-video' | 'only-immutable-attributes'
 
-function fetchVideoByUrl (url: string, fetchType: 'all'): Bluebird<MVideoAccountLightBlacklistAllFiles>
-function fetchVideoByUrl (url: string, fetchType: 'only-immutable-attributes'): Bluebird<MVideoImmutable>
-function fetchVideoByUrl (url: string, fetchType: 'only-video'): Bluebird<MVideoThumbnail>
+function fetchVideoByUrl (url: string, fetchType: 'all'): Promise<MVideoAccountLightBlacklistAllFiles>
+function fetchVideoByUrl (url: string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
+function fetchVideoByUrl (url: string, fetchType: 'only-video'): Promise<MVideoThumbnail>
 function fetchVideoByUrl (
   url: string,
   fetchType: VideoFetchByUrlType
-): Bluebird<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable>
+): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable>
 function fetchVideoByUrl (
   url: string,
   fetchType: VideoFetchByUrlType
-): Bluebird<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
+): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
   if (fetchType === 'all') return VideoModel.loadByUrlAndPopulateAccount(url)
 
   if (fetchType === 'only-immutable-attributes') return VideoModel.loadByUrlImmutableAttributes(url)

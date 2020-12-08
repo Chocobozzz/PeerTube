@@ -13,7 +13,7 @@ import { AbuseModel } from './abuse'
     }
   ]
 })
-export class VideoCommentAbuseModel extends Model<VideoCommentAbuseModel> {
+export class VideoCommentAbuseModel extends Model {
 
   @CreatedAt
   createdAt: Date

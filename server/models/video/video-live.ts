@@ -28,7 +28,7 @@ import { VideoBlacklistModel } from './video-blacklist'
     }
   ]
 })
-export class VideoLiveModel extends Model<VideoLiveModel> {
+export class VideoLiveModel extends Model {
 
   @AllowNull(true)
   @Column(DataType.STRING)

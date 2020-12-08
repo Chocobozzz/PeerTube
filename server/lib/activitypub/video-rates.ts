@@ -13,8 +13,6 @@ import { sendDislike } from './send/send-dislike'
 import { MAccountActor, MActorUrl, MVideo, MVideoAccountLight, MVideoId } from '../../types/models'
 
 async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateType) {
-  let rateCounts = 0
-
   await Bluebird.map(ratesUrl, async rateUrl => {
     try {
       // Fetch url
@@ -43,21 +41,12 @@ async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateTy
         url: body.id
       }
 
-      const created = await AccountVideoRateModel.upsert(entry)
-
-      if (created) rateCounts += 1
+      // Video "likes"/"dislikes" will be updated by the caller
+      await AccountVideoRateModel.upsert(entry)
     } catch (err) {
       logger.warn('Cannot add rate %s.', rateUrl, { err })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
-
-  logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
-
-  // This is "likes" and "dislikes"
-  if (rateCounts !== 0) {
-    const field = rate === 'like' ? 'likes' : 'dislikes'
-    await video.increment(field, { by: rateCounts })
-  }
 }
 
 async function sendVideoRateChange (

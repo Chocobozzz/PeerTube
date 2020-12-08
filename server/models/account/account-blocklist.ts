@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { Op } from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/types/models'
@@ -41,7 +40,7 @@ enum ScopeNames {
     }
   ]
 })
-export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
+export class AccountBlocklistModel extends Model {
 
   @CreatedAt
   createdAt: Date
@@ -102,7 +101,7 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
                                 })
   }
 
-  static loadByAccountAndTarget (accountId: number, targetAccountId: number): Bluebird<MAccountBlocklist> {
+  static loadByAccountAndTarget (accountId: number, targetAccountId: number): Promise<MAccountBlocklist> {
     const query = {
       where: {
         accountId,
@@ -151,9 +150,9 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
       })
   }
 
-  static listHandlesBlockedBy (accountIds: number[]): Bluebird<string[]> {
+  static listHandlesBlockedBy (accountIds: number[]): Promise<string[]> {
     const query = {
-      attributes: [],
+      attributes: [ 'id' ],
       where: {
         accountId: {
           [Op.in]: accountIds

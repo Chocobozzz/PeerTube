@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { values } from 'lodash'
 import { col, FindOptions, fn, literal, Op, QueryTypes, where, WhereOptions } from 'sequelize'
 import {
@@ -16,11 +15,11 @@ import {
   HasOne,
   Is,
   IsEmail,
+  IsUUID,
   Model,
   Scopes,
   Table,
-  UpdatedAt,
-  IsUUID
+  UpdatedAt
 } from 'sequelize-typescript'
 import {
   MMyUserFormattable,
@@ -220,7 +219,7 @@ enum ScopeNames {
     }
   ]
 })
-export class UserModel extends Model<UserModel> {
+export class UserModel extends Model {
 
   @AllowNull(true)
   @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password', true))
@@ -483,7 +482,7 @@ export class UserModel extends Model<UserModel> {
                     })
   }
 
-  static listWithRight (right: UserRight): Bluebird<MUserDefault[]> {
+  static listWithRight (right: UserRight): Promise<MUserDefault[]> {
     const roles = Object.keys(USER_ROLE_LABELS)
                         .map(k => parseInt(k, 10) as UserRole)
                         .filter(role => hasUserRight(role, right))
@@ -499,7 +498,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static listUserSubscribersOf (actorId: number): Bluebird<MUserWithNotificationSetting[]> {
+  static listUserSubscribersOf (actorId: number): Promise<MUserWithNotificationSetting[]> {
     const query = {
       include: [
         {
@@ -538,7 +537,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.unscoped().findAll(query)
   }
 
-  static listByUsernames (usernames: string[]): Bluebird<MUserDefault[]> {
+  static listByUsernames (usernames: string[]): Promise<MUserDefault[]> {
     const query = {
       where: {
         username: usernames
@@ -548,11 +547,11 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static loadById (id: number): Bluebird<MUser> {
+  static loadById (id: number): Promise<MUser> {
     return UserModel.unscoped().findByPk(id)
   }
 
-  static loadByIdWithChannels (id: number, withStats = false): Bluebird<MUserDefault> {
+  static loadByIdWithChannels (id: number, withStats = false): Promise<MUserDefault> {
     const scopes = [
       ScopeNames.WITH_VIDEOCHANNELS
     ]
@@ -562,7 +561,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.scope(scopes).findByPk(id)
   }
 
-  static loadByUsername (username: string): Bluebird<MUserDefault> {
+  static loadByUsername (username: string): Promise<MUserDefault> {
     const query = {
       where: {
         username: { [Op.iLike]: username }
@@ -572,7 +571,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadForMeAPI (username: string): Bluebird<MUserNotifSettingChannelDefault> {
+  static loadForMeAPI (username: string): Promise<MUserNotifSettingChannelDefault> {
     const query = {
       where: {
         username: { [Op.iLike]: username }
@@ -582,7 +581,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.scope(ScopeNames.FOR_ME_API).findOne(query)
   }
 
-  static loadByEmail (email: string): Bluebird<MUserDefault> {
+  static loadByEmail (email: string): Promise<MUserDefault> {
     const query = {
       where: {
         email
@@ -592,7 +591,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByUsernameOrEmail (username: string, email?: string): Bluebird<MUserDefault> {
+  static loadByUsernameOrEmail (username: string, email?: string): Promise<MUserDefault> {
     if (!email) email = username
 
     const query = {
@@ -608,7 +607,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByVideoId (videoId: number): Bluebird<MUserDefault> {
+  static loadByVideoId (videoId: number): Promise<MUserDefault> {
     const query = {
       include: [
         {
@@ -639,7 +638,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByVideoImportId (videoImportId: number): Bluebird<MUserDefault> {
+  static loadByVideoImportId (videoImportId: number): Promise<MUserDefault> {
     const query = {
       include: [
         {
@@ -656,7 +655,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByChannelActorId (videoChannelActorId: number): Bluebird<MUserDefault> {
+  static loadByChannelActorId (videoChannelActorId: number): Promise<MUserDefault> {
     const query = {
       include: [
         {
@@ -680,7 +679,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByAccountActorId (accountActorId: number): Bluebird<MUserDefault> {
+  static loadByAccountActorId (accountActorId: number): Promise<MUserDefault> {
     const query = {
       include: [
         {
@@ -697,7 +696,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByLiveId (liveId: number): Bluebird<MUser> {
+  static loadByLiveId (liveId: number): Promise<MUser> {
     const query = {
       include: [
         {

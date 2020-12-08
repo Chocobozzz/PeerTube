@@ -40,7 +40,7 @@ import { logger } from '@server/helpers/logger'
     }
   ]
 })
-export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistModel> {
+export class VideoStreamingPlaylistModel extends Model {
   @CreatedAt
   createdAt: Date
 

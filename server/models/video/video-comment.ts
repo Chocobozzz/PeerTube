@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { uniq } from 'lodash'
 import { FindAndCountOptions, FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -174,7 +173,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoCommentModel extends Model<VideoCommentModel> {
+export class VideoCommentModel extends Model {
   @CreatedAt
   createdAt: Date
 
@@ -255,7 +254,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   })
   CommentAbuses: VideoCommentAbuseModel[]
 
-  static loadById (id: number, t?: Transaction): Bluebird<MComment> {
+  static loadById (id: number, t?: Transaction): Promise<MComment> {
     const query: FindOptions = {
       where: {
         id
@@ -267,7 +266,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.findOne(query)
   }
 
-  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Transaction): Bluebird<MCommentOwnerVideoReply> {
+  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Transaction): Promise<MCommentOwnerVideoReply> {
     const query: FindOptions = {
       where: {
         id
@@ -281,7 +280,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccountAndVideo (url: string, t?: Transaction): Bluebird<MCommentOwnerVideo> {
+  static loadByUrlAndPopulateAccountAndVideo (url: string, t?: Transaction): Promise<MCommentOwnerVideo> {
     const query: FindOptions = {
       where: {
         url
@@ -293,7 +292,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
-  static loadByUrlAndPopulateReplyAndVideoUrlAndAccount (url: string, t?: Transaction): Bluebird<MCommentOwnerReplyVideoLight> {
+  static loadByUrlAndPopulateReplyAndVideoUrlAndAccount (url: string, t?: Transaction): Promise<MCommentOwnerReplyVideoLight> {
     const query: FindOptions = {
       where: {
         url
@@ -501,7 +500,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       })
   }
 
-  static listThreadParentComments (comment: MCommentId, t: Transaction, order: 'ASC' | 'DESC' = 'ASC'): Bluebird<MCommentOwner[]> {
+  static listThreadParentComments (comment: MCommentId, t: Transaction, order: 'ASC' | 'DESC' = 'ASC'): Promise<MCommentOwner[]> {
     const query = {
       order: [ [ 'createdAt', order ] ] as Order,
       where: {

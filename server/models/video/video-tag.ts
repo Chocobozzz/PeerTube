@@ -13,7 +13,7 @@ import { VideoModel } from './video'
     }
   ]
 })
-export class VideoTagModel extends Model<VideoTagModel> {
+export class VideoTagModel extends Model {
   @CreatedAt
   createdAt: Date
 

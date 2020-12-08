@@ -16,7 +16,7 @@ import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@
     }
   ]
 })
-export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
+export class ScheduleVideoUpdateModel extends Model {
 
   @AllowNull(false)
   @Default(null)

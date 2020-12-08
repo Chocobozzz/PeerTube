@@ -14,7 +14,7 @@ import * as Sequelize from 'sequelize'
     }
   ]
 })
-export class VideoViewModel extends Model<VideoViewModel> {
+export class VideoViewModel extends Model {
   @CreatedAt
   createdAt: Date
 

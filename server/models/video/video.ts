@@ -2,7 +2,7 @@ import * as Bluebird from 'bluebird'
 import { remove } from 'fs-extra'
 import { maxBy, minBy, pick } from 'lodash'
 import { join } from 'path'
-import { FindOptions, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Includeable, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -190,26 +190,26 @@ export type AvailableForListIDsOptions = {
     attributes: [ 'id', 'url', 'uuid', 'remote' ]
   },
   [ScopeNames.FOR_API]: (options: ForAPIOptions) => {
-    const query: FindOptions = {
-      include: [
-        {
-          model: VideoChannelModel.scope({
-            method: [
-              VideoChannelScopeNames.SUMMARY, {
-                withAccount: true,
-                withAccountBlockerIds: options.withAccountBlockerIds
-              } as SummaryOptions
-            ]
-          }),
-          required: true
-        },
-        {
-          attributes: [ 'type', 'filename' ],
-          model: ThumbnailModel,
-          required: false
-        }
-      ]
-    }
+    const include: Includeable[] = [
+      {
+        model: VideoChannelModel.scope({
+          method: [
+            VideoChannelScopeNames.SUMMARY, {
+              withAccount: true,
+              withAccountBlockerIds: options.withAccountBlockerIds
+            } as SummaryOptions
+          ]
+        }),
+        required: true
+      },
+      {
+        attributes: [ 'type', 'filename' ],
+        model: ThumbnailModel,
+        required: false
+      }
+    ]
+
+    const query: FindOptions = {}
 
     if (options.ids) {
       query.where = {
@@ -220,14 +220,14 @@ export type AvailableForListIDsOptions = {
     }
 
     if (options.withFiles === true) {
-      query.include.push({
+      include.push({
         model: VideoFileModel,
         required: true
       })
     }
 
     if (options.videoPlaylistId) {
-      query.include.push({
+      include.push({
         model: VideoPlaylistElementModel.unscoped(),
         required: true,
         where: {
@@ -235,6 +235,8 @@ export type AvailableForListIDsOptions = {
         }
       })
     }
+
+    query.include = include
 
     return query
   },
@@ -477,7 +479,7 @@ export type AvailableForListIDsOptions = {
     }
   ]
 })
-export class VideoModel extends Model<VideoModel> {
+export class VideoModel extends Model {
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
@@ -860,7 +862,7 @@ export class VideoModel extends Model<VideoModel> {
     return undefined
   }
 
-  static listLocal (): Bluebird<MVideoWithAllFiles[]> {
+  static listLocal (): Promise<MVideoWithAllFiles[]> {
     const query = {
       where: {
         remote: false
@@ -988,7 +990,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static listPublishedLiveIds () {
+  static async listPublishedLiveIds () {
     const options = {
       attributes: [ 'id' ],
       where: {
@@ -997,8 +999,9 @@ export class VideoModel extends Model<VideoModel> {
       }
     }
 
-    return VideoModel.findAll(options)
-      .map(v => v.id)
+    const result = await VideoModel.findAll(options)
+
+    return result.map(v => v.id)
   }
 
   static listUserVideosForApi (
@@ -1214,7 +1217,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.count(options)
   }
 
-  static load (id: number | string, t?: Transaction): Bluebird<MVideoThumbnail> {
+  static load (id: number | string, t?: Transaction): Promise<MVideoThumbnail> {
     const where = buildWhereIdOrUUID(id)
     const options = {
       where,
@@ -1224,7 +1227,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
-  static loadWithBlacklist (id: number | string, t?: Transaction): Bluebird<MVideoThumbnailBlacklist> {
+  static loadWithBlacklist (id: number | string, t?: Transaction): Promise<MVideoThumbnailBlacklist> {
     const where = buildWhereIdOrUUID(id)
     const options = {
       where,
@@ -1237,7 +1240,7 @@ export class VideoModel extends Model<VideoModel> {
     ]).findOne(options)
   }
 
-  static loadImmutableAttributes (id: number | string, t?: Transaction): Bluebird<MVideoImmutable> {
+  static loadImmutableAttributes (id: number | string, t?: Transaction): Promise<MVideoImmutable> {
     const fun = () => {
       const query = {
         where: buildWhereIdOrUUID(id),
@@ -1255,7 +1258,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static loadWithRights (id: number | string, t?: Transaction): Bluebird<MVideoWithRights> {
+  static loadWithRights (id: number | string, t?: Transaction): Promise<MVideoWithRights> {
     const where = buildWhereIdOrUUID(id)
     const options = {
       where,
@@ -1269,7 +1272,7 @@ export class VideoModel extends Model<VideoModel> {
     ]).findOne(options)
   }
 
-  static loadOnlyId (id: number | string, t?: Transaction): Bluebird<MVideoIdThumbnail> {
+  static loadOnlyId (id: number | string, t?: Transaction): Promise<MVideoIdThumbnail> {
     const where = buildWhereIdOrUUID(id)
 
     const options = {
@@ -1281,7 +1284,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
-  static loadWithFiles (id: number | string, t?: Transaction, logging?: boolean): Bluebird<MVideoWithAllFiles> {
+  static loadWithFiles (id: number | string, t?: Transaction, logging?: boolean): Promise<MVideoWithAllFiles> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -1297,7 +1300,7 @@ export class VideoModel extends Model<VideoModel> {
     ]).findOne(query)
   }
 
-  static loadByUUID (uuid: string): Bluebird<MVideoThumbnail> {
+  static loadByUUID (uuid: string): Promise<MVideoThumbnail> {
     const options = {
       where: {
         uuid
@@ -1307,7 +1310,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MVideoThumbnail> {
+  static loadByUrl (url: string, transaction?: Transaction): Promise<MVideoThumbnail> {
     const query: FindOptions = {
       where: {
         url
@@ -1318,7 +1321,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(query)
   }
 
-  static loadByUrlImmutableAttributes (url: string, transaction?: Transaction): Bluebird<MVideoImmutable> {
+  static loadByUrlImmutableAttributes (url: string, transaction?: Transaction): Promise<MVideoImmutable> {
     const fun = () => {
       const query: FindOptions = {
         where: {
@@ -1338,7 +1341,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Bluebird<MVideoAccountLightBlacklistAllFiles> {
+  static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {
     const query: FindOptions = {
       where: {
         url
@@ -1355,7 +1358,7 @@ export class VideoModel extends Model<VideoModel> {
     ]).findOne(query)
   }
 
-  static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Transaction, userId?: number): Bluebird<MVideoFullLight> {
+  static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Transaction, userId?: number): Promise<MVideoFullLight> {
     const where = buildWhereIdOrUUID(id)
 
     const options = {
@@ -1388,7 +1391,7 @@ export class VideoModel extends Model<VideoModel> {
     id: number | string
     t?: Transaction
     userId?: number
-  }): Bluebird<MVideoDetails> {
+  }): Promise<MVideoDetails> {
     const { id, t, userId } = parameters
     const where = buildWhereIdOrUUID(id)
 
@@ -1487,7 +1490,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.update({ support: videoChannel.support }, options)
   }
 
-  static getAllIdsFromChannel (videoChannel: MChannelId): Bluebird<number[]> {
+  static getAllIdsFromChannel (videoChannel: MChannelId): Promise<number[]> {
     const query = {
       attributes: [ 'id' ],
       where: {

@@ -1,22 +1,21 @@
 import { values } from 'lodash'
-import { FindOptions, Op, Transaction } from 'sequelize'
+import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { VideoRateType } from '../../../shared/models/videos'
-import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
-import { VideoModel } from '../video/video'
-import { AccountModel } from './account'
-import { ActorModel } from '../activitypub/actor'
-import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { AccountVideoRate } from '../../../shared'
-import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
-import * as Bluebird from 'bluebird'
 import {
   MAccountVideoRate,
   MAccountVideoRateAccountUrl,
   MAccountVideoRateAccountVideo,
   MAccountVideoRateFormattable
 } from '@server/types/models/video/video-rate'
+import { AccountVideoRate } from '../../../shared'
+import { VideoRateType } from '../../../shared/models/videos'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
+import { ActorModel } from '../activitypub/actor'
+import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
+import { VideoModel } from '../video/video'
+import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
+import { AccountModel } from './account'
 
 /*
   Account rates per video.
@@ -43,7 +42,7 @@ import {
     }
   ]
 })
-export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
+export class AccountVideoRateModel extends Model {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...values(VIDEO_RATE_TYPES)))
@@ -84,7 +83,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   })
   Account: AccountModel
 
-  static load (accountId: number, videoId: number, transaction?: Transaction): Bluebird<MAccountVideoRate> {
+  static load (accountId: number, videoId: number, transaction?: Transaction): Promise<MAccountVideoRate> {
     const options: FindOptions = {
       where: {
         accountId,
@@ -96,7 +95,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     return AccountVideoRateModel.findOne(options)
   }
 
-  static loadByAccountAndVideoOrUrl (accountId: number, videoId: number, url: string, t?: Transaction): Bluebird<MAccountVideoRate> {
+  static loadByAccountAndVideoOrUrl (accountId: number, videoId: number, url: string, t?: Transaction): Promise<MAccountVideoRate> {
     const options: FindOptions = {
       where: {
         [Op.or]: [
@@ -152,7 +151,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     accountName: string,
     videoId: number | string,
     t?: Transaction
-  ): Bluebird<MAccountVideoRateAccountVideo> {
+  ): Promise<MAccountVideoRateAccountVideo> {
     const options: FindOptions = {
       where: {
         videoId,
@@ -240,17 +239,23 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
         transaction: t
       }
 
-      const deleted = await AccountVideoRateModel.destroy(query)
+      await AccountVideoRateModel.destroy(query)
 
-      const options = {
+      const field = type === 'like'
+        ? 'likes'
+        : 'dislikes'
+
+      const rawQuery = `UPDATE "video" SET "${field}" = ` +
+        '(' +
+          'SELECT COUNT(id) FROM "accountVideoRate" WHERE "accountVideoRate"."videoId" = "video"."id" AND type = :rateType' +
+        ') ' +
+        'WHERE "video"."id" = :videoId'
+
+      return AccountVideoRateModel.sequelize.query(rawQuery, {
         transaction: t,
-        where: {
-          id: videoId
-        }
-      }
-
-      if (type === 'like') await VideoModel.increment({ likes: -deleted }, options)
-      else if (type === 'dislike') await VideoModel.increment({ dislikes: -deleted }, options)
+        replacements: { videoId, rateType: type },
+        type: QueryTypes.UPDATE
+      })
     })
   }
 
