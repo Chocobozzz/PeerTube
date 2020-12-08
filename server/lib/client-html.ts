@@ -1,29 +1,28 @@
 import * as express from 'express'
-import * as Bluebird from 'bluebird'
+import { readFile } from 'fs-extra'
+import { join } from 'path'
+import validator from 'validator'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
+import { escapeHTML, isTestInstance, sha256 } from '../helpers/core-utils'
+import { logger } from '../helpers/logger'
+import { CONFIG } from '../initializers/config'
 import {
+  ACCEPT_HEADERS,
   AVATARS_SIZE,
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
-  PLUGIN_GLOBAL_CSS_PATH,
-  WEBSERVER,
   FILES_CONTENT_HASH,
-  ACCEPT_HEADERS
+  PLUGIN_GLOBAL_CSS_PATH,
+  WEBSERVER
 } from '../initializers/constants'
-import { join } from 'path'
-import { escapeHTML, isTestInstance, sha256 } from '../helpers/core-utils'
-import { VideoModel } from '../models/video/video'
-import { VideoPlaylistModel } from '../models/video/video-playlist'
-import validator from 'validator'
-import { VideoPrivacy, VideoPlaylistPrivacy } from '../../shared/models/videos'
-import { readFile } from 'fs-extra'
-import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { AccountModel } from '../models/account/account'
+import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { CONFIG } from '../initializers/config'
-import { logger } from '../helpers/logger'
+import { getActivityStreamDuration } from '../models/video/video-format-utils'
+import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 
 type Tags = {
   ogType: string
@@ -218,7 +217,7 @@ class ClientHtml {
   }
 
   private static async getAccountOrChannelHTMLPage (
-    loader: () => Bluebird<MAccountActor | MChannelActor>,
+    loader: () => Promise<MAccountActor | MChannelActor>,
     req: express.Request,
     res: express.Response
   ) {

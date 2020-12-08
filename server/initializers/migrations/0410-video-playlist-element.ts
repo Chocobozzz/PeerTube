@@ -18,7 +18,8 @@ async function up (utils: {
 
   await utils.queryInterface.removeConstraint('videoPlaylistElement', 'videoPlaylistElement_videoId_fkey')
 
-  await utils.queryInterface.addConstraint('videoPlaylistElement', [ 'videoId' ], {
+  await utils.queryInterface.addConstraint('videoPlaylistElement', {
+    fields: [ 'videoId' ],
     type: 'foreign key',
     references: {
       table: 'video',

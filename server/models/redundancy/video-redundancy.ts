@@ -1,3 +1,5 @@
+import { sample } from 'lodash'
+import { col, FindOptions, fn, literal, Op, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -12,23 +14,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { ActorModel } from '../activitypub/actor'
-import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../utils'
-import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
-import { VideoFileModel } from '../video/video-file'
-import { VideoModel } from '../video/video'
-import { VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../shared/models/redundancy'
-import { logger } from '../../helpers/logger'
-import { CacheFileObject, VideoPrivacy } from '../../../shared'
-import { VideoChannelModel } from '../video/video-channel'
-import { ServerModel } from '../server/server'
-import { sample } from 'lodash'
-import { isTestInstance } from '../../helpers/core-utils'
-import * as Bluebird from 'bluebird'
-import { col, FindOptions, fn, literal, Op, Transaction, WhereOptions } from 'sequelize'
-import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
-import { CONFIG } from '../../initializers/config'
+import { getServerActor } from '@server/models/application/application'
 import { MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models'
 import { VideoRedundanciesTarget } from '@shared/models/redundancy/video-redundancies-filters.model'
 import {
@@ -36,7 +22,20 @@ import {
   StreamingPlaylistRedundancyInformation,
   VideoRedundancy
 } from '@shared/models/redundancy/video-redundancy.model'
-import { getServerActor } from '@server/models/application/application'
+import { CacheFileObject, VideoPrivacy } from '../../../shared'
+import { VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../shared/models/redundancy'
+import { isTestInstance } from '../../helpers/core-utils'
+import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers/config'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
+import { ActorModel } from '../activitypub/actor'
+import { ServerModel } from '../server/server'
+import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../utils'
+import { VideoModel } from '../video/video'
+import { VideoChannelModel } from '../video/video-channel'
+import { VideoFileModel } from '../video/video-file'
+import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -84,7 +83,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
+export class VideoRedundancyModel extends Model {
 
   @CreatedAt
   createdAt: Date
@@ -199,7 +198,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static loadByIdWithVideo (id: number, transaction?: Transaction): Bluebird<MVideoRedundancyVideo> {
+  static loadByIdWithVideo (id: number, transaction?: Transaction): Promise<MVideoRedundancyVideo> {
     const query = {
       where: { id },
       transaction
@@ -208,7 +207,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MVideoRedundancy> {
+  static loadByUrl (url: string, transaction?: Transaction): Promise<MVideoRedundancy> {
     const query = {
       where: {
         url
@@ -251,7 +250,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
                                .then(r => !!r)
   }
 
-  static async getVideoSample (p: Bluebird<VideoModel[]>) {
+  static async getVideoSample (p: Promise<VideoModel[]>) {
     const rows = await p
     if (rows.length === 0) return undefined
 
@@ -696,7 +695,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
     const notIn = literal(
       '(' +
-      `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "videoFileId" IS NOT NULL` +
+        `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "videoFileId" IS NOT NULL` +
       ')'
     )
 

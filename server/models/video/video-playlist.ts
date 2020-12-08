@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { join } from 'path'
 import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -125,7 +124,6 @@ type AvailableForListOptions = {
     ]
   },
   [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
-
     let whereActor: WhereOptions = {}
 
     const whereAnd: WhereOptions[] = []
@@ -182,15 +180,13 @@ type AvailableForListOptions = {
       [Op.and]: whereAnd
     }
 
-    const accountScope = {
-      method: [ AccountScopeNames.SUMMARY, { whereActor } as SummaryOptions ]
-    }
-
     return {
       where,
       include: [
         {
-          model: AccountModel.scope(accountScope),
+          model: AccountModel.scope({
+            method: [ AccountScopeNames.SUMMARY, { whereActor } as SummaryOptions ]
+          }),
           required: true
         },
         {
@@ -217,7 +213,7 @@ type AvailableForListOptions = {
     }
   ]
 })
-export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
+export class VideoPlaylistModel extends Model {
   @CreatedAt
   createdAt: Date
 
@@ -367,7 +363,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
                              })
   }
 
-  static listPlaylistIdsOf (accountId: number, videoIds: number[]): Bluebird<MVideoPlaylistIdWithElements[]> {
+  static listPlaylistIdsOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistIdWithElements[]> {
     const query = {
       attributes: [ 'id' ],
       where: {
@@ -392,7 +388,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
   static doesPlaylistExist (url: string) {
     const query = {
-      attributes: [],
+      attributes: [ 'id' ],
       where: {
         url
       }
@@ -403,7 +399,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .then(e => !!e)
   }
 
-  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction): Bluebird<MVideoPlaylistFullSummary> {
+  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction): Promise<MVideoPlaylistFullSummary> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -416,7 +412,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadWithAccountAndChannel (id: number | string, transaction: Transaction): Bluebird<MVideoPlaylistFull> {
+  static loadWithAccountAndChannel (id: number | string, transaction: Transaction): Promise<MVideoPlaylistFull> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -429,7 +425,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string): Bluebird<MVideoPlaylistAccountThumbnail> {
+  static loadByUrlAndPopulateAccount (url: string): Promise<MVideoPlaylistAccountThumbnail> {
     const query = {
       where: {
         url

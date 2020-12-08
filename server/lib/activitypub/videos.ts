@@ -352,6 +352,9 @@ async function updateVideoFromAP (options: {
       video.views = videoData.views
       video.isLive = videoData.isLive
 
+      // Ensures we update the updated video attribute
+      video.changed('updatedAt', true)
+
       const videoUpdated = await video.save(sequelizeOptions) as MVideoFullLight
 
       if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)

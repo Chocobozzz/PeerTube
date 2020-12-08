@@ -1,5 +1,4 @@
-import * as Bluebird from 'bluebird'
-import { FindOptions, literal, Op, ScopeOptions } from 'sequelize'
+import { FindOptions, Includeable, literal, Op, ScopeOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -119,36 +118,39 @@ export type SummaryOptions = {
     }
   },
   [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
+    const include: Includeable[] = [
+      {
+        attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+        model: ActorModel.unscoped(),
+        required: options.actorRequired ?? true,
+        include: [
+          {
+            attributes: [ 'host' ],
+            model: ServerModel.unscoped(),
+            required: false
+          },
+          {
+            model: AvatarModel.unscoped(),
+            required: false
+          }
+        ]
+      }
+    ]
+
     const base: FindOptions = {
-      attributes: [ 'id', 'name', 'description', 'actorId' ],
-      include: [
-        {
-          attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
-          model: ActorModel.unscoped(),
-          required: options.actorRequired ?? true,
-          include: [
-            {
-              attributes: [ 'host' ],
-              model: ServerModel.unscoped(),
-              required: false
-            },
-            {
-              model: AvatarModel.unscoped(),
-              required: false
-            }
-          ]
-        }
-      ]
+      attributes: [ 'id', 'name', 'description', 'actorId' ]
     }
 
     if (options.withAccount === true) {
-      base.include.push({
+      include.push({
         model: AccountModel.scope({
           method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } as AccountSummaryOptions ]
         }),
         required: true
       })
     }
+
+    base.include = include
 
     return base
   },
@@ -221,7 +223,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class VideoChannelModel extends Model<VideoChannelModel> {
+export class VideoChannelModel extends Model {
 
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))
@@ -328,18 +330,17 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       order: getSort(parameters.sort)
     }
 
-    const scopes = {
-      method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
-    }
     return VideoChannelModel
-      .scope(scopes)
+      .scope({
+        method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
+      })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
   }
 
-  static listLocalsForSitemap (sort: string): Bluebird<MChannelActor[]> {
+  static listLocalsForSitemap (sort: string): Promise<MChannelActor[]> {
     const query = {
       attributes: [ ],
       offset: 0,
@@ -391,11 +392,10 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       }
     }
 
-    const scopes = {
-      method: [ ScopeNames.FOR_API, { actorId: options.actorId } as AvailableForListOptions ]
-    }
     return VideoChannelModel
-      .scope(scopes)
+      .scope({
+        method: [ ScopeNames.FOR_API, { actorId: options.actorId } as AvailableForListOptions ]
+      })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
@@ -457,13 +457,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
-  static loadByIdAndPopulateAccount (id: number): Bluebird<MChannelAccountDefault> {
+  static loadByIdAndPopulateAccount (id: number): Promise<MChannelAccountDefault> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
   }
 
-  static loadByIdAndAccount (id: number, accountId: number): Bluebird<MChannelAccountDefault> {
+  static loadByIdAndAccount (id: number, accountId: number): Promise<MChannelAccountDefault> {
     const query = {
       where: {
         id,
@@ -476,13 +476,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadAndPopulateAccount (id: number): Bluebird<MChannelAccountDefault> {
+  static loadAndPopulateAccount (id: number): Promise<MChannelAccountDefault> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
   }
 
-  static loadByUrlAndPopulateAccount (url: string): Bluebird<MChannelAccountDefault> {
+  static loadByUrlAndPopulateAccount (url: string): Promise<MChannelAccountDefault> {
     const query = {
       include: [
         {
@@ -508,7 +508,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
-  static loadLocalByNameAndPopulateAccount (name: string): Bluebird<MChannelAccountDefault> {
+  static loadLocalByNameAndPopulateAccount (name: string): Promise<MChannelAccountDefault> {
     const query = {
       include: [
         {
@@ -527,7 +527,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Bluebird<MChannelAccountDefault> {
+  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Promise<MChannelAccountDefault> {
     const query = {
       include: [
         {
@@ -552,7 +552,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadAndPopulateAccountAndVideos (id: number): Bluebird<MChannelActorAccountDefaultVideos> {
+  static loadAndPopulateAccountAndVideos (id: number): Promise<MChannelActorAccountDefaultVideos> {
     const options = {
       include: [
         VideoModel

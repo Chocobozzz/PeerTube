@@ -1,5 +1,4 @@
-import * as Bluebird from 'bluebird'
-import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Includeable, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -73,28 +72,29 @@ export type SummaryOptions = {
       required: false
     }
 
-    const query: FindOptions = {
-      attributes: [ 'id', 'name', 'actorId' ],
-      include: [
-        {
-          attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
-          model: ActorModel.unscoped(),
-          required: options.actorRequired ?? true,
-          where: whereActor,
-          include: [
-            serverInclude,
+    const queryInclude: Includeable[] = [
+      {
+        attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+        model: ActorModel.unscoped(),
+        required: options.actorRequired ?? true,
+        where: whereActor,
+        include: [
+          serverInclude,
 
-            {
-              model: AvatarModel.unscoped(),
-              required: false
-            }
-          ]
-        }
-      ]
+          {
+            model: AvatarModel.unscoped(),
+            required: false
+          }
+        ]
+      }
+    ]
+
+    const query: FindOptions = {
+      attributes: [ 'id', 'name', 'actorId' ]
     }
 
     if (options.withAccountBlockerIds) {
-      query.include.push({
+      queryInclude.push({
         attributes: [ 'id' ],
         model: AccountBlocklistModel.unscoped(),
         as: 'BlockedAccounts',
@@ -120,6 +120,8 @@ export type SummaryOptions = {
       ]
     }
 
+    query.include = queryInclude
+
     return query
   }
 }))
@@ -138,7 +140,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class AccountModel extends Model<AccountModel> {
+export class AccountModel extends Model {
 
   @AllowNull(false)
   @Column
@@ -244,11 +246,11 @@ export class AccountModel extends Model<AccountModel> {
     return undefined
   }
 
-  static load (id: number, transaction?: Transaction): Bluebird<MAccountDefault> {
+  static load (id: number, transaction?: Transaction): Promise<MAccountDefault> {
     return AccountModel.findByPk(id, { transaction })
   }
 
-  static loadByNameWithHost (nameWithHost: string): Bluebird<MAccountDefault> {
+  static loadByNameWithHost (nameWithHost: string): Promise<MAccountDefault> {
     const [ accountName, host ] = nameWithHost.split('@')
 
     if (!host || host === WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
@@ -256,7 +258,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.loadByNameAndHost(accountName, host)
   }
 
-  static loadLocalByName (name: string): Bluebird<MAccountDefault> {
+  static loadLocalByName (name: string): Promise<MAccountDefault> {
     const fun = () => {
       const query = {
         where: {
@@ -296,7 +298,7 @@ export class AccountModel extends Model<AccountModel> {
     })
   }
 
-  static loadByNameAndHost (name: string, host: string): Bluebird<MAccountDefault> {
+  static loadByNameAndHost (name: string, host: string): Promise<MAccountDefault> {
     const query = {
       include: [
         {
@@ -321,7 +323,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MAccountDefault> {
+  static loadByUrl (url: string, transaction?: Transaction): Promise<MAccountDefault> {
     const query = {
       include: [
         {
@@ -354,7 +356,7 @@ export class AccountModel extends Model<AccountModel> {
       })
   }
 
-  static loadAccountIdFromVideo (videoId: number): Bluebird<MAccount> {
+  static loadAccountIdFromVideo (videoId: number): Promise<MAccount> {
     const query = {
       include: [
         {
@@ -377,7 +379,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static listLocalsForSitemap (sort: string): Bluebird<MAccountActor[]> {
+  static listLocalsForSitemap (sort: string): Promise<MAccountActor[]> {
     const query = {
       attributes: [ ],
       offset: 0,

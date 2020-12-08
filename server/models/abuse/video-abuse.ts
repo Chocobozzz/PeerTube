@@ -14,7 +14,7 @@ import { AbuseModel } from './abuse'
     }
   ]
 })
-export class VideoAbuseModel extends Model<VideoAbuseModel> {
+export class VideoAbuseModel extends Model {
 
   @CreatedAt
   createdAt: Date

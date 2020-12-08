@@ -7,7 +7,8 @@ async function up (utils: {
 }): Promise<void> {
   await utils.queryInterface.removeConstraint('actor', 'actor_avatarId_fkey')
 
-  await utils.queryInterface.addConstraint('actor', [ 'avatarId' ], {
+  await utils.queryInterface.addConstraint('actor', {
+    fields: [ 'avatarId' ],
     type: 'foreign key',
     references: {
       table: 'avatar',

@@ -33,7 +33,7 @@ async function processDislike (activity: ActivityCreate | ActivityDislike, byAct
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislikeObject })
 
   return sequelizeTypescript.transaction(async t => {
-    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id)
+    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
     if (existingRate && existingRate.type === 'dislike') return
 
     await video.increment('dislikes', { transaction: t })

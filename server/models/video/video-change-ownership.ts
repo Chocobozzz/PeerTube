@@ -1,10 +1,9 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
-import { AccountModel } from '../account/account'
-import { ScopeNames as VideoScopeNames, VideoModel } from './video'
-import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
-import { getSort } from '../utils'
 import { MVideoChangeOwnershipFormattable, MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership'
-import * as Bluebird from 'bluebird'
+import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
+import { AccountModel } from '../account/account'
+import { getSort } from '../utils'
+import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 
 enum ScopeNames {
   WITH_ACCOUNTS = 'WITH_ACCOUNTS',
@@ -54,7 +53,7 @@ enum ScopeNames {
     ]
   }
 }))
-export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> {
+export class VideoChangeOwnershipModel extends Model {
   @CreatedAt
   createdAt: Date
 
@@ -119,7 +118,7 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
     ]).then(([ count, rows ]) => ({ total: count, data: rows }))
   }
 
-  static load (id: number): Bluebird<MVideoChangeOwnershipFull> {
+  static load (id: number): Promise<MVideoChangeOwnershipFull> {
     return VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ])
                                     .findByPk(id)
   }

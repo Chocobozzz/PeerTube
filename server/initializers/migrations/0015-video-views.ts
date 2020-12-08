@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
 
 function up (utils: {
   transaction: Sequelize.Transaction

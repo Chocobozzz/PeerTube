@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { difference, values } from 'lodash'
 import { IncludeOptions, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -62,7 +61,7 @@ import { ActorModel, unusedActorAttributesForAPI } from './actor'
     }
   ]
 })
-export class ActorFollowModel extends Model<ActorFollowModel> {
+export class ActorFollowModel extends Model {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...values(FOLLOW_STATES)))
@@ -176,7 +175,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                      .then(results => results.length === 1)
   }
 
-  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Bluebird<MActorFollowActorsDefault> {
+  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Promise<MActorFollowActorsDefault> {
     const query = {
       where: {
         actorId,
@@ -205,7 +204,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     targetName: string,
     targetHost: string,
     t?: Transaction
-  ): Bluebird<MActorFollowActorsDefaultSubscription> {
+  ): Promise<MActorFollowActorsDefaultSubscription> {
     const actorFollowingPartInclude: IncludeOptions = {
       model: ActorModel,
       required: true,
@@ -258,7 +257,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
   }
 
-  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]): Bluebird<MActorFollowFollowingHost[]> {
+  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]): Promise<MActorFollowFollowingHost[]> {
     const whereTab = targets
       .map(t => {
         if (t.host) {
@@ -287,7 +286,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
 
     const query = {
-      attributes: [],
+      attributes: [ 'id' ],
       where: {
         [Op.and]: [
           {
@@ -671,7 +670,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
     selections.push('COUNT(*) AS "total"')
 
-    const tasks: Bluebird<any>[] = []
+    const tasks: Promise<any>[] = []
 
     for (const selection of selections) {
       let query = 'SELECT ' + selection + ' FROM "actor" ' +

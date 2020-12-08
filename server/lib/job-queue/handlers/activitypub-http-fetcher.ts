@@ -1,19 +1,18 @@
 import * as Bull from 'bull'
-import * as Bluebird from 'bluebird'
+import { ActivitypubHttpFetcherPayload, FetchType } from '@shared/models'
 import { logger } from '../../../helpers/logger'
-import { processActivities } from '../../activitypub/process'
-import { addVideoComments } from '../../activitypub/video-comments'
-import { crawlCollectionPage } from '../../activitypub/crawl'
-import { VideoModel } from '../../../models/video/video'
-import { addVideoShares } from '../../activitypub/share'
-import { createRates } from '../../activitypub/video-rates'
-import { createAccountPlaylists } from '../../activitypub/playlist'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { VideoShareModel } from '../../../models/video/video-share'
+import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
+import { VideoShareModel } from '../../../models/video/video-share'
 import { MAccountDefault, MVideoFullLight } from '../../../types/models'
-import { ActivitypubHttpFetcherPayload, FetchType } from '@shared/models'
+import { crawlCollectionPage } from '../../activitypub/crawl'
+import { createAccountPlaylists } from '../../activitypub/playlist'
+import { processActivities } from '../../activitypub/process'
+import { addVideoShares } from '../../activitypub/share'
+import { addVideoComments } from '../../activitypub/video-comments'
+import { createRates } from '../../activitypub/video-rates'
 
 async function processActivityPubHttpFetcher (job: Bull.Job) {
   logger.info('Processing ActivityPub fetcher in job %d.', job.id)
@@ -35,7 +34,7 @@ async function processActivityPubHttpFetcher (job: Bull.Job) {
     'account-playlists': items => createAccountPlaylists(items, account)
   }
 
-  const cleanerType: { [ id in FetchType ]?: (crawlStartDate: Date) => Bluebird<any> } = {
+  const cleanerType: { [ id in FetchType ]?: (crawlStartDate: Date) => Promise<any> } = {
     'video-likes': crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'like' as 'like', crawlStartDate),
     'video-dislikes': crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'dislike' as 'dislike', crawlStartDate),
     'video-shares': crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate),

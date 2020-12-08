@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { Router } from 'express'
 import { Logger } from 'winston'
 import { ActorModel } from '@server/models/activitypub/actor'
@@ -29,7 +28,7 @@ export type PeerTubeHelpers = {
   }
 
   videos: {
-    loadByUrl: (url: string) => Bluebird<MVideoThumbnail>
+    loadByUrl: (url: string) => Promise<MVideoThumbnail>
 
     removeVideo: (videoId: number) => Promise<void>
   }

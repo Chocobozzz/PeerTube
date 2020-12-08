@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { invert } from 'lodash'
 import { literal, Op, QueryTypes } from 'sequelize'
 import {
@@ -188,7 +187,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class AbuseModel extends Model<AbuseModel> {
+export class AbuseModel extends Model {
 
   @AllowNull(false)
   @Default(null)
@@ -265,7 +264,7 @@ export class AbuseModel extends Model<AbuseModel> {
   })
   VideoAbuse: VideoAbuseModel
 
-  static loadByIdWithReporter (id: number): Bluebird<MAbuseReporter> {
+  static loadByIdWithReporter (id: number): Promise<MAbuseReporter> {
     const query = {
       where: {
         id
@@ -281,7 +280,7 @@ export class AbuseModel extends Model<AbuseModel> {
     return AbuseModel.findOne(query)
   }
 
-  static loadFull (id: number): Bluebird<MAbuseFull> {
+  static loadFull (id: number): Promise<MAbuseFull> {
     const query = {
       where: {
         id

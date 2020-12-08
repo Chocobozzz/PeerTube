@@ -1,8 +1,14 @@
-import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { MUserDefault } from '@server/types/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { UserRole } from '../../../shared/models/users'
+import { UserRegister } from '../../../shared/models/users/user-register.model'
+import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
 import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isNoInstanceConfigWarningModal,
   isNoWelcomeModal,
@@ -22,22 +28,15 @@ import {
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
+import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
+import { doesVideoExist } from '../../helpers/middlewares'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
+import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
-import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
-import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
-import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
-import { UserRegister } from '../../../shared/models/users/user-register.model'
-import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
-import { isThemeRegistered } from '../../lib/plugins/theme-utils'
-import { doesVideoExist } from '../../helpers/middlewares'
-import { UserRole } from '../../../shared/models/users'
-import { MUserDefault } from '@server/types/models'
-import { Hooks } from '@server/lib/plugins/hooks'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { areValidationErrors } from './utils'
 
 const usersListValidator = [
   query('blocked')
@@ -529,7 +528,7 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
   return true
 }
 
-async function checkUserExist (finder: () => Bluebird<MUserDefault>, res: express.Response, abortResponse = true) {
+async function checkUserExist (finder: () => Promise<MUserDefault>, res: express.Response, abortResponse = true) {
   const user = await finder()
 
   if (!user) {

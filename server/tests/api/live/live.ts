@@ -686,12 +686,7 @@ describe('Test live', function () {
     it('Should save a live replay', async function () {
       this.timeout(60000)
 
-      await waitJobs(servers)
-
-      const res = await getVideo(servers[0].url, liveVideoReplayId)
-      const video: VideoDetails = res.body
-
-      expect(video.state.id).to.equal(VideoState.PUBLISHED)
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoReplayId)
     })
   })
 

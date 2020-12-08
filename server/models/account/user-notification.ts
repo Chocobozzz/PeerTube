@@ -254,7 +254,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
     }
   ] as (ModelIndexesOptions & { where?: WhereOptions })[]
 })
-export class UserNotificationModel extends Model<UserNotificationModel> {
+export class UserNotificationModel extends Model {
 
   @AllowNull(false)
   @Default(null)

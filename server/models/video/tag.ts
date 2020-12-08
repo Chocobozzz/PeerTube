@@ -1,12 +1,11 @@
-import * as Bluebird from 'bluebird'
-import { fn, QueryTypes, Transaction, col } from 'sequelize'
+import { col, fn, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { MTag } from '@server/types/models'
+import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoTagModel } from './video-tag'
-import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
-import { MTag } from '@server/types/models'
 
 @Table({
   tableName: 'tag',
@@ -22,7 +21,7 @@ import { MTag } from '@server/types/models'
     }
   ]
 })
-export class TagModel extends Model<TagModel> {
+export class TagModel extends Model {
 
   @AllowNull(false)
   @Is('VideoTag', value => throwIfNotValid(value, isVideoTagValid, 'tag'))
@@ -45,7 +44,7 @@ export class TagModel extends Model<TagModel> {
   static findOrCreateTags (tags: string[], transaction: Transaction): Promise<MTag[]> {
     if (tags === null) return Promise.resolve([])
 
-    const tasks: Bluebird<MTag>[] = []
+    const tasks: Promise<MTag>[] = []
     tags.forEach(tag => {
       const query = {
         where: {
@@ -66,7 +65,7 @@ export class TagModel extends Model<TagModel> {
   }
 
   // threshold corresponds to how many video the field should have to be returned
-  static getRandomSamples (threshold: number, count: number): Bluebird<string[]> {
+  static getRandomSamples (threshold: number, count: number): Promise<string[]> {
     const query = 'SELECT tag.name FROM tag ' +
       'INNER JOIN "videoTag" ON "videoTag"."tagId" = tag.id ' +
       'INNER JOIN video ON video.id = "videoTag"."videoId" ' +

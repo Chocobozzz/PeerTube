@@ -30,7 +30,7 @@ async function processLikeVideo (byActor: MActorSignature, activity: ActivityLik
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoUrl })
 
   return sequelizeTypescript.transaction(async t => {
-    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id)
+    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
     if (existingRate && existingRate.type === 'like') return
 
     if (existingRate && existingRate.type === 'dislike') {

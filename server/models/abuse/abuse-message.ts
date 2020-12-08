@@ -1,10 +1,10 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isAbuseMessageValid } from '@server/helpers/custom-validators/abuses'
+import { MAbuseMessage, MAbuseMessageFormattable } from '@server/types/models'
 import { AbuseMessage } from '@shared/models'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
-import { throwIfNotValid, getSort } from '../utils'
+import { getSort, throwIfNotValid } from '../utils'
 import { AbuseModel } from './abuse'
-import { MAbuseMessageFormattable, MAbuseMessage } from '@server/types/models'
 
 @Table({
   tableName: 'abuseMessage',
@@ -17,7 +17,7 @@ import { MAbuseMessageFormattable, MAbuseMessage } from '@server/types/models'
     }
   ]
 })
-export class AbuseMessageModel extends Model<AbuseMessageModel> {
+export class AbuseMessageModel extends Model {
 
   @AllowNull(false)
   @Is('AbuseMessage', value => throwIfNotValid(value, isAbuseMessageValid, 'message'))

@@ -1,3 +1,4 @@
+import { AggregateOptions, Op, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -13,18 +14,8 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video'
-import { VideoPlaylistModel } from './video-playlist'
-import { getSort, throwIfNotValid } from '../utils'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
 import validator from 'validator'
-import { AggregateOptions, Op, ScopeOptions, Sequelize, Transaction } from 'sequelize'
-import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../shared/models/videos/playlist/video-playlist-element.model'
-import { AccountModel } from '../account/account'
-import { VideoPrivacy } from '../../../shared/models/videos'
-import * as Bluebird from 'bluebird'
+import { MUserAccountId } from '@server/types/models'
 import {
   MVideoPlaylistElement,
   MVideoPlaylistElementAP,
@@ -32,7 +23,15 @@ import {
   MVideoPlaylistElementVideoUrlPlaylistPrivacy,
   MVideoPlaylistVideoThumbnail
 } from '@server/types/models/video/video-playlist-element'
-import { MUserAccountId } from '@server/types/models'
+import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
+import { VideoPrivacy } from '../../../shared/models/videos'
+import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../shared/models/videos/playlist/video-playlist-element.model'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
+import { AccountModel } from '../account/account'
+import { getSort, throwIfNotValid } from '../utils'
+import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video'
+import { VideoPlaylistModel } from './video-playlist'
 
 @Table({
   tableName: 'videoPlaylistElement',
@@ -49,7 +48,7 @@ import { MUserAccountId } from '@server/types/models'
     }
   ]
 })
-export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> {
+export class VideoPlaylistElementModel extends Model {
   @CreatedAt
   createdAt: Date
 
@@ -166,7 +165,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static loadByPlaylistAndVideo (videoPlaylistId: number, videoId: number): Bluebird<MVideoPlaylistElement> {
+  static loadByPlaylistAndVideo (videoPlaylistId: number, videoId: number): Promise<MVideoPlaylistElement> {
     const query = {
       where: {
         videoPlaylistId,
@@ -177,14 +176,14 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.findOne(query)
   }
 
-  static loadById (playlistElementId: number | string): Bluebird<MVideoPlaylistElement> {
+  static loadById (playlistElementId: number | string): Promise<MVideoPlaylistElement> {
     return VideoPlaylistElementModel.findByPk(playlistElementId)
   }
 
   static loadByPlaylistAndElementIdForAP (
     playlistId: number | string,
     playlistElementId: number
-  ): Bluebird<MVideoPlaylistElementVideoUrlPlaylistPrivacy> {
+  ): Promise<MVideoPlaylistElementVideoUrlPlaylistPrivacy> {
     const playlistWhere = validator.isUUID('' + playlistId) ? { uuid: playlistId } : { id: playlistId }
 
     const query = {
@@ -226,7 +225,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
       })
   }
 
-  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number): Bluebird<MVideoPlaylistVideoThumbnail> {
+  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number): Promise<MVideoPlaylistVideoThumbnail> {
     const query = {
       order: getSort('position'),
       where: {

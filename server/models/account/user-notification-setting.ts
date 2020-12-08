@@ -28,7 +28,7 @@ import { UserModel } from './user'
     }
   ]
 })
-export class UserNotificationSettingModel extends Model<UserNotificationSettingModel> {
+export class UserNotificationSettingModel extends Model {
 
   @AllowNull(false)
   @Default(null)

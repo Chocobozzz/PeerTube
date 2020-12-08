@@ -101,7 +101,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoFileModel extends Model<VideoFileModel> {
+export class VideoFileModel extends Model {
   @CreatedAt
   createdAt: Date
 

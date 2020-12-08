@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import { move, readFile } from 'fs-extra'
 import * as magnetUtil from 'magnet-uri'
@@ -17,6 +16,7 @@ import {
 } from '@server/types/models'
 import { MVideoImport, MVideoImportFormattable } from '@server/types/models/video/video-import'
 import { VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
@@ -36,7 +36,6 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoIm
 import { VideoModel } from '../../../models/video/video'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { VideoImportModel } from '../../../models/video/video-import'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -314,7 +313,7 @@ function insertIntoDB (parameters: {
   tags: string[]
   videoImportAttributes: Partial<MVideoImport>
   user: MUser
-}): Bluebird<MVideoImportFormattable> {
+}): Promise<MVideoImportFormattable> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters
 
   return sequelizeTypescript.transaction(async t => {

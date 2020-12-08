@@ -14,7 +14,7 @@ import { OAuthTokenModel } from './oauth-token'
     }
   ]
 })
-export class OAuthClientModel extends Model<OAuthClientModel> {
+export class OAuthClientModel extends Model {
 
   @AllowNull(false)
   @Column

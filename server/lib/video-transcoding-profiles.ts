@@ -111,7 +111,6 @@ async function buildTargetBitrate (options: {
   input: string
   resolution: VideoResolution
   fps: number
-
 }) {
   const { input, resolution, fps } = options
   const probe = await ffprobePromise(input)
