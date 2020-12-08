@@ -1351,7 +1351,7 @@
       </trans-unit>
       <trans-unit id="4424964105331349857" datatype="html">
         <source>I'm a teapot</source>
-        <target state="new">I'm a teapot</target>
+        <target state="translated">Sono una teiera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -1359,7 +1359,7 @@
       </trans-unit>
       <trans-unit id="75183663cb423cbc64e9443f38b091e65cf71ceb" datatype="html">
         <source>That's an error.</source>
-        <target state="new">That's an error.</target>
+        <target state="translated">Questo è un errore.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1367,7 +1367,7 @@
       </trans-unit>
       <trans-unit id="09ee94b4e53e53026dbd591978aaa92901a8b67e" datatype="html">
         <source>We couldn't find any ressource tied to the URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> you were looking for. </source>
-        <target state="new"> We couldn't find any ressource tied to the URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> you were looking for. </target>
+        <target state="translated">Non siamo riusciti a trovare alcuna risorsa collegata all'URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> che stavi cercando. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -1375,7 +1375,7 @@
       </trans-unit>
       <trans-unit id="c2c0aec88a83dd3aabac669264c432058f9e197e" datatype="html">
         <source>Possible reasons:</source>
-        <target state="new">Possible reasons:</target>
+        <target state="translated">Possibili ragioni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1384,7 +1384,7 @@
       </trans-unit>
       <trans-unit id="5ddf9d42947dae74a85539c13e487932a157fc74" datatype="html">
         <source>The page may have been moved or deleted</source>
-        <target state="new">The page may have been moved or deleted</target>
+        <target state="translated">La pagina potrebbe essere stata spostata o eliminata</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1392,7 +1392,7 @@
       </trans-unit>
       <trans-unit id="ed052af4856de46aa0482d05b23b393619689cd2" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="new">You may have used an outdated or broken link</target>
+        <target state="translated">Potresti aver utilizzato un collegamento obsoleto o interrotto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1400,7 +1400,7 @@
       </trans-unit>
       <trans-unit id="b274f3be0260cd15f51c8d2de3387ec128a85083" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="new">You may have typed the address or URL incorrectly</target>
+        <target state="translated">Potresti aver digitato l'indirizzo o l'URL in modo errato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1417,7 +1417,7 @@
       </trans-unit>
       <trans-unit id="68ffb388e7bfe4b0a6f9f6faef194f536a195c09" datatype="html">
         <source>Sepia seems to like it.</source>
-        <target state="new">Sepia seems to like it.</target>
+        <target state="translated">Sepia sembra gradirlo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">28</context>
