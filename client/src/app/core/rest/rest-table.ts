@@ -110,8 +110,8 @@ export abstract class RestTable {
       .subscribe(params => {
         this.search = params.search || ''
 
+        // Primeng table will run an event to load data
         this.setTableFilter(this.search)
-        this.loadData()
       })
   }
 
