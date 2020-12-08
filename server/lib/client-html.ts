@@ -117,7 +117,16 @@ export class ClientHtml {
     const schemaType = 'VideoObject'
 
     customHtml = ClientHtml.addTags(customHtml, {
-      url, originUrl, siteName, title, description, image, embed, ogType, twitterCard, schemaType
+      url,
+      originUrl,
+      siteName,
+      title,
+      description,
+      image,
+      embed,
+      ogType,
+      twitterCard,
+      schemaType
     })
 
     return customHtml
@@ -168,7 +177,17 @@ export class ClientHtml {
     const schemaType = 'ItemList'
 
     customHtml = ClientHtml.addTags(customHtml, {
-      url, originUrl, siteName, embed, title, description, image, list, ogType, twitterCard, schemaType
+      url,
+      originUrl,
+      siteName,
+      embed,
+      title,
+      description,
+      image,
+      list,
+      ogType,
+      twitterCard,
+      schemaType
     })
 
     return customHtml
@@ -216,7 +235,7 @@ export class ClientHtml {
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(entity.getDisplayName()))
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(entity.description))
 
-    const url = entity.Actor.url
+    const url = entity.getLocalUrl()
     const originUrl = entity.Actor.url
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const title = escapeHTML(entity.getDisplayName())
@@ -232,7 +251,17 @@ export class ClientHtml {
     const twitterCard = 'summary'
     const schemaType = 'ProfilePage'
 
-    customHtml = ClientHtml.addTags(customHtml, { url, originUrl, title, siteName, description, image, ogType, twitterCard, schemaType })
+    customHtml = ClientHtml.addTags(customHtml, {
+      url,
+      originUrl,
+      title,
+      siteName,
+      description,
+      image,
+      ogType,
+      twitterCard,
+      schemaType
+    })
 
     return customHtml
   }
