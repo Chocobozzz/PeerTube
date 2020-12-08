@@ -80,7 +80,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.live.enabled).to.be.false
   expect(data.live.allowReplay).to.be.false
-  expect(data.live.maxDuration).to.equal(1000 * 3600 * 5)
+  expect(data.live.maxDuration).to.be.null
   expect(data.live.maxInstanceLives).to.equal(20)
   expect(data.live.maxUserLives).to.equal(3)
   expect(data.live.transcoding.enabled).to.be.false
