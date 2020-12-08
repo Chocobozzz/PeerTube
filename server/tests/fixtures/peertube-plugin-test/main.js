@@ -40,6 +40,26 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
+    target: 'filter:api.accounts.videos.list.params',
+    handler: obj => addToCount(obj)
+  })
+
+  registerHook({
+    target: 'filter:api.accounts.videos.list.result',
+    handler: obj => addToTotal(obj, 2)
+  })
+
+  registerHook({
+    target: 'filter:api.video-channels.videos.list.params',
+    handler: obj => addToCount(obj, 3)
+  })
+
+  registerHook({
+    target: 'filter:api.video-channels.videos.list.result',
+    handler: obj => addToTotal(obj, 3)
+  })
+
+  registerHook({
     target: 'filter:api.video.get.result',
     handler: video => {
       video.name += ' <3'
@@ -167,14 +187,14 @@ module.exports = {
 
 // ############################################################################
 
-function addToCount (obj) {
-  return Object.assign({}, obj, { count: obj.count + 1 })
+function addToCount (obj, amount = 1) {
+  return Object.assign({}, obj, { count: obj.count + amount })
 }
 
-function addToTotal (result) {
+function addToTotal (result, amount = 1) {
   return {
     data: result.data,
-    total: result.total + 1
+    total: result.total + amount
   }
 }
 

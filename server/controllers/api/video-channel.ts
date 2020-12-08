@@ -1,4 +1,5 @@
 import * as express from 'express'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MChannelAccountDefault } from '@server/types/models'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
@@ -265,7 +266,7 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
   const countVideos = getCountVideos(req)
 
-  const resultList = await VideoModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     followerActorId,
     start: req.query.start,
     count: req.query.count,
@@ -282,7 +283,13 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     videoChannelId: videoChannelInstance.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
-  })
+  }, 'filter:api.video-channels.videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi,
+    apiOptions,
+    'filter:api.video-channels.videos.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
