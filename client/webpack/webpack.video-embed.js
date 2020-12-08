@@ -122,7 +122,15 @@ module.exports = function () {
         title: 'PeerTube',
         chunksSortMode: 'auto',
         inject: 'body',
-        chunks: ['video-embed']
+        chunks: ['video-embed'],
+        minify: {
+          collapseWhitespace: true,
+          removeComments: false,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          useShortDoctype: true
+        }
       }),
 
       new HtmlWebpackPlugin({
