@@ -39,7 +39,7 @@ You need to follow all the following steps even if you are on a PeerTube server 
 ### Dependencies
 
 Install the [PeerTube dependencies](dependencies.md) except PostgreSQL and Redis.
-PeerTube only supports NodeJS 10.x.
+PeerTube supports NodeJS 12.
 
 ### Installation
 
@@ -239,6 +239,7 @@ These scripts should be run on the server, in `peertube-latest` directory.
 To parse PeerTube last log file:
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level info
 ```
 
@@ -249,11 +250,13 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 You can use this script to force transcoding of an existing video. PeerTube needs to be running.
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID]
 ```
 
 Or to transcode to a specific resolution:
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
 ```
 The resolution should be an integer (`1080`, `720`, `480`, etc.)
@@ -261,6 +264,7 @@ The resolution should be an integer (`1080`, `720`, `480`, etc.)
 To generate an HLS playlist for a video:
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- --generate-hls -v [videoUUID]
 ```
 
@@ -269,6 +273,7 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video. PeerTube needs to be running.
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
 
@@ -278,6 +283,7 @@ Some transcoded videos or shutdown at a bad time can leave some unused files on 
 Stop PeerTube and delete these files (a confirmation will be demanded first):
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo systemctl stop peertube && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
 
@@ -289,6 +295,7 @@ very large files that are too large for streaming. This script re-transcodes
 these videos so that they can be watched properly, even on slow connections.
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run optimize-old-videos
 ```
 
@@ -300,6 +307,7 @@ invalid torrent files and invalid URLs in your database. To fix this, you have
 to run:
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-host
 ```
 
@@ -308,6 +316,7 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 To reset a user password from CLI, run:
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u target_username
 ```
 
@@ -320,18 +329,21 @@ If PeerTube is running, you need to restart it for the changes to take effect (w
 To install/update a plugin or a theme from the disk:
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --plugin-path /local/plugin/path
 ```
 
 From NPM:
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-myplugin
 ```
 
 To uninstall a plugin or a theme:
 
 ```
+$ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
 ```
 
