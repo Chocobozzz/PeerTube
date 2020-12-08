@@ -211,6 +211,7 @@ class ClientHtml {
     let html = buffer.toString()
     html = await ClientHtml.addAsyncPluginCSS(html)
     html = ClientHtml.addCustomCSS(html)
+    html = ClientHtml.addTitleTag(html)
 
     ClientHtml.htmlCache[path] = html
 
