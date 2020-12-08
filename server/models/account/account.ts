@@ -1,3 +1,5 @@
+import * as Bluebird from 'bluebird'
+import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -15,27 +17,33 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { ModelCache } from '@server/models/model-cache'
 import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
+import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send'
+import {
+  MAccount,
+  MAccountActor,
+  MAccountAP,
+  MAccountDefault,
+  MAccountFormattable,
+  MAccountSummaryFormattable,
+  MChannelActor
+} from '../../types/models'
 import { ActorModel } from '../activitypub/actor'
+import { ActorFollowModel } from '../activitypub/actor-follow'
 import { ApplicationModel } from '../application/application'
+import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
+import { ServerBlocklistModel } from '../server/server-blocklist'
 import { getSort, throwIfNotValid } from '../utils'
+import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
-import { UserModel } from './user'
-import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from '../video/video-playlist'
-import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
-import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
 import { AccountBlocklistModel } from './account-blocklist'
-import { ServerBlocklistModel } from '../server/server-blocklist'
-import { ActorFollowModel } from '../activitypub/actor-follow'
-import { MAccountActor, MAccountAP, MAccountDefault, MAccountFormattable, MAccountSummaryFormattable, MAccount } from '../../types/models'
-import * as Bluebird from 'bluebird'
-import { ModelCache } from '@server/models/model-cache'
-import { VideoModel } from '../video/video'
+import { UserModel } from './user'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
@@ -439,6 +447,10 @@ export class AccountModel extends Model<AccountModel> {
 
   getDisplayName () {
     return this.name
+  }
+
+  getLocalUrl (this: MAccountActor | MChannelActor) {
+    return WEBSERVER.URL + `/accounts/` + this.Actor.preferredUsername
   }
 
   isBlocked () {

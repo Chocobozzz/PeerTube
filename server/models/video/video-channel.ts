@@ -18,6 +18,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { MAccountActor } from '@server/types/models'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
@@ -626,6 +627,10 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
         }
       ]
     })
+  }
+
+  getLocalUrl (this: MAccountActor | MChannelActor) {
+    return WEBSERVER.URL + `/video-channels/` + this.Actor.preferredUsername
   }
 
   getDisplayName () {
