@@ -176,12 +176,12 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
-  }, 'filter:api.videos.list.params')
+  }, 'filter:api.accounts.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
     VideoModel.listForApi,
     apiOptions,
-    'filter:api.videos.list.result'
+    'filter:api.accounts.videos.list.result'
   )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

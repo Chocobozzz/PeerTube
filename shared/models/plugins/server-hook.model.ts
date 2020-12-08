@@ -5,6 +5,15 @@ export const serverFilterHookObject = {
   // (used by the trending page, recently-added page, local page etc)
   'filter:api.videos.list.params': true,
   'filter:api.videos.list.result': true,
+
+  // Filter params/result used to list account videos for the REST API
+  'filter:api.accounts.videos.list.params': true,
+  'filter:api.accounts.videos.list.result': true,
+
+  // Filter params/result used to list account videos for the REST API
+  'filter:api.video-channels.videos.list.params': true,
+  'filter:api.video-channels.videos.list.result': true,
+
   // Filter the result of the get function
   // Used to get detailed video information (video watch page for example)
   'filter:api.video.get.result': true,

@@ -8,9 +8,11 @@ import {
   addVideoCommentThread,
   createLive,
   doubleFollow,
+  getAccountVideos,
   getConfig,
   getPluginTestPath,
   getVideo,
+  getVideoChannelVideos,
   getVideoCommentThreads,
   getVideosList,
   getVideosListPagination,
@@ -88,6 +90,34 @@ describe('Test plugin filter hooks', function () {
 
     // Plugin do +1 to the total result
     expect(res.body.total).to.equal(11)
+  })
+
+  it('Should run filter:api.accounts.videos.list.params', async function () {
+    const res = await getAccountVideos(servers[0].url, servers[0].accessToken, 'root', 0, 2)
+
+    // 1 plugin do +1 to the count parameter
+    expect(res.body.data).to.have.lengthOf(3)
+  })
+
+  it('Should run filter:api.accounts.videos.list.result', async function () {
+    const res = await getAccountVideos(servers[0].url, servers[0].accessToken, 'root', 0, 2)
+
+    // Plugin do +2 to the total result
+    expect(res.body.total).to.equal(12)
+  })
+
+  it('Should run filter:api.video-channels.videos.list.params', async function () {
+    const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, 'root_channel', 0, 2)
+
+    // 1 plugin do +3 to the count parameter
+    expect(res.body.data).to.have.lengthOf(5)
+  })
+
+  it('Should run filter:api.video-channels.videos.list.result', async function () {
+    const res = await getAccountVideos(servers[0].url, servers[0].accessToken, 'root_channel', 0, 2)
+
+    // Plugin do +3 to the total result
+    expect(res.body.total).to.equal(13)
   })
 
   it('Should run filter:api.video.get.result', async function () {
