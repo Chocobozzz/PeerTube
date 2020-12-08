@@ -114,7 +114,7 @@ describe('Test plugin filter hooks', function () {
   })
 
   it('Should run filter:api.video-channels.videos.list.result', async function () {
-    const res = await getAccountVideos(servers[0].url, servers[0].accessToken, 'root_channel', 0, 2)
+    const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, 'root_channel', 0, 2)
 
     // Plugin do +3 to the total result
     expect(res.body.total).to.equal(13)
