@@ -6,6 +6,7 @@ import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, 
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -67,7 +68,7 @@ describe('Test contact form', function () {
       body: 'my super message',
       fromName: 'Super toto',
       subject: 'my subject',
-      expectedStatus: 403
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
     })
   })
 

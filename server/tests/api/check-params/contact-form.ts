@@ -5,6 +5,7 @@ import 'mocha'
 import { cleanupTests, flushAndRunServer, immutableAssign, killallServers, reRunServer, ServerInfo } from '../../../../shared/extra-utils'
 import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test contact form API validators', function () {
   let server: ServerInfo
@@ -29,7 +30,7 @@ describe('Test contact form API validators', function () {
   })
 
   it('Should not accept a contact form if emails are disabled', async function () {
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 409 }))
+    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: HttpStatusCode.CONFLICT_409 }))
   })
 
   it('Should not accept a contact form if it is disabled in the configuration', async function () {
@@ -39,7 +40,7 @@ describe('Test contact form API validators', function () {
 
     // Contact form is disabled
     await reRunServer(server, { smtp: { hostname: 'localhost', port: emailPort }, contact_form: { enabled: false } })
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 409 }))
+    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: HttpStatusCode.CONFLICT_409 }))
   })
 
   it('Should not accept a contact form if from email is invalid', async function () {
@@ -50,21 +51,57 @@ describe('Test contact form API validators', function () {
     // Email & contact form enabled
     await reRunServer(server, { smtp: { hostname: 'localhost', port: emailPort } })
 
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, fromEmail: 'badEmail' }))
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, fromEmail: 'badEmail@' }))
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, fromEmail: undefined }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      fromEmail: 'badEmail'
+    }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      fromEmail: 'badEmail@'
+    }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      fromEmail: undefined
+    }))
   })
 
   it('Should not accept a contact form if from name is invalid', async function () {
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, fromName: 'name'.repeat(100) }))
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, fromName: '' }))
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, fromName: undefined }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      fromName: 'name'.repeat(100)
+    }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      fromName: ''
+    }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      fromName: undefined
+    }))
   })
 
   it('Should not accept a contact form if body is invalid', async function () {
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, body: 'body'.repeat(5000) }))
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, body: 'a' }))
-    await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, body: undefined }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      body: 'body'.repeat(5000)
+    }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      body: 'a'
+    }))
+    await sendContactForm(immutableAssign(defaultBody, {
+      url: server.url,
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+      body: undefined
+    }))
   })
 
   it('Should accept a contact form with the correct parameters', async function () {

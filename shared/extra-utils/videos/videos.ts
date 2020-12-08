@@ -155,7 +155,7 @@ function getVideosListWithToken (url: string, token: string, query: { nsfw?: boo
     .set('Authorization', 'Bearer ' + token)
     .query(immutableAssign(query, { sort: 'name' }))
     .set('Accept', 'application/json')
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 
@@ -166,7 +166,7 @@ function getLocalVideos (url: string) {
     .get(path)
     .query({ sort: 'name', filter: 'local' })
     .set('Accept', 'application/json')
-    .expect(200)
+    .expect(HttpStatusCode.OK_200)
     .expect('Content-Type', /json/)
 }
 

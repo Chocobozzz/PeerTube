@@ -17,6 +17,7 @@ import {
 import { unfollow } from '../../../../shared/extra-utils/server/follows'
 import { userLogin } from '../../../../shared/extra-utils/users/login'
 import { createUser } from '../../../../shared/extra-utils/users/users'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -58,11 +59,11 @@ describe('Test follow constraints', function () {
     describe('With an unlogged user', function () {
 
       it('Should get the local video', async function () {
-        await getVideo(servers[0].url, video1UUID, 200)
+        await getVideo(servers[0].url, video1UUID, HttpStatusCode.OK_200)
       })
 
       it('Should get the remote video', async function () {
-        await getVideo(servers[0].url, video2UUID, 200)
+        await getVideo(servers[0].url, video2UUID, HttpStatusCode.OK_200)
       })
 
       it('Should list local account videos', async function () {
@@ -98,11 +99,11 @@ describe('Test follow constraints', function () {
 
     describe('With a logged user', function () {
       it('Should get the local video', async function () {
-        await getVideoWithToken(servers[0].url, userAccessToken, video1UUID, 200)
+        await getVideoWithToken(servers[0].url, userAccessToken, video1UUID, HttpStatusCode.OK_200)
       })
 
       it('Should get the remote video', async function () {
-        await getVideoWithToken(servers[0].url, userAccessToken, video2UUID, 200)
+        await getVideoWithToken(servers[0].url, userAccessToken, video2UUID, HttpStatusCode.OK_200)
       })
 
       it('Should list local account videos', async function () {
@@ -148,11 +149,11 @@ describe('Test follow constraints', function () {
     describe('With an unlogged user', function () {
 
       it('Should get the local video', async function () {
-        await getVideo(servers[0].url, video1UUID, 200)
+        await getVideo(servers[0].url, video1UUID, HttpStatusCode.OK_200)
       })
 
       it('Should not get the remote video', async function () {
-        await getVideo(servers[0].url, video2UUID, 403)
+        await getVideo(servers[0].url, video2UUID, HttpStatusCode.FORBIDDEN_403)
       })
 
       it('Should list local account videos', async function () {
@@ -188,11 +189,11 @@ describe('Test follow constraints', function () {
 
     describe('With a logged user', function () {
       it('Should get the local video', async function () {
-        await getVideoWithToken(servers[0].url, userAccessToken, video1UUID, 200)
+        await getVideoWithToken(servers[0].url, userAccessToken, video1UUID, HttpStatusCode.OK_200)
       })
 
       it('Should get the remote video', async function () {
-        await getVideoWithToken(servers[0].url, userAccessToken, video2UUID, 200)
+        await getVideoWithToken(servers[0].url, userAccessToken, video2UUID, HttpStatusCode.OK_200)
       })
 
       it('Should list local account videos', async function () {

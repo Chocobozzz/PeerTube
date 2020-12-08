@@ -9,6 +9,7 @@ import { BytesPipe, VideoCaptionService, VideoEdit, VideoService } from '@app/sh
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 @Component({
   selector: 'my-video-upload',
@@ -129,17 +130,17 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   cancelUpload () {
     if (this.videoUploadObservable !== null) {
       this.videoUploadObservable.unsubscribe()
-
-      this.isUploadingVideo = false
-      this.videoUploadPercents = 0
-      this.videoUploadObservable = null
-
-      this.firstStepError.emit()
-      this.enableRetryAfterError = false
-      this.error = ''
-
-      this.notifier.info($localize`Upload cancelled`)
     }
+
+    this.isUploadingVideo = false
+    this.videoUploadPercents = 0
+    this.videoUploadObservable = null
+
+    this.firstStepError.emit()
+    this.enableRetryAfterError = false
+    this.error = ''
+
+    this.notifier.info($localize`Upload cancelled`)
   }
 
   uploadFirstStep (clickedOnButton = false) {
@@ -229,6 +230,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           notifier: this.notifier,
           sticky: false
         })
+
+        if (err.status === HttpStatusCode.PAYLOAD_TOO_LARGE_413 ||
+            err.status === HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415) {
+          this.cancelUpload()
+        }
       }
     )
   }

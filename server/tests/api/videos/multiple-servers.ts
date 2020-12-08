@@ -41,6 +41,7 @@ import {
   findCommentId
 } from '../../../../shared/extra-utils/videos/video-comments'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -999,7 +1000,7 @@ describe('Test multiple servers', function () {
         expect(res.body.downloadEnabled).to.be.false
 
         const text = 'my super forbidden comment'
-        await addVideoCommentThread(server.url, server.accessToken, videoUUID, text, 409)
+        await addVideoCommentThread(server.url, server.accessToken, videoUUID, text, HttpStatusCode.CONFLICT_409)
       }
     })
   })
@@ -1021,7 +1022,7 @@ describe('Test multiple servers', function () {
       const filePath = join(__dirname, '..', '..', 'fixtures', 'video_short.webm')
 
       await req.attach('videofile', filePath)
-               .expect(200)
+               .expect(HttpStatusCode.OK_200)
 
       await waitJobs(servers)
 

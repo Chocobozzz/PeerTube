@@ -76,6 +76,7 @@ import { sendCreateVideo, sendUpdateVideo } from './send'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { addVideoComments } from './video-comments'
 import { createRates } from './video-rates'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   const video = videoArg as MVideoAP
@@ -488,7 +489,7 @@ async function refreshVideoIfNeeded (options: {
 
   try {
     const { response, videoObject } = await fetchRemoteVideo(video.url)
-    if (response.statusCode === 404) {
+    if (response.statusCode === HttpStatusCode.NOT_FOUND_404) {
       logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
 
       // Video does not exist anymore

@@ -24,6 +24,7 @@ import {
 } from '../../../../shared/extra-utils'
 import { getAccount } from '../../../../shared/extra-utils/users/accounts'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test AP refresher', function () {
   let servers: ServerInfo[] = []
@@ -86,8 +87,8 @@ describe('Test AP refresher', function () {
 
       await waitJobs(servers)
 
-      await getVideo(servers[0].url, videoUUID1, 404)
-      await getVideo(servers[0].url, videoUUID2, 200)
+      await getVideo(servers[0].url, videoUUID1, HttpStatusCode.NOT_FOUND_404)
+      await getVideo(servers[0].url, videoUUID2, HttpStatusCode.OK_200)
     })
 
     it('Should not update a remote video if the remote instance is down', async function () {
@@ -106,7 +107,7 @@ describe('Test AP refresher', function () {
 
       await reRunServer(servers[1])
 
-      await getVideo(servers[0].url, videoUUID3, 200)
+      await getVideo(servers[0].url, videoUUID3, HttpStatusCode.OK_200)
     })
   })
 
@@ -126,8 +127,8 @@ describe('Test AP refresher', function () {
 
       await waitJobs(servers)
 
-      await getAccount(servers[0].url, 'user1@localhost:' + servers[1].port, 200)
-      await getAccount(servers[0].url, 'user2@localhost:' + servers[1].port, 404)
+      await getAccount(servers[0].url, 'user1@localhost:' + servers[1].port, HttpStatusCode.OK_200)
+      await getAccount(servers[0].url, 'user2@localhost:' + servers[1].port, HttpStatusCode.NOT_FOUND_404)
     })
   })
 
@@ -146,8 +147,8 @@ describe('Test AP refresher', function () {
 
       await waitJobs(servers)
 
-      await getVideoPlaylist(servers[0].url, playlistUUID1, 200)
-      await getVideoPlaylist(servers[0].url, playlistUUID2, 404)
+      await getVideoPlaylist(servers[0].url, playlistUUID1, HttpStatusCode.OK_200)
+      await getVideoPlaylist(servers[0].url, playlistUUID2, HttpStatusCode.NOT_FOUND_404)
     })
   })
 

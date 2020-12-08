@@ -33,6 +33,7 @@ import {
   getVideoCommentThreads,
   getVideoThreadComments
 } from '../../../../shared/extra-utils/videos/video-comments'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -352,7 +353,7 @@ describe('Test handle downs', function () {
     }
 
     for (const id of videoIdsServer1) {
-      await getVideo(servers[1].url, id, 403)
+      await getVideo(servers[1].url, id, HttpStatusCode.FORBIDDEN_403)
     }
   })
 

@@ -11,6 +11,7 @@ import {
   setAccessTokensToServers,
   uploadVideo
 } from '../../../../shared/extra-utils'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -53,7 +54,7 @@ describe('Test activitypub', function () {
   })
 
   it('Should redirect to the origin video object', async function () {
-    const res = await makeActivityPubGetRequest(servers[1].url, '/videos/watch/' + videoUUID, 302)
+    const res = await makeActivityPubGetRequest(servers[1].url, '/videos/watch/' + videoUUID, HttpStatusCode.FOUND_302)
 
     expect(res.header.location).to.equal('http://localhost:' + servers[0].port + '/videos/watch/' + videoUUID)
   })

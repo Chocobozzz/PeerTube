@@ -13,6 +13,7 @@ import {
   PluginType,
   ClientHookName
 } from '../../../../shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { TranslationsManager } from '../../assets/player/translations-manager'
@@ -85,7 +86,7 @@ export class PeerTubeEmbed {
   refreshFetch (url: string, options?: RequestInit) {
     return fetch(url, options)
       .then((res: Response) => {
-        if (res.status !== 401) return res
+        if (res.status !== HttpStatusCode.UNAUTHORIZED_401) return res
 
         const refreshingTokenPromise = new Promise((resolve, reject) => {
           const clientId: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
@@ -107,7 +108,7 @@ export class PeerTubeEmbed {
             method: 'POST',
             body: objectToUrlEncoded(data)
           }).then(res => {
-            if (res.status === 401) return undefined
+            if (res.status === HttpStatusCode.UNAUTHORIZED_401) return undefined
 
             return res.json()
           }).then((obj: UserRefreshToken & { code: 'invalid_grant'}) => {
@@ -338,7 +339,7 @@ export class PeerTubeEmbed {
 
     try {
       playlistResponse = await playlistPromise
-      isResponseOk = playlistResponse.status === 200
+      isResponseOk = playlistResponse.status === HttpStatusCode.OK_200
     } catch (err) {
       console.error(err)
       isResponseOk = false
@@ -347,7 +348,7 @@ export class PeerTubeEmbed {
     if (!isResponseOk) {
       const serverTranslations = await this.translationsPromise
 
-      if (playlistResponse?.status === 404) {
+      if (playlistResponse?.status === HttpStatusCode.NOT_FOUND_404) {
         this.playlistNotFound(serverTranslations)
         return undefined
       }
@@ -367,7 +368,7 @@ export class PeerTubeEmbed {
 
     try {
       videoResponse = await videoPromise
-      isResponseOk = videoResponse.status === 200
+      isResponseOk = videoResponse.status === HttpStatusCode.OK_200
     } catch (err) {
       console.error(err)
 
@@ -377,7 +378,7 @@ export class PeerTubeEmbed {
     if (!isResponseOk) {
       const serverTranslations = await this.translationsPromise
 
-      if (videoResponse?.status === 404) {
+      if (videoResponse?.status === HttpStatusCode.NOT_FOUND_404) {
         this.videoNotFound(serverTranslations)
         return undefined
       }

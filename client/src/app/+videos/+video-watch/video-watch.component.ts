@@ -39,6 +39,7 @@ import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
 import { VideoSupportComponent } from './modal/video-support.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 type URLOptions = CustomizationOptions & { playerMode: PlayerMode }
 
@@ -412,13 +413,25 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               $localize`This video is not available on this instance. Do you want to be redirected on the origin instance: <a href="${originUrl}">${originUrl}</a>?`,
               $localize`Redirection`
             ).then(res => {
-              if (res === false) return this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ])
+              if (res === false) {
+                return this.restExtractor.redirectTo404IfNotFound(err, [
+                  HttpStatusCode.BAD_REQUEST_400,
+                  HttpStatusCode.UNAUTHORIZED_401,
+                  HttpStatusCode.FORBIDDEN_403,
+                  HttpStatusCode.NOT_FOUND_404
+                ])
+              }
 
               return window.location.href = originUrl
             })
           }
 
-          return this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ])
+          return this.restExtractor.redirectTo404IfNotFound(err, [
+            HttpStatusCode.BAD_REQUEST_400,
+            HttpStatusCode.UNAUTHORIZED_401,
+            HttpStatusCode.FORBIDDEN_403,
+            HttpStatusCode.NOT_FOUND_404
+          ])
         })
       )
       .subscribe(([ video, captionsResult ]) => {
@@ -450,7 +463,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.playlistService.getVideoPlaylist(playlistId)
       .pipe(
         // If 401, the video is private or blocked so redirect to 404
-        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ]))
+        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [
+          HttpStatusCode.BAD_REQUEST_400,
+          HttpStatusCode.UNAUTHORIZED_401,
+          HttpStatusCode.FORBIDDEN_403,
+          HttpStatusCode.NOT_FOUND_404
+        ]))
       )
       .subscribe(playlist => {
         this.playlist = playlist

@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router'
 import { AuthService, Notifier, RestExtractor, ScreenService } from '@app/core'
 import { ListOverflowItem, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 @Component({
   templateUrl: './video-channels.component.html',
@@ -37,7 +38,10 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
                           map(params => params[ 'videoChannelName' ]),
                           distinctUntilChanged(),
                           switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
-                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
+                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [
+                            HttpStatusCode.BAD_REQUEST_400,
+                            HttpStatusCode.NOT_FOUND_404
+                          ]))
                         )
                         .subscribe(videoChannel => {
                           this.videoChannel = videoChannel

@@ -3,12 +3,11 @@ import { constants, promises as fs } from 'fs'
 import { join } from 'path'
 import { CONFIG } from '@server/initializers/config'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@shared/core-utils/i18n'
-import { root } from '../helpers/core-utils'
-import { logger } from '../helpers/logger'
-import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers/constants'
-import { ClientHtml } from '../lib/client-html'
-import { asyncMiddleware, embedCSP } from '../middlewares'
 import { HttpStatusCode } from '@shared/core-utils'
+import { root } from '../helpers/core-utils'
+import { STATIC_MAX_AGE } from '../initializers/constants'
+import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/client-html'
+import { asyncMiddleware, embedCSP } from '../middlewares'
 
 const clientsRouter = express.Router()
 
@@ -118,27 +117,8 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
   return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 }
 
-async function serveIndexHTML (req: express.Request, res: express.Response) {
-  if (req.accepts(ACCEPT_HEADERS) === 'html') {
-    try {
-      await generateHTMLPage(req, res, req.params.language)
-      return
-    } catch (err) {
-      logger.error('Cannot generate HTML page.', err)
-    }
-  }
-
-  return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
-}
-
 async function generateEmbedHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getEmbedHTML()
-
-  return sendHTML(html, res)
-}
-
-async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
-  const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)
 
   return sendHTML(html, res)
 }
@@ -165,12 +145,6 @@ async function generateVideoChannelHtmlPage (req: express.Request, res: express.
   const html = await ClientHtml.getVideoChannelHTMLPage(req.params.nameWithHost, req, res)
 
   return sendHTML(html, res)
-}
-
-function sendHTML (html: string, res: express.Response) {
-  res.set('Content-Type', 'text/html; charset=UTF-8')
-
-  return res.send(html)
 }
 
 async function generateManifest (req: express.Request, res: express.Response) {

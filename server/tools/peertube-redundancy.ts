@@ -7,6 +7,7 @@ import * as program from 'commander'
 import { getAdminTokenOrDie, getServerCredentials } from './cli'
 import { VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
 import { addVideoRedundancy, listVideoRedundancies, removeVideoRedundancy } from '@shared/extra-utils/server/redundancy'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import validator from 'validator'
 import * as CliTable3 from 'cli-table3'
 import { URL } from 'url'
@@ -124,9 +125,9 @@ async function addRedundancyCLI (options: { videoId: number }) {
 
     process.exit(0)
   } catch (err) {
-    if (err.message.includes(409)) {
+    if (err.message.includes(HttpStatusCode.CONFLICT_409)) {
       console.error('This video is already duplicated by your instance.')
-    } else if (err.message.includes(404)) {
+    } else if (err.message.includes(HttpStatusCode.NOT_FOUND_404)) {
       console.error('This video id does not exist.')
     } else {
       console.error(err)

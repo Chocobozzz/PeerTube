@@ -21,6 +21,7 @@ import {
   uploadVideo
 } from '../../../../shared/extra-utils'
 import { ServerConfig } from '../../../../shared/models'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -237,8 +238,8 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.webm')
     expect(data.video.file.extensions).to.contain('.ogv')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, 400)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, 400)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
 
     expect(data.contactForm.enabled).to.be.true
   })
@@ -427,8 +428,8 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.ogg')
     expect(data.video.file.extensions).to.contain('.flac')
 
-    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, 200)
-    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, 200)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, HttpStatusCode.OK_200)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, HttpStatusCode.OK_200)
   })
 
   it('Should have the configuration updated after a restart', async function () {

@@ -36,6 +36,7 @@ import {
 } from '../../types/models'
 import { extname } from 'path'
 import { getServerActor } from '@server/models/application/application'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys <T extends MActor> (actor: T) {
@@ -277,7 +278,7 @@ async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannel
 
     const { result, statusCode } = await fetchRemoteActor(actorUrl)
 
-    if (statusCode === 404) {
+    if (statusCode === HttpStatusCode.NOT_FOUND_404) {
       logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
       actor.Account
         ? await actor.Account.destroy()

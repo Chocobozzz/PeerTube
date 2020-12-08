@@ -10,6 +10,7 @@ import {
   ServerInfo,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test reset password scripts', function () {
   let server: ServerInfo
@@ -28,7 +29,7 @@ describe('Test reset password scripts', function () {
     const env = getEnvCli(server)
     await execCLI(`echo coucou | ${env} npm run reset-password -- -u user_1`)
 
-    await login(server.url, server.client, { username: 'user_1', password: 'coucou' }, 200)
+    await login(server.url, server.client, { username: 'user_1', password: 'coucou' }, HttpStatusCode.OK_200)
   })
 
   after(async function () {

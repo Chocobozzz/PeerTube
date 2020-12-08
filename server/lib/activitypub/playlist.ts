@@ -18,6 +18,7 @@ import { createPlaylistMiniatureFromUrl } from '../thumbnail'
 import { FilteredModelAttributes } from '../../types/sequelize'
 import { MAccountDefault, MAccountId, MVideoId } from '../../types/models'
 import { MVideoPlaylist, MVideoPlaylistId, MVideoPlaylistOwner } from '../../types/models/video/video-playlist'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: MAccountId, to: string[]) {
   const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
@@ -120,7 +121,7 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
 
   try {
     const { statusCode, playlistObject } = await fetchRemoteVideoPlaylist(videoPlaylist.url)
-    if (statusCode === 404) {
+    if (statusCode === HttpStatusCode.NOT_FOUND_404) {
       logger.info('Cannot refresh remote video playlist %s: it does not exist anymore. Deleting it.', videoPlaylist.url)
 
       await videoPlaylist.destroy()

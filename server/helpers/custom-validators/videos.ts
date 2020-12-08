@@ -11,7 +11,7 @@ import {
   VIDEO_STATES,
   VIDEO_LIVE
 } from '../../initializers/constants'
-import { exists, isArray, isDateValid, isFileValid } from './misc'
+import { exists, isArray, isDateValid, isFileMimeTypeValid, isFileValid } from './misc'
 import * as magnetUtil from 'magnet-uri'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
@@ -81,8 +81,8 @@ function isVideoFileExtnameValid (value: string) {
   return exists(value) && (value === VIDEO_LIVE.EXTENSION || MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined)
 }
 
-function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  return isFileValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile', null)
+function isVideoFileMimeTypeValid (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
+  return isFileMimeTypeValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
 }
 
 const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
@@ -143,12 +143,12 @@ export {
   isVideoFPSResolutionValid,
   isScheduleVideoUpdatePrivacyValid,
   isVideoOriginallyPublishedAtValid,
-  isVideoFile,
   isVideoMagnetUriValid,
   isVideoStateValid,
   isVideoViewsValid,
   isVideoRatingTypeValid,
   isVideoFileExtnameValid,
+  isVideoFileMimeTypeValid,
   isVideoDurationValid,
   isVideoTagValid,
   isVideoPrivacyValid,

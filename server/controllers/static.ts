@@ -27,6 +27,7 @@ import { getTorrentFilePath, getVideoFilePath } from '@server/lib/video-paths'
 import { getThemeOrDefault } from '../lib/plugins/theme-utils'
 import { getEnabledResolutions, getRegisteredPlugins, getRegisteredThemes } from '@server/controllers/api/config'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { serveIndexHTML } from '@server/lib/client-html'
 
 const staticRouter = express.Router()
 
@@ -117,6 +118,11 @@ staticRouter.get('/robots.txt',
     res.type('text/plain')
     return res.send(CONFIG.INSTANCE.ROBOTS)
   }
+)
+
+staticRouter.all('/teapot',
+  getCup,
+  asyncMiddleware(serveIndexHTML)
 )
 
 // security.txt service
@@ -390,4 +396,12 @@ function getHLSPlaylist (video: MVideoFullLight) {
   if (!playlist) return undefined
 
   return Object.assign(playlist, { Video: video })
+}
+
+function getCup (req: express.Request, res: express.Response, next: express.NextFunction) {
+  res.status(HttpStatusCode.I_AM_A_TEAPOT_418)
+  res.setHeader('Accept-Additions', 'Non-Dairy;1,Sugar;1')
+  res.setHeader('Safe', 'if-sepia-awake')
+
+  return next()
 }

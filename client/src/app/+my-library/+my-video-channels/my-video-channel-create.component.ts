@@ -10,6 +10,7 @@ import {
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannelService } from '@app/shared/shared-main'
 import { VideoChannelCreate } from '@shared/models'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { MyVideoChannelEdit } from './my-video-channel-edit'
 
 @Component({
@@ -58,7 +59,7 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
       },
 
       err => {
-        if (err.status === 409) {
+        if (err.status === HttpStatusCode.CONFLICT_409) {
           this.error = $localize`This name already exists on this instance.`
           return
         }

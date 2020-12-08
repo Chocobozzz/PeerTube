@@ -348,12 +348,26 @@ describe('Test videos API validator', function () {
       let attaches = {
         videofile: join(root(), 'server', 'tests', 'fixtures', 'video_short_fake.webm')
       }
-      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({
+        url: server.url,
+        path: path + '/upload',
+        token: server.accessToken,
+        fields,
+        attaches,
+        statusCodeExpected: HttpStatusCode.UNPROCESSABLE_ENTITY_422
+      })
 
       attaches = {
         videofile: join(root(), 'server', 'tests', 'fixtures', 'video_short.mkv')
       }
-      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({
+        url: server.url,
+        path: path + '/upload',
+        token: server.accessToken,
+        fields,
+        attaches,
+        statusCodeExpected: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415
+      })
     })
 
     it('Should fail with an incorrect thumbnail file', async function () {

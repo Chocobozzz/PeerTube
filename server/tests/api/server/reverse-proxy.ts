@@ -4,6 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { cleanupTests, getVideo, registerUser, uploadVideo, userLogin, viewVideo, wait } from '../../../../shared/extra-utils'
 import { flushAndRunServer, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -56,8 +57,8 @@ describe('Test application behind a reverse proxy', function () {
   it('Should view a video 2 times with the X-Forwarded-For header set', async function () {
     this.timeout(20000)
 
-    await viewVideo(server.url, videoId, 204, '0.0.0.1,127.0.0.1')
-    await viewVideo(server.url, videoId, 204, '0.0.0.2,127.0.0.1')
+    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.1,127.0.0.1')
+    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.2,127.0.0.1')
 
     // Wait the repeatable job
     await wait(8000)
@@ -69,8 +70,8 @@ describe('Test application behind a reverse proxy', function () {
   it('Should view a video only once with the same client IP in the X-Forwarded-For header', async function () {
     this.timeout(20000)
 
-    await viewVideo(server.url, videoId, 204, '0.0.0.4,0.0.0.3,::ffff:127.0.0.1')
-    await viewVideo(server.url, videoId, 204, '0.0.0.5,0.0.0.3,127.0.0.1')
+    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.4,0.0.0.3,::ffff:127.0.0.1')
+    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.5,0.0.0.3,127.0.0.1')
 
     // Wait the repeatable job
     await wait(8000)
@@ -82,8 +83,8 @@ describe('Test application behind a reverse proxy', function () {
   it('Should view a video two times with a different client IP in the X-Forwarded-For header', async function () {
     this.timeout(20000)
 
-    await viewVideo(server.url, videoId, 204, '0.0.0.8,0.0.0.6,127.0.0.1')
-    await viewVideo(server.url, videoId, 204, '0.0.0.8,0.0.0.7,127.0.0.1')
+    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.8,0.0.0.6,127.0.0.1')
+    await viewVideo(server.url, videoId, HttpStatusCode.NO_CONTENT_204, '0.0.0.8,0.0.0.7,127.0.0.1')
 
     // Wait the repeatable job
     await wait(8000)
@@ -96,10 +97,10 @@ describe('Test application behind a reverse proxy', function () {
     const user = { username: 'root', password: 'fail' }
 
     for (let i = 0; i < 19; i++) {
-      await userLogin(server, user, 400)
+      await userLogin(server, user, HttpStatusCode.BAD_REQUEST_400)
     }
 
-    await userLogin(server, user, 429)
+    await userLogin(server, user, HttpStatusCode.TOO_MANY_REQUESTS_429)
   })
 
   it('Should rate limit signup', async function () {
@@ -111,7 +112,7 @@ describe('Test application behind a reverse proxy', function () {
       }
     }
 
-    await registerUser(server.url, 'test42', 'password', 429)
+    await registerUser(server.url, 'test42', 'password', HttpStatusCode.TOO_MANY_REQUESTS_429)
   })
 
   it('Should not rate limit failed signup', async function () {
@@ -120,10 +121,10 @@ describe('Test application behind a reverse proxy', function () {
     await wait(7000)
 
     for (let i = 0; i < 3; i++) {
-      await registerUser(server.url, 'test' + i, 'password', 409)
+      await registerUser(server.url, 'test' + i, 'password', HttpStatusCode.CONFLICT_409)
     }
 
-    await registerUser(server.url, 'test43', 'password', 204)
+    await registerUser(server.url, 'test43', 'password', HttpStatusCode.NO_CONTENT_204)
 
   })
 
@@ -140,7 +141,7 @@ describe('Test application behind a reverse proxy', function () {
       }
     }
 
-    await getVideo(server.url, videoId, 429)
+    await getVideo(server.url, videoId, HttpStatusCode.TOO_MANY_REQUESTS_429)
   })
 
   after(async function () {

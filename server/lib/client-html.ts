@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as Bluebird from 'bluebird'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
 import {
   AVATARS_SIZE,
@@ -6,7 +7,8 @@ import {
   EMBED_SIZE,
   PLUGIN_GLOBAL_CSS_PATH,
   WEBSERVER,
-  FILES_CONTENT_HASH
+  FILES_CONTENT_HASH,
+  ACCEPT_HEADERS
 } from '../initializers/constants'
 import { join } from 'path'
 import { escapeHTML, isTestInstance, sha256 } from '../helpers/core-utils'
@@ -18,7 +20,6 @@ import { readFile } from 'fs-extra'
 import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { AccountModel } from '../models/account/account'
 import { VideoChannelModel } from '../models/video/video-channel'
-import * as Bluebird from 'bluebird'
 import { CONFIG } from '../initializers/config'
 import { logger } from '../helpers/logger'
 import { MAccountActor, MChannelActor } from '../types/models'
@@ -53,7 +54,7 @@ type Tags = {
   }
 }
 
-export class ClientHtml {
+class ClientHtml {
 
   private static htmlCache: { [path: string]: string } = {}
 
@@ -504,4 +505,39 @@ export class ClientHtml {
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsString)
   }
+}
+
+function sendHTML (html: string, res: express.Response) {
+  res.set('Content-Type', 'text/html; charset=UTF-8')
+
+  return res.send(html)
+}
+
+async function serveIndexHTML (req: express.Request, res: express.Response) {
+  if (req.accepts(ACCEPT_HEADERS) === 'html' ||
+      !req.headers.accept) {
+    try {
+      await generateHTMLPage(req, res, req.params.language)
+      return
+    } catch (err) {
+      logger.error('Cannot generate HTML page.', err)
+      return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+    }
+  }
+
+  return res.sendStatus(HttpStatusCode.NOT_ACCEPTABLE_406)
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  ClientHtml,
+  sendHTML,
+  serveIndexHTML
+}
+
+async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
+  const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)
+
+  return sendHTML(html, res)
 }

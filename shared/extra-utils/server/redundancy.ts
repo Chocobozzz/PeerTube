@@ -2,7 +2,13 @@ import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequ
 import { VideoRedundanciesTarget } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function updateRedundancy (url: string, accessToken: string, host: string, redundancyAllowed: boolean, expectedStatus = 204) {
+function updateRedundancy (
+  url: string,
+  accessToken: string,
+  host: string,
+  redundancyAllowed: boolean,
+  expectedStatus = HttpStatusCode.NO_CONTENT_204
+) {
   const path = '/api/v1/server/redundancy/' + host
 
   return makePutBodyRequest({

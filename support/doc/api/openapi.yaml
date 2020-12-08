@@ -1312,20 +1312,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoUploadResponse'
+        '400':
+          description: invalid file field, schedule date or parameter
         '403':
-          description: user video quota is exceeded with this video
+          description: video didn't pass upload filter
         '408':
           description: upload has timed out
         '413':
-          description: video file too large
+          description: video file too large, due to quota or max body size limit set by the reverse-proxy
           headers:
             X-File-Maximum-Size:
               schema:
                 type: string
                 format: Nginx size
               description: Maximum file size for the video
+        '415':
+          description: video type unsupported
         '422':
-          description: invalid input file
+          description: video unreadable
       requestBody:
         content:
           multipart/form-data:
@@ -1534,10 +1538,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoUploadResponse'
-        '409':
-          description: HTTP or Torrent/magnetURI import not enabled
         '400':
           description: '`magnetUri` or `targetUrl` or a torrent file missing'
+        '403':
+          description: video didn't pass pre-import filter
+        '409':
+          description: HTTP or Torrent/magnetURI import not enabled
 
   /videos/live:
     post:
@@ -3572,7 +3578,7 @@ components:
       name: name
       in: path
       required: true
-      description: The name of the account
+      description: The username or handle of the account
       schema:
         type: string
         example: chocobozzz | chocobozzz@example.org
@@ -5175,7 +5181,7 @@ components:
           properties:
             name:
               type: string
-              description: The name for the default channel
+              description: The username for the default channel
               pattern: '/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]+$/'
             displayName:
               type: string

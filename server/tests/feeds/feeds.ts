@@ -31,6 +31,7 @@ import {
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
 import { User } from '../../../shared/models/users'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -330,11 +331,16 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should fail with an invalid token', async function () {
-      await getJSONfeed(servers[0].url, 'subscriptions', { accountId: feeduserAccountId, token: 'toto' }, 403)
+      await getJSONfeed(servers[0].url, 'subscriptions', { accountId: feeduserAccountId, token: 'toto' }, HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should fail with a token of another user', async function () {
-      await getJSONfeed(servers[0].url, 'subscriptions', { accountId: feeduserAccountId, token: userFeedToken }, 403)
+      await getJSONfeed(
+        servers[0].url,
+        'subscriptions',
+        { accountId: feeduserAccountId, token: userFeedToken },
+        HttpStatusCode.FORBIDDEN_403
+      )
     })
 
     it('Should list no videos for a user with videos but no subscriptions', async function () {
@@ -382,7 +388,12 @@ describe('Test syndication feeds', () => {
     it('Should renew the token, and so have an invalid old token', async function () {
       await renewUserScopedTokens(servers[0].url, userAccessToken)
 
-      await getJSONfeed(servers[0].url, 'subscriptions', { accountId: userAccountId, token: userFeedToken, version: 3 }, 403)
+      await getJSONfeed(
+        servers[0].url,
+        'subscriptions',
+        { accountId: userAccountId, token: userFeedToken, version: 3 },
+        HttpStatusCode.FORBIDDEN_403
+      )
     })
 
     it('Should succeed with the new token', async function () {
