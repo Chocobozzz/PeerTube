@@ -69,7 +69,18 @@ class PeerTubeSocket {
     const data: LiveVideoEventPayload = { state: video.state }
     const type: LiveVideoEventType = 'state-change'
 
-    logger.debug('Sending video live new state notification of %s.', video.url)
+    logger.debug('Sending video live new state notification of %s.', video.url, { state: video.state })
+
+    this.liveVideosNamespace
+      .in(video.id)
+      .emit(type, data)
+  }
+
+  sendVideoViewsUpdate (video: MVideo) {
+    const data: LiveVideoEventPayload = { views: video.views }
+    const type: LiveVideoEventType = 'views-change'
+
+    logger.debug('Sending video live views update notification of %s.', video.url, { views: video.views })
 
     this.liveVideosNamespace
       .in(video.id)

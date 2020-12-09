@@ -25,6 +25,7 @@ import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/sha
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { MetaService } from '@ngx-meta/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
 import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import {
@@ -39,7 +40,6 @@ import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
 import { VideoSupportComponent } from './modal/video-support.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 type URLOptions = CustomizationOptions & { playerMode: PlayerMode }
 
@@ -866,21 +866,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {
     if (!this.liveVideosSub) {
-      this.liveVideosSub = this.peertubeSocket.getLiveVideosObservable()
-        .subscribe(({ payload }) => {
-          if (payload.state !== VideoState.PUBLISHED) return
-
-          const videoState = this.video.state.id
-          if (videoState !== VideoState.WAITING_FOR_LIVE && videoState !== VideoState.LIVE_ENDED) return
-
-          console.log('Loading video after live update.')
-
-          const videoUUID = this.video.uuid
-
-          // Reset to refetch the video
-          this.video = undefined
-          this.loadVideo(videoUUID)
-        })
+      this.liveVideosSub = this.buildLiveEventsSubscription()
     }
 
     if (oldVideo && oldVideo.id !== newVideo.id) {
@@ -890,6 +876,38 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!newVideo.isLive) return
 
     await this.peertubeSocket.subscribeToLiveVideosSocket(newVideo.id)
+  }
+
+  private buildLiveEventsSubscription () {
+    return this.peertubeSocket.getLiveVideosObservable()
+      .subscribe(({ type, payload }) => {
+        if (type === 'state-change') return this.handleLiveStateChange(payload.state)
+        if (type === 'views-change') return this.handleLiveViewsChange(payload.views)
+      })
+  }
+
+  private handleLiveStateChange (newState: VideoState) {
+    if (newState !== VideoState.PUBLISHED) return
+
+    const videoState = this.video.state.id
+    if (videoState !== VideoState.WAITING_FOR_LIVE && videoState !== VideoState.LIVE_ENDED) return
+
+    console.log('Loading video after live update.')
+
+    const videoUUID = this.video.uuid
+
+    // Reset to refetch the video
+    this.video = undefined
+    this.loadVideo(videoUUID)
+  }
+
+  private handleLiveViewsChange (newViews: number) {
+    if (!this.video) {
+      console.error('Cannot update video live views because video is no defined.')
+      return
+    }
+
+    this.video.views = newViews
   }
 
   private initHotkeys () {

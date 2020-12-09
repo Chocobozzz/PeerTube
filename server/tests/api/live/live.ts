@@ -328,7 +328,7 @@ describe('Test live', function () {
         await checkResolutionsInMasterPlaylist(hlsPlaylist.playlistUrl, resolutions)
 
         for (let i = 0; i < resolutions.length; i++) {
-          const segmentNum = 2
+          const segmentNum = 3
           const segmentName = `${i}-00000${segmentNum}.ts`
           await waitUntilLiveSegmentGeneration(servers[0], video.uuid, i, segmentNum)
 
@@ -606,6 +606,55 @@ describe('Test live', function () {
         expect(stateChanges).to.have.length.at.least(2)
         expect(stateChanges[stateChanges.length - 1]).to.equal(VideoState.LIVE_ENDED)
       }
+    })
+
+    it('Should correctly send views change notification', async function () {
+      this.timeout(60000)
+
+      let localLastVideoViews = 0
+      let remoteLastVideoViews = 0
+
+      const liveVideoUUID = await createLiveWrapper()
+      await waitJobs(servers)
+
+      {
+        const videoId = await getVideoIdFromUUID(servers[0].url, liveVideoUUID)
+
+        const localSocket = getLiveNotificationSocket(servers[0].url)
+        localSocket.on('views-change', data => { localLastVideoViews = data.views })
+        localSocket.emit('subscribe', { videoId })
+      }
+
+      {
+        const videoId = await getVideoIdFromUUID(servers[1].url, liveVideoUUID)
+
+        const remoteSocket = getLiveNotificationSocket(servers[1].url)
+        remoteSocket.on('views-change', data => { remoteLastVideoViews = data.views })
+        remoteSocket.emit('subscribe', { videoId })
+      }
+
+      const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
+
+      for (const server of servers) {
+        await waitUntilLivePublished(server.url, server.accessToken, liveVideoUUID)
+      }
+
+      await waitJobs(servers)
+
+      expect(localLastVideoViews).to.equal(0)
+      expect(remoteLastVideoViews).to.equal(0)
+
+      await viewVideo(servers[0].url, liveVideoUUID)
+      await viewVideo(servers[1].url, liveVideoUUID)
+
+      await waitJobs(servers)
+      await wait(5000)
+      await waitJobs(servers)
+
+      expect(localLastVideoViews).to.equal(2)
+      expect(remoteLastVideoViews).to.equal(2)
+
+      await stopFfmpeg(command)
     })
 
     it('Should not receive a notification after unsubscribe', async function () {

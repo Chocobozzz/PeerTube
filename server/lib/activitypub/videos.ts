@@ -461,8 +461,13 @@ async function updateVideoFromAP (options: {
       transaction: undefined
     })
 
-    if (wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoUpdated) // Notify our users?
-    if (videoUpdated.isLive) PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
+    // Notify our users?
+    if (wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoUpdated)
+
+    if (videoUpdated.isLive) {
+      PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
+      PeerTubeSocket.Instance.sendVideoViewsUpdate(videoUpdated)
+    }
 
     logger.info('Remote video with uuid %s updated', videoObject.uuid)
 

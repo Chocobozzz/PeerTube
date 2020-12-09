@@ -1,1 +1,1 @@
-export type LiveVideoEventType = 'state-change'
+export type LiveVideoEventType = 'state-change' | 'views-change'

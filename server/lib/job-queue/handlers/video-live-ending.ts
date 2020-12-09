@@ -91,7 +91,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
   hlsPlaylist.VideoFiles = []
 
-  let durationDone: boolean
+  let durationDone = false
 
   for (const playlistFile of playlistFiles) {
     const concatenatedTsFile = LiveManager.Instance.buildConcatenatedName(playlistFile)

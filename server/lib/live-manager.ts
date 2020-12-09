@@ -537,6 +537,8 @@ class LiveManager {
 
       await federateVideoIfNeeded(video, false)
 
+      PeerTubeSocket.Instance.sendVideoViewsUpdate(video)
+
       // Only keep not expired watchers
       const newWatchers = watchers.filter(w => w > notBefore)
       this.watchersPerVideo.set(videoId, newWatchers)
