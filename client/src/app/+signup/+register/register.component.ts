@@ -38,7 +38,8 @@ export class RegisterComponent implements OnInit {
     moderation: false
   }
 
-  defaultNextStepButtonLabel = $localize`Next`
+  defaultPreviousStepButtonLabel = $localize`:Button on the registration form to go to the previous step:Back`
+  defaultNextStepButtonLabel = $localize`:Button on the registration form to go to the previous step:Next`
   stepUserButtonLabel = this.defaultNextStepButtonLabel
 
   private serverConfig: ServerConfig
@@ -60,7 +61,7 @@ export class RegisterComponent implements OnInit {
 
     this.videoUploadDisabled = this.serverConfig.user.videoQuota === 0
     this.stepUserButtonLabel = this.videoUploadDisabled
-      ? $localize`Signup`
+      ? $localize`:Button on the registration form to finalize the account and channel creation:Signup`
       : this.defaultNextStepButtonLabel
 
     this.hooks.runAction('action:signup.register.init', 'signup')

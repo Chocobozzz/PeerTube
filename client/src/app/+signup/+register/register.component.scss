@@ -55,7 +55,16 @@ input:not([type=submit]) {
 input[type=submit],
 button {
   @include peertube-button;
-  @include orange-button;
+
+  &[cdkStepperNext] {
+    @include orange-button;
+    float: inline-end;
+  }
+
+  &[cdkStepperPrevious] {
+    @include grey-button;
+    float: inline-start;
+  }
 }
 
 .name-information {

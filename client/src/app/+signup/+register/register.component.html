@@ -26,15 +26,15 @@
         <cdk-step [stepControl]="formStepUser" i18n-label="Stepper label for the registration page asking user informations" label="User">
           <my-register-step-user (formBuilt)="onUserFormBuilt($event)" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-user>
 
+          <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
           <button cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid" (click)="videoUploadDisabled && signup()">{{ stepUserButtonLabel }}</button>
         </cdk-step>
 
         <cdk-step [stepControl]="formStepChannel" i18n-label="Stepper label for the registration page asking information about the default channel" label="Channel" *ngIf="!videoUploadDisabled">
           <my-register-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-register-step-channel>
 
-          <button i18n cdkStepperNext (click)="signup()"
-                  [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()"
-          >
+          <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+          <button cdkStepperNext [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()" (click)="signup()" i18n>
             Create my account
           </button>
         </cdk-step>
