@@ -19,6 +19,7 @@ export class InputToggleHiddenComponent implements ControlValueAccessor {
   @Input() value = ''
   @Input() autocomplete = 'off'
   @Input() placeholder = ''
+  @Input() tabindex = 0
   @Input() withToggle = true
   @Input() withCopy = false
   @Input() readonly = false

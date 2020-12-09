@@ -1,5 +1,5 @@
 <div class="input-group input-group-sm">
-  <input [id]="id" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [(ngModel)]="value" (ngModelChange)="update()" [ngClass]="{ 'readonly': readonly }" [readonly]="readonly"
+  <input [id]="id" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex" [(ngModel)]="value" (ngModelChange)="update()" [ngClass]="{ 'readonly': readonly }" [readonly]="readonly"
          #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control" />
 
   <div *ngIf="withToggle || withCopy" class="input-group-append">
