@@ -6,11 +6,11 @@ import { pathExists, readdir } from 'fs-extra'
 import { omit } from 'lodash'
 import { join } from 'path'
 import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, VideoDetails, VideoState } from '@shared/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { buildAbsoluteFixturePath, buildServerDirectory, wait } from '../miscs/miscs'
 import { makeGetRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
-import { ServerInfo } from '../server/servers'
+import { ServerInfo, waitUntilLog } from '../server/servers'
 import { getVideoWithToken } from './videos'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function getLive (url: string, token: string, videoId: number | string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/videos/live'
@@ -136,19 +136,20 @@ async function stopFfmpeg (command: ffmpeg.FfmpegCommand) {
   await wait(500)
 }
 
-function waitUntilLiveStarts (url: string, token: string, videoId: number | string) {
-  return waitWhileLiveState(url, token, videoId, VideoState.WAITING_FOR_LIVE)
-}
-
 function waitUntilLivePublished (url: string, token: string, videoId: number | string) {
-  return waitWhileLiveState(url, token, videoId, VideoState.PUBLISHED)
+  return waitUntilLiveState(url, token, videoId, VideoState.PUBLISHED)
 }
 
 function waitUntilLiveEnded (url: string, token: string, videoId: number | string) {
-  return waitWhileLiveState(url, token, videoId, VideoState.LIVE_ENDED)
+  return waitUntilLiveState(url, token, videoId, VideoState.LIVE_ENDED)
 }
 
-async function waitWhileLiveState (url: string, token: string, videoId: number | string, state: VideoState) {
+function waitUntilLiveSegmentGeneration (server: ServerInfo, videoUUID: string, resolutionNum: number, segmentNum: number) {
+  const segmentName = `${resolutionNum}-00000${segmentNum}.ts`
+  return waitUntilLog(server, `${videoUUID}/${segmentName}`, 2, false)
+}
+
+async function waitUntilLiveState (url: string, token: string, videoId: number | string, state: VideoState) {
   let video: VideoDetails
 
   do {
@@ -156,7 +157,7 @@ async function waitWhileLiveState (url: string, token: string, videoId: number |
     video = res.body
 
     await wait(500)
-  } while (video.state.id === state)
+  } while (video.state.id !== state)
 }
 
 async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resolutions: number[] = []) {
@@ -200,10 +201,10 @@ export {
   getPlaylistsCount,
   waitUntilLivePublished,
   updateLive,
-  waitUntilLiveStarts,
   createLive,
   runAndTestFfmpegStreamError,
   checkLiveCleanup,
+  waitUntilLiveSegmentGeneration,
   stopFfmpeg,
   sendRTMPStreamInVideo,
   waitUntilLiveEnded,

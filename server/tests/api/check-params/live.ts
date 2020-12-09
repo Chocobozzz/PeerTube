@@ -22,7 +22,7 @@ import {
   updateLive,
   uploadVideoAndGetId,
   userLogin,
-  waitUntilLiveStarts
+  waitUntilLivePublished
 } from '../../../../shared/extra-utils'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
@@ -409,7 +409,7 @@ describe('Test video lives API validator', function () {
 
       const command = sendRTMPStream(live.rtmpUrl, live.streamKey)
 
-      await waitUntilLiveStarts(server.url, server.accessToken, videoId)
+      await waitUntilLivePublished(server.url, server.accessToken, videoId)
       await updateLive(server.url, server.accessToken, videoId, {}, HttpStatusCode.BAD_REQUEST_400)
 
       await stopFfmpeg(command)
@@ -423,7 +423,7 @@ describe('Test video lives API validator', function () {
 
       const command = sendRTMPStream(live.rtmpUrl, live.streamKey)
 
-      await waitUntilLiveStarts(server.url, server.accessToken, videoId)
+      await waitUntilLivePublished(server.url, server.accessToken, videoId)
 
       await runAndTestFfmpegStreamError(server.url, server.accessToken, videoId, true)
 

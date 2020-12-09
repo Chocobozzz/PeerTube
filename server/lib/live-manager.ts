@@ -287,16 +287,17 @@ class LiveManager {
     for (let i = 0; i < allResolutions.length; i++) {
       const resolution = allResolutions[i]
 
-      VideoFileModel.upsert({
+      const file = new VideoFileModel({
         resolution,
         size: -1,
         extname: '.ts',
         infoHash: null,
         fps,
         videoStreamingPlaylistId: playlist.id
-      }).catch(err => {
-        logger.error('Cannot create file for live streaming.', { err })
       })
+
+      VideoFileModel.customUpsert(file, 'streaming-playlist', null)
+        .catch(err => logger.error('Cannot create file for live streaming.', { err }))
     }
 
     const outPath = getHLSDirectory(videoLive.Video)

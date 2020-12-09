@@ -23,7 +23,7 @@ import {
   updateCustomSubConfig,
   updateVideo,
   waitJobs,
-  waitUntilLiveStarts
+  waitUntilLivePublished
 } from '../../../../shared/extra-utils'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
@@ -127,7 +127,7 @@ describe('Save replay setting', function () {
       this.timeout(20000)
 
       ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
-      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoUUID)
 
       await waitJobs(servers)
 
@@ -156,7 +156,7 @@ describe('Save replay setting', function () {
       liveVideoUUID = await createLiveWrapper(false)
 
       ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
-      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoUUID)
 
       await waitJobs(servers)
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
@@ -182,7 +182,7 @@ describe('Save replay setting', function () {
       liveVideoUUID = await createLiveWrapper(false)
 
       ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
-      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoUUID)
 
       await waitJobs(servers)
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
@@ -216,7 +216,7 @@ describe('Save replay setting', function () {
       this.timeout(20000)
 
       ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
-      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoUUID)
 
       await waitJobs(servers)
 
@@ -259,7 +259,7 @@ describe('Save replay setting', function () {
       liveVideoUUID = await createLiveWrapper(true)
 
       ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
-      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoUUID)
 
       await waitJobs(servers)
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
@@ -285,7 +285,7 @@ describe('Save replay setting', function () {
       liveVideoUUID = await createLiveWrapper(true)
 
       ffmpegCommand = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
-      await waitUntilLiveStarts(servers[0].url, servers[0].accessToken, liveVideoUUID)
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoUUID)
 
       await waitJobs(servers)
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
