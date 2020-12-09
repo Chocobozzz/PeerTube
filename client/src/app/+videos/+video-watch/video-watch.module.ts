@@ -5,6 +5,7 @@ import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedShareModal } from '@app/shared/shared-share-modal'
 import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscription'
+import { SharedVideoModule } from '@app/shared/shared-video'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { SharedVideoPlaylistModule } from '@app/shared/shared-video-playlist'
@@ -32,7 +33,8 @@ import { VideoWatchComponent } from './video-watch.component'
     SharedModerationModule,
     SharedGlobalIconModule,
     SharedVideoCommentModule,
-    SharedShareModal
+    SharedShareModal,
+    SharedVideoModule
   ],
 
   declarations: [

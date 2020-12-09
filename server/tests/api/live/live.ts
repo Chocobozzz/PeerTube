@@ -42,8 +42,7 @@ import {
   waitJobs,
   waitUntilLiveEnded,
   waitUntilLivePublished,
-  waitUntilLiveSegmentGeneration,
-  waitUntilLog
+  waitUntilLiveSegmentGeneration
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -329,7 +328,7 @@ describe('Test live', function () {
         await checkResolutionsInMasterPlaylist(hlsPlaylist.playlistUrl, resolutions)
 
         for (let i = 0; i < resolutions.length; i++) {
-          const segmentNum = 1
+          const segmentNum = 2
           const segmentName = `${i}-00000${segmentNum}.ts`
           await waitUntilLiveSegmentGeneration(servers[0], video.uuid, i, segmentNum)
 

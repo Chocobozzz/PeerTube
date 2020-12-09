@@ -28,9 +28,8 @@
 
             <span class="views" [title]="video.getExactNumberOfViews()">
               <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
-              <ng-container i18n *ngIf="displayOptions.views">
-                {video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}
-              </ng-container>
+
+              <my-video-views-counter *ngIf="displayOptions.views" [video]="video"></my-video-views-counter>
             </span>
           </span>
 
