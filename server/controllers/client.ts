@@ -60,21 +60,11 @@ for (const staticClientFile of staticClientFiles) {
   })
 }
 
-// Dynamic PWA manifest
-clientsRouter.get('/manifest.webmanifest', asyncMiddleware(generateManifest))
-
 // Static client overrides
 // Must be consistent with static client overrides redirections in /support/nginx/peertube
 const staticClientOverrides = [
   'assets/images/logo.svg',
-  'assets/images/favicon.png',
-  'assets/images/icons/icon-36x36.png',
-  'assets/images/icons/icon-48x48.png',
-  'assets/images/icons/icon-72x72.png',
-  'assets/images/icons/icon-96x96.png',
-  'assets/images/icons/icon-144x144.png',
-  'assets/images/icons/icon-192x192.png',
-  'assets/images/icons/icon-512x512.png'
+  'assets/images/favicon.png'
 ]
 
 for (const staticClientOverride of staticClientOverrides) {
@@ -145,18 +135,6 @@ async function generateVideoChannelHtmlPage (req: express.Request, res: express.
   const html = await ClientHtml.getVideoChannelHTMLPage(req.params.nameWithHost, req, res)
 
   return sendHTML(html, res)
-}
-
-async function generateManifest (req: express.Request, res: express.Response) {
-  const manifestPhysicalPath = join(root(), 'client', 'dist', 'manifest.webmanifest')
-  const manifestJson = await fs.readFile(manifestPhysicalPath, 'utf8')
-  const manifest = JSON.parse(manifestJson)
-
-  manifest.name = CONFIG.INSTANCE.NAME
-  manifest.short_name = CONFIG.INSTANCE.NAME
-  manifest.description = CONFIG.INSTANCE.SHORT_DESCRIPTION
-
-  res.json(manifest)
 }
 
 function serveClientOverride (path: string) {

@@ -11,7 +11,7 @@
           "/client/*.bundle.css",
           "/client/*.bundle.js",
           "/client/*.chunk.js",
-          "/manifest.webmanifest"
+          "/client/assets/manifest.json"
         ]
       }
     },

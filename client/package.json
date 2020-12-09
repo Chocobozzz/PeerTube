@@ -29,6 +29,7 @@
     "@types/mousetrap": "1.6.3"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^10.0.1",
     "@angular-devkit/build-angular": "^0.1100.2",
     "@angular/animations": "^11.0.1",
     "@angular/cdk": "^11.0.0",
@@ -78,6 +79,7 @@
     "css-loader": "^5.0.1",
     "debug": "^4.3.1",
     "dexie": "^3.0.0",
+    "favicons-webpack-plugin": "^4.2.0",
     "file-loader": "^6.0.0",
     "focus-visible": "^5.0.2",
     "hls.js": "^0.14.16",

@@ -56,7 +56,6 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
     done
 
     mv "./dist/$defaultLanguage/assets" "./dist"
-    mv "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 
     rmdir "dist/build"
 else
