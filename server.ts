@@ -20,7 +20,7 @@ import * as cli from 'commander'
 process.title = 'peertube'
 
 // Create our main app
-const app = express()
+const app = express().disable("x-powered-by")
 
 // ----------- Core checker -----------
 import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './server/initializers/checker-before-init'
