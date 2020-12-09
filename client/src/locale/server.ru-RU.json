@@ -31,8 +31,8 @@
     "Published": "Опубликованный",
     "To transcode": "Перекодировать",
     "To import": "Импортировать",
-    "Waiting for livestream": "Waiting for livestream",
-    "Livestream ended": "Livestream ended",
+    "Waiting for livestream": "В ожидании прямой трансляции",
+    "Livestream ended": "Прямая трансляция закончилась",
     "Pending": "В ожидании",
     "Success": "Завершено",
     "Failed": "Неудачно",
@@ -244,5 +244,5 @@
     "Chinese": "Китайский",
     "Zulu": "Зулу",
     "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode"
+    "Theater mode": "Режим \"театр\""
 }
