@@ -413,9 +413,9 @@ describe('Test live', function () {
       await testVideoResolutions(liveVideoId, resolutions)
 
       await stopFfmpeg(command)
-      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoId)
-
       await waitJobs(servers)
+
+      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoId)
 
       const bitrateLimits = {
         720: 5000 * 1000, // 60FPS
@@ -427,6 +427,7 @@ describe('Test live', function () {
         const resVideo = await getVideo(server.url, liveVideoId)
         const video: VideoDetails = resVideo.body
 
+        expect(video.state.id).to.equal(VideoState.PUBLISHED)
         expect(video.duration).to.be.greaterThan(1)
         expect(video.files).to.have.lengthOf(0)
 
