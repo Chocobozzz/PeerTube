@@ -472,7 +472,7 @@ class Emailer {
     const emailPayload: EmailPayload = {
       template: 'user-registered',
       to,
-      subject: `a new user registered on ${WEBSERVER.HOST}: ${user.username}`,
+      subject: `a new user registered on ${CONFIG.INSTANCE.NAME}: ${user.username}`,
       locals: {
         user
       }
@@ -486,7 +486,7 @@ class Emailer {
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
 
     const reasonString = videoBlacklist.reason ? ` for the following reason: ${videoBlacklist.reason}` : ''
-    const blockedString = `Your video ${videoName} (${videoUrl} on ${WEBSERVER.HOST} has been blacklisted${reasonString}.`
+    const blockedString = `Your video ${videoName} (${videoUrl} on ${CONFIG.INSTANCE.NAME} has been blacklisted${reasonString}.`
 
     const emailPayload: EmailPayload = {
       to,
@@ -506,7 +506,7 @@ class Emailer {
     const emailPayload: EmailPayload = {
       to,
       subject: `Video ${video.name} unblacklisted`,
-      text: `Your video "${video.name}" (${videoUrl}) on ${WEBSERVER.HOST} has been unblacklisted.`,
+      text: `Your video "${video.name}" (${videoUrl}) on ${CONFIG.INSTANCE.NAME} has been unblacklisted.`,
       locals: {
         title: 'Your video was unblacklisted'
       }
@@ -547,7 +547,7 @@ class Emailer {
     const emailPayload: EmailPayload = {
       template: 'verify-email',
       to: [ to ],
-      subject: `Verify your email on ${WEBSERVER.HOST}`,
+      subject: `Verify your email on ${CONFIG.INSTANCE.NAME}`,
       locals: {
         username,
         verifyEmailUrl
@@ -565,7 +565,7 @@ class Emailer {
     const emailPayload: EmailPayload = {
       to: [ to ],
       subject: 'Account ' + blockedWord,
-      text: `Your account ${user.username} on ${WEBSERVER.HOST} has been ${blockedWord}${reasonString}.`
+      text: `Your account ${user.username} on ${CONFIG.INSTANCE.NAME} has been ${blockedWord}${reasonString}.`
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
@@ -597,7 +597,7 @@ class Emailer {
 
     const fromDisplayName = options.from
       ? options.from
-      : WEBSERVER.HOST
+      : CONFIG.INSTANCE.NAME
 
     const email = new Email({
       send: true,
@@ -625,6 +625,7 @@ class Emailer {
             locals: { // default variables available in all templates
               WEBSERVER,
               EMAIL: CONFIG.EMAIL,
+              instanceName: CONFIG.INSTANCE.NAME,
               text: options.text,
               subject: options.subject
             }
