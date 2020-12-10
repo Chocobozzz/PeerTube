@@ -52,7 +52,7 @@ elif [ "$1" = "api-1" ]; then
     notificationsFiles=$(findTestFiles server/tests/api/notifications)
     searchFiles=$(findTestFiles server/tests/api/search)
 
-    MOCHA_PARALLEL=true runTest 2 $notificationsFiles $searchFiles $checkParamFiles
+    MOCHA_PARALLEL=true runTest 3 $notificationsFiles $searchFiles $checkParamFiles
 elif [ "$1" = "api-2" ]; then
     npm run build:server
 
@@ -60,13 +60,13 @@ elif [ "$1" = "api-2" ]; then
     usersFiles=$(findTestFiles server/tests/api/users)
     liveFiles=$(findTestFiles server/tests/api/live)
 
-    MOCHA_PARALLEL=true runTest 2 $serverFiles $usersFiles $liveFiles
+    MOCHA_PARALLEL=true runTest 3 $serverFiles $usersFiles $liveFiles
 elif [ "$1" = "api-3" ]; then
     npm run build:server
 
     videosFiles=$(findTestFiles server/tests/api/videos)
 
-    MOCHA_PARALLEL=true runTest 2 $videosFiles
+    MOCHA_PARALLEL=true runTest 3 $videosFiles
 elif [ "$1" = "api-4" ]; then
     npm run build:server
 
