@@ -27,16 +27,16 @@ runTest () {
 
     joblog="$jobname-ci.log"
 
-    parallel -t -j $jobs --retries $retries --joblog "$joblog" \
-        npm run mocha -- -c --timeout 30000 --exit --require ts-node/register --require tsconfig-paths/register --bail \
+    parallel -j $jobs  \
+        "echo Trying {} >> $joblog; npm run mocha -- -c --timeout 30000 --exit --require ts-node/register --require tsconfig-paths/register --bail {}" \
         ::: $files
 
-    cat "$joblog"
+    cat "$joblog" | uniq -c
     rm "$joblog"
 }
 
 findTestFiles () {
-    find $1 -type f -name "*.ts" | grep -v index.ts | xargs echo
+    find $1 -type f -name "*.ts" | grep -v "/index.ts" | xargs echo
 }
 
 if [ "$1" = "misc" ]; then

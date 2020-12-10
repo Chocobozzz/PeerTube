@@ -85,8 +85,6 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
 }
 
 async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: express.Response) {
-  logger.debug('Doing channels search on search index.')
-
   const result = await buildMutedForSearchIndex(res)
 
   const body = Object.assign(query, result)
@@ -94,6 +92,8 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: e
   const url = sanitizeUrl(CONFIG.SEARCH.SEARCH_INDEX.URL) + '/api/v1/search/video-channels'
 
   try {
+    logger.debug('Doing video channels search index request on %s.', url, { body })
+
     const searchIndexResult = await doRequest<ResultList<VideoChannel>>({ uri: url, body, json: true })
 
     return res.json(searchIndexResult.body)
@@ -166,8 +166,6 @@ function searchVideos (req: express.Request, res: express.Response) {
 }
 
 async function searchVideosIndex (query: VideosSearchQuery, res: express.Response) {
-  logger.debug('Doing videos search on search index.')
-
   const result = await buildMutedForSearchIndex(res)
 
   const body: VideosSearchQuery = Object.assign(query, result)
@@ -186,6 +184,8 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
   const url = sanitizeUrl(CONFIG.SEARCH.SEARCH_INDEX.URL) + '/api/v1/search/videos'
 
   try {
+    logger.debug('Doing videos search index request on %s.', url, { body })
+
     const searchIndexResult = await doRequest<ResultList<Video>>({ uri: url, body, json: true })
 
     return res.json(searchIndexResult.body)

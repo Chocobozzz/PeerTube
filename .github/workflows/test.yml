@@ -97,7 +97,8 @@ jobs:
 
       - name: Display errors
         run: |
-          NODE_ENV=test node dist/scripts/parse-log.js -l error -f artifacts/*.log
+          (test -f dist/scripts/parse-log.js && NODE_ENV=test node dist/scripts/parse-log.js -l error -f artifacts/*.log) || \
+          echo "parse-log.js script does not exist, skipping."
 
       - name: Upload logs
         uses: actions/upload-artifact@v2

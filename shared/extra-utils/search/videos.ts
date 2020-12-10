@@ -5,10 +5,10 @@ import { VideosSearchQuery } from '../../models/search'
 import { immutableAssign } from '../miscs/miscs'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function searchVideo (url: string, search: string) {
+function searchVideo (url: string, search: string, sort = '-publishedAt') {
   const path = '/api/v1/search/videos'
 
-  const query = { sort: '-publishedAt', search: search }
+  const query = { sort, search: search }
   const req = request(url)
     .get(path)
     .query(query)

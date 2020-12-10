@@ -105,7 +105,7 @@ describe('Test videos search', function () {
   describe('Videos search', async function () {
 
     it('Should make a simple search and not have results', async function () {
-      const res = await searchVideo(server.url, 'a'.repeat(500))
+      const res = await searchVideo(server.url, 'djidane'.repeat(50))
 
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.have.lengthOf(0)
@@ -216,7 +216,7 @@ describe('Test videos search', function () {
       {
         await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'display' } })
 
-        const res = await searchVideo(server.url, 'NSFW search index')
+        const res = await searchVideo(server.url, 'NSFW search index', '-match')
         const video = res.body.data[0] as Video
 
         expect(res.body.data).to.have.length.greaterThan(0)
@@ -228,7 +228,7 @@ describe('Test videos search', function () {
       {
         await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'do_not_list' } })
 
-        const res = await searchVideo(server.url, 'NSFW search index')
+        const res = await searchVideo(server.url, 'NSFW search index', '-match')
 
         try {
           expect(res.body.data).to.have.lengthOf(0)
