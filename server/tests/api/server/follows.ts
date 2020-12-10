@@ -302,7 +302,7 @@ describe('Test follows', function () {
   })
 
   it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
-    this.timeout(35000)
+    this.timeout(60000)
 
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'server2' })
     await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3' })

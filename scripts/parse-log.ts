@@ -12,6 +12,7 @@ import { mtimeSortFilesDesc } from '../shared/core-utils/logs/logs'
 
 program
   .option('-l, --level [level]', 'Level log (debug/info/warn/error)')
+  .option('-f, --files [file...]', 'Files to parse. If not provided, the script will parse the latest log file from config)')
   .parse(process.argv)
 
 const excludedKeys = {
@@ -62,27 +63,27 @@ run()
 
 function run () {
   return new Promise(async res => {
-    const logFiles = await readdir(CONFIG.STORAGE.LOG_DIR)
-    const lastLogFile = await getNewestFile(logFiles, CONFIG.STORAGE.LOG_DIR)
+    const files = await getFiles()
 
-    const path = join(CONFIG.STORAGE.LOG_DIR, lastLogFile)
-    console.log('Opening %s.', path)
+    for (const file of files) {
+      console.log('Opening %s.', file)
 
-    const stream = createReadStream(path)
+      const stream = createReadStream(file)
 
-    const rl = createInterface({
-      input: stream
-    })
+      const rl = createInterface({
+        input: stream
+      })
 
-    rl.on('line', line => {
-      const log = JSON.parse(line)
-      // Don't know why but loggerFormat does not remove splat key
-      Object.assign(log, { splat: undefined })
+      rl.on('line', line => {
+        const log = JSON.parse(line)
+        // Don't know why but loggerFormat does not remove splat key
+        Object.assign(log, { splat: undefined })
 
-      logLevels[log.level](log)
-    })
+        logLevels[log.level](log)
+      })
 
-    stream.once('close', () => res())
+      stream.once('close', () => res())
+    }
   })
 }
 
@@ -91,6 +92,15 @@ async function getNewestFile (files: string[], basePath: string) {
   const sorted = await mtimeSortFilesDesc(files, basePath)
 
   return (sorted.length > 0) ? sorted[0].file : ''
+}
+
+async function getFiles () {
+  if (program['files']) return program['files']
+
+  const logFiles = await readdir(CONFIG.STORAGE.LOG_DIR)
+
+  const filename = await getNewestFile(logFiles, CONFIG.STORAGE.LOG_DIR)
+  return [ join(CONFIG.STORAGE.LOG_DIR, filename) ]
 }
 
 function toTimeFormat (time: string) {
