@@ -5,6 +5,7 @@ import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifie
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication, VideoDetails } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
+import { ThisReceiver } from '@angular/compiler'
 
 @Component({
   selector: 'my-video-comments',
@@ -121,7 +122,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     obs.subscribe(
       res => {
         this.comments = this.comments.concat(res.data)
-        this.componentPagination.totalItems = res.total
+        // Client does not display removed comments
+        this.componentPagination.totalItems = res.total - this.comments.filter(c => c.isDeleted).length
 
         this.onDataSubject.next(res.data)
         this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
