@@ -4,6 +4,6 @@ block title
   | Someone just used the contact form
 
 block content
-  p #{fromName} sent you a message via the contact form on #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}]:
+  p #{fromName} sent you a message via the contact form on #[a(href=WEBSERVER.URL) #{instanceName}]:
   blockquote(style='white-space: pre-wrap') #{body}
   p You can contact them at #[a(href=`mailto:${fromEmail}`) #{fromEmail}], or simply reply to this email to get in touch.
