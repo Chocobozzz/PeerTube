@@ -907,6 +907,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       return
     }
 
+    console.log('Updating live views.')
+
     this.video.views = newViews
   }
 

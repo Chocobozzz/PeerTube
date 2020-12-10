@@ -256,7 +256,7 @@ body {
         margin-left: .5em;
 
         .vjs-current-time-display {
-          line-height: calc(#{$control-bar-height} + 1px);
+          line-height: calc(#{$control-bar-height} - 1px);
 
           &::after {
             content: "/";
@@ -269,14 +269,21 @@ body {
         font-size: $font-size;
         display: inline-block;
         padding: 0;
+
         .vjs-duration-display {
-          line-height: calc(#{$control-bar-height} + 1px);
+          line-height: calc(#{$control-bar-height} - 1px);
         }
       }
 
       &.vjs-remaining-time {
         display: none;
       }
+    }
+
+    .vjs-live-control {
+      line-height: $control-bar-height;
+      min-width: 4em;
+      width: inherit;
     }
 
     .vjs-peertube {
@@ -491,7 +498,7 @@ body {
       @include disable-outline;
 
       width: 37px;
-      margin-right: 11px;
+      margin-right: $first-control-bar-element-margin-left;
 
       .vjs-icon-placeholder {
         display: inline-block;
@@ -576,9 +583,19 @@ body {
         display: none !important;
       }
     }
+
+    &.vjs-live {
+      .vjs-duration {
+        display: none !important;
+      }
+
+      .vjs-peertube {
+        display: none !important;
+      }
+    }
   }
 
-  @media screen and (max-width: 300px) {
+  @media screen and (max-width: 350px) {
     .vjs-dock-text {
       font-size: 13px;
     }
@@ -606,8 +623,20 @@ body {
       width: 33px;
     }
 
-    .vjs-play-control {
-      margin-left: $first-control-bar-element-margin-left;
+    .vjs-control-bar {
+      > button:first-child {
+        margin-left: $first-control-bar-element-margin-left-small-width;
+      }
+    }
+
+    .vjs-fullscreen-control {
+      margin-right: $first-control-bar-element-margin-left-small-width;
+    }
+
+    &.vjs-live {
+      .vjs-current-time {
+        display: none !important;
+      }
     }
   }
 
