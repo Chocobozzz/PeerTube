@@ -58,9 +58,12 @@ export class PeerTubeSocket {
       this.notificationSocket = this.io(environment.apiUrl + '/user-notifications', {
         query: { accessToken: this.auth.getAccessToken() }
       })
+
+      this.notificationSocket.on('new-notification', (n: UserNotificationServer) => {
+        this.ngZone.run(() => this.dispatchNotificationEvent('new', n))
+      })
     })
 
-    this.notificationSocket.on('new-notification', (n: UserNotificationServer) => this.dispatchNotificationEvent('new', n))
   }
 
   private async initLiveVideosSocket () {
@@ -76,7 +79,9 @@ export class PeerTubeSocket {
     const types: LiveVideoEventType[] = [ 'views-change', 'state-change' ]
 
     for (const type of types) {
-      this.liveVideosSocket.on(type, (payload: LiveVideoEventPayload) => this.dispatchLiveVideoEvent(type, payload))
+      this.liveVideosSocket.on(type, (payload: LiveVideoEventPayload) => {
+        this.ngZone.run(() => this.dispatchLiveVideoEvent(type, payload))
+      })
     }
   }
 
