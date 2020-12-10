@@ -105,4 +105,5 @@ jobs:
         if: failure()
         with:
           name: test-storages-${{ matrix.test_suite }}
-          path: test*/logs/*
+          path: artifacts
+          retention-days: 7

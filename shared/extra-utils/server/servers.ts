@@ -2,11 +2,11 @@
 
 import { expect } from 'chai'
 import { ChildProcess, exec, fork } from 'child_process'
-import { copy, pathExists, readdir, readFile, remove } from 'fs-extra'
+import { copy, ensureDir, pathExists, readdir, readFile, remove } from 'fs-extra'
 import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
 import { VideoChannel } from '../../models/videos'
-import { buildServerDirectory, getFileSize, root, wait } from '../miscs/miscs'
+import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
 
 interface ServerInfo {
   app: ChildProcess
@@ -298,11 +298,23 @@ function killallServers (servers: ServerInfo[]) {
   }
 }
 
-function cleanupTests (servers: ServerInfo[]) {
+async function cleanupTests (servers: ServerInfo[]) {
   killallServers(servers)
+
+  if (isGithubCI()) {
+    await ensureDir('artifacts')
+  }
 
   const p: Promise<any>[] = []
   for (const server of servers) {
+    if (isGithubCI()) {
+      const origin = await buildServerDirectory(server, 'logs/peertube.log')
+      const destname = `peertube-${server.internalServerNumber}.log`
+      console.log('Saving logs %s.', destname)
+
+      await copy(origin, join('artifacts', destname))
+    }
+
     if (server.parallel) {
       p.push(flushTests(server.internalServerNumber))
     }
