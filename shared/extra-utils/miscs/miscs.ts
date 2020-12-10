@@ -64,6 +64,10 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   expect(data.length).to.be.below(maxLength, "the generated image is way larger than the recorded fixture")
 }
 
+function isGithubCI () {
+  return !!process.env.GITHUB_WORKSPACE
+}
+
 function buildAbsoluteFixturePath (path: string, customCIPath = false) {
   if (isAbsolute(path)) return path
 
@@ -151,6 +155,7 @@ export {
   getFileSize,
   immutableAssign,
   testImage,
+  isGithubCI,
   buildAbsoluteFixturePath,
   root,
   generateHighBitrateVideo,
