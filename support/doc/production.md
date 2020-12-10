@@ -84,7 +84,7 @@ $ cd /var/www/peertube && sudo -u peertube cp peertube-latest/config/production.
 Then edit the `config/production.yaml` file according to your webserver
 configuration.
 
-Keep in mind that after your first start you have to use [PeerTube CLI](https://docs.joinpeertube.org/#/maintain-tools?id=update-hostjs) to change your hostname.
+**PeerTube does not support webserver host change**. Even though [PeerTube CLI can help you to switch hostname](https://docs.joinpeertube.org/#/maintain-tools?id=update-hostjs) there's no official support for it since combined with risks.
 
 ### Webserver
 
