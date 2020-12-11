@@ -191,14 +191,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.serverService.getVideoPrivacies()
       .subscribe(privacies => {
         this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
-        if (this.schedulePublicationPossible) {
-          this.videoPrivacies.push({
-            id: this.SPECIAL_SCHEDULED_PRIVACY,
-            label: $localize`Scheduled`,
-            description: $localize`Hide the video until a specific date`
-          })
-        }
-      })
+        this.videoPrivacies.push({
+          id: this.SPECIAL_SCHEDULED_PRIVACY,
+          label: $localize`Scheduled`,
+          description: $localize`Hide the video until a specific date`,
+          disabled: !this.schedulePublicationPossible
+        })
+    })
 
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
