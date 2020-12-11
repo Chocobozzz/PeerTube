@@ -55,7 +55,8 @@ describe('Test users account verification', function () {
   })
 
   it('Should register user and send verification email if verification required', async function () {
-    this.timeout(5000)
+    this.timeout(30000)
+
     await updateCustomSubConfig(server.url, server.accessToken, {
       signup: {
         enabled: true,

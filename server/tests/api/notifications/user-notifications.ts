@@ -65,7 +65,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send notifications if the user does not follow the video publisher', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       await uploadRandomVideoOnServers(servers, 1)
 
@@ -97,7 +97,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification on a scheduled publication', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
@@ -136,7 +136,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a notification before the video is published', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
@@ -154,7 +154,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification when a video becomes public', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1, data)
@@ -168,7 +168,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification when a remote video becomes public', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)
@@ -182,7 +182,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a new video notification when a video becomes unlisted', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1, data)
@@ -193,7 +193,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a new video notification when a remote video becomes unlisted', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 2, data)
@@ -237,7 +237,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a notification if transcoding is not enabled', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       const { name, uuid } = await uploadRandomVideoOnServers(servers, 1)
       await waitJobs(servers)
@@ -416,7 +416,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should notify when a local channel is following one of our channel', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
       await waitJobs(servers)
@@ -427,7 +427,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should notify when a remote channel is following one of our channel', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
       await waitJobs(servers)
@@ -439,7 +439,7 @@ describe('Test user notifications', function () {
 
     // PeerTube does not support accout -> account follows
     // it('Should notify when a local account is following one of our channel', async function () {
-    //   this.timeout(30000)
+    //   this.timeout(50000)
     //
     //   await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:' + servers[0].port)
     //
@@ -449,7 +449,7 @@ describe('Test user notifications', function () {
     // })
 
     // it('Should notify when a remote account is following one of our channel', async function () {
-    //   this.timeout(30000)
+    //   this.timeout(50000)
     //
     //   await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:' + servers[0].port)
     //

@@ -28,7 +28,7 @@ describe('Test video captions', function () {
   let videoUUID: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     servers = await flushAndRunMultipleServers(2)
 

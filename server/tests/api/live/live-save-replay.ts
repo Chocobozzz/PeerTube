@@ -136,7 +136,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly delete the video files after the stream ended', async function () {
-      this.timeout(30000)
+      this.timeout(40000)
 
       await stopFfmpeg(ffmpegCommand)
 
@@ -145,6 +145,8 @@ describe('Save replay setting', function () {
       // Live still exist, but cannot be played anymore
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.LIVE_ENDED)
+
+      await waitJobs(servers)
 
       // No resolutions saved since we did not save replay
       await checkLiveCleanup(servers[0], liveVideoUUID, [])

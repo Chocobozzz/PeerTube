@@ -546,7 +546,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
@@ -578,7 +578,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send publish/subscription notifications after scheduled update if video still auto-blacklisted', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
@@ -604,7 +604,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       const name = 'video without auto-blacklist ' + uuidv4()
 
