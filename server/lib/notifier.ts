@@ -482,15 +482,16 @@ class Notifier {
       return { users: moderators, settingGetter, notificationCreator, emailSender: emailSenderModerators }
     }
 
-    const [ reporterOptions, moderatorsOptions ] = await Promise.all([
+    const options = await Promise.all([
       buildReporterOptions(),
       buildModeratorsOptions()
     ])
 
-    return Promise.all([
-      this.notify(reporterOptions),
-      this.notify(moderatorsOptions)
-    ])
+    return Promise.all(
+      options
+        .filter(opt => opt)
+        .map(this.notify)
+    )
   }
 
   private async notifyModeratorsOfVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo) {
