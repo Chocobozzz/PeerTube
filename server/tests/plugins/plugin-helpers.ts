@@ -180,7 +180,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should remove a video after a view', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       // Should not throw -> video exists
       await getVideo(servers[0].url, videoUUID)

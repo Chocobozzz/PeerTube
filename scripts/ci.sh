@@ -27,7 +27,7 @@ runTest () {
 
     joblog="$jobname-ci.log"
 
-    parallel -j $jobs  \
+    parallel -j $jobs --retries $retries \
         "echo Trying {} >> $joblog; npm run mocha -- -c --timeout 30000 --exit --require ts-node/register --require tsconfig-paths/register --bail {}" \
         ::: $files
 
@@ -40,7 +40,7 @@ findTestFiles () {
 }
 
 if [ "$1" = "misc" ]; then
-    npm run build -- --light
+    npm run build
 
     feedsFiles=$(findTestFiles server/tests/feeds)
     helperFiles=$(findTestFiles server/tests/helpers)

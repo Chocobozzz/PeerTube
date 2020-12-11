@@ -20,7 +20,8 @@ import {
   updateLive,
   wait,
   waitJobs,
-  waitUntilLivePublished
+  waitUntilLivePublished,
+  waitUntilLiveWaiting
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -111,7 +112,7 @@ describe('Permenant live', function () {
   })
 
   it('Should stream into this permanent live', async function () {
-    this.timeout(40000)
+    this.timeout(60000)
 
     const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, videoUUID)
 
@@ -122,6 +123,7 @@ describe('Permenant live', function () {
     await checkVideoState(videoUUID, VideoState.PUBLISHED)
 
     await stopFfmpeg(command)
+    await waitUntilLiveWaiting(servers[0].url, servers[0].accessToken, videoUUID)
 
     await waitJobs(servers)
   })

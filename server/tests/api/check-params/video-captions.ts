@@ -58,7 +58,7 @@ describe('Test video captions API validator', function () {
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
-        path: path + '4da6fde3-88f7-4d16-b119-108df563d0b06/captions',
+        path: path + '4da6fde3-88f7-4d16-b119-108df563d0b06/captions/fr',
         token: server.accessToken,
         fields,
         attaches
@@ -69,10 +69,11 @@ describe('Test video captions API validator', function () {
       await makeUploadRequest({
         method: 'PUT',
         url: server.url,
-        path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions',
+        path: path + '4da6fde3-88f7-4d16-b119-108df5630b06/captions/fr',
         token: server.accessToken,
         fields,
-        attaches
+        attaches,
+        statusCodeExpected: 404
       })
     })
 

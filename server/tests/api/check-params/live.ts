@@ -402,7 +402,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail to update a live if it has already started', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       const resLive = await getLive(server.url, server.accessToken, videoId)
       const live: LiveVideo = resLive.body
@@ -416,7 +416,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail to stream twice in the save live', async function () {
-      this.timeout(30000)
+      this.timeout(40000)
 
       const resLive = await getLive(server.url, server.accessToken, videoId)
       const live: LiveVideo = resLive.body

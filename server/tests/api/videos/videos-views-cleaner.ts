@@ -27,7 +27,7 @@ describe('Test video views cleaner', function () {
   let videoIdServer2: string
 
   before(async function () {
-    this.timeout(50000)
+    this.timeout(120000)
 
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)

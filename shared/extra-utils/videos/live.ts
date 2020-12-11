@@ -119,7 +119,7 @@ async function testFfmpegStreamError (command: ffmpeg.FfmpegCommand, shouldHaveE
   let error: Error
 
   try {
-    await waitFfmpegUntilError(command, 15000)
+    await waitFfmpegUntilError(command, 25000)
   } catch (err) {
     error = err
   }
@@ -138,6 +138,10 @@ async function stopFfmpeg (command: ffmpeg.FfmpegCommand) {
 
 function waitUntilLivePublished (url: string, token: string, videoId: number | string) {
   return waitUntilLiveState(url, token, videoId, VideoState.PUBLISHED)
+}
+
+function waitUntilLiveWaiting (url: string, token: string, videoId: number | string) {
+  return waitUntilLiveState(url, token, videoId, VideoState.WAITING_FOR_LIVE)
 }
 
 function waitUntilLiveEnded (url: string, token: string, videoId: number | string) {
@@ -206,6 +210,7 @@ export {
   checkLiveCleanup,
   waitUntilLiveSegmentGeneration,
   stopFfmpeg,
+  waitUntilLiveWaiting,
   sendRTMPStreamInVideo,
   waitUntilLiveEnded,
   waitFfmpegUntilError,

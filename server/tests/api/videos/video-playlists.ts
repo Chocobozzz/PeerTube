@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
   addVideoInPlaylist,
@@ -44,13 +45,6 @@ import {
   wait,
   waitJobs
 } from '../../../../shared/extra-utils'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { VideoPlaylist } from '../../../../shared/models/videos/playlist/video-playlist.model'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
-import { VideoExistInPlaylist } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
-import { User } from '../../../../shared/models/users'
-import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../../shared/models/videos/playlist/video-playlist-element.model'
 import {
   addAccountToAccountBlocklist,
   addAccountToServerBlocklist,
@@ -61,7 +55,13 @@ import {
   removeServerFromAccountBlocklist,
   removeServerFromServerBlocklist
 } from '../../../../shared/extra-utils/users/blocklist'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { User } from '../../../../shared/models/users'
+import { VideoPrivacy } from '../../../../shared/models/videos'
+import { VideoExistInPlaylist } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
+import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../../shared/models/videos/playlist/video-playlist-element.model'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
+import { VideoPlaylist } from '../../../../shared/models/videos/playlist/video-playlist.model'
 
 const expect = chai.expect
 
@@ -123,24 +123,18 @@ describe('Test video playlists', function () {
     await doubleFollow(servers[0], servers[2])
 
     {
-      const serverPromises: Promise<any>[][] = []
+      servers[0].videos = []
+      servers[1].videos = []
+      servers[2].videos = []
 
       for (const server of servers) {
-        const videoPromises: Promise<any>[] = []
-
         for (let i = 0; i < 7; i++) {
-          videoPromises.push(
-            uploadVideo(server.url, server.accessToken, { name: `video ${i} server ${server.serverNumber}`, nsfw: false })
-              .then(res => res.body.video)
-          )
+          const name = `video ${i} server ${server.serverNumber}`
+          const resVideo = await uploadVideo(server.url, server.accessToken, { name, nsfw: false })
+
+          server.videos.push(resVideo.body.video)
         }
-
-        serverPromises.push(videoPromises)
       }
-
-      servers[0].videos = await Promise.all(serverPromises[0])
-      servers[1].videos = await Promise.all(serverPromises[1])
-      servers[2].videos = await Promise.all(serverPromises[2])
     }
 
     nsfwVideoServer1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'NSFW video', nsfw: true })).id
