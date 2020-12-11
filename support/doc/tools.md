@@ -302,9 +302,10 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 
 ### update-host.js
 
+**Changing the hostname is unsupported and may be a risky operation, especially if you have already federated.**
 If you started PeerTube with a domain, and then changed it you will have
 invalid torrent files and invalid URLs in your database. To fix this, you have
-to run:
+to run the command below (keep in mind your follower instances will NOT update their URLs).
 
 ```
 $ cd /var/www/peertube/peertube-latest
