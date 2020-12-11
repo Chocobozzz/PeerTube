@@ -249,7 +249,7 @@ async function startApplication () {
   Emailer.Instance.init()
 
   await Promise.all([
-    Emailer.Instance.checkConnectionOrDie(),
+    Emailer.Instance.checkConnection(),
     JobQueue.Instance.init()
   ])
 

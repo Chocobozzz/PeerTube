@@ -107,18 +107,18 @@ class Emailer {
     }
   }
 
-  async checkConnectionOrDie () {
+  async checkConnection () {
     if (!this.transporter || CONFIG.SMTP.TRANSPORT !== 'smtp') return
 
     logger.info('Testing SMTP server...')
 
     try {
       const success = await this.transporter.verify()
-      if (success !== true) this.dieOnConnectionFailure()
+      if (success !== true) this.warnOnConnectionFailure()
 
       logger.info('Successfully connected to SMTP server.')
     } catch (err) {
-      this.dieOnConnectionFailure(err)
+      this.warnOnConnectionFailure(err)
     }
   }
 
@@ -636,9 +636,8 @@ class Emailer {
     }
   }
 
-  private dieOnConnectionFailure (err?: Error) {
+  private warnOnConnectionFailure (err?: Error) {
     logger.error('Failed to connect to SMTP %s:%d.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT, { err })
-    process.exit(-1)
   }
 
   static get Instance () {
