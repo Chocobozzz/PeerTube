@@ -22,13 +22,13 @@ export class AboutFollowsComponent implements OnInit {
   followersPagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 20,
-    totalItems: null
+    totalItems: 0
   }
 
   followingsPagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 20,
-    totalItems: null
+    totalItems: 0
   }
 
   sort: SortMeta = {
