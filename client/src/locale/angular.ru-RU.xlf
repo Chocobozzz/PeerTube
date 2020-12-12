@@ -703,7 +703,7 @@
       </trans-unit>
       <trans-unit id="3334825601859787496" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</target>
+        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл не может быть передан до установленного таймаута (обычно 10 минут)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">192</context>
@@ -912,7 +912,7 @@
       </trans-unit>
       <trans-unit id="06c663bf1474713f57551123a46b34318543b67d" datatype="html">
         <source>Reset</source>
-        <target state="new">Reset</target>
+        <target state="translated">Сброс</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">114</context>
