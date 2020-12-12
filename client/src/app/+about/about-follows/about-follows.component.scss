@@ -19,6 +19,7 @@ a {
 
 .showMore {
   @include peertube-button-link;
-  padding: 0;
-  text-align: left;
+  @include grey-button;
+  
+  margin-top: 1%;
 }

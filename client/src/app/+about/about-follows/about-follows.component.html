@@ -1,7 +1,7 @@
 <div class="row">
   <h1 class="sr-only" i18n>Follows</h1>
   <div class="col-xl-6 col-md-12">
-    <h2 i18n class="subtitle">Followers instances</h2>
+    <h2 i18n class="subtitle">Followers instances ({{ followersPagination.totalItems }})</h2>
 
     <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">This instance does not have instances followers.</div>
 
@@ -13,13 +13,13 @@
         {{ follower }}
       </a>
     </ng-container>
-    
-    <a i18n class="showMore" *ngIf="!showMoreFollowers" (click)="loadAllFollowers()" (click)="showMoreFollowers=true">Show full list</a>
-    <a i18n class="showMore" *ngIf="showMoreFollowers" (click)= "showMoreFollowers=false">Show less</a>
+
+      <button i18n class="showMore" *ngIf="!showMoreFollowers && followersPagination.totalItems > 0" (click)="loadAllFollowers()" (click)="showMoreFollowers=true">Show full list</button> 
+      <button i18n class="showMore" *ngIf="showMoreFollowers" (click)= "showMoreFollowers=false">Show less</button> 
   </div>
 
   <div class="col-xl-6 col-md-12">
-    <h2 i18n class="subtitle">Followings instances</h2>
+    <h2 i18n class="subtitle">Followings instances ({{ followingsPagination.totalItems }})</h2>
 
     <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">This instance is not following any other.</div>
 
@@ -32,8 +32,8 @@
       </a>
     </ng-container>
 
-    <a i18n class="showMore" *ngIf="!showMoreFollowings" (click)="loadAllFollowings()" (click)="showMoreFollowings=true">Show full list</a>
-    <a i18n class="showMore" *ngIf="showMoreFollowings" (click)="showMoreFollowings=false">Show less</a>
+    <button i18n class="showMore" *ngIf="!showMoreFollowings && followingsPagination.totalItems > 0" (click)="loadAllFollowings()" (click)="showMoreFollowings=true">Show full list</button>
+    <button i18n class="showMore" *ngIf="showMoreFollowings" (click)="showMoreFollowings=false">Show less</button>
   </div>
 
 </div>
