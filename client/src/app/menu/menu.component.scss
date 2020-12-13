@@ -416,12 +416,8 @@ menu {
     }
 
     &.settings-sensitive {
-      my-global-icon {
-        ::ng-deep {
-          svg {
-            margin-top: 2px !important;
-          }
-        }
+      my-global-icon ::ng-deep svg {
+        margin-top: 2px !important;
       }
     }
   }
@@ -451,14 +447,8 @@ menu {
   }
 
   .dropdown-item:hover, .dropdown-item:active {
-    &.settings-sensitive {
-      my-global-icon {
-        ::ng-deep {
-          svg {
-            margin-top: 0px !important;
-          }
-        }
-      }
+    &.settings-sensitive my-global-icon ::ng-deep svg {
+      margin-top: 0px !important;
     }
   }
 }
