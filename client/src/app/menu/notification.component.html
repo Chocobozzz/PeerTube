@@ -1,10 +1,19 @@
 <div
-  [ngbPopover]="popContent" autoClose="outside" placement="bottom-left" container="body" popoverClass="popover-notifications"
-  i18n-title title="View your notifications" class="notification-avatar" #popover="ngbPopover" (hidden)="onPopoverHidden()"
+  [ngbPopover]="popContent" autoClose="outside" placement="bottom" container={this} popoverClass="popover-notifications"
+  i18n-title title="View your notifications" [ngClass]="{ 'notification-inbox-popover': true, 'shown': opened, 'hidden': isInMobileView }"
+  #popover="ngbPopover" (shown)="onPopoverShown()" (hidden)="onPopoverHidden()"
 >
   <div *ngIf="unreadNotifications > 0" class="unread-notifications">{{ unreadNotifications }}</div>
 
-  <img [src]="user.accountAvatarUrl" alt="Avatar" />
+  <my-global-icon iconName="bell"></my-global-icon>
+</div>
+
+<div *ngIf="isInMobileView" i18n-title title="View your notifications" class="notification-inbox-link">
+  <div *ngIf="unreadNotifications > 0" class="unread-notifications">{{ unreadNotifications }}</div>
+
+  <a routerLink="/my-account/notifications" routerLinkActive="active" #link (click)="onNavigate(link)">
+    <my-global-icon iconName="bell"></my-global-icon>
+  </a>
 </div>
 
 <ng-template #popContent>
@@ -15,7 +24,7 @@
       <div>
         <button
           *ngIf="unreadNotifications"
-          i18n-title title="Mark all as read" class="glyphicon glyphicon-inbox mr-2"
+          i18n-title title="Mark all as read" class="glyphicon glyphicon-ok mr-2"
           (click)="markAllAsRead()"
         ></button>
         <a
@@ -36,7 +45,7 @@
     ></my-user-notifications>
 
     <a *ngIf="loaded" class="all-notifications" routerLink="/my-account/notifications" #notifications (click)="onNavigate(notifications)">
-      <my-global-icon class="mr-1" iconName="inbox-full" aria-hidden="true"></my-global-icon>
+      <my-global-icon class="mr-1" iconName="bell" aria-hidden="true"></my-global-icon>
       <span i18n>See all your notifications</span>
     </a>
   </div>

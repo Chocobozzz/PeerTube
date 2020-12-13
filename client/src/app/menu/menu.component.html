@@ -3,28 +3,24 @@
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
         <div>
-          <my-avatar-notification [user]="user" (navigate)="onActiveLinkScrollToAnchor($event)"></my-avatar-notification>
+          <div class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left" [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside">
+            <div ngbDropdownToggle>
+              <img [src]="user.accountAvatarUrl" alt="Avatar" />
+              <div class="logged-in-info">
+                <div class="logged-in-display-name">{{ user.account?.displayName }}</div>
 
-          <div class="logged-in-info">
-            <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="logged-in-display-name">{{ user.account?.displayName }}</a>
-            <a *ngIf="!user.account" routerLink="/my-account/settings" class="logged-in-display-name">{{ user.account?.displayName }}</a>
+                <div class="logged-in-username">@{{ user.username }}</div>
+              </div>
 
-            <div class="logged-in-username">@{{ user.username }}</div>
-          </div>
-
-          <div class="logged-in-more" ngbDropdown [placement]="loggedInMorePlacement" container="body" autoClose="outside">
-            <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button"></my-global-icon>
+              <div class="dropdown-toggle-indicator">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+              </div>
+            </div>
 
             <div ngbDropdownMenu>
-              <a *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/accounts', user.account.nameWithHost ]">
+              <a *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/accounts', user.account.nameWithHost ]"
+                #profile (click)="onActiveLinkScrollToAnchor(profile)">
                 <my-global-icon iconName="go" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
-              </a>
-
-              <div class="dropdown-divider"></div>
-
-              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/notifications"
-                #notifications (click)="onActiveLinkScrollToAnchor(notifications)">
-                <my-global-icon iconName="inbox-full" aria-hidden="true"></my-global-icon> <ng-container i18n>My notifications</ng-container>
               </a>
 
               <div class="dropdown-divider"></div>
@@ -42,7 +38,7 @@
                 <span class="ml-auto text-muted">{{ videoLanguages.join(', ') }}</span>
               </a>
 
-              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings"
+              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item settings-sensitive" routerLink="/my-account/settings"
                 fragment="video-sensitive-content-policy" #settingsSensitiveContentPolicy
                 (click)="onActiveLinkScrollToAnchor(settingsSensitiveContentPolicy)">
                 <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy === 'display' }" iconName="sensitive" aria-hidden="true"></my-global-icon>
@@ -60,7 +56,7 @@
 
               <div class="dropdown-divider"></div>
 
-              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
+              <a *ngIf="!isInMobileView" ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
                 <my-global-icon iconName="command" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Keyboard shortcuts</ng-container>
               </a>
@@ -71,6 +67,8 @@
               </a>
             </div>
           </div>
+
+          <my-notification (navigate)="onActiveLinkScrollToAnchor($event)"></my-notification>
         </div>
 
         <div class="logged-in-menu">

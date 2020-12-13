@@ -36,7 +36,7 @@ const icons = {
   'clock': require('!!raw-loader?!../../../assets/images/feather/clock.svg').default,
   'cog': require('!!raw-loader?!../../../assets/images/feather/cog.svg').default,
   'delete': require('!!raw-loader?!../../../assets/images/feather/delete.svg').default,
-  'inbox-full': require('!!raw-loader?!../../../assets/images/feather/inbox-full.svg').default,
+  'bell': require('!!raw-loader?!../../../assets/images/feather/bell.svg').default,
   'sign-out': require('!!raw-loader?!../../../assets/images/feather/log-out.svg').default,
   'sign-in': require('!!raw-loader?!../../../assets/images/feather/log-in.svg').default,
   'download': require('!!raw-loader?!../../../assets/images/feather/download.svg').default,

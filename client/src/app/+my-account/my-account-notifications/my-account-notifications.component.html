@@ -15,7 +15,7 @@
 
   <button class="btn ml-auto" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
     <ng-container *ngIf="hasUnreadNotifications()">
-      <my-global-icon iconName="inbox-full" aria-hidden="true"></my-global-icon>
+      <my-global-icon iconName="tick" aria-hidden="true"></my-global-icon>
 
       <span i18n>Mark all as read</span>
     </ng-container>
