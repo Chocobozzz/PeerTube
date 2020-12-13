@@ -70,6 +70,8 @@ else
     npm run ng build -- --localize=false --output-path "dist/$defaultLanguage/" --deploy-url "/client/$defaultLanguage/" --prod --stats-json $additionalParams
 fi
 
+mv "./dist/$defaultLanguage/ngsw-worker.js" "./dist/"
+
 cd ../ && npm run build:embed && cd client/
 
 # Copy runtime locales
