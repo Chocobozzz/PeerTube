@@ -15,6 +15,7 @@ function isValidJobType (value: any) {
 // ---------------------------------------------------------------------------
 
 export {
+  jobStates,
   isValidJobState,
   isValidJobType
 }

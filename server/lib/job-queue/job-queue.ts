@@ -154,13 +154,13 @@ class JobQueue {
   }
 
   async listForApi (options: {
-    state: JobState
+    state: JobState | JobState[]
     start: number
     count: number
     asc?: boolean
     jobType: JobType
   }): Promise<Bull.Job[]> {
-    const { state, start, count, asc, jobType } = options
+    const { state = Array.isArray(options.state) ? options.state : [ options.state ], start, count, asc, jobType } = options
     let results: Bull.Job[] = []
 
     const filteredJobTypes = this.filterJobTypes(jobType)
@@ -172,7 +172,7 @@ class JobQueue {
         continue
       }
 
-      const jobs = await queue.getJobs([ state ], 0, start + count, asc)
+      const jobs = await queue.getJobs(state as Bull.JobStatus[], 0, start + count, asc)
       results = results.concat(jobs)
     }
 
@@ -188,7 +188,8 @@ class JobQueue {
     return results.slice(start, start + count)
   }
 
-  async count (state: JobState, jobType?: JobType): Promise<number> {
+  async count (state: JobState | JobState[], jobType?: JobType): Promise<number> {
+    const states = Array.isArray(state) ? state : [ state ]
     let total = 0
 
     const filteredJobTypes = this.filterJobTypes(jobType)
@@ -202,7 +203,9 @@ class JobQueue {
 
       const counts = await queue.getJobCounts()
 
-      total += counts[state]
+      for (const s of states) {
+        total += counts[s]
+      }
     }
 
     return total

@@ -12,10 +12,22 @@ import {
   setDefaultSort
 } from '../../middlewares'
 import { paginationValidator } from '../../middlewares/validators'
-import { listJobsValidator } from '../../middlewares/validators/jobs'
+import { listJobsStateValidator, listJobsValidator } from '../../middlewares/validators/jobs'
 import { isArray } from '../../helpers/custom-validators/misc'
+import { jobStates } from '@server/helpers/custom-validators/jobs'
 
 const jobsRouter = express.Router()
+
+jobsRouter.get('/',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_JOBS),
+  paginationValidator,
+  jobsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  listJobsValidator,
+  asyncMiddleware(listJobs)
+)
 
 jobsRouter.get('/:state',
   authenticate,
@@ -25,6 +37,7 @@ jobsRouter.get('/:state',
   setDefaultSort,
   setDefaultPagination,
   listJobsValidator,
+  listJobsStateValidator,
   asyncMiddleware(listJobs)
 )
 
@@ -37,7 +50,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listJobs (req: express.Request, res: express.Response) {
-  const state = req.params.state as JobState
+  const state = req.params.state as JobState || jobStates
   const asc = req.query.sort === 'createdAt'
   const jobType = req.query.jobType
 
@@ -52,7 +65,11 @@ async function listJobs (req: express.Request, res: express.Response) {
 
   const result: ResultList<Job> = {
     total,
-    data: jobs.map(j => formatJob(j, state))
+    data: Array.isArray(state)
+      ? await Promise.all(
+        jobs.map(async j => formatJob(j, await j.getState() as JobState))
+      )
+      : jobs.map(j => formatJob(j, state))
   }
   return res.json(result)
 }

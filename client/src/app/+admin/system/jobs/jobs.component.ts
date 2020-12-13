@@ -16,7 +16,7 @@ export class JobsComponent extends RestTable implements OnInit {
   private static LOCAL_STORAGE_STATE = 'jobs-list-state'
   private static LOCAL_STORAGE_TYPE = 'jobs-list-type'
 
-  jobState: JobStateClient = 'waiting'
+  jobState?: JobStateClient | 'all'
   jobStates: JobStateClient[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed' ]
 
   jobType: JobTypeClient = 'all'
@@ -73,6 +73,10 @@ export class JobsComponent extends RestTable implements OnInit {
     }
   }
 
+  getColspan () {
+    return this.jobState === 'all' ? 5 : 4
+  }
+
   onJobStateOrTypeChanged () {
     this.pagination.start = 0
 
@@ -81,8 +85,16 @@ export class JobsComponent extends RestTable implements OnInit {
   }
 
   protected loadData () {
+    let jobState = this.jobState as JobState
+    if (this.jobState === 'all') jobState = null
+
     this.jobsService
-      .getJobs(this.jobState, this.jobType, this.pagination, this.sort)
+      .getJobs({
+        jobState,
+        jobType: this.jobType,
+        pagination: this.pagination,
+        sort: this.sort
+      })
       .subscribe(
         resultList => {
           this.jobs = resultList.data

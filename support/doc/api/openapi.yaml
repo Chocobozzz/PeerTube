@@ -356,15 +356,17 @@ paths:
         - name: state
           in: path
           required: true
-          description: The state of the job
+          description: The state of the job ('' for for no filter)
           schema:
             type: string
             enum:
+              - ''
               - active
               - completed
               - failed
               - waiting
               - delayed
+        - $ref: '#/components/parameters/jobType'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -3780,6 +3782,26 @@ components:
       schema:
         type: string
         example: peertube-plugin-auth-ldap
+    jobType:
+      name: jobType
+      in: query
+      required: false
+      description: job type
+      schema:
+        type: string
+        enum:
+          - activitypub-follow
+          - activitypub-http-broadcast
+          - activitypub-http-fetcher
+          - activitypub-http-unicast
+          - email
+          - video-transcoding
+          - video-file-import
+          - video-import
+          - videos-views
+          - activitypub-refresher
+          - video-redundancy
+          - video-live-ending
   securitySchemes:
     OAuth2:
       description: >
