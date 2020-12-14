@@ -98,7 +98,7 @@ describe('Test emails', function () {
 
       const email = emails[0]
 
-      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains('password')
@@ -151,7 +151,7 @@ describe('Test emails', function () {
 
       const email = emails[1]
 
-      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('create_password@example.com')
       expect(email['subject']).contains('account')
@@ -197,7 +197,7 @@ describe('Test emails', function () {
 
       const email = emails[2]
 
-      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('admin' + server.internalServerNumber + '@example.com')
       expect(email['subject']).contains('abuse')
@@ -218,12 +218,12 @@ describe('Test emails', function () {
 
       const email = emails[3]
 
-      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' blocked')
       expect(email['text']).contains(' blocked')
-      expect(email['text']).contains(reason)
+      expect(email['text']).contains('bad reason')
     })
 
     it('Should send the notification email when unblocking a user', async function () {
@@ -236,7 +236,7 @@ describe('Test emails', function () {
 
       const email = emails[4]
 
-      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblocked')
@@ -256,7 +256,7 @@ describe('Test emails', function () {
 
       const email = emails[5]
 
-      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' blacklisted')
@@ -274,7 +274,7 @@ describe('Test emails', function () {
 
       const email = emails[6]
 
-      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblacklisted')
@@ -299,7 +299,7 @@ describe('Test emails', function () {
 
       const email = emails[7]
 
-      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains('Verify')
