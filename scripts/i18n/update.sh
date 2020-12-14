@@ -5,7 +5,7 @@ set -eu
 git fetch weblate && git merge weblate/develop
 
 cd client
-npm run ng -- extract-i18n --i18n-locale "en-US" --out-file src/locale/angular.xlf
+npm run ng -- extract-i18n --out-file src/locale/angular.xlf
 
 # Merge new translations in other language files
 npm run ng run -- PeerTube:xliffmerge
