@@ -124,19 +124,18 @@ function processVideo (parameters: {
     const videoInfo = await fetchObject(youtubeInfo)
     log.debug('Fetched object.', videoInfo)
 
-    if (program['since']) {
-      if (buildOriginallyPublishedAt(videoInfo).getTime() < program['since'].getTime()) {
-        log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
-          videoInfo.title, formatDate(program['since']))
-        return res()
-      }
+    const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)
+
+    if (program['since'] && originallyPublishedAt && originallyPublishedAt.getTime() < program['since'].getTime()) {
+      log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
+        videoInfo.title, formatDate(program['since']))
+      return res()
     }
-    if (program['until']) {
-      if (buildOriginallyPublishedAt(videoInfo).getTime() > program['until'].getTime()) {
-        log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
-          videoInfo.title, formatDate(program['until']))
-        return res()
-      }
+
+    if (program['until'] && originallyPublishedAt && originallyPublishedAt.getTime() > program['until'].getTime()) {
+      log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
+        videoInfo.title, formatDate(program['until']))
+      return res()
     }
 
     const result = await searchVideoWithSort(url, videoInfo.title, '-match')
