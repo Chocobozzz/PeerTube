@@ -12,8 +12,8 @@ window.addEventListener('load', async () => {
 
   const iframe = document.createElement('iframe')
   iframe.src = isPlaylist
-    ? `/videos/embed/${elementId}?api=1`
-    : `/video-playlists/embed/${elementId}?api=1`
+    ? `/video-playlists/embed/${elementId}?api=1`
+    : `/videos/embed/${elementId}?api=1`
 
   const mainElement = document.querySelector('#host')
   mainElement.appendChild(iframe)
