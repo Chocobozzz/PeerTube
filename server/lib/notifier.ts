@@ -463,11 +463,11 @@ class Notifier {
 
     async function buildReporterOptions () {
       // Only notify our users
-      if (abuse.ReporterAccount.isOwned() !== true) return
+      if (abuse.ReporterAccount.isOwned() !== true) return undefined
 
       const reporter = await UserModel.loadByAccountActorId(abuse.ReporterAccount.actorId)
       // Don't notify my own message
-      if (reporter.Account.id === message.accountId) return
+      if (reporter.Account.id === message.accountId) return undefined
 
       return { users: [ reporter ], settingGetter, notificationCreator, emailSender: emailSenderReporter }
     }
@@ -477,7 +477,7 @@ class Notifier {
       // Don't notify my own message
       moderators = moderators.filter(m => m.Account.id !== message.accountId)
 
-      if (moderators.length === 0) return
+      if (moderators.length === 0) return undefined
 
       return { users: moderators, settingGetter, notificationCreator, emailSender: emailSenderModerators }
     }
@@ -489,8 +489,8 @@ class Notifier {
 
     return Promise.all(
       options
-        .filter(opt => opt)
-        .map(this.notify)
+        .filter(opt => !!opt)
+        .map(opt => this.notify(opt))
     )
   }
 
