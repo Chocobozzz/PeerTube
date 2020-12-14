@@ -361,3 +361,25 @@ ngb-tooltip-window {
     display: none;
   }
 }
+
+.callout {
+	padding: 1.25rem;
+	border: 1px solid #eee;
+  border-radius: .25rem;
+
+  & > label {
+    position: relative;
+    top: -5px;
+    left: -10px;
+    color: #6c757d !important;
+  }
+
+  &:not(.callout-light) {
+    border-left-width: .25rem;
+  }
+  
+  &.callout-info {
+    border-color: pvar(--mainColorLightest);
+    border-left-color: pvar(--mainColor);
+  }
+}

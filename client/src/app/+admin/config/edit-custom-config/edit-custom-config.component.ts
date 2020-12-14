@@ -119,6 +119,30 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       .map(t => t.name)
   }
 
+  getTotalTranscodingThreads () {
+    const transcodingEnabled = this.form.value['transcoding']['enabled']
+    const transcodingThreads = this.form.value['transcoding']['threads']
+    const liveTranscodingEnabled = this.form.value['live']['transcoding']['enabled']
+    const liveTranscodingThreads = this.form.value['live']['transcoding']['threads']
+
+    // checks whether all enabled method are on fixed values and not on auto (= 0)
+    let noneOnAuto = !transcodingEnabled || +transcodingThreads > 0
+    noneOnAuto &&= !liveTranscodingEnabled || +liveTranscodingThreads > 0
+
+    // count total of fixed value, repalcing auto by a single thread (knowing it will display "at least")
+    let value = 0
+    if (transcodingEnabled) value += +transcodingThreads || 1
+    if (liveTranscodingEnabled) value += +liveTranscodingThreads || 1
+
+    return {
+      value,
+      atMost: noneOnAuto, // auto switches everything to a least estimation since ffmpeg will take as many threads as possible
+      unit: value > 1
+        ? $localize`threads`
+        : $localize`thread`
+    }
+  }
+
   getResolutionKey (resolution: string) {
     return 'transcoding.resolutions.' + resolution
   }

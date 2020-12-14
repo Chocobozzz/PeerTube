@@ -103,3 +103,23 @@ ngb-tabset:not(.previews) ::ng-deep {
   width: fit-content;
   margin-top: 10px;
 }
+
+.callout-container {
+  position: absolute;
+  display: flex;
+  height: 0;
+  width: 100%;
+  justify-content: right;
+
+  .callout-link {
+    @include peertube-button-link;
+
+    position: relative;
+    right: 3.3em;
+    top: .3em;
+    font-size: 90%;
+    color: pvar(--mainColor);
+    background-color: pvar(--mainBackgroundColor);
+    padding: 0 .3em;
+  }
+}
