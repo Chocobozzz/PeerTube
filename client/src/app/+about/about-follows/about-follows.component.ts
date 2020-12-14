@@ -1,5 +1,4 @@
 import { SortMeta } from 'primeng/api'
-import { Subject } from 'rxjs'
 import { Component, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier, RestService } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
@@ -13,11 +12,9 @@ import { InstanceFollowService } from '@app/shared/shared-instance'
 export class AboutFollowsComponent implements OnInit {
   followers: string[] = []
   followings: string[] = []
-  moreFollowers: string[] = []
-  moreFollowings: string[] = []
 
-  showMoreFollowers = false
-  showMoreFollowings = false
+  loadedAllFollowers = false
+  loadedAllFollowings = false
 
   followersPagination: ComponentPagination = {
     currentPage: 1,
@@ -36,8 +33,6 @@ export class AboutFollowsComponent implements OnInit {
     order: -1
   }
 
-  onDataSubject = new Subject<any[]>()
-
   constructor (
     private restService: RestService,
     private notifier: Notifier,
@@ -51,6 +46,13 @@ export class AboutFollowsComponent implements OnInit {
   }
 
   loadAllFollowings () {
+    if (this.loadedAllFollowings) return
+
+    this.loadedAllFollowings = true
+    this.followingsPagination.itemsPerPage = 100
+
+    this.loadMoreFollowings(true)
+
     while (hasMoreItems(this.followingsPagination)) {
       this.followingsPagination.currentPage += 1
 
@@ -59,6 +61,13 @@ export class AboutFollowsComponent implements OnInit {
   }
 
   loadAllFollowers () {
+    if (this.loadedAllFollowers) return
+
+    this.loadedAllFollowers = true
+    this.followersPagination.itemsPerPage = 100
+
+    this.loadMoreFollowers(true)
+
     while (hasMoreItems(this.followersPagination)) {
       this.followersPagination.currentPage += 1
 
@@ -70,40 +79,44 @@ export class AboutFollowsComponent implements OnInit {
     return window.location.protocol + '//' + host
   }
 
-  private loadMoreFollowers () {
+  canLoadMoreFollowers () {
+    return this.loadedAllFollowers || this.followersPagination.totalItems > this.followersPagination.itemsPerPage
+  }
+
+  canLoadMoreFollowings () {
+    return this.loadedAllFollowings || this.followingsPagination.totalItems > this.followingsPagination.itemsPerPage
+  }
+
+  private loadMoreFollowers (reset = false) {
     const pagination = this.restService.componentPaginationToRestPagination(this.followersPagination)
 
     this.followService.getFollowers({ pagination: pagination, sort: this.sort, state: 'accepted' })
         .subscribe(
           resultList => {
-            const newFollowers = resultList.data.map(r => r.follower.host)
-            if (this.followers.length === 0) this.followers = this.followers.concat(newFollowers)
+            if (reset) this.followers = []
 
-            else this.moreFollowers = this.moreFollowers.concat(newFollowers)
+            const newFollowers = resultList.data.map(r => r.follower.host)
+            this.followers = this.followers.concat(newFollowers)
 
             this.followersPagination.totalItems = resultList.total
-
-            this.onDataSubject.next(newFollowers)
           },
 
           err => this.notifier.error(err.message)
         )
   }
 
-  private loadMoreFollowings () {
+  private loadMoreFollowings (reset = false) {
     const pagination = this.restService.componentPaginationToRestPagination(this.followingsPagination)
 
     this.followService.getFollowing({ pagination, sort: this.sort, state: 'accepted' })
         .subscribe(
           resultList => {
-            const newFollowings = resultList.data.map(r => r.following.host)
-            if (this.followings.length === 0) this.followings = this.followings.concat(newFollowings)
+            if (reset) this.followings = []
 
-            else this.moreFollowings = this.moreFollowings.concat(newFollowings)
+            const newFollowings = resultList.data.map(r => r.following.host)
+            this.followings = this.followings.concat(newFollowings)
 
             this.followingsPagination.totalItems = resultList.total
-
-            this.onDataSubject.next(newFollowings)
           },
 
           err => this.notifier.error(err.message)

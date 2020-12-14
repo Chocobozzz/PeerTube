@@ -6,16 +6,10 @@
     <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">This instance does not have instances followers.</div>
 
     <a *ngFor="let follower of followers" [href]="buildLink(follower)" target="_blank" rel="noopener noreferrer">
-      {{follower}}
+      {{ follower}}
     </a>
-    <ng-container *ngIf="showMoreFollowers">
-      <a *ngFor="let follower of moreFollowers" [href]="buildLink(follower)" target="_blank" rel="noopener noreferrer">
-        {{ follower }}
-      </a>
-    </ng-container>
 
-      <button i18n class="showMore" *ngIf="!showMoreFollowers && followersPagination.totalItems > 0" (click)="loadAllFollowers()" (click)="showMoreFollowers=true">Show full list</button> 
-      <button i18n class="showMore" *ngIf="showMoreFollowers" (click)= "showMoreFollowers=false">Show less</button> 
+    <button i18n class="showMore" *ngIf="!loadedAllFollowers && canLoadMoreFollowers()" (click)="loadAllFollowers()">Show full list</button>
   </div>
 
   <div class="col-xl-6 col-md-12">
@@ -26,14 +20,8 @@
     <a *ngFor="let following of followings" [href]="buildLink(following)" target="_blank" rel="noopener noreferrer">
       {{ following }}
     </a>
-    <ng-container *ngIf="showMoreFollowings">
-      <a *ngFor="let following of moreFollowings" [href]="buildLink(following)" target="_blank" rel="noopener noreferrer">
-        {{ following }}
-      </a>
-    </ng-container>
 
-    <button i18n class="showMore" *ngIf="!showMoreFollowings && followingsPagination.totalItems > 0" (click)="loadAllFollowings()" (click)="showMoreFollowings=true">Show full list</button>
-    <button i18n class="showMore" *ngIf="showMoreFollowings" (click)="showMoreFollowings=false">Show less</button>
+    <button i18n class="showMore" *ngIf="!loadedAllFollowings && canLoadMoreFollowings()" (click)="loadAllFollowings()">Show full list</button>
   </div>
 
 </div>
