@@ -80,6 +80,7 @@
 
     &:first-child {
       @include peertube-file;
+      display: block;
     }
   }
 }
