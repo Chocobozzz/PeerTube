@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.0.0-rc.1 (mid-December, stable in January)
+## v3.0.0-rc.1
 
 ### IMPORTANT NOTES
 
@@ -20,10 +20,16 @@
 
  * Add ability for auth plugins to redirect user on logout [#32](https://framagit.org/framasoft/peertube/PeerTube/-/merge_requests/32) & [#33](https://framagit.org/framasoft/peertube/PeerTube/-/merge_requests/33)
  * Add `input-password` setting to plugins [#3375](https://github.com/Chocobozzz/PeerTube/issues/3375)
+ * Add server plugin hooks (https://docs.joinpeertube.org/#/api-plugins):
+   * `filter:api.accounts.videos.list.params`
+   * `filter:api.accounts.videos.list.result`
+   * `filter:api.video-channels.videos.list.params`
+   * `filter:api.video-channels.videos.list.result`
+ * Authenticate the user if possible in plugin router [#3400](https://github.com/Chocobozzz/PeerTube/pull/3400)
 
 ### Features
 
- * :tada: :tada: :tada: Support live streaming [#3250](https://github.com/Chocobozzz/PeerTube/pull/3250)
+ * :tada: :tada: :tada: Support live streaming :tada: :tada: :tada: [#3250](https://github.com/Chocobozzz/PeerTube/pull/3250)
    * Create a live video using the PeerTube interface and start streaming using your favorite streaming software (OBS, ffmpeg...)
    * If the admin allows it, add ability for users to save a replay of their live
    * Support live transcoding in multiple resolutions
@@ -48,16 +54,22 @@
  * Allow private syndication feed of videos from subscriptions [#3074](https://github.com/Chocobozzz/PeerTube/pull/3074)
  * Improve default account and channel avatars [#3326](https://github.com/Chocobozzz/PeerTube/pull/3326)
  * Accessibility/UI:
+   * More explicit error messages for file uploads [#3347](https://github.com/Chocobozzz/PeerTube/pull/3347)
+   * Allow to retry a failed video upload [#3347](https://github.com/Chocobozzz/PeerTube/pull/3347)
    * Improve jobs and logs view [#3127](https://github.com/Chocobozzz/PeerTube/pull/3127)
    * Use badges for *NSFW* and *Unfederated* labels in video block list table
    * Improved video rating popover text if the user is not logged-in [#3168](https://github.com/Chocobozzz/PeerTube/pull/3168)
    * Improve markdown-it emoji list column display [#3253](https://github.com/Chocobozzz/PeerTube/pull/3253)
    * Add help popup for choosing a licence [#3306](https://github.com/Chocobozzz/PeerTube/pull/3306)
    * Change *Upload* button to *Publish*
+   * More player download/upload title details [#3394](https://github.com/Chocobozzz/PeerTube/pull/3394)
    * Create a dedicated transcoding tab in admin config
+   * Improve 404 page
+   * Improve login form [#3357](https://github.com/Chocobozzz/PeerTube/pull/3357)
    * Add a title attribute on views element to see the view counter [#3365](https://github.com/Chocobozzz/PeerTube/pull/3365)
    * Clearer titles for periods in recently added and videos from subscriptions pages
    * Select first available channel when accepting ownership change [#3382](https://github.com/Chocobozzz/PeerTube/pull/3382)
+   * Hide channel registration step if default quota is 0 [#3393](https://github.com/Chocobozzz/PeerTube/pull/3393)
  * Add possibility to share origin URL to video if it's not local [#3201](https://github.com/Chocobozzz/PeerTube/pull/3201)
  * Render markdown in email notifications for new comments [#3255](https://github.com/Chocobozzz/PeerTube/pull/3255)
  * Add an admin setting to force ipv4 in youtube-dl [#3311](https://github.com/Chocobozzz/PeerTube/pull/3311)
@@ -85,6 +97,7 @@
  * Fix overflow of some dropdowns
  * Fix infinite scrollin in channel's playlists page
  * Fix anchors scrolling in About page
+ * Fix canonical URLs of videos and playlists [#3406](https://github.com/Chocobozzz/PeerTube/pull/3406)
  * Fix CLI import script when importing Youtube channels
  * Fix video tag min length validator
  * Fix user notification preferences column width [#3352](https://github.com/Chocobozzz/PeerTube/pull/3352)
@@ -98,6 +111,7 @@
  * Fix menu theme colors [#3376](https://github.com/Chocobozzz/PeerTube/pull/3376)
  * Fix playlist list `name`/`displayName` sort field [#3385](https://github.com/Chocobozzz/PeerTube/pull/3385)
  * Fix 401 error display in embeds
+ * Do not crash if SMTP server is down, instead log an error [#3457](https://github.com/Chocobozzz/PeerTube/issues/3457)
 
 
 

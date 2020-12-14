@@ -10,7 +10,7 @@ export const serverFilterHookObject = {
   'filter:api.accounts.videos.list.params': true,
   'filter:api.accounts.videos.list.result': true,
 
-  // Filter params/result used to list account videos for the REST API
+  // Filter params/result used to list channel videos for the REST API
   'filter:api.video-channels.videos.list.params': true,
   'filter:api.video-channels.videos.list.result': true,
 
