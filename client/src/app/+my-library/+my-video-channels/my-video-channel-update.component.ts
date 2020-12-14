@@ -11,6 +11,8 @@ import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { ServerConfig, VideoChannelUpdate } from '@shared/models'
 import { MyVideoChannelEdit } from './my-video-channel-edit'
+import { HttpErrorResponse } from '@angular/common/http'
+import { uploadErrorHandler } from '@app/helpers'
 
 @Component({
   selector: 'my-video-channel-update',
@@ -107,8 +109,25 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
             this.videoChannelToUpdate.updateAvatar(data.avatar)
           },
 
-          err => this.notifier.error(err.message)
+          (err: HttpErrorResponse) => uploadErrorHandler({
+            err,
+            name: $localize`avatar`,
+            notifier: this.notifier
+          })
         )
+  }
+
+  onAvatarDelete () {
+    this.videoChannelService.deleteVideoChannelAvatar(this.videoChannelToUpdate.name)
+                            .subscribe(
+                              data => {
+                                this.notifier.success($localize`Avatar deleted.`)
+
+                                this.videoChannelToUpdate.resetAvatar()
+                              },
+
+                              err => this.notifier.error(err.message)
+                            )
   }
 
   get maxAvatarSize () {

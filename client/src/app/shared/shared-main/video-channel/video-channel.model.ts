@@ -56,6 +56,11 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.updateComputedAttributes()
   }
 
+  resetAvatar () {
+    this.avatar = null
+    this.avatarUrl = VideoChannel.GET_DEFAULT_AVATAR_URL()
+  }
+
   private updateComputedAttributes () {
     this.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this)
   }

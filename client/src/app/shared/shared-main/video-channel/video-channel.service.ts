@@ -89,6 +89,16 @@ export class VideoChannelService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
+  deleteVideoChannelAvatar (videoChannelName: string) {
+    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/avatar'
+
+    return this.authHttp.delete(url)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
   removeVideoChannel (videoChannel: VideoChannel) {
     return this.authHttp.delete(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost)
                .pipe(
