@@ -461,7 +461,7 @@
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">85</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">85</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">267</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">85</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">85</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">270</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
         <source>Truncated preview</source>
         <target>截取預覽</target>
@@ -1134,12 +1134,12 @@ The link will expire within 1 hour.</source>
         <target>關閉</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">38</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">30</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">38</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">34</context></context-group></trans-unit>
       <trans-unit id="5d3bc02dfb6c9b6fdd716f77c487a779ba6d6cc2" datatype="html">
         <source>Update live settings</source>
         <target state="translated">更新直播設定</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">35</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="c2fe7580753ac7c1442df31eb97f8acc6fa250e6" datatype="html">
         <source>Configure</source>
         <target state="translated">設定</target>
@@ -1832,27 +1832,21 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">208</context></context-group>
       </trans-unit><trans-unit id="a3ecb8ed851e54c72dd44723d9fc3117e49ea498" datatype="html">
         <source>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</source><target state="new">You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
-          <context context-type="linenumber">233</context>
-        </context-group>
-      </trans-unit><trans-unit id="223e01b44f68af4522e390bae9d584b4cbbdfebe" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">236</context></context-group></trans-unit><trans-unit id="223e01b44f68af4522e390bae9d584b4cbbdfebe" datatype="html">
         <source>This is a permanent live</source><target state="new">This is a permanent live</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
-          <context context-type="linenumber">229</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">232</context></context-group></trans-unit>
       <trans-unit id="4b5b87d3c8366afa8bd2e40e0b07cc3102133250" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
         <target state="translated">⚠️ 如果啟用此選項，您的直播將會在您超過您的影片配額時結束</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">245</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">248</context></context-group></trans-unit>
       <trans-unit id="e495a796f252097a77a501a99db7cb30d1019296" datatype="html">
         <source>Automatically publish a replay when your live ends</source>
         <target state="translated">當您的直播結束後自動發布重播</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">241</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">244</context></context-group></trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
         <source>Captions</source>
         <target>字幕</target>
@@ -1862,47 +1856,47 @@ The link will expire within 1 hour.</source>
         <source>Video preview</source>
         <target>影片預覽</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">264</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">267</context></context-group></trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
         <source>Support</source>
         <target>支援</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">273</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">276</context></context-group></trans-unit>
       <trans-unit id="64ec6a11fd39e7a4cba76281bdd490124437e96f" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
         <target state="translated">告訴人們他們可以如何支援您（成員平臺等）的短文。</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">277</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">280</context></context-group></trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6">
         <source>Original publication date</source>
         <target>原始發佈日期</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">293</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">296</context></context-group></trans-unit>
       <trans-unit id="109ff29714fe8f2a0bfb232f04b908062fac22b0" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
         <target state="translated">這是內容原始發佈的日期（如電影的發行日期）</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">297</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">300</context></context-group></trans-unit>
       <trans-unit id="48c3bde722dc317f76aa607445f11128f7fc7276" datatype="html">
         <source>Plugin settings</source>
         <target state="translated">外掛程式設定</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">327</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">330</context></context-group></trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
         <target>啟用影片評論</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">314</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">317</context></context-group></trans-unit>
       <trans-unit id="0b365218ce1ae736f9066fd3d47278cc8f3ed1d0">
         <source>Enable download</source>
         <target>啟用下載</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">319</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">322</context></context-group></trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>進階設定</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">257</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">260</context></context-group></trans-unit>
       <trans-unit id="801b98c6f02fe3b32f6afa3ee854c99ed83474e6">
         <source>URL</source>
         <target>URL</target>
@@ -5180,6 +5174,18 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         <source>Follows</source>
         <target>追蹤</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">2</context></context-group>
+      </trans-unit><trans-unit id="33a9a4343ee46c354d8b716167990efeea654382" datatype="html">
+        <source>Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source><target state="new">Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit><trans-unit id="268584471c7cdb176fdcd85015f668a7620deea3" datatype="html">
+        <source>Followings instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source><target state="new">Followings instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="5fea66be16da46ed7a0775e9a62b7b5e94b77473">
         <source>Contact <x id="INTERPOLATION"/> administrator</source>
@@ -5437,26 +5443,28 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         <target state="translated">最後，請記住您一直都可以透過在影片播放器中切換 P2P 來停用它，或者僅在瀏覽器中停用 WebRTC。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
-      <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
-        <source>Followers instances</source>
-        <target state="translated">追蹤者站臺</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">4</context></context-group>
-      </trans-unit>
+      
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
         <source>This instance does not have instances followers.</source>
         <target state="translated">此站臺沒有站臺追蹤者。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">6</context></context-group>
+      </trans-unit><trans-unit id="144d423719b19c9f99ee6aaff85aed693d5cdd97" datatype="html">
+        <source>Show full list</source><target state="new">Show full list</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="9a9dcdc62c7e0048f4f4702b0327dda350341abc" datatype="html">
         <source>This instance is not following any other.</source>
         <target state="translated">此站台沒有追蹤任何其他的站台。</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">16</context></context-group>
-      </trans-unit>
-      <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
-        <source>Followings instances</source>
-        <target state="translated">正在追蹤的站臺</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">14</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">18</context></context-group></trans-unit>
+      
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
         <target state="translated">關於此站臺</target>
@@ -7747,6 +7755,16 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Support text cannot be more than 1000 characters long</source>
         <target state="translated">支援文字不能超過 1000 個字元長</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">50</context></context-group>
+      </trans-unit><trans-unit id="8c9434491bf113074890c9c975d89d5f7727d2d9" datatype="html">
+        <source> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>
+  "/> to learn how to use the PeerTube live streaming feature.
+</source><target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>
+  "/> to learn how to use the PeerTube live streaming feature.
+</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-documentation-link.component.html</context>
+          <context context-type="linenumber">2,4</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="4267638333776227701">
         <source>Comment is required.</source>
@@ -7788,19 +7806,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">直播 RTMP Url</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">15</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">215</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">19</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">218</context></context-group></trans-unit>
       <trans-unit id="39d142e6915c4f2d0f9b45e76c176eec6a48c1c1" datatype="html">
         <source>Live stream key</source>
         <target state="translated">直播串流金鑰</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">220</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">24</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">223</context></context-group></trans-unit>
       <trans-unit id="930826dd8818902aaf1300253dbee4717ceb35ee" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source>
         <target state="translated">⚠️ 絕對不要與其他人分享您的串流金鑰。</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">23</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">223</context></context-group></trans-unit><trans-unit id="5b5759ae8d3274fdc904e1ef5bb4a52c2251de66" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">226</context></context-group></trans-unit><trans-unit id="5b5759ae8d3274fdc904e1ef5bb4a52c2251de66" datatype="html">
         <source>Permanent live</source><target state="new">Permanent live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
