@@ -74,10 +74,15 @@ async function run (url: string, user: UserInfo) {
 
   let info = await getYoutubeDLInfo(youtubeDL, program['targetUrl'], command.args)
 
-  if (info?.title === 'Uploads') {
-    console.log('Fixing URL to %s.', info.url)
+  if (!Array.isArray(info)) info = [ info ]
 
-    info = await getYoutubeDLInfo(youtubeDL, info.url, command.args)
+  // Try to fix youtube channels upload
+  const uploadsObject = info.find(i => !i.ie_key && !i.duration && i.title === 'Uploads')
+
+  if (uploadsObject) {
+    console.log('Fixing URL to %s.', uploadsObject.url)
+
+    info = await getYoutubeDLInfo(youtubeDL, uploadsObject.url, command.args)
   }
 
   let infoArray: any[]
