@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core'
 import { SharedFormModule } from '../shared-forms'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
+import { LiveDocumentationLinkComponent } from './live-documentation-link.component'
 import { LiveStreamInformationComponent } from './live-stream-information.component'
 import { LiveVideoService } from './live-video.service'
 
@@ -14,11 +15,13 @@ import { LiveVideoService } from './live-video.service'
   ],
 
   declarations: [
-    LiveStreamInformationComponent
+    LiveStreamInformationComponent,
+    LiveDocumentationLinkComponent
   ],
 
   exports: [
-    LiveStreamInformationComponent
+    LiveStreamInformationComponent,
+    LiveDocumentationLinkComponent
   ],
 
   providers: [

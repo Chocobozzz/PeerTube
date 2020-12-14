@@ -11,6 +11,10 @@
       <div class="badge badge-info" *ngIf="live.saveReplay" i18n>Replay will be saved</div>
     </div>
 
+    <div class="alert alert-info">
+      <my-live-documentation-link></my-live-documentation-link>
+    </div>
+
     <div class="form-group">
       <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
       <my-input-toggle-hidden id="liveVideoRTMPUrl" [value]="live.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
