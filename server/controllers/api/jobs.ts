@@ -1,7 +1,8 @@
 import * as express from 'express'
 import { ResultList } from '../../../shared'
-import { Job, JobType, JobState } from '../../../shared/models'
+import { Job, JobState, JobType } from '../../../shared/models'
 import { UserRight } from '../../../shared/models/users'
+import { isArray } from '../../helpers/custom-validators/misc'
 import { JobQueue } from '../../lib/job-queue'
 import {
   asyncMiddleware,
@@ -12,13 +13,11 @@ import {
   setDefaultSort
 } from '../../middlewares'
 import { paginationValidator } from '../../middlewares/validators'
-import { listJobsStateValidator, listJobsValidator } from '../../middlewares/validators/jobs'
-import { isArray } from '../../helpers/custom-validators/misc'
-import { jobStates } from '@server/helpers/custom-validators/jobs'
+import { listJobsValidator } from '../../middlewares/validators/jobs'
 
 const jobsRouter = express.Router()
 
-jobsRouter.get('/',
+jobsRouter.get('/:state?',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
   paginationValidator,
@@ -26,18 +25,6 @@ jobsRouter.get('/',
   setDefaultSort,
   setDefaultPagination,
   listJobsValidator,
-  asyncMiddleware(listJobs)
-)
-
-jobsRouter.get('/:state',
-  authenticate,
-  ensureUserHasRight(UserRight.MANAGE_JOBS),
-  paginationValidator,
-  jobsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  listJobsValidator,
-  listJobsStateValidator,
   asyncMiddleware(listJobs)
 )
 
@@ -50,7 +37,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listJobs (req: express.Request, res: express.Response) {
-  const state = req.params.state as JobState || jobStates
+  const state = req.params.state as JobState
   const asc = req.query.sort === 'createdAt'
   const jobType = req.query.jobType
 
@@ -65,17 +52,22 @@ async function listJobs (req: express.Request, res: express.Response) {
 
   const result: ResultList<Job> = {
     total,
-    data: Array.isArray(state)
-      ? await Promise.all(
-        jobs.map(async j => formatJob(j, await j.getState() as JobState))
-      )
-      : jobs.map(j => formatJob(j, state))
+    data: state
+      ? jobs.map(j => formatJob(j, state))
+      : await Promise.all(jobs.map(j => formatJobWithUnknownState(j)))
   }
+
   return res.json(result)
 }
 
+async function formatJobWithUnknownState (job: any) {
+  return formatJob(job, await job.getState())
+}
+
 function formatJob (job: any, state: JobState): Job {
-  const error = isArray(job.stacktrace) && job.stacktrace.length !== 0 ? job.stacktrace[0] : null
+  const error = isArray(job.stacktrace) && job.stacktrace.length !== 0
+    ? job.stacktrace[0]
+    : null
 
   return {
     id: job.id,

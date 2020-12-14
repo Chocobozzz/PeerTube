@@ -1,12 +1,20 @@
 import * as request from 'supertest'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { makeGetRequest } from '../../../shared/extra-utils'
 import { Job, JobState, JobType } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
-import { makeGetRequest } from '../../../shared/extra-utils'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-function getJobsList (url: string, accessToken: string, state: JobState) {
-  const path = '/api/v1/jobs/' + state
+function buildJobsUrl (state?: JobState) {
+  let path = '/api/v1/jobs'
+
+  if (state) path += '/' + state
+
+  return path
+}
+
+function getJobsList (url: string, accessToken: string, state?: JobState) {
+  const path = buildJobsUrl(state)
 
   return request(url)
     .get(path)
@@ -19,14 +27,14 @@ function getJobsList (url: string, accessToken: string, state: JobState) {
 function getJobsListPaginationAndSort (options: {
   url: string
   accessToken: string
-  state: JobState
   start: number
   count: number
   sort: string
+  state?: JobState
   jobType?: JobType
 }) {
   const { url, accessToken, state, start, count, sort, jobType } = options
-  const path = '/api/v1/jobs/' + state
+  const path = buildJobsUrl(state)
 
   const query = {
     start,

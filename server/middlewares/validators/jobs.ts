@@ -5,6 +5,10 @@ import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 
 const listJobsValidator = [
+  param('state')
+  .optional()
+  .custom(isValidJobState).not().isEmpty().withMessage('Should have a valid job state'),
+
   query('jobType')
     .optional()
     .custom(isValidJobType).withMessage('Should have a valid job state'),
@@ -18,22 +22,8 @@ const listJobsValidator = [
   }
 ]
 
-const listJobsStateValidator = [
-  param('state')
-    .custom(isValidJobState).not().isEmpty().withMessage('Should have a valid job state'),
-
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listJobsValidator parameters.', { parameters: req.params })
-
-    if (areValidationErrors(req, res)) return
-
-    return next()
-  }
-]
-
 // ---------------------------------------------------------------------------
 
 export {
-  listJobsValidator,
-  listJobsStateValidator
+  listJobsValidator
 }
