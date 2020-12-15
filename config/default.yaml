@@ -247,8 +247,8 @@ live:
   enabled: false
 
   # Limit lives duration
-  # Set null to disable duration limit
-  max_duration: null # For example: '5 hours'
+  # -1 == unlimited
+  max_duration: -1 # For example: '5 hours'
 
   # Limit max number of live videos created on your instance
   # -1 == unlimited

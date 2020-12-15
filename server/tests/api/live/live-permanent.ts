@@ -66,7 +66,7 @@ describe('Permenant live', function () {
       live: {
         enabled: true,
         allowReplay: true,
-        maxDuration: null,
+        maxDuration: -1,
         transcoding: {
           enabled: true,
           resolutions: {
@@ -155,7 +155,7 @@ describe('Permenant live', function () {
       live: {
         enabled: true,
         allowReplay: true,
-        maxDuration: null,
+        maxDuration: -1,
         transcoding: {
           enabled: true,
           resolutions: {

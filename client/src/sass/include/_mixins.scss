@@ -307,7 +307,8 @@
 
 
 @mixin ng-select ($width) {
-  ::ng-deep ng-select {
+  ::ng-deep &.ng-select,
+  ::ng-deep .ng-select {
     width: $width;
 
     @media screen and (max-width: $width) {

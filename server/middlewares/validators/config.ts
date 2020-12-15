@@ -2,13 +2,13 @@ import * as express from 'express'
 import { body } from 'express-validator'
 import { isIntOrNull } from '@server/helpers/custom-validators/misc'
 import { isEmailEnabled } from '@server/initializers/config'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
 import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { areValidationErrors } from './utils'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists().withMessage('Should have a valid instance name'),
@@ -65,7 +65,7 @@ const customConfigUpdateValidator = [
 
   body('live.enabled').isBoolean().withMessage('Should have a valid live enabled boolean'),
   body('live.allowReplay').isBoolean().withMessage('Should have a valid live allow replay boolean'),
-  body('live.maxDuration').custom(isIntOrNull).withMessage('Should have a valid live max duration'),
+  body('live.maxDuration').isInt().withMessage('Should have a valid live max duration'),
   body('live.maxInstanceLives').custom(isIntOrNull).withMessage('Should have a valid max instance lives'),
   body('live.maxUserLives').custom(isIntOrNull).withMessage('Should have a valid max user lives'),
   body('live.transcoding.enabled').isBoolean().withMessage('Should have a valid live transcoding enabled boolean'),

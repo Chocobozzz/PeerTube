@@ -505,7 +505,7 @@ class LiveManager {
   private isDurationConstraintValid (streamingStartTime: number) {
     const maxDuration = CONFIG.LIVE.MAX_DURATION
     // No limit
-    if (maxDuration === null) return true
+    if (maxDuration < 0) return true
 
     const now = new Date().getTime()
     const max = streamingStartTime + maxDuration

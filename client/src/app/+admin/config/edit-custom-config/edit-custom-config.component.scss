@@ -18,7 +18,8 @@ input[type=text] {
 }
 
 input[type=number] {
-  @include peertube-input-text(315px);
+  @include peertube-input-text($form-base-input-width);
+
   display: block;
 }
 

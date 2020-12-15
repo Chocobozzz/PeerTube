@@ -697,7 +697,7 @@
     </ng-container>
 
     <ng-container ngbNavItem="transcoding">
-      <a ngbNavLink i18n>Transcoding</a>
+      <a ngbNavLink i18n>VOD Transcoding</a>
 
       <ng-template ngbNavContent>
 
@@ -924,14 +924,11 @@
 
                     <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() }">
                       <label i18n for="liveMaxDuration">Max live duration</label>
-                      <div>
-                        <ng-select
-                          labelForId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"
-                          bindLabel="label" bindValue="value"
-                          [clearable]="false"
-                          [searchable]="false"
-                        ></ng-select>
-                      </div>
+
+                      <ng-select
+                        labelForId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"
+                        bindLabel="label" bindValue="value" [clearable]="false" [searchable]="false"
+                      ></ng-select>
                     </div>
 
                   </ng-container>

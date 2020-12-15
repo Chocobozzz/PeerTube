@@ -105,7 +105,7 @@ describe('Test config API validators', function () {
       enabled: true,
 
       allowReplay: false,
-      maxDuration: null,
+      maxDuration: 30,
       maxInstanceLives: -1,
       maxUserLives: 50,
 

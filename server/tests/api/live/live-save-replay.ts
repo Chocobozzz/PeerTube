@@ -90,7 +90,7 @@ describe('Save replay setting', function () {
       live: {
         enabled: true,
         allowReplay: true,
-        maxDuration: null,
+        maxDuration: -1,
         transcoding: {
           enabled: false,
           resolutions: {
