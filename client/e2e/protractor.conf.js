@@ -51,21 +51,21 @@ exports.config = {
     {
       browserName: 'Chrome',
       device: 'Google Nexus 6',
-      realMobile: 'true',
+      real_mobile: 'true',
       os_version: '5.0',
       name: 'Latest Chrome Android'
     },
     {
       browserName: 'Safari',
-      device: 'iPhone 8',
-      realMobile: 'true',
-      os_version: '12',
+      device: 'iPhone 8 Plus',
+      real_mobile: 'true',
+      os_version: '11',
       name: 'Safari iPhone'
     },
     {
       browserName: 'Safari',
       device: 'iPad 7th',
-      realMobile: 'true',
+      real_mobile: 'true',
       os_version: '13',
       name: 'Safari iPad'
     }

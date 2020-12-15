@@ -42,12 +42,11 @@ input[type=checkbox] {
   @include peertube-select-container($form-base-input-width);
 }
 
-ng-select {
-  @include ng-select($form-base-input-width);
-}
-
+ng-select,
 my-select-checkbox {
-  @include ng-select($form-base-input-width);
+  @include responsive-width($form-base-input-width);
+
+  display: block;
 }
 
 input[type=submit] {

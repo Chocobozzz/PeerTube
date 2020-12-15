@@ -20,7 +20,9 @@ input[type=submit] {
 }
 
 my-select-checkbox {
-  @include ng-select(340px);
+  @include responsive-width(340px);
+
+  display: block;
 }
 
 .form-group-select {

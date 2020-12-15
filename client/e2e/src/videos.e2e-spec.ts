@@ -208,6 +208,8 @@ describe('Videos workflow', () => {
 
     await playerPage.waitUntilPlayerWrapper()
 
+    console.log('Will set %s and %s tokens in local storage.', accessToken, refreshToken)
+
     await browser.executeScript(`window.localStorage.setItem('access_token', '${accessToken}');`)
     await browser.executeScript(`window.localStorage.setItem('refresh_token', '${refreshToken}');`)
     await browser.executeScript(`window.localStorage.setItem('token_type', 'Bearer');`)
