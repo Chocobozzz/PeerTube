@@ -19,4 +19,4 @@ NODE_APP_INSTANCE=6 NODE_ENV=test npm run start
  * Check the release is okay: https://github.com/Chocobozzz/PeerTube/releases
  * Update https://peertube3.cpy.re and check it works correctly
  * Update all other instances and check it works correctly
- * Communicate on Mastodon & peertube-admin mailing list
+ * Communicate
