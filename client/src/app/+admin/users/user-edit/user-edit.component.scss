@@ -19,6 +19,12 @@ input:not([type=submit]) {
   display: block;
 }
 
+my-input-toggle-hidden {
+  @include responsive-width(340px);
+
+  display: block;
+}
+
 .peertube-select-container {
   @include peertube-select-container(340px);
 }

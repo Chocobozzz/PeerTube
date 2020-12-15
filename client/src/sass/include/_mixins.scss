@@ -305,6 +305,13 @@
   z-index: 100;
 }
 
+@mixin responsive-width ($width) {
+  width: $width;
+
+  @media screen and (max-width: $width) {
+    width: 100%;
+  }
+}
 
 @mixin ng-select ($width) {
   ::ng-deep &.ng-select,

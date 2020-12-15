@@ -122,9 +122,11 @@
             </ng-container>
           </ng-template>
         </my-help>
-        <my-input-toggle-hidden formControlName="password" id="password"
-                          [ngClass]="{ 'input-error': formErrors['password'] }"
-                          autocomplete="new-password"></my-input-toggle-hidden>
+
+        <my-input-toggle-hidden
+          formControlName="password" id="password" [ngClass]="{ 'input-error': formErrors['password'] }" autocomplete="new-password"
+        ></my-input-toggle-hidden>
+
         <div *ngIf="formErrors.password" class="form-error">
           {{ formErrors.password }}
         </div>
