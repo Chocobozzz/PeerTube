@@ -756,7 +756,7 @@
                           </ng-container>
                         </my-peertube-checkbox>
                       </div>
-  
+
                       <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
                         <my-peertube-checkbox
                           inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
@@ -782,16 +782,16 @@
                             <ng-template ptTemplate="help">
                               <ng-container i18n>
                                 <p>If you also enabled HLS support, it will multiply videos storage by 2</p>
-      
+
                                 <br />
-      
+
                                 <strong>If disabled, breaks federation with PeerTube instances < 2.1</strong>
                               </ng-container>
                             </ng-template>
                           </my-peertube-checkbox>
                         </div>
                       </ng-container>
-      
+
                       <ng-container formGroupName="hls">
                         <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
                           <my-peertube-checkbox
@@ -802,14 +802,14 @@
                             <ng-template ptTemplate="help">
                               <ng-container i18n>
                                 <strong>Requires ffmpeg >= 4.1</strong>
-      
+
                                 <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:</p>
                                 <ul>
                                   <li>Resolution change is smoother</li>
                                   <li>Faster playback especially with long videos</li>
                                   <li>More stable playback (less bugs/infinite loading)</li>
                                 </ul>
-      
+
                                 <p>If you also enabled WebTorrent support, it will multiply videos storage by 2</p>
                               </ng-container>
                             </ng-template>
@@ -819,7 +819,7 @@
 
                       <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
                         <label i18n>Resolutions to generate per enabled format</label>
-        
+
                         <div class="ml-2 mt-2 d-flex flex-column">
                           <ng-container formGroupName="resolutions">
                             <div class="form-group" *ngFor="let resolution of resolutions">
@@ -924,7 +924,7 @@
 
                     <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() }">
                       <label i18n for="liveMaxDuration">Max live duration</label>
-                      <div class="peertube-select-container">
+                      <div>
                         <ng-select
                           labelForId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"
                           bindLabel="label" bindValue="value"
