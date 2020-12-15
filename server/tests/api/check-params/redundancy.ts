@@ -27,7 +27,7 @@ describe('Test server redundancy API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(80000)
 
     servers = await flushAndRunMultipleServers(2)
 
