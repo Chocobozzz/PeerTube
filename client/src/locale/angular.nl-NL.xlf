@@ -1086,7 +1086,7 @@ Geen resultaten gevonden</target>
       </trans-unit>
       <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="translated">De <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>naam van je exemplaar van PeerTube kiezen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>een beschrijving instellen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, duidelijk maken <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>wie je bent <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, waarom <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>je je exemplaar van PeerTube hebt aangemaakt <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> en <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>hoe lang <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je plant <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ze te onderhouden <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is heel belangrijk voor bezoekers om te begrijpen op welk soort exemplaar van PeerTube ze zich bevinden. </target>
+        <target state="translated">Het uitzoeken van <x id="START_TAG_STRONG"/> een naam voor je exemplaar van PeerTube<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>het toevoegen van een beschrijving<x id="CLOSE_TAG_STRONG"/>, uitleggen <x id="START_TAG_STRONG"/>wie je bent<x id="CLOSE_TAG_STRONG"/>, waarom <x id="START_TAG_STRONG"/>je dit exemplaar van peertube hebt gemaakt<x id="CLOSE_TAG_STRONG"/> en <x id="START_TAG_STRONG"/>hoe lang<x id="CLOSE_TAG_STRONG"/> je van plan bent <x id="START_TAG_STRONG"/>deze te onderhouden<x id="CLOSE_TAG_STRONG"/> is van groot belang voor bezoekers om te begrijpen op wat voor soort exemplaar van peertube ze zich bevinden. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="2a94cfa351109b958a00ee927cd87ada8da44c1e" datatype="html">
@@ -1131,7 +1131,7 @@ Geen resultaten gevonden</target>
       </trans-unit>
       <trans-unit id="de688f72fc745cc8481a5e9cc70b8ca9e6f41e2a" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target state="translated">Hoe lang je je exemplaar van PeerTube plant te onderhouden</target>
+        <target state="translated">Hoe lang je jou exemplaar van PeerTube van plan bent te onderhouden</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="af60a062ecc7c70b278bdb3ba7ad0147abfecf0a" datatype="html">
@@ -1141,7 +1141,7 @@ Geen resultaten gevonden</target>
       </trans-unit>
       <trans-unit id="c69c1bd027bae555557a48123a26d770a93ee473" datatype="html">
         <source>How you will moderate your instance</source>
-        <target state="translated">Hoe je je exemplaar van PeerTube gaat modereren</target>
+        <target state="translated">Hoe je jou exemplaar van PeerTube gaat modereren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c" datatype="html">
@@ -4894,7 +4894,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="0b68f86015522b0dbd374822caefe74a62e3470f" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
-        <target state="translated">Eens je je account verwijdert kan je niet meer terug. Je zal de vraag krijgen deze beslissing te bevestigen.</target>
+        <target state="translated">Eens je jou account verwijdert kan je niet meer terug. Je zal de vraag krijgen deze beslissing te bevestigen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
