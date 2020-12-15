@@ -176,6 +176,32 @@ describe('Test stats (excluding redundancy)', function () {
     }
   })
 
+  it('Should have the correct AP stats', async function () {
+    this.timeout(60000)
+
+    for (let i = 0; i < 10; i++) {
+      await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
+    }
+
+    const res1 = await getStats(servers[1].url)
+    const first = res1.body as ServerStats
+
+    await waitJobs(servers)
+
+    const res2 = await getStats(servers[1].url)
+    const second: ServerStats = res2.body
+
+    expect(second.totalActivityPubMessagesWaiting).to.equal(0)
+    expect(second.totalActivityPubMessagesProcessed).to.be.greaterThan(first.totalActivityPubMessagesProcessed)
+
+    await wait(5000)
+
+    const res3 = await getStats(servers[1].url)
+    const third: ServerStats = res3.body
+
+    expect(third.activityPubMessagesProcessedPerSecond).to.be.lessThan(second.activityPubMessagesProcessedPerSecond)
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

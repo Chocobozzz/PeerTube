@@ -18,6 +18,10 @@ export interface ServerStats {
   totalInstanceFollowing: number
 
   videosRedundancy: VideosRedundancyStats[]
+
+  totalActivityPubMessagesProcessed: number
+  activityPubMessagesProcessedPerSecond: number
+  totalActivityPubMessagesWaiting: number
 }
 
 export interface VideosRedundancyStats {
