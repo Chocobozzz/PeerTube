@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class InstanceFollowService {
-  private static BASE_APPLICATION_URL = environment.production + '/api/v1/server'
+  private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/server'
 
   constructor (
     private authHttp: HttpClient,
