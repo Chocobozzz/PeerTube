@@ -29,6 +29,7 @@ languages=(
     ["ja"]="ja-JP"
     ["eu"]="eu-ES"
     ["ca"]="ca-ES"
+    ["gl"]="gl-ES"
     ["cs"]="cs-CZ"
     ["eo"]="eo"
     ["de"]="de-DE"

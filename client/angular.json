@@ -93,6 +93,10 @@
             "translation": "src/locale/angular.ca-ES.xlf",
             "baseHref": "/client/ca-ES/"
           },
+          "gl": {
+            "translation": "src/locale/angular.gl-ES.xlf",
+            "baseHref": "/client/gl-ES/"
+          },
           "cs": {
             "translation": "src/locale/angular.cs-CZ.xlf",
             "baseHref": "/client/cs-CZ/"
@@ -307,6 +311,7 @@
               "languages": [
                 "ar",
                 "ca-ES",
+                "gl-ES",
                 "cs-CZ",
                 "da-DK",
                 "de-DE",
