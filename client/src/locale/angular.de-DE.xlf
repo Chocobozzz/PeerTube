@@ -916,7 +916,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">Es wird eine E-Mail zum Zurücksetzen des Passworts an <x id="PH"/> gesendet. Der Link wird in einer Stunde ablaufen.</target>
+        <target state="translated">Es wird eine E-Mail zum Zurücksetzen des Passworts an <x id="PH" equiv-text="this.forgotPasswordEmail"/> gesendet. Der Link wird in einer Stunde ablaufen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -944,7 +944,7 @@
       </trans-unit>
       <trans-unit id="406b08e859ab668ff07056881dcc4390109d4e1d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}} "/> </source>
-        <target state="translated"><x id="INTERPOLATION"/><x id="ICU"/> </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/><x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}} "/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="26b0b148ff87e083300fa9ca213f8ada7fa6211d" datatype="html">
@@ -1090,7 +1090,7 @@
       </trans-unit>
       <trans-unit id="2a94cfa351109b958a00ee927cd87ada8da44c1e" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Wenn Sie Registrierungen erlauben wollen, legen Sie bitte fest, was<x id="START_TAG_STRONG"/> <x id="START_TAG_STRONG"/>Ihre Moderationsregeln<x id="CLOSE_TAG_STRONG"/> und <x id="START_TAG_STRONG"/>Instanzrichtlinien<x id="CLOSE_TAG_STRONG"/> sind, sowie die Kategorien und Sprachen, die Ihre Moderatoren sprechen. Auf diese Weise helfen Sie Nutzern, sich auf <x id="START_TAG_STRONG"/>der passenden<x id="CLOSE_TAG_STRONG"/> PeerTube Instanz zu registrieren. </target>
+        <target state="translated">Wenn Sie Registrierungen eröffnen wollen, entscheiden Sie bitte, was <x id="START_TAG_STRONG"/>Ihre Moderationsregeln<x id="CLOSE_TAG_STRONG"/> und <x id="START_TAG_STRONG"/>Instanzbedingungen<x id="CLOSE_TAG_STRONG"/> sind, sowie die Kategorien und Sprachen, die Ihre Moderatoren sprechen. Auf diese Weise helfen Sie den Nutzern, sich auf der <x id="START_TAG_STRONG"/>passenden<x id="CLOSE_TAG_STRONG"/> PeerTube-Instanz anzumelden. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
@@ -3305,7 +3305,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="fd7b8e728c25b616934661747224b1b2e7d9ea5c" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated"><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></target>
+        <target state="translated"><x id="ICU" equiv-text="{{abuse.countReportsForReporter, plural, =1 {1 Bericht} other {{{ abuse. countReportsForReporter }} Berichte}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="fe8634bd713368d7971877c0e09d1869f09c924d" datatype="html">
@@ -3392,7 +3392,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="da3ebfaee320ad7a8a41c75d6ee19e687f9b484d" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReportee, plural, =1 {1 report} other {{{ abuse.countReportsForReportee }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated"><x id="ICU"/><x id="START_TAG_SPAN"/><x id="CLOSE_TAG_SPAN"/></target>
+        <target state="translated"><x id="ICU" equiv-text="{{abuse.countReportsForReportee, plural, =1 {1 Bericht} other {{{ abuse. countReportsForReportee }} Berichte}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="bdd37f55632abc18fb1fbf95d4b3f5f89ce3237b" datatype="html">
@@ -3571,7 +3571,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005">
         <source><x id="INTERPOLATION" equiv-text="      {{ pagination.totalIt"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target><x id="INTERPOLATION"/> <x id="ICU"/> für " <x id="INTERPOLATION_1"/>" </target>
+        <target><x id="INTERPOLATION" equiv-text="      {{ pagination.totalIt"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {Ergebnis} other {Ergebnisse}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494">
@@ -3706,7 +3706,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="e8d0453dbe7338287c348e1043da4620c218e9c4" datatype="html">
         <source>No jobs found.</source>
-        <target state="translated">Keine Jobs gefunden</target>
+        <target state="translated">Keine Jobs gefunden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">94</context>
@@ -4449,7 +4449,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="0a1a7d6e04056d30bb85aca5bb8bd47ced098167" datatype="html">
         <source>Live streaming</source>
-        <target state="translated">Live streaming</target>
+        <target state="translated">Live Streaming</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">67</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">870</context></context-group>
       </trans-unit>
@@ -4604,7 +4604,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="05c5e2816638b3916627b407da27f08c4f0668d4" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, Plural, =1 {Bild im Cache} andere {Bilder im Cache}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1044</context></context-group>
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
@@ -4629,17 +4629,17 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">Schreiben sie CSS-Code direkt. Beispiel:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/> Prepend with <x id="START_EMPHASISED_TEXT"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT"/> to override styles. Example:<x id="LINE_BREAK"/><x id="LINE_BREAK"/><x id="START_TAG_PRE"/> #custom-css .logged-in-email <x id="INTERPOLATION"/> color: red; <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_PRE"/></target>
+        <target state="translated">Schreiben Sie direkt CSS-Code. Beispiel: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: Rot; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt; "/> Vorangestellt wird <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> um Stile außer Kraft zu setzen. Beispiel:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css . eingeloggt-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1090</context></context-group>
       </trans-unit>
       <trans-unit id="3128766f8e9bac2f95f5413fdb810e90c6084ef0" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
-        <target state="new"> It seems like the configuration is invalid. Please search for potential errors in the different tabs. </target>
+        <target state="translated">Es scheint, dass die Konfiguration ungültig ist. Bitte suchen Sie in den verschiedenen Registerkarten nach möglichen Fehlern.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1128</context></context-group>
       </trans-unit>
       <trans-unit id="1411138433f379dbe80e0682284b2384d8e390cb" datatype="html">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="new"> You cannot allow live replay if you don't enable transcoding. </target>
+        <target state="translated">Sie können keine Live-Wiedergabe zulassen, wenn Sie die Transcodierung nicht aktivieren.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1132</context></context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -5072,12 +5072,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7040375308762081154" datatype="html">
         <source>My video channels</source>
-        <target state="new">My video channels</target>
+        <target state="translated">Meine Video-Kanäle</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="7418836785553125957" datatype="html">
         <source>Create a new video channel</source>
-        <target state="new">Create a new video channel</target>
+        <target state="translated">Einen neuen Videokanal erstellen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="8828123061564507501" datatype="html">
@@ -5174,12 +5174,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
         <source>Verify account via email</source>
-        <target state="new">Verify account via email</target>
+        <target state="translated">Konto per E-Mail verifizieren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="9197112111252826229" datatype="html">
         <source>Ask to send an email to verify you account</source>
-        <target state="new">Ask to send an email to verify you account</target>
+        <target state="translated">Aufforderung zum Senden einer E-Mail zur Verifizierung Ihres Kontos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="bd2edf99dd6562385ccec19a7ab2d1898e626605">
@@ -5226,7 +5226,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>? It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">Möchten Sie wirklich <x id="PH"/> löschen? Dies wird <x id="PH_1"/> Videos löschen, die mit diesem Kanal hochgeladen wurden. Es wird nicht möglich sein, einen Kanal mit dem gleichen Namen (<x id="PH_2"/>) neu zu erstellen!</target>
+        <target state="translated">Wollen Sie wirklich <x id="PH" equiv-text="videoChannel.displayName"/> löschen? Es löscht <x id="PH_1" equiv-text="videoChannel.videosCount"/> Videos, die in diesem Kanal hochgeladen wurden, und Sie können keinen weiteren Kanal mit demselben Namen (<x id="PH_2" equiv-text="videoChannel.name"/>) erstellen!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="d5f0913d08d01648d7e6165c168a99ccd06d1f4c" datatype="html">
@@ -5301,7 +5301,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2494835943815843060" datatype="html">
         <source>Videos that have the most likes.</source>
-        <target state="new">Videos that have the most likes.</target>
+        <target state="translated">Videos mit den meisten Likes.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-most-liked.component.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="5523952d0300c96cfba2ec5a693c95f923e90c40">
@@ -5326,7 +5326,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2c7cd7912f61e528f6b38d4bc28733135931042b" datatype="html">
         <source>Network</source>
-        <target state="new">Network</target>
+        <target state="translated">Netzwerk</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="fc978c97e261ee6494db916622339aedb633da3a">
@@ -5336,7 +5336,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="33a9a4343ee46c354d8b716167990efeea654382" datatype="html">
         <source>Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source>
-        <target state="new">Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
+        <target state="translated">Follower-Instanzen (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5344,7 +5344,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="268584471c7cdb176fdcd85015f668a7620deea3" datatype="html">
         <source>Followings instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target state="new">Followings instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <target state="translated">Folgende Instanzen (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5464,7 +5464,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="ccbfd56f7d72ca5055b86a35f66b7a6d0a250d03" datatype="html">
         <source>It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="new"> It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Es ist freie und quelloffene Software, die unter der <x id="START_LINK"/>AGPLv3-Lizenz<x id="CLOSE_LINK"/> steht. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7b85d0debc419e6c9c390ce02686b57d256cd139" datatype="html">
@@ -5614,7 +5614,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="144d423719b19c9f99ee6aaff85aed693d5cdd97" datatype="html">
         <source>Show full list</source>
-        <target state="new">Show full list</target>
+        <target state="translated">Ganze Liste zeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">12</context>
@@ -5626,7 +5626,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="9a9dcdc62c7e0048f4f4702b0327dda350341abc" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="new">This instance is not following any other.</target>
+        <target state="translated">Diese Instanz folgt keiner Anderen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
@@ -5641,12 +5641,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target state="new">About this instance's network</target>
+        <target state="translated">Über das Netzwerk dieser Instanz</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
         <source>Link copied</source>
-        <target state="new">Link copied</target>
+        <target state="translated">Link kopiert</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="3d2fb0ff92d3dd1e6040cd79b2a60edac6dea2da" datatype="html">
@@ -5747,7 +5747,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4b84dbfc388651c74c77bba7ee0078b5714baf00" datatype="html">
         <source>Channel name cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="new"> Channel name cannot be the same as your account name. You can click on the first step to update your account name. </target>
+        <target state="translated">Der Kanalname kann nicht mit Ihrem Kontonamen identisch sein. Sie können auf den ersten Schritt klicken, um Ihren Kontonamen zu aktualisieren.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="095664da04cb19afa1c2bb5992db6e253a664dd6" datatype="html">
@@ -5757,7 +5757,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="76118692a327ca6158811d5c3f4e9eeea30dc8b1" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="new"> Video uploads are disabled on this instance, hence your account won't be able to upload videos. </target>
+        <target state="translated">Video-Uploads sind auf dieser Instanz deaktiviert, daher können in Ihrem Konto keine Videos hochgeladen werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -5812,7 +5812,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="e4965e47ed9cd6553d9a87a5112871a2dcbbe132" datatype="html">
         <source>Display all videos (private, unlisted or not yet published)</source>
-        <target state="new">Display all videos (private, unlisted or not yet published)</target>
+        <target state="translated">Alle Videos anzeigen (privat, nicht aufgelistet oder noch nicht veröffentlicht)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">40</context></context-group>
@@ -5921,32 +5921,32 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="931255636742351800" datatype="html">
         <source>No limit</source>
-        <target state="new">No limit</target>
+        <target state="translated">Kein Limit</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="5250062810079582285" datatype="html">
         <source>1 hour</source>
-        <target state="new">1 hour</target>
+        <target state="translated">1 Stunde</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="8662356672298904015" datatype="html">
         <source>3 hours</source>
-        <target state="new">3 hours</target>
+        <target state="translated">3 Stunden</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="1794624538833178491" datatype="html">
         <source>5 hours</source>
-        <target state="new">5 hours</target>
+        <target state="translated">5 Stunden</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="4941148355486671862" datatype="html">
         <source>10 hours</source>
-        <target state="new">10 hours</target>
+        <target state="translated">10 Stunden</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="1618463615802675111" datatype="html">
         <source>threads</source>
-        <target state="new">threads</target>
+        <target state="translated">Threads</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -5954,7 +5954,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="593234948551881507" datatype="html">
         <source>thread</source>
-        <target state="new">thread</target>
+        <target state="translated">Thread</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">142</context>
@@ -5967,7 +5967,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="new">You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</target>
+        <target state="translated">Sie haben die Anmeldung aktiviert: Wir haben das Kontrollkästchen "Neue Videos automatisch blockieren" im Abschnitt "Videos" direkt darunter aktiviert.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">465</context></context-group>
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
@@ -6511,22 +6511,22 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3164845764519833078" datatype="html">
         <source>debug</source>
-        <target state="new">debug</target>
+        <target state="translated">Debug</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target state="new">info</target>
+        <target state="translated">Info</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
-        <target state="new">warning</target>
+        <target state="translated">Warnung</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="new">error</target>
+        <target state="translated">Fehler</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
@@ -6572,7 +6572,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7098180453085889026" datatype="html">
         <source>Blocked videos</source>
-        <target state="new">Blocked videos</target>
+        <target state="translated">Gesperrte Videos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
@@ -6906,7 +6906,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8920809083620698740" datatype="html">
         <source>avatar</source>
-        <target state="new">avatar</target>
+        <target state="translated">Avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -7002,7 +7002,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6658000829978978023" datatype="html">
         <source>Applications</source>
-        <target state="new">Applications</target>
+        <target state="translated">Anwendungen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">60</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
@@ -7025,7 +7025,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
         <source>Change ownership</source>
-        <target state="new">Change ownership</target>
+        <target state="translated">Besitzer ändern</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="3380608219513805292">
@@ -7040,7 +7040,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="73022f1676784c4f9b8cdbb322e52b02ccc800b7" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">Änderung des Besitzers</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8197117721861453263">
@@ -7118,22 +7118,22 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5983006734882925930" datatype="html">
         <source>My video history</source>
-        <target state="new">My video history</target>
+        <target state="translated">Mein Video-Verlauf</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="8181077408762380407" datatype="html">
         <source>Channels</source>
-        <target state="new">Channels</target>
+        <target state="translated">Kanäle</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="8936704404804793618" datatype="html">
         <source>Videos</source>
-        <target state="new">Videos</target>
+        <target state="translated">Videos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="1823843876735462104" datatype="html">
         <source>Playlists</source>
-        <target state="new">Playlists</target>
+        <target state="translated">Playlists</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="7916647920967632052" datatype="html">
@@ -7144,7 +7144,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
-        <target state="new">Maximize editor</target>
+        <target state="translated">Editor maximieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -7152,7 +7152,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source>
-        <target state="new">Exit maximized editor</target>
+        <target state="translated">Beenden des maximierten Editors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -7257,7 +7257,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="error.text"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="translated">Referenzen des OAuth-Clients können nicht abgerufen werden: <x id="PH"/>. Stellen Sie sicher, dass PeerTube korrekt konfiguriert ist (Ordner config/), speziell der Abschnitt "webserver".</target>
+        <target state="translated">Referenzen des OAuth-Clients können nicht abgerufen werden: <x id="PH" equiv-text="error.text"/>. Stellen Sie sicher, dass PeerTube korrekt konfiguriert ist (Ordner config/), speziell der Abschnitt "webserver".</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544">
@@ -7292,7 +7292,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4ecb8d97ebb2f37c5b410afccbb78003f75ac35c" datatype="html">
         <source>ON <x id="INTERPOLATION"/></source>
-        <target state="new">ON <x id="INTERPOLATION"/></target>
+        <target state="translated">AN <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="5633144232269377096" datatype="html">
@@ -7340,12 +7340,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5073473933031004097" datatype="html">
         <source>This week</source>
-        <target state="new">This week</target>
+        <target state="translated">Diese Woche</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="842657237693374355" datatype="html">
         <source>This month</source>
-        <target state="new">This month</target>
+        <target state="translated">Diesen Monat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.ts</context><context context-type="linenumber">119</context></context-group>
       </trans-unit>
       <trans-unit id="4463380307954693363" datatype="html">
@@ -7511,12 +7511,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
         <source>Abuse reports</source>
-        <target state="new">Abuse reports</target>
+        <target state="translated">Missbrauchsberichte</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
-        <target state="new">Settings</target>
+        <target state="translated">Einstellungen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="9178182467454450952">
@@ -7721,7 +7721,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <target state="translated">Der Kanalname sollte klein geschrieben werden und darf nur alphanumerische Zeichen, Punkte und Unterstriche enthalten.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056">
@@ -7927,8 +7927,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8c9434491bf113074890c9c975d89d5f7727d2d9" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature. </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature.
-</target>
+        <target state="translated">Siehe <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>die Dokumentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> um zu erfahren, wie Sie die PeerTube-Live-Streaming-Funktion nutzen können. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-documentation-link.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -7966,30 +7965,30 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="d8ae45f6eb0e2d78efd70b4e80e132784aa65cf1" datatype="html">
         <source>Live information</source>
-        <target state="new">Live information</target>
+        <target state="translated">Live-Übertragung Informationen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="fc840cbc744829dee0c0d50e8d32e45beb731c36" datatype="html">
         <source>Live RTMP Url</source>
-        <target state="new">Live RTMP Url</target>
+        <target state="translated">Live-Übertragung RTMP-URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">19</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">218</context></context-group>
       </trans-unit>
       <trans-unit id="39d142e6915c4f2d0f9b45e76c176eec6a48c1c1" datatype="html">
         <source>Live stream key</source>
-        <target state="new">Live stream key</target>
+        <target state="translated">Live-Übertragung Stream Key</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="930826dd8818902aaf1300253dbee4717ceb35ee" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="new">⚠️ Never share your stream key with anyone.</target>
+        <target state="translated">⚠️ Geben Sie Ihren Stream-Schlüssel niemals an Dritte weiter.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="5b5759ae8d3274fdc904e1ef5bb4a52c2251de66" datatype="html">
         <source>Permanent live</source>
-        <target state="new">Permanent live</target>
+        <target state="translated">Permanente Live-Übertragung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">10</context>
@@ -7997,7 +7996,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6bf2a2b88df254434e6a415bfd44c8efb5fe40a7" datatype="html">
         <source>Replay will be saved</source>
-        <target state="new">Replay will be saved</target>
+        <target state="translated">Wiederholung wird gespeichert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">11</context>
@@ -8055,7 +8054,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2389667090302909529" datatype="html">
         <source>A tag should be more than 1 and less than 30 characters long.</source>
-        <target state="new">A tag should be more than 1 and less than 30 characters long.</target>
+        <target state="translated">Ein Tag sollte mehr als 1 und weniger als 30 Zeichen lang sein.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">67</context>
@@ -8587,7 +8586,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2365286519320230773" datatype="html">
         <source>Hide any content from that user from you.</source>
-        <target state="new">Hide any content from that user from you.</target>
+        <target state="translated">Verstecken Sie alle Inhalte dieses Benutzers vor Ihnen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">298</context></context-group>
       </trans-unit>
       <trans-unit id="4043508901590508211">
@@ -8627,7 +8626,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
         <source>Remove comments made by this account on your videos.</source>
-        <target state="new">Remove comments made by this account on your videos.</target>
+        <target state="translated">Entfernen Sie Kommentare, die von diesem Konto in Ihren Videos gemacht wurden.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">322</context></context-group>
       </trans-unit>
       <trans-unit id="81452583525574033">
@@ -8637,7 +8636,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
         <source>Hide any content from that user from you, your instance and its users.</source>
-        <target state="new">Hide any content from that user from you, your instance and its users.</target>
+        <target state="translated">Verstecken Sie alle Inhalte dieses Benutzers vor Ihnen, Ihrer Instanz und deren Benutzern.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">334</context></context-group>
       </trans-unit>
       <trans-unit id="884942914962310163">
@@ -8647,7 +8646,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
         <source>Show this user's content to the users of this instance again.</source>
-        <target state="new">Show this user's content to the users of this instance again.</target>
+        <target state="translated">Zeigt den Inhalt dieses Benutzers den Benutzern dieser Instanz wieder an.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="3191211873505538654">
@@ -8657,7 +8656,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
         <source>Hide any content from that instance from you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance from you, your instance and its users.</target>
+        <target state="translated">Verstecken Sie alle Inhalte dieser Instanz vor Ihnen, Ihrer Instanz und deren Benutzern.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">352</context></context-group>
       </trans-unit>
       <trans-unit id="5325628963747139770">
@@ -8677,7 +8676,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target state="new">Remove comments made by this account from your instance.</target>
+        <target state="translated">Entfernen Sie Kommentare, die von diesem Konto erstellt wurden, aus Ihrer Instanz.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">369</context></context-group>
       </trans-unit>
       <trans-unit id="6746743143272021955" datatype="html">
@@ -8907,7 +8906,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1979da7460819153e11d2078244645d94291b69c" datatype="html">
         <source>Copy</source>
-        <target state="new">Copy</target>
+        <target state="translated">Kopieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-toggle-hidden.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8957,7 +8956,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
         <source>Display live information</source>
-        <target state="new">Display live information</target>
+        <target state="translated">Live-Übertragung Informationen anzeigen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">161</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">278</context></context-group>
       </trans-unit>
@@ -8983,7 +8982,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8272123190776748811" datatype="html">
         <source>You need to be &lt;a href="/login"&gt;logged in&lt;/a&gt; to rate this video.</source>
-        <target state="new">You need to be &lt;a href="/login"&gt;logged in&lt;/a&gt; to rate this video.</target>
+        <target state="translated">Sie müssen &lt;a href="/login"&gt;eingeloggt&lt;/a&gt; sein, um dieses Video zu bewerten.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">220</context></context-group>
       </trans-unit>
       <trans-unit id="4503408361537553733" datatype="html">
@@ -9099,7 +9098,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="a2adc8b3bb63e13ff7adf65469f356b692bd294b" datatype="html">
         <source>LIVE ENDED</source>
-        <target state="new">LIVE ENDED</target>
+        <target state="translated">Live-Übertragung beendet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="2439066254855913806">
@@ -9124,7 +9123,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8312101634344200207" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> viewers</source>
-        <target state="new"><x id="PH" equiv-text="this.views"/> viewers</target>
+        <target state="translated"><x id="PH" equiv-text="this.views"/> Betrachter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">211</context>
@@ -9132,7 +9131,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7756087706411154095" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> views</source>
-        <target state="new"><x id="PH" equiv-text="this.views"/> views</target>
+        <target state="translated"><x id="PH" equiv-text="this.views"/> Aufrufe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">214</context>
@@ -9146,7 +9145,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
+        <target state="translated">Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> von <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
@@ -9352,12 +9351,12 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
         <source>Your video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">Ihr Videokontingent wird mit diesem Video überschritten (Videogröße: <x id="PH"/>, genutzt: <x id="PH_1"/>, Kontingent: <x id="PH_2"/>)</target>
+        <target state="translated">Ihr Videokontingent wurde mit diesem Video überschritten ( Videogröße: <x id="PH" equiv-text="videoSizeBytes"/>, verwendet: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, Quote: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
         <source>Your daily video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="translated">Ihr tägliches Videokontingent wird mit diesem Video überschritten (Videogröße: <x id="PH"/>, genutzt: <x id="PH_1"/>, Kontingent: <x id="PH_2"/>)</target>
+        <target state="translated">Ihr tägliches Videokontingent wurde mit diesem Video überschritten ( Videogröße: <x id="PH" equiv-text="videoSizeBytes"/>, verwendet: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">309</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119">
@@ -9522,7 +9521,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="642534594356440342" datatype="html">
         <source>Feed</source>
-        <target state="new">Feed</target>
+        <target state="translated">Feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -9530,7 +9529,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3392372077636861449" datatype="html">
         <source>Feed URL copied</source>
-        <target state="new">Feed URL copied</target>
+        <target state="translated">Feed URL kopiert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -9545,7 +9544,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="186236568870281953" datatype="html">
         <source>History</source>
-        <target state="new">History</target>
+        <target state="translated">Verlauf</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
