@@ -185,12 +185,12 @@ describe('Test stats (excluding redundancy)', function () {
       }
     })
 
+    const res1 = await getStats(servers[1].url)
+    const first = res1.body as ServerStats
+
     for (let i = 0; i < 10; i++) {
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
     }
-
-    const res1 = await getStats(servers[1].url)
-    const first = res1.body as ServerStats
 
     await waitJobs(servers)
 
