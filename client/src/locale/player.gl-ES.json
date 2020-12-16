@@ -7,13 +7,17 @@
     "peer": "parceiro",
     "Go to the video page": "Ir a páxina do vídeo",
     "Settings": "Axustes",
-    "Uses P2P, others may know you are watching this video.": "Utiliza P2P, outras poderían saber que estás a ver este vídeo.",
+    "Watching this video may reveal your IP address to others.": "Watching this video may reveal your IP address to others.",
     "Copy the video URL": "Copiar URL do vídeo",
     "Copy the video URL at the current time": "Copiar URL do vídeo na posición actual",
     "Copy embed code": "Copiar código de inscrustado",
     "Copy magnet URI": "Copiar URI magnet",
     "Total downloaded: ": "Total descargado: ",
     "Total uploaded: ": "Total subido: ",
+    "From servers: ": "From servers: ",
+    "From peers: ": "From peers: ",
+    "Normal mode": "Normal mode",
+    "Theater mode": "Theater mode",
     "Audio Player": "Reprodutor de audio",
     "Video Player": "Reprodutor de vídeo",
     "Play": "Reproducir",
@@ -96,5 +100,6 @@
     "Caption Settings Dialog": "Diálogo de axustes dos comentarios",
     "Beginning of dialog window. Escape will cancel and close the window.": "Inicio da xanela de diálogo. Escape cancelará e pechará a xanela.",
     "End of dialog window.": "Fin da xanela de diálogo.",
-    "{1} is loading.": "{1} está a cargarse."
+    "{1} is loading.": "{1} está a cargarse.",
+    "Uses P2P, others may know you are watching this video.": "Utiliza P2P, outras poderían saber que estás a ver este vídeo."
 }
