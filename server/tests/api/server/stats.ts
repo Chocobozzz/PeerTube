@@ -135,7 +135,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should correctly count video file sizes if transcoding is enabled', async function () {
-    this.timeout(20000)
+    this.timeout(60000)
 
     await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
       transcoding: {
@@ -179,6 +179,12 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct AP stats', async function () {
     this.timeout(60000)
 
+    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+      transcoding: {
+        enabled: false
+      }
+    })
+
     for (let i = 0; i < 10; i++) {
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
     }
@@ -191,7 +197,6 @@ describe('Test stats (excluding redundancy)', function () {
     const res2 = await getStats(servers[1].url)
     const second: ServerStats = res2.body
 
-    expect(second.totalActivityPubMessagesWaiting).to.equal(0)
     expect(second.totalActivityPubMessagesProcessed).to.be.greaterThan(first.totalActivityPubMessagesProcessed)
 
     await wait(5000)
@@ -199,6 +204,7 @@ describe('Test stats (excluding redundancy)', function () {
     const res3 = await getStats(servers[1].url)
     const third: ServerStats = res3.body
 
+    expect(third.totalActivityPubMessagesWaiting).to.equal(0)
     expect(third.activityPubMessagesProcessedPerSecond).to.be.lessThan(second.activityPubMessagesProcessedPerSecond)
   })
 
