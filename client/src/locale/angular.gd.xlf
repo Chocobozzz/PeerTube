@@ -5,13 +5,13 @@
     <body>
       <trans-unit id="f50983ee112befc1afddea5c570283db67e20fed" datatype="html">
         <source>Channel avatar</source>
-        <target state="new">Channel avatar</target>
+        <target state="translated">Avatar an t-seanail</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="879fef27271d8247d791381cf1f9bb0eb8974166" datatype="html">
         <source>Account avatar</source>
-        <target state="new">Account avatar</target>
+        <target state="translated">Avatar a’ chunntais</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">7</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">23</context></context-group>
@@ -23,83 +23,42 @@
       </trans-unit>
       <trans-unit id="1cff8e38c81055fa0ae7dbc80a7a0c5c39bbc263" datatype="html">
         <source><x id="INTERPOLATION"/> published a new video: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a new video: 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Dh’fhoillsich <x id="INTERPOLATION"/> video ùr: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5f61f85f3c9e196f7044fec4dfe165b081e14a3f" datatype="html">
         <source>The notification concerns a video now unavailable</source>
-        <target state="new">
-            The notification concerns a video now unavailable
-          </target>
+        <target state="translated">Tha am brath mu video nach eil ann tuilleadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="03ccba66e74e25303828fc37062dda862ec272dc" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been unblocked </source>
-        <target state="new">
-          Your video 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblocked
-        
-        </target>
+        <target state="translated">Chaidh a’ video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> agad a neo-bhacadh </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="b1393385d75d42dfb7e893e3e99290bcc697e791" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been blocked </source>
-        <target state="new">
-          Your video 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blocked
-        
-        </target>
+        <target state="translated">Chaidh a’ video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> agad a bhacadh </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="552e90b955a7121d58f6e5a38b68c7e90f5ed90c" datatype="html">
         <source><x id="START_LINK"/>A new video abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new video abuse
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Chaidh <x id="START_LINK"/>mì-ghnàthachadh video ùr<x id="CLOSE_LINK"/> a chruthachadh air video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="c039b9ff89810152d8c0006979d3542a122cd286" datatype="html">
         <source><x id="START_LINK"/>A new comment abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new comment abuse
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.comment.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Chaidh <x id="START_LINK"/>mì-ghnàthachadh beachd ùr<x id="CLOSE_LINK"/> a chruthachadh air video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="bfe60e77cfae17a8719a5fb422fb7e4b2bcc83c2" datatype="html">
         <source><x id="START_LINK"/>A new account abuse<x id="CLOSE_LINK"/> has been created on account <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new account abuse
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on account 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.account.displayName }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Chaidh <x id="START_LINK"/>mì-ghnàthachadh cunntais ùr<x id="CLOSE_LINK"/> a chruthachadh air cunntas <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="285ef550cb17086e949266777312a1884bd7d739" datatype="html">
         <source><x id="START_LINK"/>A new abuse<x id="CLOSE_LINK"/> has been created </source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new abuse
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created
-        
-        </target>
+        <target state="translated">Chaidh <x id="START_LINK"/>mì-ghnàthachadh ùr<x id="CLOSE_LINK"/> a chruthachadh </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="680ba11d9548df295024d7f8ab7b816580725d5d" datatype="html">
@@ -118,43 +77,22 @@
       </trans-unit>
       <trans-unit id="3f8e1a007a869471c5ab6e9b6149165ecc26e4ad" datatype="html">
         <source><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Abuse 
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has a new message
-        
-        </target>
+        <target state="translated">Tha teachdaireachd ùr aig <x id="START_LINK"/>mì-ghnàthachadh <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="new">
-          The recently added video 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>automatically blocked
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Chaidh a’ video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> a chuireadh ris o chionn ghoirid a <x id="START_LINK_1"/>bhacadh gu fèin-obrachail<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> commented your video <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> commented your video 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Chuir <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> beachd ris a’ video <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/> agad</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="4d2311a5156bd322cc7e2ebafcf6063ba8232e63" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
-        <target state="new">
-            The notification concerns a comment now unavailable
-          </target>
+        <target state="translated">Tha am brath mu bheachd nach eil ann tuilleadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="b187dd5f406f4195b326ab01fa81f823025821b9" datatype="html">
@@ -186,13 +124,7 @@
       </trans-unit>
       <trans-unit id="55c81d14a4e11004f0bcda5a47575f316e85e43e" datatype="html">
         <source>User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> registered on your instance </source>
-        <target state="new">
-          User 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> registered on your instance
-        
-        </target>
+        <target state="translated">Chlàraich cleachdaiche <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> air an ionstans agad </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="0f146c0a4152eb93ec2ad119e1dec613864d64c6" datatype="html">
@@ -243,19 +175,17 @@
       </trans-unit>
       <trans-unit id="d60604b8e42b3e6f9612ae780b2547b537250849" datatype="html">
         <source>The notification points to content now unavailable</source>
-        <target state="new"> The notification points to content now unavailable </target>
+        <target state="translated">Tha am brath a’ tomhadh ri susbaint ach eil ann tuilleadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">190</context></context-group>
       </trans-unit>
       <trans-unit id="3fb9a5f7268114445d8c109a8f48102e93471f5a" datatype="html">
         <source>Change your avatar</source>
-        <target state="new">Change your avatar</target>
+        <target state="translated">Atharraich an t-avatar agad</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action.label }}"/> </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ action.label }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566" datatype="html">
@@ -286,31 +216,24 @@
       </trans-unit>
       <trans-unit id="020d5da7c3f4726e3623587a05a11f00e1d40409" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="new">
-          Your report will be sent to moderators of 
-          <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (
-          <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
-        
-        </target>
+        <target state="translated">Thèid do ghearan a chuir dha na maoir aig <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> ’S a shìneadh air adhart gu tùs a’ video (<x id="INTERPOLATION_1"/>) cuideachd<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="04f47b9519b96ac834a111c0e113d18c77d177de" datatype="html">
         <source>Please describe the issue...</source>
-        <target state="new">Please describe the issue...</target>
+        <target state="translated">Mìnich an trioblaid…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">80</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="8efba03f22550a671ee2c2c6dfd1ff03ea047700" datatype="html">
         <source>Search playlists</source>
-        <target state="new">Search playlists</target>
+        <target state="translated">Lorg sna liostaichean-cluich</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="19fc45e7e0cab63a8c4422ea7158bf5c6228cee4" datatype="html">
         <source>Create a private playlist</source>
-        <target state="new">Create a private playlist</target>
+        <target state="translated">Cruthaich liosta-chluich phrìobhaideach ùr</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9" datatype="html">
@@ -337,12 +260,12 @@
       </trans-unit>
       <trans-unit id="e53246788ffa2660a170aa859691a55576df2e6c" datatype="html">
         <source>video</source>
-        <target state="new">video</target>
+        <target state="translated">video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
         <source>subtitles</source>
-        <target state="new">subtitles</target>
+        <target state="translated">fo-thiotalan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
@@ -352,21 +275,19 @@
       </trans-unit>
       <trans-unit id="be745b3dc0df310871766eb6c8f78c3ce652a2b4" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/> </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">61</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="01504bc3847894e0816ec486648854d3835f91b0" datatype="html">
         <source>Video stream</source>
-        <target state="new">Video stream</target>
+        <target state="translated">Sruth video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="697b93fd14fd3c85be79056c6d7f459da204eff1" datatype="html">
         <source>Audio stream</source>
-        <target state="new">Audio stream</target>
+        <target state="translated">Sruth fuaime</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c" datatype="html">
@@ -381,13 +302,13 @@
       </trans-unit>
       <trans-unit id="1006562256968398209" datatype="html">
         <source>video</source>
-        <target state="new">video</target>
+        <target state="translated">video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">48</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
-        <target state="new">subtitles</target>
+        <target state="translated">fo-thiotalan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="da44efc7b658c318651866454d258bbbe57ff21c" datatype="html">
@@ -423,26 +344,24 @@
       </trans-unit>
       <trans-unit id="448d436df053141260523149173073ccbb0259f9" datatype="html">
         <source>Report video "<x id="INTERPOLATION"/>"</source>
-        <target state="new">Report video "
-          <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"
-        </target>
+        <target state="translated">Dèan gearan mun video “<x id="INTERPOLATION"/>”</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="97916f2928694b8d574b6f052b93e54565ed9823" datatype="html">
         <source>What is the issue?</source>
-        <target state="new">What is the issue?</target>
+        <target state="translated">Dè an trioblaid?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="297603f796b0d287ac02b80d5aca6156c91a8fea" datatype="html">
         <source>This will ask remote instances to delete it</source>
-        <target state="new">This will ask remote instances to delete it</target>
+        <target state="translated">Iarraidh sinn air na h-ionstansan cèine gun dèid a sguabadh às</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="a5065c0f26fbd00b6f6ac0cf948535a44fffbd45" datatype="html">
         <source>Blocking this live will automatically terminate the live stream.</source>
-        <target state="new"> Blocking this live will automatically terminate the live stream. </target>
+        <target state="translated">Ma bhacas tu seo gu beò, cuiridh sin crìoch air an t-sruth bheò gu fèin-obrachail.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="0cd0f27936731dabfd8d89277b781d5dd664bc89" datatype="html">
@@ -974,12 +893,7 @@
       </trans-unit>
       <trans-unit id="6b6240483bee515c1e20c0c21fc6096e8cdd08e9" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK"/>contact an administrator<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-    Sorry but there was an issue with the external login process. Please 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-  
-        </target>
+        <target state="translated">Tha sinn duilich ach bha duilgheadas ann le clàradh a-steach on taobh a-muigh. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453" datatype="html">
