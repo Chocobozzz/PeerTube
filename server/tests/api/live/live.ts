@@ -116,6 +116,8 @@ describe('Test live', function () {
         expect(video.channel.name).to.equal(servers[0].videoChannel.name)
         expect(video.channel.host).to.equal(servers[0].videoChannel.host)
 
+        expect(video.isLive).to.be.true
+
         expect(video.nsfw).to.be.false
         expect(video.waitTranscoding).to.be.false
         expect(video.name).to.equal('my super live')
@@ -267,6 +269,20 @@ describe('Test live', function () {
 
       const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
       await testFfmpegStreamError(command, false)
+    })
+
+    it('Should list this live now someone stream into it', async function () {
+      for (const server of servers) {
+        const res = await getVideosList(server.url)
+
+        expect(res.body.total).to.equal(1)
+        expect(res.body.data).to.have.lengthOf(1)
+
+        const video: Video = res.body.data[0]
+
+        expect(video.name).to.equal('user live')
+        expect(video.isLive).to.be.true
+      }
     })
 
     it('Should not allow a stream on a live that was blacklisted', async function () {

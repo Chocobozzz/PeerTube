@@ -1602,6 +1602,7 @@ export class VideoModel extends Model {
       'likes',
       'dislikes',
       'remote',
+      'isLive',
       'url',
       'commentsEnabled',
       'downloadEnabled',
