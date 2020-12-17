@@ -5,7 +5,7 @@
     <body>
       <trans-unit id="f50983ee112befc1afddea5c570283db67e20fed" datatype="html">
         <source>Channel avatar</source>
-        <target state="translated">Awatar Kanału</target>
+        <target state="translated">Awatar kanału</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
@@ -38,12 +38,12 @@
       </trans-unit>
       <trans-unit id="03ccba66e74e25303828fc37062dda862ec272dc" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been unblocked </source>
-        <target state="translated">Twoje wideo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> zostało odblokowane </target>
+        <target state="translated">Twój film <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> został odblokowany </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="b1393385d75d42dfb7e893e3e99290bcc697e791" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been blocked </source>
-        <target state="translated">Twoje wideo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> zostało zablokowane </target>
+        <target state="translated">Twój film <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> został zablokowany </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="552e90b955a7121d58f6e5a38b68c7e90f5ed90c" datatype="html">
@@ -78,7 +78,7 @@
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="translated">Ostatnio dodane wideo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> zostało <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>automatycznie zablokowane <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Ostatnio dodany film <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> został <x id="START_LINK_1"/>automatycznie zablokowany<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
@@ -230,7 +230,7 @@
       </trans-unit>
       <trans-unit id="04f47b9519b96ac834a111c0e113d18c77d177de" datatype="html">
         <source>Please describe the issue...</source>
-        <target state="translated">Proszę opisać zgłoszenie...</target>
+        <target state="translated">Proszę opisać problem…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">80</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
@@ -311,7 +311,7 @@
       </trans-unit>
       <trans-unit id="1006562256968398209" datatype="html">
         <source>video</source>
-        <target state="translated">wideo</target>
+        <target state="translated">film</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">48</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
@@ -357,7 +357,7 @@
       </trans-unit>
       <trans-unit id="448d436df053141260523149173073ccbb0259f9" datatype="html">
         <source>Report video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Zgłoś wideo " <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</target>
+        <target state="translated">Zgłoś film "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="97916f2928694b8d574b6f052b93e54565ed9823" datatype="html">
@@ -7033,7 +7033,7 @@
       </trans-unit>
       <trans-unit id="5179099584732142331" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">Czy na pewno chcesz usunąć swoje konto? To usunie wszystkie Twoje dane, uwzględniając kanały, filmy i komentarze. Zawartość w pamięci podręcznej innych serwerów może nie zostać usunięta od razu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="6897292459203320054" datatype="html">
@@ -7079,7 +7079,7 @@
       </trans-unit>
       <trans-unit id="2265829846010085268" datatype="html">
         <source>Video blocked automatically waiting review</source>
-        <target state="new">Video blocked automatically waiting review</target>
+        <target state="translated">Automatycznie zablokowany film oczekuję przejrzenia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="5671547068905553663" datatype="html">
@@ -7163,7 +7163,7 @@
       </trans-unit>
       <trans-unit id="3761504852202418603" datatype="html">
         <source>Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</source>
-        <target state="new">Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</target>
+        <target state="translated">Włączono zbyt wiele języków. Włącz wszystkie lub pozostań poniżej 20 włączonych języków.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="1904720062363293328" datatype="html">
@@ -7216,7 +7216,7 @@
       </trans-unit>
       <trans-unit id="6450826648284332649" datatype="html">
         <source>Views for the day</source>
-        <target state="new">Views for the day</target>
+        <target state="translated">Wyświetlenia dnia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="6059091237492573541" datatype="html">
@@ -7525,8 +7525,7 @@
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="error.text"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="new">Cannot retrieve OAuth Client credentials: <x id="PH"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="translated">Nie można uzyskać danych uwierzytelniających klienta OAuth: <x id="PH" equiv-text="error.text"/>. Upewnij się, że PeerTube jest prawidłowo skonfigurowane (katalog config/), szczególnie w sekcji „webserver”.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544">
@@ -7775,9 +7774,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH"/> sec </source>
-        <target state="new">
-          <x id="PH"/> sec
-        </target>
+        <target state="translated"><x id="PH"/> sek. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
@@ -7882,7 +7879,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="new">Search index URL should be a URL</target>
+        <target state="translated">Adres URL indeksu wyszukiwania musi być adresem URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="8602814243662345124">
@@ -7992,7 +7989,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <target state="translated">Nazwa kanału musi używać małych liter i może zawierać tylko znaki alfanumeryczne, kropki i podkreślniki.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056">
@@ -8118,17 +8115,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="new">Abuse message is required.</target>
+        <target state="translated">Wiadomość o nadużyciu jest wymagana.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="new">Abuse message must be at least 2 characters long.</target>
+        <target state="translated">Wiadomość o nadużyciu musi zawierać przynajmniej 2 znaki.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="new">Abuse message cannot be more than 3000 characters long.</target>
+        <target state="translated">Wiadomość o nadużyciu nie może być dłuższa niż 3000 znaków.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6700357678556223012" datatype="html">
@@ -8138,12 +8135,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
-        <target state="new">Block reason must be at least 2 characters long.</target>
+        <target state="translated">Powód blokady musi zawierać przynajmniej 2 znaki.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="new">Block reason cannot be more than 300 characters long.</target>
+        <target state="translated">Powód blokady nie może być dłuższy niż 300 znaków.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
@@ -8198,8 +8195,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8c9434491bf113074890c9c975d89d5f7727d2d9" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature. </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature.
-</target>
+        <target state="translated">Zajrzyj do <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>dokumentacji<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/>, aby dowiedzieć się jak używać funkcji transmisji live na PeerTube. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-documentation-link.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -8237,30 +8233,30 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="d8ae45f6eb0e2d78efd70b4e80e132784aa65cf1" datatype="html">
         <source>Live information</source>
-        <target state="new">Live information</target>
+        <target state="translated">Informacje o transmisji</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="fc840cbc744829dee0c0d50e8d32e45beb731c36" datatype="html">
         <source>Live RTMP Url</source>
-        <target state="new">Live RTMP Url</target>
+        <target state="translated">Adres URL RTMP transmisji</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">19</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">218</context></context-group>
       </trans-unit>
       <trans-unit id="39d142e6915c4f2d0f9b45e76c176eec6a48c1c1" datatype="html">
         <source>Live stream key</source>
-        <target state="new">Live stream key</target>
+        <target state="translated">Klucz strumienia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="930826dd8818902aaf1300253dbee4717ceb35ee" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="new">⚠️ Never share your stream key with anyone.</target>
+        <target state="translated">⚠️ Nie dziel się kluczem strumienia z innymi.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="5b5759ae8d3274fdc904e1ef5bb4a52c2251de66" datatype="html">
         <source>Permanent live</source>
-        <target state="new">Permanent live</target>
+        <target state="translated">Trwała transmisja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">10</context>
@@ -8268,7 +8264,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6bf2a2b88df254434e6a415bfd44c8efb5fe40a7" datatype="html">
         <source>Replay will be saved</source>
-        <target state="new">Replay will be saved</target>
+        <target state="translated">Powtórka zostanie zapisana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">11</context>
@@ -8321,12 +8317,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4146790476782316573" datatype="html">
         <source>A maximum of 5 tags can be used on a video.</source>
-        <target state="new">A maximum of 5 tags can be used on a video.</target>
+        <target state="translated">W filmie można użyć maksymalnie 5 tagów.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="2389667090302909529" datatype="html">
         <source>A tag should be more than 1 and less than 30 characters long.</source>
-        <target state="new">A tag should be more than 1 and less than 30 characters long.</target>
+        <target state="translated">Tag musi zawierać przynajmniej 1 znak i nie może być dłuższy niż 30 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">67</context>
@@ -8354,7 +8350,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6360987759186261451" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH"/>}.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH"/>}.</target>
+        <target state="translated">PeerTube nie może obsłużyć tego rodzaju pliku. Obsługiwane rozszerzenia to <x id="PH"/>}.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="6708273825233539746" datatype="html">
@@ -8978,7 +8974,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5272553814105457319" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
-        <target state="new">Contains offensive, violent, or coarse language or iconography.</target>
+        <target state="translated">Zawiera obraźliwy, przemocowy lub wulgarny język lub grafikę.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="6979166468838302269" datatype="html">
