@@ -242,8 +242,8 @@ body {
       @include disable-outline;
 
       cursor: pointer;
-      font-size: $font-size;
-      width: 3em;
+      font-size: $play-control-font-size;
+      width: 2em;
     }
 
     .vjs-time-control {
