@@ -79,8 +79,13 @@ async function sendUndoDislike (byActor: MActor, video: MVideoAccountLight, t: T
 async function sendUndoCacheFile (byActor: MActor, redundancyModel: MVideoRedundancyVideo, t: Transaction) {
   logger.info('Creating job to undo cache file %s.', redundancyModel.url)
 
-  const videoId = redundancyModel.getVideo().id
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+  const associatedVideo = redundancyModel.getVideo()
+  if (!associatedVideo) {
+    logger.warn('Cannot send undo activity for redundancy %s: no video files associated.', redundancyModel.url)
+    return
+  }
+
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(associatedVideo.id)
   const createActivity = buildCreateActivity(redundancyModel.url, byActor, redundancyModel.toActivityPubObject())
 
   return sendUndoVideoRelatedActivity({ byActor, video, url: redundancyModel.url, activity: createActivity, transaction: t })

@@ -651,7 +651,9 @@ export class VideoRedundancyModel extends Model {
   getVideo () {
     if (this.VideoFile) return this.VideoFile.Video
 
-    return this.VideoStreamingPlaylist.Video
+    if (this.VideoStreamingPlaylist.Video) return this.VideoStreamingPlaylist.Video
+
+    return undefined
   }
 
   isOwned () {
