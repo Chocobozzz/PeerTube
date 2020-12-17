@@ -92,7 +92,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
   }
 
   ngAfterViewInit () {
-    if (this.search) this.setTableFilter(this.search)
+    if (this.search) this.setTableFilter(this.search, false)
   }
 
   getIdentifier () {

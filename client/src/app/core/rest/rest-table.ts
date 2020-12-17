@@ -131,10 +131,14 @@ export abstract class RestTable {
     this.expandedRows = {}
   }
 
-  setTableFilter (filter: string) {
+  setTableFilter (filter: string, triggerEvent = true) {
     // FIXME: cannot use ViewChild, so create a component for the filter input
     const filterInput = document.getElementById('table-filter') as HTMLInputElement
-    if (filterInput) filterInput.value = filter
+    if (!filterInput) return
+
+    filterInput.value = filter
+
+    if (triggerEvent) filterInput.dispatchEvent(new Event('keyup'))
   }
 
   resetSearch () {

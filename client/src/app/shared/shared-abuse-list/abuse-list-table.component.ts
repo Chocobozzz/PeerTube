@@ -70,7 +70,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   }
 
   ngAfterViewInit () {
-    if (this.search) this.setTableFilter(this.search)
+    if (this.search) this.setTableFilter(this.search, false)
   }
 
   isAdminView () {
