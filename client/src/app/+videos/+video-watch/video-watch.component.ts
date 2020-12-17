@@ -358,7 +358,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   handleTimestampClicked (timestamp: number) {
-    if (this.player) this.player.currentTime(timestamp)
+    if (!this.player || this.video.isLive) return
+
+    this.player.currentTime(timestamp)
     scrollToTop()
   }
 
