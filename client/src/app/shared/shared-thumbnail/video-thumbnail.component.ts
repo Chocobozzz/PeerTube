@@ -31,6 +31,8 @@ export class VideoThumbnailComponent {
   }
 
   isLiveEnded () {
+    if (!this.video.state) return
+
     return this.video.state.id === VideoState.LIVE_ENDED
   }
 
