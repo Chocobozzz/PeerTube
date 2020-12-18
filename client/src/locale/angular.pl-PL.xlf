@@ -420,7 +420,7 @@
       </trans-unit>
       <trans-unit id="2a6ba0b4ffe992ddd03f40ee75b879996bdfb5f7" datatype="html">
         <source><x id="ICU" equiv-text="{video.views, plural, =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}   "/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{video.views, plural, =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}   "/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {1 oglądający} other {{{ video.views | myNumberFormatter }} oglądających}}   "/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -880,18 +880,18 @@
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
         <source><x id="PH"/>h</source>
-        <target state="new"><x id="PH"/>h</target>
+        <target state="translated"><x id="PH"/> godz.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH"/>min</source>
-        <target state="new"><x id="PH"/>min</target>
+        <target state="translated"><x id="PH"/> min</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">16</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH"/>sec</source>
-        <target state="new"><x id="PH"/>sec</target>
+        <target state="translated"><x id="PH"/> sek</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -2181,7 +2181,7 @@
       </trans-unit>
       <trans-unit id="63f5d0ec23e3cf4abf6d5221107633c90d8d4a15" datatype="html">
         <source>OR</source>
-        <target state="new">OR</target>
+        <target state="translated">LUB</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9" datatype="html">
@@ -2335,7 +2335,7 @@
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target state="new">Login</target>
+        <target state="translated">Zaloguj się</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login-routing.module.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="0c2e76c41af25effefd456fb1e86143e0cfd1a4e" datatype="html">
@@ -2676,7 +2676,7 @@
       </trans-unit>
       <trans-unit id="b9809a21a8eb3c9db2a0282c5dd94bc221575c96" datatype="html">
         <source>Emoji markup</source>
-        <target state="new">Emoji markup</target>
+        <target state="translated">Składnia emoji</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="f37feb427aaa551edd1f22616be6464bc0d492de" datatype="html">
@@ -2706,7 +2706,7 @@
       </trans-unit>
       <trans-unit id="974170f455ff5a9034d5737e84b4194c0046fc6b" datatype="html">
         <source>Markdown Emoji List</source>
-        <target state="new">Markdown Emoji List</target>
+        <target state="translated">Lista emoji Markdown</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="2662644497259948010" datatype="html">
@@ -2984,7 +2984,7 @@
       </trans-unit>
       <trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
         <source>Follow domains</source>
-        <target state="new">Follow domains</target>
+        <target state="translated">Obserwuj domeny</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="1fc09996a8d49e3d1cc3abedb3edf3fa4c427a5f" datatype="html">
@@ -3420,18 +3420,12 @@
       </trans-unit>
       <trans-unit id="fd7b8e728c25b616934661747224b1b2e7d9ea5c" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new">
-          <x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {...} other {...}}"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated"><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 zgłoszenie} few {{{ abuse.countReportsForReporter }} zgłoszenia} many {{{ abuse.countReportsForReporter }} zgłoszeń} other {{{ abuse.countReportsForReporter }} zgłoszeń}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="fe8634bd713368d7971877c0e09d1869f09c924d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 report} other {
-          <x id="INTERPOLATION" equiv-text="{{ abuse.countReportsForReporter }}"/> reports} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 zgłoszenie} few {<x id="INTERPOLATION"/> zgłoszenia} many {<x id="INTERPOLATION"/> zgłoszeń} other {<x id="INTERPOLATION"/> zgłoszenia}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4">
@@ -3519,18 +3513,12 @@
       </trans-unit>
       <trans-unit id="da3ebfaee320ad7a8a41c75d6ee19e687f9b484d" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReportee, plural, =1 {1 report} other {{{ abuse.countReportsForReportee }} reports}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new">
-          <x id="ICU" equiv-text="{abuse.countReportsForReportee, plural, =1 {...} other {...}}"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated"><x id="ICU" equiv-text="{abuse.countReportsForReportee, plural, =1 {1 zgłoszenie} few {{{ abuse.countReportsForReportee }} zgłoszenia} many {{{ abuse.countReportsForReportee }} zgłoszeń} other {{{ abuse.countReportsForReportee }} zgłoszeń}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="bdd37f55632abc18fb1fbf95d4b3f5f89ce3237b" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 report} other {
-          <x id="INTERPOLATION" equiv-text="{{ abuse.countReportsForReportee }}"/> reports} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 zgłoszenie} few {<x id="INTERPOLATION"/> zgłoszenia} many {<x id="INTERPOLATION"/> zgłoszeń} other {<x id="INTERPOLATION"/> zgłoszeń}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc" datatype="html">
@@ -3665,7 +3653,7 @@
       </trans-unit>
       <trans-unit id="82c6fc1dfd67a87c2a9f54c221907d0d61c63b88" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="new">Users can resolve distant content</target>
+        <target state="translated">Użytkownicy mogą uzyskiwać zdalną treść</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="0fab2b1e25b97842c52a6b95f139bda7e416fde6" datatype="html">
@@ -3865,7 +3853,7 @@
       </trans-unit>
       <trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
         <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
-        <target state="new">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <target state="translated">Nie znaleziono <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> zadań które są <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a" datatype="html">
