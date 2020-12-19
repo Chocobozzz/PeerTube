@@ -158,6 +158,7 @@ server {
   keepalive_timeout         10s; # default is 75
   resolver_timeout          10s; # default is 30
   reset_timedout_connection on;
+  proxy_ignore_client_abort on;
 
   tcp_nopush                on; # send headers in one piece
   tcp_nodelay               on; # don't buffer data sent, good for small data bursts in real time
