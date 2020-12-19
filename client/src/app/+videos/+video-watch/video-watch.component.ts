@@ -285,7 +285,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.pausePlayer()
 
-    this.videoShareModal.show(this.currentTime, this.videoWatchPlaylist.currentPlaylistPosition)
+    const modalRef = this.videoShareModal.show(this.currentTime, this.videoWatchPlaylist.currentPlaylistPosition)
+
+    modalRef.result.then(() => {
+      if (isVideoPlaying) {
+        this.resumePlayer()
+      }
+    })
   }
 
   isUserLoggedIn () {
