@@ -280,6 +280,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showShareModal () {
+    // Check video was playing before opening support modal
+    const isVideoPlaying = this.isPlaying()
+
     this.pausePlayer()
 
     this.videoShareModal.show(this.currentTime, this.videoWatchPlaylist.currentPlaylistPosition)

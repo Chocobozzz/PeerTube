@@ -79,7 +79,7 @@ export class VideoShareComponent {
 
     this.playlistPosition = currentPlaylistPosition
 
-    this.modalService.open(this.modal, { centered: true })
+    return this.modalService.open(this.modal, { centered: true })
   }
 
   getVideoIframeCode () {
