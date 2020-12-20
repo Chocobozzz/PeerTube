@@ -35,6 +35,10 @@ tokensRouter.post('/scoped-tokens',
   asyncMiddleware(renewScopedTokens)
 )
 
+tokensRouter.get('/check-auth',
+  authenticate
+)
+
 // ---------------------------------------------------------------------------
 
 export {
