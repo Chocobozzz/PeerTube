@@ -47,7 +47,7 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px">
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
       <th style="width: 40px"></th>
       <th style="width: 60px;">
@@ -87,7 +87,7 @@
 
     <tr [pSelectableRow]="user" [ngClass]="{ banned: highlightBannedUsers && user.blocked }">
       <td class="checkbox-cell">
-        <p-tableCheckbox [value]="user"></p-tableCheckbox>
+        <p-tableCheckbox [value]="user" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
       <td class="expand-cell">

@@ -32,7 +32,7 @@
 
           <div class="form-group">
             <label i18n for="password">Password</label>
-            <my-input-toggle-hidden formControlName="password" id="password"
+            <my-input-toggle-hidden formControlName="password" inputId="password"
                                     i18n-placeholder placeholder="Password"
                                     [ngClass]="{ 'input-error': formErrors['password'] }"
                                     autocomplete="current-password" [tabindex]="2"></my-input-toggle-hidden>
@@ -42,7 +42,7 @@
           </div>
 
           <input type="submit" i18n-value value="Login" [disabled]="!form.valid">
-          
+
           <div class="additionnal-links">
             <a class="forgot-password-button" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
             <div *ngIf="signupAllowed" class="signup-link">

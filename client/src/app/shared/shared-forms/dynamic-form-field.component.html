@@ -5,7 +5,7 @@
 
   <input *ngIf="setting.type === 'input'" type="text" [id]="setting.name" [formControlName]="setting.name" />
 
-  <my-input-toggle-hidden *ngIf="setting.type === 'input-password'" [formControlName]="setting.name" [id]="setting.name"></my-input-toggle-hidden>
+  <my-input-toggle-hidden *ngIf="setting.type === 'input-password'" [formControlName]="setting.name" [inputId]="setting.name"></my-input-toggle-hidden>
 
   <textarea *ngIf="setting.type === 'input-textarea'" type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
 

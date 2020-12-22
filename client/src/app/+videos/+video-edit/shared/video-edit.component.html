@@ -216,12 +216,12 @@
 
             <div class="form-group">
               <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
-              <my-input-toggle-hidden id="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-toggle-hidden inputId="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
             </div>
 
             <div class="form-group">
               <label for="liveVideoStreamKey" i18n>Live stream key</label>
-              <my-input-toggle-hidden id="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-toggle-hidden inputId="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
 
               <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
             </div>

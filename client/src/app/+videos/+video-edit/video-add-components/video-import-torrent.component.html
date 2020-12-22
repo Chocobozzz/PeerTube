@@ -4,7 +4,10 @@
 
     <div class="button-file form-control" [ngbTooltip]="'(extensions: .torrent)'">
       <span i18n>Select the torrent to import</span>
-      <input #torrentfileInput type="file" name="torrentfile" id="torrentfile" accept=".torrent" (change)="fileChange()" />
+      <input
+        aria-label="Select the torrent to import" i18n-aria-label
+        #torrentfileInput type="file" name="torrentfile" id="torrentfile" accept=".torrent" (change)="fileChange()"
+      />
     </div>
 
     <div class="torrent-or-magnet" i18n-data-content data-content="OR"></div>

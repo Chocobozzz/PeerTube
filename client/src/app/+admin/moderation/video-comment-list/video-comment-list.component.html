@@ -52,7 +52,7 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px">
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
       <th style="width: 40px"></th>
       <th style="width: 150px;"></th>
@@ -67,7 +67,7 @@
     <tr [pSelectableRow]="videoComment">
 
       <td class="checkbox-cell">
-        <p-tableCheckbox [value]="videoComment"></p-tableCheckbox>
+        <p-tableCheckbox [value]="videoComment" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
       <td class="expand-cell c-hand" [pRowToggler]="videoComment" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">

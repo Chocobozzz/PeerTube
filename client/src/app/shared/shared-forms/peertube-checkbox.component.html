@@ -8,7 +8,7 @@
         [id]="inputName"
         [disabled]="disabled"
       />
-      <span role="checkbox" [attr.aria-checked]="checked"></span>
+      <span role="checkbox" [attr.aria-checked]="checked" [attr.aria-label]="labelText || labelInnerHTML"></span>
       <span *ngIf="labelText">{{ labelText }}</span>
       <span
         *ngIf="!labelText && labelInnerHTML"

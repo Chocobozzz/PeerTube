@@ -15,7 +15,7 @@ import { Notifier } from '@app/core'
   ]
 })
 export class InputToggleHiddenComponent implements ControlValueAccessor {
-  @Input() id = Math.random().toString(11).slice(2, 8) // id cannot be left empty or undefined
+  @Input() inputId = Math.random().toString(11).slice(2, 8) // id cannot be left empty or undefined
   @Input() value = ''
   @Input() autocomplete = 'off'
   @Input() placeholder = ''

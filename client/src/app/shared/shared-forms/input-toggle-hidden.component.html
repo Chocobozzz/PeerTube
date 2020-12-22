@@ -1,12 +1,19 @@
 <div class="input-group input-group-sm">
-  <input [id]="id" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex" [(ngModel)]="value" (ngModelChange)="update()" [ngClass]="{ 'readonly': readonly }" [readonly]="readonly"
-         #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control" />
+  <input
+    [id]="inputId" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex"
+    [(ngModel)]="value" (ngModelChange)="update()" [ngClass]="{ 'readonly': readonly }" [readonly]="readonly"
+    #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
+  />
 
   <div *ngIf="withToggle || withCopy" class="input-group-append">
     <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary" [title]="toggleTitle">
       <span class="glyphicon glyphicon-eye-{{ show ? 'open' : 'close' }}"></span>
     </button>
-    <button *ngIf="withCopy" [cdkCopyToClipboard]="input.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary" i18n-title title="Copy">
+
+    <button
+      *ngIf="withCopy" [cdkCopyToClipboard]="input.value" (click)="activateCopiedMessage()" type="button"
+      class="btn btn-outline-secondary" i18n-title title="Copy"
+    >
       <span class="glyphicon glyphicon-copy"></span>
     </button>
   </div>

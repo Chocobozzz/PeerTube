@@ -4,7 +4,10 @@
     [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keydown)="handleKey($event)" (keydown.enter)="doSearch()"
     aria-label="Search" autocomplete="off"
   >
-  <my-global-icon iconName="search" class="icon icon-search" role="button" (click)="doSearch()" (keydown.enter)="doSearch()"></my-global-icon>
+  <my-global-icon
+    title="Search" i18n-title role="button"
+    iconName="search" class="icon icon-search" (click)="doSearch()" (keydown.enter)="doSearch()"
+  ></my-global-icon>
 
   <div class="position-absolute jump-to-suggestions">
 
