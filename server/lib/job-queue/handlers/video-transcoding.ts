@@ -18,6 +18,7 @@ import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateHlsPlaylist, mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewResolution } from '../../video-transcoding'
 import { JobQueue } from '../job-queue'
+import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
 
 async function processVideoTranscoding (job: Bull.Job) {
   const payload = job.data as VideoTranscodingPayload
@@ -56,9 +57,9 @@ async function processVideoTranscoding (job: Bull.Job) {
 
     await retryTransactionWrapper(publishNewResolutionIfNeeded, video, payload)
   } else {
-    await optimizeOriginalVideofile(video)
+    const transcodeType = await optimizeOriginalVideofile(video)
 
-    await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload)
+    await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload, transcodeType)
   }
 
   return video
@@ -83,10 +84,14 @@ async function onHlsPlaylistGenerationSuccess (video: MVideoFullLight) {
 async function publishNewResolutionIfNeeded (video: MVideoUUID, payload?: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload) {
   await publishAndFederateIfNeeded(video)
 
-  await createHlsJobIfEnabled(payload)
+  createHlsJobIfEnabled(Object.assign({}, payload, { copyCodecs: true })
 }
 
-async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: OptimizeTranscodingPayload) {
+async function onVideoFileOptimizerSuccess (
+  videoArg: MVideoWithFile,
+  payload: OptimizeTranscodingPayload,
+  transcodeType: TranscodeOptionsType
+) {
   if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)
@@ -108,8 +113,13 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
     let videoPublished = false
 
     // Generate HLS version of the max quality file
-    const hlsPayload = Object.assign({}, payload, { resolution: videoDatabase.getMaxQualityFile().resolution })
-    await createHlsJobIfEnabled(hlsPayload)
+    const originalFileHLSPayload = Object.assign({}, payload, {
+      isPortraitMode,
+      resolution: videoDatabase.getMaxQualityFile().resolution,
+      // If we quick transcoded original file, force transcoding for HLS to avoid some weird playback issues
+      copyCodecs: transcodeType !== 'quick-transcode'
+    })
+    createHlsJobIfEnabled(originalFileHLSPayload)
 
     if (resolutionsEnabled.length !== 0) {
       for (const resolution of resolutionsEnabled) {
@@ -161,7 +171,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function createHlsJobIfEnabled (payload?: { videoUUID: string, resolution: number, isPortraitMode?: boolean }) {
+function createHlsJobIfEnabled (payload: { videoUUID: string, resolution: number, isPortraitMode?: boolean, copyCodecs: boolean }) {
   // Generate HLS playlist?
   if (payload && CONFIG.TRANSCODING.HLS.ENABLED) {
     const hlsTranscodingPayload = {
@@ -169,7 +179,7 @@ function createHlsJobIfEnabled (payload?: { videoUUID: string, resolution: numbe
       videoUUID: payload.videoUUID,
       resolution: payload.resolution,
       isPortraitMode: payload.isPortraitMode,
-      copyCodecs: true
+      copyCodecs: payload.copyCodecs
     }
 
     return JobQueue.Instance.createJob({ type: 'video-transcoding', payload: hlsTranscodingPayload })

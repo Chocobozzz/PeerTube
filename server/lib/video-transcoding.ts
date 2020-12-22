@@ -59,6 +59,8 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFileA
     const videoOutputPath = getVideoFilePath(video, inputVideoFile)
 
     await onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
+
+    return transcodeType
   } catch (err) {
     // Auto destruction...
     video.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', { err }))
