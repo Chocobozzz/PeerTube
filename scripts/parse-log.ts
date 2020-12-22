@@ -75,11 +75,16 @@ function run () {
       })
 
       rl.on('line', line => {
-        const log = JSON.parse(line)
-        // Don't know why but loggerFormat does not remove splat key
-        Object.assign(log, { splat: undefined })
+        try {
+          const log = JSON.parse(line)
+          // Don't know why but loggerFormat does not remove splat key
+          Object.assign(log, { splat: undefined })
 
-        logLevels[log.level](log)
+          logLevels[log.level](log)
+        } catch (err) {
+          console.error('Cannot parse line.', line)
+          throw err
+        }
       })
 
       stream.once('close', () => res())
