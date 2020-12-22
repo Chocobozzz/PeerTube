@@ -84,7 +84,7 @@ async function onHlsPlaylistGenerationSuccess (video: MVideoFullLight) {
 async function publishNewResolutionIfNeeded (video: MVideoUUID, payload?: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload) {
   await publishAndFederateIfNeeded(video)
 
-  createHlsJobIfEnabled(Object.assign({}, payload, { copyCodecs: true })
+  createHlsJobIfEnabled(Object.assign({}, payload, { copyCodecs: true }))
 }
 
 async function onVideoFileOptimizerSuccess (
