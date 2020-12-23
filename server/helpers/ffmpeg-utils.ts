@@ -312,22 +312,6 @@ function buildStreamSuffix (base: string, streamNum?: number) {
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  getLiveTranscodingCommand,
-  getLiveMuxingCommand,
-  buildStreamSuffix,
-  convertWebPToJPG,
-  processGIF,
-  generateImageFromVideoFile,
-  TranscodeOptions,
-  TranscodeOptionsType,
-  transcode
-}
-
-// ---------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------
 // Default options
 // ---------------------------------------------------------------------------
 
@@ -641,4 +625,22 @@ async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
 
     command.run()
   })
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  getLiveTranscodingCommand,
+  getLiveMuxingCommand,
+  buildStreamSuffix,
+  convertWebPToJPG,
+  processGIF,
+  generateImageFromVideoFile,
+  TranscodeOptions,
+  TranscodeOptionsType,
+  transcode,
+  runCommand,
+
+  // builders
+  buildx264VODCommand
 }
