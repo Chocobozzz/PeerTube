@@ -227,6 +227,7 @@ transcoding:
     480p: false
     720p: false
     1080p: false
+    1440p: false
     2160p: false
 
   # Generate videos in a WebTorrent format (what we do since the first PeerTube release)
@@ -280,6 +281,7 @@ live:
       480p: false
       720p: false
       1080p: false
+      1440p: false
       2160p: false
 
 import:

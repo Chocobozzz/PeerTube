@@ -99,6 +99,7 @@ describe('Save replay setting', function () {
             '480p': true,
             '720p': true,
             '1080p': true,
+            '1440p': true,
             '2160p': true
           }
         }

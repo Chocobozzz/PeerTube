@@ -188,6 +188,7 @@ function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod'
     VideoResolution.H_720P,
     VideoResolution.H_240P,
     VideoResolution.H_1080P,
+    VideoResolution.H_1440P,
     VideoResolution.H_4K
   ]
 
