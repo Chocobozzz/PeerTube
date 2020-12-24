@@ -3941,7 +3941,7 @@ components:
       properties:
         id:
           type: integer
-          description: 'Video resolution (240, 360, 720 ...)'
+          description: 'Video resolution (240, 360, 720, 1080, 1440 or 2160)'
           example: 240
         label:
           type: string
@@ -4828,6 +4828,8 @@ components:
                 720p:
                   type: boolean
                 1080p:
+                  type: boolean
+                1440p:
                   type: boolean
                 2160p:
                   type: boolean

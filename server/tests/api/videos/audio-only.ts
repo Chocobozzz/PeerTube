@@ -36,6 +36,7 @@ describe('Test audio only video transcoding', function () {
           '480p': false,
           '720p': false,
           '1080p': false,
+          '1440p': false,
           '2160p': false
         },
         hls: {

@@ -419,6 +419,7 @@ function customConfig (): CustomConfig {
         '480p': CONFIG.TRANSCODING.RESOLUTIONS['480p'],
         '720p': CONFIG.TRANSCODING.RESOLUTIONS['720p'],
         '1080p': CONFIG.TRANSCODING.RESOLUTIONS['1080p'],
+        '1440p': CONFIG.TRANSCODING.RESOLUTIONS['1440p'],
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
       webtorrent: {
@@ -443,6 +444,7 @@ function customConfig (): CustomConfig {
           '480p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['480p'],
           '720p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['720p'],
           '1080p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1080p'],
+          '1440p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1440p'],
           '2160p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['2160p']
         }
       }

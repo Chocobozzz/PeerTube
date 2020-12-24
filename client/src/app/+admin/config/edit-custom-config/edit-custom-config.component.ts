@@ -82,6 +82,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         label: $localize`1080p`
       },
       {
+        id: '1440p',
+        label: $localize`1440p`
+      },
+      {
         id: '2160p',
         label: $localize`2160p`
       }
