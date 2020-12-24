@@ -11,7 +11,7 @@ import * as prompt from 'prompt'
 import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
-import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
+import { buildOriginallyPublishedAt, getYoutubeDLVideoFormat, safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getLogger, getServerCredentials } from './cli'
 
 type UserInfo = {
@@ -156,7 +156,7 @@ function processVideo (parameters: {
 
     log.info('Downloading video "%s"...', videoInfo.title)
 
-    const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', ...command.args, '-o', path ]
+    const options = [ '-f', getYoutubeDLVideoFormat(), ...command.args, '-o', path ]
     try {
       const youtubeDL = await safeGetYoutubeDL()
       youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {

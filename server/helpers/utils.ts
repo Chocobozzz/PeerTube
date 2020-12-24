@@ -86,6 +86,16 @@ function getUUIDFromFilename (filename: string) {
   return result[0]
 }
 
+function getEnabledResolutions (type: 'vod' | 'live') {
+  const transcoding = type === 'vod'
+    ? CONFIG.TRANSCODING
+    : CONFIG.LIVE.TRANSCODING
+
+  return Object.keys(transcoding.RESOLUTIONS)
+               .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
+               .map(r => parseInt(r, 10))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -95,5 +105,6 @@ export {
   getSecureTorrentName,
   getServerCommit,
   generateVideoImportTmpPath,
-  getUUIDFromFilename
+  getUUIDFromFilename,
+  getEnabledResolutions
 }

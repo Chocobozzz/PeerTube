@@ -1,6 +1,6 @@
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../initializers/constants'
 import { logger } from './logger'
-import { generateVideoImportTmpPath } from './utils'
+import { generateVideoImportTmpPath, getEnabledResolutions } from './utils'
 import { join } from 'path'
 import { peertubeTruncate, root } from './core-utils'
 import { ensureDir, remove, writeFile } from 'fs-extra'
@@ -8,6 +8,7 @@ import * as request from 'request'
 import { createWriteStream } from 'fs'
 import { CONFIG } from '@server/initializers/config'
 import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { VideoResolution } from '../../shared/models/videos'
 
 export type YoutubeDLInfo = {
   name?: string
@@ -92,13 +93,37 @@ function getYoutubeDLSubs (url: string, opts?: object): Promise<YoutubeDLSubs> {
   })
 }
 
+function getYoutubeDLVideoFormat () {
+  /**
+   * list of format selectors in order or preference
+   * see https://github.com/ytdl-org/youtube-dl#format-selection
+   *
+   * case #1 asks for a mp4 using h264 (avc1) and the exact resolution in the hope
+   * of being able to do a "quick-transcode"
+   * case #2 is the first fallback. No "quick-transcode" means we can get anything else (like vp9)
+   *
+   * in any case we avoid AV1, see https://github.com/Chocobozzz/PeerTube/issues/3499
+   **/
+  const enabledResolutions = getEnabledResolutions('vod')
+  const resolution = enabledResolutions.length === 0
+    ? VideoResolution.H_720P
+    : Math.max(...enabledResolutions)
+
+  return [
+    `bestvideo[vcodec^=avc1][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
+    `bestvideo[vcodec!*=av01][height=${resolution}]+bestaudio[ext=m4a]`, // case #2
+    `bestvideo[vcodec!*=av01]+bestaudio[ext=m4a]`,
+    'best' // case fallback
+  ].join('/')
+}
+
 function downloadYoutubeDLVideo (url: string, extension: string, timeout: number) {
   const path = generateVideoImportTmpPath(url, extension)
   let timer
 
   logger.info('Importing youtubeDL video %s to %s', url, path)
 
-  let options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
+  let options = [ '-f', getYoutubeDLVideoFormat(), '-o', path ]
   options = wrapWithProxyOptions(options)
 
   if (process.env.FFMPEG_PATH) {
@@ -236,6 +261,7 @@ function buildOriginallyPublishedAt (obj: any) {
 
 export {
   updateYoutubeDLBinary,
+  getYoutubeDLVideoFormat,
   downloadYoutubeDLVideo,
   getYoutubeDLSubs,
   getYoutubeDLInfo,
