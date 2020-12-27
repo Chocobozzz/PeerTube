@@ -563,7 +563,7 @@
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
         <source>User registration allowed</source>
-        <target>Registrering av nya användare är tillåten</target>
+        <target>Registrering av nya användare</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2">
@@ -574,7 +574,7 @@
       </trans-unit>
       <trans-unit id="ba774dce7a0cbbc29d7086b8557939c7e8d9883d">
         <source>Transcoding in multiple resolutions</source>
-        <target>Omkodning i flera upplösningar</target>
+        <target>Omkodning till fler upplösningar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5e84ff80421724dc306284a6330c0910fb95c64d" datatype="html">
@@ -584,7 +584,7 @@
       </trans-unit>
       <trans-unit id="855e1ff3acad516b927095d3990aeff917f75fa3" datatype="html">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="translated">Omkoda direktsänd video till flera upplösningar</target>
+        <target state="translated">Omkodning av direktsänd video till fler upplösningar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="bc3387a5ccd470d163e6459ff017b9f2edca92f4" datatype="html">
@@ -8396,7 +8396,7 @@
       </trans-unit>
       <trans-unit id="2173989454916398137">
         <source>Blurred with confirmation request</source>
-        <target>Suddig med fråga om bekräftelse</target>
+        <target>Suddig, fråga om bekräftelse</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="8929218224642530466">
