@@ -80,8 +80,19 @@ program
         }
       }
     }, async (_, result) => {
+      const stripExtraneousFromPeerTubeUrl = function (url: string) {
+        // Get everything before the 3rd /.
+        const urlLength: number = url.includes('/', 8) ? url.indexOf('/', 8) : url.length
+
+        return url.substr(0, urlLength)
+      }
+
       // Check credentials
       try {
+        // Strip out everything after the domain:port.
+        // @see https://github.com/Chocobozzz/PeerTube/issues/3520
+        result.url = stripExtraneousFromPeerTubeUrl(result.url)
+
         await getAccessToken(result.url, result.username, result.password)
       } catch (err) {
         console.error(err.message)
