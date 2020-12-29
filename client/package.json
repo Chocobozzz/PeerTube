@@ -45,7 +45,7 @@
     "@angular/service-worker": "^11.0.1",
     "@neos21/bootstrap3-glyphicons": "^1.0.1",
     "@ng-bootstrap/ng-bootstrap": "^8.0.0",
-    "@ng-select/ng-select": "^5.0.0",
+    "@ng-select/ng-select": "^5.0.11",
     "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.6",
     "@ngx-i18nsupport/tooling": "^8.0.3",
     "@ngx-loading-bar/core": "^5.0.0",
