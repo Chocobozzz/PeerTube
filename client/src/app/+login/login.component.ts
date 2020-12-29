@@ -71,6 +71,12 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   ngOnInit () {
     const snapshot = this.route.snapshot
 
+    // Avoid undefined errors when accessing form error properties
+    this.buildForm({
+      username: LOGIN_USERNAME_VALIDATOR,
+      password: LOGIN_PASSWORD_VALIDATOR
+    })
+
     this.serverConfig = snapshot.data.serverConfig
 
     if (snapshot.queryParams.externalAuthToken) {
@@ -82,11 +88,6 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
       this.externalAuthError = true
       return
     }
-
-    this.buildForm({
-      username: LOGIN_USERNAME_VALIDATOR,
-      password: LOGIN_PASSWORD_VALIDATOR
-    })
   }
 
   ngAfterViewInit () {
