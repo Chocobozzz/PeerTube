@@ -25,7 +25,7 @@ export class LogsComponent implements OnInit {
   constructor (
     private logsService: LogsService,
     private notifier: Notifier
-    ) { }
+  ) { }
 
   ngOnInit (): void {
     this.buildTimeChoices()
