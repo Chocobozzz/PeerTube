@@ -46,6 +46,15 @@ function isURLaPeerTubeInstance (url: string) {
   return url.startsWith('http://') || url.startsWith('https://')
 }
 
+function stripExtraneousFromPeerTubeUrl (url: string) {
+  // Get everything before the 3rd /.
+  const urlLength = url.includes('/', 8)
+    ? url.indexOf('/', 8)
+    : url.length
+
+  return url.substr(0, urlLength)
+}
+
 program
   .name('auth')
   .usage('[command] [options]')
@@ -80,12 +89,6 @@ program
         }
       }
     }, async (_, result) => {
-      const stripExtraneousFromPeerTubeUrl = function (url: string) {
-        // Get everything before the 3rd /.
-        const urlLength: number = url.includes('/', 8) ? url.indexOf('/', 8) : url.length
-
-        return url.substr(0, urlLength)
-      }
 
       // Check credentials
       try {
