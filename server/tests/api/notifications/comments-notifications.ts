@@ -53,7 +53,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new comment notification after a comment on another video', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -66,7 +66,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new comment notification if I comment my own video', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -79,7 +79,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new comment notification if the account is muted', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       await addAccountToAccountBlocklist(servers[0].url, userAccessToken, 'root')
 
@@ -96,7 +96,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new comment notification after a local comment on my video', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -109,7 +109,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new comment notification after a remote comment on my video', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -128,7 +128,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new comment notification after a local reply on my video', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -144,7 +144,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new comment notification after a remote reply on my video', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -172,7 +172,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should convert markdown in comment to html', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'cool video' })
       const uuid = resVideo.body.video.uuid
