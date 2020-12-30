@@ -206,7 +206,7 @@ export {
 async function generateNodeinfo (req: express.Request, res: express.Response) {
   const { totalVideos } = await VideoModel.getStats()
   const { totalLocalVideoComments } = await VideoCommentModel.getStats()
-  const { totalUsers } = await UserModel.getStats()
+  const { totalUsers, totalMonthlyActiveUsers, totalHalfYearActiveUsers } = await UserModel.getStats()
   let json = {}
 
   if (req.params.version && (req.params.version === '2.0')) {
@@ -229,7 +229,9 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
       openRegistrations: CONFIG.SIGNUP.ENABLED,
       usage: {
         users: {
-          total: totalUsers
+          total: totalUsers,
+          activeMonth: totalMonthlyActiveUsers,
+          activeHalfyear: totalHalfYearActiveUsers
         },
         localPosts: totalVideos,
         localComments: totalLocalVideoComments

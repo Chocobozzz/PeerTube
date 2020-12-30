@@ -794,12 +794,14 @@ export class UserModel extends Model {
     const totalDailyActiveUsers = await getActiveUsers(1)
     const totalWeeklyActiveUsers = await getActiveUsers(7)
     const totalMonthlyActiveUsers = await getActiveUsers(30)
+    const totalHalfYearActiveUsers = await getActiveUsers(180)
 
     return {
       totalUsers,
       totalDailyActiveUsers,
       totalWeeklyActiveUsers,
-      totalMonthlyActiveUsers
+      totalMonthlyActiveUsers,
+      totalHalfYearActiveUsers
     }
   }
 

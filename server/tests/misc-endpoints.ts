@@ -110,6 +110,8 @@ describe('Test misc endpoints', function () {
       })
 
       expect(res.body.software.name).to.equal('peertube')
+      expect(res.body.usage.users.activeMonth).to.equal(1)
+      expect(res.body.usage.users.activeHalfyear).to.equal(1)
     })
   })
 
