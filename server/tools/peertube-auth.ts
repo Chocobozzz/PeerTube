@@ -46,6 +46,15 @@ function isURLaPeerTubeInstance (url: string) {
   return url.startsWith('http://') || url.startsWith('https://')
 }
 
+function stripExtraneousFromPeerTubeUrl (url: string) {
+  // Get everything before the 3rd /.
+  const urlLength = url.includes('/', 8)
+    ? url.indexOf('/', 8)
+    : url.length
+
+  return url.substr(0, urlLength)
+}
+
 program
   .name('auth')
   .usage('[command] [options]')
@@ -80,8 +89,13 @@ program
         }
       }
     }, async (_, result) => {
+
       // Check credentials
       try {
+        // Strip out everything after the domain:port.
+        // @see https://github.com/Chocobozzz/PeerTube/issues/3520
+        result.url = stripExtraneousFromPeerTubeUrl(result.url)
+
         await getAccessToken(result.url, result.username, result.password)
       } catch (err) {
         console.error(err.message)

@@ -66,6 +66,18 @@ describe('Test CLI wrapper', function () {
       await execCLI(`${env} ${cmd} auth add -u ${server.url} -U user_1 -p super_password`)
     })
 
+    it('Should not fail to add a user if there is a slash at the end of the instance URL', async function () {
+      this.timeout(60000)
+
+      const env = getEnvCli(server)
+      let fullServerURL
+      fullServerURL = server.url + '/'
+      await execCLI(`${env} ${cmd} auth add -u ${fullServerURL} -U user_1 -p super_password`)
+
+      fullServerURL = server.url + '/asdfasdf'
+      await execCLI(`${env} ${cmd} auth add -u ${fullServerURL} -U user_1 -p super_password`)
+    })
+
     it('Should default to this user', async function () {
       this.timeout(60000)
 
