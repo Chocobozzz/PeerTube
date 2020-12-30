@@ -215,7 +215,7 @@ class Redis {
   }
 
   private generateVideoViewKey (videoId: number, hour?: number) {
-    if (!hour) hour = new Date().getHours()
+    if (hour === undefined || hour === null) hour = new Date().getHours()
 
     return `video-view-${videoId}-h${hour}`
   }
