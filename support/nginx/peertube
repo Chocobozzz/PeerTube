@@ -4,18 +4,17 @@
 # OPTIONAL HTTP MODULES: Gzip, Headers, HTTP/2, Log, Real IP, SSL, Thread Pool, Upstream.
 # THIRD PARTY MODULES:   None.
 
-# Uncomment in production to redirect HTTP to HTTPS. Leave commented for docker-compose.
-#server {
-#  listen 80;
-#  listen [::]:80;
-#  server_name ${WEBSERVER_HOST};
-#
-#  location /.well-known/acme-challenge/ {
-#    default_type "text/plain";
-#    root /var/www/certbot;
-#  }
-#  location / { return 301 https://$host$request_uri; }
-#}
+server {
+  listen 80;
+  listen [::]:80;
+  server_name ${WEBSERVER_HOST};
+
+  location /.well-known/acme-challenge/ {
+    default_type "text/plain";
+    root /var/www/certbot;
+  }
+  location / { return 301 https://$host$request_uri; }
+}
 
 upstream backend {
   server ${PEERTUBE_HOST};
@@ -33,8 +32,8 @@ server {
   # Certificates
   # you need a certificate to run in production. see https://letsencrypt.org/
   ##
-  ssl_certificate     /etc/letsencrypt/live/peertube/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/peertube/privkey.pem;
+  ssl_certificate     /etc/letsencrypt/live/${WEBSERVER_HOST}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/${WEBSERVER_HOST}/privkey.pem;
 
   location ^~ '/.well-known/acme-challenge' {
     default_type "text/plain";

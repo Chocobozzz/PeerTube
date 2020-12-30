@@ -56,14 +56,33 @@ Other environment variables are used in
 [/support/docker/production/config/custom-environment-variables.yaml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/custom-environment-variables.yaml) and can be
 intuited from usage.
 
-#### Testing local Docker setup
+#### Webserver
 
-To test locally your Docker setup, you must add your domain (`<MY DOMAIN>`) in `/etc/hosts`:
-```
-127.0.0.1       localhost   mydomain.tld
+*The docker compose file includes a configured web server. You can skip this part and comment the appropriate section in the docker compose if you use another webserver/proxy.*
+
+Install the template that the nginx container will use.
+The container will generate the configuration by replacing `${WEBSERVER_HOST}` and `${PEERTUBE_HOST}` using your docker compose env file.
+
+It will also generate a TLS certificate at startup and schedule a renew
+
+```shell
+mkdir -p docker-volume/nginx
+curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/support/nginx/peertube > docker-volume/nginx/peertube
 ```
 
-#### You can use the regular `up` command to set it up
+You need to manually generate the first SSL/TLS certificate using Let's Encrypt:
+
+```shell
+mkdir -p docker-volume/certbot
+docker run -it --rm --name certbot -p 80:80 -v "$(pwd)/docker-volume/certbot/conf:/etc/letsencrypt" certbot/certbot certonly --standalone
+```
+
+The docker-compose will automatically renew this certificate and reload nginx.
+
+
+#### Test your setup
+
+Run your containers:
 
 ```shell
 docker-compose up
