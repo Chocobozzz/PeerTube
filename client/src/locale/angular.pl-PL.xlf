@@ -404,7 +404,7 @@
       </trans-unit>
       <trans-unit id="7ac18f5bb1a9b9f245acc8497c2f165a7e9f8510" datatype="html">
         <source><x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}   "/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}   "/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {1 wyświetlenie} few {{{ video.views | myNumberFormatter }} wyświetlenia}} many {{{ video.views | myNumberFormatter }} wyświetleń}} other {{{ video.views | myNumberFormatter }} wyświetleń}}   "/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -546,7 +546,7 @@
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="new">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</target>
+        <target state="translated">Kompatybilny z &lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt;, obsługującym:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
@@ -1020,10 +1020,7 @@
       </trans-unit>
       <trans-unit id="406b08e859ab668ff07056881dcc4390109d4e1d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}} "/> </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
-          <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {wynik} few {wyniki{} many {wyników} other {wyników}} "/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="26b0b148ff87e083300fa9ca213f8ada7fa6211d" datatype="html">
@@ -2066,7 +2063,7 @@
       </trans-unit>
       <trans-unit id="92cd0a8da81d2ec6d454aa524c0ad967e1ca0818" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="new"> You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">Możesz zaimportować dowolny adres URL <x id="START_LINK"/>obsługiwany przez youtube-dl<x id="CLOSE_LINK"/> lub URL wskazujący na plik multimedialny. Upewnij się, że masz prawa do udostępniania treści na którą on wskazuje, aby nie stworzyć problemów prawnych sobie i swojej instancji. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7" datatype="html">
@@ -5384,9 +5381,7 @@
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 film} few {<x id="INTERPOLATION"/> filmy} many {<x id="INTERPOLATION"/> filmów} other {<x id="INTERPOLATION"/> filmów}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
@@ -6064,7 +6059,7 @@
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH"/> subscribers</source>
-        <target state="new"><x id="PH"/> subscribers</target>
+        <target state="translated"><x id="PH"/> subskrybujący</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="db28493f1be1ed4d0edfea612181d27c9c530270" datatype="html">
@@ -6170,7 +6165,7 @@
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="new">You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</target>
+        <target state="translated">Włączyłeś(-aś) rejestracje – automatycznie przełączyliśmy opcję „Automatycznie blokuj nowe filmy” w poniższej sekcji „Filmy”.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">465</context></context-group>
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
@@ -6570,7 +6565,7 @@
       </trans-unit>
       <trans-unit id="3962242315365992494" datatype="html">
         <source>Switch video block to manual</source>
-        <target state="new">Switch video block to manual</target>
+        <target state="translated">Przełącz blokowanie filmów na ręczne</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6906423861055262169" datatype="html">
@@ -7548,7 +7543,7 @@
       </trans-unit>
       <trans-unit id="4ecb8d97ebb2f37c5b410afccbb78003f75ac35c" datatype="html">
         <source>ON <x id="INTERPOLATION"/></source>
-        <target state="new">ON <x id="INTERPOLATION"/></target>
+        <target state="translated">NA <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="5633144232269377096" datatype="html">
@@ -8178,7 +8173,7 @@
       </trans-unit>
       <trans-unit id="6461548560008228165" datatype="html">
         <source>Support text cannot be more than 1000 characters long</source>
-        <target state="new">Support text cannot be more than 1000 characters long</target>
+        <target state="translated">Tekst wsparcia nie może być dłuższy niż 1000 znaków</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="8c9434491bf113074890c9c975d89d5f7727d2d9" datatype="html">
@@ -8972,7 +8967,7 @@
       </trans-unit>
       <trans-unit id="8006612645824137458" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
-        <target state="new">Contains abusive, racist or sexist language or iconography.</target>
+        <target state="translated">Zawiera obraźliwy, rasistowski bądź seksistowski język czy grafikę.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
@@ -8982,22 +8977,22 @@
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target state="new">Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</target>
+        <target state="translated">Zawiera treści reklamowe, spam, fałszywe informacje, bądź inne wprowadzające w błąd miniaturki, tekst czy tagi. Prosimy dostarczyć wiarygodne źródła przy zgłaszaniu mistyfikacji.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target state="new">Privacy breach or doxxing</target>
+        <target state="translated">Naruszenie prywatności lub doxxing</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="new">Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</target>
+        <target state="translated">Zawiera informacje osobiste, które mogą zostać wykorzystane do wyśledzenia, rozpoznania, skontaktowania się bądź podszycia pod kogoś (np. imię i nazwisko, adres, numer telefonu, adres e-mail czy dane karty kredytowej).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
         <source>Infringes your copyright wrt. the regional laws with which the server must comply.</source>
-        <target state="new">Infringes your copyright wrt. the regional laws with which the server must comply.</target>
+        <target state="translated">Narusza Twoje prawa autorskie według lokalnych praw pod które podlega serwer.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
@@ -9007,7 +9002,7 @@
       </trans-unit>
       <trans-unit id="7930601470861156366" datatype="html">
         <source>Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</source>
-        <target state="new">Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</target>
+        <target state="translated">Cokolwiek, czego nie uwzględniono wyżej, a łamie regulamin serwera, bądź inne zasady obowiązujące na serwerze.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="8700771664729810984" datatype="html">
@@ -9393,7 +9388,7 @@
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
-        <target state="new">Only shareable via a private link</target>
+        <target state="translated">Udostępniane tylko przez prywatny odnośnik</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">374</context></context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528">
@@ -9636,14 +9631,12 @@
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
         <source>Your video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="new">Your video quota is exceeded with this video (
-video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
+        <target state="translated">Twój limit powierzchni na filmy zostaje przekroczony przez ten film ( rozmiar filmu: <x id="PH" equiv-text="videoSizeBytes"/>, wykorzystano: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, limit: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
         <source>Your daily video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="new">Your daily video quota is exceeded with this video (
-video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
+        <target state="translated">Twój dzienny limit powierzchni na filmy zostaje przekroczony przez ten film ( rozmiar filmu: <x id="PH" equiv-text="videoSizeBytes"/>, wykorzystano: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, limit: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">309</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119" datatype="html">
