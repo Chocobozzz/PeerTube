@@ -170,7 +170,12 @@ async function updateYoutubeDLBinary () {
           return res()
         }
 
-        downloadFile.pipe(createWriteStream(bin, { mode: 493 }))
+        const writeStream = createWriteStream(bin, { mode: 493 }).on('error', err => {
+          logger.error('youtube-dl update error in write stream', { err })
+          return res()
+        })
+
+        downloadFile.pipe(writeStream)
       })
 
       downloadFile.on('error', err => {
