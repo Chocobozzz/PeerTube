@@ -75,14 +75,21 @@ $ cd ./peertube-latest && sudo -H -u peertube yarn install --production --pure-l
 
 ### PeerTube configuration
 
-Copy example configuration:
+Copy the default configuration file that contains the default configuration provided by PeerTube.
+You **must not** update this file.
+
+```
+$ cd /var/www/peertube && sudo -u peertube cp peertube-latest/config/default.yaml.example config/default.yaml
+```
+
+Now copy the production example configuration:
 
 ```
 $ cd /var/www/peertube && sudo -u peertube cp peertube-latest/config/production.yaml.example config/production.yaml
 ```
 
 Then edit the `config/production.yaml` file according to your webserver
-configuration.
+configuration. Keys defined in `config/production.yaml` will override keys defined in `config/default.yaml`.
 
 **PeerTube does not support webserver host change**. Even though [PeerTube CLI can help you to switch hostname](https://docs.joinpeertube.org/#/maintain-tools?id=update-hostjs) there's no official support for that since it is a risky operation that might result in unforeseen errors.
 
