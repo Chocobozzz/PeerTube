@@ -15,6 +15,7 @@ $menu-link-icon-margin-right: 18px;
   word-break: break-word;
   padding-right: 20px;
   transition: background-color .1s ease-in-out;
+  line-height: $line-height-normal;
 
   &.active {
     background-color: rgba(255, 255, 255, 0.15);
@@ -208,6 +209,7 @@ menu {
     flex-direction: column;
     align-items: flex-start;
     border-top: 1px solid var(--greyForegroundColor);
+    line-height: $line-height-normal;
 
     a {
       @include menu-link;

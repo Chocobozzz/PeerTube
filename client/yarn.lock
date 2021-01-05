@@ -7721,11 +7721,6 @@ npm-bundled@^1.0.1:
   dependencies:
     npm-normalize-package-bin "^1.0.1"
 
-npm-font-source-sans-pro@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/npm-font-source-sans-pro/-/npm-font-source-sans-pro-1.0.2.tgz#c55c8ae368eebdbcaca65425a0d7e1f9a192a03e"
-  integrity sha1-xVyK42juvbysplQloNfh+aGSoD4=
-
 npm-install-checks@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/npm-install-checks/-/npm-install-checks-4.0.0.tgz#a37facc763a2fde0497ef2c6d0ac7c3fbe00d7b4"

@@ -604,7 +604,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
-      this.timeout(40000)
+      this.timeout(60000)
 
       const name = 'video without auto-blacklist ' + uuidv4()
 
