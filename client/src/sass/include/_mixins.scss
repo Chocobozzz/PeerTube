@@ -180,6 +180,7 @@
 
 @mixin grey-button {
   @include button-focus($grey-button-outline-color);
+
   background-color: $grey-background-color;
   color: pvar(--greyForegroundColor);
 
@@ -247,6 +248,10 @@
 }
 
 @mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px) {
+  display: inline-flex;
+  align-items: center;
+  line-height: normal !important;
+
   my-global-icon {
     position: relative;
     width: $width;
@@ -807,7 +812,6 @@
   .dashboard-num, .dashboard-text {
     text-align: center;
     font-size: 130%;
-    line-height: 21px;
     color: pvar(--mainForegroundColor);
     line-height: 30px;
     margin-bottom: 20px;

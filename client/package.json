@@ -96,7 +96,6 @@
     "lodash-es": "^4.17.4",
     "markdown-it": "12.0.2",
     "mini-css-extract-plugin": "^1.3.1",
-    "npm-font-source-sans-pro": "^1.0.2",
     "p2p-media-loader-hlsjs": "^0.6.2",
     "path-browserify": "^1.0.0",
     "primeng": "^11.0.0-rc.1",
