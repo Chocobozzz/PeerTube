@@ -1,6 +1,8 @@
 # Changelog
 
-## v3.0.0-rc.1
+## v3.0.0
+
+**Since v2.4.0**
 
 ### IMPORTANT NOTES
 
@@ -14,7 +16,10 @@
 
 ### Docker
 
- * Add nginx behind traefik to benefit nginx optimizations of some PeerTube routes [#2531](https://github.com/Chocobozzz/PeerTube/pull/2531)
+ * Replace traefik by nginx in our docker-compose template:
+   * Better consistency with our default setup (we now use the same stack)
+   * Use our default nginx template enabling many optimizations
+   * Update the documentation to take into account this change: https://docs.joinpeertube.org/install-docker
 
 ### Plugins/Themes/Embed API
 
@@ -35,6 +40,7 @@
    * Support live transcoding in multiple resolutions
    * Admins can set a limit of created lives per user/instance and a duration limit
    * This is the first step of live streaming, we'll consolidate the feature next year
+ * Support Galician locale
  * Update left menu [#3296](https://github.com/Chocobozzz/PeerTube/pull/3296)
    * Add *My settings*, *My library*, *Administration* (if admin) below the username
    * Rename section titles to *In my account*, and *On instance name* for better block scopes identification
@@ -74,10 +80,12 @@
  * Render markdown in email notifications for new comments [#3255](https://github.com/Chocobozzz/PeerTube/pull/3255)
  * Add an admin setting to force ipv4 in youtube-dl [#3311](https://github.com/Chocobozzz/PeerTube/pull/3311)
  * Add ability for admins to put markdown in all fields of *About* page [#3371](https://github.com/Chocobozzz/PeerTube/pull/3371)
+ * Support `activeMonth` and `activeHalfyear` in nodeinfo
 
 ### Bug fixes
 
  * Fix inability to delete a channel due to a bug in the confirm modal
+ * Fix views processing for hour 0
  * Fix ownership change modal accept button
  * Fix incorrect ActivityPub IDs
  * Do not transcode videos to an higher bitrate than the source
@@ -112,7 +120,36 @@
  * Fix playlist list `name`/`displayName` sort field [#3385](https://github.com/Chocobozzz/PeerTube/pull/3385)
  * Fix 401 error display in embeds
  * Do not crash if SMTP server is down, instead log an error [#3457](https://github.com/Chocobozzz/PeerTube/issues/3457)
+ * Fix redundancy federation in specific cases
+ * Stop CLI auth failure with extra `/` [#3520](https://github.com/Chocobozzz/PeerTube/issues/3520)
+ * Add missing audit log if the user deletes its account
+ * Don't crash on youtube-dl update write error
+ * Fix video auto block notification issue
 
+**Since v3.0.0-rc.1**
+
+### Features
+
+ * Support Galician locale
+ * Support `activeMonth` and `activeHalfyear` in nodeinfo
+
+### Bug fixes
+
+ * Fix views processing for hour 0
+ * Fix follows pages (in admin and about)
+ * Don't display live max duration if disabled by admin
+ * Correctly display live badge in videos list
+ * Fix redundancy federation in specific cases
+ * Fix live miniatures
+ * Don't update player timestamp when clicking on a timecode in comments/descriptions for a live
+ * Fix admin table filters
+ * Fix some accessibility issues
+ * Stop CLI auth failure with extra `/` [#3520](https://github.com/Chocobozzz/PeerTube/issues/3520)
+ * Fix login error display
+ * Don't display log level in audit logs view
+ * Add missing audit log if the user deletes its account
+ * Don't crash on youtube-dl update write error
+ * Fix video auto block notification issue
 
 
 ## v2.4.0
