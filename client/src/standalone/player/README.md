@@ -1,3 +1,3 @@
 # @peertube/embed-api
 
-See https://docs.joinpeertube.org/#/api-embed-player
+See https://docs.joinpeertube.org/api-embed-player

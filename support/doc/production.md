@@ -91,7 +91,7 @@ $ cd /var/www/peertube && sudo -u peertube cp peertube-latest/config/production.
 Then edit the `config/production.yaml` file according to your webserver
 configuration. Keys defined in `config/production.yaml` will override keys defined in `config/default.yaml`.
 
-**PeerTube does not support webserver host change**. Even though [PeerTube CLI can help you to switch hostname](https://docs.joinpeertube.org/#/maintain-tools?id=update-hostjs) there's no official support for that since it is a risky operation that might result in unforeseen errors.
+**PeerTube does not support webserver host change**. Even though [PeerTube CLI can help you to switch hostname](https://docs.joinpeertube.org/maintain-tools?id=update-hostjs) there's no official support for that since it is a risky operation that might result in unforeseen errors.
 
 ### Webserver
 

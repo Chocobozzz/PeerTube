@@ -59,7 +59,7 @@ is named "Framatube".
 
 Yes, the origin server always seeds videos uploaded on it thanks to
 [Webseed](http://www.bittorrent.org/beps/bep_0019.html).
-It can also be helped by other servers using [redundancy](https://docs.joinpeertube.org/#/contribute-architecture?id=redundancy-between-instances).
+It can also be helped by other servers using [redundancy](https://docs.joinpeertube.org/contribute-architecture?id=redundancy-between-instances).
 
 
 ## What is WebSeed?
@@ -89,7 +89,7 @@ and FLV formats when transcoding is enabled on their instance.
 
 ## I want to change my domain name, how can I do that?
 
-It's not officially supported, but you can try the `update-host` script: https://docs.joinpeertube.org/#/maintain-tools?id=update-hostjs
+It's not officially supported, but you can try the `update-host` script: https://docs.joinpeertube.org/maintain-tools?id=update-hostjs
 
 
 ## Why do we have to put our Twitter username in the PeerTube configuration?
@@ -141,7 +141,7 @@ Take a server for example with a 1 Gbit/s uplink for example pushing out 1080p60
 
 But what if you need to serve more users? That's where PeerTube's federation feature shines. If other PeerTube instances following yours, chances are they have decided to mirror part of your instance! The feature is called "server redundancy" and caches your most popular videos to help serve additional viewers. While viewers themselves contribute a little additional bandwidth while watching the video in their browsers (mostly during surges), mirroring servers have a much greater uplink and will help your instance with sustained higher concurrent streaming.
 
-If all your preparations and friends' bandwidth is not enough, you might prefer serving files from a CDN ; see our [remote storage guide](https://docs.joinpeertube.org/#/admin-remote-storage).
+If all your preparations and friends' bandwidth is not enough, you might prefer serving files from a CDN ; see our [remote storage guide](https://docs.joinpeertube.org/admin-remote-storage).
 
 ## Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?
 
