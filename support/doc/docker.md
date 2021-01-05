@@ -63,8 +63,6 @@ intuited from usage.
 Install the template that the nginx container will use.
 The container will generate the configuration by replacing `${WEBSERVER_HOST}` and `${PEERTUBE_HOST}` using your docker compose env file.
 
-It will also generate a TLS certificate at startup and schedule a renew
-
 ```shell
 mkdir -p docker-volume/nginx
 curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/support/nginx/peertube > docker-volume/nginx/peertube
@@ -77,7 +75,7 @@ mkdir -p docker-volume/certbot
 docker run -it --rm --name certbot -p 80:80 -v "$(pwd)/docker-volume/certbot/conf:/etc/letsencrypt" certbot/certbot certonly --standalone
 ```
 
-The docker-compose will automatically renew this certificate and reload nginx.
+A dedicated container in the docker-compose will automatically renew this certificate and reload nginx.
 
 
 #### Test your setup

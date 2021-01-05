@@ -46,6 +46,11 @@ services:
     #   context: .
     #   dockerfile: ./support/docker/production/Dockerfile.buster
     image: chocobozzz/peertube:production-buster
+    # Use a static IP for this container because nginx does not handle proxy host change without reload
+    # This container could be restarted on crash or until the postgresql database is ready for connection
+    networks:
+      default:
+        ipv4_address: 172.18.0.42
     env_file:
       - .env
     # If you provide your own webserver and reverse-proxy, otherwise not suitable for production:
