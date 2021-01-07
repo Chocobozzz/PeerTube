@@ -16,9 +16,9 @@
 
     <div class="form-group">
       <label i18n for="first-step-privacy">Privacy</label>
-      <my-select-options
+      <my-select-privacy
         labelForId="first-step-privacy" [items]="videoPrivacies" [(ngModel)]="firstStepPrivacyId"
-      ></my-select-options>
+      ></my-select-privacy>
     </div>
 
     <ng-container *ngIf="isUploadingAudioFile">

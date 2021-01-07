@@ -104,9 +104,9 @@
 
             <div class="form-group">
               <label i18n for="privacy">Privacy</label>
-              <my-select-options
-                labelForId="privacy" [items]="videoPrivacies" formControlName="privacy" [clearable]="false"
-              ></my-select-options>
+              <my-select-privacy
+                labelForId="privacy" [items]="videoPrivacies" formControlName="privacy"
+              ></my-select-privacy>
 
               <div *ngIf="formErrors.privacy" class="form-error">
                 {{ formErrors.privacy }}

@@ -26,7 +26,7 @@ $width-size: 190px;
   .peertube-select-container {
     @include peertube-select-container($width-size);
   }
-  my-select-options ::ng-deep ng-select,
+  my-select-privacy ::ng-deep ng-select,
   my-select-channel ::ng-deep ng-select {
     width: $width-size;
     @media screen and (max-width: $width-size) {
