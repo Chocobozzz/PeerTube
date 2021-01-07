@@ -96,8 +96,8 @@ export class VideoShareComponent {
     return buildVideoOrPlaylistEmbed(embedUrl)
   }
 
-  getBaseUrl(id: string) {
-    let baseUrl = this.customizations.originUrl ? this.video.originInstanceUrl : window.location.origin
+  getBaseUrl (id: string) {
+    const baseUrl = this.customizations.originUrl ? this.video.originInstanceUrl : window.location.origin
     return baseUrl + '/videos/watch/' + id
   }
 
