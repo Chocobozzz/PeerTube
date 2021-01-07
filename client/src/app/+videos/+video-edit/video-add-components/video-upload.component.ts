@@ -26,7 +26,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
 
   // So that it can be accessed in the template
-  readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
+  readonly SPECIAL_SCHEDULED_PRIVACY = VideoPrivacy.SCHEDULED
 
   userVideoQuotaUsed = 0
   userVideoQuotaUsedDaily = 0

@@ -45,6 +45,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
         .subscribe(
           privacies => {
             this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
+              .filter(privacy => privacy.id !== VideoPrivacy.SCHEDULED)
 
             this.firstStepPrivacyId = this.DEFAULT_VIDEO_PRIVACY
           })

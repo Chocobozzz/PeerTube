@@ -68,7 +68,7 @@ export class VideoEdit implements VideoUpdate {
     })
 
     // If schedule publication, the video is private and will be changed to public privacy
-    if (parseInt(values['privacy'], 10) === VideoEdit.SPECIAL_SCHEDULED_PRIVACY) {
+    if (parseInt(values['privacy'], 10) === VideoPrivacy.SCHEDULED) {
       const updateAt = new Date(values['schedulePublicationAt'])
       updateAt.setSeconds(0)
 
@@ -114,7 +114,7 @@ export class VideoEdit implements VideoUpdate {
     // Special case if we scheduled an update
     if (this.scheduleUpdate) {
       Object.assign(json, {
-        privacy: VideoEdit.SPECIAL_SCHEDULED_PRIVACY,
+        privacy: VideoPrivacy.SCHEDULED,
         schedulePublicationAt: new Date(this.scheduleUpdate.updateAt.toString())
       })
     }

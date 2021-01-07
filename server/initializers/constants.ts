@@ -394,6 +394,7 @@ const VIDEO_LICENCES = {
 const VIDEO_LANGUAGES: { [id: string]: string } = {}
 
 const VIDEO_PRIVACIES: { [ id in VideoPrivacy ]: string } = {
+  [VideoPrivacy.SCHEDULED]: 'Scheduled',
   [VideoPrivacy.PUBLIC]: 'Public',
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',

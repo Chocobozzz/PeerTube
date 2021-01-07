@@ -49,7 +49,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Output() pluginFieldsAdded = new EventEmitter<void>()
 
   // So that it can be accessed in the template
-  readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
+  readonly SPECIAL_SCHEDULED_PRIVACY = VideoPrivacy.SCHEDULED
 
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCategories: VideoConstant<number>[] = []
@@ -191,12 +191,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.serverService.getVideoPrivacies()
       .subscribe(privacies => {
         this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
-        this.videoPrivacies.push({
-          id: this.SPECIAL_SCHEDULED_PRIVACY,
-          label: $localize`Scheduled`,
-          description: $localize`Hide the video until a specific date`,
+        .map(privacy => privacy.id !== VideoPrivacy.SCHEDULED ? privacy : ({
+          ...privacy,
           disabled: !this.schedulePublicationPossible
-        })
+        }))
     })
 
     this.serverConfig = this.serverService.getTmpConfig()

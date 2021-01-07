@@ -380,12 +380,16 @@ export class VideoService implements VideosProvider {
       {
         id: VideoPrivacy.INTERNAL,
         description: $localize`Only users of this instance can see this video`
+      },
+      {
+        id: VideoPrivacy.SCHEDULED,
+        description: $localize`Hide the video until a specific date`
       }
     ]
 
     return base
       .filter(o => !!privacies.find(p => p.id === o.id)) // filter down to privacies that where in the input
-      .map(o => ({ ...privacies[o.id - 1], ...o })) // merge the input privacies that contain a label, and extend them with a description
+      .map(o => ({ ...privacies[privacies.findIndex(p => p.id === o.id)], ...o }))
   }
 
   nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType) {
