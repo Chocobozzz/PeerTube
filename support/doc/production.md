@@ -256,7 +256,7 @@ Now your instance is up you can:
 
 **Check the changelog (in particular BREAKING CHANGES!):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
 
-#### Auto (minor versions only)
+#### Auto
 
 The password it asks is PeerTube's database user password.
 
