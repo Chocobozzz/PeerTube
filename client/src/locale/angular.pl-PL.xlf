@@ -3315,7 +3315,7 @@
       </trans-unit>
       <trans-unit id="33115b0bb932b9b0e326d7433b6ea8e6609ea577" datatype="html">
         <source>Select this row</source>
-        <target state="new">Select this row</target>
+        <target state="translated">Wybierz ten rządSelect this row</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">70</context>
@@ -3819,7 +3819,7 @@
       </trans-unit>
       <trans-unit id="5cb90e520edbff8862ce9fbec8c377416c1c286b" datatype="html">
         <source>Select all rows</source>
-        <target state="new">Select all rows</target>
+        <target state="translated">ybierz wszystkie rzędy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">55</context>
@@ -9121,7 +9121,7 @@
       </trans-unit>
       <trans-unit id="0713f058de1d239f503a974e384eda384d35ad2b" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target state="new">Multiple ways to subscribe to the current channel</target>
+        <target state="translated">Wiele sposobów na zasubskrybowanie obecnego kanału</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">44</context>
@@ -9346,7 +9346,7 @@
       </trans-unit>
       <trans-unit id="9faa7899e515045c650407ca7263db6c7b6a90f9" datatype="html">
         <source>Open video actions</source>
-        <target state="new">Open video actions</target>
+        <target state="translated">Otwórz działania dla filmu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -9914,7 +9914,7 @@
       </trans-unit>
       <trans-unit id="e40d752221cf8adc1941495c7c8dc1862bb0c248" datatype="html">
         <source>Open actions</source>
-        <target state="new">Open actions</target>
+        <target state="translated">Otwórz działania</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
