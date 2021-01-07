@@ -42,6 +42,11 @@ smtp:
     __format: "json"
   from_address: "PEERTUBE_SMTP_FROM"
 
+log:
+  log_ping_requests:
+    __name: "PEERTUBE_LOG_PING_REQUESTS"
+    __format: "json"
+
 user:
   video_quota:
     __name: "PEERTUBE_USER_VIDEO_QUOTA"
