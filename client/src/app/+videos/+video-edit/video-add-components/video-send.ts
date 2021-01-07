@@ -44,10 +44,12 @@ export abstract class VideoSend extends FormReactive implements OnInit {
     this.serverService.getVideoPrivacies()
         .subscribe(
           privacies => {
+            const schedDesc = $localize`(only available after upload/import)`
             this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
-              .map(privacy => ({
+              .map(privacy => (privacy.id !== VideoPrivacy.SCHEDULED ? privacy : {
                 ...privacy,
-                disabled: privacy.id === VideoPrivacy.SCHEDULED
+                description: `${privacy.description} ${schedDesc}`,
+                disabled: true
               }))
 
             this.firstStepPrivacyId = this.DEFAULT_VIDEO_PRIVACY
