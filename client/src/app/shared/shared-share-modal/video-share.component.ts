@@ -25,7 +25,7 @@ type Customizations = {
   peertubeLink: boolean
 }
 
-type TabId = 'url' | 'qrcode' | 'embed'
+type TabId = 'url' | 'shortUrl' | 'qrcode' | 'embed'
 
 @Component({
   selector: 'my-video-share',
@@ -96,10 +96,19 @@ export class VideoShareComponent {
     return buildVideoOrPlaylistEmbed(embedUrl)
   }
 
-  getVideoUrl () {
+  getBaseUrl(id: string) {
     let baseUrl = this.customizations.originUrl ? this.video.originInstanceUrl : window.location.origin
-    baseUrl += '/videos/watch/' + this.video.uuid
-    const options = this.getVideoOptions(baseUrl)
+    return baseUrl + '/videos/watch/' + id
+  }
+
+  getVideoUrl () {
+    const options = this.getVideoOptions(this.getBaseUrl(this.video.uuid))
+
+    return buildVideoLink(options)
+  }
+
+  getVideoShortUrl () {
+    const options = this.getVideoOptions(this.getBaseUrl(this.video.id.toString()))
 
     return buildVideoLink(options)
   }

@@ -77,6 +77,16 @@
           </ng-template>
         </ng-container>
 
+        <ng-container ngbNavItem="shortUrl">
+          <a ngbNavLink i18n>Short URL</a>
+
+          <ng-template ngbNavContent>
+            <div class="nav-content">
+              <my-input-toggle-hidden [value]="getVideoShortUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+            </div>
+          </ng-template>
+        </ng-container>
+
         <ng-container ngbNavItem="qrcode">
           <a ngbNavLink i18n>QR-Code</a>
 
