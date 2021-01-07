@@ -53,9 +53,10 @@ services:
         ipv4_address: 172.18.0.42
     env_file:
       - .env
-    # If you provide your own webserver and reverse-proxy, otherwise not suitable for production:
-    #ports:
-    #  - "80:9000" # serving HTTP
+
+    ports:
+     - "1935:1935" # If you don't want to use the live feature, you can comment this line
+    #  - "9000:9000" # If you provide your own webserver and reverse-proxy, otherwise not suitable for production
     volumes:
       - assets:/app/client/dist
       - ./docker-volume/data:/data
