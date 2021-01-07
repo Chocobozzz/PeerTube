@@ -104,7 +104,8 @@ const CONFIG = {
       MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.maxFileSize')),
       MAX_FILES: config.get<number>('log.rotation.maxFiles')
     },
-    ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP')
+    ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP'),
+    LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests')
   },
   TRENDING: {
     VIDEOS: {
