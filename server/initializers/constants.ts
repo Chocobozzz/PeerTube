@@ -195,7 +195,7 @@ const SCHEDULER_INTERVALS_MS = {
   autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
-  updateInboxStats: 1000 * 60 * 5 // 5 minutes
+  updateInboxStats: 1000 * 60// 1 minute
 }
 
 // ---------------------------------------------------------------------------
