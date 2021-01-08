@@ -123,11 +123,21 @@ See the production guide ["What now" section](https://docs.joinpeertube.org/inst
 
 **Important:** Before upgrading, check you have all the `storage` fields in your [production.yaml file](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/production.yaml).
 
-Pull the latest images and rerun PeerTube:
+Pull the latest images:
 
 ```shell
 $ cd /your/peertube/directory
 $ docker-compose pull
+
+Stop, delete the containers and internal volumes (to invalidate static client files shared by `peertube` and `webserver` containers):
+
+```shell
+$ docker-compose down -v
+```
+
+Rerun PeerTube:
+
+```shell
 $ docker-compose up -d
 ```
 
