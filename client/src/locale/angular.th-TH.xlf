@@ -486,7 +486,7 @@
       </trans-unit>
       <trans-unit id="1d3781d7296d4b4e04e7f023aec1052fb2955c4d" datatype="html">
         <source>Blocked</source>
-        <target state="new">Blocked</target>
+        <target state="translated">ถูกบล็อก</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="fb8ccb136ab0ad1ff1dfbce739198be16a814f87">
@@ -844,7 +844,7 @@
       </trans-unit>
       <trans-unit id="2605931708025789621" datatype="html">
         <source>The upload failed</source>
-        <target state="new">The upload failed</target>
+        <target state="translated">การอัปโหลดล้มเหลว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">185</context>
@@ -852,7 +852,7 @@
       </trans-unit>
       <trans-unit id="1447760976255144968" datatype="html">
         <source>The connection was interrupted</source>
-        <target state="new">The connection was interrupted</target>
+        <target state="translated">การเชื่อมต่อถูกขัดจังหวะ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">189</context>
@@ -1123,7 +1123,7 @@
       </trans-unit>
       <trans-unit id="8890553633144307762" datatype="html">
         <source>Back</source>
-        <target state="new">Back</target>
+        <target state="translated">ย้อนกลับ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -1132,7 +1132,7 @@
       </trans-unit>
       <trans-unit id="3885497195825665706" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">ถัดไป</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -1141,7 +1141,7 @@
       </trans-unit>
       <trans-unit id="5018804994794983050" datatype="html">
         <source>Signup</source>
-        <target state="new">Signup</target>
+        <target state="translated">ลงทะเบียน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -1403,7 +1403,7 @@
       </trans-unit>
       <trans-unit id="9fe1faff741de7a4d50e520d2161209997f8224c" datatype="html">
         <source>Sensitive:</source>
-        <target state="new">Sensitive:</target>
+        <target state="translated">เนื้อหาที่ไม่เหมาะสม:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
@@ -1481,7 +1481,7 @@
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
         <source>Create a new playlist</source>
-        <target state="new">Create a new playlist</target>
+        <target state="translated">สร้างเพลย์ลิสต์ใหม่</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
@@ -1496,7 +1496,7 @@
       </trans-unit>
       <trans-unit id="2a95ee9e381f834e55527edcbb3cb882ff0aef79" datatype="html">
         <source>Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></source>
-        <target state="new">Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
+        <target state="translated">อินเตอร์เฟซ: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="47546e45bbb476baaaad38244db444c427ddc502">
@@ -1596,7 +1596,7 @@
       </trans-unit>
       <trans-unit id="4424964105331349857" datatype="html">
         <source>I'm a teapot</source>
-        <target state="new">I'm a teapot</target>
+        <target state="translated">ฉันเป็นกาน้ำชา</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -1604,7 +1604,7 @@
       </trans-unit>
       <trans-unit id="75183663cb423cbc64e9443f38b091e65cf71ceb" datatype="html">
         <source>That's an error.</source>
-        <target state="new">That's an error.</target>
+        <target state="translated">เกิดข้อผิดพลาด</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1612,7 +1612,7 @@
       </trans-unit>
       <trans-unit id="09ee94b4e53e53026dbd591978aaa92901a8b67e" datatype="html">
         <source>We couldn't find any ressource tied to the URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> you were looking for. </source>
-        <target state="new"> We couldn't find any ressource tied to the URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> you were looking for. </target>
+        <target state="translated">เราไม่พบเนื้อหาที่เชื่อมโยงกับ URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> ที่คุณมองหา </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -1620,7 +1620,7 @@
       </trans-unit>
       <trans-unit id="c2c0aec88a83dd3aabac669264c432058f9e197e" datatype="html">
         <source>Possible reasons:</source>
-        <target state="new">Possible reasons:</target>
+        <target state="translated">สาเหตุที่เป็นไปได้:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1629,7 +1629,7 @@
       </trans-unit>
       <trans-unit id="5ddf9d42947dae74a85539c13e487932a157fc74" datatype="html">
         <source>The page may have been moved or deleted</source>
-        <target state="new">The page may have been moved or deleted</target>
+        <target state="translated">หน้าอาจถูกย้ายหรือลบไปแล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1637,7 +1637,7 @@
       </trans-unit>
       <trans-unit id="ed052af4856de46aa0482d05b23b393619689cd2" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="new">You may have used an outdated or broken link</target>
+        <target state="translated">คุณอาจใช้ลิงก์เก่าหรือลิงก์เสีย</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1645,7 +1645,7 @@
       </trans-unit>
       <trans-unit id="b274f3be0260cd15f51c8d2de3387ec128a85083" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="new">You may have typed the address or URL incorrectly</target>
+        <target state="translated">คุณอาจพิมพ์ที่อยู่หรือ URL ผิด</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1662,7 +1662,7 @@
       </trans-unit>
       <trans-unit id="68ffb388e7bfe4b0a6f9f6faef194f536a195c09" datatype="html">
         <source>Sepia seems to like it.</source>
-        <target state="new">Sepia seems to like it.</target>
+        <target state="translated">ดูเหมือนว่าซีเปียจะชอบนะ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">28</context>
@@ -1671,7 +1671,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="new">Media is too large for the server. Please contact you administrator if you want to increase the limit size.</target>
+        <target state="translated">สื่อมีขนาดใหญ่เกินที่จะอยู่บนเซิร์ฟเวอร์ โปรดติดต่อผู้ดูแลระบบหากคุณต้องการเพิ่มขีดจำกัดขนาด</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="73216504c8903e04fdb415d876eb8969dd3afa60" datatype="html">
@@ -1681,14 +1681,12 @@
       </trans-unit>
       <trans-unit id="90ce30ddedd5892740bb41e9ead736cd2c0f9b53" datatype="html">
         <source>GLOBAL SEARCH</source>
-        <target state="new">GLOBAL SEARCH</target>
+        <target state="translated">ค้นหาทุกเซิร์ฟเวอร์</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="b2f3e08a790518414d240fbe2c3c116c6f83c275" datatype="html">
         <source>using <x id="INTERPOLATION"/></source>
-        <target state="new">using 
-          <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/>
-        </target>
+        <target state="translated">โดยใช้ <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
@@ -1918,16 +1916,7 @@
       </trans-unit>
       <trans-unit id="554a78c6ac043b4a9058c39d63e4475a454e4dc2" datatype="html">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK"/> There is a maximum of 5 tags. <x id="LINE_BREAK"/> Press <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/> to add a new tag. </source>
-        <target state="new">
-                    Tags could be used to suggest relevant recommendations. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    There is a maximum of 5 tags. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    Press 
-          <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter
-          <x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/> to add a new tag.
-                  
-        </target>
+        <target state="translated">แท็กสามารถใช้เพื่อแนะนำเนื้อหาที่มีความเกี่ยวข้องกัน <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> สามารถใส่ได้สูงสุด 5 แท็ก <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> กดปุ่ม <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter <x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/> เพื่อเพิ่มแท็กใหม่ </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
@@ -1967,7 +1956,7 @@
       </trans-unit>
       <trans-unit id="ef0f544578470cd6dd75432d0f1ba0e27914d2cc" datatype="html">
         <source><x id="START_LINK"/>Choose<x id="CLOSE_LINK"/> the appropriate license for your work. </source>
-        <target state="new"><x id="START_LINK"/>Choose<x id="CLOSE_LINK"/> the appropriate license for your work. </target>
+        <target state="translated"><x id="START_LINK"/>เลือก<x id="CLOSE_LINK"/>สัญญาอนุญาตที่เหมาะสมกับงานของคุณ </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
@@ -1998,7 +1987,7 @@
       </trans-unit>
       <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
         <source>FAQ</source>
-        <target state="new">FAQ</target>
+        <target state="translated">คำถามที่พบบ่อย</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">175</context></context-group>
       </trans-unit>
       <trans-unit id="a2892dc0bd40629b160c490cdd4aff82204bbec6" datatype="html">
@@ -2097,17 +2086,17 @@
       </trans-unit>
       <trans-unit id="a3ecb8ed851e54c72dd44723d9fc3117e49ea498" datatype="html">
         <source>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</source>
-        <target state="new">You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</target>
+        <target state="translated">คุณสามารถแพร่ภาพสดได้หลายครั้งในวิดีโอสดถาวร URL สำหรับผู้ชมจะไม่เปลี่ยน แต่คุณไม่สามารถบันทึกการเล่นซ้ำสำหรับวิดีโอสดของคุณได้</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">236</context></context-group>
       </trans-unit>
       <trans-unit id="223e01b44f68af4522e390bae9d584b4cbbdfebe" datatype="html">
         <source>This is a permanent live</source>
-        <target state="new">This is a permanent live</target>
+        <target state="translated">วิดีโอสดนี้เป็นวิดีโอสดถาวร</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="4b5b87d3c8366afa8bd2e40e0b07cc3102133250" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="new">⚠️ If you enable this option, your live will be terminated if you exceed your video quota</target>
+        <target state="translated">⚠️ หากคุณเปิดตัวเลือกนี้ วิดีโอสดของคุณจะสิ้นสุดหากคุณใช้เกินโควต้าวิดีโอของคุณ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">248</context></context-group>
       </trans-unit>
       <trans-unit id="e495a796f252097a77a501a99db7cb30d1019296" datatype="html">
@@ -2132,9 +2121,7 @@
       </trans-unit>
       <trans-unit id="64ec6a11fd39e7a4cba76281bdd490124437e96f" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="new">
-                    Short text to tell people how they can support you (membership platform...).
-                  </target>
+        <target state="translated">ข้อความสั้น ๆ ที่บอกผู้ชมว่าจะสนับสนุนคุณอย่างไร (เช่น แพลตฟอร์มสมาชิก)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">280</context></context-group>
       </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6">
@@ -2218,7 +2205,7 @@
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
-        <target state="new">Hide the video until a specific date</target>
+        <target state="translated">ซ่อนวิดีโอจนถึงวันที่กำหนด</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">198</context></context-group>
       </trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d" datatype="html">
@@ -2235,7 +2222,7 @@
       </trans-unit>
       <trans-unit id="5d8068c24887a511fc8b04308de94829c9b13cce" datatype="html">
         <source>Total video uploaded</source>
-        <target state="new">Total video uploaded</target>
+        <target state="translated">ปริมาณวิดีโอที่อัปโหลดทั้งหมด</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="dfd046dad933ba0a50926b9ab3c1b579c802312e" datatype="html">
@@ -2245,13 +2232,13 @@
       </trans-unit>
       <trans-unit id="38e0956efb7c78e758d638c8f1e5c99859b82836" datatype="html">
         <source>Retry</source>
-        <target state="new">Retry</target>
+        <target state="translated">ลองอีกครั้ง</target>
         <note priority="1" from="description">Retry failed upload of a video</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="a81bfce50be151484f8e59b34829ab07ef97982b" datatype="html">
         <source>Total video quota</source>
-        <target state="new">Total video quota</target>
+        <target state="translated">โควต้าวิดีโอทั้งหมด</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
@@ -2304,12 +2291,12 @@
       </trans-unit>
       <trans-unit id="7860848084471862305" datatype="html">
         <source>Cannot create live because this instance have too many created lives</source>
-        <target state="new">Cannot create live because this instance have too many created lives</target>
+        <target state="translated">ไม่สามารถสร้างวิดีโอสด เนื่องจากเว็บไซต์นี้ได้สร้างวิดีโอสดมากเกินไป</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="1278564497286613571" datatype="html">
         <source>Cannot create live because you created too many lives</source>
-        <target state="new">Cannot create live because you created too many lives</target>
+        <target state="translated">ไม่สามารถสร้างวิดีโอสด เนื่องจากคุณได้สร้างวิดีโอสดมากเกินไป</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="2621043320678012413" datatype="html">
@@ -2414,7 +2401,7 @@
       </trans-unit>
       <trans-unit id="08c1bbb22df74b12c362fd114d0aa5a230ee4656" datatype="html">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="translated">URL นี้ไม่ปลอดภัย (ไม่มี HTTPS) ดังนั้นการฝังวิดีโอจะไม่สามารถทำงานบนเว็บไซต์ที่ใช้ HTTPS (เว็บเบราเซอร์บล็อกคำขอ HTTP ที่ไม่ปลอดภัยบนเว็บไซต์ HTTPS)</target>
+        <target state="translated">URL นี้ไม่ปลอดภัย (ไม่มี HTTPS) ดังนั้นการฝังวิดีโอจะไม่สามารถทำงานบนเว็บไซต์ที่ใช้ HTTPS (เว็บเบราว์เซอร์บล็อกคำขอ HTTP ที่ไม่ปลอดภัยบนเว็บไซต์ HTTPS)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
@@ -2526,7 +2513,7 @@
       </trans-unit>
       <trans-unit id="4ae62d06d4ba0a78f3c5f478235cdb8cacc5f3e9" datatype="html">
         <source>This live has ended.</source>
-        <target state="new"> This live has ended. </target>
+        <target state="translated">วิดีโอสดนี้สิ้นสุดแล้ว</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="bbb57efb2edd572de832c8fff03bc85d7723abd3" datatype="html">
@@ -2536,7 +2523,7 @@
       </trans-unit>
       <trans-unit id="1ade7342907e567e3c91d505719fac63d95324e0" datatype="html">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></source>
-        <target state="new">Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></target>
+        <target state="translated">เผยแพร่เมื่อ <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
@@ -2644,7 +2631,7 @@
       </trans-unit>
       <trans-unit id="75d9bb7a2e6256268cd0653aac75a8b994d3cf1f" datatype="html">
         <source>The video was blocked due to automatic blocking of new videos</source>
-        <target state="new">The video was blocked due to automatic blocking of new videos</target>
+        <target state="translated">วิดีโอถูกบล็อกเนื่องจากการบล็อกวิดีโอใหม่โดยอัตโนมัติ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">74</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
@@ -2740,7 +2727,7 @@
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
         <source>Delete and re-draft</source>
-        <target state="new">Delete and re-draft</target>
+        <target state="translated">ลบและร่างใหม่</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.ts</context><context context-type="linenumber">199</context></context-group>
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
@@ -2907,7 +2894,7 @@
       </trans-unit>
       <trans-unit id="f1abafaeb40ce52355ddcc24686e3cd17b64e08a" datatype="html">
         <source>Applications</source>
-        <target state="new">Applications</target>
+        <target state="translated">แอปพลิเคชั่น</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">3</context>
@@ -8146,9 +8133,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH"/> sec </source>
-        <target state="new">
-          <x id="PH"/> sec
-        </target>
+        <target state="translated"><x id="PH"/> วิ </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
@@ -9904,22 +9889,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
-        <target state="new">First</target>
+        <target state="translated">แรก</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">ก่อนหน้า</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">ถัดไป</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
         <source>Last</source>
-        <target state="new">Last</target>
+        <target state="translated">สุดท้าย</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">195</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
@@ -9974,7 +9959,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
         <source>Seconds</source>
-        <target state="new">Seconds</target>
+        <target state="translated">วินาที</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
