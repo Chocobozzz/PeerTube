@@ -123,6 +123,7 @@ import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
 import { LiveManager } from './server/lib/live-manager'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
+import { isPortTaken } from '@server/helpers/utils'
 
 // ----------- Command line -----------
 
@@ -278,12 +279,23 @@ async function startApplication () {
 
   if (cli.plugins) await PluginManager.Instance.registerPluginsAndThemes()
 
+  // Create RTMP server
   LiveManager.Instance.init()
-  if (CONFIG.LIVE.ENABLED) LiveManager.Instance.run()
+  if (CONFIG.LIVE.ENABLED) {
+    if (await isPortTaken(CONFIG.LIVE.RTMP.PORT)) {
+      logger.warn(`Live functionality disabled, port ${port} (required for RTMP) is already taken.`)
+    } else {
+      LiveManager.Instance.run()
+    }
+  }
 
-  // Make server listening
+  // Create HTTP server
+  if (await isPortTaken(port)) {
+    logger.error(`Cannot start application, port ${port} (required for HTTP) is already taken.`)
+    process.exit(-1)
+  }
   server.listen(port, hostname, () => {
-    logger.info('Server listening on %s:%d', hostname, port)
+    logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
 
     Hooks.runAction('action:application.listening')

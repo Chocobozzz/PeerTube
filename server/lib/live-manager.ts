@@ -8,6 +8,7 @@ import { isTestInstance } from '@server/helpers/core-utils'
 import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers/ffmpeg-utils'
 import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { logger } from '@server/helpers/logger'
+import { isPortTaken } from '@server/helpers/utils'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME, WEBSERVER } from '@server/initializers/constants'
 import { UserModel } from '@server/models/account/user'
@@ -87,9 +88,13 @@ class LiveManager {
       logger.info('Live session ended.', { sessionId })
     })
 
-    registerConfigChangedHandler(() => {
+    registerConfigChangedHandler(async () => {
       if (!this.rtmpServer && CONFIG.LIVE.ENABLED === true) {
-        this.run()
+        if (await isPortTaken(CONFIG.LIVE.RTMP.PORT)) {
+          logger.warn(`Live functionality disabled, port ${CONFIG.LIVE.RTMP.PORT} (required for RTMP) is already taken.`)
+        } else {
+          this.run()
+        }
         return
       }
 
@@ -106,7 +111,7 @@ class LiveManager {
   }
 
   run () {
-    logger.info('Running RTMP server on port %d', config.rtmp.port)
+    logger.info('RTMP server listening on %s:%d', CONFIG.LISTEN.HOSTNAME, config.rtmp.port)
 
     this.rtmpServer = new NodeRtmpServer(config)
     this.rtmpServer.run()

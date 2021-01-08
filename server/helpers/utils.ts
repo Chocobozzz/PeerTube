@@ -6,6 +6,7 @@ import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../initializers/config'
 import { isVideoFileExtnameValid } from './custom-validators/videos'
+import * as net from 'net'
 
 function deleteFileAsync (path: string) {
   remove(path)
@@ -86,6 +87,15 @@ function getUUIDFromFilename (filename: string) {
   return result[0]
 }
 
+function isPortTaken (port: number) {
+  return new Promise<boolean>((resolve, reject) => {
+    const tester = net.createServer()
+                      .once('error', (err: NodeJS.ErrnoException) => (err.code === 'EADDRINUSE' ? resolve(true) : reject(err)))
+                      .once('listening', () => tester.once('close', () => resolve(false)).close())
+                      .listen(port)
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -95,5 +105,6 @@ export {
   getSecureTorrentName,
   getServerCommit,
   generateVideoImportTmpPath,
-  getUUIDFromFilename
+  getUUIDFromFilename,
+  isPortTaken
 }
