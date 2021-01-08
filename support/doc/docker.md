@@ -128,6 +128,7 @@ Pull the latest images:
 ```shell
 $ cd /your/peertube/directory
 $ docker-compose pull
+```
 
 Stop, delete the containers and internal volumes (to invalidate static client files shared by `peertube` and `webserver` containers):
 
