@@ -19,7 +19,8 @@ export type YoutubeDLInfo = {
   nsfw?: boolean
   tags?: string[]
   thumbnailUrl?: string
-  fileExt?: string
+  ext?: string
+  mergeExt?: string
   originallyPublishedAt?: Date
 }
 
@@ -42,12 +43,21 @@ function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo>
     }
 
     args = wrapWithProxyOptions(args)
+    args = [ '-f', getYoutubeDLVideoFormat() ].concat(args)
 
     safeGetYoutubeDL()
       .then(youtubeDL => {
         youtubeDL.getInfo(url, args, processOptions, (err, info) => {
           if (err) return rej(err)
           if (info.is_live === true) return rej(new Error('Cannot download a live streaming.'))
+          if (info.format_id?.includes('+')) {
+            // this is a merge format and its extension will be appended
+            if (info.ext === 'mp4') {
+              info.mergeExt = 'mp4'
+            } else {
+              info.mergeExt = 'mkv'
+            }
+          }
 
           const obj = buildVideoInfo(normalizeObject(info))
           if (obj.name && obj.name.length < CONSTRAINTS_FIELDS.VIDEOS.NAME.min) obj.name += ' video'
@@ -101,6 +111,7 @@ function getYoutubeDLVideoFormat () {
    * case #1 asks for a mp4 using h264 (avc1) and the exact resolution in the hope
    * of being able to do a "quick-transcode"
    * case #2 is the first fallback. No "quick-transcode" means we can get anything else (like vp9)
+   * case #3 is the resolution-degraded equivalent of #1, and already a pretty safe fallback
    *
    * in any case we avoid AV1, see https://github.com/Chocobozzz/PeerTube/issues/3499
    **/
@@ -110,18 +121,20 @@ function getYoutubeDLVideoFormat () {
     : Math.max(...enabledResolutions)
 
   return [
-    `bestvideo[vcodec^=avc1][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
-    `bestvideo[vcodec!*=av01][height=${resolution}]+bestaudio[ext=m4a]`, // case #2
-    `bestvideo[vcodec!*=av01]+bestaudio[ext=m4a]`,
+    `bestvideo[vcodec^=avc1][ext=mp4][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
+    `bestvideo[vcodec!*=av01][ext=webm][height=${resolution}]+bestaudio`, // case #2
+    `bestvideo[vcodec^=avc1][ext=mp4][height<=${resolution}]+bestaudio[ext=m4a]`, // case #3
+    `bestvideo[vcodec!*=av01]+bestaudio`,
     'best' // case fallback
   ].join('/')
 }
 
-function downloadYoutubeDLVideo (url: string, extension: string, timeout: number) {
+function downloadYoutubeDLVideo (url: string, extension: string, timeout: number, mergeExtension?: string) {
   const path = generateVideoImportTmpPath(url, extension)
+  const finalPath = mergeExtension ? path.replace(extension, mergeExtension) : path
   let timer
 
-  logger.info('Importing youtubeDL video %s to %s', url, path)
+  logger.info('Importing youtubeDL video %s to %s', url, finalPath)
 
   let options = [ '-f', getYoutubeDLVideoFormat(), '-o', path ]
   options = wrapWithProxyOptions(options)
@@ -143,7 +156,7 @@ function downloadYoutubeDLVideo (url: string, extension: string, timeout: number
             return rej(err)
           }
 
-          return res(path)
+          return res(finalPath)
         })
 
         timer = setTimeout(() => {
@@ -301,7 +314,8 @@ function buildVideoInfo (obj: any): YoutubeDLInfo {
     tags: getTags(obj.tags),
     thumbnailUrl: obj.thumbnail || undefined,
     originallyPublishedAt: buildOriginallyPublishedAt(obj),
-    fileExt: obj.ext
+    ext: obj.ext,
+    mergeExt: obj.mergeExt
   }
 }
 

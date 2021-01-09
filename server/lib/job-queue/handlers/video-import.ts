@@ -79,7 +79,11 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
     generatePreview: payload.generatePreview
   }
 
-  return processFile(() => downloadYoutubeDLVideo(videoImport.targetUrl, payload.fileExt, VIDEO_IMPORT_TIMEOUT), videoImport, options)
+  return processFile(
+    () => downloadYoutubeDLVideo(videoImport.targetUrl, payload.fileExt, VIDEO_IMPORT_TIMEOUT, payload.mergeExt),
+    videoImport,
+    options
+  )
 }
 
 async function getVideoImportOrDie (videoImportId: number) {

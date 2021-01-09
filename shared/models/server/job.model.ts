@@ -82,6 +82,7 @@ export type VideoImportYoutubeDLPayload = {
   generatePreview: boolean
 
   fileExt?: string
+  mergeExt?: string
 }
 export type VideoImportTorrentPayload = {
   type: VideoImportTorrentPayloadType
