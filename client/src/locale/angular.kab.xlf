@@ -2933,7 +2933,7 @@
       </trans-unit>
       <trans-unit id="70b989779eb53e6ff14d810336677dbc3bde4202" datatype="html">
         <source>Feed URL</source>
-        <target state="new">Feed URL</target>
+        <target state="translated">URL n usuddim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2941,7 +2941,7 @@
       </trans-unit>
       <trans-unit id="87752e8ea0b8d9cc97d85d89a74b828c031242d2" datatype="html">
         <source>Feed Token</source>
-        <target state="new">Feed Token</target>
+        <target state="translated">Ajuṭu n usuddem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">23</context>
@@ -2949,7 +2949,7 @@
       </trans-unit>
       <trans-unit id="7b4abd453d7f667c0aa6bce607433714511bae6e" datatype="html">
         <source>⚠️ Never share your feed token with anyone.</source>
-        <target state="new">⚠️ Never share your feed token with anyone.</target>
+        <target state="translated">⚠️ Ur beṭṭu ara akk ajuṭu n usuddem-inek·inem ula akked yiwen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">26</context>
@@ -3125,7 +3125,7 @@
       </trans-unit>
       <trans-unit id="498afab4384cdddd310de830b987345b71aee25f" datatype="html">
         <source>e.g. jane_doe</source>
-        <target state="new">e.g. jane_doe</target>
+        <target state="translated">am. jane_doe</target>
         <note priority="1" from="description">Username choice placeholder in the registration form</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
@@ -3312,7 +3312,7 @@
       </trans-unit>
       <trans-unit id="7427986413651551775" datatype="html">
         <source>Video comments</source>
-        <target state="new">Video comments</target>
+        <target state="translated">Iwenniten n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">67</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
@@ -3412,7 +3412,7 @@
       </trans-unit>
       <trans-unit id="8c9050c6851a9df66791ce33bc05d6daff294921" datatype="html">
         <source>Commented video</source>
-        <target state="new">Commented video</target>
+        <target state="translated">Iwennet tavidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="0b8869949ffd1265a194490cd96c74c4ad7c234a" datatype="html">
@@ -3805,22 +3805,22 @@
       </trans-unit>
       <trans-unit id="8949443215142664126" datatype="html">
         <source>Delete this comment</source>
-        <target state="new">Delete this comment</target>
+        <target state="translated">Kkes awennit-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="3327751240218085797" datatype="html">
         <source>Delete all comments of this account</source>
-        <target state="new">Delete all comments of this account</target>
+        <target state="translated">Kkes akk iwenniten n umiḍan-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="2850960459131251840" datatype="html">
         <source>Comments are deleted after a few minutes</source>
-        <target state="new">Comments are deleted after a few minutes</target>
+        <target state="translated">Iwenniten ttwakksen seld kra n tesdatin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="545410448674339480" datatype="html">
         <source><x id="PH" equiv-text="commentArgs.length"/> comments deleted.</source>
-        <target state="new"><x id="PH" equiv-text="commentArgs.length"/> comments deleted.</target>
+        <target state="translated"><x id="PH" equiv-text="commentArgs.length"/> iwenniten ttwakksen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -3828,17 +3828,17 @@
       </trans-unit>
       <trans-unit id="379090446060940062" datatype="html">
         <source>Do you really want to delete all comments of <x id="PH"/>?</source>
-        <target state="new">Do you really want to delete all comments of <x id="PH"/>?</target>
+        <target state="translated">Tebɣiḍ s tidet ad tekkseḍ meṛṛa iwenniten n <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="4539246224625965241" datatype="html">
         <source>Comments of <x id="PH"/> will be deleted in a few minutes</source>
-        <target state="new">Comments of <x id="PH"/> will be deleted in a few minutes</target>
+        <target state="translated">Iwenniten n <x id="PH"/> ad ttwakksen deg kra n tesdatin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="5b8782215fc5ae41cbbb41f92509192b66ee1246" datatype="html">
         <source>Video comments</source>
-        <target state="new">Video comments</target>
+        <target state="translated">Iwenniten ɣef tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="e92e448d39ae2bbd73d8f44d2f167019fe45a622" datatype="html">
@@ -3853,7 +3853,7 @@
       </trans-unit>
       <trans-unit id="1f689bd2c3f3cfac3c800799545786e56aa5156d" datatype="html">
         <source>Local comments</source>
-        <target state="new">Local comments</target>
+        <target state="translated">Iwenniten idiganen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3c770e01673ea017697b8c8a4feb63aefdd1f999" datatype="html">
@@ -3885,7 +3885,7 @@
       </trans-unit>
       <trans-unit id="5e85feb6f9f0334366e46ee09ca6b8df52397432" datatype="html">
         <source>any</source>
-        <target state="new">any</target>
+        <target state="translated">ula yiwen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">21</context>
