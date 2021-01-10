@@ -594,7 +594,10 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
 
 function getFFmpeg (input: string, type: 'live' | 'vod') {
   // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
-  const command = ffmpeg(input, { niceness: FFMPEG_NICE.TRANSCODING, cwd: CONFIG.STORAGE.TMP_DIR })
+  const command = ffmpeg(input, {
+    niceness: type === 'live' ? FFMPEG_NICE.LIVE : FFMPEG_NICE.VOD,
+    cwd: CONFIG.STORAGE.TMP_DIR
+  })
 
   const threads = type === 'live'
     ? CONFIG.LIVE.TRANSCODING.THREADS
