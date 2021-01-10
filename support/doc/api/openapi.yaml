@@ -933,6 +933,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/search'
       responses:
         '200':
           description: successful operation

@@ -1,12 +1,23 @@
 <h1>
   <my-global-icon iconName="history" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My history</ng-container>
+  <ng-container i18n>My watch history</ng-container> <span class="badge badge-secondary">{{ pagination.totalItems }}</span>
 </h1>
 
 <div class="top-buttons">
-  <div class="history-switch">
+  <div>
+    <div class="input-group has-feedback has-clear">
+      <input
+        type="text" name="history-search" id="history-search" i18n-placeholder placeholder="Search your history"
+        (keyup)="onSearch($event)"
+      >
+      <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
+      <span class="sr-only" i18n>Clear filters</span>
+    </div>
+  </div>
+
+  <div class="history-switch ml-auto mr-3">
     <my-input-switch [(ngModel)]="videosHistoryEnabled" (ngModelChange)="onVideosHistoryChange()"></my-input-switch>
-    <label i18n>Video history</label>
+    <label i18n>Track watch history</label>
   </div>
 
   <button class="delete-history" (click)="deleteHistory()" i18n>
@@ -16,7 +27,7 @@
 </div>
 
 
-<div class="no-history" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">You don't have any video history yet.</div>
+<div class="no-history" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">You don't have any video in your watch history yet.</div>
 
 <div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()" class="videos">
   <div class="video" *ngFor="let video of videos">
