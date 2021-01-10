@@ -797,7 +797,7 @@
       </trans-unit>
       <trans-unit id="3334825601859787496" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</target>
+        <target state="translated">Afaylu-inek·inem <x id="PH" equiv-text="name"/> ur yettwazan ara send ad tettusbadu wakud n keffu (s umata 10tsd)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">192</context>
@@ -838,7 +838,7 @@
       </trans-unit>
       <trans-unit id="cc6208fd0ded0d4a57f4c0a97c2843dc454db39a" datatype="html">
         <source>Block live "<x id="INTERPOLATION"/>"</source>
-        <target state="new">Block live "<x id="INTERPOLATION"/>"</target>
+        <target state="translated">Sewḥel srid "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="dc3bdad5421d0ee7ddd76ae62b699d72dd9f61b4" datatype="html">
@@ -988,7 +988,7 @@
       </trans-unit>
       <trans-unit id="0b56e18291f70cbcaddcafe46a4901fe499cd3cc" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Tummant-a tsareg ajerred. Γas akken, ɣur-k·m senqed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Tiwtilin<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Tiwtilin<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> send timerna n umiḍan. Tzemreḍ daɣen ad tnadiḍ tummant-nniḍen i wakken ad yemṣada swaswa wayen i tuḥwaǧeḍ deg: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">60,62</context>
@@ -996,7 +996,7 @@
       </trans-unit>
       <trans-unit id="5ff5b420545ecb1ef07d7ad7c03253e4500246f1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Akka tura tummant-a ur tsirig ara ajerred n yiseqdacen, ilaq ad tesneqdeḍ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Tiwtilin<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> i wugar n telqayt neɣ i tifin n tummant ara ak·am-imudden tazmert n ujerred i umiḍan, syen ad d-tsalayeḍ tividyutin din. Af-d ayla-k·m gar waṭas n tummanin yemgaraden deg: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">65,67</context>
@@ -1242,7 +1242,7 @@
       </trans-unit>
       <trans-unit id="2a94cfa351109b958a00ee927cd87ada8da44c1e" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="new"> If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </target>
+        <target state="translated">Ma yella tebɣiḍ ad teldiḍ ijerriden, ma ulac aɣilif wali acu <x id="START_TAG_STRONG"/>n yilugan-inek·inem ifessasen<x id="CLOSE_TAG_STRONG"/> d <x id="START_TAG_STRONG"/>tewtilin n useqdec n tummant<x id="CLOSE_TAG_STRONG"/> d, daɣen fren taggayin d tutlayin d yimḍebbren ara yemmeslayen. Abrid-a, ad tɛawneḍ iseqdacen ad skelsen ɣef <x id="START_TAG_STRONG"/>tummant n<x id="CLOSE_TAG_STRONG"/> PeerTube ilaqen. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
@@ -1601,7 +1601,7 @@
       </trans-unit>
       <trans-unit id="09ee94b4e53e53026dbd591978aaa92901a8b67e" datatype="html">
         <source>We couldn't find any ressource tied to the URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> you were looking for. </source>
-        <target state="new"> We couldn't find any ressource tied to the URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> you were looking for. </target>
+        <target state="translated">Ur nufi ula d yiwen uɣbalu yeqqnen ɣer URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> i tettnadiḍ. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -1626,7 +1626,7 @@
       </trans-unit>
       <trans-unit id="ed052af4856de46aa0482d05b23b393619689cd2" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="new">You may have used an outdated or broken link</target>
+        <target state="translated">Yezmer tesqedceḍ aseɣwen yemmuten neɣ yerrẓen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1634,7 +1634,7 @@
       </trans-unit>
       <trans-unit id="b274f3be0260cd15f51c8d2de3387ec128a85083" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="new">You may have typed the address or URL incorrectly</target>
+        <target state="translated">Yezmer mačči akken ilaq i turiḍ tansa neɣ URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1651,7 +1651,7 @@
       </trans-unit>
       <trans-unit id="68ffb388e7bfe4b0a6f9f6faef194f536a195c09" datatype="html">
         <source>Sepia seems to like it.</source>
-        <target state="new">Sepia seems to like it.</target>
+        <target state="translated">Sepya tettban tḥemmel-it.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">28</context>
@@ -2064,7 +2064,7 @@
       </trans-unit>
       <trans-unit id="e495a796f252097a77a501a99db7cb30d1019296" datatype="html">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="new">Automatically publish a replay when your live ends</target>
+        <target state="translated">Suffeɣ tiririt s wudem awurman mi ara yekfu wusrid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1" datatype="html">
@@ -2253,7 +2253,7 @@
       </trans-unit>
       <trans-unit id="2621043320678012413" datatype="html">
         <source>Live published.</source>
-        <target state="new">Live published.</target>
+        <target state="translated">Asuffeɣ srid.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="40e85da538414cc425f42d2b09189ce344865aa1" datatype="html">
@@ -2289,12 +2289,12 @@
       </trans-unit>
       <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470" datatype="html">
         <source>Import with URL</source>
-        <target state="translated">Import with URL</target>
+        <target state="translated">Kter s URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="752c401d7dcd708944eef60e411187f71d882340" datatype="html">
         <source>Import with torrent</source>
-        <target state="translated">Import with torrent</target>
+        <target state="translated">Kter s torrent</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="d90cc5777a7e16ef76f325c89fe0f9270b9fa827" datatype="html">
@@ -3899,7 +3899,7 @@
       </trans-unit>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c" datatype="html">
         <source>ID</source>
-        <target>ID</target>
+        <target>Asulay</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc" datatype="html">
@@ -4387,7 +4387,7 @@
       </trans-unit>
       <trans-unit id="0a1a7d6e04056d30bb85aca5bb8bd47ced098167" datatype="html">
         <source>Live streaming</source>
-        <target state="new">Live streaming</target>
+        <target state="translated">Askan usrid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">67</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">870</context></context-group>
       </trans-unit>
@@ -4426,7 +4426,7 @@
       </trans-unit>
       <trans-unit id="cf385a62ac2f7e599d5dab1ea3fcd86a739ec098" datatype="html">
         <source>However, you may want to read our guidelines before tweaking the following values.</source>
-        <target state="new"> However, you may want to read our guidelines before tweaking the following values. </target>
+        <target state="translated">Ɣas akken, tebɣiḍ ahat ad teɣriḍ iwellihen-nne send ad tbeddleḍ azalen-a.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">713,714</context>
@@ -4463,7 +4463,7 @@
       </trans-unit>
       <trans-unit id="f071c73e20463032b9e1f2ad2dacb54395a7b3bf" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
-        <target state="new"> If the user quota is reached, PeerTube will automatically terminate the live streaming </target>
+        <target state="translated">Ma yella amur n useqdac yewweḍ, Peertube ad yemmed s wudem awurman taggara n uskan usrid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">904</context></context-group>
       </trans-unit>
       <trans-unit id="cf06f240dd01db03367a64c84e5513dd59f3a381" datatype="html">
@@ -4512,7 +4512,7 @@
       </trans-unit>
       <trans-unit id="bd9fc4914f5eeb416181cb966d98cadb94282485" datatype="html">
         <source>Live resolutions to generate</source>
-        <target state="new">Live resolutions to generate</target>
+        <target state="translated">Afrayen usriden i usirew</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">965</context></context-group>
       </trans-unit>
       <trans-unit id="0dcaa17190a8baac67add948a7c63671f9027a7b" datatype="html">
@@ -4736,7 +4736,7 @@
       </trans-unit>
       <trans-unit id="3128766f8e9bac2f95f5413fdb810e90c6084ef0" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
-        <target state="new"> It seems like the configuration is invalid. Please search for potential errors in the different tabs. </target>
+        <target state="translated">Akka i d-yettban tawila d tarameɣtut. Ma ulac aɣilif, nadi tuccḍiwin i izemren ad ilint deg waccaren yemgaraden.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1128</context></context-group>
       </trans-unit>
       <trans-unit id="1411138433f379dbe80e0682284b2384d8e390cb" datatype="html">
@@ -5453,7 +5453,7 @@
       </trans-unit>
       <trans-unit id="ccbfd56f7d72ca5055b86a35f66b7a6d0a250d03" datatype="html">
         <source>It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="new"> It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">D aseɣẓan ilelli yerna n uɣbalu yeldin, ddaw <x id="START_LINK"/>turagt AGPLv3<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7b85d0debc419e6c9c390ce02686b57d256cd139" datatype="html">
@@ -5635,7 +5635,7 @@
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
         <source>Link copied</source>
-        <target state="new">Link copied</target>
+        <target state="translated">Aseɣwen yettwanɣel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="3d2fb0ff92d3dd1e6040cd79b2a60edac6dea2da" datatype="html">
@@ -5799,7 +5799,7 @@
       </trans-unit>
       <trans-unit id="e4965e47ed9cd6553d9a87a5112871a2dcbbe132" datatype="html">
         <source>Display all videos (private, unlisted or not yet published)</source>
-        <target state="new">Display all videos (private, unlisted or not yet published)</target>
+        <target state="translated">Sken meṛṛa tividyutin (tusligin, ur d-nettwabder ara neɣ tid urɛad i d-neffiɣ)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">40</context></context-group>
@@ -5928,12 +5928,12 @@
       </trans-unit>
       <trans-unit id="1794624538833178491" datatype="html">
         <source>5 hours</source>
-        <target state="new">5 hours</target>
+        <target state="translated">5 yisragen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="4941148355486671862" datatype="html">
         <source>10 hours</source>
-        <target state="new">10 hours</target>
+        <target state="translated">10 yisragen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="1618463615802675111" datatype="html">
@@ -6567,7 +6567,7 @@
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target state="new">info</target>
+        <target state="translated">talɣut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
@@ -6577,7 +6577,7 @@
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="new">error</target>
+        <target state="translated">tuccḍa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
@@ -6623,7 +6623,7 @@
       </trans-unit>
       <trans-unit id="7098180453085889026" datatype="html">
         <source>Blocked videos</source>
-        <target state="new">Blocked videos</target>
+        <target state="translated">Tividyutin yettusweḥlen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
@@ -6951,7 +6951,7 @@
       </trans-unit>
       <trans-unit id="8920809083620698740" datatype="html">
         <source>avatar</source>
-        <target state="new">avatar</target>
+        <target state="translated">avaṭar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -7070,7 +7070,7 @@
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
         <source>Change ownership</source>
-        <target state="new">Change ownership</target>
+        <target state="translated">Beddel amli</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="3380608219513805292" datatype="html">
@@ -7085,7 +7085,7 @@
       </trans-unit>
       <trans-unit id="73022f1676784c4f9b8cdbb322e52b02ccc800b7" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">Isenfal n wamli</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8197117721861453263" datatype="html">
@@ -7125,7 +7125,7 @@
       </trans-unit>
       <trans-unit id="3108704604266608109" datatype="html">
         <source>My video imports</source>
-        <target state="new">My video imports</target>
+        <target state="translated">Aktaren n tvidyut-iw</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
@@ -7185,7 +7185,7 @@
       </trans-unit>
       <trans-unit id="5983006734882925930" datatype="html">
         <source>My video history</source>
-        <target state="new">My video history</target>
+        <target state="translated">Azray n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="8181077408762380407" datatype="html">
@@ -7211,7 +7211,7 @@
       </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
-        <target state="new">Maximize editor</target>
+        <target state="translated">Semɣer amaẓrag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -7219,7 +7219,7 @@
       </trans-unit>
       <trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source>
-        <target state="new">Exit maximized editor</target>
+        <target state="translated">Ffeɣ seg umaẓrag yettusmeɣ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -7776,7 +7776,7 @@
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <target state="translated">Isem n ubadu ilaq ad yili s yisekkilen imeẓẓyanen yerna ilaq ad ilin deg-s ala isekkilen igmumḍinen, agazen d yijerriden n uderrer.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
@@ -7982,8 +7982,7 @@
       </trans-unit>
       <trans-unit id="8c9434491bf113074890c9c975d89d5f7727d2d9" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature. </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature.
-</target>
+        <target state="translated">Wali <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>tasemlit<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> i wakken ad tissineḍ amek ara tesqedceḍ tamahilt tusridt n uskan PeerTube. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-documentation-link.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -8021,12 +8020,12 @@
       </trans-unit>
       <trans-unit id="d8ae45f6eb0e2d78efd70b4e80e132784aa65cf1" datatype="html">
         <source>Live information</source>
-        <target state="new">Live information</target>
+        <target state="translated">Talɣut tusridt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="fc840cbc744829dee0c0d50e8d32e45beb731c36" datatype="html">
         <source>Live RTMP Url</source>
-        <target state="new">Live RTMP Url</target>
+        <target state="translated">RTMP Url usrid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">19</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">218</context></context-group>
       </trans-unit>
