@@ -121,11 +121,11 @@ function getYoutubeDLVideoFormat () {
     : Math.max(...enabledResolutions)
 
   return [
-    `bestvideo[vcodec^=avc1][ext=mp4][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
-    `bestvideo[vcodec!*=av01][ext=webm][height=${resolution}]+bestaudio`, // case #2
-    `bestvideo[vcodec^=avc1][ext=mp4][height<=${resolution}]+bestaudio[ext=m4a]`, // case #3
-    `bestvideo[vcodec!*=av01]+bestaudio`,
-    'best' // case fallback
+    `bestvideo[vcodec^=avc1][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
+    `bestvideo[vcodec!*=av01][vcodec!*=vp9.2][height=${resolution}]+bestaudio`, // case #2
+    `bestvideo[vcodec^=avc1][height<=${resolution}]+bestaudio[ext=m4a]`, // case #3
+    `bestvideo[vcodec!*=av01][vcodec!*=vp9.2]+bestaudio`,
+    'best[vcodec!*=av01][vcodec!*=vp9.2]' // case fallback
   ].join('/')
 }
 
