@@ -30,7 +30,7 @@ import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditBu
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
-import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent } from './misc'
+import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent, SimpleSearchInputComponent } from './misc'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
@@ -88,6 +88,7 @@ import { VideoChannelService } from './video-channel'
     HelpComponent,
     ListOverflowComponent,
     TopMenuDropdownComponent,
+    SimpleSearchInputComponent,
 
     UserQuotaComponent,
     UserNotificationsComponent
@@ -140,6 +141,7 @@ import { VideoChannelService } from './video-channel'
     HelpComponent,
     ListOverflowComponent,
     TopMenuDropdownComponent,
+    SimpleSearchInputComponent,
 
     UserQuotaComponent,
     UserNotificationsComponent
