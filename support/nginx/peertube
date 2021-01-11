@@ -1,7 +1,7 @@
 # Minimum Nginx version required:  1.13.0 (released Apr 25, 2017)
 # Please check your Nginx installation features the following modules via 'nginx -V':
-# STANDARD HTTP MODULES: Core, Proxy, Rewrite.
-# OPTIONAL HTTP MODULES: Gzip, Headers, HTTP/2, Log, Real IP, SSL, Thread Pool, Upstream.
+# STANDARD HTTP MODULES: AIO Multithreading, Core, Proxy, Rewrite.
+# OPTIONAL HTTP MODULES: Access, Gzip, Headers, HTTP/2, Log, Real IP, SSL, Thread Pool, Upstream.
 # THIRD PARTY MODULES:   None.
 
 server {
