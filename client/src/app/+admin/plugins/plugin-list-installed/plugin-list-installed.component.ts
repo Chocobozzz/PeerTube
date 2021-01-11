@@ -149,6 +149,10 @@ export class PluginListInstalledComponent implements OnInit {
     return [ '/admin', 'plugins', 'show', this.pluginService.nameToNpmName(plugin.name, plugin.type) ]
   }
 
+  getPluginOrThemeHref (name: string) {
+    return this.pluginApiService.getPluginOrThemeHref(this.pluginType, name)
+  }
+
   private getUpdatingKey (plugin: PeerTubePlugin) {
     return plugin.name + plugin.type
   }

@@ -134,6 +134,14 @@ export class PluginApiService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
+  getPluginOrThemeHref (type: PluginType, name: string) {
+    const typeString = type === PluginType.PLUGIN
+      ? 'plugin'
+      : 'theme'
+
+    return `https://www.npmjs.com/package/peertube-${typeString}-${name}`
+  }
+
   private translateSettingsLabel (npmName: string, res: RegisteredServerSettings): Observable<RegisteredServerSettings> {
     return this.pluginService.translationsObservable
       .pipe(
