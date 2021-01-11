@@ -31,7 +31,7 @@ const trackerServer = new TrackerServer({
     let ip: string
 
     if (params.type === 'ws') {
-      ip = params.socket.ip
+      ip = params.ip
     } else {
       ip = params.httpReq.ip
     }
