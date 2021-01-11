@@ -130,7 +130,7 @@ async function getUserVideoImports (req: express.Request, res: express.Response)
 
 async function getUserInformation (req: express.Request, res: express.Response) {
   // We did not load channels in res.locals.user
-  const user = await UserModel.loadForMeAPI(res.locals.oauth.token.user.username)
+  const user = await UserModel.loadForMeAPI(res.locals.oauth.token.user.id)
 
   return res.json(user.toMeFormattedJSON())
 }

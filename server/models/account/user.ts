@@ -564,17 +564,17 @@ export class UserModel extends Model {
   static loadByUsername (username: string): Promise<MUserDefault> {
     const query = {
       where: {
-        username: { [Op.iLike]: username }
+        username
       }
     }
 
     return UserModel.findOne(query)
   }
 
-  static loadForMeAPI (username: string): Promise<MUserNotifSettingChannelDefault> {
+  static loadForMeAPI (id: number): Promise<MUserNotifSettingChannelDefault> {
     const query = {
       where: {
-        username: { [Op.iLike]: username }
+        id
       }
     }
 
