@@ -109,6 +109,10 @@ class LiveManager {
     logger.info('Running RTMP server on port %d', config.rtmp.port)
 
     this.rtmpServer = new NodeRtmpServer(config)
+    this.rtmpServer.tcpServer.on('error', err => {
+      logger.error('Cannot run RTMP server.', { err })
+    })
+
     this.rtmpServer.run()
   }
 

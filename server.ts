@@ -283,7 +283,7 @@ async function startApplication () {
 
   // Make server listening
   server.listen(port, hostname, () => {
-    logger.info('Server listening on %s:%d', hostname, port)
+    logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
 
     Hooks.runAction('action:application.listening')
