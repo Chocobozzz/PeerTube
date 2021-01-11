@@ -126,6 +126,10 @@ async function getConfig (req: express.Request, res: express.Response) {
       transcoding: {
         enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
         enabledResolutions: getEnabledResolutions('live')
+      },
+
+      rtmp: {
+        port: CONFIG.LIVE.RTMP.PORT
       }
     },
     import: {

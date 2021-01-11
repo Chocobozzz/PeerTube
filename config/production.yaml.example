@@ -278,6 +278,7 @@ live:
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
   allow_replay: true
 
+  # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
     port: 1935
 

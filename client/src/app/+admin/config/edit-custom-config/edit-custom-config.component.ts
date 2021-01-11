@@ -119,6 +119,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       .map(t => t.name)
   }
 
+  get liveRTMPPort () {
+    return this.serverConfig.live.rtmp.port
+  }
+
   getTotalTranscodingThreads () {
     const transcodingEnabled = this.form.value['transcoding']['enabled']
     const transcodingThreads = this.form.value['transcoding']['threads']
