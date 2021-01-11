@@ -14,7 +14,7 @@ export class MyAccountApplicationsComponent implements OnInit {
   feedUrl: string
   feedToken: string
 
-  private baseURL = environment.originServerUrl
+  private baseURL = environment.originServerUrl || window.location.origin
 
   constructor (
     private authService: AuthService,
