@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
 import { getBytes } from '@root-helpers/bytes'
 import { ServerConfig } from '@shared/models'
@@ -12,7 +12,7 @@ import { Actor } from './actor.model'
   templateUrl: './actor-avatar-info.component.html',
   styleUrls: [ './actor-avatar-info.component.scss' ]
 })
-export class ActorAvatarInfoComponent implements OnInit {
+export class ActorAvatarInfoComponent implements OnInit, OnChanges {
   @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>
   @ViewChild('avatarPopover') avatarPopover: NgbPopover
 
@@ -21,6 +21,7 @@ export class ActorAvatarInfoComponent implements OnInit {
   @Output() avatarChange = new EventEmitter<FormData>()
   @Output() avatarDelete = new EventEmitter<void>()
 
+  private avatarUrl: string
   private serverConfig: ServerConfig
 
   constructor (
@@ -34,12 +35,18 @@ export class ActorAvatarInfoComponent implements OnInit {
         .subscribe(config => this.serverConfig = config)
   }
 
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes['actor']) {
+      this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.actor)
+    }
+  }
+
   onAvatarChange (input: HTMLInputElement) {
     this.avatarfileInput = new ElementRef(input)
 
     const avatarfile = this.avatarfileInput.nativeElement.files[ 0 ]
     if (avatarfile.size > this.maxAvatarSize) {
-      this.notifier.error('Error', 'This image is too large.')
+      this.notifier.error('Error', $localize`This image is too large.`)
       return
     }
 
@@ -70,6 +77,6 @@ export class ActorAvatarInfoComponent implements OnInit {
   }
 
   get hasAvatar () {
-    return Actor.GET_ACTOR_AVATAR_URL(this.actor)
+    return !!this.avatarUrl
   }
 }
