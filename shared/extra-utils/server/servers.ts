@@ -145,7 +145,7 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
 async function runServer (server: ServerInfo, configOverrideArg?: any, args = [], options: RunServerOptions = {}) {
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
-    'Server listening': false
+    'HTTP server listening': false
   }
   const key = 'Database peertube_test' + server.internalServerNumber + ' is ready'
   serverRunString[key] = false
