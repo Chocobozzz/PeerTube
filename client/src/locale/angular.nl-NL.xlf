@@ -4226,7 +4226,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="0a82b1f5636ff3c47cddf9e4bffa86b5d696fe06" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated"><x id="CLOSE_TAG_STRONG"/>Je gebruikers <x id="START_TAG_STRONG"/> toestaan externe video's/gebruikers op te zoeken die mogelijk niet met je exemplaar van PeerTube zijn verbonden</target>
+        <target state="translated"><x id="START_TAG_STRONG"/>Je gebruikers<x id="CLOSE_TAG_STRONG"/> toestaan externe video's/gebruikers op te zoeken die mogelijk niet met je exemplaar van PeerTube zijn verbonden</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">485</context></context-group>
       </trans-unit>
       <trans-unit id="f3af9d2cf9a341ce634210908597e491e77e7376" datatype="html">
