@@ -1,6 +1,7 @@
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../initializers/constants'
 import { logger } from './logger'
-import { generateVideoImportTmpPath, getEnabledResolutions } from './utils'
+import { generateVideoImportTmpPath } from './utils'
+import { getEnabledResolutions } from '../lib/video-transcoding'
 import { join } from 'path'
 import { peertubeTruncate, root } from './core-utils'
 import { ensureDir, remove, writeFile } from 'fs-extra'
@@ -131,7 +132,7 @@ function getYoutubeDLVideoFormat () {
 
 function downloadYoutubeDLVideo (url: string, extension: string, timeout: number, mergeExtension?: string) {
   const path = generateVideoImportTmpPath(url, extension)
-  const finalPath = mergeExtension ? path.replace(extension, mergeExtension) : path
+  const finalPath = mergeExtension ? path.replace(new RegExp(`${extension}$`), mergeExtension) : path
   let timer
 
   logger.info('Importing youtubeDL video %s to %s', url, finalPath)
