@@ -23,7 +23,7 @@ export class UserHistoryService {
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)
-    params = this.restService.addObjectParams(params, { search })
+    params = params.append('search', search)
 
     return this.authHttp
                .get<ResultList<Video>>(UserHistoryService.BASE_USER_VIDEOS_HISTORY_URL, { params })
