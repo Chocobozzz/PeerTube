@@ -19,6 +19,7 @@ export class AccountSearchComponent extends AbstractVideoList implements OnInit,
   titlePage: string
   loadOnInit = false
 
+  search = ''
   filter: VideoFilter = null
 
   private account: Account
@@ -62,6 +63,13 @@ export class AccountSearchComponent extends AbstractVideoList implements OnInit,
     super.ngOnDestroy()
   }
 
+  updateSearch (value: string) {
+    if (value === '') this.router.navigate(['../videos'], { relativeTo: this.route })
+    this.search = value
+
+    this.reloadVideos()
+  }
+
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
     const options = {
@@ -69,14 +77,17 @@ export class AccountSearchComponent extends AbstractVideoList implements OnInit,
       videoPagination: newPagination,
       sort: this.sort,
       nsfwPolicy: this.nsfwPolicy,
-      videoFilter: this.filter
+      videoFilter: this.filter,
+      search: this.search
     }
 
     return this.videoService
                .getAccountVideos(options)
                .pipe(
                  tap(({ total }) => {
-                   this.titlePage = $localize`${total} results on this account for TODO`
+                   this.titlePage = this.search
+                     ? $localize`Published ${total} videos matching "${this.search}"`
+                     : $localize`Published ${total} videos`
                  })
                )
   }
@@ -87,5 +98,7 @@ export class AccountSearchComponent extends AbstractVideoList implements OnInit,
     this.reloadVideos()
   }
 
-  generateSyndicationList () {}
+  generateSyndicationList () {
+    /* disable syndication */
+  }
 }

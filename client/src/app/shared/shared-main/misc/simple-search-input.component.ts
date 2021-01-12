@@ -9,16 +9,17 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
   styleUrls: [ './simple-search-input.component.scss' ]
 })
 export class SimpleSearchInputComponent implements OnInit {
-  @ViewChild("searchVideos") input: ElementRef
+  @ViewChild('ref') input: ElementRef
 
-  @Input() enter: string
+  @Input() name = 'search'
+  @Input() placeholder = $localize`Search`
 
   @Output() searchChanged = new EventEmitter<string>()
 
-  search = ''
+  value = ''
   shown: boolean
 
-  private searchSubject= new Subject<string>()
+  private searchSubject = new Subject<string>()
 
   constructor (
     private router: Router,
@@ -33,26 +34,21 @@ export class SimpleSearchInputComponent implements OnInit {
         )
         .subscribe(value => this.searchChanged.emit(value))
 
-    this.searchSubject.next(this.search)
+    this.searchSubject.next(this.value)
   }
 
   showInput () {
     this.shown = true
-    setTimeout(()=> {
-      this.input.nativeElement.focus()
-    })
+    setTimeout(() => this.input.nativeElement.focus())
   }
 
   focusLost () {
-    if (this.search !== '') return
+    if (this.value !== '') return
     this.shown = false
   }
 
   searchChange () {
-    this.searchChanged.emit(this.search)
-  }
-
-  navigate () {
     this.router.navigate(['./search'], { relativeTo: this.route })
+    this.searchSubject.next(this.value)
   }
 }

@@ -15,6 +15,7 @@ import { AccountSearchComponent } from './account-search/account-search.componen
 })
 export class AccountsComponent implements OnInit, OnDestroy {
   @ViewChild('accountReportModal') accountReportModal: AccountReportComponent
+  accountSearch: AccountSearchComponent
 
   account: Account
   accountUser: User
@@ -102,13 +103,14 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   onOutletLoaded (component: Component) {
     if (component instanceof AccountSearchComponent) {
-      console.log('AccounSearchComponent')
+      this.accountSearch = component
+    } else {
+      this.accountSearch = undefined
     }
-    console.log('not AccountSearchComponent')
   }
 
   searchChanged (search: string) {
-    console.log('search: ' + search)
+    if (this.accountSearch) this.accountSearch.updateSearch(search)
   }
 
   private onAccount (account: Account) {

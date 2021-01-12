@@ -1,13 +1,14 @@
-<my-global-icon iconName="search" aria-label="Search" role="button" (click)="showInput()"></my-global-icon>
+<span>
+  <my-global-icon iconName="search" aria-label="Search" role="button" (click)="showInput()"></my-global-icon>
 
-<input
-  #searchVideos
-  name="search-videos"
-  type="text"
-  [(ngModel)]="search"
-  (ngModelChange)="searchChange"
-  i18n-placeholder placeholder="Search videos"
-  (focusout)="focusLost()"
-  (keyup.enter)="navigate()"
-  [hidden]="!shown"
->
+  <input
+    #ref
+    type="text"
+    [(ngModel)]="value"
+    (focusout)="focusLost()"
+    (keyup.enter)="searchChange()"
+    [hidden]="!shown"
+    [name]="name"
+    [placeholder]="placeholder"
+  >
+</span>
