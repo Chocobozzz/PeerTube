@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
