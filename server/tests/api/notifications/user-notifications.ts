@@ -116,7 +116,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification on a remote scheduled publication', async function () {
-      this.timeout(50000)
+      this.timeout(100000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
