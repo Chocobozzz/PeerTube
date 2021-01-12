@@ -21,7 +21,8 @@
     height: 35px;
 
     & > button:first-child {
-      width: 175px;
+      width: max-content;
+      min-width: 175px;
     }
 
     button .extra-text {
