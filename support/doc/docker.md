@@ -3,9 +3,7 @@
 This guide requires [docker](https://www.docker.com/community-edition) and
 [docker-compose](https://docs.docker.com/compose/install/).
 
-## Production
-
-### Install
+## Install
 
 **PeerTube does not support webserver host change**. Keep in mind your domain
 name is definitive after your first PeerTube start.
@@ -86,7 +84,7 @@ Run your containers:
 docker-compose up
 ```
 
-### Obtaining your automatically-generated admin credentials
+#### Obtaining your automatically-generated admin credentials
 
 Now that you've installed your PeerTube instance you'll want to grep your peertube container's logs for the `root` password. You're going to want to run `docker-compose logs peertube | grep -A1 root` to search the log output for your new PeerTube's instance admin credentials which will look something like this.
 
@@ -97,7 +95,7 @@ peertube_1  | [example.com:443] 2019-11-16 04:26:06.082 info: Username: root
 peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abcdefghijklmnop
 ```
 
-### Obtaining Your Automatically Generated DKIM DNS TXT Record
+#### Obtaining Your Automatically Generated DKIM DNS TXT Record
 
 [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) signature sending and RSA keys generation are enabled by the default Postfix image `mwader/postfix-relay` with [OpenDKIM](http://www.opendkim.org/).
 
@@ -111,15 +109,15 @@ peertube._domainkey.mydomain.tld.	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
 	  "j5joTnYwat4387VEUyGUnZ0aZxCERi+ndXv2/wMJ0tizq+a9+EgqIb+7lkUc2XciQPNuTujM25GhrQBEKznvHyPA6fHsFheymOuB763QpkmnQQLCxyLygAY9mE/5RY+5Q6J9oDOQIDAQAB" )  ; ----- DKIM key peertube for mydomain.tld
 ```
 
-### Administrator password
+#### Administrator password
 
 See the production guide ["Administrator" section](https://docs.joinpeertube.org/install-any-os?id=administrator)
 
-### What now?
+#### What now?
 
 See the production guide ["What now" section](https://docs.joinpeertube.org/install-any-os?id=what-now).
 
-### Upgrade
+## Upgrade
 
 **Important:** Before upgrading, check you have all the `storage` fields in your [production.yaml file](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/production.yaml).
 
@@ -142,7 +140,9 @@ Rerun PeerTube:
 $ docker-compose up -d
 ```
 
-## Build your own Docker image
+## Build
+
+### Production
 
 ```shell
 $ git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
@@ -150,6 +150,6 @@ $ cd /tmp/peertube
 $ docker build . -f ./support/docker/production/Dockerfile.buster
 ```
 
-## Development
+### Development
 
 We don't have a Docker image for development. See [the CONTRIBUTING guide](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#develop) for more information on how you can hack PeerTube!
