@@ -30,8 +30,11 @@ $iconSize: 16px;
   }
 
   .moderation-block {
-    div {
-      @include button-with-icon($iconSize, 3px, -2px);
+
+    my-global-icon {
+      position: relative;
+      width: $iconSize;
+      top: -2px;
     }
 
     margin-left: .4rem;
