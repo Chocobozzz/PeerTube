@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, flushAndRunServer, killallServers, makeGetRequest, makePingRequest, reRunServer, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import * as chai from 'chai'
+import {
+  cleanupTests,
+  flushAndRunServer,
+  killallServers,
+  makePingRequest,
+  reRunServer,
+  ServerInfo,
+  setAccessTokensToServers
+} from '../../../../shared/extra-utils/index'
+import { getAuditLogs, getLogs } from '../../../../shared/extra-utils/logs/logs'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { uploadVideo } from '../../../../shared/extra-utils/videos/videos'
-import { getAuditLogs, getLogs } from '../../../../shared/extra-utils/logs/logs'
 
 const expect = chai.expect
 
