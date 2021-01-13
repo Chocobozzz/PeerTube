@@ -174,7 +174,7 @@ See our [ActivityPub documentation](https://docs.joinpeertube.org/api-activitypu
 
 ## License
 
-Copyright (C) 2015-2020 PeerTube Contributors (see [CREDITS.md](CREDITS.md))
+Copyright (C) 2015-2021 PeerTube Contributors (see [CREDITS.md](CREDITS.md))
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
