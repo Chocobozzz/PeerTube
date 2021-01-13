@@ -7,6 +7,7 @@ import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
 import { VideoChannel } from '../../models/videos'
 import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
+import { makeGetRequest } from '../requests/requests'
 
 interface ServerInfo {
   app: ChildProcess
@@ -347,6 +348,14 @@ async function getServerFileSize (server: ServerInfo, subPath: string) {
   return getFileSize(path)
 }
 
+function makePingRequest (server: ServerInfo) {
+  return makeGetRequest({
+    url: server.url,
+    path: '/api/v1/ping',
+    statusCodeExpected: 200
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -358,6 +367,7 @@ export {
   cleanupTests,
   flushAndRunMultipleServers,
   flushTests,
+  makePingRequest,
   flushAndRunServer,
   killallServers,
   reRunServer,
