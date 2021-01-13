@@ -1,7 +1,7 @@
 import 'multer'
 import { sendUpdateActor } from './activitypub/send'
 import { AVATARS_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
-import { updateActorAvatarInstance } from './activitypub/actor'
+import { updateActorAvatarInstance, deleteActorAvatarInstance } from './activitypub/actor'
 import { processImage } from '../helpers/image-utils'
 import { extname, join } from 'path'
 import { retryTransactionWrapper } from '../helpers/database-utils'
@@ -14,8 +14,8 @@ import { downloadImage } from '../helpers/requests'
 import { MAccountDefault, MChannelDefault } from '../types/models'
 
 async function updateActorAvatarFile (
-  avatarPhysicalFile: Express.Multer.File,
-  accountOrChannel: MAccountDefault | MChannelDefault
+  accountOrChannel: MAccountDefault | MChannelDefault,
+  avatarPhysicalFile: Express.Multer.File
 ) {
   const extension = extname(avatarPhysicalFile.filename)
   const avatarName = uuidv4() + extension
@@ -31,6 +31,21 @@ async function updateActorAvatarFile (
       }
 
       const updatedActor = await updateActorAvatarInstance(accountOrChannel.Actor, avatarInfo, t)
+      await updatedActor.save({ transaction: t })
+
+      await sendUpdateActor(accountOrChannel, t)
+
+      return updatedActor.Avatar
+    })
+  })
+}
+
+async function deleteActorAvatarFile (
+  accountOrChannel: MAccountDefault | MChannelDefault
+) {
+  return retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async t => {
+      const updatedActor = await deleteActorAvatarInstance(accountOrChannel.Actor, t)
       await updatedActor.save({ transaction: t })
 
       await sendUpdateActor(accountOrChannel, t)
@@ -64,5 +79,6 @@ const avatarPathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.AVAT
 export {
   avatarPathUnsafeCache,
   updateActorAvatarFile,
+  deleteActorAvatarFile,
   pushAvatarProcessInQueue
 }

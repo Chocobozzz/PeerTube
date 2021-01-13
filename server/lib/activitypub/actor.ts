@@ -199,6 +199,19 @@ async function updateActorAvatarInstance (actor: MActorDefault, info: AvatarInfo
   return actor
 }
 
+async function deleteActorAvatarInstance (actor: MActorDefault, t: Transaction) {
+  try {
+    await actor.Avatar.destroy({ transaction: t })
+  } catch (err) {
+    logger.error('Cannot remove old avatar of actor %s.', actor.url, { err })
+  }
+
+  actor.avatarId = null
+  actor.Avatar = null
+
+  return actor
+}
+
 async function fetchActorTotalItems (url: string) {
   const options = {
     uri: url,
@@ -337,6 +350,7 @@ export {
   fetchActorTotalItems,
   getAvatarInfoIfExists,
   updateActorInstance,
+  deleteActorAvatarInstance,
   refreshActorIfNeeded,
   updateActorAvatarInstance,
   addFetchOutboxJob

@@ -3,7 +3,7 @@
   <div class="form-group col-12 col-lg-4 col-xl-3"></div>
 
   <div class="form-group col-12 col-lg-8 col-xl-9">
-    <my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
+    <my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"></my-actor-avatar-info>
   </div>
 </div>
 

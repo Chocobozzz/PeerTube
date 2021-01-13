@@ -123,6 +123,16 @@ export class UserService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
+  deleteAvatar () {
+    const url = UserService.BASE_USERS_URL + 'me/avatar'
+
+    return this.authHttp.delete(url)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
   signup (userCreate: UserRegister) {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
                .pipe(

@@ -53,4 +53,17 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
         })
       )
   }
+
+  onAvatarDelete () {
+    this.userService.deleteAvatar()
+      .subscribe(
+        data => {
+          this.notifier.success($localize`Avatar deleted.`)
+
+          this.user.updateAccountAvatar()
+        },
+
+        (err: HttpErrorResponse) => this.notifier.error(err.message)
+      )
+  }
 }

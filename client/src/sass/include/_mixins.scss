@@ -260,14 +260,11 @@
   }
 }
 
-@mixin peertube-button-file ($width) {
+@mixin peertube-file {
   position: relative;
   overflow: hidden;
   display: inline-block;
-  width: $width;
   min-height: 30px;
-
-  @include peertube-button;
 
   input[type=file] {
     position: absolute;
@@ -284,6 +281,13 @@
     cursor: inherit;
     display: block;
   }
+}
+
+@mixin peertube-button-file ($width) {
+  width: $width;
+
+  @include peertube-file;
+  @include peertube-button;
 }
 
 @mixin icon ($size) {

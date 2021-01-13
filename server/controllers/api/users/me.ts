@@ -10,7 +10,7 @@ import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
-import { updateActorAvatarFile } from '../../../lib/avatar'
+import { deleteActorAvatarFile, updateActorAvatarFile } from '../../../lib/avatar'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
@@ -87,6 +87,11 @@ meRouter.post('/me/avatar/pick',
   reqAvatarFile,
   updateAvatarValidator,
   asyncRetryTransactionMiddleware(updateMyAvatar)
+)
+
+meRouter.delete('/me/avatar',
+  authenticate,
+  asyncRetryTransactionMiddleware(deleteMyAvatar)
 )
 
 // ---------------------------------------------------------------------------
@@ -225,7 +230,16 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatar = await updateActorAvatarFile(avatarPhysicalFile, userAccount)
+  const avatar = await updateActorAvatarFile(userAccount, avatarPhysicalFile)
 
   return res.json({ avatar: avatar.toFormattedJSON() })
+}
+
+async function deleteMyAvatar (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.user
+
+  const userAccount = await AccountModel.load(user.Account.id)
+  await deleteActorAvatarFile(userAccount)
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
