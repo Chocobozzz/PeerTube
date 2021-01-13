@@ -11,6 +11,13 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption">
+      <div class="left-buttons">
+        <a class="block-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
+          <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>Mute domain</ng-container>
+        </a>
+      </div>
+
       <div class="ml-auto has-feedback has-clear">
         <input
           type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
@@ -19,10 +26,6 @@
         <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
         <span class="sr-only" i18n>Clear filters</span>
       </div>
-      <a class="ml-2 block-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
-        <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
-        <ng-container i18n>Mute domain</ng-container>
-      </a>
     </div>
   </ng-template>
 
