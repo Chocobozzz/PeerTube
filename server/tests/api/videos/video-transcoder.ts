@@ -486,7 +486,9 @@ describe('Test video transcoding', function () {
           '360p': true,
           '480p': true,
           '720p': true,
-          '1080p': true
+          '1080p': true,
+          '1440p': true,
+          '2160p': true
         },
         webtorrent: { enabled: true },
         hls: { enabled: true }
@@ -563,6 +565,34 @@ describe('Test video transcoding', function () {
         const res3 = await getVideoFileMetadataUrl(file.metadataUrl)
         const metadata: FfprobeData = res3.body
         expect(metadata).to.have.nested.property('format.size')
+      }
+    }
+  })
+
+  it('Should transcode a 4k video', async function () {
+    this.timeout(200000)
+
+    const videoAttributes = {
+      name: '4k video',
+      fixture: 'video_short_4k.mp4'
+    }
+
+    const resUpload = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+    const videoUUID = resUpload.body.video.uuid
+
+    await waitJobs(servers)
+
+    const resolutions = [ 240, 360, 480, 720, 1080, 1440, 2160 ]
+
+    for (const server of servers) {
+      const res = await getVideo(server.url, videoUUID)
+      const videoDetails: VideoDetails = res.body
+
+      expect(videoDetails.files).to.have.lengthOf(resolutions.length)
+
+      for (const r of resolutions) {
+        expect(videoDetails.files.find(f => f.resolution.id === r)).to.not.be.undefined
+        expect(videoDetails.streamingPlaylists[0].files.find(f => f.resolution.id === r)).to.not.be.undefined
       }
     }
   })
