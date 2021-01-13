@@ -13,6 +13,8 @@ import {
   NgbPopoverModule,
   NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
+import { LoadingBarModule } from '@ngx-loading-bar/core'
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, ActorAvatarInfoComponent, VideoAvatarChannelComponent } from './account'
 import {
@@ -41,6 +43,9 @@ import { VideoChannelService } from './video-channel'
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
+
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
 
     NgbDropdownModule,
     NgbModalModule,
@@ -94,6 +99,9 @@ import { VideoChannelService } from './video-channel'
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
+
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
 
     NgbDropdownModule,
     NgbModalModule,
