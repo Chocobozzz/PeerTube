@@ -1,10 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
-import { getBytes } from '@root-helpers/bytes'
-import { ServerConfig } from '@shared/models'
-import { VideoChannel } from '../video-channel/video-channel.model'
-import { Account } from '../account/account.model'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
+import { getBytes } from '@root-helpers/bytes'
+import { Account } from '../account/account.model'
+import { VideoChannel } from '../video-channel/video-channel.model'
 import { Actor } from './actor.model'
 
 @Component({
@@ -21,8 +20,11 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
   @Output() avatarChange = new EventEmitter<FormData>()
   @Output() avatarDelete = new EventEmitter<void>()
 
+  avatarFormat = ''
+  maxAvatarSize = 0
+  avatarExtensions = ''
+
   private avatarUrl: string
-  private serverConfig: ServerConfig
 
   constructor (
     private serverService: ServerService,
@@ -30,9 +32,14 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit (): void {
-    this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+        .subscribe(config => {
+          this.maxAvatarSize = config.avatar.file.size.max
+          this.avatarExtensions = config.avatar.file.extensions.join(', ')
+
+          this.avatarFormat = `${$localize`max size`}: 192*192px, ` +
+                              `${getBytes(this.maxAvatarSize)} ${$localize`extensions`}: ${this.avatarExtensions}`
+        })
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -60,23 +67,7 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
     this.avatarDelete.emit()
   }
 
-  get maxAvatarSize () {
-    return this.serverConfig.avatar.file.size.max
-  }
-
-  get maxAvatarSizeInBytes () {
-    return getBytes(this.maxAvatarSize)
-  }
-
-  get avatarExtensions () {
-    return this.serverConfig.avatar.file.extensions.join(', ')
-  }
-
-  get avatarFormat () {
-    return `${$localize`max size`}: 192*192px, ${this.maxAvatarSizeInBytes} ${$localize`extensions`}: ${this.avatarExtensions}`
-  }
-
-  get hasAvatar () {
+  hasAvatar () {
     return !!this.avatarUrl
   }
 }
