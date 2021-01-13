@@ -25,6 +25,10 @@ export class MenuService {
     this.isMenuChangedByUser = true
   }
 
+  isDisplayed () {
+    return this.isMenuDisplayed
+  }
+
   setMenuDisplay (display: boolean) {
     this.isMenuDisplayed = display
 

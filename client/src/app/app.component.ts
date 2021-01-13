@@ -103,6 +103,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.pluginService.initializeCustomModal(this.customModal)
   }
 
+  getToggleTitle () {
+    if (this.menu.isDisplayed()) return $localize`Close the left menu`
+
+    return $localize`Open the left menu`
+  }
+
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
