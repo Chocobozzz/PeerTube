@@ -13,6 +13,8 @@ import {
 import { immutableAssign } from '@app/helpers'
 import { UserHistoryService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
+import { Subject } from 'rxjs'
+import { debounceTime, tap, distinctUntilChanged } from 'rxjs/operators'
 
 @Component({
   templateUrl: './my-history.component.html',
@@ -26,6 +28,9 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
     totalItems: null
   }
   videosHistoryEnabled: boolean
+  search: string
+
+  protected searchStream: Subject<string>
 
   constructor (
     protected router: Router,
@@ -41,7 +46,7 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
   ) {
     super()
 
-    this.titlePage = $localize`My videos history`
+    this.titlePage = $localize`My watch history`
   }
 
   ngOnInit () {
@@ -52,6 +57,28 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
         this.videosHistoryEnabled = this.authService.getUser().videosHistoryEnabled
       })
 
+    this.searchStream = new Subject()
+
+    this.searchStream
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged()
+      )
+      .subscribe(search => {
+        this.search = search
+        this.reloadVideos()
+      })
+  }
+
+  onSearch (event: Event) {
+    const target = event.target as HTMLInputElement
+    this.searchStream.next(target.value)
+  }
+
+  resetSearch () {
+    const searchInput = document.getElementById('history-search') as HTMLInputElement
+    searchInput.value = ''
+    this.searchStream.next('')
   }
 
   ngOnDestroy () {
@@ -61,7 +88,10 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.userHistoryService.getUserVideosHistory(newPagination)
+    return this.userHistoryService.getUserVideosHistory(newPagination, this.search)
+      .pipe(
+        tap(res => this.pagination.totalItems = res.total)
+      )
   }
 
   generateSyndicationList () {

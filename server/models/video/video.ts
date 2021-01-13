@@ -1087,6 +1087,7 @@ export class VideoModel extends Model {
     user?: MUserAccountId
     historyOfUser?: MUserId
     countVideos?: boolean
+    search?: string
   }) {
     if ((options.filter === 'all-local' || options.filter === 'all') && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
@@ -1123,7 +1124,8 @@ export class VideoModel extends Model {
       includeLocalVideos: options.includeLocalVideos,
       user: options.user,
       historyOfUser: options.historyOfUser,
-      trendingDays
+      trendingDays,
+      search: options.search
     }
 
     return VideoModel.getAvailableForApi(queryOptions, options.countVideos)

@@ -5,6 +5,7 @@ import {
   authenticate,
   paginationValidator,
   setDefaultPagination,
+  userHistoryListValidator,
   userHistoryRemoveValidator
 } from '../../../middlewares'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -18,6 +19,7 @@ myVideosHistoryRouter.get('/me/history/videos',
   authenticate,
   paginationValidator,
   setDefaultPagination,
+  userHistoryListValidator,
   asyncMiddleware(listMyVideosHistory)
 )
 
@@ -38,7 +40,7 @@ export {
 async function listMyVideosHistory (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
 
-  const resultList = await UserVideoHistoryModel.listForApi(user, req.query.start, req.query.count)
+  const resultList = await UserVideoHistoryModel.listForApi(user, req.query.start, req.query.count, req.query.search)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

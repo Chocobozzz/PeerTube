@@ -14,13 +14,16 @@ function userWatchVideo (
   return makePutBodyRequest({ url, path, token, fields, statusCodeExpected })
 }
 
-function listMyVideosHistory (url: string, token: string) {
+function listMyVideosHistory (url: string, token: string, search?: string) {
   const path = '/api/v1/users/me/history/videos'
 
   return makeGetRequest({
     url,
     path,
     token,
+    query: {
+      search
+    },
     statusCodeExpected: HttpStatusCode.OK_200
   })
 }
