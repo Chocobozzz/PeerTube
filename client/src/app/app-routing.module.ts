@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core'
 import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 import { MenuGuards } from '@app/core/routing/menu-guard.service'
+import { POSSIBLE_LOCALES } from '@shared/core-utils/i18n'
 import { PreloadSelectedModulesList } from './core'
 import { EmptyComponent } from './empty.component'
-import { POSSIBLE_LOCALES } from '@shared/core-utils/i18n'
 
 const routes: Routes = [
   {
@@ -56,6 +56,10 @@ const routes: Routes = [
   {
     path: 'videos',
     loadChildren: () => import('./+videos/videos.module').then(m => m.VideosModule)
+  },
+  {
+    path: 'remote-interaction',
+    loadChildren: () => import('./+remote-interaction/remote-interaction.module').then(m => m.RemoteInteractionModule)
   },
   {
     path: '',

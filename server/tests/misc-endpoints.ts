@@ -80,6 +80,31 @@ describe('Test misc endpoints', function () {
 
       expect(res.header.location).to.equal('/my-account/settings')
     })
+
+    it('Should test webfinger', async function () {
+      const resource = 'acct:peertube@' + server.host
+      const accountUrl = server.url + '/accounts/peertube'
+
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/.well-known/webfinger?resource=' + resource,
+        statusCodeExpected: HttpStatusCode.OK_200
+      })
+
+      const data = res.body
+
+      expect(data.subject).to.equal(resource)
+      expect(data.aliases).to.contain(accountUrl)
+
+      const self = data.links.find(l => l.rel === 'self')
+      expect(self).to.exist
+      expect(self.type).to.equal('application/activity+json')
+      expect(self.href).to.equal(accountUrl)
+
+      const remoteInteract = data.links.find(l => l.rel === 'http://ostatus.org/schema/1.0/subscribe')
+      expect(remoteInteract).to.exist
+      expect(remoteInteract.template).to.equal(server.url + '/remote-interaction?uri={uri}')
+    })
   })
 
   describe('Test classic static endpoints', function () {

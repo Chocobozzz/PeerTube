@@ -39,6 +39,17 @@ export const USER_EMAIL_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const USER_HANDLE_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [
+    Validators.required,
+    Validators.pattern(/@.+/)
+  ],
+  MESSAGES: {
+    'required': $localize`Handle is required.`,
+    'pattern': $localize`Handle must be valid (chocobozzz@example.com).`
+  }
+}
+
 export const USER_EXISTING_PASSWORD_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
     Validators.required
