@@ -613,17 +613,36 @@ function getFFmpeg (input: string, type: 'live' | 'vod') {
 
 async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
   return new Promise<void>((res, rej) => {
-    command.on('error', (err, stdout, stderr) => {
+    const onError = (
+      stdout,
+      stderr,
+      error?
+    ) => {
+      logger.error('Error in transcoding job.', { stdout, stderr })
+      rej(error || new Error(stderr))
+    }
+
+    command.on('error', (error, stdout, stderr) => {
       if (onEnd) onEnd()
 
-      logger.error('Error in transcoding job.', { stdout, stderr })
-      rej(err)
+      onError(
+        stdout,
+        stderr,
+        error
+      )
     })
 
-    command.on('end', () => {
+    command.on('end', (stdout, stderr) => {
       if (onEnd) onEnd()
 
-      res()
+      if (stderr) {
+        onError(
+          stdout,
+          stderr
+        )
+      } else {
+        res()
+      }
     })
 
     command.run()
