@@ -43,7 +43,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    if (req.body.targetUrl && CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true) {
+    if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true && req.body.targetUrl) {
       cleanUpReqFiles(req)
       return res.status(HttpStatusCode.CONFLICT_409)
         .json({ error: 'HTTP import is not enabled on this instance.' })

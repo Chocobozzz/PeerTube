@@ -196,6 +196,8 @@ export enum HttpStatusCode {
    *
    * Indicates that the request could not be processed because of conflict in the request,
    * such as an edit conflict between multiple simultaneous updates.
+   *
+   * @see HttpStatusCode.UNPROCESSABLE_ENTITY_422 to denote a disabled feature
    */
   CONFLICT_409 = 409,
 
@@ -269,6 +271,12 @@ export enum HttpStatusCode {
    * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.3
    *
    * The request was well-formed but was unable to be followed due to semantic errors.
+   * The server understands the content type of the request entity (hence a 415 (Unsupported Media Type) status code is inappropriate),
+   * and the syntax of the request entity is correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process
+   * the contained instructions. For example, this error condition may occur if an JSON request body contains well-formed (i.e.,
+   * syntactically correct), but semantically erroneous, JSON instructions.
+   *
+   * Can also be used to denote disabled features (akin to disabled syntax).
    *
    * @see HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 if the `Content-Type` was not supported.
    * @see HttpStatusCode.BAD_REQUEST_400 if the request was not parsable (broken JSON, XML)

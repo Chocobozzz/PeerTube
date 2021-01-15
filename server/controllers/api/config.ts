@@ -10,6 +10,7 @@ import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '..
 import { objectConverter } from '../../helpers/core-utils'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { getServerCommit } from '../../helpers/utils'
+import { getEnabledResolutions } from '../../lib/video-transcoding'
 import { CONFIG, isEmailEnabled, reloadConfig } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '../../initializers/constants'
 import { ClientHtml } from '../../lib/client-html'
@@ -285,16 +286,6 @@ function getRegisteredThemes () {
                       }))
 }
 
-function getEnabledResolutions (type: 'vod' | 'live') {
-  const transcoding = type === 'vod'
-    ? CONFIG.TRANSCODING
-    : CONFIG.LIVE.TRANSCODING
-
-  return Object.keys(transcoding.RESOLUTIONS)
-               .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
-               .map(r => parseInt(r, 10))
-}
-
 function getRegisteredPlugins () {
   return PluginManager.Instance.getRegisteredPlugins()
                       .map(p => ({
@@ -345,7 +336,6 @@ function getExternalAuthsPlugins () {
 
 export {
   configRouter,
-  getEnabledResolutions,
   getRegisteredPlugins,
   getRegisteredThemes
 }
