@@ -60,22 +60,24 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
         tokens => {
           const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
           feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
+
+          this.actions.unshift({
+            label: $localize`Copy feed URL`,
+            iconName: 'syndication',
+            justIcon: true,
+            href: feedUrl,
+            click: e => {
+              e.preventDefault()
+              copyToClipboard(feedUrl)
+              this.activateCopiedMessage()
+            }
+          })
         },
 
         err => {
           this.notifier.error(err.message)
         }
       )
-
-    this.actions.unshift({
-      label: $localize`Feed`,
-      iconName: 'syndication',
-      justIcon: true,
-      click: () => {
-        copyToClipboard(feedUrl)
-        this.activateCopiedMessage()
-      }
-    })
   }
 
   ngOnDestroy () {

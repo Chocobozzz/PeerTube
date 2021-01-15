@@ -12,13 +12,12 @@
         <a *ngIf="action.routerLink" class="ml-2" [routerLink]="action.routerLink" routerLinkActive="active">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
         </a>
-        <a *ngIf="!action.routerLink && action.click && !action.clipboard" class="ml-2" (click)="action.click()" (key.enter)="action.click()">
+
+        <a *ngIf="!action.routerLink && !action.href && action.click" class="ml-2" (click)="action.click($event)" (key.enter)="action.click($event)">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
         </a>
-        <a *ngIf="!action.routerLink && !action.click && action.clipboard" class="ml-2" [cdkCopyToClipboard]="action.clipboard">
-          <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
-        </a>
-        <a *ngIf="!action.routerLink && action.click && action.clipboard" class="ml-2" (click)="action.click()" (key.enter)="action.click()" [cdkCopyToClipboard]="action.clipboard">
+
+        <a *ngIf="!action.routerLink && action.href && action.click" class="ml-2" (click)="action.click($event)" (key.enter)="action.click($event)" [href]="action.href">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
         </a>
 
