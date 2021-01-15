@@ -516,6 +516,9 @@ p-table {
   th {
     background-color: pvar(--mainBackgroundColor) !important;
     outline: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   td, th {
