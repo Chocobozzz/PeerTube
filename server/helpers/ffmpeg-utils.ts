@@ -620,7 +620,9 @@ async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
       rej(err)
     })
 
-    command.on('end', () => {
+    command.on('end', (stdout, stderr) => {
+      logger.debug('FFmpeg command ended.', { stdout, stderr })
+
       if (onEnd) onEnd()
 
       res()
