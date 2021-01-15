@@ -1,4 +1,5 @@
 
+import { switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, ScopedTokensService, ScreenService, ServerService, UserService } from '@app/core'
@@ -53,16 +54,18 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     const user = this.authService.getUser()
     let feedUrl = environment.originServerUrl
 
-    this.scopedTokensService.getScopedTokens().subscribe(
-      tokens => {
-        const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
-        feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
-      },
+    this.authService.userInformationLoaded
+      .pipe(switchMap(() => this.scopedTokensService.getScopedTokens()))
+      .subscribe(
+        tokens => {
+          const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
+          feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
+        },
 
-      err => {
-        this.notifier.error(err.message)
-      }
-    )
+        err => {
+          this.notifier.error(err.message)
+        }
+      )
 
     this.actions.unshift({
       label: $localize`Feed`,
