@@ -87,7 +87,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification from a remote account', async function () {
-      this.timeout(50000) // Server 2 has transcoding enabled
+      this.timeout(150000) // Server 2 has transcoding enabled
 
       await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[1].port)
       await waitJobs(servers)
