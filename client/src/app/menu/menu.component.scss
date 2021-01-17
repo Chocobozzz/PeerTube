@@ -94,6 +94,7 @@ menu {
     .logged-in-more {
       $main-radius: 25px;
 
+      flex: 1;
       margin-left: 13px;
       border-radius: $main-radius;
       transition: all .1s ease-in-out;
@@ -161,9 +162,10 @@ menu {
       }
 
       .dropdown-toggle:first-child {
-        display: inline-flex;
+        display: flex;
         align-items: center;
         padding: 5px 7px;
+        border-radius: $main-radius;
       }
 
       img {
