@@ -16,6 +16,14 @@ input[type=text] {
   display: block;
 }
 
+input#user-name {
+  border: none;
+
+  & + div {
+    padding-left: 15px;
+  }
+}
+
 input[type=submit] {
   @include peertube-button;
   @include orange-button;

@@ -2,7 +2,8 @@
 <div *ngIf="success" class="alert alert-success">{{ success }}</div>
 
 <div i18n class="current-email">
-  Your current email is <span class="email">{{ user.email }}</span>
+  Your current email is <span class="email">{{ user.email }}</span>.
+  It is never shown to the public.
 </div>
 
 <div i18n class="pending-email" *ngIf="user.pendingEmail">
