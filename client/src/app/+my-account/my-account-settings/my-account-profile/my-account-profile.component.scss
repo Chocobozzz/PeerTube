@@ -10,18 +10,14 @@ label {
   margin-bottom: 15px;
 }
 
+input#username + .text-muted {
+  margin-top: 5px;
+}
+
 input[type=text] {
   @include peertube-input-text(340px);
 
   display: block;
-}
-
-input#user-name {
-  border: none;
-
-  & + div {
-    padding-left: 15px;
-  }
 }
 
 input[type=submit] {

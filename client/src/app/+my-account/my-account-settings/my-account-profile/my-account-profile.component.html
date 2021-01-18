@@ -3,13 +3,13 @@
 <form role="form" (ngSubmit)="updateMyProfile()" [formGroup]="form">
 
   <div class="form-group">
-    <label i18n for="user-name">User name</label>
+    <label i18n for="username">Username</label>
     <input
-      type="text" id="user-name" class="form-control"
-      formControlName="user-name"
+      type="text" id="username" class="form-control"
+      formControlName="username" readonly
     >
     <div class="text-muted" i18n>
-      People can find you @{{ user.username }}@{{ instanceHost }}
+      People can find you using @{{ user.username }}@{{ instanceHost }}
     </div>
   </div>
 
