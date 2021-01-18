@@ -1,7 +1,9 @@
 import 'focus-visible'
+import { environment } from 'src/environments/environment'
 import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
+import { ServiceWorkerModule } from '@angular/service-worker'
 import { ServerService } from '@app/core'
 import localeOc from '@app/helpers/locales/oc'
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
@@ -11,7 +13,7 @@ import { CoreModule } from './core'
 import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { HighlightPipe } from './header/highlight.pipe'
-import { NotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
+import { LanguageChooserComponent, MenuComponent, NotificationComponent } from './menu'
 import { ConfirmComponent } from './modal/confirm.component'
 import { CustomModalComponent } from './modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from './modal/instance-config-warning-modal.component'
@@ -49,6 +51,7 @@ registerLocaleData(localeOc, 'oc')
 
   imports: [
     BrowserModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
 
     CoreModule,
     SharedMainModule,

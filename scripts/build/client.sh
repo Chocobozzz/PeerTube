@@ -69,8 +69,7 @@ else
     npm run ng build -- --localize=false --output-path "dist/$defaultLanguage/" --deploy-url "/client/$defaultLanguage/" --prod --stats-json $additionalParams
 fi
 
-mv "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
-mv "./dist/$defaultLanguage/ngsw-worker.js" "./dist/"
+cp "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 
 cd ../ && npm run build:embed && cd client/
 

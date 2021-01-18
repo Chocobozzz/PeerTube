@@ -11,11 +11,6 @@ if (environment.production) {
 const bootstrap = () => platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .then(bootstrapModule => {
-    if ('serviceWorker' in navigator && environment.production) {
-      navigator.serviceWorker.register('/ngsw-worker.js')
-        .catch(err => console.error('Cannot register service worker.', err))
-    }
-
     if (!environment.production) {
       const applicationRef = bootstrapModule.injector.get(ApplicationRef)
       const componentRef = applicationRef.components[0]
