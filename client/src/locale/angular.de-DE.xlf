@@ -5,7 +5,7 @@
     <body>
       <trans-unit id="219462505467671767" datatype="html">
         <source>Close the left menu</source>
-        <target state="new">Close the left menu</target>
+        <target state="translated">Linkes Menü schließen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -13,7 +13,7 @@
       </trans-unit>
       <trans-unit id="3455550526898419928" datatype="html">
         <source>Open the left menu</source>
-        <target state="new">Open the left menu</target>
+        <target state="translated">Linkes Menü öffnen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -154,7 +154,7 @@
       </trans-unit>
       <trans-unit id="5779f601099ecd7ae8626722ef1d86f5c1a783dc" datatype="html">
         <source>Remove avatar</source>
-        <target state="new">Remove avatar</target>
+        <target state="translated">Avatar entfernen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">41</context>
@@ -169,7 +169,7 @@
       </trans-unit>
       <trans-unit id="1486537403020619891" datatype="html">
         <source>My watch history</source>
-        <target state="new">My watch history</target>
+        <target state="translated">Mein Verlauf</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -1194,7 +1194,7 @@
       </trans-unit>
       <trans-unit id="772fa4cd7612cf9dd6a7fb1a3930756a95825709" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="new">These settings apply only to your session on this instance.</target>
+        <target state="translated">Diese Einstellungen betreffen nur ihre aktuelle Sitzung auf dieser Instanz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1270,7 +1270,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5ef7ce1bada0c3d3b4e5e299dad0d336f7897a34" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2021</target>
+        <target state="translated">powered by PeerTube - CopyLeft 2015-2021</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">183</context>
@@ -1785,7 +1785,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
         <source>This image is too large.</source>
-        <target state="new">This image is too large.</target>
+        <target state="translated">Dieses Bild ist zu groß.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -2900,7 +2900,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a89875525c82ab81ffe32e481a5475b43d0c2902" datatype="html">
         <source>Unfollow</source>
-        <target state="new">Unfollow</target>
+        <target state="translated">Nichtmehr folgen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">45</context>
@@ -2935,7 +2935,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="428ed89aeb4bd5a1b5f39b674d2c476e18c55334" datatype="html">
         <source>Follow instances</source>
-        <target state="new">Follow instances</target>
+        <target state="translated">Instanzen folgen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">17</context>
@@ -4371,7 +4371,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="953cc45f4ac17dee9271bd9a3667489c03c8076b" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target state="new"> Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value. </target>
+        <target state="translated">Geben Sie den Twitter-Account an, der Ihre Instanz representiert. Falls kein solcher Account existiert, lassen Sie einfach den Standard-Wert im Feld stehen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">654,656</context>
@@ -4420,12 +4420,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="c0b94592a561638caf765f2cc338cd04e306f1a8" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="new">⚠️ Enabling live streaming requires trust in your users and extra moderation work</target>
+        <target state="translated">⚠️ Die Aktivierung des Live-Stream Features erfordert hohe Vertrauenswürdigkeit ihrer Benutzer und zusätzliche Moderation</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">898</context></context-group>
       </trans-unit>
       <trans-unit id="acdcf7ffe53af776994f9c393c1d20cdbc633ad4" datatype="html">
         <source>If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/></source>
-        <target state="new">If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/></target>
+        <target state="translated">Falls aktiviert, muss ihr Server eingehenden TCP Verkehr auf Port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/> akzeptieren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">899</context></context-group>
       </trans-unit>
       <trans-unit id="0c990b9d80188dd9edbbd945dbd8c66074ee62d8" datatype="html">
@@ -4598,7 +4598,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="c5bc90e334dc36ba82d4050e69b024713f86e71f" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="new"> The original file resolution will be the default target if no option is selected. </target>
+        <target state="translated">Die originale Bildauflösung wird das Standard-Ziel sein, falls keine Option ausgewählt ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">838,839</context>
@@ -4978,7 +4978,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="82cc4fc020efd482bb931ebd71db5868fc904629" datatype="html">
         <source>Upload a new avatar</source>
-        <target state="new">Upload a new avatar</target>
+        <target state="translated">Neuen Avatar hochladen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">10</context>
@@ -5048,7 +5048,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="945ab39294575b7271dde42240c0806dc4ff5076" datatype="html">
         <source>You don't have any video in your watch history yet.</source>
-        <target state="new">You don't have any video in your watch history yet.</target>
+        <target state="translated">Sie haben noch kein Video in ihrem Verlauf.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">30</context>
@@ -5056,7 +5056,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4cd6feecd3cc5b969cdff7e217f0582c49118ead" datatype="html">
         <source>Open syndication dropdown</source>
-        <target state="new">Open syndication dropdown</target>
+        <target state="translated">Syndication Dropdown-Menü öffnen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5563,7 +5563,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="eb99819c4e231fb1efe7f0856756941908ddf172" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="new"> The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video. </target>
+        <target state="translated">Die größte Bedrohung ihrer Privatsphäre liegt in der Speicherung ihrer IP-Adresse im BitTorrent-Tracker der Instanz, solange sie ein Video ansehen oder herunterladen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -5606,7 +5606,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="f360bcf79135ae541bdb1bbd419ccc4cb2fb6ab3" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target state="new"> Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </target>
+        <target state="translated">Web-Peers sind nicht öffentlich zugänglich: Da wir den Websocket-Transport verwenden, ist das Protokoll anders als bei klassischen BitTorrent-Trackern. Wenn Sie in einem Webbrowser sind, senden Sie ein Signal mit Ihrer IP-Adresse an den Tracker, der zufällig andere Peers auswählt, an die er die Informationen weiterleitet. Siehe <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>dieses Dokument<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> für weitere Informationen </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">118,122</context>
@@ -5971,7 +5971,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
         <source>1440p</source>
-        <target state="new">1440p</target>
+        <target state="translated">1440p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -6820,7 +6820,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="192815f43d0d7337dbf99f84281f5a4c3155af8f" datatype="html">
         <source>My watch history</source>
-        <target state="new">My watch history</target>
+        <target state="translated">Mein Verlauf</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6828,7 +6828,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="f2540f4ffc5bbb12e034a4c9e118bbc680c62e61" datatype="html">
         <source>Search your history</source>
-        <target state="new">Search your history</target>
+        <target state="translated">Verlauf durchsuchen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">10</context>
@@ -6836,7 +6836,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="777ef31e4dfcb08a00e23b586a50f0ffe94f0c72" datatype="html">
         <source>Track watch history</source>
-        <target state="new">Track watch history</target>
+        <target state="translated">Verlauf verfolgen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6993,7 +6993,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2775050991871557896" datatype="html">
         <source>Avatar deleted.</source>
-        <target state="new">Avatar deleted.</target>
+        <target state="translated">Avatar gelöscht.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -7194,7 +7194,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="61cb418b053c4b1099a9c7e5a34a9cf52c87f8dd" datatype="html">
         <source>You don't have any subscription yet.</source>
-        <target state="new">You don't have any subscription yet.</target>
+        <target state="translated">Sie haben noch kein Abonnement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context>
           <context context-type="linenumber">18</context>
@@ -8895,7 +8895,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="0713f058de1d239f503a974e384eda384d35ad2b" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target state="new">Multiple ways to subscribe to the current channel</target>
+        <target state="translated">Mehrere Möglichkeiten, den aktuellen Kanal zu abonnieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">44</context>
@@ -8903,7 +8903,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="29e51bac84b50b9a58ba54122663f31c82a504d5" datatype="html">
         <source>Open subscription dropdown</source>
-        <target state="new">Open subscription dropdown</target>
+        <target state="translated">Dropdown-Menü für Abonnement öffnen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">46</context>
@@ -9632,7 +9632,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8762033369923733525" datatype="html">
         <source>Trending for the last <x id="PH" equiv-text="trendingDays"/> days</source>
-        <target state="new">Trending for the last <x id="PH" equiv-text="trendingDays"/> days</target>
+        <target state="translated">Trending für die letzten <x id="PH" equiv-text="trendingDays"/> Tage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -9640,7 +9640,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6332970411264495724" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last <x id="PH" equiv-text="trendingDays"/> days</source>
-        <target state="new">Trending videos are those totalizing the greatest number of views during the last <x id="PH" equiv-text="trendingDays"/> days</target>
+        <target state="translated">Trending-Videos sind die Videos mit den meisten Aufrufen in den letzten <x id="PH" equiv-text="trendingDays"/> Tagen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -9653,7 +9653,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4361762785337785037" datatype="html">
         <source>Copy feed URL</source>
-        <target state="new">Copy feed URL</target>
+        <target state="translated">Feed-URL kopieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">65</context>
