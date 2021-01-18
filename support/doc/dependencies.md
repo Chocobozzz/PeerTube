@@ -39,7 +39,7 @@ Follow the below guides, and check their versions match [required external depen
 sudo snap install ffmpeg
 ```
 
-5. Run:
+6. Run:
 
 ```
 sudo apt update
