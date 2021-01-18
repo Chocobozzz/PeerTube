@@ -33,11 +33,17 @@ Follow the below guides, and check their versions match [required external depen
 4. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
 [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
 
+5. Install ffmpeg using snap to get the latest version
+
+```
+sudo snap install ffmpeg
+```
+
 5. Run:
 
 ```
 sudo apt update
-sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev
+sudo apt install certbot nginx postgresql postgresql-contrib openssl g++ make redis-server git python-dev
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
