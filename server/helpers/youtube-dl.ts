@@ -55,6 +55,8 @@ function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo>
             // this is a merge format and its extension will be appended
             if (info.ext === 'mp4') {
               info.mergeExt = 'mp4'
+            } else if (info.ext === 'webm') {
+              info.mergeExt = 'webm'
             } else {
               info.mergeExt = 'mkv'
             }
@@ -132,11 +134,15 @@ function getYoutubeDLVideoFormat () {
 }
 
 function downloadYoutubeDLVideo (url: string, extension: string, timeout: number, mergeExtension?: string) {
-  const path = generateVideoImportTmpPath(url, extension)
-  const finalPath = mergeExtension ? path.replace(new RegExp(`${extension}$`), mergeExtension) : path
+  let path = generateVideoImportTmpPath(url, extension)
+
+  path = mergeExtension
+    ? path.replace(new RegExp(`${extension}$`), mergeExtension)
+    : path
+
   let timer
 
-  logger.info('Importing youtubeDL video %s to %s', url, finalPath)
+  logger.info('Importing youtubeDL video %s to %s', url, path)
 
   let options = [ '-f', getYoutubeDLVideoFormat(), '-o', path ]
   options = wrapWithProxyOptions(options)
@@ -144,6 +150,8 @@ function downloadYoutubeDLVideo (url: string, extension: string, timeout: number
   if (process.env.FFMPEG_PATH) {
     options = options.concat([ '--ffmpeg-location', process.env.FFMPEG_PATH ])
   }
+
+  logger.debug('YoutubeDL options for %s.', url, { options })
 
   return new Promise<string>((res, rej) => {
     safeGetYoutubeDL()
@@ -158,7 +166,7 @@ function downloadYoutubeDLVideo (url: string, extension: string, timeout: number
             return rej(err)
           }
 
-          return res(finalPath)
+          return res(path)
         })
 
         timer = setTimeout(() => {
