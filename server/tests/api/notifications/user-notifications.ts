@@ -163,7 +163,7 @@ describe('Test user notifications', function () {
 
       await updateVideo(servers[0].url, servers[0].accessToken, uuid, { privacy: VideoPrivacy.PUBLIC })
 
-      await wait(500)
+      await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
     })
 
