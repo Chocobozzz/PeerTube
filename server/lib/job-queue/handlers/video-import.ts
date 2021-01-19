@@ -80,7 +80,7 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
   }
 
   return processFile(
-    () => downloadYoutubeDLVideo(videoImport.targetUrl, payload.fileExt, VIDEO_IMPORT_TIMEOUT, payload.mergeExt),
+    () => downloadYoutubeDLVideo(videoImport.targetUrl, payload.fileExt, VIDEO_IMPORT_TIMEOUT),
     videoImport,
     options
   )

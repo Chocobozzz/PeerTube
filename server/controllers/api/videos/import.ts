@@ -220,8 +220,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     videoImportId: videoImport.id,
     generateThumbnail: !thumbnailModel,
     generatePreview: !previewModel,
-    fileExt: `.${youtubeDLInfo.ext || 'mp4'}`,
-    mergeExt: youtubeDLInfo.mergeExt ? `.${youtubeDLInfo.mergeExt}` : ''
+    fileExt: `.${youtubeDLInfo.ext || 'mp4'}`
   }
   await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
 
