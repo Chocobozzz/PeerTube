@@ -48,7 +48,7 @@ clientsRouter.use('/videos/test-embed', testEmbedController)
 clientsRouter.use('/video-playlists/test-embed', testEmbedController)
 
 // Dynamic PWA manifest
-clientsRouter.get(/\/client\/[^/]+\/manifest.webmanifest/, asyncMiddleware(generateManifest))
+clientsRouter.get('/manifest.webmanifest', asyncMiddleware(generateManifest))
 
 // Static client overrides
 // Must be consistent with static client overrides redirections in /support/nginx/peertube

@@ -2,6 +2,7 @@
   "name": "PeerTube",
   "short_name": "PeerTube",
   "start_url": "/",
+  "scope": "/",
   "background_color": "#fff",
   "theme_color": "#fff",
   "description": "A federated video streaming platform using P2P",
