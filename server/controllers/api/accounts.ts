@@ -175,7 +175,8 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
     withFiles: false,
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
-    countVideos
+    countVideos,
+    search: req.query.search
   }, 'filter:api.accounts.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

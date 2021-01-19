@@ -665,6 +665,11 @@
         font-size: 130%;
       }
     }
+
+    list-overflow {
+      display: inline-block;
+      width: max-content;
+    }
   }
 }
 

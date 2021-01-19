@@ -194,7 +194,10 @@ function getAccountVideos (
   start: number,
   count: number,
   sort?: string,
-  query: { nsfw?: boolean } = {}
+  query: {
+    nsfw?: boolean
+    search?: string
+  } = {}
 ) {
   const path = '/api/v1/accounts/' + accountName + '/videos'
 

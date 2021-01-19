@@ -140,8 +140,9 @@ export class VideoService implements VideosProvider {
     sort: VideoSortField
     nsfwPolicy?: NSFWPolicyType
     videoFilter?: VideoFilter
+    search?: string
   }): Observable<ResultList<Video>> {
-    const { account, videoPagination, sort, videoFilter, nsfwPolicy } = parameters
+    const { account, videoPagination, sort, videoFilter, nsfwPolicy, search } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
@@ -154,6 +155,10 @@ export class VideoService implements VideosProvider {
 
     if (videoFilter) {
       params = params.set('filter', videoFilter)
+    }
+
+    if (search) {
+      params = params.set('search', search)
     }
 
     return this.authHttp

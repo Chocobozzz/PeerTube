@@ -7,6 +7,7 @@ import { Account, AccountService, DropdownAction, ListOverflowItem, VideoChannel
 import { AccountReportComponent } from '@app/shared/shared-moderation'
 import { User, UserRight } from '@shared/models'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { AccountSearchComponent } from './account-search/account-search.component'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -14,6 +15,7 @@ import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 })
 export class AccountsComponent implements OnInit, OnDestroy {
   @ViewChild('accountReportModal') accountReportModal: AccountReportComponent
+  accountSearch: AccountSearchComponent
 
   account: Account
   accountUser: User
@@ -97,6 +99,18 @@ export class AccountsComponent implements OnInit, OnDestroy {
     if (count === 1) return $localize`1 subscriber`
 
     return $localize`${count} subscribers`
+  }
+
+  onOutletLoaded (component: Component) {
+    if (component instanceof AccountSearchComponent) {
+      this.accountSearch = component
+    } else {
+      this.accountSearch = undefined
+    }
+  }
+
+  searchChanged (search: string) {
+    if (this.accountSearch) this.accountSearch.updateSearch(search)
   }
 
   private onAccount (account: Account) {

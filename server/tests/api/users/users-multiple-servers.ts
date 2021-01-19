@@ -34,7 +34,7 @@ describe('Test users with multiple servers', function () {
   let userAvatarFilename: string
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(120_000)
 
     servers = await flushAndRunMultipleServers(3)
 
@@ -92,7 +92,7 @@ describe('Test users with multiple servers', function () {
   })
 
   it('Should be able to update my description', async function () {
-    this.timeout(10000)
+    this.timeout(10_000)
 
     await updateMyUser({
       url: servers[0].url,
@@ -109,7 +109,7 @@ describe('Test users with multiple servers', function () {
   })
 
   it('Should be able to update my avatar', async function () {
-    this.timeout(10000)
+    this.timeout(10_000)
 
     const fixture = 'avatar2.png'
 
@@ -164,8 +164,27 @@ describe('Test users with multiple servers', function () {
     }
   })
 
+  it('Should search through account videos', async function () {
+    this.timeout(10_000)
+
+    const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'Kami no chikara' })
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getAccountVideos(server.url, server.accessToken, 'user1@localhost:' + servers[0].port, 0, 5, undefined, {
+        search: 'Kami'
+      })
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].uuid).to.equal(resVideo.body.video.uuid)
+    }
+  })
+
   it('Should remove the user', async function () {
-    this.timeout(10000)
+    this.timeout(10_000)
 
     for (const server of servers) {
       const resAccounts = await getAccountsList(server.url, '-createdAt')
