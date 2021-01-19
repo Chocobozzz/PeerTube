@@ -4043,14 +4043,7 @@
       </trans-unit>
       <trans-unit id="8dccab3d8cadb847889ff89644d3f08ffee0d76e" datatype="html">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target state="new">
-                      With 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video.
-                    
-        </target>
+        <target state="translated">Z <x id="START_TAG_STRONG"/>Nie wypisuj<x id="CLOSE_TAG_STRONG"/> lub <x id="START_TAG_STRONG"/>Rozmywaj miniatury<x id="CLOSE_TAG_STRONG"/>, będzie wymagane potwierdzenie, aby zobaczyć film. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
@@ -4925,12 +4918,7 @@
       </trans-unit>
       <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737" datatype="html">
         <source>With <x id="START_TAG_STRONG"/>Do not list<x id="CLOSE_TAG_STRONG"/> or <x id="START_TAG_STRONG"/>Blur thumbnails<x id="CLOSE_TAG_STRONG"/>, a confirmation will be requested to watch the video. </source>
-        <target state="translated">Z opcją 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Nie wyświetlaj
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> lub 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Zamazuj miniaturki
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, przed oglądnięciem filmu pojawi się zapytanie o potwierdzenie. 
-        </target>
+        <target state="translated">Z <x id="START_TAG_STRONG"/>Nie wypisuj<x id="CLOSE_TAG_STRONG"/> lub <x id="START_TAG_STRONG"/>Rozmywaj miniatury<x id="CLOSE_TAG_STRONG"/>, będzie wymagane potwierdzenie, aby zobaczyć film. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
