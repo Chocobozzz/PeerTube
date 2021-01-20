@@ -713,7 +713,13 @@
         <source>Subscribe with your local account</source>
         <target>Tilaa paikallisella tilillä</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">58</context></context-group></trans-unit><trans-unit id="7639191791633609999" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">58</context></context-group></trans-unit><trans-unit id="1096694538966074574" datatype="html">
+        <source>Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</source><target state="new">Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit><trans-unit id="7639191791633609999" datatype="html">
         <source>The live stream will be automatically terminated.</source><target state="new">The live stream will be automatically terminated.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">205</context></context-group></trans-unit>
@@ -2192,7 +2198,7 @@ The link will expire within 1 hour.</target>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">18</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">73</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">66</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">50</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">18</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">68</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">61</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="21add64f0f3ebbedf1150ca822c6e149494ab7a9">
         <source>Select the file to upload</source>
         <target>Valitse ladattava tiedosto</target>
@@ -2289,13 +2295,13 @@ The link will expire within 1 hour.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">56</context></context-group></trans-unit><trans-unit id="7860848084471862305" datatype="html">
         <source>Cannot create live because this instance have too many created lives</source><target state="new">Cannot create live because this instance have too many created lives</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit><trans-unit id="1278564497286613571" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">91</context></context-group></trans-unit><trans-unit id="1278564497286613571" datatype="html">
         <source>Cannot create live because you created too many lives</source><target state="new">Cannot create live because you created too many lives</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">91</context></context-group></trans-unit><trans-unit id="2621043320678012413" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">93</context></context-group></trans-unit><trans-unit id="2621043320678012413" datatype="html">
         <source>Live published.</source><target state="new">Live published.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">121</context></context-group></trans-unit><trans-unit id="40e85da538414cc425f42d2b09189ce344865aa1" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">123</context></context-group></trans-unit><trans-unit id="40e85da538414cc425f42d2b09189ce344865aa1" datatype="html">
         <source>Go Live</source><target state="new">Go Live</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">20</context></context-group></trans-unit><trans-unit id="975c4cdb9e07ef4c43e2c7aa3f787feabc9a47d2" datatype="html">
@@ -6122,20 +6128,26 @@ channel with the same name (<x id="PH_2"/>)!</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-about/video-channel-about.component.ts</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.ts</context><context context-type="linenumber">38</context></context-group></trans-unit><trans-unit id="819067926858619041" datatype="html">
         <source>Account videos</source><target state="new">Account videos</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">29</context></context-group></trans-unit><trans-unit id="6823616469362610020" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">48</context></context-group></trans-unit><trans-unit id="2131232107132374967" datatype="html">
+        <source>Search videos within account</source><target state="new">Search videos within account</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit><trans-unit id="6823616469362610020" datatype="html">
         <source>Account video channels</source><target state="new">Account video channels</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">42</context></context-group></trans-unit><trans-unit id="7678273613459026643" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">30</context></context-group></trans-unit><trans-unit id="7678273613459026643" datatype="html">
         <source>About account</source><target state="new">About account</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">51</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="3755500631176893489">
         <source>Published <x id="PH"/> videos</source>
         <target>Julkaistiin 
           <x id="PH"/> videota
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context><context context-type="linenumber">87</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">79</context></context-group></trans-unit><trans-unit id="e4965e47ed9cd6553d9a87a5112871a2dcbbe132" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context><context context-type="linenumber">87</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context><context context-type="linenumber">90</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">79</context></context-group></trans-unit><trans-unit id="e4965e47ed9cd6553d9a87a5112871a2dcbbe132" datatype="html">
         <source>Display all videos (private, unlisted or not yet published)</source><target state="new">Display all videos (private, unlisted or not yet published)</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
@@ -6147,37 +6159,43 @@ channel with the same name (<x id="PH_2"/>)!</target>
           <x id="PH"/> direct account followers
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">113</context></context-group></trans-unit><trans-unit id="6250999352462648289" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">127</context></context-group></trans-unit><trans-unit id="6250999352462648289" datatype="html">
         <source>Report this account</source><target state="new">Report this account</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">119</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">133</context></context-group></trans-unit><trans-unit id="230b7aa1bc012b2e5bafc1f24b6aa734a978183c" datatype="html">
+        <source>Search videos</source><target state="new">Search videos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
       
       <trans-unit id="424703522835656806" datatype="html">
         <source>VIDEO CHANNELS</source>
         <target state="new">VIDEO CHANNELS</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">63</context></context-group></trans-unit><trans-unit id="1504521795586863905" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">65</context></context-group></trans-unit><trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source><target state="new">VIDEOS</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">69</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">64</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">69</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">66</context></context-group></trans-unit>
       <trans-unit id="1341921152640000230" datatype="html">
         <source>ABOUT</source>
         <target state="new">ABOUT</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">71</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">65</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">71</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">67</context></context-group></trans-unit>
       <trans-unit id="25349740244798533">
         <source>Username copied</source>
         <target>Käyttäjänimi kopioitu</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">96</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">93</context></context-group></trans-unit><trans-unit id="9221735175659318025" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">96</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">95</context></context-group></trans-unit><trans-unit id="9221735175659318025" datatype="html">
         <source>1 subscriber</source><target state="new">1 subscriber</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">97</context></context-group></trans-unit><trans-unit id="4097331874769079975" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">99</context></context-group></trans-unit><trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH"/> subscribers</source><target state="new"><x id="PH"/> subscribers</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">99</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">101</context></context-group></trans-unit>
       
       <trans-unit id="db28493f1be1ed4d0edfea612181d27c9c530270" datatype="html">
         <source>Instances you follow</source>
@@ -7753,7 +7771,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">172</context></context-group></trans-unit><trans-unit id="4580988005648117665" datatype="html">
         <source>Search</source><target state="new">Search</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">230</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-routing.module.ts</context><context context-type="linenumber">15</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/simple-search-input.component.ts</context><context context-type="linenumber">15</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">230</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-routing.module.ts</context><context context-type="linenumber">15</context></context-group></trans-unit>
       <trans-unit id="5891040073345002614">
         <source>
           <x id="PH"/> years ago
@@ -9493,22 +9511,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Only I can see this video</source>
         <target>Vain minä voin nähdä tämän videon</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">370</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">375</context></context-group></trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
         <target state="new">Only shareable via a private link</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">374</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">379</context></context-group></trans-unit>
       <trans-unit id="6828965264297239528">
         <source>Anyone can see this video</source>
         <target>Kaikki voivat nähdä tämän videon</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">378</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">383</context></context-group></trans-unit>
       <trans-unit id="1425933035739773115" datatype="html">
         <source>Only users of this instance can see this video</source>
         <target state="new">Only users of this instance can see this video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">382</context></context-group></trans-unit><trans-unit id="8312101634344200207" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">387</context></context-group></trans-unit><trans-unit id="8312101634344200207" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> viewers</source><target state="new"><x id="PH" equiv-text="this.views"/> viewers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
@@ -9628,7 +9646,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target>Tuotava video päivitetty.</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">129</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.ts</context><context context-type="linenumber">139</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">130</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.ts</context><context context-type="linenumber">140</context></context-group></trans-unit>
       <trans-unit id="3284171506518522275" datatype="html">
         <source>Your video was uploaded to your account and is private.</source>
         <target state="new">Your video was uploaded to your account and is private.</target>
