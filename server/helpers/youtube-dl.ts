@@ -1,5 +1,5 @@
 import { createWriteStream } from 'fs'
-import { ensureDir, pathExists, remove, writeFile } from 'fs-extra'
+import { ensureDir, move, pathExists, remove, writeFile } from 'fs-extra'
 import { join } from 'path'
 import * as request from 'request'
 import { CONFIG } from '@server/initializers/config'
@@ -147,6 +147,11 @@ function downloadYoutubeDLVideo (url: string, fileExt: string, timeout: number) 
           clearTimeout(timer)
 
           try {
+            // If youtube-dl did not guess an extension for our file, just use .mp4 as default
+            if (await pathExists(pathWithoutExtension)) {
+              await move(pathWithoutExtension, pathWithoutExtension + '.mp4')
+            }
+
             const path = await guessVideoPathWithExtension(pathWithoutExtension, fileExt)
 
             if (err) {
