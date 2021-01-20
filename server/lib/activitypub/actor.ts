@@ -104,7 +104,7 @@ async function getOrCreateActorAndServerAndModel (
         const recurseIfNeeded = false
         ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, 'all', recurseIfNeeded)
       } catch (err) {
-        logger.error('Cannot get or create account attributed to video channel ' + actor.url)
+        logger.error('Cannot get or create account attributed to video channel ' + actorUrl)
         throw new Error(err)
       }
     }
