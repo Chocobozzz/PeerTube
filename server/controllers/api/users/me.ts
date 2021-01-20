@@ -1,7 +1,8 @@
 import 'multer'
 import * as express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger'
-import { UserUpdateMe, UserVideoRate as FormattedUserVideoRate, VideoSortField } from '../../../../shared'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -104,12 +105,19 @@ export {
 
 async function getUserVideos (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
-  const resultList = await VideoModel.listUserVideosForApi(
-    user.Account.id,
-    req.query.start as number,
-    req.query.count as number,
-    req.query.sort as VideoSortField,
-    req.query.search as string
+
+  const apiOptions = await Hooks.wrapObject({
+    accountId: user.Account.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search
+  }, 'filter:api.user.me.videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoModel.listUserVideosForApi,
+    apiOptions,
+    'filter:api.user.me.videos.list.result'
   )
 
   const additionalAttributes = {

@@ -1004,13 +1004,15 @@ export class VideoModel extends Model {
     return result.map(v => v.id)
   }
 
-  static listUserVideosForApi (
-    accountId: number,
-    start: number,
-    count: number,
-    sort: string,
+  static listUserVideosForApi (options: {
+    accountId: number
+    start: number
+    count: number
+    sort: string
     search?: string
-  ) {
+  }) {
+    const { accountId, start, count, sort, search } = options
+
     function buildBaseQuery (): FindOptions {
       let baseQuery = {
         offset: start,
