@@ -8,21 +8,24 @@
 - [Why did you create PeerTube?](#why-did-you-create-peertube)
 - [I don't like the name "PeerTube"](#i-dont-like-the-name-peertube)
 - [If nobody watches a video, is it seeded?](#if-nobody-watches-a-video-is-it-seeded)
-- [What is WebSeed?](#what-is-webseed)
-- [If a client requests each chunk of a video through HTTP, will the server be overloaded?](#if-a-client-requests-each-chunk-of-a-video-through-http-will-the-server-be-overloaded)
-- [Will an index of all the videos of servers you follow be too large for small servers?](#will-an-index-of-all-the-videos-of-servers-you-follow-be-too-large-for-small-servers)
 - [Which container formats can I use for the videos I want to upload?](#which-container-formats-can-i-use-for-the-videos-i-want-to-upload)
-- [I want to change my domain name. How can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
-- [Why do we have to put our Twitter username in PeerTube configuration?](#why-do-we-have-to-put-our-twitter-username-in-peertube-configuration)
+- [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
+- [Why do we have to put our Twitter username in the PeerTube configuration?](#why-do-we-have-to-put-our-twitter-username-in-the-peertube-configuration)
 - [How are video views counted?](#how-are-video-views-counted)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
+  - [CPU](#cpu)
+  - [RAM](#ram)
+  - [Storage](#storage)
+  - [Network](#network)
 - [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
 - [Why host on GitHub and Framagit?](#why-host-on-github-and-framagit)
-- [Are you going to use the Steem blockchain?](#are-you-going-to-use-the-steem-blockchain)
+- [Are you going to use a blockchain (like Steem)?](#are-you-going-to-use-a-blockchain-like-steem)
 - [Are you going to support advertisements?](#are-you-going-to-support-advertisements)
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
 - [I have found a security vulnerability in PeerTube. Where and how should I report it?](#i-have-found-a-security-vulnerability-in-peertube-where-and-how-should-i-report-it)
 - [Does PeerTube ensure federation compatibility with previous version?](#does-peertube-ensure-federation-compatibility-with-previous-version)
+- [Are specific versions of PeerTube long term supported?](#are-specific-versions-of-peertube-long-term-supported)
+- [When approximately can I expect the next version of PeerTube to arrive?](#when-approximately-can-i-expect-the-next-version-of-peertube-to-arrive)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -175,3 +178,14 @@ We have a policy for contributions related to security. Please refer to [SECURIT
 
 We **try** to keep compatibility with the latest minor version (2.3.1 with 2.2 for example).
 We don't have resources to keep compatibility with other versions.
+
+
+## Are specific versions of PeerTube long term supported?
+
+We don't have enough resource to maintain a PeerTube LTS version.
+Please always upgrade to the latest version.
+
+
+## When approximately can I expect the next version of PeerTube to arrive?
+
+Anything from 2 to 6 months, with no promises.
