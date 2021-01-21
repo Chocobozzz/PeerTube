@@ -47,7 +47,7 @@ async function run () {
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({
-        type: 'hls',
+        type: 'new-resolution-to-hls',
         videoUUID: video.uuid,
         resolution,
         isPortraitMode: false,
@@ -56,14 +56,14 @@ async function run () {
     }
   } else if (program.resolution !== undefined) {
     dataInput.push({
-      type: 'new-resolution' as 'new-resolution',
+      type: 'new-resolution-to-webtorrent',
       videoUUID: video.uuid,
       isNewVideo: false,
       resolution: program.resolution
     })
   } else {
     dataInput.push({
-      type: 'optimize' as 'optimize',
+      type: 'optimize-to-webtorrent',
       videoUUID: video.uuid,
       isNewVideo: false
     })

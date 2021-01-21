@@ -100,26 +100,26 @@ interface BaseTranscodingPayload {
   isNewVideo?: boolean
 }
 
-interface HLSTranscodingPayload extends BaseTranscodingPayload {
-  type: 'hls'
+export interface HLSTranscodingPayload extends BaseTranscodingPayload {
+  type: 'new-resolution-to-hls'
   isPortraitMode?: boolean
   resolution: VideoResolution
   copyCodecs: boolean
 }
 
 export interface NewResolutionTranscodingPayload extends BaseTranscodingPayload {
-  type: 'new-resolution'
+  type: 'new-resolution-to-webtorrent'
   isPortraitMode?: boolean
   resolution: VideoResolution
 }
 
 export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
-  type: 'merge-audio'
+  type: 'merge-audio-to-webtorrent'
   resolution: VideoResolution
 }
 
 export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
-  type: 'optimize'
+  type: 'optimize-to-webtorrent'
 }
 
 export type VideoTranscodingPayload =

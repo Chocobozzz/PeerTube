@@ -60,7 +60,7 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFile:
 
     const videoOutputPath = getVideoFilePath(video, inputVideoFile)
 
-    await onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
+    await onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
 
     return transcodeType
   } catch (err) {
@@ -72,7 +72,7 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFile:
 }
 
 // Transcode the original video file to a lower resolution.
-async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoResolution, isPortrait: boolean, job: Job) {
+async function transcodeNewWebTorrentResolution (video: MVideoWithFile, resolution: VideoResolution, isPortrait: boolean, job: Job) {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const extname = '.mp4'
 
@@ -118,7 +118,7 @@ async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoR
 
   await transcode(transcodeOptions)
 
-  return onVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, videoOutputPath)
+  return onWebTorrentVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, videoOutputPath)
 }
 
 // Merge an image with an audio file to create a video
@@ -170,11 +170,11 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
   video.duration = await getDurationFromVideoFile(videoTranscodedPath)
   await video.save()
 
-  return onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
+  return onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
 }
 
 // Concat TS segments from a live video to a fragmented mp4 HLS playlist
-async function generateHlsPlaylistFromTS (options: {
+async function generateHlsPlaylistResolutionFromTS (options: {
   video: MVideoWithFile
   concatenatedTsFilePath: string
   resolution: VideoResolution
@@ -192,7 +192,7 @@ async function generateHlsPlaylistFromTS (options: {
 }
 
 // Generate an HLS playlist from an input file, and update the master playlist
-function generateHlsPlaylist (options: {
+function generateHlsPlaylistResolution (options: {
   video: MVideoWithFile
   videoInputPath: string
   resolution: VideoResolution
@@ -224,17 +224,22 @@ function getEnabledResolutions (type: 'vod' | 'live') {
 // ---------------------------------------------------------------------------
 
 export {
-  generateHlsPlaylist,
-  generateHlsPlaylistFromTS,
+  generateHlsPlaylistResolution,
+  generateHlsPlaylistResolutionFromTS,
   optimizeOriginalVideofile,
-  transcodeNewResolution,
+  transcodeNewWebTorrentResolution,
   mergeAudioVideofile,
   getEnabledResolutions
 }
 
 // ---------------------------------------------------------------------------
 
-async function onVideoFileTranscoding (video: MVideoWithFile, videoFile: MVideoFile, transcodingPath: string, outputPath: string) {
+async function onWebTorrentVideoFileTranscoding (
+  video: MVideoWithFile,
+  videoFile: MVideoFile,
+  transcodingPath: string,
+  outputPath: string
+) {
   const stats = await stat(transcodingPath)
   const fps = await getVideoFileFPS(transcodingPath)
   const metadata = await getMetadataFromFile(transcodingPath)

@@ -74,14 +74,14 @@ function addOptimizeOrMergeAudioJob (video: MVideo, videoFile: MVideoFile) {
 
   if (videoFile.isAudio()) {
     dataInput = {
-      type: 'merge-audio' as 'merge-audio',
+      type: 'merge-audio-to-webtorrent',
       resolution: DEFAULT_AUDIO_RESOLUTION,
       videoUUID: video.uuid,
       isNewVideo: true
     }
   } else {
     dataInput = {
-      type: 'optimize' as 'optimize',
+      type: 'optimize-to-webtorrent',
       videoUUID: video.uuid,
       isNewVideo: true
     }

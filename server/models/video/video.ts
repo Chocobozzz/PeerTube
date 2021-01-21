@@ -1735,6 +1735,7 @@ export class VideoModel extends Model {
   }
 
   getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], it: (file: MVideoFile) => number) => MVideoFile) {
+    // We first transcode to WebTorrent format, so try this array first
     if (Array.isArray(this.VideoFiles) && this.VideoFiles.length !== 0) {
       const file = fun(this.VideoFiles, file => file.resolution)
 
