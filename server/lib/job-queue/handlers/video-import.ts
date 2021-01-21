@@ -1,10 +1,10 @@
 import * as Bull from 'bull'
 import { move, remove, stat } from 'fs-extra'
 import { extname } from 'path'
-import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { isAbleToUploadVideo } from '@server/lib/user'
+import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import {
@@ -224,7 +224,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     // Create transcoding jobs?
     if (video.state === VideoState.TO_TRANSCODE) {
-      await addOptimizeOrMergeAudioJob(videoImportUpdated.Video, videoFile)
+      await addOptimizeOrMergeAudioJob(videoImportUpdated.Video, videoFile, videoImport.User)
     }
 
   } catch (err) {

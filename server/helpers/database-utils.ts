@@ -4,6 +4,14 @@ import { Model } from 'sequelize-typescript'
 import { logger } from './logger'
 import { Transaction } from 'sequelize'
 
+function retryTransactionWrapper <T, A, B, C, D> (
+  functionToRetry: (arg1: A, arg2: B, arg3: C, arg4: D) => Promise<T> | Bluebird<T>,
+  arg1: A,
+  arg2: B,
+  arg3: C,
+  arg4: D,
+): Promise<T>
+
 function retryTransactionWrapper <T, A, B, C> (
   functionToRetry: (arg1: A, arg2: B, arg3: C) => Promise<T> | Bluebird<T>,
   arg1: A,

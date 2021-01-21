@@ -69,6 +69,7 @@ async function formatJob (job: any, state?: JobState): Promise<Job> {
     type: job.queue.name as JobType,
     data: job.data,
     progress: await job.progress(),
+    priority: job.opts.priority,
     error,
     createdAt: new Date(job.timestamp),
     finishedOn: new Date(job.finishedOn),
