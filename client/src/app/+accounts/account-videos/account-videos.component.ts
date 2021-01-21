@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs'
 import { first, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
@@ -35,7 +35,8 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
     private accountService: AccountService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    protected cfr: ComponentFactoryResolver
   ) {
     super()
   }

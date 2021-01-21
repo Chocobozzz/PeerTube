@@ -459,6 +459,7 @@
  * `language` by Aaron Jin (CC-BY)
  * `video-language` by Rigel Kent (CC-BY)
  * `peertube-x` by Solen DP (CC-BY)
+ * `flame` by Freepik (Flaticon License)
 
 
 # Contributors to our 2020 crowdfunding :heart:

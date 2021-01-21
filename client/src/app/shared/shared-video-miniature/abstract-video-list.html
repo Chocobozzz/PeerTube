@@ -1,13 +1,9 @@
 <div class="margin-content">
   <div class="videos-header">
-    <h1 *ngIf="titlePage" class="title-page title-page-single">
-      <div placement="bottom" [ngbTooltip]="titleTooltip" container="body">
-        {{ titlePage }}
-      </div>
-    </h1>
+    <ng-template #videoListHeader></ng-template>
 
     <div class="action-block">
-      <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
+      <my-feed *ngIf="syndicationItems" [syndicationItems]="syndicationItems"></my-feed>
       <ng-container *ngFor="let action of actions">
         <a *ngIf="action.routerLink" class="ml-2" [routerLink]="action.routerLink" routerLinkActive="active">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>

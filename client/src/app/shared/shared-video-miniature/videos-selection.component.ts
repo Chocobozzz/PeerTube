@@ -2,6 +2,7 @@ import { Observable } from 'rxjs'
 import {
   AfterContentInit,
   Component,
+  ComponentFactoryResolver,
   ContentChildren,
   EventEmitter,
   Input,
@@ -51,7 +52,8 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
     protected userService: UserService,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
-    protected serverService: ServerService
+    protected serverService: ServerService,
+    protected cfr: ComponentFactoryResolver
   ) {
     super()
   }

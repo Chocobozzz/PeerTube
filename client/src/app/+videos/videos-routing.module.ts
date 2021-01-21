@@ -3,10 +3,11 @@ import { RouterModule, Routes } from '@angular/router'
 import { LoginGuard } from '@app/core'
 import { MetaGuard } from '@ngx-meta/core'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
+import { VideoHotComponent } from './video-list/trending/video-hot.component'
+import { VideoMostLikedComponent } from './video-list/trending/video-most-liked.component'
+import { VideoTrendingComponent } from './video-list/trending/video-trending.component'
 import { VideoLocalComponent } from './video-list/video-local.component'
-import { VideoMostLikedComponent } from './video-list/video-most-liked.component'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
-import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
 import { VideosComponent } from './videos.component'
 
@@ -35,6 +36,19 @@ const videosRoutes: Routes = [
           reuse: {
             enabled: true,
             key: 'trending-videos-list'
+          }
+        }
+      },
+      {
+        path: 'hot',
+        component: VideoHotComponent,
+        data: {
+          meta: {
+            title: $localize`Hot videos`
+          },
+          reuse: {
+            enabled: true,
+            key: 'hot-videos-list'
           }
         }
       },
