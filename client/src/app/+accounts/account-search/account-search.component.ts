@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs'
 import { first, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
@@ -11,9 +11,7 @@ import { VideoFilter } from '@shared/models'
 @Component({
   selector: 'my-account-search',
   templateUrl: '../../shared/shared-video-miniature/abstract-video-list.html',
-  styleUrls: [
-    '../../shared/shared-video-miniature/abstract-video-list.scss'
-  ]
+  styleUrls: [ '../../shared/shared-video-miniature/abstract-video-list.scss' ]
 })
 export class AccountSearchComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
@@ -35,6 +33,7 @@ export class AccountSearchComponent extends AbstractVideoList implements OnInit,
     protected confirmService: ConfirmService,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
+    protected cfr: ComponentFactoryResolver,
     private accountService: AccountService,
     private videoService: VideoService
   ) {
@@ -99,6 +98,7 @@ export class AccountSearchComponent extends AbstractVideoList implements OnInit,
   }
 
   generateSyndicationList () {
-    /* disable syndication */
+    /* method disabled */
+    throw new Error('Method not implemented.')
   }
 }

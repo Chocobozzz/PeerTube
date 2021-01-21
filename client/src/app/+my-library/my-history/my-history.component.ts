@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import {
   AuthService,
@@ -42,7 +42,8 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
     private confirmService: ConfirmService,
-    private userHistoryService: UserHistoryService
+    private userHistoryService: UserHistoryService,
+    protected cfr: ComponentFactoryResolver
   ) {
     super()
 
@@ -95,6 +96,7 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
   }
 
   generateSyndicationList () {
+    /* method disabled */
     throw new Error('Method not implemented.')
   }
 

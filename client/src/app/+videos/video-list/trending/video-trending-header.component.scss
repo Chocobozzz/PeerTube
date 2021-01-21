@@ -1,0 +1,17 @@
+.btn-group label {
+  border: 1px solid transparent;
+  border-radius: 9999px !important;
+  padding: 5px 16px;
+  opacity: .8;
+
+  &:not(:first-child) {
+    margin-left: .5rem;
+  }
+
+  my-global-icon {
+    position: relative;
+    top: -2px;
+    height: 1rem;
+    margin-right: .1rem;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -28,6 +28,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
     protected userService: UserService,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
+    protected cfr: ComponentFactoryResolver,
     private videoService: VideoService,
     private hooks: HooksService
   ) {

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
@@ -6,10 +7,12 @@ import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscripti
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { OverviewService } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
+import { VideoTrendingHeaderComponent } from './video-list/trending/video-trending-header.component'
+import { VideoHotComponent } from './video-list/trending/video-hot.component'
+import { VideoTrendingComponent } from './video-list/trending/video-trending.component'
+import { VideoMostLikedComponent } from './video-list/trending/video-most-liked.component'
 import { VideoLocalComponent } from './video-list/video-local.component'
-import { VideoMostLikedComponent } from './video-list/video-most-liked.component'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
-import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
 import { VideosRoutingModule } from './videos-routing.module'
 import { VideosComponent } from './videos.component'
@@ -28,7 +31,9 @@ import { VideosComponent } from './videos.component'
   declarations: [
     VideosComponent,
 
+    VideoTrendingHeaderComponent,
     VideoTrendingComponent,
+    VideoHotComponent,
     VideoMostLikedComponent,
     VideoRecentlyAddedComponent,
     VideoLocalComponent,

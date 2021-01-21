@@ -1090,6 +1090,7 @@ export class VideoModel extends Model {
     const trendingDays = options.sort.endsWith('trending')
       ? CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
       : undefined
+    const hot = options.sort.endsWith('hot')
 
     const serverActor = await getServerActor()
 
@@ -1119,6 +1120,7 @@ export class VideoModel extends Model {
       user: options.user,
       historyOfUser: options.historyOfUser,
       trendingDays,
+      hot,
       search: options.search
     }
 
