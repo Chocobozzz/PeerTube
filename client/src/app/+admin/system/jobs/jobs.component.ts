@@ -83,6 +83,16 @@ export class JobsComponent extends RestTable implements OnInit {
     this.saveJobStateAndType()
   }
 
+  hasProgress () {
+    return this.jobType === 'all' || this.jobType === 'video-transcoding'
+  }
+
+  getProgress (job: Job) {
+    if (job.state === 'active') return job.progress + '%'
+
+    return ''
+  }
+
   protected loadData () {
     let jobState = this.jobState as JobState
     if (this.jobState === 'all') jobState = null

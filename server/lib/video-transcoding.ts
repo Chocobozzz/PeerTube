@@ -1,3 +1,4 @@
+import { Job } from 'bull'
 import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
@@ -23,11 +24,10 @@ import { availableEncoders } from './video-transcoding-profiles'
  */
 
 // Optimize the original video file and replace it. The resolution is not changed.
-async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFileArg?: MVideoFile) {
+async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFile: MVideoFile, job?: Job) {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
-  const inputVideoFile = inputVideoFileArg || video.getMaxQualityFile()
   const videoInputPath = getVideoFilePath(video, inputVideoFile)
   const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
@@ -44,7 +44,9 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFileA
     availableEncoders,
     profile: 'default',
 
-    resolution: inputVideoFile.resolution
+    resolution: inputVideoFile.resolution,
+
+    job
   }
 
   // Could be very long!
@@ -70,7 +72,7 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFileA
 }
 
 // Transcode the original video file to a lower resolution.
-async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoResolution, isPortrait: boolean) {
+async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoResolution, isPortrait: boolean, job: Job) {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const extname = '.mp4'
 
@@ -96,7 +98,9 @@ async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoR
       availableEncoders,
       profile: 'default',
 
-      resolution
+      resolution,
+
+      job
     }
     : {
       type: 'video' as 'video',
@@ -107,7 +111,9 @@ async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoR
       profile: 'default',
 
       resolution,
-      isPortraitMode: isPortrait
+      isPortraitMode: isPortrait,
+
+      job
     }
 
   await transcode(transcodeOptions)
@@ -116,7 +122,7 @@ async function transcodeNewResolution (video: MVideoWithFile, resolution: VideoR
 }
 
 // Merge an image with an audio file to create a video
-async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: VideoResolution) {
+async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: VideoResolution, job: Job) {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
@@ -140,7 +146,9 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
     profile: 'default',
 
     audioPath: audioInputPath,
-    resolution
+    resolution,
+
+    job
   }
 
   try {
@@ -190,6 +198,7 @@ function generateHlsPlaylist (options: {
   resolution: VideoResolution
   copyCodecs: boolean
   isPortraitMode: boolean
+  job?: Job
 }) {
   return generateHlsPlaylistCommon({
     video: options.video,
@@ -197,7 +206,8 @@ function generateHlsPlaylist (options: {
     copyCodecs: options.copyCodecs,
     isPortraitMode: options.isPortraitMode,
     inputPath: options.videoInputPath,
-    type: 'hls' as 'hls'
+    type: 'hls' as 'hls',
+    job: options.job
   })
 }
 
@@ -251,8 +261,10 @@ async function generateHlsPlaylistCommon (options: {
   copyCodecs?: boolean
   isAAC?: boolean
   isPortraitMode: boolean
+
+  job?: Job
 }) {
-  const { type, video, inputPath, resolution, copyCodecs, isPortraitMode, isAAC } = options
+  const { type, video, inputPath, resolution, copyCodecs, isPortraitMode, isAAC, job } = options
 
   const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
   await ensureDir(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
@@ -277,7 +289,9 @@ async function generateHlsPlaylistCommon (options: {
 
     hlsPlaylist: {
       videoFilename
-    }
+    },
+
+    job
   }
 
   await transcode(transcodeOptions)

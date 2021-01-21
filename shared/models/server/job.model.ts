@@ -23,6 +23,7 @@ export interface Job {
   state: JobState
   type: JobType
   data: any
+  progress: number
   error: any
   createdAt: Date | string
   finishedOn: Date | string

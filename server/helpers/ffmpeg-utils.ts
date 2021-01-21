@@ -1,3 +1,4 @@
+import { Job } from 'bull'
 import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
@@ -124,6 +125,8 @@ interface BaseTranscodeOptions {
   resolution: VideoResolution
 
   isPortraitMode?: boolean
+
+  job?: Job
 }
 
 interface HLSTranscodeOptions extends BaseTranscodeOptions {
@@ -188,7 +191,7 @@ async function transcode (options: TranscodeOptions) {
 
   command = await builders[options.type](command, options)
 
-  await runCommand(command)
+  await runCommand(command, options.job)
 
   await fixHLSPlaylistIfNeeded(options)
 }
@@ -611,11 +614,9 @@ function getFFmpeg (input: string, type: 'live' | 'vod') {
   return command
 }
 
-async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
+async function runCommand (command: ffmpeg.FfmpegCommand, job?: Job) {
   return new Promise<void>((res, rej) => {
     command.on('error', (err, stdout, stderr) => {
-      if (onEnd) onEnd()
-
       logger.error('Error in transcoding job.', { stdout, stderr })
       rej(err)
     })
@@ -623,10 +624,17 @@ async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
     command.on('end', (stdout, stderr) => {
       logger.debug('FFmpeg command ended.', { stdout, stderr })
 
-      if (onEnd) onEnd()
-
       res()
     })
+
+    if (job) {
+      command.on('progress', progress => {
+        if (!progress.percent) return
+
+        job.progress(Math.round(progress.percent))
+          .catch(err => logger.warn('Cannot set ffmpeg job progress.', { err }))
+      })
+    }
 
     command.run()
   })

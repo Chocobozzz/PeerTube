@@ -44,20 +44,21 @@ async function processVideoTranscoding (job: Bull.Job) {
       videoInputPath,
       resolution: payload.resolution,
       copyCodecs: payload.copyCodecs,
-      isPortraitMode: payload.isPortraitMode || false
+      isPortraitMode: payload.isPortraitMode || false,
+      job
     })
 
     await retryTransactionWrapper(onHlsPlaylistGenerationSuccess, video)
   } else if (payload.type === 'new-resolution') {
-    await transcodeNewResolution(video, payload.resolution, payload.isPortraitMode || false)
+    await transcodeNewResolution(video, payload.resolution, payload.isPortraitMode || false, job)
 
     await retryTransactionWrapper(publishNewResolutionIfNeeded, video, payload)
   } else if (payload.type === 'merge-audio') {
-    await mergeAudioVideofile(video, payload.resolution)
+    await mergeAudioVideofile(video, payload.resolution, job)
 
     await retryTransactionWrapper(publishNewResolutionIfNeeded, video, payload)
   } else {
-    const transcodeType = await optimizeOriginalVideofile(video)
+    const transcodeType = await optimizeOriginalVideofile(video, video.getMaxQualityFile(), job)
 
     await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload, transcodeType)
   }

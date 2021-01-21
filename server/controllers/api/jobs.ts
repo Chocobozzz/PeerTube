@@ -52,28 +52,23 @@ async function listJobs (req: express.Request, res: express.Response) {
 
   const result: ResultList<Job> = {
     total,
-    data: state
-      ? jobs.map(j => formatJob(j, state))
-      : await Promise.all(jobs.map(j => formatJobWithUnknownState(j)))
+    data: await Promise.all(jobs.map(j => formatJob(j, state)))
   }
 
   return res.json(result)
 }
 
-async function formatJobWithUnknownState (job: any) {
-  return formatJob(job, await job.getState())
-}
-
-function formatJob (job: any, state: JobState): Job {
+async function formatJob (job: any, state?: JobState): Promise<Job> {
   const error = isArray(job.stacktrace) && job.stacktrace.length !== 0
     ? job.stacktrace[0]
     : null
 
   return {
     id: job.id,
-    state: state,
+    state: state || await job.getState(),
     type: job.queue.name as JobType,
     data: job.data,
+    progress: await job.progress(),
     error,
     createdAt: new Date(job.timestamp),
     finishedOn: new Date(job.finishedOn),
