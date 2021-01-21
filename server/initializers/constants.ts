@@ -179,6 +179,12 @@ const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = 
     cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   }
 }
+const JOB_PRIORITY = {
+  TRANSCODING: {
+    OPTIMIZER: 10,
+    NEW_RESOLUTION: 100
+  }
+}
 
 const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
 const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
@@ -851,6 +857,7 @@ export {
   VIDEO_STATES,
   QUEUE_CONCURRENCY,
   VIDEO_RATE_TYPES,
+  JOB_PRIORITY,
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   ABUSE_STATES,

@@ -47,6 +47,7 @@ type CreateJobArgument =
 
 type CreateJobOptions = {
   delay?: number
+  priority?: number
 }
 
 const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
@@ -148,6 +149,7 @@ class JobQueue {
       backoff: { delay: 60 * 1000, type: 'exponential' },
       attempts: JOB_ATTEMPTS[obj.type],
       timeout: JOB_TTL[obj.type],
+      priority: options.priority,
       delay: options.delay
     }
 

@@ -2,16 +2,16 @@ import * as express from 'express'
 import { move } from 'fs-extra'
 import { extname } from 'path'
 import toInt from 'validator/lib/toInt'
-import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { LiveManager } from '@server/lib/live-manager'
-import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
+import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoFullLight } from '@server/types/models'
 import { VideoCreate, VideoState, VideoUpdate } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
@@ -66,7 +66,6 @@ import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -267,7 +266,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   Notifier.Instance.notifyOnNewVideoIfNeeded(videoCreated)
 
   if (video.state === VideoState.TO_TRANSCODE) {
-    await addOptimizeOrMergeAudioJob(videoCreated, videoFile)
+    await addOptimizeOrMergeAudioJob(videoCreated, videoFile, res.locals.oauth.token.User)
   }
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated })

@@ -1,20 +1,17 @@
 import { Response } from 'express'
 import { CONFIG } from '@server/initializers/config'
-import { DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants'
-import { JobQueue } from '@server/lib/job-queue'
 import {
   isStreamingPlaylist,
   MStreamingPlaylistVideo,
   MVideo,
   MVideoAccountLightBlacklistAllFiles,
-  MVideoFile,
   MVideoFullLight,
   MVideoIdThumbnail,
   MVideoImmutable,
   MVideoThumbnail,
   MVideoWithRights
 } from '@server/types/models'
-import { VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
+import { VideoPrivacy, VideoState } from '@shared/models'
 import { VideoModel } from '../models/video/video'
 
 type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
@@ -69,27 +66,6 @@ function getVideoWithAttributes (res: Response) {
   return res.locals.videoAll || res.locals.onlyVideo || res.locals.onlyVideoWithRights
 }
 
-function addOptimizeOrMergeAudioJob (video: MVideo, videoFile: MVideoFile) {
-  let dataInput: VideoTranscodingPayload
-
-  if (videoFile.isAudio()) {
-    dataInput = {
-      type: 'merge-audio-to-webtorrent',
-      resolution: DEFAULT_AUDIO_RESOLUTION,
-      videoUUID: video.uuid,
-      isNewVideo: true
-    }
-  } else {
-    dataInput = {
-      type: 'optimize-to-webtorrent',
-      videoUUID: video.uuid,
-      isNewVideo: true
-    }
-  }
-
-  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput })
-}
-
 function extractVideo (videoOrPlaylist: MVideo | MStreamingPlaylistVideo) {
   return isStreamingPlaylist(videoOrPlaylist)
     ? videoOrPlaylist.Video
@@ -107,7 +83,6 @@ function isStateForFederation (state: VideoState) {
   const castedState = parseInt(state + '', 10)
 
   return castedState === VideoState.PUBLISHED || castedState === VideoState.WAITING_FOR_LIVE || castedState === VideoState.LIVE_ENDED
-
 }
 
 function getPrivaciesForFederation () {
@@ -130,7 +105,6 @@ export {
   fetchVideo,
   getVideoWithAttributes,
   fetchVideoByUrl,
-  addOptimizeOrMergeAudioJob,
   extractVideo,
   getExtFromMimetype,
   isStateForFederation,

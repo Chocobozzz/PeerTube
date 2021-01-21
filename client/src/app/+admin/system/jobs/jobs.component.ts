@@ -21,19 +21,19 @@ export class JobsComponent extends RestTable implements OnInit {
 
   jobType: JobTypeClient = 'all'
   jobTypes: JobTypeClient[] = [
-    'all',
     'activitypub-follow',
     'activitypub-http-broadcast',
     'activitypub-http-fetcher',
     'activitypub-http-unicast',
+    'activitypub-refresher',
+    'all',
     'email',
-    'video-transcoding',
     'video-file-import',
     'video-import',
-    'videos-views',
-    'activitypub-refresher',
+    'video-live-ending',
     'video-redundancy',
-    'video-live-ending'
+    'video-transcoding',
+    'videos-views'
   ]
 
   jobs: Job[] = []
@@ -75,7 +75,7 @@ export class JobsComponent extends RestTable implements OnInit {
   getColspan () {
     if (this.jobState === 'all' && this.hasProgress()) return 6
 
-    if (this.jobState === 'all') return 5
+    if (this.jobState === 'all' || this.hasProgress()) return 5
 
     return 4
   }
