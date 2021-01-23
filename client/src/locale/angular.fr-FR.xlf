@@ -561,7 +561,7 @@
       </trans-unit>
       <trans-unit id="1096694538966074574" datatype="html">
         <source>Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</source>
-        <target state="new">Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</target>
+        <target state="translated">Publiées <x id="PH" equiv-text="total"/> concordances vidéos "<x id="PH_1" equiv-text="this.search"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -602,7 +602,7 @@
       </trans-unit>
       <trans-unit id="d27c1d2f9703f3afcfb9186fc57fe169d851cb06" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="new"> You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example). </target>
+        <target state="translated">Vous pouvez interagir avec cela via n'importe quelle instance fediverse compatible avec ActivityPub (PeerTube, Mastodon ou Pleroma par exemple).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">26,27</context>
@@ -1218,7 +1218,7 @@
       </trans-unit>
       <trans-unit id="772fa4cd7612cf9dd6a7fb1a3930756a95825709" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="new">These settings apply only to your session on this instance.</target>
+        <target state="translated">Ces paramètres s'appliquent uniquement à votre session sur cette instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1295,7 +1295,7 @@
       </trans-unit>
       <trans-unit id="5ef7ce1bada0c3d3b4e5e299dad0d336f7897a34" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2021</target>
+        <target state="translated">alimenté par PeerTube - CopyLeft 2015-2021</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">183</context>
@@ -1810,7 +1810,7 @@
       </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
         <source>This image is too large.</source>
-        <target state="new">This image is too large.</target>
+        <target state="translated">Cette image est trop grande.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -2658,7 +2658,7 @@
       </trans-unit>
       <trans-unit id="6670e588ad98a777c18f30096aeff7687d53c1c4" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example). </target>
+        <target state="translated">Vous pouvez commenter en utilisant un compte sur toute instance compatible avec ActivityPub (compte PeerTube/Mastodon/Pleroma par exemple).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">60,61</context>
@@ -2919,7 +2919,7 @@
       </trans-unit>
       <trans-unit id="a89875525c82ab81ffe32e481a5475b43d0c2902" datatype="html">
         <source>Unfollow</source>
-        <target state="new">Unfollow</target>
+        <target state="translated">Arrêter de suivre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">45</context>
@@ -2954,7 +2954,7 @@
       </trans-unit>
       <trans-unit id="428ed89aeb4bd5a1b5f39b674d2c476e18c55334" datatype="html">
         <source>Follow instances</source>
-        <target state="new">Follow instances</target>
+        <target state="translated">Suivre les instances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">17</context>
@@ -4389,7 +4389,7 @@
       </trans-unit>
       <trans-unit id="953cc45f4ac17dee9271bd9a3667489c03c8076b" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target state="new"> Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value. </target>
+        <target state="translated">Fournissez le compte Twitter représentant votre instance pour améliorer l'aperçu des liens. Si vous n'avez pas de compte Twitter, laissez simplement la valeur par défaut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">654,656</context>
@@ -4438,12 +4438,12 @@
       </trans-unit>
       <trans-unit id="c0b94592a561638caf765f2cc338cd04e306f1a8" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="new">⚠️ Enabling live streaming requires trust in your users and extra moderation work</target>
+        <target state="translated">⚠️ L'activation du streaming en direct nécessite une confiance dans vos utilisateurs et un travail de modération supplémentaire</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">898</context></context-group>
       </trans-unit>
       <trans-unit id="acdcf7ffe53af776994f9c393c1d20cdbc633ad4" datatype="html">
         <source>If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/></source>
-        <target state="new">If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/></target>
+        <target state="translated">Si cette option est activée, votre serveur doit accepter le trafic TCP entrant sur le port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">899</context></context-group>
       </trans-unit>
       <trans-unit id="0c990b9d80188dd9edbbd945dbd8c66074ee62d8" datatype="html">
@@ -4576,7 +4576,7 @@
       </trans-unit>
       <trans-unit id="0ff72c066084f3c420dde9febf4f7255e7511867" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf, or .nut videos.</source>
-        <target state="new">Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf, or .nut videos.</target>
+        <target state="translated">Permet aux utilisateurs de télécharger des vidéos .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf, ou .nut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">756</context>
@@ -4619,7 +4619,7 @@
       </trans-unit>
       <trans-unit id="c5bc90e334dc36ba82d4050e69b024713f86e71f" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="new"> The original file resolution will be the default target if no option is selected. </target>
+        <target state="translated">La résolution du fichier original sera la cible par défaut si aucune option n'est sélectionnée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">838,839</context>
@@ -4682,7 +4682,7 @@
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">Ecrivez directement le code CSS. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> couleur : rouge ; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Précisez avec <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> pour passer outre les styles. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color : red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">Ecrivez directement le code CSS. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;       "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> couleur : rouge ; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Précisez avec <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> pour passer outre les styles. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;       "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color : red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1096</context></context-group>
       </trans-unit>
       <trans-unit id="3128766f8e9bac2f95f5413fdb810e90c6084ef0" datatype="html">
@@ -4996,7 +4996,7 @@
       </trans-unit>
       <trans-unit id="82cc4fc020efd482bb931ebd71db5868fc904629" datatype="html">
         <source>Upload a new avatar</source>
-        <target state="new">Upload a new avatar</target>
+        <target state="translated">Envoyez un nouvel avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">10</context>
@@ -5065,7 +5065,7 @@
       </trans-unit>
       <trans-unit id="945ab39294575b7271dde42240c0806dc4ff5076" datatype="html">
         <source>You don't have any video in your watch history yet.</source>
-        <target state="new">You don't have any video in your watch history yet.</target>
+        <target state="translated">Vous n'avez pas encore de vidéo dans votre historique de visionnage.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">30</context>
@@ -5073,7 +5073,7 @@
       </trans-unit>
       <trans-unit id="4cd6feecd3cc5b969cdff7e217f0582c49118ead" datatype="html">
         <source>Open syndication dropdown</source>
-        <target state="new">Open syndication dropdown</target>
+        <target state="translated">Ouvrir le menu déroulant de la syndication</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5413,7 +5413,7 @@
       </trans-unit>
       <trans-unit id="aed1bb4393932c974d4347ff743a2253cc64ef02" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target state="new">Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <target state="translated">Les instances suivantes (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5583,7 +5583,7 @@
       </trans-unit>
       <trans-unit id="eb99819c4e231fb1efe7f0856756941908ddf172" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="new"> The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video. </target>
+        <target state="translated">La principale menace pour votre vie privée provoquée par BitTorrent réside dans le fait que votre adresse IP est stockée dans le tracker BitTorrent de l'instance tant que vous téléchargez ou regardez la vidéo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -5626,7 +5626,7 @@
       </trans-unit>
       <trans-unit id="f360bcf79135ae541bdb1bbd419ccc4cb2fb6ab3" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target state="new"> Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </target>
+        <target state="translated">Les pairs Web ne sont pas accessibles au public : comme nous utilisons le transport par websocket, le protocole est différent du traqueur BitTorrent classique. Lorsque vous êtes dans un navigateur web, vous envoyez un signal contenant votre adresse IP au tracker qui choisira au hasard d'autres pairs auxquels il transmettra les informations. Voir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>ce document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> pour plus d'information </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">118,122</context>
@@ -5880,7 +5880,7 @@
       </trans-unit>
       <trans-unit id="2131232107132374967" datatype="html">
         <source>Search videos within account</source>
-        <target state="new">Search videos within account</target>
+        <target state="translated">Rechercher des vidéos dans le compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">61</context>
@@ -5928,7 +5928,7 @@
       </trans-unit>
       <trans-unit id="230b7aa1bc012b2e5bafc1f24b6aa734a978183c" datatype="html">
         <source>Search videos</source>
-        <target state="new">Search videos</target>
+        <target state="translated">Rechercher les vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">48</context>
@@ -6014,7 +6014,7 @@
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
         <source>1440p</source>
-        <target state="new">1440p</target>
+        <target state="translated">1440p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -6879,7 +6879,7 @@
       </trans-unit>
       <trans-unit id="192815f43d0d7337dbf99f84281f5a4c3155af8f" datatype="html">
         <source>My watch history</source>
-        <target state="new">My watch history</target>
+        <target state="translated">Mon historique de visionnage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6887,7 +6887,7 @@
       </trans-unit>
       <trans-unit id="f2540f4ffc5bbb12e034a4c9e118bbc680c62e61" datatype="html">
         <source>Search your history</source>
-        <target state="new">Search your history</target>
+        <target state="translated">Recherchez dans votre historique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">10</context>
@@ -6895,7 +6895,7 @@
       </trans-unit>
       <trans-unit id="777ef31e4dfcb08a00e23b586a50f0ffe94f0c72" datatype="html">
         <source>Track watch history</source>
-        <target state="new">Track watch history</target>
+        <target state="translated">Historique de la surveillance des pistes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6918,8 +6918,7 @@
       </trans-unit>
       <trans-unit id="73fc884417b68de6671fbab6e72e054c38a1990a" datatype="html">
         <source>Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public. </source>
-        <target state="new"> Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public.
-</target>
+        <target state="translated">Votre adresse de courrier électronique actuelle est <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. Elle n'est jamais montrée au public. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -7049,7 +7048,7 @@
       </trans-unit>
       <trans-unit id="d2ade8ba2e32c6fe467932b6b156025fe50da7c3" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="new"> People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
+        <target state="translated">Les gens peuvent vous trouver en utilisant @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -7069,7 +7068,7 @@
       </trans-unit>
       <trans-unit id="2775050991871557896" datatype="html">
         <source>Avatar deleted.</source>
-        <target state="new">Avatar deleted.</target>
+        <target state="translated">Avatar supprimé.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -7146,7 +7145,7 @@
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="new">URL parameter is missing in URL parameters</target>
+        <target state="translated">Le paramètre URL est manquant dans les paramètres URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -7154,7 +7153,7 @@
       </trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
-        <target state="new">Cannot access to the remote resource</target>
+        <target state="translated">Impossible d'accéder à la ressource à distance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -7162,7 +7161,7 @@
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
-        <target state="new">Remote interaction</target>
+        <target state="translated">Interaction à distance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -7294,7 +7293,7 @@
       </trans-unit>
       <trans-unit id="61cb418b053c4b1099a9c7e5a34a9cf52c87f8dd" datatype="html">
         <source>You don't have any subscription yet.</source>
-        <target state="new">You don't have any subscription yet.</target>
+        <target state="translated">Vous n'avez pas encore d'abonnement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context>
           <context context-type="linenumber">18</context>
@@ -7827,7 +7826,7 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="new">Handle is required.</target>
+        <target state="translated">Un handle est nécessaire.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -7835,7 +7834,7 @@
       </trans-unit>
       <trans-unit id="4415706443503032539" datatype="html">
         <source>Handle must be valid (chocobozzz@example.com).</source>
-        <target state="new">Handle must be valid (chocobozzz@example.com).</target>
+        <target state="translated">L'handle doit être valide (chocobozzz@example.com).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -9020,7 +9019,7 @@
       </trans-unit>
       <trans-unit id="0713f058de1d239f503a974e384eda384d35ad2b" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target state="new">Multiple ways to subscribe to the current channel</target>
+        <target state="translated">Plusieurs façons de s'abonner à la chaîne actuelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">44</context>
@@ -9242,7 +9241,7 @@
       </trans-unit>
       <trans-unit id="9faa7899e515045c650407ca7263db6c7b6a90f9" datatype="html">
         <source>Open video actions</source>
-        <target state="new">Open video actions</target>
+        <target state="translated">Ouvrir les actions vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -9370,7 +9369,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> de <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> de <x id="INTERPOLATION_1" equiv-text="ect(false) ;    p"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
@@ -9741,7 +9740,7 @@
       </trans-unit>
       <trans-unit id="8762033369923733525" datatype="html">
         <source>Trending for the last <x id="PH" equiv-text="trendingDays"/> days</source>
-        <target state="new">Trending for the last <x id="PH" equiv-text="trendingDays"/> days</target>
+        <target state="translated">Tendances pour les derniers <x id="PH" equiv-text="trendingDays"/> jours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -9749,7 +9748,7 @@
       </trans-unit>
       <trans-unit id="6332970411264495724" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last <x id="PH" equiv-text="trendingDays"/> days</source>
-        <target state="new">Trending videos are those totalizing the greatest number of views during the last <x id="PH" equiv-text="trendingDays"/> days</target>
+        <target state="translated">Les vidéos "tendances" sont celles qui totalisent le plus grand nombre de vues au cours des derniers <x id="PH" equiv-text="trendingDays"/> jours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -9762,7 +9761,7 @@
       </trans-unit>
       <trans-unit id="4361762785337785037" datatype="html">
         <source>Copy feed URL</source>
-        <target state="new">Copy feed URL</target>
+        <target state="translated">Copier l'URL du flux</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -9787,7 +9786,7 @@
       </trans-unit>
       <trans-unit id="e40d752221cf8adc1941495c7c8dc1862bb0c248" datatype="html">
         <source>Open actions</source>
-        <target state="new">Open actions</target>
+        <target state="translated">Ouvrir les actions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
