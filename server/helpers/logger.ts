@@ -6,6 +6,7 @@ import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config'
 import { omit } from 'lodash'
 import { LOG_FILENAME } from '../initializers/constants'
+const { prettify } = require('sql-log-prettifier')
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
@@ -39,12 +40,31 @@ function getLoggerReplacer () {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  const obj = omit(info, 'label', 'timestamp', 'level', 'message')
+  const obj = omit(info, 'label', 'timestamp', 'level', 'message', 'sql')
 
   let additionalInfos = JSON.stringify(obj, getLoggerReplacer(), 2)
 
   if (additionalInfos === undefined || additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
+
+  if (info.sql) {
+    additionalInfos += '\n' + prettify(info.sql, {
+      settings: {
+        operators: {
+          color: '#808080'
+        },
+        functions: {
+          color: '#808080'
+        },
+        keywords: {
+          color: '#808080'
+        },
+        strings: {
+          color: '#808080'
+        }
+      }
+    }).replace(/^(?!\s*$)/gm, '  ') // indent by 2 spaces relative to the log beginning
+  }
 
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
