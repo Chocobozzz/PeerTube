@@ -85,9 +85,12 @@ To learn more, see:
 ----------------------------------------------------------------
 
 <img src="https://lutim.cpy.re/AHbctLjn.png" align="left" height="300px"/>
-<h3 align="left">Video streaming</h3>
+<h3 align="left">Video streaming, even in live!</h3>
 <p align="left">
 Just upload your videos, and be sure they will stream anywhere. Add a description, some tags and your video will be discoverable by the entire video fediverse, not just your instance. You can even embed a player on your favorite website!
+</p>
+<p align="left">
+You are used to hosting live events? We got you covered too! Start livestreaming from your favorite client, and even host permanent streams!
 </p>
 
 ---
@@ -121,7 +124,7 @@ Content creators can get help from their viewers in the simplest way possible: a
 :raised_hands: Contributing
 ----------------------------------------------------------------
 
-You don't need to be a coder to help!
+You don't need to be a programmer to help!
 
 You can give us your feedback, report bugs, help us translate PeerTube, write documentation, and more. Check out the [contributing
 guide](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md) to know how, it takes less than 2 minutes to get started. :wink:
