@@ -131,8 +131,9 @@ export class User implements UserServerModel {
     }
   }
 
-  updateAccountAvatar (newAccountAvatar: Avatar) {
-    this.account.updateAvatar(newAccountAvatar)
+  updateAccountAvatar (newAccountAvatar?: Avatar) {
+    if (newAccountAvatar) this.account.updateAvatar(newAccountAvatar)
+    else this.account.resetAvatar()
   }
 
   isUploadDisabled () {

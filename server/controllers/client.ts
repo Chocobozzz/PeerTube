@@ -1,9 +1,10 @@
 import * as express from 'express'
 import { constants, promises as fs } from 'fs'
+import { readFile } from 'fs-extra'
 import { join } from 'path'
 import { CONFIG } from '@server/initializers/config'
-import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@shared/core-utils/i18n'
 import { HttpStatusCode } from '@shared/core-utils'
+import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@shared/core-utils/i18n'
 import { root } from '../helpers/core-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/client-html'
@@ -45,20 +46,6 @@ const testEmbedController = (req: express.Request, res: express.Response) => res
 
 clientsRouter.use('/videos/test-embed', testEmbedController)
 clientsRouter.use('/video-playlists/test-embed', testEmbedController)
-
-// Static HTML/CSS/JS client files
-const staticClientFiles = [
-  'ngsw-worker.js',
-  'ngsw.json'
-]
-
-for (const staticClientFile of staticClientFiles) {
-  const path = join(root(), 'client', 'dist', staticClientFile)
-
-  clientsRouter.get(`/${staticClientFile}`, (req: express.Request, res: express.Response) => {
-    res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
-  })
-}
 
 // Dynamic PWA manifest
 clientsRouter.get('/manifest.webmanifest', asyncMiddleware(generateManifest))
@@ -149,7 +136,7 @@ async function generateVideoChannelHtmlPage (req: express.Request, res: express.
 
 async function generateManifest (req: express.Request, res: express.Response) {
   const manifestPhysicalPath = join(root(), 'client', 'dist', 'manifest.webmanifest')
-  const manifestJson = await fs.readFile(manifestPhysicalPath, 'utf8')
+  const manifestJson = await readFile(manifestPhysicalPath, 'utf8')
   const manifest = JSON.parse(manifestJson)
 
   manifest.name = CONFIG.INSTANCE.NAME

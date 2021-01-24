@@ -1,4 +1,5 @@
 
+import { switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, ScopedTokensService, ScreenService, ServerService, UserService } from '@app/core'
@@ -53,26 +54,30 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     const user = this.authService.getUser()
     let feedUrl = environment.originServerUrl
 
-    this.scopedTokensService.getScopedTokens().subscribe(
-      tokens => {
-        const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
-        feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
-      },
+    this.authService.userInformationLoaded
+      .pipe(switchMap(() => this.scopedTokensService.getScopedTokens()))
+      .subscribe(
+        tokens => {
+          const feeds = this.videoService.getVideoSubscriptionFeedUrls(user.account.id, tokens.feedToken)
+          feedUrl = feedUrl + feeds.find(f => f.format === FeedFormat.RSS).url
 
-      err => {
-        this.notifier.error(err.message)
-      }
-    )
+          this.actions.unshift({
+            label: $localize`Copy feed URL`,
+            iconName: 'syndication',
+            justIcon: true,
+            href: feedUrl,
+            click: e => {
+              e.preventDefault()
+              copyToClipboard(feedUrl)
+              this.activateCopiedMessage()
+            }
+          })
+        },
 
-    this.actions.unshift({
-      label: $localize`Feed`,
-      iconName: 'syndication',
-      justIcon: true,
-      click: () => {
-        copyToClipboard(feedUrl)
-        this.activateCopiedMessage()
-      }
-    })
+        err => {
+          this.notifier.error(err.message)
+        }
+      )
   }
 
   ngOnDestroy () {

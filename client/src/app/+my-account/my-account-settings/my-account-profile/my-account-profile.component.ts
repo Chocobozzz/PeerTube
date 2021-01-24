@@ -25,16 +25,23 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
+      username: null,
       'display-name': USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
       description: USER_DESCRIPTION_VALIDATOR
     })
+    this.form.controls['username'].disable()
 
     this.userInformationLoaded.subscribe(() => {
       this.form.patchValue({
+        username: this.user.username,
         'display-name': this.user.account.displayName,
         description: this.user.account.description
       })
     })
+  }
+
+  get instanceHost () {
+    return window.location.host
   }
 
   updateMyProfile () {

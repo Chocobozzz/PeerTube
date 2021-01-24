@@ -74,8 +74,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     label: string
     justIcon?: boolean
     routerLink?: string
-    click?: Function
-    clipboard?: string
+    href?: string
+    click?: (e: Event) => void
   }[] = []
 
   onDataSubject = new Subject<any[]>()

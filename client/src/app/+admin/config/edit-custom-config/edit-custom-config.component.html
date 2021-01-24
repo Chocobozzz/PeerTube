@@ -651,7 +651,8 @@
           <div class="form-group col-12 col-lg-4 col-xl-3">
             <div i18n class="inner-form-title">TWITTER</div>
             <div i18n class="inner-form-description">
-              Optional. If any, provide the Twitter account representing your instance to improve link previews.
+              Provide the Twitter account representing your instance to improve link previews.
+              If you don't have a Twitter account, just leave the default value.
             </div>
           </div>
 
@@ -752,7 +753,7 @@
                           i18n-labelText labelText="Allow additional extensions"
                         >
                           <ng-container ngProjectAs="description">
-                            <span i18n>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, or .nut videos.</span>
+                            <span i18n>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf, or .nut videos.</span>
                           </ng-container>
                         </my-peertube-checkbox>
                       </div>
@@ -832,6 +833,10 @@
                                 </ng-template>
                               </my-peertube-checkbox>
                             </div>
+
+                            <span class="mb-2 text-muted" i18n>
+                              The original file resolution will be the default target if no option is selected.
+                            </span>
                           </ng-container>
                         </div>
                       </div>
@@ -889,8 +894,9 @@
                     <ng-container i18n>Allow live streaming</ng-container>
                   </ng-template>
 
-                  <ng-container ngProjectAs="description" i18n>
-                    ⚠️ Enabling live streaming requires trust in your users and extra moderation work
+                  <ng-container ngProjectAs="description">
+                    <div i18n>⚠️ Enabling live streaming requires trust in your users and extra moderation work</div>
+                    <div i18n>If enabled, your server needs to accept incoming TCP traffic on port {{ liveRTMPPort }}</div>
                   </ng-container>
 
                   <ng-container ngProjectAs="extra">

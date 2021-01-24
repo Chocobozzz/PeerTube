@@ -42,6 +42,11 @@ smtp:
     __format: "json"
   from_address: "PEERTUBE_SMTP_FROM"
 
+log:
+  log_ping_requests:
+    __name: "PEERTUBE_LOG_PING_REQUESTS"
+    __format: "json"
+
 user:
   video_quota:
     __name: "PEERTUBE_USER_VIDEO_QUOTA"
@@ -105,6 +110,9 @@ transcoding:
       __format: "json"
     1080p:
       __name: "PEERTUBE_TRANSCODING_1080P"
+      __format: "json"
+    1440p:
+      __name: "PEERTUBE_TRANSCODING_1440P"
       __format: "json"
     2160p:
       __name: "PEERTUBE_TRANSCODING_2160P"

@@ -23,8 +23,8 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-videoImport>
     <tr>
-      <td class="expand-cell">
-        <span *ngIf="videoImport.error" class="expander" [pRowToggler]="videoImport" i18n-ngbTooltip ngbTooltip="See the error">
+      <td class="expand-cell c-hand" [pRowToggler]="videoImport" i18n-ngbTooltip ngbTooltip="See the error" placement="top-left" container="body">
+        <span *ngIf="videoImport.error" class="expander">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>
@@ -51,7 +51,7 @@
       </td>
 
       <td>
-        <span class="badge" [ngClass]="getVideoImportStateClass(videoImport.state)">
+        <span class="badge" [ngClass]="getVideoImportStateClass(videoImport.state.id)">
           {{ videoImport.state.label }}
         </span>
       </td>

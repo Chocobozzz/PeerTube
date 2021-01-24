@@ -75,6 +75,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.transcoding.resolutions['480p']).to.be.true
   expect(data.transcoding.resolutions['720p']).to.be.true
   expect(data.transcoding.resolutions['1080p']).to.be.true
+  expect(data.transcoding.resolutions['1440p']).to.be.true
   expect(data.transcoding.resolutions['2160p']).to.be.true
   expect(data.transcoding.webtorrent.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
@@ -91,6 +92,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.live.transcoding.resolutions['480p']).to.be.false
   expect(data.live.transcoding.resolutions['720p']).to.be.false
   expect(data.live.transcoding.resolutions['1080p']).to.be.false
+  expect(data.live.transcoding.resolutions['1440p']).to.be.false
   expect(data.live.transcoding.resolutions['2160p']).to.be.false
 
   expect(data.import.videos.http.enabled).to.be.true
@@ -322,6 +324,7 @@ describe('Test config', function () {
           '480p': true,
           '720p': false,
           '1080p': false,
+          '1440p': false,
           '2160p': false
         },
         webtorrent: {
@@ -346,6 +349,7 @@ describe('Test config', function () {
             '480p': true,
             '720p': true,
             '1080p': true,
+            '1440p': true,
             '2160p': true
           }
         }

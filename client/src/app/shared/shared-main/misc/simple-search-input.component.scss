@@ -1,0 +1,29 @@
+@import '_variables';
+@import '_mixins';
+
+span {
+  opacity: .6;
+  
+  &:focus-within {
+    opacity: 1;
+  }
+}
+
+my-global-icon {
+  height: 18px;
+  position: relative;
+  top: -2px;
+}
+
+input {
+  @include peertube-input-text(150px);
+
+  height: 22px; // maximum height for the account/video-channels links
+  padding-left: 10px;
+  background-color: transparent;
+  border: none;
+
+  &::placeholder {
+    font-size: 15px;
+  }
+}

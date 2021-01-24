@@ -1,23 +1,17 @@
-$FontPathSourceSansPro: '~npm-font-source-sans-pro/fonts';
-$basePath: '#{$FontPathSourceSansPro}/WOFF2/TTF/SourceSansPro';
-
-@mixin fontface($name, $path, $weight: null, $style: null, $exts: woff2) {
-  $src: null;
-  @each $ext in $exts {
-    $src: append($src, url(quote($path + "." + $ext)) format(quote($ext)), comma);
-  }
-  @font-face {
-    font-family: quote($name);
-    font-weight: $weight;
-    font-style: $style;
-    font-stretch: normal;
-    font-display: swap;
-    src: $src;
-  }
+@font-face{
+  font-family: 'Source Sans Pro';
+  font-weight: 200 900;
+  font-style: normal;
+  font-stretch: normal;
+  font-display: swap;
+  src: url('../fonts/source-sans/WOFF2/VAR/SourceSans3VF-Roman.ttf.woff2') format('woff2');
 }
 
-@include fontface('Source Sans Pro', '#{$basePath}-Regular.ttf', 400, normal);
-@include fontface('Source Sans Pro', '#{$basePath}-It.ttf', 400, italic);
-@include fontface('Source Sans Pro', '#{$basePath}-Semibold.ttf', 600, normal);
-@include fontface('Source Sans Pro', '#{$basePath}-SemiboldIt.ttf', 600, italic);
-@include fontface('Source Sans Pro', '#{$basePath}-Bold.ttf', 700, normal);
+@font-face{
+  font-family: 'Source Sans Pro';
+  font-weight: 200 900;
+  font-style: italic;
+  font-stretch: normal;
+  font-display: swap;
+  src: url('../fonts/source-sans/WOFF2/VAR/SourceSans3VF-Italic.ttf.woff2') format('woff2');
+}

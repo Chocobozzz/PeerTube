@@ -87,7 +87,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification from a remote account', async function () {
-      this.timeout(50000) // Server 2 has transcoding enabled
+      this.timeout(150000) // Server 2 has transcoding enabled
 
       await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[1].port)
       await waitJobs(servers)
@@ -116,7 +116,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification on a remote scheduled publication', async function () {
-      this.timeout(50000)
+      this.timeout(100000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
@@ -163,7 +163,7 @@ describe('Test user notifications', function () {
 
       await updateVideo(servers[0].url, servers[0].accessToken, uuid, { privacy: VideoPrivacy.PUBLIC })
 
-      await wait(500)
+      await waitJobs(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
     })
 

@@ -228,7 +228,7 @@ export class MenuComponent implements OnInit {
 
     // Close dropdown when window scroll to avoid dropdown quick jump for re-position
     const onWindowScroll = () => {
-      this.dropdown.close()
+      this.dropdown?.close()
       window.removeEventListener('scroll', onWindowScroll)
     }
 

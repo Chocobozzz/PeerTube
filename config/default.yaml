@@ -4,6 +4,7 @@ listen:
   hostname: '127.0.0.1'
   port: 9000
 
+# Correspond to your reverse proxy server_name/listen configuration (i.e., your public PeerTube instance URL)
 webserver:
   https: false
   hostname: 'localhost'
@@ -99,6 +100,7 @@ log:
     maxFileSize: 12MB
     maxFiles: 20
   anonymizeIP: false
+  log_ping_requests: true
 
 trending:
   videos:
@@ -226,6 +228,7 @@ transcoding:
     480p: false
     720p: false
     1080p: false
+    1440p: false
     2160p: false
 
   # Generate videos in a WebTorrent format (what we do since the first PeerTube release)
@@ -264,6 +267,7 @@ live:
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
   allow_replay: false
 
+  # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
     port: 1935
 
@@ -278,6 +282,7 @@ live:
       480p: false
       720p: false
       1080p: false
+      1440p: false
       2160p: false
 
 import:

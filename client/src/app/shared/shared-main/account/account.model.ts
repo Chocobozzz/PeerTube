@@ -44,6 +44,11 @@ export class Account extends Actor implements ServerAccount {
     this.updateComputedAttributes()
   }
 
+  resetAvatar () {
+    this.avatar = null
+    this.avatarUrl = Account.GET_DEFAULT_AVATAR_URL()
+  }
+
   private updateComputedAttributes () {
     this.avatarUrl = Account.GET_ACTOR_AVATAR_URL(this)
   }

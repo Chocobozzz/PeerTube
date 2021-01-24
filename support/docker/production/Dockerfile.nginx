@@ -1,6 +1,6 @@
 FROM nginx:alpine
 
-COPY entrypoint.nginx.sh .
+COPY ./support/docker/production/entrypoint.nginx.sh .
 RUN chmod +x entrypoint.nginx.sh
 
 EXPOSE 80 443

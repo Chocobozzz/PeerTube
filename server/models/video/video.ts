@@ -1004,13 +1004,15 @@ export class VideoModel extends Model {
     return result.map(v => v.id)
   }
 
-  static listUserVideosForApi (
-    accountId: number,
-    start: number,
-    count: number,
-    sort: string,
+  static listUserVideosForApi (options: {
+    accountId: number
+    start: number
+    count: number
+    sort: string
     search?: string
-  ) {
+  }) {
+    const { accountId, start, count, sort, search } = options
+
     function buildBaseQuery (): FindOptions {
       let baseQuery = {
         offset: start,
@@ -1087,6 +1089,7 @@ export class VideoModel extends Model {
     user?: MUserAccountId
     historyOfUser?: MUserId
     countVideos?: boolean
+    search?: string
   }) {
     if ((options.filter === 'all-local' || options.filter === 'all') && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
@@ -1123,7 +1126,8 @@ export class VideoModel extends Model {
       includeLocalVideos: options.includeLocalVideos,
       user: options.user,
       historyOfUser: options.historyOfUser,
-      trendingDays
+      trendingDays,
+      search: options.search
     }
 
     return VideoModel.getAvailableForApi(queryOptions, options.countVideos)
@@ -1731,6 +1735,7 @@ export class VideoModel extends Model {
   }
 
   getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], it: (file: MVideoFile) => number) => MVideoFile) {
+    // We first transcode to WebTorrent format, so try this array first
     if (Array.isArray(this.VideoFiles) && this.VideoFiles.length !== 0) {
       const file = fun(this.VideoFiles, file => file.resolution)
 

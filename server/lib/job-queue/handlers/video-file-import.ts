@@ -9,7 +9,7 @@ import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprob
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { publishNewResolutionIfNeeded } from './video-transcoding'
+import { onNewWebTorrentFileResolution } from './video-transcoding'
 
 async function processVideoFileImport (job: Bull.Job) {
   const payload = job.data as VideoFileImportPayload
@@ -24,7 +24,7 @@ async function processVideoFileImport (job: Bull.Job) {
 
   await updateVideoFile(video, payload.filePath)
 
-  await publishNewResolutionIfNeeded(video)
+  await onNewWebTorrentFileResolution(video)
   return video
 }
 

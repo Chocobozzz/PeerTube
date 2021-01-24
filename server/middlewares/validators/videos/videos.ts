@@ -6,6 +6,7 @@ import { MVideoFullLight } from '@server/types/models'
 import { ServerErrorCode, UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
 import {
+  exists,
   isBooleanValid,
   isDateValid,
   isFileFieldValid,
@@ -444,6 +445,9 @@ const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid skip count boolean'),
+  query('search')
+    .optional()
+    .custom(exists).withMessage('Should have a valid search'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking commons video filters query', { parameters: req.query })

@@ -4,12 +4,18 @@
       <img [src]="actor.avatarUrl" alt="Avatar" />
 
       <div class="actor-img-edit-container">
-        <div class="actor-img-edit-button" [ngbTooltip]="avatarFormat"
-          placement="right" container="body">
-          <my-global-icon iconName="edit"></my-global-icon>
-          <label for="avatarfile" i18n>Change your avatar</label>
-          <input #avatarfileInput type="file" title=" " name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange()"/>
+
+        <div *ngIf="!hasAvatar()" class="actor-img-edit-button" [ngbTooltip]="avatarFormat" placement="right" container="body">
+          <my-global-icon iconName="upload"></my-global-icon>
+          <label class="sr-only" for="avatarfile" i18n>Upload a new avatar</label>
+          <input #avatarfileInput type="file" title=" " name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
         </div>
+
+        <div *ngIf="hasAvatar()" class="actor-img-edit-button" #avatarPopover="ngbPopover" [ngbPopover]="avatarEditContent" popoverClass="popover-avatar-info" autoClose="outside" placement="right">
+          <my-global-icon iconName="edit"></my-global-icon>
+          <label class="sr-only" for="avatarMenu" i18n>Change your avatar</label>
+        </div>
+
       </div>
     </div>
 
@@ -23,3 +29,15 @@
     </div>
   </div>
 </ng-container>
+
+<ng-template #avatarEditContent>
+  <div class="dropdown-item c-hand" [ngbTooltip]="avatarFormat" placement="right" container="body">
+    <my-global-icon iconName="upload"></my-global-icon>
+    <span for="avatarfile" i18n>Upload a new avatar</span>
+    <input #avatarfileInput type="file" title=" " name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
+  </div>
+  <div class="dropdown-item c-hand" (click)="deleteAvatar()" (key.enter)="deleteAvatar()">
+    <my-global-icon iconName="delete"></my-global-icon>
+    <span i18n>Remove avatar</span>
+  </div>
+</ng-template>

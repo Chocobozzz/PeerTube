@@ -91,7 +91,7 @@
   <div class="submit-container">
     <div i18n *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
 
-    <my-button className="submit-button orange-button" i18n-label label="Publish" icon="circle-tick"
+    <my-button className="orange-button" i18n-label label="Publish" icon="circle-tick"
                (click)="updateSecondStep()" (keydown.enter)="updateSecondStep()"
                [disabled]="isPublishingButtonDisabled()"
     ></my-button>

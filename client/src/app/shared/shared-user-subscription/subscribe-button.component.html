@@ -58,8 +58,10 @@
         <span *ngIf="isUserLoggedIn()" i18n>Subscribe with your local account</span>
       </button>
 
-      <button class="dropdown-item dropdown-item-neutral" i18n>Subscribe with a Mastodon account:</button>
-      <my-remote-subscribe [showHelp]="true" [uri]="uri"></my-remote-subscribe>
+      <button class="dropdown-item dropdown-item-neutral">
+        <div class="mb-1" i18n>Subscribe with a remote account:</div>
+        <my-remote-subscribe [showHelp]="true" [uri]="uri"></my-remote-subscribe>
+      </button>
 
       <div class="dropdown-divider"></div>
 

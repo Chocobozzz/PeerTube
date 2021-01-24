@@ -137,7 +137,7 @@ describe('Test video privacy', function () {
   })
 
   it('Should upload an unlisted video on server 2', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     const attributes = {
       name: 'unlisted video',

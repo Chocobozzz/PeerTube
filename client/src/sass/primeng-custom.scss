@@ -503,6 +503,10 @@ p-table {
       display: inline-flex;
       align-items: center;
 
+      .left-buttons {
+        padding-left: 15px;
+      }
+
       .input-group-text {
         background-color: transparent;
       }
@@ -512,6 +516,9 @@ p-table {
   th {
     background-color: pvar(--mainBackgroundColor) !important;
     outline: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   td, th {
@@ -627,8 +634,6 @@ p-table {
 
   .action-cell {
     width: 250px !important;
-    padding: 0 !important;
-    text-align: center;
 
     .dropdown-root,
     my-edit-button,
@@ -637,7 +642,7 @@ p-table {
       display: inline-block !important;
       margin-left: 5px;
 
-      :first-child {
+      &:first-child {
         margin-left: 0
       }
     }

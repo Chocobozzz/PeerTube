@@ -45,10 +45,11 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
         if (trendingDays === 1) {
           this.titlePage = $localize`Trending for the last 24 hours`
           this.titleTooltip = $localize`Trending videos are those totalizing the greatest number of views during the last 24 hours`
-        } else {
-          this.titlePage = `Trending for the last ${trendingDays} days`
-          this.titleTooltip = `Trending videos are those totalizing the greatest number of views during the last ${trendingDays} days`
+          return
         }
+
+        this.titlePage = $localize`Trending for the last ${trendingDays} days`
+        this.titleTooltip = $localize`Trending videos are those totalizing the greatest number of views during the last ${trendingDays} days`
       })
   }
 

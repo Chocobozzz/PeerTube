@@ -111,6 +111,10 @@ export interface ServerConfig {
 
       enabledResolutions: number[]
     }
+
+    rtmp: {
+      port: number
+    }
   }
 
   import: {

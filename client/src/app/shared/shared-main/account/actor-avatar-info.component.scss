@@ -70,3 +70,17 @@
     }
   }
 }
+
+.actor-img-edit-container ::ng-deep .popover-avatar-info .popover-body {
+  padding: 0;
+
+  .dropdown-item {
+    padding: 6px 10px;
+    border-radius: 4px;
+
+    &:first-child {
+      @include peertube-file;
+      display: block;
+    }
+  }
+}

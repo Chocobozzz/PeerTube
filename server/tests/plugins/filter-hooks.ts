@@ -10,6 +10,7 @@ import {
   doubleFollow,
   getAccountVideos,
   getConfig,
+  getMyVideos,
   getPluginTestPath,
   getVideo,
   getVideoChannelVideos,
@@ -119,6 +120,20 @@ describe('Test plugin filter hooks', function () {
 
     // Plugin do +3 to the total result
     expect(res.body.total).to.equal(13)
+  })
+
+  it('Should run filter:api.user.me.videos.list.params', async function () {
+    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 2)
+
+    // 1 plugin do +4 to the count parameter
+    expect(res.body.data).to.have.lengthOf(6)
+  })
+
+  it('Should run filter:api.user.me.videos.list.result', async function () {
+    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 2)
+
+    // Plugin do +4 to the total result
+    expect(res.body.total).to.equal(14)
   })
 
   it('Should run filter:api.video.get.result', async function () {

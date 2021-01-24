@@ -43,7 +43,8 @@ activityPubClientRouter.use(cors())
 
 // Intercept ActivityPub client requests
 
-activityPubClientRouter.get('/accounts?/:name',
+activityPubClientRouter.get(
+  [ '/accounts?/:name', '/accounts?/:name/video-channels' ],
   executeIfActivityPub,
   asyncMiddleware(localAccountValidator),
   accountController
@@ -121,7 +122,8 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity
   asyncMiddleware(videoCommentController)
 )
 
-activityPubClientRouter.get('/video-channels/:name',
+activityPubClientRouter.get(
+  [ '/video-channels/:name', '/video-channels/:name/videos' ],
   executeIfActivityPub,
   asyncMiddleware(localVideoChannelValidator),
   videoChannelController

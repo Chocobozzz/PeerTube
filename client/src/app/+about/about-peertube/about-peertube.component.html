@@ -65,7 +65,7 @@
   <div class="privacy-contributors">
     <my-about-peertube-contributors></my-about-peertube-contributors>
 
-    <div class="p2p-privacy">     
+    <div class="p2p-privacy">
       <h2 class="section-title">
         <div class="anchor" id="privacy"></div> <!-- privacy anchor -->
         <ng-container i18n>P2P & Privacy</ng-container>
@@ -77,8 +77,8 @@
         follows applies only if you want to keep using the P2P mode of PeerTube.
       </p>
 
-      <p>
-        The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent 
+      <p i18n>
+        The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent
         tracker as long as you download or watch the video.
       </p>
 
@@ -115,8 +115,7 @@
         </li>
 
         <li i18n>
-          Web peers are not publicly accessible: because we use WebRTC inside the web browser (<a href="https://webtorrent.io/">with the
-          WebTorrent library</a>), the protocol is different from classic BitTorrent.
+          Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker.
           When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers
           to forward the information to.
           See <a href="https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst">this document</a> for more information

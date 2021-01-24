@@ -6,7 +6,7 @@
   <div class="header">
 
     <div class="top-left-block">
-      <span class="icon icon-menu" (click)="menu.toggleMenu()"></span>
+      <span class="icon icon-menu" role="button" [title]="getToggleTitle()" (click)="menu.toggleMenu()"></span>
 
       <a class="peertube-title" [routerLink]="defaultRoute">
         <span class="icon icon-logo"></span>

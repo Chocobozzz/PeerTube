@@ -1,7 +1,7 @@
 {
   "name": "peertube",
-  "description": "Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.",
-  "version": "3.0.0-rc.1",
+  "description": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.",
+  "version": "3.0.1",
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
@@ -54,6 +54,7 @@
     "update-host": "node ./dist/scripts/update-host.js",
     "create-transcoding-job": "node ./dist/scripts/create-transcoding-job.js",
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
+    "print-transcode-command": "node ./dist/scripts/print-transcode-command.js",
     "test": "scripty",
     "help": "scripty",
     "generate-cli-doc": "scripty",

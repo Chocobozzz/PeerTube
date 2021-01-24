@@ -7,7 +7,7 @@ import { LiveManager } from '@server/lib/live-manager'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
-import { generateHlsPlaylistFromTS } from '@server/lib/video-transcoding'
+import { generateHlsPlaylistResolutionFromTS } from '@server/lib/video-transcoding'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -102,7 +102,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
     const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
 
-    const outputPath = await generateHlsPlaylistFromTS({
+    const outputPath = await generateHlsPlaylistResolutionFromTS({
       video: videoWithFiles,
       concatenatedTsFilePath,
       resolution: videoFileResolution,

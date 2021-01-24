@@ -13,6 +13,8 @@ import {
   NgbPopoverModule,
   NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
+import { LoadingBarModule } from '@ngx-loading-bar/core'
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, ActorAvatarInfoComponent, VideoAvatarChannelComponent } from './account'
 import {
@@ -28,7 +30,7 @@ import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditBu
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
-import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent } from './misc'
+import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent, SimpleSearchInputComponent } from './misc'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
@@ -41,6 +43,9 @@ import { VideoChannelService } from './video-channel'
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
+
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
 
     NgbDropdownModule,
     NgbModalModule,
@@ -83,6 +88,7 @@ import { VideoChannelService } from './video-channel'
     HelpComponent,
     ListOverflowComponent,
     TopMenuDropdownComponent,
+    SimpleSearchInputComponent,
 
     UserQuotaComponent,
     UserNotificationsComponent
@@ -94,6 +100,9 @@ import { VideoChannelService } from './video-channel'
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
+
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
 
     NgbDropdownModule,
     NgbModalModule,
@@ -132,6 +141,7 @@ import { VideoChannelService } from './video-channel'
     HelpComponent,
     ListOverflowComponent,
     TopMenuDropdownComponent,
+    SimpleSearchInputComponent,
 
     UserQuotaComponent,
     UserNotificationsComponent

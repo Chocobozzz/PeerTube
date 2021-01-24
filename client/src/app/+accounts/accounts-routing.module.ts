@@ -5,6 +5,7 @@ import { AccountsComponent } from './accounts.component'
 import { AccountVideosComponent } from './account-videos/account-videos.component'
 import { AccountAboutComponent } from './account-about/account-about.component'
 import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
+import { AccountSearchComponent } from './account-search/account-search.component'
 
 const accountsRoutes: Routes = [
   {
@@ -22,19 +23,6 @@ const accountsRoutes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'videos',
-        component: AccountVideosComponent,
-        data: {
-          meta: {
-            title: $localize`Account videos`
-          },
-          reuse: {
-            enabled: true,
-            key: 'account-videos-list'
-          }
-        }
-      },
-      {
         path: 'video-channels',
         component: AccountVideoChannelsComponent,
         data: {
@@ -49,6 +37,28 @@ const accountsRoutes: Routes = [
         data: {
           meta: {
             title: $localize`About account`
+          }
+        }
+      },
+      {
+        path: 'videos',
+        component: AccountVideosComponent,
+        data: {
+          meta: {
+            title: $localize`Account videos`
+          },
+          reuse: {
+            enabled: true,
+            key: 'account-videos-list'
+          }
+        }
+      },
+      {
+        path: 'search',
+        component: AccountSearchComponent,
+        data: {
+          meta: {
+            title: $localize`Search videos within account`
           }
         }
       }

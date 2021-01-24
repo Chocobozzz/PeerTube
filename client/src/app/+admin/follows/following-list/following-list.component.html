@@ -11,6 +11,13 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption">
+      <div class="left-buttons">
+        <a class="follow-button" (click)="addDomainsToFollow()" (key.enter)="addDomainsToFollow()">
+          <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>Follow instances</ng-container>
+        </a>
+      </div>
+
       <div class="ml-auto has-feedback has-clear">
         <input
           type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
@@ -19,10 +26,6 @@
         <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
         <span class="sr-only" i18n>Clear filters</span>
       </div>
-      <a class="ml-2 follow-button" (click)="addDomainsToFollow()" (key.enter)="addDomainsToFollow()">
-        <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
-        <ng-container i18n>Follow domain</ng-container>
-      </a>
     </div>
   </ng-template>
 
@@ -39,7 +42,7 @@
   <ng-template pTemplate="body" let-follow>
     <tr>
       <td class="action-cell">
-        <my-delete-button label (click)="removeFollowing(follow)"></my-delete-button>
+        <my-delete-button label="Unfollow" i18n-label (click)="removeFollowing(follow)"></my-delete-button>
       </td>
       <td>
         <a [href]="'https://' + follow.following.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">

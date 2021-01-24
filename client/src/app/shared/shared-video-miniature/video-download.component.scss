@@ -2,7 +2,7 @@
 @import 'mixins';
 
 .peertube-select-container {
-  @include peertube-select-container(100px);
+  @include peertube-select-container(85px);
 
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -10,6 +10,8 @@
 
   select {
     height: inherit;
+    border-top-left-radius: .2rem;
+    border-bottom-left-radius: .2rem;
   }
 }
 

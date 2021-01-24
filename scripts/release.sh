@@ -87,7 +87,7 @@ rm -f "./client/dist/embed-stats.json"
   # archive creation + signing
   zip -r "PeerTube/$zip_name" "${directories_to_archive[@]}"
   gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$zip_name"
-  XZ_OPT=-e9 tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
+  XZ_OPT="-e9 -T0" tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
   gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$tar_name"
 
   # temporary setup destruction

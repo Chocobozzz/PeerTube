@@ -63,7 +63,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
     this.isImportingVideo = true
 
     const videoUpdate: VideoUpdate = {
-      privacy: this.firstStepPrivacyId,
+      privacy: VideoPrivacy.PRIVATE,
       waitTranscoding: false,
       commentsEnabled: true,
       downloadEnabled: true,
@@ -103,6 +103,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
             this.video = new VideoEdit(Object.assign(video, {
               commentsEnabled: videoUpdate.commentsEnabled,
               downloadEnabled: videoUpdate.downloadEnabled,
+              privacy: { id: this.firstStepPrivacyId },
               support: null,
               thumbnailUrl,
               previewUrl

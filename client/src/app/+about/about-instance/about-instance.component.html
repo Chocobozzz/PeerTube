@@ -7,7 +7,7 @@
       <button i18n *ngIf="isContactFormEnabled" (click)="openContactModal()" (keydown.enter)="openContactModal()" class="contact-admin">Contact administrator</button>
     </div>
 
-    <div class="block instance-badges" *ngIf="categories.length !== 0 || languages.length !== 0">
+    <div class="instance-badges" *ngIf="categories.length !== 0 || languages.length !== 0">
       <span *ngFor="let category of categories" class="badge badge-primary category">{{ category }}</span>
 
       <span *ngFor="let language of languages" class="badge badge-secondary language">{{ language }}</span>

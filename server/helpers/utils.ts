@@ -1,11 +1,10 @@
+import { remove } from 'fs-extra'
+import { Instance as ParseTorrent } from 'parse-torrent'
+import { join } from 'path'
 import { ResultList } from '../../shared'
+import { CONFIG } from '../initializers/config'
 import { execPromise, execPromise2, randomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
-import { join } from 'path'
-import { Instance as ParseTorrent } from 'parse-torrent'
-import { remove } from 'fs-extra'
-import { CONFIG } from '../initializers/config'
-import { isVideoFileExtnameValid } from './custom-validators/videos'
 
 function deleteFileAsync (path: string) {
   remove(path)
@@ -31,15 +30,10 @@ function getFormattedObjects<U, V, T extends FormattableToJSON<U, V>> (objects: 
   } as ResultList<V>
 }
 
-function generateVideoImportTmpPath (target: string | ParseTorrent, extensionArg?: string) {
+function generateVideoImportTmpPath (target: string | ParseTorrent, extension = '.mp4') {
   const id = typeof target === 'string'
     ? target
     : target.infoHash
-
-  let extension = '.mp4'
-  if (extensionArg && isVideoFileExtnameValid(extensionArg)) {
-    extension = extensionArg
-  }
 
   const hash = sha256(id)
   return join(CONFIG.STORAGE.TMP_DIR, `${hash}-import${extension}`)

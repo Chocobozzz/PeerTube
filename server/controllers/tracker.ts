@@ -22,7 +22,6 @@ const trackerServer = new TrackerServer({
   http: false,
   udp: false,
   ws: false,
-  dht: false,
   filter: async function (infoHash, params, cb) {
     if (CONFIG.TRACKER.ENABLED === false) {
       return cb(new Error('Tracker is disabled on this instance.'))
@@ -31,7 +30,7 @@ const trackerServer = new TrackerServer({
     let ip: string
 
     if (params.type === 'ws') {
-      ip = params.socket.ip
+      ip = params.ip
     } else {
       ip = params.httpReq.ip
     }

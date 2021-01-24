@@ -7,6 +7,7 @@ export type ConfigResolutions = {
   '480p': boolean
   '720p': boolean
   '1080p': boolean
+  '1440p': boolean
   '2160p': boolean
 }
 

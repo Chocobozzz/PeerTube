@@ -117,6 +117,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
         '480p': true,
         '720p': false,
         '1080p': false,
+        '1440p': false,
         '2160p': false
       },
       webtorrent: {
@@ -141,6 +142,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
           '480p': true,
           '720p': true,
           '1080p': true,
+          '1440p': true,
           '2160p': true
         }
       }

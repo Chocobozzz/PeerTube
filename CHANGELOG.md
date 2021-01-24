@@ -1,6 +1,31 @@
 # Changelog
 
-## v3.0.0-rc.1
+## v3.0.1
+
+### SECURITY
+
+ * **Important** Fix retrieving data of another user if the username contains `_` when fetching *my information*
+
+### Docker
+
+ * Fix [upgrade documentation](https://docs.joinpeertube.org/install-docker?id=upgrade)
+ * Add live RTMP port in docker compose
+
+### Bug fixes
+
+ * Fix account feed URL
+ * Log RTMP server error (address already in use)
+ * Fix NPM theme links in admin theme page
+ * Don't reject AP actors with empty description
+ * Fix twitter admin config description
+ * Fix duplicate entry in job list page
+ * Fix `nl-NL` broken admin config page
+ * Fix bad tracker client IP when using a reverse proxy
+
+
+## v3.0.0
+
+**Since v2.4.0**
 
 ### IMPORTANT NOTES
 
@@ -14,13 +39,16 @@
 
 ### Docker
 
- * Add nginx behind traefik to benefit nginx optimizations of some PeerTube routes [#2531](https://github.com/Chocobozzz/PeerTube/pull/2531)
+ * Replace traefik by nginx in our docker-compose template:
+   * Better consistency with our default setup (we now use the same stack)
+   * Use our default nginx template enabling many optimizations
+   * Update the documentation to take into account this change: https://docs.joinpeertube.org/install-docker
 
 ### Plugins/Themes/Embed API
 
  * Add ability for auth plugins to redirect user on logout [#32](https://framagit.org/framasoft/peertube/PeerTube/-/merge_requests/32) & [#33](https://framagit.org/framasoft/peertube/PeerTube/-/merge_requests/33)
  * Add `input-password` setting to plugins [#3375](https://github.com/Chocobozzz/PeerTube/issues/3375)
- * Add server plugin hooks (https://docs.joinpeertube.org/#/api-plugins):
+ * Add server plugin hooks (https://docs.joinpeertube.org/api-plugins):
    * `filter:api.accounts.videos.list.params`
    * `filter:api.accounts.videos.list.result`
    * `filter:api.video-channels.videos.list.params`
@@ -35,6 +63,7 @@
    * Support live transcoding in multiple resolutions
    * Admins can set a limit of created lives per user/instance and a duration limit
    * This is the first step of live streaming, we'll consolidate the feature next year
+ * Support Galician locale
  * Update left menu [#3296](https://github.com/Chocobozzz/PeerTube/pull/3296)
    * Add *My settings*, *My library*, *Administration* (if admin) below the username
    * Rename section titles to *In my account*, and *On instance name* for better block scopes identification
@@ -74,10 +103,12 @@
  * Render markdown in email notifications for new comments [#3255](https://github.com/Chocobozzz/PeerTube/pull/3255)
  * Add an admin setting to force ipv4 in youtube-dl [#3311](https://github.com/Chocobozzz/PeerTube/pull/3311)
  * Add ability for admins to put markdown in all fields of *About* page [#3371](https://github.com/Chocobozzz/PeerTube/pull/3371)
+ * Support `activeMonth` and `activeHalfyear` in nodeinfo
 
 ### Bug fixes
 
  * Fix inability to delete a channel due to a bug in the confirm modal
+ * Fix views processing for hour 0
  * Fix ownership change modal accept button
  * Fix incorrect ActivityPub IDs
  * Do not transcode videos to an higher bitrate than the source
@@ -112,7 +143,36 @@
  * Fix playlist list `name`/`displayName` sort field [#3385](https://github.com/Chocobozzz/PeerTube/pull/3385)
  * Fix 401 error display in embeds
  * Do not crash if SMTP server is down, instead log an error [#3457](https://github.com/Chocobozzz/PeerTube/issues/3457)
+ * Fix redundancy federation in specific cases
+ * Stop CLI auth failure with extra `/` [#3520](https://github.com/Chocobozzz/PeerTube/issues/3520)
+ * Add missing audit log if the user deletes its account
+ * Don't crash on youtube-dl update write error
+ * Fix video auto block notification issue
 
+**Since v3.0.0-rc.1**
+
+### Features
+
+ * Support Galician locale
+ * Support `activeMonth` and `activeHalfyear` in nodeinfo
+
+### Bug fixes
+
+ * Fix views processing for hour 0
+ * Fix follows pages (in admin and about)
+ * Don't display live max duration if disabled by admin
+ * Correctly display live badge in videos list
+ * Fix redundancy federation in specific cases
+ * Fix live miniatures
+ * Don't update player timestamp when clicking on a timecode in comments/descriptions for a live
+ * Fix admin table filters
+ * Fix some accessibility issues
+ * Stop CLI auth failure with extra `/` [#3520](https://github.com/Chocobozzz/PeerTube/issues/3520)
+ * Fix login error display
+ * Don't display log level in audit logs view
+ * Add missing audit log if the user deletes its account
+ * Don't crash on youtube-dl update write error
+ * Fix video auto block notification issue
 
 
 ## v2.4.0
@@ -139,16 +199,16 @@
 
 ### Plugins/Themes/Embed API
 
- * Add embed API (https://docs.joinpeertube.org/#/api-embed-player):
+ * Add embed API (https://docs.joinpeertube.org/api-embed-player):
    * `playNextVideo` method
    * `playPreviousVideo` method
    * `getCurrentPosition` method
  * Embed URL parameters
    * Add ability to disable PeerTube link in embed using an URL param (`peertubeLink=0`)
  * Add plugins support in embed
- * Add client plugin hooks (https://docs.joinpeertube.org/#/api-plugins):
+ * Add client plugin hooks (https://docs.joinpeertube.org/api-plugins):
    * `action:embed.player.loaded` (for embed)
- * Add custom fields in video update/upload form using `registerVideoField` (https://docs.joinpeertube.org/#/contribute-plugins?id=add-custom-fields-to-video-form)
+ * Add custom fields in video update/upload form using `registerVideoField` (https://docs.joinpeertube.org/contribute-plugins?id=add-custom-fields-to-video-form)
 
 ### Features
 
@@ -358,7 +418,7 @@ A new endpoint to report videos will be created in PeerTube 2.4 and will also al
 
 ### CLI tools
 
- * Add redundancy CLI: https://docs.joinpeertube.org/#/maintain-tools?id=peertube-redundancyjs
+ * Add redundancy CLI: https://docs.joinpeertube.org/maintain-tools?id=peertube-redundancyjs
  * Add ability to pass remaining options to youtube-dl binary in peertube-import script ([@drzraf](https://github.com/drzraf))
 
 ### Docker
@@ -368,19 +428,19 @@ A new endpoint to report videos will be created in PeerTube 2.4 and will also al
 
 ### Maintenance
 
- * Add nginx configuration to redirect videos to an S3 bucket ([@rigelk](https://github.com/rigelk)) and update of the [corresponding documentation](https://docs.joinpeertube.org/#/admin-remote-storage).
+ * Add nginx configuration to redirect videos to an S3 bucket ([@rigelk](https://github.com/rigelk)) and update of the [corresponding documentation](https://docs.joinpeertube.org/admin-remote-storage).
 
 ### Plugins/Themes/Embed API
 
- * Add embed API (https://docs.joinpeertube.org/#/api-embed-player):
+ * Add embed API (https://docs.joinpeertube.org/api-embed-player):
    * `playbackState` can be `ended`
    * `playbackStatusUpdate` has a `duration` field
    * `setCaption` and `getCaptions` methods
- * Add client plugin hooks (https://docs.joinpeertube.org/#/api-plugins):
+ * Add client plugin hooks (https://docs.joinpeertube.org/api-plugins):
    * `action:login.init`
    * `action:video-watch.video-threads.loaded`
    * `action:video-watch.video-thread-replies.loaded` ([@ipbc-dev](https://github.com/ipbc-dev))
- * Add server plugin hooks (https://docs.joinpeertube.org/#/api-plugins):
+ * Add server plugin hooks (https://docs.joinpeertube.org/api-plugins):
    * `filter:api.video.pre-import-url.accept.result`
    * `filter:api.video.pre-import-torrent.accept.result`
    * `filter:api.video.post-import-url.accept.result`
@@ -572,13 +632,13 @@ A new endpoint to report videos will be created in PeerTube 2.4 and will also al
 
 We added some sections in the documentation website:
 
- * S3 remote storage: https://docs.joinpeertube.org/#/admin-remote-storage
- * Instances redundancy: https://docs.joinpeertube.org/#/admin-following-instances
- * Moderate your instance: https://docs.joinpeertube.org/#/admin-moderation
- * Customize your instance (install plugins & themes): https://docs.joinpeertube.org/#/admin-customize-instance
- * PeerTube logs (standard log/audit log): https://docs.joinpeertube.org/#/admin-logs
- * Mute accounts/instances: https://docs.joinpeertube.org/#/use-mute
- * Controlled player embed API: https://docs.joinpeertube.org/#/api-embed-player
+ * S3 remote storage: https://docs.joinpeertube.org/admin-remote-storage
+ * Instances redundancy: https://docs.joinpeertube.org/admin-following-instances
+ * Moderate your instance: https://docs.joinpeertube.org/admin-moderation
+ * Customize your instance (install plugins & themes): https://docs.joinpeertube.org/admin-customize-instance
+ * PeerTube logs (standard log/audit log): https://docs.joinpeertube.org/admin-logs
+ * Mute accounts/instances: https://docs.joinpeertube.org/use-mute
+ * Controlled player embed API: https://docs.joinpeertube.org/api-embed-player
 
 ### Docker
 
@@ -613,7 +673,7 @@ We added some sections in the documentation website:
 
  * PeerTube moved translations from Zanata to Weblate. Here is the new translations website URL: https://weblate.framasoft.org/projects/peertube/
  * We now provide a JavaScript library to control a PeerTube embed: https://www.npmjs.com/package/@peertube/embed-api
- * Add ability to generate HLS videos using `create-transcoding-job` script (see [the documentation](https://docs.joinpeertube.org/#/maintain-tools?id=create-transcoding-jobjs))
+ * Add ability to generate HLS videos using `create-transcoding-job` script (see [the documentation](https://docs.joinpeertube.org/maintain-tools?id=create-transcoding-jobjs))
  * Update nginx template: (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
    * Add streaming playlists endpoint
    * Add `client_body_temp_path` hint
@@ -882,7 +942,7 @@ We added some sections in the documentation website:
 ### Features
 
  * :tada: Support Finnish, Greek and Scottish Gaelic languages
- * :tada: Add basic plugins and themes support (**beta**): https://docs.joinpeertube.org/#/contribute-plugins
+ * :tada: Add basic plugins and themes support (**beta**): https://docs.joinpeertube.org/contribute-plugins
    * Install plugins or themes from the administration panel
    * Choose a default theme for your instance
    * Users can choose the theme they want among the list of themes their administrator installed

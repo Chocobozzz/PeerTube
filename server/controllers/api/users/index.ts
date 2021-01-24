@@ -305,9 +305,9 @@ async function listUsers (req: express.Request, res: express.Response) {
 async function removeUser (req: express.Request, res: express.Response) {
   const user = res.locals.user
 
-  await user.destroy()
-
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
+
+  await user.destroy()
 
   Hooks.runAction('action:api.user.deleted', { user })
 

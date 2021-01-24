@@ -195,7 +195,7 @@ const SCHEDULER_INTERVALS_MS = {
   autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
-  updateInboxStats: 1000 * 60 * 5 // 5 minutes
+  updateInboxStats: 1000 * 60// 1 minute
 }
 
 // ---------------------------------------------------------------------------
@@ -356,8 +356,11 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
 }
 
 const FFMPEG_NICE: { [ id: string ]: number } = {
-  THUMBNAIL: 2, // 2 just for don't blocking servers
-  TRANSCODING: 15
+  // parent process defaults to niceness = 0
+  // reminder: lower = higher priority, max value is 19, lowest is -20
+  THUMBNAIL: 2, // low value in order to avoid blocking server
+  LIVE: 9, // prioritize over VOD
+  VOD: 15
 }
 
 const VIDEO_CATEGORIES = {

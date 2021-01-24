@@ -88,6 +88,9 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
+.badge {
+  line-height: 1.1;
+}
 
 @media screen and (min-width: #{breakpoint(md)}) {
   .modal:before {
@@ -377,7 +380,7 @@ ngb-tooltip-window {
   &:not(.callout-light) {
     border-left-width: .25rem;
   }
-  
+
   &.callout-info {
     border-color: pvar(--mainColorLightest);
     border-left-color: pvar(--mainColor);

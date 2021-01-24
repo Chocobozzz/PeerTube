@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { USER_EMAIL_VALIDATOR } from '../form-validators/user-validators'
+import { USER_HANDLE_VALIDATOR } from '../form-validators/user-validators'
 
 @Component({
   selector: 'my-remote-subscribe',
@@ -13,14 +14,15 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
   @Input() showHelp = false
 
   constructor (
-    protected formValidatorService: FormValidatorService
+    protected formValidatorService: FormValidatorService,
+    private notifier: Notifier
   ) {
     super()
   }
 
   ngOnInit () {
     this.buildForm({
-      text: USER_EMAIL_VALIDATOR
+      text: USER_HANDLE_VALIDATOR
     })
   }
 
@@ -35,22 +37,27 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
     const address = this.form.value['text']
     const [ username, hostname ] = address.split('@')
 
-    // Should not have CORS error because https://tools.ietf.org/html/rfc7033#section-5
-    fetch(`https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
-      .then(response => response.json())
-      .then(data => new Promise((resolve, reject) => {
-        if (data && Array.isArray(data.links)) {
-          const link: { template: string } = data.links.find((link: any) => {
-            return link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe'
-          })
+    const protocol = window.location.protocol
 
-          if (link && link.template.includes('{uri}')) {
-            resolve(link.template.replace('{uri}', encodeURIComponent(this.uri)))
-          }
+    // Should not have CORS error because https://tools.ietf.org/html/rfc7033#section-5
+    fetch(`${protocol}//${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
+      .then(response => response.json())
+      .then(data => new Promise((res, rej) => {
+        if (!data || Array.isArray(data.links) === false) return rej()
+
+        const link: { template: string } = data.links.find((link: any) => {
+          return link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe'
+        })
+
+        if (link && link.template.includes('{uri}')) {
+          res(link.template.replace('{uri}', encodeURIComponent(this.uri)))
         }
-        reject()
       }))
       .then(window.open)
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err)
+
+        this.notifier.error($localize`Cannot fetch information of this remote account`)
+      })
   }
 }

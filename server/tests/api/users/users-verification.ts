@@ -104,6 +104,8 @@ describe('Test users account verification', function () {
   })
 
   it('Should be able to change the user email', async function () {
+    this.timeout(10000)
+
     let updateVerificationString: string
 
     {

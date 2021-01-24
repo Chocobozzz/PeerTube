@@ -57,7 +57,6 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
     done
 
     mv "./dist/$defaultLanguage/assets" "./dist"
-    mv "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 
     rmdir "dist/build"
 else
@@ -69,6 +68,8 @@ else
 
     npm run ng build -- --localize=false --output-path "dist/$defaultLanguage/" --deploy-url "/client/$defaultLanguage/" --prod --stats-json $additionalParams
 fi
+
+cp "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 
 cd ../ && npm run build:embed && cd client/
 

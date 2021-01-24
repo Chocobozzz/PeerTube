@@ -14,7 +14,7 @@ import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/extra-utils/index'
 import { sha256 } from '../helpers/core-utils'
-import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
+import { buildOriginallyPublishedAt, getYoutubeDLVideoFormat, safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getLogger, getServerCredentials } from './cli'
 
 type UserInfo = {
@@ -161,7 +161,7 @@ async function processVideo (parameters: {
 
   log.info('Downloading video "%s"...', videoInfo.title)
 
-  const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', ...command.args, '-o', path ]
+  const options = [ '-f', getYoutubeDLVideoFormat(), ...command.args, '-o', path ]
   try {
     const youtubeDL = await safeGetYoutubeDL()
     const youtubeDLExec = promisify(youtubeDL.exec).bind(youtubeDL)

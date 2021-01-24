@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import * as chai from 'chai'
+import {
+  cleanupTests,
+  flushAndRunServer,
+  killallServers,
+  makePingRequest,
+  reRunServer,
+  ServerInfo,
+  setAccessTokensToServers
+} from '../../../../shared/extra-utils/index'
+import { getAuditLogs, getLogs } from '../../../../shared/extra-utils/logs/logs'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { uploadVideo } from '../../../../shared/extra-utils/videos/videos'
-import { getAuditLogs, getLogs } from '../../../../shared/extra-utils/logs/logs'
 
 const expect = chai.expect
 
@@ -20,6 +28,7 @@ describe('Test logs', function () {
   })
 
   describe('With the standard log file', function () {
+
     it('Should get logs with a start date', async function () {
       this.timeout(10000)
 
@@ -83,6 +92,34 @@ describe('Test logs', function () {
 
         expect(logsString.includes('video 6')).to.be.false
       }
+    })
+
+    it('Should log ping requests', async function () {
+      const now = new Date()
+
+      await makePingRequest(server)
+
+      const res = await getLogs(server.url, server.accessToken, now, undefined, 'info')
+      const logsString = JSON.stringify(res.body)
+
+      expect(logsString.includes('/api/v1/ping')).to.be.true
+    })
+
+    it('Should not log ping requests', async function () {
+      this.timeout(30000)
+
+      killallServers([ server ])
+
+      await reRunServer(server, { log: { log_ping_requests: false } })
+
+      const now = new Date()
+
+      await makePingRequest(server)
+
+      const res = await getLogs(server.url, server.accessToken, now, undefined, 'info')
+      const logsString = JSON.stringify(res.body)
+
+      expect(logsString.includes('/api/v1/ping')).to.be.false
     })
   })
 

@@ -1,3 +1,4 @@
+import { Job } from 'bull'
 import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
@@ -124,6 +125,8 @@ interface BaseTranscodeOptions {
   resolution: VideoResolution
 
   isPortraitMode?: boolean
+
+  job?: Job
 }
 
 interface HLSTranscodeOptions extends BaseTranscodeOptions {
@@ -188,7 +191,7 @@ async function transcode (options: TranscodeOptions) {
 
   command = await builders[options.type](command, options)
 
-  await runCommand(command)
+  await runCommand(command, options.job)
 
   await fixHLSPlaylistIfNeeded(options)
 }
@@ -310,22 +313,6 @@ function buildStreamSuffix (base: string, streamNum?: number) {
 
   return base
 }
-
-// ---------------------------------------------------------------------------
-
-export {
-  getLiveTranscodingCommand,
-  getLiveMuxingCommand,
-  buildStreamSuffix,
-  convertWebPToJPG,
-  processGIF,
-  generateImageFromVideoFile,
-  TranscodeOptions,
-  TranscodeOptionsType,
-  transcode
-}
-
-// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // Default options
@@ -610,7 +597,10 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
 
 function getFFmpeg (input: string, type: 'live' | 'vod') {
   // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
-  const command = ffmpeg(input, { niceness: FFMPEG_NICE.TRANSCODING, cwd: CONFIG.STORAGE.TMP_DIR })
+  const command = ffmpeg(input, {
+    niceness: type === 'live' ? FFMPEG_NICE.LIVE : FFMPEG_NICE.VOD,
+    cwd: CONFIG.STORAGE.TMP_DIR
+  })
 
   const threads = type === 'live'
     ? CONFIG.LIVE.TRANSCODING.THREADS
@@ -624,21 +614,46 @@ function getFFmpeg (input: string, type: 'live' | 'vod') {
   return command
 }
 
-async function runCommand (command: ffmpeg.FfmpegCommand, onEnd?: Function) {
+async function runCommand (command: ffmpeg.FfmpegCommand, job?: Job) {
   return new Promise<void>((res, rej) => {
     command.on('error', (err, stdout, stderr) => {
-      if (onEnd) onEnd()
-
       logger.error('Error in transcoding job.', { stdout, stderr })
       rej(err)
     })
 
-    command.on('end', () => {
-      if (onEnd) onEnd()
+    command.on('end', (stdout, stderr) => {
+      logger.debug('FFmpeg command ended.', { stdout, stderr })
 
       res()
     })
 
+    if (job) {
+      command.on('progress', progress => {
+        if (!progress.percent) return
+
+        job.progress(Math.round(progress.percent))
+          .catch(err => logger.warn('Cannot set ffmpeg job progress.', { err }))
+      })
+    }
+
     command.run()
   })
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  getLiveTranscodingCommand,
+  getLiveMuxingCommand,
+  buildStreamSuffix,
+  convertWebPToJPG,
+  processGIF,
+  generateImageFromVideoFile,
+  TranscodeOptions,
+  TranscodeOptionsType,
+  transcode,
+  runCommand,
+
+  // builders
+  buildx264VODCommand
 }

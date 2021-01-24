@@ -126,24 +126,6 @@ my-peertube-checkbox {
     color: pvar(--greyForegroundColor);
     font-size: 15px;
   }
-
-  .submit-button {
-    @include peertube-button;
-    @include orange-button;
-    @include button-with-icon(20px, 1px);
-
-    display: inline-block;
-
-    input {
-      cursor: inherit;
-      background-color: inherit;
-      border: none;
-      padding: 0;
-      outline: 0;
-      color: inherit;
-      font-weight: $font-semibold;
-    }
-  }
 }
 
 p-calendar {

@@ -106,10 +106,5 @@ export abstract class UserEdit extends FormReactive implements OnInit {
                                         label: q.label,
                                         disabled: q.disabled
                                       }))
-
-    console.log(
-      this.videoQuotaOptions,
-      this.videoQuotaDailyOptions
-    )
   }
 }

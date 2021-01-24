@@ -14,12 +14,19 @@ import {
   listVideoCaptions,
   ServerInfo,
   setAccessTokensToServers,
-  testCaptionFile
+  testCaptionFile,
+  updateCustomSubConfig
 } from '../../../../shared/extra-utils'
 import { areHttpImportTestsDisabled, testImage } from '../../../../shared/extra-utils/miscs/miscs'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
-import { VideoCaption, VideoDetails, VideoImport, VideoPrivacy } from '../../../../shared/models/videos'
+import {
+  getMagnetURI,
+  getMyVideoImports,
+  getYoutubeHDRVideoUrl,
+  getYoutubeVideoUrl,
+  importVideo
+} from '../../../../shared/extra-utils/videos/video-imports'
+import { VideoCaption, VideoDetails, VideoImport, VideoPrivacy, VideoResolution } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -90,7 +97,7 @@ describe('Test video imports', function () {
   }
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(30_000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
@@ -111,7 +118,7 @@ describe('Test video imports', function () {
   })
 
   it('Should import videos on server 1', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const baseAttributes = {
       channelId: channelIdServer1,
@@ -223,7 +230,7 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should have the video listed on the two instances', async function () {
-    this.timeout(120000)
+    this.timeout(120_000)
 
     await waitJobs(servers)
 
@@ -238,7 +245,7 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should import a video on server 2 with some fields', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const attributes = {
       targetUrl: getYoutubeVideoUrl(),
@@ -256,7 +263,7 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should have the videos listed on the two instances', async function () {
-    this.timeout(120000)
+    this.timeout(120_000)
 
     await waitJobs(servers)
 
@@ -273,7 +280,7 @@ Ajouter un sous-titre est vraiment facile`)
   })
 
   it('Should import a video that will be transcoded', async function () {
-    this.timeout(120000)
+    this.timeout(120_000)
 
     const attributes = {
       name: 'transcoded video',
@@ -293,6 +300,56 @@ Ajouter un sous-titre est vraiment facile`)
       expect(video.name).to.equal('transcoded video')
       expect(video.files).to.have.lengthOf(4)
     }
+  })
+
+  it('Should import no HDR version on a HDR video', async function () {
+    this.timeout(120_000)
+
+    const config = {
+      transcoding: {
+        enabled: true,
+        resolutions: {
+          '240p': false,
+          '360p': false,
+          '480p': false,
+          '720p': false,
+          '1080p': true, // the resulting resolution shouldn't be higher than this, and not vp9.2/av01
+          '1440p': false,
+          '2160p': false
+        },
+        webtorrent: { enabled: true },
+        hls: { enabled: false }
+      },
+      import: {
+        videos: {
+          http: {
+            enabled: true
+          },
+          torrent: {
+            enabled: true
+          }
+        }
+      }
+    }
+    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+
+    const attributes = {
+      name: 'hdr video',
+      targetUrl: getYoutubeHDRVideoUrl(),
+      channelId: channelIdServer1,
+      privacy: VideoPrivacy.PUBLIC
+    }
+    const res1 = await importVideo(servers[0].url, servers[0].accessToken, attributes)
+    const videoUUID = res1.body.video.uuid
+
+    await waitJobs(servers)
+
+    // test resolution
+    const res2 = await getVideo(servers[0].url, videoUUID)
+    const video: VideoDetails = res2.body
+    expect(video.name).to.equal('hdr video')
+    const maxResolution = Math.max.apply(Math, video.files.map(function (o) { return o.resolution.id }))
+    expect(maxResolution, 'expected max resolution not met').to.equals(VideoResolution.H_1080P)
   })
 
   after(async function () {

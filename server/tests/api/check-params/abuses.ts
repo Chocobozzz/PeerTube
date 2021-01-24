@@ -424,7 +424,7 @@ describe('Test abuses API validators', function () {
     let anotherServer: ServerInfo
 
     before(async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       anotherServer = await flushAndRunServer(2)
       await setAccessTokensToServers([ anotherServer ])

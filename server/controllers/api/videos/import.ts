@@ -146,9 +146,10 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   } catch (err) {
     logger.info('Cannot fetch information from import for URL %s.', targetUrl, { err })
 
-    return res.status(HttpStatusCode.BAD_REQUEST_400).json({
-      error: 'Cannot fetch remote information of this URL.'
-    }).end()
+    return res.status(HttpStatusCode.BAD_REQUEST_400)
+              .json({
+                error: 'Cannot fetch remote information of this URL.'
+              })
   }
 
   const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
@@ -219,9 +220,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     videoImportId: videoImport.id,
     generateThumbnail: !thumbnailModel,
     generatePreview: !previewModel,
-    fileExt: youtubeDLInfo.fileExt
-      ? `.${youtubeDLInfo.fileExt}`
-      : '.mp4'
+    fileExt: `.${youtubeDLInfo.ext || 'mp4'}`
   }
   await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
 

@@ -40,7 +40,8 @@
       <th style="width: 40px"></th>
       <th style="width: calc(100% - 390px)" class="job-id" i18n>ID</th>
       <th style="width: 200px" class="job-type" i18n>Type</th>
-      <th style="width: 200px" class="job-type" i18n *ngIf="jobState === 'all'">State</th>
+      <th style="width: 200px" class="job-state" i18n *ngIf="jobState === 'all'">State</th>
+      <th style="width: 100px" class="job-progress" i18n *ngIf="hasProgress()">Progress</th>
       <th style="width: 150px" class="job-date" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
@@ -55,9 +56,15 @@
 
       <td class="job-id c-hand" [pRowToggler]="job" [title]="job.id">{{ job.id }}</td>
       <td class="job-type c-hand" [pRowToggler]="job">{{ job.type }}</td>
-      <td class="job-type c-hand" [pRowToggler]="job" *ngIf="jobState === 'all'">
+
+      <td class="job-state c-hand" [pRowToggler]="job" *ngIf="jobState === 'all'">
         <span class="badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
       </td>
+
+      <td class="job-state" [pRowToggler]="job" *ngIf="hasProgress()">
+        {{ getProgress(job) }}
+      </td>
+
       <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt | date: 'short' }}</td>
     </tr>
   </ng-template>
@@ -94,7 +101,7 @@
               <ng-container *ngIf="jobType === 'all'" i18n>No jobs found.</ng-container>
               <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found.</ng-container>
             </ng-container>
-            <ng-container *ngIf="jobState !== 'all'"> 
+            <ng-container *ngIf="jobState !== 'all'">
               <ng-container *ngIf="jobType === 'all'" i18n>No <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
               <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
             </ng-container>

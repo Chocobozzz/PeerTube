@@ -8,21 +8,24 @@
 - [Why did you create PeerTube?](#why-did-you-create-peertube)
 - [I don't like the name "PeerTube"](#i-dont-like-the-name-peertube)
 - [If nobody watches a video, is it seeded?](#if-nobody-watches-a-video-is-it-seeded)
-- [What is WebSeed?](#what-is-webseed)
-- [If a client requests each chunk of a video through HTTP, will the server be overloaded?](#if-a-client-requests-each-chunk-of-a-video-through-http-will-the-server-be-overloaded)
-- [Will an index of all the videos of servers you follow be too large for small servers?](#will-an-index-of-all-the-videos-of-servers-you-follow-be-too-large-for-small-servers)
 - [Which container formats can I use for the videos I want to upload?](#which-container-formats-can-i-use-for-the-videos-i-want-to-upload)
-- [I want to change my domain name. How can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
-- [Why do we have to put our Twitter username in PeerTube configuration?](#why-do-we-have-to-put-our-twitter-username-in-peertube-configuration)
+- [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
+- [Why do we have to put our Twitter username in the PeerTube configuration?](#why-do-we-have-to-put-our-twitter-username-in-the-peertube-configuration)
 - [How are video views counted?](#how-are-video-views-counted)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
+  - [CPU](#cpu)
+  - [RAM](#ram)
+  - [Storage](#storage)
+  - [Network](#network)
 - [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
 - [Why host on GitHub and Framagit?](#why-host-on-github-and-framagit)
-- [Are you going to use the Steem blockchain?](#are-you-going-to-use-the-steem-blockchain)
+- [Are you going to use a blockchain (like Steem)?](#are-you-going-to-use-a-blockchain-like-steem)
 - [Are you going to support advertisements?](#are-you-going-to-support-advertisements)
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
 - [I have found a security vulnerability in PeerTube. Where and how should I report it?](#i-have-found-a-security-vulnerability-in-peertube-where-and-how-should-i-report-it)
 - [Does PeerTube ensure federation compatibility with previous version?](#does-peertube-ensure-federation-compatibility-with-previous-version)
+- [Are specific versions of PeerTube long term supported?](#are-specific-versions-of-peertube-long-term-supported)
+- [When approximately can I expect the next version of PeerTube to arrive?](#when-approximately-can-i-expect-the-next-version-of-peertube-to-arrive)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -42,10 +45,7 @@ very early prided itself on using a contributory design, both for creating
 communities as federated nodes (as [Mastodon](https://joinmastodon.org/) for
 example), and for seeding videos (instances can seed each other's videos). But that's not
 enough because one video could become popular and overload the server. That is
-why we need to use a P2P protocol to limit the server load. Thanks to
-[WebTorrent](https://github.com/feross/webtorrent), we can use BitTorrent
-inside most modern web browsers, and users become seeds as the video gets
-more viewers.
+why we need to use P2P in the web browser using WebRTC to limit the server load.
 
 
 ## I don't like the name "PeerTube"
@@ -57,39 +57,20 @@ is named "Framatube".
 
 ## If nobody watches a video, is it seeded?
 
-Yes, the origin server always seeds videos uploaded on it thanks to
-[Webseed](http://www.bittorrent.org/beps/bep_0019.html).
-It can also be helped by other servers using [redundancy](https://docs.joinpeertube.org/#/contribute-architecture?id=redundancy-between-instances).
-
-
-## What is WebSeed?
-
-It is a BitTorrent extension that allows a server to seed a file through HTTP.
-It just needs to statically serve a file, then the clients will request chunks
-with a `Content-Range` HTTP header.
-
-
-## If a client requests each chunk of a video through HTTP, will the server be overloaded?
-
-Not really. Reverse proxies like Nginx handle static file requests very well. In my tests, it can send chunks at 10MB/s without consuming more than 5% CPU on a very small VPS.
-
-
-## Will an index of all the videos of servers you follow be too large for small servers?
-
-In our benchmarks, 1,000,000 videos consume around 2GB of PostgreSQL storage.
-We think that is acceptable for a video platform.
+Yes, the player also downloads the video from the server using HTTP.
+It can also be helped by other servers using [redundancy](https://docs.joinpeertube.org/contribute-architecture?id=redundancy-between-instances).
 
 
 ## Which container formats can I use for the videos I want to upload?
 
 WEBM, MP4 or OGV videos are supported by default (they are streamable formats),
-but instance administrators can additionally enable support for MKV, MOV, AVI
-and FLV formats when transcoding is enabled on their instance.
+but instance administrators can additionally enable support for additional formats
+when transcoding is enabled on their instance.
 
 
 ## I want to change my domain name, how can I do that?
 
-It's not officially supported, but you can try the `update-host` script: https://docs.joinpeertube.org/#/maintain-tools?id=update-hostjs
+It's not officially supported, but you can try the `update-host` script: https://docs.joinpeertube.org/maintain-tools?id=update-hostjs
 
 
 ## Why do we have to put our Twitter username in the PeerTube configuration?
@@ -100,7 +81,9 @@ We need this information because Twitter requires an account for links share/vid
 
 ## How are video views counted?
 
-Your web browser sends a view to the server after 30 seconds of playback. If a video is less than 30 seconds in length, a view is sent after 75% of the video. After giving a view, that IP address cannot add another view in the next hour.
+Your web browser sends a view to the server after 30 seconds of playback.
+If a video is less than 30 seconds in length, a view is sent after 75% of the video duration.
+After giving a view, that IP address cannot add another view in the next hour.
 Views are buffered, so don't panic if the view counter stays the same after you watched a video.
 
 
@@ -109,8 +92,9 @@ Views are buffered, so don't panic if the view counter stays the same after you 
 PeerTube should run happily on a virtual machine with 2 threads/vCPUs, at least 1 Gb of RAM and enough storage for videos. In terms of bandwidth, a lot will depend on which PeerTube instances you federate with and what your relation with them is (more about that below).
 
 As a real life example, the PeerTube demonstration server [https://peertube.cpy.re](https://peertube.cpy.re) runs on 2 vCores and 2GB of RAM. Average consumption is:
- * **CPU**: nginx ~ 20%, peertube ~ 10%,   postgres ~ 1%, redis ~ 3%
- * **RAM**: nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
+ * **CPU**: nginx ~ 2%, peertube ~ 10%,   postgres ~ 1%, redis ~ 1%
+ * **RAM**: nginx ~ 1MB, peertube ~ 150MB, postgres ~ 30MB, redis ~ 20MB
+ * **Network**: ~200GB sent per month (https://framatube.org: ~1.5TB sent per month)
 
 ### CPU
 
@@ -120,7 +104,7 @@ You will hugely benefit from at least a second thread though, because of transco
 
 ### RAM
 
-1 Gb of RAM should be plenty for a basic PeerTube instance, which usually takes at most 150 Mb in RAM. The only reason you might want more would be if you colocate your Redis or PostgreSQL services on a non-SSD system.
+1/2 GB of RAM should be plenty for a basic PeerTube instance, which usually takes at most 150 MB in RAM. The only reason you might want more would be if you colocate your Redis or PostgreSQL services on a non-SSD system.
 
 ### Storage
 
@@ -141,27 +125,23 @@ Take a server for example with a 1 Gbit/s uplink for example pushing out 1080p60
 
 But what if you need to serve more users? That's where PeerTube's federation feature shines. If other PeerTube instances following yours, chances are they have decided to mirror part of your instance! The feature is called "server redundancy" and caches your most popular videos to help serve additional viewers. While viewers themselves contribute a little additional bandwidth while watching the video in their browsers (mostly during surges), mirroring servers have a much greater uplink and will help your instance with sustained higher concurrent streaming.
 
-If all your preparations and friends' bandwidth is not enough, you might prefer serving files from a CDN ; see our [remote storage guide](https://docs.joinpeertube.org/#/admin-remote-storage).
+If all your preparations and friends' bandwidth is not enough, you might prefer serving files from a CDN ; see our [remote storage guide](https://docs.joinpeertube.org/admin-remote-storage).
+
 
 ## Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?
 
 Yes you can, but you won't be able to send data to users that watch the video in their web browser.
-The reason is they connect to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
-You can check if your BitTorrent client supports WebTorrent in this issue: https://github.com/webtorrent/webtorrent/issues/369
 
 
 ## Why host on GitHub and Framagit?
 
-The project was initially hosted on GitHub by Chocobozzz. A full migration to [Framagit](https://framagit.org/framasoft/peertube/PeerTube) would be ideal now that Framasoft supports PeerTube, but it would take a lot of time and is an ongoing effort.
+Historical reason.
 
 
-## Are you going to use the Steem blockchain?
+## Are you going to use a blockchain (like Steem)?
 
 Short answer: no, since like most appchains/votechains, it modifies the dynamic of creation, and as such cannot be integrated into mainline PeerTube. Read more about that in [the dedicated section](#what-is-creation-dynamic-and-why-not-modify-it).
 
-Long answer is that the Steem blockchain goes astray of its promises of fairness and decentralization: the deliberate relaunching of the currency to ensure centralization, and the stake-based voting power, makes manipulation by wealthy users inevitable ([source here](https://decentralize.today/the-ugly-truth-behind-steemit-1a525f5e156)).
-Worse, money generated primarily goes to stakeholders ([source here](https://steemit.com/steemit/@orly/how-the-steem-pyramid-scheme-really-works) ).
-For more information, read the complete whitepaper analysis done by [Tone Vays](https://twitter.com/ToneVays/status/761975587451928576).
 
 ## Are you going to support advertisements?
 
@@ -177,6 +157,7 @@ Read more about it in the 2018 study by Mathias Bärtl, [*YouTube channels, uplo
 To the best of our knowledge, small and medium-community creators are better off getting support from their community on platforms such as Liberapay, Tipeee or Patreon.
 Moreover, don't forget that advertisers already pay considering YouTube's large user base; with PeerTube's way smaller user base and refusal of user profiling, a pay-per-view that's lower than YouTube's could only be expected.
 
+
 ## What is "creation dynamic" and why not modify it?
 
 We define creation dynamic as the way any original content, regardless of its monetary value, is created and incentivized.
@@ -187,11 +168,24 @@ If you still want to use a functionality potentially altering that state of thin
 With that being said, know that we are not against these features *per se*.
 We are always open to discussion about potential PRs bringing in features, even of that kind. But we certainly won't dedicate our limited resources to develop them ourselves when there is so much to be done elsewhere.
 
+
 ## I have found a security vulnerability in PeerTube. Where and how should I report it?
 
 We have a policy for contributions related to security. Please refer to [SECURITY.md](./SECURITY.md)
+
 
 ## Does PeerTube ensure federation compatibility with previous version?
 
 We **try** to keep compatibility with the latest minor version (2.3.1 with 2.2 for example).
 We don't have resources to keep compatibility with other versions.
+
+
+## Are specific versions of PeerTube long term supported?
+
+We don't have enough resource to maintain a PeerTube LTS version.
+Please always upgrade to the latest version.
+
+
+## When approximately can I expect the next version of PeerTube to arrive?
+
+Anything from 2 to 6 months, with no promises.

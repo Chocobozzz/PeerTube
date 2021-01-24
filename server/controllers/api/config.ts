@@ -10,6 +10,7 @@ import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '..
 import { objectConverter } from '../../helpers/core-utils'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { getServerCommit } from '../../helpers/utils'
+import { getEnabledResolutions } from '../../lib/video-transcoding'
 import { CONFIG, isEmailEnabled, reloadConfig } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '../../initializers/constants'
 import { ClientHtml } from '../../lib/client-html'
@@ -126,6 +127,10 @@ async function getConfig (req: express.Request, res: express.Response) {
       transcoding: {
         enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
         enabledResolutions: getEnabledResolutions('live')
+      },
+
+      rtmp: {
+        port: CONFIG.LIVE.RTMP.PORT
       }
     },
     import: {
@@ -281,16 +286,6 @@ function getRegisteredThemes () {
                       }))
 }
 
-function getEnabledResolutions (type: 'vod' | 'live') {
-  const transcoding = type === 'vod'
-    ? CONFIG.TRANSCODING
-    : CONFIG.LIVE.TRANSCODING
-
-  return Object.keys(transcoding.RESOLUTIONS)
-               .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
-               .map(r => parseInt(r, 10))
-}
-
 function getRegisteredPlugins () {
   return PluginManager.Instance.getRegisteredPlugins()
                       .map(p => ({
@@ -341,7 +336,6 @@ function getExternalAuthsPlugins () {
 
 export {
   configRouter,
-  getEnabledResolutions,
   getRegisteredPlugins,
   getRegisteredThemes
 }
@@ -419,6 +413,7 @@ function customConfig (): CustomConfig {
         '480p': CONFIG.TRANSCODING.RESOLUTIONS['480p'],
         '720p': CONFIG.TRANSCODING.RESOLUTIONS['720p'],
         '1080p': CONFIG.TRANSCODING.RESOLUTIONS['1080p'],
+        '1440p': CONFIG.TRANSCODING.RESOLUTIONS['1440p'],
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
       webtorrent: {
@@ -443,6 +438,7 @@ function customConfig (): CustomConfig {
           '480p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['480p'],
           '720p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['720p'],
           '1080p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1080p'],
+          '1440p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1440p'],
           '2160p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['2160p']
         }
       }

@@ -152,6 +152,15 @@ describe('Test videos history', function () {
     expect(res.body.data).to.have.lengthOf(0)
   })
 
+  it('Should be able to search through videos in my history', async function () {
+    const res = await listMyVideosHistory(server.url, server.accessToken, '2')
+
+    expect(res.body.total).to.equal(1)
+
+    const videos: Video[] = res.body.data
+    expect(videos[0].name).to.equal('video 2')
+  })
+
   it('Should clear my history', async function () {
     await removeMyVideosHistory(server.url, server.accessToken, video3WatchedDate.toISOString())
   })

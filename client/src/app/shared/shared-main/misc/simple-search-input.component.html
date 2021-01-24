@@ -1,0 +1,14 @@
+<span>
+  <my-global-icon iconName="search" aria-label="Search" role="button" (click)="showInput()"></my-global-icon>
+
+  <input
+    #ref
+    type="text"
+    [(ngModel)]="value"
+    (focusout)="focusLost()"
+    (keyup.enter)="searchChange()"
+    [hidden]="!shown"
+    [name]="name"
+    [placeholder]="placeholder"
+  >
+</span>

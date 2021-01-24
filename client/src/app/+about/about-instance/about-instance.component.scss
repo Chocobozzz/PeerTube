@@ -4,7 +4,6 @@
 .about-instance-title {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
 
   .title {
     font-size: 20px;
@@ -21,6 +20,7 @@
 
 .instance-badges {
   font-size: 16px;
+  margin-bottom: 20px;
 
   .badge {
     font-size: 12px;

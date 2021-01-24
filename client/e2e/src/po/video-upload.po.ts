@@ -40,6 +40,6 @@ export class VideoUploadPage {
   }
 
   private getSecondStepSubmitButton () {
-    return element(by.css('.submit-button:not(.disabled)'))
+    return element(by.css('.submit-container my-button'))
   }
 }

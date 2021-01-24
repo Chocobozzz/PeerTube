@@ -26,4 +26,12 @@ $ng-select-height: 30px;
       border-color: #ccc !important;
     }
   }
+
+  .ng-select-container {
+    background-color: pvar(--inputBackgroundColor);
+  }
+
+  &.ng-select-single .ng-value-container .ng-value {
+    color: pvar(--inputForegroundColor);
+  }
 }

@@ -45,7 +45,7 @@ describe('Test video transcoding', function () {
   let servers: ServerInfo[] = []
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(30_000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
@@ -56,7 +56,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should not transcode video on server 1', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const videoAttributes = {
       name: 'my super name for server 1',
@@ -86,7 +86,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should transcode video on server 2', async function () {
-    this.timeout(120000)
+    this.timeout(120_000)
 
     const videoAttributes = {
       name: 'my super name for server 2',
@@ -117,7 +117,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should transcode high bit rate mp3 to proper bit rate', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const videoAttributes = {
       name: 'mp3_256k',
@@ -149,7 +149,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should transcode video with no audio and have no audio itself', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const videoAttributes = {
       name: 'no_audio',
@@ -174,7 +174,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should leave the audio untouched, but properly transcode the video', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const videoAttributes = {
       name: 'untouched_audio',
@@ -209,7 +209,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should transcode a 60 FPS video', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const videoAttributes = {
       name: 'my super 30fps name for server 2',
@@ -248,7 +248,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should wait for transcoding before publishing the video', async function () {
-    this.timeout(160000)
+    this.timeout(160_000)
 
     {
       // Upload the video, but wait transcoding
@@ -301,7 +301,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should respect maximum bitrate values', async function () {
-    this.timeout(160000)
+    this.timeout(160_000)
 
     let tempFixturePath: string
 
@@ -341,7 +341,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should accept and transcode additional extensions', async function () {
-    this.timeout(300000)
+    this.timeout(300_000)
 
     let tempFixturePath: string
 
@@ -378,14 +378,14 @@ describe('Test video transcoding', function () {
   })
 
   it('Should correctly detect if quick transcode is possible', async function () {
-    this.timeout(10000)
+    this.timeout(10_000)
 
     expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.mp4'))).to.be.true
     expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.webm'))).to.be.false
   })
 
   it('Should merge an audio file with the preview file', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg)
@@ -410,7 +410,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should upload an audio file and choose a default background image', async function () {
-    this.timeout(60000)
+    this.timeout(60_000)
 
     const videoAttributesArg = { name: 'audio_without_preview', fixture: 'sample.ogg' }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg)
@@ -435,7 +435,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should downscale to the closest divisor standard framerate', async function () {
-    this.timeout(200000)
+    this.timeout(200_000)
 
     let tempFixturePath: string
 
@@ -476,7 +476,7 @@ describe('Test video transcoding', function () {
   })
 
   it('Should not transcode to an higher bitrate than the original file', async function () {
-    this.timeout(160000)
+    this.timeout(160_000)
 
     const config = {
       transcoding: {
@@ -486,7 +486,9 @@ describe('Test video transcoding', function () {
           '360p': true,
           '480p': true,
           '720p': true,
-          '1080p': true
+          '1080p': true,
+          '1440p': true,
+          '2160p': true
         },
         webtorrent: { enabled: true },
         hls: { enabled: true }
@@ -506,12 +508,12 @@ describe('Test video transcoding', function () {
 
     const resolutions = [ 240, 360, 480, 720, 1080 ]
     for (const r of resolutions) {
-      expect(await getServerFileSize(servers[1], `videos/${videoUUID}-${r}.mp4`)).to.be.below(60000)
+      expect(await getServerFileSize(servers[1], `videos/${videoUUID}-${r}.mp4`)).to.be.below(60_000)
     }
   })
 
   it('Should provide valid ffprobe data', async function () {
-    this.timeout(160000)
+    this.timeout(160_000)
 
     const videoUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'ffprobe data' })).uuid
     await waitJobs(servers)
@@ -563,6 +565,34 @@ describe('Test video transcoding', function () {
         const res3 = await getVideoFileMetadataUrl(file.metadataUrl)
         const metadata: FfprobeData = res3.body
         expect(metadata).to.have.nested.property('format.size')
+      }
+    }
+  })
+
+  it('Should transcode a 4k video', async function () {
+    this.timeout(200_000)
+
+    const videoAttributes = {
+      name: '4k video',
+      fixture: 'video_short_4k.mp4'
+    }
+
+    const resUpload = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+    const videoUUID = resUpload.body.video.uuid
+
+    await waitJobs(servers)
+
+    const resolutions = [ 240, 360, 480, 720, 1080, 1440, 2160 ]
+
+    for (const server of servers) {
+      const res = await getVideo(server.url, videoUUID)
+      const videoDetails: VideoDetails = res.body
+
+      expect(videoDetails.files).to.have.lengthOf(resolutions.length)
+
+      for (const r of resolutions) {
+        expect(videoDetails.files.find(f => f.resolution.id === r)).to.not.be.undefined
+        expect(videoDetails.streamingPlaylists[0].files.find(f => f.resolution.id === r)).to.not.be.undefined
       }
     }
   })

@@ -1,4 +1,5 @@
 import { Transaction } from 'sequelize'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { sequelizeTypescript } from '@server/initializers/database'
 import {
   MUser,
@@ -15,9 +16,9 @@ import { CONFIG } from '../initializers/config'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { sendDeleteVideo } from './activitypub/send'
 import { federateVideoIfNeeded } from './activitypub/videos'
+import { LiveManager } from './live-manager'
 import { Notifier } from './notifier'
 import { Hooks } from './plugins/hooks'
-import { LiveManager } from './live-manager'
 
 async function autoBlacklistVideoIfNeeded (parameters: {
   video: MVideoWithBlacklistLight
@@ -53,7 +54,11 @@ async function autoBlacklistVideoIfNeeded (parameters: {
 
   videoBlacklist.Video = video
 
-  if (notify) Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
+  if (notify) {
+    afterCommitIfTransaction(transaction, () => {
+      Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
+    })
+  }
 
   logger.info('Video %s auto-blacklisted.', video.uuid)
 

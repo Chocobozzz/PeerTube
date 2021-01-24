@@ -39,13 +39,13 @@ export class PluginSearchComponent implements OnInit {
   private searchSubject = new Subject<string>()
 
   constructor (
-    private pluginService: PluginApiService,
+    private pluginApiService: PluginApiService,
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.pluginTypeOptions = this.pluginService.getPluginTypeOptions()
+    this.pluginTypeOptions = this.pluginApiService.getPluginTypeOptions()
   }
 
   ngOnInit () {
@@ -83,7 +83,7 @@ export class PluginSearchComponent implements OnInit {
   loadMorePlugins () {
     this.isSearching = true
 
-    this.pluginService.searchAvailablePlugins(this.pluginType, this.pagination, this.sort, this.search)
+    this.pluginApiService.searchAvailablePlugins(this.pluginType, this.pagination, this.sort, this.search)
         .subscribe(
           res => {
             this.isSearching = false
@@ -115,6 +115,10 @@ export class PluginSearchComponent implements OnInit {
     return !!this.installing[plugin.npmName]
   }
 
+  getPluginOrThemeHref (name: string) {
+    return this.pluginApiService.getPluginOrThemeHref(this.pluginType, name)
+  }
+
   async install (plugin: PeerTubePluginIndex) {
     if (this.installing[plugin.npmName]) return
 
@@ -126,7 +130,7 @@ export class PluginSearchComponent implements OnInit {
 
     this.installing[plugin.npmName] = true
 
-    this.pluginService.install(plugin.npmName)
+    this.pluginApiService.install(plugin.npmName)
         .subscribe(
           () => {
             this.installing[plugin.npmName] = false

@@ -46,7 +46,7 @@
 
       <my-actor-avatar-info
         *ngIf="!isCreation() && videoChannelToUpdate"
-        [actor]="videoChannelToUpdate" (avatarChange)="onAvatarChange($event)"
+        [actor]="videoChannelToUpdate" (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
       ></my-actor-avatar-info>
 
       <div class="form-group">

@@ -67,7 +67,7 @@ describe('Official plugin auth-ldap', function () {
         'mail-property': 'mail',
         'search-base': 'ou=people,dc=planetexpress,dc=com',
         'search-filter': '(|(mail={{username}})(uid={{username}}))',
-        'url': 'ldap://localhost:389',
+        'url': 'ldap://localhost:10389',
         'username-property': 'uid'
       }
     })

@@ -104,7 +104,7 @@ async function getOrCreateActorAndServerAndModel (
         const recurseIfNeeded = false
         ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, 'all', recurseIfNeeded)
       } catch (err) {
-        logger.error('Cannot get or create account attributed to video channel ' + actor.url)
+        logger.error('Cannot get or create account attributed to video channel ' + actorUrl)
         throw new Error(err)
       }
     }
@@ -195,6 +195,19 @@ async function updateActorAvatarInstance (actor: MActorDefault, info: AvatarInfo
 
   actor.avatarId = avatar.id
   actor.Avatar = avatar
+
+  return actor
+}
+
+async function deleteActorAvatarInstance (actor: MActorDefault, t: Transaction) {
+  try {
+    await actor.Avatar.destroy({ transaction: t })
+  } catch (err) {
+    logger.error('Cannot remove old avatar of actor %s.', actor.url, { err })
+  }
+
+  actor.avatarId = null
+  actor.Avatar = null
 
   return actor
 }
@@ -337,6 +350,7 @@ export {
   fetchActorTotalItems,
   getAvatarInfoIfExists,
   updateActorInstance,
+  deleteActorAvatarInstance,
   refreshActorIfNeeded,
   updateActorAvatarInstance,
   addFetchOutboxJob

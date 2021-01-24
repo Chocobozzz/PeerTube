@@ -8,12 +8,17 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div>
+      <div class="left-buttons">
         <my-action-dropdown
           *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
           [actions]="bulkUserActions" [entry]="selectedUsers"
         >
         </my-action-dropdown>
+
+        <a *ngIf="!isInSelectionMode()" class="add-button" routerLink="/admin/users/create">
+          <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>Create user</ng-container>
+        </a>
       </div>
 
       <div class="ml-auto">
@@ -37,10 +42,6 @@
         </div>
       </div>
 
-      <a class="ml-2 add-button" routerLink="/admin/users/create">
-        <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
-        <ng-container i18n>Create user</ng-container>
-      </a>
     </div>
   </ng-template>
 

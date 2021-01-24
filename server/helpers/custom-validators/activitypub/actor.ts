@@ -62,6 +62,7 @@ function isActorObjectValid (actor: any) {
     (!actor.followers || isActivityPubUrlValid(actor.followers)) &&
 
     setValidAttributedTo(actor) &&
+    setValidDescription(actor) &&
     // If this is a group (a channel), it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
     (actor.type !== 'Group' || actor.attributedTo.length !== 0)
@@ -114,6 +115,12 @@ function isValidActorHandle (handle: string) {
 
 function areValidActorHandles (handles: string[]) {
   return isArray(handles) && handles.every(h => isValidActorHandle(h))
+}
+
+function setValidDescription (obj: any) {
+  if (!obj.summary) obj.summary = null
+
+  return true
 }
 
 // ---------------------------------------------------------------------------

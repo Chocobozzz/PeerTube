@@ -83,6 +83,9 @@ export class ServerService {
       transcoding: {
         enabled: false,
         enabledResolutions: []
+      },
+      rtmp: {
+        port: 1935
       }
     },
     avatar: {
