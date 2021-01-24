@@ -1,20 +1,29 @@
 <div class="root">
-  <div *ngIf="status === 404" class="box">
+  <div *ngIf="status !== 403 && status !== 418" class="box">
     <strong>{{ status }}.</strong>
     <span class="ml-1 text-muted" i18n>That's an error.</span>
 
     <div class="text mt-4" i18n>
-      We couldn't find any ressource tied to the URL {{ pathname }} you were looking for.
+      We couldn't find any {{ getRessourceName() }} tied to the URL {{ pathname }} you were looking for.
     </div>
 
     <div class="text-muted mt-4">
       <span i18n="Possible reasons preceding a list of reasons a `Not Found` error page may occur">Possible reasons:</span>
 
       <ul>
-        <li i18n>The page may have been moved or deleted</li>
         <li i18n>You may have used an outdated or broken link</li>
+        <li i18n>The {{ getRessourceName() }} may have been moved or deleted</li>
         <li i18n>You may have typed the address or URL incorrectly</li>
       </ul>
+    </div>
+  </div>
+
+  <div *ngIf="status === 403" class="box">
+    <strong>{{ status }}.</strong>
+    <span class="ml-1 text-muted" i18n>You are not authorized here.</span>
+
+    <div class="text mt-4" i18n>
+      You might need to check your account is allowed by the {{ getRessourceName() }} or instance owner.
     </div>
   </div>
 

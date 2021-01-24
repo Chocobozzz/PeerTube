@@ -1,15 +1,17 @@
-import { Observable, throwError as observableThrowError } from 'rxjs'
+import { Observable, of, throwError as observableThrowError } from 'rxjs'
 import { catchError, switchMap } from 'rxjs/operators'
-import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http'
+import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse } from '@angular/common/http'
 import { Injectable, Injector } from '@angular/core'
 import { AuthService } from '@app/core/auth/auth.service'
+import { Router } from '@angular/router'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private authService: AuthService
 
   // https://github.com/angular/angular/issues/18224#issuecomment-316957213
-  constructor (private injector: Injector) {}
+  constructor (private injector: Injector, private router: Router) {}
 
   intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.authService === undefined) {
@@ -22,9 +24,11 @@ export class AuthInterceptor implements HttpInterceptor {
     // Catch 401 errors (refresh token expired)
     return next.handle(authReq)
                .pipe(
-                 catchError(err => {
-                   if (err.status === 401 && err.error && err.error.code === 'invalid_token') {
+                 catchError((err: HttpErrorResponse) => {
+                   if (err.status === HttpStatusCode.UNAUTHORIZED_401 && err.error && err.error.code === 'invalid_token') {
                      return this.handleTokenExpired(req, next)
+                   } else if (err.status === HttpStatusCode.UNAUTHORIZED_401) {
+                     return this.handleNotAuthenticated(err)
                    }
 
                    return observableThrowError(err)
@@ -50,6 +54,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
     // Clone the request to add the new header
     return req.clone({ headers: req.headers.set('Authorization', authHeaderValue) })
+  }
+
+  private handleNotAuthenticated (err: HttpErrorResponse, path = '/login'): Observable<any> {
+    this.router.navigateByUrl(path)
+    return of(err.message)
   }
 }
 

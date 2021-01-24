@@ -93,10 +93,10 @@ export class RestExtractor {
     return observableThrowError(errorObj)
   }
 
-  redirectTo404IfNotFound (obj: { status: number }, status = [ HttpStatusCode.NOT_FOUND_404 ]) {
+  redirectTo404IfNotFound (obj: { status: number }, type: 'video' | 'other', status = [ HttpStatusCode.NOT_FOUND_404 ]) {
     if (obj && obj.status && status.indexOf(obj.status) !== -1) {
       // Do not use redirectService to avoid circular dependencies
-      this.router.navigate([ '/404' ], { skipLocationChange: true })
+      this.router.navigate([ '/404' ], { state: { type, obj }, skipLocationChange: true })
     }
 
     return observableThrowError(obj)
