@@ -73,11 +73,11 @@ export class JobsComponent extends RestTable implements OnInit {
   }
 
   getColspan () {
-    if (this.jobState === 'all' && this.hasProgress()) return 6
+    if (this.jobState === 'all' && this.hasProgress()) return 7
 
-    if (this.jobState === 'all' || this.hasProgress()) return 5
+    if (this.jobState === 'all' || this.hasProgress()) return 6
 
-    return 4
+    return 5
   }
 
   onJobStateOrTypeChanged () {
