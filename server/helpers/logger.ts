@@ -1,12 +1,12 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
 import { mkdirpSync } from 'fs-extra'
+import { omit } from 'lodash'
 import * as path from 'path'
+import { format as sqlFormat } from 'sql-formatter'
 import * as winston from 'winston'
 import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config'
-import { omit } from 'lodash'
 import { LOG_FILENAME } from '../initializers/constants'
-const { prettify } = require('sql-log-prettifier')
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
@@ -48,22 +48,10 @@ const consoleLoggerFormat = winston.format.printf(info => {
   else additionalInfos = ' ' + additionalInfos
 
   if (info.sql) {
-    additionalInfos += '\n' + prettify(info.sql, {
-      settings: {
-        operators: {
-          color: '#808080'
-        },
-        functions: {
-          color: '#808080'
-        },
-        keywords: {
-          color: '#808080'
-        },
-        strings: {
-          color: '#808080'
-        }
-      }
-    }).replace(/^(?!\s*$)/gm, '  ') // indent by 2 spaces relative to the log beginning
+    additionalInfos += '\n' + sqlFormat(info.sql, {
+      language: 'sql',
+      ident: '  '
+    })
   }
 
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
