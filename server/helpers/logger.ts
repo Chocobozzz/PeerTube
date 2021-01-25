@@ -1,10 +1,11 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
 import { mkdirpSync } from 'fs-extra'
+import { omit } from 'lodash'
 import * as path from 'path'
+import { format as sqlFormat } from 'sql-formatter'
 import * as winston from 'winston'
 import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config'
-import { omit } from 'lodash'
 import { LOG_FILENAME } from '../initializers/constants'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
@@ -39,12 +40,19 @@ function getLoggerReplacer () {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  const obj = omit(info, 'label', 'timestamp', 'level', 'message')
+  const obj = omit(info, 'label', 'timestamp', 'level', 'message', 'sql')
 
   let additionalInfos = JSON.stringify(obj, getLoggerReplacer(), 2)
 
   if (additionalInfos === undefined || additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
+
+  if (info.sql) {
+    additionalInfos += '\n' + sqlFormat(info.sql, {
+      language: 'sql',
+      ident: '  '
+    })
+  }
 
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })

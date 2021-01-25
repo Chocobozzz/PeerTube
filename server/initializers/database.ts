@@ -69,12 +69,12 @@ const sequelizeTypescript = new SequelizeTypescript({
   logging: (message: string, benchmark: number) => {
     if (process.env.NODE_DB_LOG === 'false') return
 
-    let newMessage = message
+    let newMessage = 'Executed SQL request'
     if (isTestInstance() === true && benchmark !== undefined) {
-      newMessage += ' | ' + benchmark + 'ms'
+      newMessage += ' in ' + benchmark + 'ms'
     }
 
-    logger.debug(newMessage)
+    logger.debug(newMessage, { sql: message })
   }
 })
 

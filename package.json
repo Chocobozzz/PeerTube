@@ -147,6 +147,7 @@
     "sequelize-typescript": "^2.0.0-beta.1",
     "sitemap": "^6.1.0",
     "socket.io": "^3.0.2",
+    "sql-formatter": "^4.0.0-beta.0",
     "srt-to-vtt": "^1.1.2",
     "tsconfig-paths": "^3.9.0",
     "tslib": "^2.0.0",
