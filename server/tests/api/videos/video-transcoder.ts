@@ -5,7 +5,9 @@ import * as chai from 'chai'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { omit } from 'lodash'
 import { join } from 'path'
+import { Job } from '@shared/models'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   buildAbsoluteFixturePath,
   buildServerDirectory,
@@ -14,6 +16,7 @@ import {
   flushAndRunMultipleServers,
   generateHighBitrateVideo,
   generateVideoWithFramerate,
+  getJobsListPaginationAndSort,
   getMyVideos,
   getServerFileSize,
   getVideo,
@@ -37,12 +40,12 @@ import {
   getVideoFileFPS,
   getVideoFileResolution
 } from '../../../helpers/ffprobe-utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
 describe('Test video transcoding', function () {
   let servers: ServerInfo[] = []
+  let video4k: string
 
   before(async function () {
     this.timeout(30_000)
@@ -578,14 +581,14 @@ describe('Test video transcoding', function () {
     }
 
     const resUpload = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
-    const videoUUID = resUpload.body.video.uuid
+    video4k = resUpload.body.video.uuid
 
     await waitJobs(servers)
 
     const resolutions = [ 240, 360, 480, 720, 1080, 1440, 2160 ]
 
     for (const server of servers) {
-      const res = await getVideo(server.url, videoUUID)
+      const res = await getVideo(server.url, video4k)
       const videoDetails: VideoDetails = res.body
 
       expect(videoDetails.files).to.have.lengthOf(resolutions.length)
@@ -594,6 +597,41 @@ describe('Test video transcoding', function () {
         expect(videoDetails.files.find(f => f.resolution.id === r)).to.not.be.undefined
         expect(videoDetails.streamingPlaylists[0].files.find(f => f.resolution.id === r)).to.not.be.undefined
       }
+    }
+  })
+
+  it('Should have the appropriate priorities for transcoding jobs', async function () {
+    const res = await getJobsListPaginationAndSort({
+      url: servers[1].url,
+      accessToken: servers[1].accessToken,
+      start: 0,
+      count: 100,
+      sort: '-createdAt',
+      jobType: 'video-transcoding'
+    })
+
+    const jobs = res.body.data as Job[]
+
+    const transcodingJobs = jobs.filter(j => j.data.videoUUID === video4k)
+
+    expect(transcodingJobs).to.have.lengthOf(14)
+
+    const hlsJobs = transcodingJobs.filter(j => j.data.type === 'new-resolution-to-hls')
+    const webtorrentJobs = transcodingJobs.filter(j => j.data.type === 'new-resolution-to-webtorrent')
+    const optimizeJobs = transcodingJobs.filter(j => j.data.type === 'optimize-to-webtorrent')
+
+    expect(hlsJobs).to.have.lengthOf(7)
+    expect(webtorrentJobs).to.have.lengthOf(6)
+    expect(optimizeJobs).to.have.lengthOf(1)
+
+    for (const j of optimizeJobs) {
+      expect(j.priority).to.be.greaterThan(11)
+      expect(j.priority).to.be.lessThan(50)
+    }
+
+    for (const j of hlsJobs.concat(webtorrentJobs)) {
+      expect(j.priority).to.be.greaterThan(100)
+      expect(j.priority).to.be.lessThan(150)
     }
   })
 

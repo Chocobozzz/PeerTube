@@ -1804,6 +1804,10 @@ export class VideoModel extends Model {
     return Object.assign(file, { Video: this })
   }
 
+  hasWebTorrentFiles () {
+    return Array.isArray(this.VideoFiles) === true && this.VideoFiles.length !== 0
+  }
+
   async addAndSaveThumbnail (thumbnail: MThumbnail, transaction: Transaction) {
     thumbnail.videoId = this.id
 

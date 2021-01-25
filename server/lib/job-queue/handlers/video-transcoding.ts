@@ -93,7 +93,7 @@ async function handleHLSJob (job: Bull.Job, payload: HLSTranscodingPayload, vide
     job
   })
 
-  await retryTransactionWrapper(onHlsPlaylistGeneration, video)
+  await retryTransactionWrapper(onHlsPlaylistGeneration, video, payload.resolution)
 }
 
 async function handleNewWebTorrentResolutionJob (
@@ -121,11 +121,13 @@ async function handleWebTorrentOptimizeJob (job: Bull.Job, payload: OptimizeTran
 
 // ---------------------------------------------------------------------------
 
-async function onHlsPlaylistGeneration (video: MVideoFullLight) {
+async function onHlsPlaylistGeneration (video: MVideoFullLight, resolution: number) {
   if (video === undefined) return undefined
 
-  // We generated the HLS playlist, we don't need the webtorrent files anymore if the admin disabled it
-  if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
+  const maxQualityFile = video.getMaxQualityFile()
+
+  // We generated the max quality HLS playlist, we don't need the webtorrent files anymore if the admin disabled it
+  if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && video.hasWebTorrentFiles() && maxQualityFile.resolution === resolution) {
     for (const file of video.VideoFiles) {
       await video.removeFile(file)
       await file.destroy()
