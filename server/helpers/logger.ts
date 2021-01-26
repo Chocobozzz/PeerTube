@@ -40,8 +40,7 @@ function getLoggerReplacer () {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  const toOmit = [ 'label', 'timestamp', 'level', 'message' ]
-  if (CONFIG.LOG.PRETTIFY_SQL) toOmit.push('sql')
+  const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql' ]
 
   const obj = omit(info, ...toOmit)
 
@@ -50,11 +49,15 @@ const consoleLoggerFormat = winston.format.printf(info => {
   if (additionalInfos === undefined || additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
-  if (CONFIG.LOG.PRETTIFY_SQL && info.sql) {
-    additionalInfos += '\n' + sqlFormat(info.sql, {
-      language: 'sql',
-      ident: '  '
-    })
+  if (info.sql) {
+    if (CONFIG.LOG.PRETTIFY_SQL) {
+      additionalInfos += '\n' + sqlFormat(info.sql, {
+        language: 'sql',
+        ident: '  '
+      })
+    } else {
+      additionalInfos += ' - ' + info.sql
+    }
   }
 
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
