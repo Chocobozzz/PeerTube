@@ -105,7 +105,8 @@ const CONFIG = {
       MAX_FILES: config.get<number>('log.rotation.maxFiles')
     },
     ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP'),
-    LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests')
+    LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests'),
+    PRETTIFY_SQL: config.get<boolean>('log.prettify_sql')
   },
   TRENDING: {
     VIDEOS: {

@@ -101,6 +101,7 @@ log:
     maxFiles: 20
   anonymizeIP: false
   log_ping_requests: true
+  prettify_sql: false
 
 trending:
   videos:

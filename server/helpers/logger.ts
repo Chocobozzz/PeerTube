@@ -40,14 +40,17 @@ function getLoggerReplacer () {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  const obj = omit(info, 'label', 'timestamp', 'level', 'message', 'sql')
+  const toOmit = [ 'label', 'timestamp', 'level', 'message' ]
+  if (CONFIG.LOG.PRETTIFY_SQL) toOmit.push('sql')
+
+  const obj = omit(info, ...toOmit)
 
   let additionalInfos = JSON.stringify(obj, getLoggerReplacer(), 2)
 
   if (additionalInfos === undefined || additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
-  if (info.sql) {
+  if (CONFIG.LOG.PRETTIFY_SQL && info.sql) {
     additionalInfos += '\n' + sqlFormat(info.sql, {
       language: 'sql',
       ident: '  '

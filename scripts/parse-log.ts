@@ -9,6 +9,7 @@ import * as winston from 'winston'
 import { labelFormatter } from '../server/helpers/logger'
 import { CONFIG } from '../server/initializers/config'
 import { mtimeSortFilesDesc } from '../shared/core-utils/logs/logs'
+import { inspect } from 'util'
 
 program
   .option('-l, --level [level]', 'Level log (debug/info/warn/error)')
@@ -82,7 +83,7 @@ function run () {
 
           logLevels[log.level](log)
         } catch (err) {
-          console.error('Cannot parse line.', line)
+          console.error('Cannot parse line.', inspect(line))
           throw err
         }
       })
