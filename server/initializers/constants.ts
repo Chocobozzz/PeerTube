@@ -274,8 +274,6 @@ const CONSTRAINTS_FIELDS = {
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
-    THUMBNAIL: { min: 2, max: 30 },
-    THUMBNAIL_DATA: { min: 0, max: 20000 }, // Bytes
     VIEWS: { min: 0 },
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
@@ -750,6 +748,7 @@ if (isTestInstance() === true) {
   ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
+  CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max = 400 * 1024 // 400KB
 
   SCHEDULER_INTERVALS_MS.actorFollowScores = 1000
   SCHEDULER_INTERVALS_MS.removeOldJobs = 10000

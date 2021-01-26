@@ -251,7 +251,14 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should fail with an incorrect thumbnail file', async function () {
-      const params = getBase({ thumbnailfile: 'avatar.png' })
+      const params = getBase({ thumbnailfile: 'video_short.mp4' })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+    })
+
+    it('Should fail with a thumbnail file too big', async function () {
+      const params = getBase({ thumbnailfile: 'preview-big.png' })
 
       await createVideoPlaylist(params)
       await updateVideoPlaylist(getUpdate(params, playlistUUID))
