@@ -366,6 +366,10 @@ instance:
 #    - 18 # Food
 
   default_client_route: '/videos/trending'
+  default_trending_route: '/videos/most-viewed'
+  pages:
+    hot:
+      enabled: true
 
   # Whether or not the instance is dedicated to NSFW content
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content

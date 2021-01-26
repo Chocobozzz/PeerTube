@@ -41,8 +41,16 @@ describe('Test config API validators', function () {
       categories: [ 1, 2 ],
 
       isNSFW: true,
-      defaultClientRoute: '/videos/recently-added',
       defaultNSFWPolicy: 'blur',
+
+      defaultClientRoute: '/videos/recently-added',
+      defaultTrendingRoute: '/videos/trending',
+      pages: {
+        hot: {
+          enabled: true
+        }
+      },
+
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'

@@ -36,9 +36,15 @@ export interface ServerConfig {
   instance: {
     name: string
     shortDescription: string
-    defaultClientRoute: string
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
+    defaultClientRoute: string
+    defaultTrendingRoute: string
+    pages: {
+      hot: {
+        enabled: boolean
+      }
+    }
     customizations: {
       javascript: string
       css: string

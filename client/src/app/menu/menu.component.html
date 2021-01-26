@@ -127,10 +127,14 @@
           <ng-container i18n>Discover</ng-container>
         </a>
 
-        <a routerLink="/videos/trending" routerLinkActive="active">
+        <a routerLink="/videos/trending" routerLinkActive="active" [ngClass]="{ 'active': hot.isActive || mostViewed.isActive || mostLiked.isActive }">
           <my-global-icon iconName="trending" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Trending</ng-container>
         </a>
+        <a routerLink="/videos/hot" routerLinkActive #hot="routerLinkActive" hidden></a>
+        <a routerLink="/videos/most-viewed" routerLinkActive #mostViewed="routerLinkActive" hidden></a>
+        <a routerLink="/videos/most-liked" routerLinkActive #mostLiked="routerLinkActive" hidden></a>
+
 
         <a routerLink="/videos/recently-added" routerLinkActive="active">
           <my-global-icon iconName="recently-added" aria-hidden="true"></my-global-icon>

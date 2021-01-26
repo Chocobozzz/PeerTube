@@ -15,8 +15,9 @@ const customConfigUpdateValidator = [
   body('instance.shortDescription').exists().withMessage('Should have a valid instance short description'),
   body('instance.description').exists().withMessage('Should have a valid instance description'),
   body('instance.terms').exists().withMessage('Should have a valid instance terms'),
-  body('instance.defaultClientRoute').exists().withMessage('Should have a valid instance default client route'),
   body('instance.defaultNSFWPolicy').custom(isUserNSFWPolicyValid).withMessage('Should have a valid NSFW policy'),
+  body('instance.defaultClientRoute').exists().withMessage('Should have a valid instance default client route'),
+  body('instance.defaultTrendingRoute').exists().withMessage('Should have a valid instance default trending route'),
   body('instance.customizations.css').exists().withMessage('Should have a valid instance CSS customization'),
   body('instance.customizations.javascript').exists().withMessage('Should have a valid instance JavaScript customization'),
 

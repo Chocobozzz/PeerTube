@@ -278,8 +278,16 @@ const CONFIG = {
     get CATEGORIES () { return config.get<number[]>('instance.categories') || [] },
 
     get IS_NSFW () { return config.get<boolean>('instance.is_nsfw') },
-    get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
     get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
+
+    get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
+    get DEFAULT_TRENDING_ROUTE () { return config.get<string>('instance.default_trending_route') },
+    PAGES: {
+      HOT: {
+        get ENABLED () { return config.get<boolean>('instance.pages.hot.enabled') }
+      }
+    },
+
     CUSTOMIZATIONS: {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
       get CSS () { return config.get<string>('instance.customizations.css') }

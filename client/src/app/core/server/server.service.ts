@@ -36,9 +36,15 @@ export class ServerService {
       name: 'PeerTube',
       shortDescription: 'PeerTube, a federated (ActivityPub) video streaming platform  ' +
                         'using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.',
-      defaultClientRoute: '',
       isNSFW: false,
       defaultNSFWPolicy: 'do_not_list' as 'do_not_list',
+      defaultClientRoute: '',
+      defaultTrendingRoute: '',
+      pages: {
+        hot: {
+          enabled: true
+        }
+      },
       customizations: {
         javascript: '',
         css: ''
