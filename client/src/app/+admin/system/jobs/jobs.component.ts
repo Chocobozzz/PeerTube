@@ -44,7 +44,7 @@ export class JobsComponent extends RestTable implements OnInit {
   constructor (
     private notifier: Notifier,
     private jobsService: JobService
-    ) {
+  ) {
     super()
   }
 
@@ -95,6 +95,13 @@ export class JobsComponent extends RestTable implements OnInit {
     if (job.state === 'active') return job.progress + '%'
 
     return ''
+  }
+
+  refresh () {
+    this.jobs = []
+    this.totalRecords = 0
+
+    this.loadData()
   }
 
   protected loadData () {

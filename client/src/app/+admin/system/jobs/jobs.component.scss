@@ -36,6 +36,10 @@
       @include peertube-select-container(auto);
     }
   }
+
+  .button-filter-block {
+    align-self: flex-end;
+  }
 }
 
 td .glyphicon {
