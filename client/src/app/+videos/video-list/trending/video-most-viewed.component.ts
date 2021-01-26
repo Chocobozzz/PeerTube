@@ -9,11 +9,11 @@ import { VideoSortField } from '@shared/models'
 import { VideoTrendingHeaderComponent } from './video-trending-header.component'
 
 @Component({
-  selector: 'my-videos-trending',
+  selector: 'my-videos-most-viewed',
   styleUrls: [ '../../../shared/shared-video-miniature/abstract-video-list.scss' ],
   templateUrl: '../../../shared/shared-video-miniature/abstract-video-list.html'
 })
-export class VideoTrendingComponent extends AbstractVideoList implements OnInit, OnDestroy {
+export class VideoMostViewedComponent extends AbstractVideoList implements OnInit, OnDestroy {
   HeaderComponent = VideoTrendingHeaderComponent
   titlePage: string
   defaultSort: VideoSortField = '-trending'

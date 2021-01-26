@@ -272,9 +272,17 @@ describe('Test config', function () {
         languages: [ 'en', 'es' ],
         categories: [ 1, 2 ],
 
-        defaultClientRoute: '/videos/recently-added',
         isNSFW: true,
         defaultNSFWPolicy: 'blur' as 'blur',
+
+        defaultClientRoute: '/videos/recently-added',
+        defaultTrendingRoute: '/videos/trending',
+        pages: {
+          hot: {
+            enabled: true
+          }
+        },
+
         customizations: {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'

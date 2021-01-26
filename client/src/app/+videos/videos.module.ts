@@ -9,7 +9,7 @@ import { OverviewService } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 import { VideoTrendingHeaderComponent } from './video-list/trending/video-trending-header.component'
 import { VideoHotComponent } from './video-list/trending/video-hot.component'
-import { VideoTrendingComponent } from './video-list/trending/video-trending.component'
+import { VideoMostViewedComponent } from './video-list/trending/video-most-viewed.component'
 import { VideoMostLikedComponent } from './video-list/trending/video-most-liked.component'
 import { VideoLocalComponent } from './video-list/video-local.component'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
@@ -32,7 +32,7 @@ import { VideosComponent } from './videos.component'
     VideosComponent,
 
     VideoTrendingHeaderComponent,
-    VideoTrendingComponent,
+    VideoMostViewedComponent,
     VideoHotComponent,
     VideoMostLikedComponent,
     VideoRecentlyAddedComponent,

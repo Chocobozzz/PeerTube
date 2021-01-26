@@ -186,6 +186,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         languages: null,
 
         defaultClientRoute: null,
+        defaultTrendingRoute: null,
+        pages: {
+          hot: {
+            enabled: null
+          }
+        },
 
         customizations: {
           javascript: null,
@@ -362,6 +368,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
   isAutoFollowIndexEnabled () {
     return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
+  }
+
+  isTrendingHotEnabled () {
+    return this.form.value['instance']['pages']['hot']['enabled'] === true
   }
 
   async formValidated () {

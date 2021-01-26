@@ -7,11 +7,14 @@ export class RedirectService {
   // Default route could change according to the instance configuration
   static INIT_DEFAULT_ROUTE = '/videos/trending'
   static DEFAULT_ROUTE = RedirectService.INIT_DEFAULT_ROUTE
+  static INIT_DEFAULT_TRENDING_ROUTE = '/videos/most-viewed'
+  static DEFAULT_TRENDING_ROUTE = RedirectService.INIT_DEFAULT_TRENDING_ROUTE
 
   private previousUrl: string
   private currentUrl: string
 
   private redirectingToHomepage = false
+  private redirectingToTrending = false
 
   constructor (
     private router: Router,
@@ -19,17 +22,27 @@ export class RedirectService {
   ) {
     // The config is first loaded from the cache so try to get the default route
     const tmpConfig = this.serverService.getTmpConfig()
-    if (tmpConfig && tmpConfig.instance && tmpConfig.instance.defaultClientRoute) {
-      RedirectService.DEFAULT_ROUTE = tmpConfig.instance.defaultClientRoute
+    if (tmpConfig && tmpConfig.instance) {
+      if (tmpConfig.instance.defaultClientRoute) {
+        RedirectService.DEFAULT_ROUTE = tmpConfig.instance.defaultClientRoute
+      }
+      if (tmpConfig.instance.defaultTrendingRoute) {
+        RedirectService.DEFAULT_TRENDING_ROUTE = tmpConfig.instance.defaultTrendingRoute
+      }
     }
 
     // Load default route
     this.serverService.getConfig()
         .subscribe(config => {
           const defaultRouteConfig = config.instance.defaultClientRoute
+          const defaultTrendingConfig = config.instance.defaultTrendingRoute
 
           if (defaultRouteConfig) {
             RedirectService.DEFAULT_ROUTE = defaultRouteConfig
+          }
+
+          if (defaultTrendingConfig) {
+            RedirectService.DEFAULT_TRENDING_ROUTE = defaultTrendingConfig
           }
         })
 
@@ -55,6 +68,15 @@ export class RedirectService {
     }
 
     return this.redirectToHomepage()
+  }
+
+  redirectToTrending () {
+    if (this.redirectingToTrending) return
+
+    this.redirectingToTrending = true
+
+    this.router.navigate([ RedirectService.DEFAULT_TRENDING_ROUTE ])
+        .then(() => this.redirectingToTrending = false)
   }
 
   redirectToHomepage (skipLocationChange = false) {

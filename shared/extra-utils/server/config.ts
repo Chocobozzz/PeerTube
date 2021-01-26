@@ -65,9 +65,17 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       languages: [ 'en', 'es' ],
       categories: [ 1, 2 ],
 
-      defaultClientRoute: '/videos/recently-added',
       isNSFW: true,
       defaultNSFWPolicy: 'blur',
+
+      defaultClientRoute: '/videos/recently-added',
+      defaultTrendingRoute: '/videos/trending',
+      pages: {
+        hot: {
+          enabled: true
+        }
+      },
+
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'

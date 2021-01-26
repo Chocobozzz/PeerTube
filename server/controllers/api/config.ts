@@ -65,9 +65,15 @@ async function getConfig (req: express.Request, res: express.Response) {
     instance: {
       name: CONFIG.INSTANCE.NAME,
       shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
-      defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       isNSFW: CONFIG.INSTANCE.IS_NSFW,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+      defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
+      defaultTrendingRoute: CONFIG.INSTANCE.DEFAULT_TRENDING_ROUTE,
+      pages: {
+        hot: {
+          enabled: CONFIG.INSTANCE.PAGES.HOT.ENABLED
+        }
+      },
       customizations: {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
@@ -362,8 +368,16 @@ function customConfig (): CustomConfig {
       categories: CONFIG.INSTANCE.CATEGORIES,
 
       isNSFW: CONFIG.INSTANCE.IS_NSFW,
-      defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+
+      defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
+      defaultTrendingRoute: CONFIG.INSTANCE.DEFAULT_TRENDING_ROUTE,
+      pages: {
+        hot: {
+          enabled: CONFIG.INSTANCE.PAGES.HOT.ENABLED
+        }
+      },
+
       customizations: {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT

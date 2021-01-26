@@ -30,8 +30,16 @@ export interface CustomConfig {
     categories: number[]
 
     isNSFW: boolean
-    defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType
+
+    defaultClientRoute: string
+    defaultTrendingRoute: string
+    pages: {
+      hot: {
+        enabled: boolean
+      }
+    }
+
     customizations: {
       javascript?: string
       css?: string
