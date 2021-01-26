@@ -344,7 +344,11 @@ function registerConfigChangedHandler (fun: Function) {
 }
 
 function isEmailEnabled () {
-  return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
+  if (CONFIG.SMTP.TRANSPORT === 'sendmail' && CONFIG.SMTP.SENDMAIL) return true
+
+  if (CONFIG.SMTP.TRANSPORT === 'smtp' && CONFIG.SMTP.HOSTNAME && CONFIG.SMTP.PORT) return true
+
+  return false
 }
 
 // ---------------------------------------------------------------------------

@@ -52,59 +52,16 @@ class Emailer {
     if (this.initialized === true) return
     this.initialized = true
 
-    if (isEmailEnabled()) {
-      if (CONFIG.SMTP.TRANSPORT === 'smtp') {
-        logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
-
-        let tls
-        if (CONFIG.SMTP.CA_FILE) {
-          tls = {
-            ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
-          }
-        }
-
-        let auth
-        if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
-          auth = {
-            user: CONFIG.SMTP.USERNAME,
-            pass: CONFIG.SMTP.PASSWORD
-          }
-        }
-
-        this.transporter = createTransport({
-          host: CONFIG.SMTP.HOSTNAME,
-          port: CONFIG.SMTP.PORT,
-          secure: CONFIG.SMTP.TLS,
-          debug: CONFIG.LOG.LEVEL === 'debug',
-          logger: bunyanLogger as any,
-          ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
-          tls,
-          auth
-        })
-      } else { // sendmail
-        logger.info('Using sendmail to send emails')
-
-        this.transporter = createTransport({
-          sendmail: true,
-          newline: 'unix',
-          path: CONFIG.SMTP.SENDMAIL
-        })
-      }
-    } else {
+    if (!isEmailEnabled()) {
       if (!isTestInstance()) {
         logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
       }
-    }
-  }
 
-  static isEnabled () {
-    if (CONFIG.SMTP.TRANSPORT === 'sendmail') {
-      return !!CONFIG.SMTP.SENDMAIL
-    } else if (CONFIG.SMTP.TRANSPORT === 'smtp') {
-      return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
-    } else {
-      return false
+      return
     }
+
+    if (CONFIG.SMTP.TRANSPORT === 'smtp') this.initSMTPTransport()
+    else if (CONFIG.SMTP.TRANSPORT === 'sendmail') this.initSendmailTransport()
   }
 
   async checkConnection () {
@@ -639,6 +596,46 @@ class Emailer {
 
   private warnOnConnectionFailure (err?: Error) {
     logger.error('Failed to connect to SMTP %s:%d.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT, { err })
+  }
+
+  private initSMTPTransport () {
+    logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
+
+    let tls
+    if (CONFIG.SMTP.CA_FILE) {
+      tls = {
+        ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
+      }
+    }
+
+    let auth
+    if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
+      auth = {
+        user: CONFIG.SMTP.USERNAME,
+        pass: CONFIG.SMTP.PASSWORD
+      }
+    }
+
+    this.transporter = createTransport({
+      host: CONFIG.SMTP.HOSTNAME,
+      port: CONFIG.SMTP.PORT,
+      secure: CONFIG.SMTP.TLS,
+      debug: CONFIG.LOG.LEVEL === 'debug',
+      logger: bunyanLogger as any,
+      ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
+      tls,
+      auth
+    })
+  }
+
+  private initSendmailTransport () {
+    logger.info('Using sendmail to send emails')
+
+    this.transporter = createTransport({
+      sendmail: true,
+      newline: 'unix',
+      path: CONFIG.SMTP.SENDMAIL
+    })
   }
 
   static get Instance () {
