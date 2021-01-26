@@ -11,7 +11,7 @@ import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
-import { deleteActorAvatarFile, updateActorAvatarFile } from '../../../lib/avatar'
+import { deleteLocalActorAvatarFile, updateLocalActorAvatarFile } from '../../../lib/avatar'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
@@ -238,7 +238,7 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatar = await updateActorAvatarFile(userAccount, avatarPhysicalFile)
+  const avatar = await updateLocalActorAvatarFile(userAccount, avatarPhysicalFile)
 
   return res.json({ avatar: avatar.toFormattedJSON() })
 }
@@ -247,7 +247,7 @@ async function deleteMyAvatar (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
 
   const userAccount = await AccountModel.load(user.Account.id)
-  await deleteActorAvatarFile(userAccount)
+  await deleteLocalActorAvatarFile(userAccount)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

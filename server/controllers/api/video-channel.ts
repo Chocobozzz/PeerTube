@@ -13,7 +13,7 @@ import { MIMETYPES } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { setAsyncActorKeys } from '../../lib/activitypub/actor'
 import { sendUpdateActor } from '../../lib/activitypub/send'
-import { deleteActorAvatarFile, updateActorAvatarFile } from '../../lib/avatar'
+import { deleteLocalActorAvatarFile, updateLocalActorAvatarFile } from '../../lib/avatar'
 import { JobQueue } from '../../lib/job-queue'
 import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import {
@@ -140,7 +140,7 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const avatar = await updateActorAvatarFile(videoChannel, avatarPhysicalFile)
+  const avatar = await updateLocalActorAvatarFile(videoChannel, avatarPhysicalFile)
 
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
@@ -154,7 +154,7 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
 async function deleteVideoChannelAvatar (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
-  await deleteActorAvatarFile(videoChannel)
+  await deleteLocalActorAvatarFile(videoChannel)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

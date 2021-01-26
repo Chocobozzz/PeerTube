@@ -13,11 +13,12 @@ import { queue } from 'async'
 import { downloadImage } from '../helpers/requests'
 import { MAccountDefault, MChannelDefault } from '../types/models'
 
-async function updateActorAvatarFile (
+async function updateLocalActorAvatarFile (
   accountOrChannel: MAccountDefault | MChannelDefault,
   avatarPhysicalFile: Express.Multer.File
 ) {
   const extension = extname(avatarPhysicalFile.filename)
+
   const avatarName = uuidv4() + extension
   const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
   await processImage(avatarPhysicalFile.path, destination, AVATARS_SIZE)
@@ -40,7 +41,7 @@ async function updateActorAvatarFile (
   })
 }
 
-async function deleteActorAvatarFile (
+async function deleteLocalActorAvatarFile (
   accountOrChannel: MAccountDefault | MChannelDefault
 ) {
   return retryTransactionWrapper(() => {
@@ -78,7 +79,7 @@ const avatarPathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.AVAT
 
 export {
   avatarPathUnsafeCache,
-  updateActorAvatarFile,
-  deleteActorAvatarFile,
+  updateLocalActorAvatarFile,
+  deleteLocalActorAvatarFile,
   pushAvatarProcessInQueue
 }

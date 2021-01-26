@@ -264,7 +264,7 @@ const CONSTRAINTS_FIELDS = {
     DESCRIPTION: { min: 3, max: 10000 }, // Length
     SUPPORT: { min: 3, max: 1000 }, // Length
     IMAGE: {
-      EXTNAME: [ '.jpg', '.jpeg' ],
+      EXTNAME: [ '.png', '.jpg', '.jpeg', '.webp' ],
       FILE_SIZE: {
         max: 2 * 1024 * 1024 // 2MB
       }
@@ -298,7 +298,7 @@ const CONSTRAINTS_FIELDS = {
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
     URL: { min: 3, max: 2000 }, // Length
     AVATAR: {
-      EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif' ],
+      EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
       FILE_SIZE: {
         max: 2 * 1024 * 1024 // 2MB
       }
