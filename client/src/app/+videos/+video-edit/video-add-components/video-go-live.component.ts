@@ -137,6 +137,10 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
     return this.serverConfig.live.maxDuration / 1000
   }
 
+  isWaitTranscodingEnabled () {
+    return this.form.value['saveReplay'] === true
+  }
+
   private fetchVideoLive () {
     this.liveVideoService.getVideoLive(this.videoId)
       .subscribe(

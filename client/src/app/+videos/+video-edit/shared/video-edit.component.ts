@@ -96,22 +96,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
   }
 
-  get existingCaptions () {
-    return this.videoCaptions
-               .filter(c => c.action !== 'REMOVE')
-               .map(c => c.language.id)
-  }
-
-  isWaitTranscodingDisplayed () {
-    if (!this.waitTranscodingEnabled) return false
-
-    if (this.liveVideo) {
-      return this.form.value['saveReplay'] === true
-    }
-
-    return true
-  }
-
   updateForm () {
     const defaultValues: any = {
       nsfw: 'false',
@@ -215,6 +199,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy () {
     if (this.schedulerInterval) clearInterval(this.schedulerInterval)
+  }
+
+  getExistingCaptions () {
+    return this.videoCaptions
+               .filter(c => c.action !== 'REMOVE')
+               .map(c => c.language.id)
   }
 
   onCaptionAdded (caption: VideoCaptionEdit) {

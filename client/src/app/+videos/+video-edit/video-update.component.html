@@ -9,7 +9,7 @@
     <my-video-edit
       [form]="form" [formErrors]="formErrors" [schedulePublicationPossible]="schedulePublicationPossible"
       [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
-      [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="waitTranscodingEnabled"
+      [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="isWaitTranscodingEnabled()"
       type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"
       [liveVideo]="liveVideo"
     ></my-video-edit>

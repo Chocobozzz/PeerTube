@@ -44,7 +44,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
   formData: FormData
 
-  waitTranscodingEnabled = true
   previewfileUpload: File
 
   error: string
@@ -162,11 +161,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     // If the name of the file is very small, keep the extension
     if (nameWithoutExtension.length < 3) name = videofile.name
     else name = nameWithoutExtension
-
-    // Force user to wait transcoding for unsupported video types in web browsers
-    if (!videofile.name.endsWith('.mp4') && !videofile.name.endsWith('.webm') && !videofile.name.endsWith('.ogv')) {
-      this.waitTranscodingEnabled = false
-    }
 
     const nsfw = this.serverConfig.instance.isNSFW
     const waitTranscoding = true

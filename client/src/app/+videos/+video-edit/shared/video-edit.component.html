@@ -136,7 +136,7 @@
               </ng-template>
             </my-peertube-checkbox>
 
-            <my-peertube-checkbox *ngIf="isWaitTranscodingDisplayed()" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
+            <my-peertube-checkbox *ngIf="waitTranscodingEnabled" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
               <ng-template ptTemplate="label">
                 <ng-container i18n>Publish after transcoding</ng-container>
               </ng-template>
@@ -347,5 +347,5 @@
 </div>
 
 <my-video-caption-add-modal
-  #videoCaptionAddModal [existingCaptions]="existingCaptions" [serverConfig]="serverConfig" (captionAdded)="onCaptionAdded($event)"
+  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" [serverConfig]="serverConfig" (captionAdded)="onCaptionAdded($event)"
 ></my-video-caption-add-modal>
