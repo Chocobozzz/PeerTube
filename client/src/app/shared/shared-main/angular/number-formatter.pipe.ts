@@ -1,14 +1,9 @@
-import { Pipe, PipeTransform } from '@angular/core'
+import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core'
 
 // Thanks: https://github.com/danrevah/ngx-pipes/blob/master/src/ng-pipes/pipes/math/bytes.ts
 
 @Pipe({ name: 'myNumberFormatter' })
 export class NumberFormatterPipe implements PipeTransform {
-  private dictionary: Array<{max: number, type: string}> = [
-    { max: 1000, type: '' },
-    { max: 1000000, type: 'K' },
-    { max: 1000000000, type: 'M' }
-  ]
 
   /**
    * @param x number
@@ -21,14 +16,25 @@ export class NumberFormatterPipe implements PipeTransform {
     return +f
   }
 
+  private dictionary: Array<{max: number, type: string}> = [
+    { max: 1000, type: '' },
+    { max: 1000000, type: 'K' },
+    { max: 1000000000, type: 'M' }
+  ]
+  constructor (@Inject(LOCALE_ID) private localeId: string) {}
+
   transform (value: number) {
     const format = this.dictionary.find(d => value < d.max) || this.dictionary[this.dictionary.length - 1]
     const calc = value / (format.max / 1000)
     const integralPart = Math.floor(calc)
     const decimalPart = NumberFormatterPipe.getDecimalForNumber(calc)
+    const decimalSeparator = Intl.NumberFormat(this.localeId)
+      .formatToParts(1.1)
+      .find(part => part.type === 'decimal')
+      .value
 
     return integralPart < 10 && decimalPart > 0
-      ? `${integralPart}.${decimalPart}${format.type}`
+      ? `${integralPart}${decimalSeparator}${decimalPart}${format.type}`
       : `${integralPart}${format.type}`
   }
 }
