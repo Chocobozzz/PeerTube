@@ -56,7 +56,7 @@ export type AvailableEncoders = {
 // ---------------------------------------------------------------------------
 
 function convertWebPToJPG (path: string, destination: string): Promise<void> {
-  const command = ffmpeg(path)
+  const command = ffmpeg(path, { niceness: FFMPEG_NICE.THUMBNAIL })
     .output(destination)
 
   return runCommand(command)
@@ -67,7 +67,7 @@ function processGIF (
   destination: string,
   newSize: { width: number, height: number }
 ): Promise<void> {
-  const command = ffmpeg(path)
+  const command = ffmpeg(path, { niceness: FFMPEG_NICE.THUMBNAIL })
     .fps(20)
     .size(`${newSize.width}x${newSize.height}`)
     .output(destination)

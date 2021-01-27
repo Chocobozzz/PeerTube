@@ -362,8 +362,8 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
 const FFMPEG_NICE: { [ id: string ]: number } = {
   // parent process defaults to niceness = 0
   // reminder: lower = higher priority, max value is 19, lowest is -20
-  THUMBNAIL: 2, // low value in order to avoid blocking server
-  LIVE: 9, // prioritize over VOD
+  LIVE: 5, // prioritize over VOD and THUMBNAIL
+  THUMBNAIL: 10,
   VOD: 15
 }
 
