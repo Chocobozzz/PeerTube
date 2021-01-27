@@ -472,6 +472,8 @@ function wrapForAPIResults (baseQuery: string, replacements: any, options: Build
       '"VideoFiles"."videoId"': '"VideoFiles.videoId"',
 
       '"VideoStreamingPlaylists"."id"': '"VideoStreamingPlaylists.id"',
+      '"VideoStreamingPlaylists"."playlistUrl"': '"VideoStreamingPlaylists.playlistUrl"',
+      '"VideoStreamingPlaylists"."type"': '"VideoStreamingPlaylists.type"',
       '"VideoStreamingPlaylists->VideoFiles"."id"': '"VideoStreamingPlaylists.VideoFiles.id"',
       '"VideoStreamingPlaylists->VideoFiles"."createdAt"': '"VideoStreamingPlaylists.VideoFiles.createdAt"',
       '"VideoStreamingPlaylists->VideoFiles"."updatedAt"': '"VideoStreamingPlaylists.VideoFiles.updatedAt"',
@@ -480,6 +482,7 @@ function wrapForAPIResults (baseQuery: string, replacements: any, options: Build
       '"VideoStreamingPlaylists->VideoFiles"."extname"': '"VideoStreamingPlaylists.VideoFiles.extname"',
       '"VideoStreamingPlaylists->VideoFiles"."infoHash"': '"VideoStreamingPlaylists.VideoFiles.infoHash"',
       '"VideoStreamingPlaylists->VideoFiles"."fps"': '"VideoStreamingPlaylists.VideoFiles.fps"',
+      '"VideoStreamingPlaylists->VideoFiles"."videoStreamingPlaylistId"': '"VideoStreamingPlaylists.VideoFiles.videoStreamingPlaylistId"',
       '"VideoStreamingPlaylists->VideoFiles"."videoId"': '"VideoStreamingPlaylists.VideoFiles.videoId"'
     })
   }

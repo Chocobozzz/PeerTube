@@ -152,8 +152,6 @@ export type ForAPIOptions = {
 
   videoPlaylistId?: number
 
-  withFiles?: boolean
-
   withAccountBlockerIds?: number[]
 }
 
@@ -218,13 +216,6 @@ export type AvailableForListIDsOptions = {
           [Op.in]: options.ids
         }
       }
-    }
-
-    if (options.withFiles === true) {
-      include.push({
-        model: VideoFileModel,
-        required: true
-      })
     }
 
     if (options.videoPlaylistId) {
@@ -1622,8 +1613,19 @@ export class VideoModel extends Model {
     const avatarKeys = [ 'id', 'filename', 'fileUrl', 'onDisk', 'createdAt', 'updatedAt' ]
     const actorKeys = [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ]
     const serverKeys = [ 'id', 'host' ]
-    const videoFileKeys = [ 'id', 'createdAt', 'updatedAt', 'resolution', 'size', 'extname', 'infoHash', 'fps', 'videoId' ]
-    const videoStreamingPlaylistKeys = [ 'id' ]
+    const videoFileKeys = [
+      'id',
+      'createdAt',
+      'updatedAt',
+      'resolution',
+      'size',
+      'extname',
+      'infoHash',
+      'fps',
+      'videoId',
+      'videoStreamingPlaylistId'
+    ]
+    const videoStreamingPlaylistKeys = [ 'id', 'type', 'playlistUrl' ]
     const videoKeys = [
       'id',
       'uuid',
@@ -1882,17 +1884,21 @@ export class VideoModel extends Model {
 
   getFormattedVideoFilesJSON (): VideoFile[] {
     const { baseUrlHttp, baseUrlWs } = this.getBaseUrls()
-    let files: MVideoFileRedundanciesOpt[] = []
+    let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      files = files.concat(this.VideoFiles)
+      const result = videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, this.VideoFiles)
+      files = files.concat(result)
     }
 
     for (const p of (this.VideoStreamingPlaylists || [])) {
-      files = files.concat(p.VideoFiles || [])
+      p.Video = this
+
+      const result = videoFilesModelToFormattedJSON(p, baseUrlHttp, baseUrlWs, p.VideoFiles)
+      files = files.concat(result)
     }
 
-    return videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, files)
+    return files
   }
 
   toActivityPubObject (this: MVideoAP): VideoObject {
