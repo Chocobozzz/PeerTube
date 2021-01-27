@@ -68,12 +68,6 @@ async function getConfig (req: express.Request, res: express.Response) {
       isNSFW: CONFIG.INSTANCE.IS_NSFW,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
-      defaultTrendingRoute: CONFIG.INSTANCE.DEFAULT_TRENDING_ROUTE,
-      pages: {
-        hot: {
-          enabled: CONFIG.INSTANCE.PAGES.HOT.ENABLED
-        }
-      },
       customizations: {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
@@ -189,7 +183,11 @@ async function getConfig (req: express.Request, res: express.Response) {
     },
     trending: {
       videos: {
-        intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
+        intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS,
+        algorithms: {
+          enabled: CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED,
+          default: CONFIG.TRENDING.VIDEOS.ALGORITHMS.DEFAULT
+        }
       }
     },
     tracker: {
@@ -371,12 +369,6 @@ function customConfig (): CustomConfig {
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
 
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
-      defaultTrendingRoute: CONFIG.INSTANCE.DEFAULT_TRENDING_ROUTE,
-      pages: {
-        hot: {
-          enabled: CONFIG.INSTANCE.PAGES.HOT.ENABLED
-        }
-      },
 
       customizations: {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
@@ -464,6 +456,14 @@ function customConfig (): CustomConfig {
         },
         torrent: {
           enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
+        }
+      }
+    },
+    trending: {
+      videos: {
+        algorithms: {
+          enabled: CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED,
+          default: CONFIG.TRENDING.VIDEOS.ALGORITHMS.DEFAULT
         }
       }
     },

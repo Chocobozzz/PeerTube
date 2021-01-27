@@ -17,7 +17,6 @@ const customConfigUpdateValidator = [
   body('instance.terms').exists().withMessage('Should have a valid instance terms'),
   body('instance.defaultNSFWPolicy').custom(isUserNSFWPolicyValid).withMessage('Should have a valid NSFW policy'),
   body('instance.defaultClientRoute').exists().withMessage('Should have a valid instance default client route'),
-  body('instance.defaultTrendingRoute').exists().withMessage('Should have a valid instance default trending route'),
   body('instance.customizations.css').exists().withMessage('Should have a valid instance CSS customization'),
   body('instance.customizations.javascript').exists().withMessage('Should have a valid instance JavaScript customization'),
 
@@ -54,6 +53,9 @@ const customConfigUpdateValidator = [
 
   body('import.videos.http.enabled').isBoolean().withMessage('Should have a valid import video http enabled boolean'),
   body('import.videos.torrent.enabled').isBoolean().withMessage('Should have a valid import video torrent enabled boolean'),
+
+  body('trending.videos.algorithms.default').exists().withMessage('Should have a valid default trending algorithm'),
+  body('trending.videos.algorithms.enabled').exists().withMessage('Should have a valid array of enabled trending algorithms'),
 
   body('followers.instance.enabled').isBoolean().withMessage('Should have a valid followers of instance boolean'),
   body('followers.instance.manualApproval').isBoolean().withMessage('Should have a valid manual approval boolean'),

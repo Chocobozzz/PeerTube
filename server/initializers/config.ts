@@ -110,7 +110,11 @@ const CONFIG = {
   },
   TRENDING: {
     VIDEOS: {
-      INTERVAL_DAYS: config.get<number>('trending.videos.interval_days')
+      INTERVAL_DAYS: config.get<number>('trending.videos.interval_days'),
+      ALGORITHMS: {
+        get ENABLED () { return config.get<string[]>('trending.videos.algorithms.enabled') },
+        get DEFAULT () { return config.get<string>('trending.videos.algorithms.default') }
+      }
     }
   },
   REDUNDANCY: {
@@ -281,12 +285,6 @@ const CONFIG = {
     get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
 
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
-    get DEFAULT_TRENDING_ROUTE () { return config.get<string>('instance.default_trending_route') },
-    PAGES: {
-      HOT: {
-        get ENABLED () { return config.get<boolean>('instance.pages.hot.enabled') }
-      }
-    },
 
     CUSTOMIZATIONS: {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },

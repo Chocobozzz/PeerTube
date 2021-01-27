@@ -69,12 +69,6 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       defaultNSFWPolicy: 'blur',
 
       defaultClientRoute: '/videos/recently-added',
-      defaultTrendingRoute: '/videos/trending',
-      pages: {
-        hot: {
-          enabled: true
-        }
-      },
 
       customizations: {
         javascript: 'alert("coucou")',
@@ -162,6 +156,14 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
         },
         torrent: {
           enabled: false
+        }
+      }
+    },
+    trending: {
+      videos: {
+        algorithms: {
+          enabled: [ 'hot', 'most-viewed', 'most-liked' ],
+          default: 'hot'
         }
       }
     },
