@@ -1,3 +1,4 @@
+import { formatNumber } from '@angular/common'
 import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core'
 
 // Thanks: https://github.com/danrevah/ngx-pipes/blob/master/src/ng-pipes/pipes/math/bytes.ts
@@ -28,13 +29,9 @@ export class NumberFormatterPipe implements PipeTransform {
     const calc = value / (format.max / 1000)
     const integralPart = Math.floor(calc)
     const decimalPart = NumberFormatterPipe.getDecimalForNumber(calc)
-    const decimalSeparator = Intl.NumberFormat(this.localeId)
-      .formatToParts(1.1)
-      .find(part => part.type === 'decimal')
-      .value
 
     return integralPart < 10 && decimalPart > 0
-      ? `${integralPart}${decimalSeparator}${decimalPart}${format.type}`
+      ? formatNumber(parseFloat(`${integralPart}.${decimalPart}`), this.localeId) + format.type
       : `${integralPart}${format.type}`
   }
 }
