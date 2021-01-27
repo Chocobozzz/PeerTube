@@ -28,10 +28,16 @@ export class NumberFormatterPipe implements PipeTransform {
     const calc = value / (format.max / 1000)
     const integralPart = Math.floor(calc)
     const decimalPart = NumberFormatterPipe.getDecimalForNumber(calc)
-    const decimalSeparator = Intl.NumberFormat(this.localeId)
-      .formatToParts(1.1)
-      .find(part => part.type === 'decimal')
-      .value
+    let decimalSeparator
+
+    try {
+      decimalSeparator = Intl.NumberFormat(this.localeId)
+        .formatToParts(1.1)
+        .find(part => part.type === 'decimal')
+        .value
+    } catch (error) {
+      decimalSeparator = ','
+    }
 
     return integralPart < 10 && decimalPart > 0
       ? `${integralPart}${decimalSeparator}${decimalPart}${format.type}`
