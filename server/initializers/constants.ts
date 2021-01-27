@@ -644,6 +644,7 @@ const VIDEO_LIVE = {
   SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
   REPLAY_DIRECTORY: 'replay',
   EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION: 4,
+  MAX_SOCKET_WAITING_DATA: 1024 * 1000 * 100, // 100MB
   RTMP: {
     CHUNK_SIZE: 60000,
     GOP_CACHE: true,
@@ -656,7 +657,8 @@ const VIDEO_LIVE = {
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4, // 4 hours
   INFO_HASH_EXISTS: 1000 * 3600 * 12, // 12 hours
-  LIVE_ABLE_TO_UPLOAD: 1000 * 60 // 1 minute
+  LIVE_ABLE_TO_UPLOAD: 1000 * 60, // 1 minute
+  LIVE_CHECK_SOCKET_HEALTH: 1000 * 60 // 1 minute
 }
 
 const MEMOIZE_LENGTH = {
