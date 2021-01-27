@@ -39,12 +39,6 @@ export class ServerService {
       isNSFW: false,
       defaultNSFWPolicy: 'do_not_list' as 'do_not_list',
       defaultClientRoute: '',
-      defaultTrendingRoute: '',
-      pages: {
-        hot: {
-          enabled: true
-        }
-      },
       customizations: {
         javascript: '',
         css: ''
@@ -131,7 +125,11 @@ export class ServerService {
     },
     trending: {
       videos: {
-        intervalDays: 0
+        intervalDays: 0,
+        algorithms: {
+          enabled: [ 'hot', 'most-viewed', 'most-liked' ],
+          default: 'most-viewed'
+        }
       }
     },
     autoBlacklist: {

@@ -230,7 +230,6 @@ const customConfigKeysToKeep = [
   'instance-description',
   'instance-terms',
   'instance-defaultClientRoute',
-  'instance-defaultTrendingRoute',
   'instance-defaultNSFWPolicy',
   'instance-customizations-javascript',
   'instance-customizations-css',

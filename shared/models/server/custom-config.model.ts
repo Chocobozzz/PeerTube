@@ -33,12 +33,6 @@ export interface CustomConfig {
     defaultNSFWPolicy: NSFWPolicyType
 
     defaultClientRoute: string
-    defaultTrendingRoute: string
-    pages: {
-      hot: {
-        enabled: boolean
-      }
-    }
 
     customizations: {
       javascript?: string
@@ -127,6 +121,15 @@ export interface CustomConfig {
       }
       torrent: {
         enabled: boolean
+      }
+    }
+  }
+
+  trending: {
+    videos: {
+      algorithms: {
+        enabled: string[]
+        default: string
       }
     }
   }

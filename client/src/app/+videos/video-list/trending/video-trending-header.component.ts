@@ -1,30 +1,34 @@
-import { Component, Inject, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
+import { Component, HostBinding, Inject, OnDestroy, OnInit } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import { VideoListHeaderComponent } from '@app/shared/shared-video-miniature'
 import { GlobalIconName } from '@app/shared/shared-icons'
-import { VideoSortField } from '@shared/models'
 import { ServerService } from '@app/core/server/server.service'
+import { Subscription } from 'rxjs'
+import { RedirectService } from '@app/core'
 
 interface VideoTrendingHeaderItem {
   label: string
   iconName: GlobalIconName
-  value: VideoSortField
-  path: string
+  value: string
   tooltip?: string
   hidden?: boolean
 }
 
 @Component({
   selector: 'video-trending-title-page',
-  host: { 'class': 'title-page title-page-single' },
   styleUrls: [ './video-trending-header.component.scss' ],
   templateUrl: './video-trending-header.component.html'
 })
-export class VideoTrendingHeaderComponent extends VideoListHeaderComponent implements OnInit {
+export class VideoTrendingHeaderComponent extends VideoListHeaderComponent implements OnInit, OnDestroy {
+  @HostBinding('class') class = 'title-page title-page-single'
+
   buttons: VideoTrendingHeaderItem[]
+
+  private algorithmChangeSub: Subscription
 
   constructor (
     @Inject('data') public data: any,
+    private route: ActivatedRoute,
     private router: Router,
     private serverService: ServerService
   ) {
@@ -34,23 +38,20 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
       {
         label: $localize`:A variant of Trending videos based on the number of recent interactions:Hot`,
         iconName: 'flame',
-        value: '-hot',
-        path: 'hot',
+        value: 'hot',
         tooltip: $localize`Videos totalizing the most interactions for recent videos`,
         hidden: true
       },
       {
         label: $localize`:Main variant of Trending videos based on number of recent views:Views`,
         iconName: 'trending',
-        value: '-trending',
-        path: 'most-viewed',
-        tooltip: $localize`Videos totalizing the most views during the last 24 hours`,
+        value: 'most-viewed',
+        tooltip: $localize`Videos totalizing the most views during the last 24 hours`
       },
       {
         label: $localize`:A variant of Trending videos based on the number of likes:Likes`,
         iconName: 'like',
-        value: '-likes',
-        path: 'most-liked',
+        value: 'most-liked',
         tooltip: $localize`Videos that have the most likes`
       }
     ]
@@ -59,20 +60,40 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
   ngOnInit () {
     this.serverService.getConfig()
         .subscribe(config => {
-          // don't filter if auto-blacklist is not enabled as this will be the only list
-          if (config.instance.pages.hot.enabled) {
-            const index = this.buttons.findIndex(b => b.path === 'hot')
-            this.buttons[index].hidden = false
-          }
+          this.buttons = this.buttons.map(b => {
+            b.hidden = !config.trending.videos.algorithms.enabled.includes(b.value)
+            return b
+          })
         })
+
+    this.algorithmChangeSub = this.route.queryParams.subscribe(
+      queryParams => {
+        const algorithm = queryParams['alg']
+        if (algorithm) {
+          this.data.model = algorithm
+        } else {
+          this.data.model = RedirectService.DEFAULT_TRENDING_ALGORITHM
+        }
+      }
+    )
   }
 
-  get visibleButtons () {
-    return this.buttons.filter(b => !b.hidden)
+  ngOnDestroy () {
+    if (this.algorithmChangeSub) this.algorithmChangeSub.unsubscribe()
   }
 
   setSort () {
-    const path = this.buttons.find(b => b.value === this.data.model).path
-    this.router.navigate([ `/videos/${path}` ])
+    const alg = this.data.model !== RedirectService.DEFAULT_TRENDING_ALGORITHM
+      ? this.data.model
+      : undefined
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: { alg },
+        queryParamsHandling: 'merge'
+      }
+    )
   }
 }

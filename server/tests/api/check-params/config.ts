@@ -44,12 +44,6 @@ describe('Test config API validators', function () {
       defaultNSFWPolicy: 'blur',
 
       defaultClientRoute: '/videos/recently-added',
-      defaultTrendingRoute: '/videos/trending',
-      pages: {
-        hot: {
-          enabled: true
-        }
-      },
 
       customizations: {
         javascript: 'alert("coucou")',
@@ -139,6 +133,14 @@ describe('Test config API validators', function () {
         },
         torrent: {
           enabled: false
+        }
+      }
+    },
+    trending: {
+      videos: {
+        algorithms: {
+          enabled: [ 'hot', 'most-viewed', 'most-liked' ],
+          default: 'most-viewed'
         }
       }
     },

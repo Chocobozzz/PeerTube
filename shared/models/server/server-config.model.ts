@@ -39,12 +39,6 @@ export interface ServerConfig {
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
     defaultClientRoute: string
-    defaultTrendingRoute: string
-    pages: {
-      hot: {
-        enabled: boolean
-      }
-    }
     customizations: {
       javascript: string
       css: string
@@ -180,6 +174,10 @@ export interface ServerConfig {
   trending: {
     videos: {
       intervalDays: number
+      algorithms: {
+        enabled: string[]
+        default: string
+      }
     }
   }
 

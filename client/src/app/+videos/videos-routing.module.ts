@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { LoginGuard, TrendingGuard } from '@app/core'
+import { LoginGuard } from '@app/core'
 import { MetaGuard } from '@ngx-meta/core'
+import { VideoTrendingComponent } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
-import { VideoHotComponent } from './video-list/trending/video-hot.component'
-import { VideoMostLikedComponent } from './video-list/trending/video-most-liked.component'
-import { VideoMostViewedComponent } from './video-list/trending/video-most-viewed.component'
 import { VideoLocalComponent } from './video-list/video-local.component'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
 import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
@@ -28,46 +26,16 @@ const videosRoutes: Routes = [
       },
       {
         path: 'trending',
-        canActivate: [ TrendingGuard ]
-      },
-      {
-        path: 'hot',
-        component: VideoHotComponent,
+        component: VideoTrendingComponent,
         data: {
           meta: {
-            title: $localize`Hot videos`
-          },
-          reuse: {
-            enabled: true,
-            key: 'hot-videos-list'
-          }
-        }
-      },
-      {
-        path: 'most-viewed',
-        component: VideoMostViewedComponent,
-        data: {
-          meta: {
-            title: $localize`Most viewed videos`
-          },
-          reuse: {
-            enabled: true,
-            key: 'most-viewed-videos-list'
+            title: $localize`Trending videos`
           }
         }
       },
       {
         path: 'most-liked',
-        component: VideoMostLikedComponent,
-        data: {
-          meta: {
-            title: $localize`Most liked videos`
-          },
-          reuse: {
-            enabled: true,
-            key: 'most-liked-videos-list'
-          }
-        }
+        redirectTo: 'trending?alg=most-liked'
       },
       {
         path: 'recently-added',

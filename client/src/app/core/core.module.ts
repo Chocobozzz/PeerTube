@@ -15,7 +15,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
 import { Notifier } from './notification'
 import { HtmlRendererService, LinkifierService, MarkdownService } from './renderer'
 import { RestExtractor, RestService } from './rest'
-import { LoginGuard, RedirectService, UserRightGuard, UnloggedGuard, TrendingGuard } from './routing'
+import { LoginGuard, RedirectService, UserRightGuard, UnloggedGuard } from './routing'
 import { CanDeactivateGuard } from './routing/can-deactivate-guard.service'
 import { ServerConfigResolver } from './routing/server-config-resolver.service'
 import { ScopedTokensService } from './scoped-tokens'
@@ -56,7 +56,6 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
     LoginGuard,
     UserRightGuard,
     UnloggedGuard,
-    TrendingGuard,
 
     PluginService,
     HooksService,

@@ -271,10 +271,9 @@
                   <option i18n value="/videos/overview">Discover videos</option>
                   <optgroup i18n-label label="Trending pages">
                     <option i18n value="/videos/trending">Default trending page</option>
-                    <option i18n value="/videos/hot" *ngIf="isTrendingHotEnabled()">Hot videos</option>
-                    <option i18n value="/videos/hot" *ngIf="!isTrendingHotEnabled()" disabled>Hot videos</option>
-                    <option i18n value="/videos/most-viewed">Most viewed videos</option>
-                    <option i18n value="/videos/most-liked">Most liked videos</option>
+                    <option i18n value="/videos/trending?alg=hot" [disabled]="!trendingVideosAlgorithmsEnabledIncludes('hot')">Hot videos</option>
+                    <option i18n value="/videos/trending?alg=most-viewed" [disabled]="!trendingVideosAlgorithmsEnabledIncludes('most-viewed')">Most viewed videos</option>
+                    <option i18n value="/videos/trending?alg=most-liked" [disabled]="!trendingVideosAlgorithmsEnabledIncludes('most-liked')">Most liked videos</option>
                   </optgroup>
                   <option i18n value="/videos/recently-added">Recently added videos</option>
                   <option i18n value="/videos/local">Local videos</option>
@@ -283,17 +282,20 @@
               <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error">{{ formErrors.instance.defaultClientRoute }}</div>
             </div>
 
-            <div class="form-group" formGroupName="instance">
-              <label i18n for="instanceDefaultTrendingRoute">Default trending page</label>
-              <div class="peertube-select-container">
-                <select id="instanceDefaultTrendingRoute" formControlName="defaultTrendingRoute" class="form-control">
-                  <option i18n value="/videos/hot" *ngIf="isTrendingHotEnabled()">Hot videos</option>
-                  <option i18n value="/videos/hot" *ngIf="!isTrendingHotEnabled()" disabled>Hot videos</option>
-                  <option i18n value="/videos/trending">Most viewed videos</option>
-                  <option i18n value="/videos/most-liked">Most liked videos</option>
-                </select>
-              </div>
-              <div *ngIf="formErrors.instance.defaultTrendingRoute" class="form-error">{{ formErrors.instance.defaultTrendingRoute }}</div>
+            <div class="form-group" formGroupName="trending">
+              <ng-container formGroupName="videos">
+                <ng-container formGroupName="algorithms">
+                  <label i18n for="trendingVideosAlgorithmsDefault">Default trending page</label>
+                  <div class="peertube-select-container">
+                    <select id="trendingVideosAlgorithmsDefault" formControlName="default" class="form-control">
+                      <option i18n value="hot">Hot videos</option>
+                      <option i18n value="most-viewed">Most viewed videos</option>
+                      <option i18n value="most-liked">Most liked videos</option>
+                    </select>
+                  </div>
+                  <div *ngIf="formErrors.trending.videos.algorithms.default" class="form-error">{{ formErrors.trending.videos.algorithms.default }}</div>
+                </ng-container>
+              </ng-container>
             </div>
 
           </div>

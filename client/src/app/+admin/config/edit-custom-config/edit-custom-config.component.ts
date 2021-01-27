@@ -186,12 +186,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         languages: null,
 
         defaultClientRoute: null,
-        defaultTrendingRoute: null,
-        pages: {
-          hot: {
-            enabled: null
-          }
-        },
 
         customizations: {
           javascript: null,
@@ -227,6 +221,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
           },
           torrent: {
             enabled: null
+          }
+        }
+      },
+      trending: {
+        videos: {
+          algorithms: {
+            enabled: null,
+            default: null
           }
         }
       },
@@ -370,8 +372,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
     return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
   }
 
-  isTrendingHotEnabled () {
-    return this.form.value['instance']['pages']['hot']['enabled'] === true
+  trendingVideosAlgorithmsEnabledIncludes (algorithm: string) {
+    return this.form.value['trending']['videos']['algorithms']['enabled'].find((e: string) => e === algorithm)
   }
 
   async formValidated () {
