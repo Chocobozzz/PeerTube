@@ -80,6 +80,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   tooltipLike = ''
   tooltipDislike = ''
+  tooltipShare = ''
   tooltipSupport = ''
   tooltipSaveToPlaylist = ''
 
@@ -131,6 +132,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   ) {
     this.tooltipLike = $localize`Like this video`
     this.tooltipDislike = $localize`Dislike this video`
+    this.tooltipShare = $localize`Share this video`
     this.tooltipSupport = $localize`Support options for this video`
     this.tooltipSaveToPlaylist = $localize`Save to playlist`
   }

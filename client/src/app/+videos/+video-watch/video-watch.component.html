@@ -104,7 +104,11 @@
                     <span class="icon-text" i18n>SUPPORT</span>
                   </button>
 
-                  <button (click)="showShareModal()" (keyup.enter)="showShareModal()" class="action-button">
+                  <button (click)="showShareModal()" (keyup.enter)="showShareModal()" class="action-button"
+                    [attr.aria-label]="tooltipShare"
+                    [ngbTooltip]="tooltipShare"
+                    placement="bottom auto"
+                    >
                     <my-global-icon iconName="share" aria-hidden="true"></my-global-icon>
                     <span class="icon-text" i18n>SHARE</span>
                   </button>
