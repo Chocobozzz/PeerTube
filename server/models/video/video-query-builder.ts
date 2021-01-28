@@ -262,7 +262,9 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
        * justify a better score. However there are multiple ways to achieve that
        * goal, which is left for later. Yes, this is a TODO :)
        *
-       * note: weights and base score are in number of half-days.
+       * notes:
+       *  - weights and base score are in number of half-days.
+       *  - all comments are counted, regardless of being written by the video author or not
        * see https://github.com/reddit-archive/reddit/blob/master/r2/r2/lib/db/_sorts.pyx#L47-L58
        */
       const weights = {

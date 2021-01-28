@@ -3491,6 +3491,7 @@ components:
         - -views
         - -likes
         - -trending
+        - -hot
     videosSearchSort:
       name: sort
       in: query
