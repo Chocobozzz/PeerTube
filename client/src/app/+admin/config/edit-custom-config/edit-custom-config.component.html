@@ -885,15 +885,22 @@
 
               <div class="form-group mt-4" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
                 <label i18n for="transcodingProfile">Transcoding profile</label>
-                <span class="text-muted ml-1" i18n>New transcoding profiles can be added by PeerTube plugins</span>
+                <span class="text-muted ml-1" i18n>new transcoding profiles can be added by PeerTube plugins</span>
 
-                <div class="peertube-select-container">
-                  <select id="transcodingProfile" formControlName="profile" class="form-control">
-                    <option *ngFor="let vodTranscodingProfileOption of getAvailableTranscodingProfile('vod')" [value]="vodTranscodingProfileOption">
-                      {{ vodTranscodingProfileOption }}
-                    </option>
-                  </select>
-                </div>
+                <ng-select
+                  id="transcodingProfile"
+                  formControlName="profile"
+                  [items]="getAvailableTranscodingProfile('vod')"
+                  [clearable]="false"
+                >
+                  <ng-template ng-option-tmp let-item="item" let-index="index">
+                    {{ item }}
+                    <ng-container *ngIf="item === 'default'">
+                      <br>
+                      <span class="text-muted">x264, targeting maximum device compatibility</span>
+                    </ng-container>
+                  </ng-template>
+                </ng-select>
                 <div *ngIf="formErrors.transcoding.profile" class="form-error">{{ formErrors.transcoding.profile }}</div>
               </div>
 
