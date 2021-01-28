@@ -66,6 +66,8 @@ export class ServerService {
       requiresEmailVerification: false
     },
     transcoding: {
+      profile: 'default',
+      availableProfiles: [ 'default' ],
       enabledResolutions: [],
       hls: {
         enabled: false
@@ -82,6 +84,8 @@ export class ServerService {
       maxUserLives: -1,
       transcoding: {
         enabled: false,
+        profile: 'default',
+        availableProfiles: [ 'default' ],
         enabledResolutions: []
       },
       rtmp: {

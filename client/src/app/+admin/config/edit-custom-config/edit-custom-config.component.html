@@ -883,6 +883,20 @@
                 <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
               </div>
 
+              <div class="form-group mt-4" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                <label i18n for="transcodingProfile">Transcoding profile</label>
+                <span class="text-muted ml-1" i18n>New transcoding profiles can be added by PeerTube plugins</span>
+
+                <div class="peertube-select-container">
+                  <select id="transcodingProfile" formControlName="profile" class="form-control">
+                    <option *ngFor="let vodTranscodingProfileOption of getAvailableTranscodingProfile('vod')" [value]="vodTranscodingProfileOption">
+                      {{ vodTranscodingProfileOption }}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="formErrors.transcoding.profile" class="form-error">{{ formErrors.transcoding.profile }}</div>
+              </div>
+
             </ng-container>
 
           </div>
@@ -1021,6 +1035,20 @@
                     </select>
                   </div>
                   <div *ngIf="formErrors.live.transcoding.threads" class="form-error">{{ formErrors.live.transcoding.threads }}</div>
+                </div>
+
+                <div class="form-group mt-4" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() || !isLiveTranscodingEnabled() }">
+                  <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
+                  <span class="text-muted ml-1" i18n>New live transcoding profiles can be added by PeerTube plugins</span>
+
+                  <div class="peertube-select-container">
+                    <select id="liveTranscodingProfile" formControlName="profile" class="form-control">
+                      <option *ngFor="let liveTranscodingProfileOption of getAvailableTranscodingProfile('live')" [value]="liveTranscodingProfileOption">
+                        {{ liveTranscodingProfileOption }}
+                      </option>
+                    </select>
+                  </div>
+                  <div *ngIf="formErrors.live.transcoding.profile" class="form-error">{{ formErrors.live.transcoding.profile }}</div>
                 </div>
 
               </ng-container>

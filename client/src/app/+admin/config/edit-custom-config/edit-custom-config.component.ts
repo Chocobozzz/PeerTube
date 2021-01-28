@@ -1,4 +1,5 @@
 import { forkJoin } from 'rxjs'
+import { pairwise } from 'rxjs/operators'
 import { ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
@@ -20,7 +21,6 @@ import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@a
 import { FormReactive, FormValidatorService, SelectOptionsItem } from '@app/shared/shared-forms'
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
 import { CustomConfig, ServerConfig } from '@shared/models'
-import { pairwise } from 'rxjs/operators'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -38,6 +38,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   liveResolutions: { id: string, label: string, description?: string }[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
   liveMaxDurationOptions: { label: string, value: number }[] = []
+
+  vodTranscodingProfileOptions: string[] = []
+  liveTranscodingProfileOptions: string[] = []
 
   languageItems: SelectOptionsItem[] = []
   categoryItems: SelectOptionsItem[] = []
@@ -101,6 +104,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       { value: 8, label: '8' }
     ]
 
+    this.vodTranscodingProfileOptions = [ 'default' ]
+    this.liveTranscodingProfileOptions = [ 'default' ]
+
     this.liveMaxDurationOptions = [
       { value: -1, label: $localize`No limit` },
       { value: 1000 * 3600, label: $localize`1 hour` },
@@ -125,6 +131,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
   get liveRTMPPort () {
     return this.serverConfig.live.rtmp.port
+  }
+
+  getAvailableTranscodingProfile (type: 'live' | 'vod') {
+    if (type === 'live') {
+      return this.serverConfig.live.transcoding.availableProfiles
+    }
+
+    return this.serverConfig.transcoding.availableProfiles
   }
 
   getTotalTranscodingThreads () {
@@ -247,6 +261,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         threads: TRANSCODING_THREADS_VALIDATOR,
         allowAdditionalExtensions: null,
         allowAudioFiles: null,
+        profile: null,
         resolutions: {},
         hls: {
           enabled: null
@@ -266,6 +281,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         transcoding: {
           enabled: null,
           threads: TRANSCODING_THREADS_VALIDATOR,
+          profile: null,
           resolutions: {}
         }
       },
