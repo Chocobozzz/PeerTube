@@ -27,6 +27,14 @@ function getLoggerReplacer () {
       seen.add(value)
     }
 
+    if (value instanceof Set) {
+      return Array.from(value)
+    }
+
+    if (value instanceof Map) {
+      return Array.from(value.entries())
+    }
+
     if (value instanceof Error) {
       const error = {}
 

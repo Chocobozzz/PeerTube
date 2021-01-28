@@ -96,6 +96,9 @@ export interface ServerConfig {
     }
 
     enabledResolutions: number[]
+
+    profile: string
+    availableProfiles: string[]
   }
 
   live: {
@@ -110,6 +113,9 @@ export interface ServerConfig {
       enabled: boolean
 
       enabledResolutions: number[]
+
+      profile: string
+      availableProfiles: string[]
     }
 
     rtmp: {

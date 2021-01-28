@@ -42,7 +42,7 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFile:
     outputPath: videoTranscodedPath,
 
     availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-    profile: 'default',
+    profile: CONFIG.TRANSCODING.PROFILE,
 
     resolution: inputVideoFile.resolution,
 
@@ -96,7 +96,7 @@ async function transcodeNewWebTorrentResolution (video: MVideoWithFile, resoluti
       outputPath: videoTranscodedPath,
 
       availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-      profile: 'default',
+      profile: CONFIG.TRANSCODING.PROFILE,
 
       resolution,
 
@@ -108,7 +108,7 @@ async function transcodeNewWebTorrentResolution (video: MVideoWithFile, resoluti
       outputPath: videoTranscodedPath,
 
       availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-      profile: 'default',
+      profile: CONFIG.TRANSCODING.PROFILE,
 
       resolution,
       isPortraitMode: isPortrait,
@@ -143,7 +143,7 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
     outputPath: videoTranscodedPath,
 
     availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-    profile: 'default',
+    profile: CONFIG.TRANSCODING.PROFILE,
 
     audioPath: audioInputPath,
     resolution,
@@ -284,7 +284,7 @@ async function generateHlsPlaylistCommon (options: {
     outputPath,
 
     availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-    profile: 'default',
+    profile: CONFIG.TRANSCODING.PROFILE,
 
     resolution,
     copyCodecs,

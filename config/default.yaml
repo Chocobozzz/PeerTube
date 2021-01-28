@@ -223,11 +223,20 @@ user:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+
   # Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
   allow_additional_extensions: true
+
   # If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
   allow_audio_files: true
+
   threads: 1
+
+  # Choose the transcoding profile
+  # New profiles can be added by plugins
+  # Available in core PeerTube: 'default'
+  profile: 'default'
+
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     0p: false # audio-only (creates mp4 without video stream, always created when enabled)
     240p: false
@@ -282,6 +291,11 @@ live:
   transcoding:
     enabled: true
     threads: 2
+
+    # Choose the transcoding profile
+    # New profiles can be added by plugins
+    # Available in core PeerTube: 'default'
+    profile: 'default'
 
     resolutions:
       240p: false

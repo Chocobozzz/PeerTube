@@ -97,34 +97,6 @@ async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
       throw new Error('Unavailable encode codec ' + codec + ' in FFmpeg')
     }
   }
-
-  return checkFFmpegEncoders()
-}
-
-// Detect supported encoders by ffmpeg
-let supportedEncoders: Map<string, boolean>
-async function checkFFmpegEncoders (): Promise<Map<string, boolean>> {
-  if (supportedEncoders !== undefined) {
-    return supportedEncoders
-  }
-
-  const Ffmpeg = require('fluent-ffmpeg')
-  const getAvailableEncodersPromise = promisify0(Ffmpeg.getAvailableEncoders)
-  const availableEncoders = await getAvailableEncodersPromise()
-
-  const searchEncoders = [
-    'aac',
-    'libfdk_aac',
-    'libx264'
-  ]
-
-  supportedEncoders = new Map<string, boolean>()
-
-  for (const searchEncoder of searchEncoders) {
-    supportedEncoders.set(searchEncoder, availableEncoders[searchEncoder] !== undefined)
-  }
-
-  return supportedEncoders
 }
 
 function checkNodeVersion () {
@@ -143,7 +115,6 @@ function checkNodeVersion () {
 
 export {
   checkFFmpeg,
-  checkFFmpegEncoders,
   checkMissedConfig,
   checkNodeVersion
 }

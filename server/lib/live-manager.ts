@@ -338,7 +338,7 @@ class LiveManager {
         resolutions: allResolutions,
         fps,
         availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-        profile: 'default'
+        profile: CONFIG.LIVE.TRANSCODING.PROFILE
       })
       : getLiveMuxingCommand(rtmpUrl, outPath)
 

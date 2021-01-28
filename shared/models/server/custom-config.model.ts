@@ -87,6 +87,9 @@ export interface CustomConfig {
     allowAudioFiles: boolean
 
     threads: number
+
+    profile: string
+
     resolutions: ConfigResolutions & { '0p': boolean }
 
     webtorrent: {
@@ -110,6 +113,7 @@ export interface CustomConfig {
     transcoding: {
       enabled: boolean
       threads: number
+      profile: string
       resolutions: ConfigResolutions
     }
   }

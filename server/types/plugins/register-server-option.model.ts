@@ -5,6 +5,7 @@ import {
   PluginPlaylistPrivacyManager,
   PluginSettingsManager,
   PluginStorageManager,
+  PluginTranscodingManager,
   PluginVideoCategoryManager,
   PluginVideoLanguageManager,
   PluginVideoLicenceManager,
@@ -67,6 +68,8 @@ export type RegisterServerOptions = {
 
   videoPrivacyManager: PluginVideoPrivacyManager
   playlistPrivacyManager: PluginPlaylistPrivacyManager
+
+  transcodingManager: PluginTranscodingManager
 
   registerIdAndPassAuth: (options: RegisterServerAuthPassOptions) => void
   registerExternalAuth: (options: RegisterServerAuthExternalOptions) => RegisterServerAuthExternalResult

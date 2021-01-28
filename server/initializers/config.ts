@@ -188,6 +188,7 @@ const CONFIG = {
     get ALLOW_ADDITIONAL_EXTENSIONS () { return config.get<boolean>('transcoding.allow_additional_extensions') },
     get ALLOW_AUDIO_FILES () { return config.get<boolean>('transcoding.allow_audio_files') },
     get THREADS () { return config.get<number>('transcoding.threads') },
+    get PROFILE () { return config.get<string>('transcoding.profile') },
     RESOLUTIONS: {
       get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
       get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
@@ -221,6 +222,7 @@ const CONFIG = {
     TRANSCODING: {
       get ENABLED () { return config.get<boolean>('live.transcoding.enabled') },
       get THREADS () { return config.get<number>('live.transcoding.threads') },
+      get PROFILE () { return config.get<string>('live.transcoding.profile') },
 
       RESOLUTIONS: {
         get '240p' () { return config.get<boolean>('live.transcoding.resolutions.240p') },

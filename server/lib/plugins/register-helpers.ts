@@ -17,6 +17,7 @@ import {
   RegisterServerOptions
 } from '@server/types/plugins'
 import {
+  EncoderOptionsBuilder,
   PluginPlaylistPrivacyManager,
   PluginSettingsManager,
   PluginStorageManager,
@@ -28,7 +29,8 @@ import {
   RegisterServerSettingOptions
 } from '@shared/models'
 import { serverHookObject } from '@shared/models/plugins/server-hook.model'
-import { buildPluginHelpers } from './plugin-helpers'
+import { VideoTranscodingProfilesManager } from '../video-transcoding-profiles'
+import { buildPluginHelpers } from './plugin-helpers-builder'
 
 type AlterableVideoConstant = 'language' | 'licence' | 'category' | 'privacy' | 'playlistPrivacy'
 type VideoConstant = { [key in number | string]: string }
@@ -40,7 +42,7 @@ type UpdatedVideoConstant = {
   }
 }
 
-export class RegisterHelpersStore {
+export class RegisterHelpers {
   private readonly updatedVideoConstants: UpdatedVideoConstant = {
     playlistPrivacy: { added: [], deleted: [] },
     privacy: { added: [], deleted: [] },
@@ -48,6 +50,23 @@ export class RegisterHelpersStore {
     licence: { added: [], deleted: [] },
     category: { added: [], deleted: [] }
   }
+
+  private readonly transcodingProfiles: {
+    [ npmName: string ]: {
+      type: 'vod' | 'live'
+      encoder: string
+      profile: string
+    }[]
+  } = {}
+
+  private readonly transcodingEncoders: {
+    [ npmName: string ]: {
+      type: 'vod' | 'live'
+      streamType: 'audio' | 'video'
+      encoder: string
+      priority: number
+    }[]
+  } = {}
 
   private readonly settings: RegisterServerSettingOptions[] = []
 
@@ -83,6 +102,8 @@ export class RegisterHelpersStore {
     const videoPrivacyManager = this.buildVideoPrivacyManager()
     const playlistPrivacyManager = this.buildPlaylistPrivacyManager()
 
+    const transcodingManager = this.buildTranscodingManager()
+
     const registerIdAndPassAuth = this.buildRegisterIdAndPassAuth()
     const registerExternalAuth = this.buildRegisterExternalAuth()
     const unregisterIdAndPassAuth = this.buildUnregisterIdAndPassAuth()
@@ -105,6 +126,8 @@ export class RegisterHelpersStore {
 
       videoPrivacyManager,
       playlistPrivacyManager,
+
+      transcodingManager,
 
       registerIdAndPassAuth,
       registerExternalAuth,
@@ -138,6 +161,22 @@ export class RegisterHelpersStore {
       }
 
       delete this.updatedVideoConstants[type][npmName]
+    }
+  }
+
+  reinitTranscodingProfilesAndEncoders (npmName: string) {
+    const profiles = this.transcodingProfiles[npmName]
+    if (Array.isArray(profiles)) {
+      for (const profile of profiles) {
+        VideoTranscodingProfilesManager.Instance.removeProfile(profile)
+      }
+    }
+
+    const encoders = this.transcodingEncoders[npmName]
+    if (Array.isArray(encoders)) {
+      for (const o of encoders) {
+        VideoTranscodingProfilesManager.Instance.removeEncoderPriority(o.type, o.streamType, o.encoder, o.priority)
+      }
     }
   }
 
@@ -353,5 +392,53 @@ export class RegisterHelpersStore {
     delete obj[key]
 
     return true
+  }
+
+  private buildTranscodingManager () {
+    const self = this
+
+    function addProfile (type: 'live' | 'vod', encoder: string, profile: string, builder: EncoderOptionsBuilder) {
+      if (profile === 'default') {
+        logger.error('A plugin cannot add a default live transcoding profile')
+        return false
+      }
+
+      VideoTranscodingProfilesManager.Instance.addProfile({
+        type,
+        encoder,
+        profile,
+        builder
+      })
+
+      if (!self.transcodingProfiles[self.npmName]) self.transcodingProfiles[self.npmName] = []
+      self.transcodingProfiles[self.npmName].push({ type, encoder, profile })
+
+      return true
+    }
+
+    function addEncoderPriority (type: 'live' | 'vod', streamType: 'audio' | 'video', encoder: string, priority: number) {
+      VideoTranscodingProfilesManager.Instance.addEncoderPriority(type, streamType, encoder, priority)
+
+      if (!self.transcodingEncoders[self.npmName]) self.transcodingEncoders[self.npmName] = []
+      self.transcodingEncoders[self.npmName].push({ type, streamType, encoder, priority })
+    }
+
+    return {
+      addLiveProfile (encoder: string, profile: string, builder: EncoderOptionsBuilder) {
+        return addProfile('live', encoder, profile, builder)
+      },
+
+      addVODProfile (encoder: string, profile: string, builder: EncoderOptionsBuilder) {
+        return addProfile('vod', encoder, profile, builder)
+      },
+
+      addLiveEncoderPriority (streamType: 'audio' | 'video', encoder: string, priority: number) {
+        return addEncoderPriority('live', streamType, encoder, priority)
+      },
+
+      addVODEncoderPriority (streamType: 'audio' | 'video', encoder: string, priority: number) {
+        return addEncoderPriority('vod', streamType, encoder, priority)
+      }
+    }
   }
 }

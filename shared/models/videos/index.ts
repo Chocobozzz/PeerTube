@@ -34,6 +34,7 @@ export * from './video-state.enum'
 export * from './video-streaming-playlist.model'
 export * from './video-streaming-playlist.type'
 
+export * from './video-transcoding.model'
 export * from './video-transcoding-fps.model'
 
 export * from './video-update.model'

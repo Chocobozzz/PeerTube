@@ -18,6 +18,7 @@ import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
+import { VideoTranscodingProfilesManager } from '@server/lib/video-transcoding-profiles'
 
 const configRouter = express.Router()
 
@@ -114,7 +115,9 @@ async function getConfig (req: express.Request, res: express.Response) {
       webtorrent: {
         enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
       },
-      enabledResolutions: getEnabledResolutions('vod')
+      enabledResolutions: getEnabledResolutions('vod'),
+      profile: CONFIG.TRANSCODING.PROFILE,
+      availableProfiles: VideoTranscodingProfilesManager.Instance.getAvailableProfiles('vod')
     },
     live: {
       enabled: CONFIG.LIVE.ENABLED,
@@ -126,7 +129,9 @@ async function getConfig (req: express.Request, res: express.Response) {
 
       transcoding: {
         enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
-        enabledResolutions: getEnabledResolutions('live')
+        enabledResolutions: getEnabledResolutions('live'),
+        profile: CONFIG.LIVE.TRANSCODING.PROFILE,
+        availableProfiles: VideoTranscodingProfilesManager.Instance.getAvailableProfiles('live')
       },
 
       rtmp: {
@@ -412,6 +417,7 @@ function customConfig (): CustomConfig {
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
       allowAudioFiles: CONFIG.TRANSCODING.ALLOW_AUDIO_FILES,
       threads: CONFIG.TRANSCODING.THREADS,
+      profile: CONFIG.TRANSCODING.PROFILE,
       resolutions: {
         '0p': CONFIG.TRANSCODING.RESOLUTIONS['0p'],
         '240p': CONFIG.TRANSCODING.RESOLUTIONS['240p'],
@@ -438,6 +444,7 @@ function customConfig (): CustomConfig {
       transcoding: {
         enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
         threads: CONFIG.LIVE.TRANSCODING.THREADS,
+        profile: CONFIG.LIVE.TRANSCODING.PROFILE,
         resolutions: {
           '240p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['240p'],
           '360p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['360p'],

@@ -112,6 +112,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       allowAdditionalExtensions: true,
       allowAudioFiles: true,
       threads: 1,
+      profile: 'default',
       resolutions: {
         '0p': false,
         '240p': false,
@@ -138,6 +139,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       transcoding: {
         enabled: true,
         threads: 4,
+        profile: 'default',
         resolutions: {
           '240p': true,
           '360p': true,
