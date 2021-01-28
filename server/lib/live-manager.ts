@@ -25,7 +25,7 @@ import { cleanupLive } from './job-queue/handlers/video-live-ending'
 import { PeerTubeSocket } from './peertube-socket'
 import { isAbleToUploadVideo } from './user'
 import { getHLSDirectory } from './video-paths'
-import { availableEncoders } from './video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
 
 import memoizee = require('memoizee')
 const NodeRtmpSession = require('node-media-server/node_rtmp_session')
@@ -337,7 +337,7 @@ class LiveManager {
         outPath,
         resolutions: allResolutions,
         fps,
-        availableEncoders,
+        availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
         profile: 'default'
       })
       : getLiveMuxingCommand(rtmpUrl, outPath)

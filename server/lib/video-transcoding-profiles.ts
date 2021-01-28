@@ -78,32 +78,83 @@ const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum })
   return { outputOptions: [ buildStreamSuffix('-q:a', streamNum), '5' ] }
 }
 
-const availableEncoders: AvailableEncoders = {
-  vod: {
-    libx264: {
-      default: defaultX264VODOptionsBuilder
+// Used to get and update available encoders
+class VideoTranscodingProfilesManager {
+  private static instance: VideoTranscodingProfilesManager
+
+  // 1 === less priority
+  private readonly encodersPriorities = {
+    video: [
+      { name: 'libx264', priority: 100 }
+    ],
+
+    // Try the first one, if not available try the second one etc
+    audio: [
+      // we favor VBR, if a good AAC encoder is available
+      { name: 'libfdk_aac', priority: 200 },
+      { name: 'aac', priority: 100 }
+    ]
+  }
+
+  private readonly availableEncoders = {
+    vod: {
+      libx264: {
+        default: defaultX264VODOptionsBuilder
+      },
+      aac: {
+        default: defaultAACOptionsBuilder
+      },
+      libfdk_aac: {
+        default: defaultLibFDKAACVODOptionsBuilder
+      }
     },
-    aac: {
-      default: defaultAACOptionsBuilder
-    },
-    libfdk_aac: {
-      default: defaultLibFDKAACVODOptionsBuilder
+    live: {
+      libx264: {
+        default: defaultX264LiveOptionsBuilder
+      },
+      aac: {
+        default: defaultAACOptionsBuilder
+      }
     }
-  },
-  live: {
-    libx264: {
-      default: defaultX264LiveOptionsBuilder
-    },
-    aac: {
-      default: defaultAACOptionsBuilder
+  }
+
+  private constructor () {
+
+  }
+
+  getAvailableEncoders (): AvailableEncoders {
+    const encodersToTry = {
+      video: this.getEncodersByPriority('video'),
+      audio: this.getEncodersByPriority('audio')
     }
+
+    return Object.assign({}, this.availableEncoders, { encodersToTry })
+  }
+
+  getAvailableProfiles (type: 'vod' | 'live') {
+    return this.availableEncoders[type]
+  }
+
+  private getEncodersByPriority (type: 'video' | 'audio') {
+    return this.encodersPriorities[type]
+      .sort((e1, e2) => {
+        if (e1.priority > e2.priority) return -1
+        else if (e1.priority === e2.priority) return 0
+
+        return 1
+      })
+      .map(e => e.name)
+  }
+
+  static get Instance () {
+    return this.instance || (this.instance = new this())
   }
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  availableEncoders
+  VideoTranscodingProfilesManager
 }
 
 // ---------------------------------------------------------------------------

@@ -2,7 +2,7 @@ import { Job } from 'bull'
 import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
-import { FFMPEG_NICE, VIDEO_LIVE, VIDEO_TRANSCODING_ENCODERS } from '@server/initializers/constants'
+import { FFMPEG_NICE, VIDEO_LIVE } from '@server/initializers/constants'
 import { VideoResolution } from '../../shared/models/videos'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
 import { CONFIG } from '../initializers/config'
@@ -46,10 +46,21 @@ export interface EncoderProfile <T> {
 }
 
 export type AvailableEncoders = {
-  [ id in 'live' | 'vod' ]: {
-    [ encoder in 'libx264' | 'aac' | 'libfdk_aac' ]?: EncoderProfile<EncoderOptionsBuilder>
+  live: {
+    [ encoder: string ]: EncoderProfile<EncoderOptionsBuilder>
+  }
+
+  vod: {
+    [ encoder: string ]: EncoderProfile<EncoderOptionsBuilder>
+  }
+
+  encodersToTry: {
+    video: string[]
+    audio: string[]
   }
 }
+
+type StreamType = 'audio' | 'video'
 
 // ---------------------------------------------------------------------------
 // Image manipulation
@@ -243,8 +254,10 @@ async function getLiveTranscodingCommand (options: {
 
     const baseEncoderBuilderParams = {
       input,
+
       availableEncoders,
       profile,
+
       fps: resolutionFPS,
       resolution,
       streamNum: i,
@@ -252,7 +265,8 @@ async function getLiveTranscodingCommand (options: {
     }
 
     {
-      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType: 'VIDEO' }))
+      const streamType: StreamType = 'video'
+      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType }))
       if (!builderResult) {
         throw new Error('No available live video encoder found')
       }
@@ -268,7 +282,8 @@ async function getLiveTranscodingCommand (options: {
     }
 
     {
-      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType: 'AUDIO' }))
+      const streamType: StreamType = 'audio'
+      const builderResult = await getEncoderBuilderResult(Object.assign({}, baseEncoderBuilderParams, { streamType }))
       if (!builderResult) {
         throw new Error('No available live audio encoder found')
       }
@@ -480,8 +495,11 @@ function getHLSVideoPath (options: HLSTranscodeOptions | HLSFromTSTranscodeOptio
 // Transcoding presets
 // ---------------------------------------------------------------------------
 
+// Run encoder builder depending on available encoders
+// Try encoders by priority: if the encoder is available, run the chosen profile or fallback to the default one
+// If the default one does not exist, check the next encoder
 async function getEncoderBuilderResult (options: {
-  streamType: string
+  streamType: 'video' | 'audio'
   input: string
 
   availableEncoders: AvailableEncoders
@@ -495,17 +513,24 @@ async function getEncoderBuilderResult (options: {
 }) {
   const { availableEncoders, input, profile, resolution, streamType, fps, streamNum, videoType } = options
 
-  const encodersToTry: string[] = VIDEO_TRANSCODING_ENCODERS[streamType]
+  const encodersToTry = availableEncoders.encodersToTry[streamType]
+  const encoders = availableEncoders[videoType]
 
   for (const encoder of encodersToTry) {
-    if (!(await checkFFmpegEncoders()).get(encoder) || !availableEncoders[videoType][encoder]) continue
+    if (!(await checkFFmpegEncoders()).get(encoder) || !encoders[encoder]) continue
 
-    const builderProfiles: EncoderProfile<EncoderOptionsBuilder> = availableEncoders[videoType][encoder]
+    // An object containing available profiles for this encoder
+    const builderProfiles: EncoderProfile<EncoderOptionsBuilder> = encoders[encoder]
     let builder = builderProfiles[profile]
 
     if (!builder) {
       logger.debug('Profile %s for encoder %s not available. Fallback to default.', profile, encoder)
       builder = builderProfiles.default
+
+      if (!builder) {
+        logger.debug('Default profile for encoder %s not available. Try next available encoder.', encoder)
+        continue
+      }
     }
 
     const result = await builder({ input, resolution: resolution, fps, streamNum })
@@ -538,11 +563,11 @@ async function presetVideo (
   // Audio encoder
   const parsedAudio = await getAudioStream(input)
 
-  let streamsToProcess = [ 'AUDIO', 'VIDEO' ]
+  let streamsToProcess: StreamType[] = [ 'audio', 'video' ]
 
   if (!parsedAudio.audioStream) {
     localCommand = localCommand.noAudio()
-    streamsToProcess = [ 'VIDEO' ]
+    streamsToProcess = [ 'audio' ]
   }
 
   for (const streamType of streamsToProcess) {
@@ -564,9 +589,9 @@ async function presetVideo (
 
     logger.debug('Apply ffmpeg params from %s.', builderResult.encoder, builderResult)
 
-    if (streamType === 'VIDEO') {
+    if (streamType === 'video') {
       localCommand.videoCodec(builderResult.encoder)
-    } else if (streamType === 'AUDIO') {
+    } else if (streamType === 'audio') {
       localCommand.audioCodec(builderResult.encoder)
     }
 

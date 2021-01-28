@@ -3,9 +3,9 @@ registerTSPaths()
 
 import * as program from 'commander'
 import * as ffmpeg from 'fluent-ffmpeg'
-import { availableEncoders } from '@server/lib/video-transcoding-profiles'
 import { buildx264VODCommand, runCommand, TranscodeOptions } from '@server/helpers/ffmpeg-utils'
 import { exit } from 'process'
+import { VideoTranscodingProfilesManager } from '@server/lib/video-transcoding-profiles'
 
 program
   .arguments('<path>')
@@ -31,7 +31,7 @@ async function run (path: string, cmd: any) {
     inputPath: path,
     outputPath: '/dev/null',
 
-    availableEncoders,
+    availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
     profile: 'default',
 
     resolution: +cmd.resolution,

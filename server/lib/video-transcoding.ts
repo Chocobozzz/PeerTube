@@ -14,7 +14,7 @@ import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { updateMasterHLSPlaylist, updateSha256VODSegments } from './hls'
 import { generateVideoStreamingPlaylistName, getVideoFilename, getVideoFilePath } from './video-paths'
-import { availableEncoders } from './video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
 
 /**
  *
@@ -41,7 +41,7 @@ async function optimizeOriginalVideofile (video: MVideoWithFile, inputVideoFile:
     inputPath: videoInputPath,
     outputPath: videoTranscodedPath,
 
-    availableEncoders,
+    availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
     profile: 'default',
 
     resolution: inputVideoFile.resolution,
@@ -95,7 +95,7 @@ async function transcodeNewWebTorrentResolution (video: MVideoWithFile, resoluti
       inputPath: videoInputPath,
       outputPath: videoTranscodedPath,
 
-      availableEncoders,
+      availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
       profile: 'default',
 
       resolution,
@@ -107,7 +107,7 @@ async function transcodeNewWebTorrentResolution (video: MVideoWithFile, resoluti
       inputPath: videoInputPath,
       outputPath: videoTranscodedPath,
 
-      availableEncoders,
+      availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
       profile: 'default',
 
       resolution,
@@ -142,7 +142,7 @@ async function mergeAudioVideofile (video: MVideoWithAllFiles, resolution: Video
     inputPath: tmpPreviewPath,
     outputPath: videoTranscodedPath,
 
-    availableEncoders,
+    availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
     profile: 'default',
 
     audioPath: audioInputPath,
@@ -283,7 +283,7 @@ async function generateHlsPlaylistCommon (options: {
     inputPath,
     outputPath,
 
-    availableEncoders,
+    availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
     profile: 'default',
 
     resolution,
