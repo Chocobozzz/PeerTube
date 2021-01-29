@@ -641,10 +641,12 @@ async function uploadVideoAndGetId (options: {
   nsfw?: boolean
   privacy?: VideoPrivacy
   token?: string
+  fixture?: string
 }) {
   const videoAttrs: any = { name: options.videoName }
   if (options.nsfw) videoAttrs.nsfw = options.nsfw
   if (options.privacy) videoAttrs.privacy = options.privacy
+  if (options.fixture) videoAttrs.fixture = options.fixture
 
   const res = await uploadVideo(options.server.url, options.token || options.server.accessToken, videoAttrs)
 

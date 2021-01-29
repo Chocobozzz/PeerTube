@@ -203,10 +203,10 @@ describe('Test transcoding plugins', function () {
     it('Should use the new vod encoders', async function () {
       this.timeout(240000)
 
-      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video', fixture: 'video_short_240p.mp4' })).uuid
       await waitJobs([ server ])
 
-      const path = buildServerDirectory(server, join('videos', videoUUID + '-720.mp4'))
+      const path = buildServerDirectory(server, join('videos', videoUUID + '-240.mp4'))
       const audioProbe = await getAudioStream(path)
       expect(audioProbe.audioStream.codec_name).to.equal('opus')
 

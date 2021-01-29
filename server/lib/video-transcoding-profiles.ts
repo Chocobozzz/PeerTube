@@ -28,6 +28,7 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, reso
 
   return {
     outputOptions: [
+      `-preset veryfast`,
       `-r ${fps}`,
       `-maxrate ${targetBitrate}`,
       `-bufsize ${targetBitrate * 2}`
@@ -40,6 +41,7 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution
 
   return {
     outputOptions: [
+      `-preset veryfast`,
       `${buildStreamSuffix('-r:v', streamNum)} ${fps}`,
       `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`,
       `-maxrate ${targetBitrate}`,
