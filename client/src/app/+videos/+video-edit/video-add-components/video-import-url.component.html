@@ -32,10 +32,13 @@
       ></my-select-options>
     </div>
 
-    <input
-      type="button" i18n-value value="Import"
-      [disabled]="!isTargetUrlValid() || isImportingVideo" (click)="importVideo()"
-    />
+      <input
+        *ngIf="!isImportingVideo" type="button" i18n-value value="Import"
+        [disabled]="!isTargetUrlValid() || isImportingVideo" (click)="importVideo()"
+      />
+
+      <input *ngIf="isImportingVideo" type="button" class="grey-button" i18n-value value="Cancel" 
+        [disabled]="isCanceling" (click)="cancelImport()"/>
   </div>
 </div>
 
@@ -50,7 +53,7 @@
 </div>
 
 <!-- Hidden because we want to load the component -->
-<form [hidden]="!hasImportedVideo" novalidate [formGroup]="form">
+<form [hidden]="!hasImportedVideo || isCanceling" novalidate [formGroup]="form">
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [schedulePublicationPossible]="false"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"

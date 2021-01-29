@@ -1,7 +1,8 @@
-import { map, switchMap } from 'rxjs/operators'
-import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { map, switchMap, takeUntil } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
+import { AuthService, CanComponentDeactivate, ConfirmService, Notifier, ServerService } from '@app/core'
 import { getAbsoluteAPIUrl, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
@@ -18,15 +19,18 @@ import { VideoSend } from './video-send'
     './video-send.scss'
   ]
 })
-export class VideoImportUrlComponent extends VideoSend implements OnInit, CanComponentDeactivate {
+export class VideoImportUrlComponent extends VideoSend implements OnDestroy, OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
+  protected ngUnsubscribe: Subject<void> = new Subject<void>()
 
   targetUrl = ''
 
   isImportingVideo = false
   hasImportedVideo = false
   isUpdatingVideo = false
+  isCanceling = false
+  hasCanceledVideo = false
 
   video: VideoEdit
   error: string
@@ -42,6 +46,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
     private router: Router,
+    private confirmService: ConfirmService,
     private videoImportService: VideoImportService
     ) {
     super()
@@ -59,8 +64,48 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
     return this.targetUrl && this.targetUrl.match(/https?:\/\//)
   }
 
+  ngOnDestroy () {
+    this.ngUnsubscribe.next()
+    this.ngUnsubscribe.complete()
+    return this.ngUnsubscribe.asObservable()
+  }
+
+  async cancelImport () {
+    const res = await this.confirmService.confirm(
+      $localize`Do you really want to cancel the importation ?`,
+      $localize`Cancel`
+    )
+    if (res === false) {
+      this.isCanceling = false
+      return
+    }
+    if (this.hasImportedVideo === false) {
+      this.isCanceling = true
+      this.loadingBar.useRef().complete()
+      this.notifier.info($localize`Video to import is being canceled`)
+    }
+  }
+
+  removeVideo(videoId: number) {
+    this.videoService.removeVideo(videoId)
+    .subscribe(
+      () => {
+        this.isImportingVideo = false
+        this.hasCanceledVideo = true
+
+        this.loadingBar.useRef().complete()
+        this.notifier.success($localize`Video to import canceled`)
+      },
+      error => {
+        this.notifier.error(error.message)
+      }
+    )
+  }
+
   importVideo () {
     this.isImportingVideo = true
+    this.isCanceling = false
+    this.hasCanceledVideo = false
 
     const videoUpdate: VideoUpdate = {
       privacy: VideoPrivacy.PRIVATE,
@@ -75,7 +120,12 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
     this.videoImportService
         .importVideoUrl(this.targetUrl, videoUpdate)
         .pipe(
+          takeUntil(this.ngOnDestroy()),
           switchMap(res => {
+            if (this.isCanceling === true) {
+              this.removeVideo(res.video.id)
+              return
+            }
             return this.videoCaptionService
                 .listCaptions(res.video.id)
                 .pipe(
