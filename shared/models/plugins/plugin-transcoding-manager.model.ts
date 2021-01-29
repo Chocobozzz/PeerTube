@@ -8,4 +8,6 @@ export interface PluginTranscodingManager {
   addLiveEncoderPriority (streamType: 'audio' | 'video', encoder: string, priority: number): void
 
   addVODEncoderPriority (streamType: 'audio' | 'video', encoder: string, priority: number): void
+
+  removeAllProfilesAndEncoderPriorities()
 }

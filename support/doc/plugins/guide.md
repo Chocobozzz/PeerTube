@@ -22,6 +22,7 @@
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
     - [Add custom fields to video form](#add-custom-fields-to-video-form)
+    - [Add new transcoding profiles](#add-new-transcoding-profiles)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
   - [Clone the quickstart repository](#clone-the-quickstart-repository)
@@ -440,7 +441,94 @@ async function register ({
     }
   })
 }
+```
 
+#### Add new transcoding profiles
+
+Adding transcoding profiles allow admins to change ffmpeg encoding parameters and/or encoders.
+A transcoding profile has to be chosen by the admin of the instance using the admin configuration.
+
+```js
+async function register ({
+  transcodingManager
+}) {
+
+  // Adapt bitrate when using libx264 encoder
+  {
+    const builder = (options) => {
+      const { input, resolution, fps, streamNum } = options
+
+      const streamString = streamNum ? ':' + streamNum : ''
+
+      // You can also return a promise
+      return {
+        outputOptions: [
+        // Use a custom bitrate
+          '-b' + streamString + ' 10K'
+        ]
+      }
+    }
+
+    const encoder = 'libx264'
+    const profileName = 'low-quality'
+
+    // Support this profile for VOD transcoding
+    transcodingManager.addVODProfile(encoder, profileName, builder)
+
+    // And/Or support this profile for live transcoding
+    transcodingManager.addLiveProfile(encoder, profileName, builder)
+  }
+
+  {
+    const builder = (options) => {
+      const { streamNum } = options
+
+      const streamString = streamNum ? ':' + streamNum : ''
+
+      // Always copy stream when PeerTube use libfdk_aac or aac encoders
+      return {
+        copy: true
+      }
+    }
+
+    const profileName = 'copy-audio'
+
+    for (const encoder of [ 'libfdk_aac', 'aac' ]) {
+      transcodingManager.addVODProfile(encoder, profileName, builder)
+    }
+  }
+```
+
+PeerTube will try different encoders depending on their priority.
+If the encoder is not available in the current transcoding profile or in ffmpeg, it tries the next one.
+Plugins can change the order of these encoders and add their custom encoders:
+
+```js
+async function register ({
+  transcodingManager
+}) {
+
+  // Adapt bitrate when using libx264 encoder
+  {
+    const builder = () => {
+      return {
+        outputOptions: []
+      }
+    }
+
+    // Support libopus and libvpx-vp9 encoders, just for the example (PeerTube player is only compatible with h264/aac)
+    transcodingManager.addVODProfile('libopus', 'test-vod-profile', builder)
+
+    // Default priorities are ~100
+    // Lowest priority = 1
+    transcodingManager.addVODEncoderPriority('audio', 'libopus', 1000)
+
+    transcodingManager.addVODProfile('libvpx-vp9', 'test-vod-profile', builder)
+    transcodingManager.addVODEncoderPriority('video', 'libvpx-vp9', 1000)
+
+    transcodingManager.addLiveProfile('libopus', 'test-live-profile', builder)
+    transcodingManager.addLiveEncoderPriority('audio', 'libopus', 1000)
+  }
 ```
 
 

@@ -438,6 +438,10 @@ export class RegisterHelpers {
 
       addVODEncoderPriority (streamType: 'audio' | 'video', encoder: string, priority: number) {
         return addEncoderPriority('vod', streamType, encoder, priority)
+      },
+
+      removeAllProfilesAndEncoderPriorities () {
+        return self.reinitTranscodingProfilesAndEncoders(self.npmName)
       }
     }
   }
