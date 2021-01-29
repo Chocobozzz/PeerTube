@@ -202,6 +202,8 @@ function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod'
 }
 
 async function canDoQuickTranscode (path: string): Promise<boolean> {
+  if (CONFIG.TRANSCODING.PROFILE !== 'default') return false
+
   const probe = await ffprobePromise(path)
 
   return await canDoQuickVideoTranscode(path, probe) &&
