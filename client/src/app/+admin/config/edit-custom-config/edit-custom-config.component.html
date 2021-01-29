@@ -897,7 +897,7 @@
                     {{ item }}
                     <ng-container *ngIf="item === 'default'">
                       <br>
-                      <span class="text-muted">x264, targeting maximum device compatibility</span>
+                      <span class="text-muted" i18n>x264, targeting maximum device compatibility</span>
                     </ng-container>
                   </ng-template>
                 </ng-select>
@@ -1046,15 +1046,22 @@
 
                 <div class="form-group mt-4" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() || !isLiveTranscodingEnabled() }">
                   <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
-                  <span class="text-muted ml-1" i18n>New live transcoding profiles can be added by PeerTube plugins</span>
+                  <span class="text-muted ml-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
 
-                  <div class="peertube-select-container">
-                    <select id="liveTranscodingProfile" formControlName="profile" class="form-control">
-                      <option *ngFor="let liveTranscodingProfileOption of getAvailableTranscodingProfile('live')" [value]="liveTranscodingProfileOption">
-                        {{ liveTranscodingProfileOption }}
-                      </option>
-                    </select>
-                  </div>
+                  <ng-select
+                    id="liveTranscodingProfile"
+                    formControlName="profile"
+                    [items]="getAvailableTranscodingProfile('live')"
+                    [clearable]="false"
+                  >
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                      {{ item }}
+                      <ng-container *ngIf="item === 'default'">
+                        <br>
+                        <span class="text-muted" i18n>x264, targeting maximum device compatibility</span>
+                      </ng-container>
+                    </ng-template>
+                  </ng-select>
                   <div *ngIf="formErrors.live.transcoding.profile" class="form-error">{{ formErrors.live.transcoding.profile }}</div>
                 </div>
 
