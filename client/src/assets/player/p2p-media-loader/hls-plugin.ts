@@ -243,30 +243,21 @@ class Html5Hlsjs {
     if (this.errorCounts[ data.type ]) this.errorCounts[ data.type ] += 1
     else this.errorCounts[ data.type ] = 1
 
-    // Implement simple error handling based on hls.js documentation
-    // https://github.com/dailymotion/hls.js/blob/master/API.md#fifth-step-error-handling
-    if (data.fatal) {
-      switch (data.type) {
-        case Hlsjs.ErrorTypes.NETWORK_ERROR:
-          console.info('bubbling network error up to VIDEOJS')
-          error.code = 2
-          this.tech.error = () => error as any
-          this.tech.trigger('error')
-          break
+    if (!data.fatal) return
 
-        case Hlsjs.ErrorTypes.MEDIA_ERROR:
-          error.code = 3
-          this._handleMediaError(error)
-          break
-
-        default:
-          // cannot recover
-          this.hls.destroy()
-          console.info('bubbling error up to VIDEOJS')
-          this.tech.error = () => error as any
-          this.tech.trigger('error')
-          break
-      }
+    if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
+      console.info('bubbling network error up to VIDEOJS')
+      error.code = 2
+      this.tech.error = () => error as any
+      this.tech.trigger('error')
+    } else if (data.type === Hlsjs.ErrorTypes.MEDIA_ERROR && data.details !== 'manifestIncompatibleCodecsError') {
+      error.code = 3
+      this._handleMediaError(error)
+    } else {
+      this.hls.destroy()
+      console.info('bubbling error up to VIDEOJS')
+      this.tech.error = () => error as any
+      this.tech.trigger('error')
     }
   }
 
