@@ -44,12 +44,24 @@ function updateConf (server: ServerInfo, vodProfile: string, liveProfile: string
       },
       webtorrent: {
         enabled: true
+      },
+      resolutions: {
+        '240p': true,
+        '360p': false,
+        '480p': false,
+        '720p': true
       }
     },
     live: {
       transcoding: {
         profile: liveProfile,
-        enabled: true
+        enabled: true,
+        resolutions: {
+          '240p': true,
+          '360p': false,
+          '480p': false,
+          '720p': true
+        }
       }
     }
   })
