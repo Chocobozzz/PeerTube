@@ -516,7 +516,7 @@ async function register ({
       }
     }
 
-    // Support libopus and libvpx-vp9 encoders, just for the example (PeerTube player is only compatible with h264/aac)
+    // Support libopus and libvpx-vp9 encoders (these codecs could be incompatible with the player)
     transcodingManager.addVODProfile('libopus', 'test-vod-profile', builder)
 
     // Default priorities are ~100
