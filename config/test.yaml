@@ -86,6 +86,8 @@ transcoding:
 live:
   enabled: false
 
+  allow_replay: false
+
   rtmp:
     port: 1935
 

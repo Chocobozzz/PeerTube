@@ -14,7 +14,7 @@ rates_limit:
   api:
     # 50 attempts in 10 seconds
     window: 10 seconds
-    max: 100
+    max: 50
   login:
     # 15 attempts in 5 min
     window: 5 minutes
@@ -45,6 +45,7 @@ database:
   pool:
     max: 5
 
+# Redis server for short time storage
 # You can also specify a 'socket' path to a unix socket but first need to
 # comment out hostname and port
 redis:
@@ -53,16 +54,17 @@ redis:
   auth: null
   db: 0
 
+# SMTP server to send emails
 smtp:
   # smtp or sendmail
   transport: smtp
   # Path to sendmail command. Required if you use sendmail transport
   sendmail: null
   hostname: null
-  port: 465
+  port: 465 # If you use StartTLS: 587
   username: null
   password: null
-  tls: true
+  tls: true # If you use StartTLS: false
   disable_starttls: false
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
@@ -96,7 +98,7 @@ storage:
 log:
   level: 'info' # debug/info/warning/error
   rotation:
-    enabled : true
+    enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
     maxFileSize: 12MB
     maxFiles: 20
   anonymizeIP: false
@@ -281,7 +283,7 @@ live:
   # PeerTube will transcode segments in a video file
   # If the user daily/total quota is reached, PeerTube will stop the live
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
-  allow_replay: false
+  allow_replay: true
 
   # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
@@ -328,6 +330,7 @@ auto_blacklist:
     of_users:
       enabled: false
 
+# Instance settings
 instance:
   name: 'PeerTube'
   short_description: 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
@@ -425,7 +428,6 @@ followers:
 followings:
   instance:
     # If you want to automatically follow back new instance followers
-    # Only follows accepted followers (in case you enabled manual followers approbation)
     # If this option is enabled, use the mute feature instead of deleting followings
     # /!\ Don't enable this if you don't have a reactive moderation team /!\
     auto_follow_back:
