@@ -124,8 +124,11 @@ class Html5Hlsjs {
 
     this.videoElement.addEventListener('error', event => {
       let errorTxt: string
-      const mediaError = (event.currentTarget as HTMLVideoElement).error
+      const mediaError = ((event.currentTarget || event.target) as HTMLVideoElement).error
 
+      if (!mediaError) return
+
+      console.log(mediaError)
       switch (mediaError.code) {
         case mediaError.MEDIA_ERR_ABORTED:
           errorTxt = 'You aborted the video playback'
