@@ -1,5 +1,5 @@
 import { mapValues, pick } from 'lodash-es'
-import { Component, ElementRef, ViewChild } from '@angular/core'
+import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
@@ -34,13 +34,14 @@ export class VideoDownloadComponent {
   private numbersPipe: NumberFormatterPipe
 
   constructor (
+    @Inject(LOCALE_ID) private localeId: string,
     private notifier: Notifier,
     private modalService: NgbModal,
     private videoService: VideoService,
     private auth: AuthService
   ) {
     this.bytesPipe = new BytesPipe()
-    this.numbersPipe = new NumberFormatterPipe()
+    this.numbersPipe = new NumberFormatterPipe(this.localeId)
   }
 
   get typeText () {
