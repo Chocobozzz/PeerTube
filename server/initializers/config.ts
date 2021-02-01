@@ -336,8 +336,8 @@ const CONFIG = {
   },
   SEARCH: {
     REMOTE_URI: {
-      USERS: config.get<boolean>('search.remote_uri.users'),
-      ANONYMOUS: config.get<boolean>('search.remote_uri.anonymous')
+      get USERS () { return config.get<boolean>('search.remote_uri.users') },
+      get ANONYMOUS () { return config.get<boolean>('search.remote_uri.anonymous') }
     },
     SEARCH_INDEX: {
       get ENABLED () { return config.get<boolean>('search.search_index.enabled') },
