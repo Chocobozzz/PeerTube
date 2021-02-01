@@ -363,7 +363,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
       categoryOneOf: this.categoryOneOf
     }
 
-    let path = this.router.url
+    let path = this.getUrlWithoutParams()
     if (!path || path === '/') path = this.serverConfig.instance.defaultClientRoute
 
     this.router.navigate([ path ], { queryParams, replaceUrl: true, queryParamsHandling: 'merge' })
@@ -379,5 +379,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
         this.languageOneOf = user.videoLanguages
         this.nsfwPolicy = user.nsfwPolicy
       }))
+  }
+
+  private getUrlWithoutParams () {
+    let urlTree = this.router.parseUrl(this.router.url)
+    urlTree.queryParams = {}
+    return urlTree.toString()
   }
 }
