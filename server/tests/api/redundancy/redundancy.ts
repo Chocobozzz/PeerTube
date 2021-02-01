@@ -24,6 +24,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   unfollow,
+  updateVideo,
   uploadVideo,
   viewVideo,
   wait,
@@ -40,7 +41,7 @@ import { getStats } from '../../../../shared/extra-utils/server/stats'
 import { ActorFollow } from '../../../../shared/models/actors'
 import { VideoRedundancy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../../shared/models/redundancy'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
-import { VideoDetails } from '../../../../shared/models/videos'
+import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -682,12 +683,17 @@ describe('Test videos redundancy', function () {
       await waitUntilLog(servers[0], 'Duplicated ', 5)
       await waitJobs(servers)
 
-      await check2Webseeds()
-      await check1PlaylistRedundancies()
+      await check2Webseeds(video1Server2UUID)
+      await check1PlaylistRedundancies(video1Server2UUID)
       await checkStatsWith1Redundancy(strategy)
 
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 2 server 2' })
+      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 2 server 2', privacy: VideoPrivacy.PRIVATE })
       video2Server2UUID = res.body.video.uuid
+
+      // Wait transcoding before federation
+      await waitJobs(servers)
+
+      await updateVideo(servers[1].url, servers[1].accessToken, video2Server2UUID, { privacy: VideoPrivacy.PUBLIC })
     })
 
     it('Should cache video 2 webseeds on the first video', async function () {
@@ -703,6 +709,7 @@ describe('Test videos redundancy', function () {
         try {
           await check1WebSeed(video1Server2UUID)
           await check0PlaylistRedundancies(video1Server2UUID)
+
           await check2Webseeds(video2Server2UUID)
           await check1PlaylistRedundancies(video2Server2UUID)
 

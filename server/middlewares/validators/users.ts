@@ -7,7 +7,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 import { UserRole } from '../../../shared/models/users'
 import { UserRegister } from '../../../shared/models/users/user-register.model'
 import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
-import { exists, isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isNoInstanceConfigWarningModal,
