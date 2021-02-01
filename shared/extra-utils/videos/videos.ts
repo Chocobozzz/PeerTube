@@ -338,7 +338,7 @@ async function checkVideoFilesWereRemoved (
 
     const files = await readdir(directoryPath)
     for (const file of files) {
-      expect(file).to.not.contain(videoUUID)
+      expect(file, `File ${file} should not exist in ${directoryPath}`).to.not.contain(videoUUID)
     }
   }
 }
