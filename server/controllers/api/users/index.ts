@@ -327,6 +327,7 @@ async function updateUser (req: express.Request, res: express.Response) {
   if (body.videoQuotaDaily !== undefined) userToUpdate.videoQuotaDaily = body.videoQuotaDaily
   if (body.role !== undefined) userToUpdate.role = body.role
   if (body.adminFlags !== undefined) userToUpdate.adminFlags = body.adminFlags
+  if (body.pluginAuth !== undefined) userToUpdate.pluginAuth = body.pluginAuth
 
   const user = await userToUpdate.save()
 

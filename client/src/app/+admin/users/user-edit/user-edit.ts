@@ -42,6 +42,11 @@ export abstract class UserEdit extends FormReactive implements OnInit {
     return forAccount + forChannels
   }
 
+  getAuthPlugins () {
+    return this.serverConfig.plugin.registeredIdAndPassAuths.map(p => p.npmName)
+      .concat(this.serverConfig.plugin.registeredExternalAuths.map(p => p.npmName))
+  }
+
   isInBigView () {
     return this.screenService.getWindowInnerWidth() > 1600
   }

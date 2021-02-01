@@ -716,11 +716,12 @@ describe('Test users', function () {
         emailVerified: true,
         videoQuota: 42,
         role: UserRole.MODERATOR,
-        adminFlags: UserAdminFlag.NONE
+        adminFlags: UserAdminFlag.NONE,
+        pluginAuth: 'toto'
       })
 
       const res = await getUserInformation(server.url, accessToken, userId)
-      const user = res.body
+      const user = res.body as User
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated2@example.com')
@@ -730,6 +731,15 @@ describe('Test users', function () {
       expect(user.roleLabel).to.equal('Moderator')
       expect(user.id).to.be.a('number')
       expect(user.adminFlags).to.equal(UserAdminFlag.NONE)
+      expect(user.pluginAuth).to.equal('toto')
+    })
+
+    it('Should reset the auth plugin', async function () {
+      await updateUser({ url: server.url, userId, accessToken, pluginAuth: null })
+
+      const res = await getUserInformation(server.url, accessToken, userId)
+      const user = res.body as User
+      expect(user.pluginAuth).to.be.null
     })
 
     it('Should have removed the user token', async function () {
