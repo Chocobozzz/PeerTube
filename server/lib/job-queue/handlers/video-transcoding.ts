@@ -130,6 +130,7 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, resolution: numb
   if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && video.hasWebTorrentFiles() && maxQualityFile.resolution === resolution) {
     for (const file of video.VideoFiles) {
       await video.removeFile(file)
+      await video.removeTorrent(file)
       await file.destroy()
     }
 
