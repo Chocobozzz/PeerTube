@@ -119,6 +119,8 @@ async function getUser (usernameOrEmail?: string, password?: string) {
       // This user does not belong to this plugin, skip it
       if (user.pluginAuth !== obj.pluginName) return null
 
+      checkUserValidityOrThrow(user)
+
       return user
     }
   }
@@ -132,7 +134,7 @@ async function getUser (usernameOrEmail?: string, password?: string) {
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) return null
 
-  if (user.blocked) throw new AccessDeniedError('User is blocked.')
+  checkUserValidityOrThrow(user)
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
     throw new AccessDeniedError('User email is not verified.')
@@ -237,4 +239,8 @@ async function createUserFromExternal (pluginAuth: string, options: {
   })
 
   return user
+}
+
+function checkUserValidityOrThrow (user: MUser) {
+  if (user.blocked) throw new AccessDeniedError('User is blocked.')
 }

@@ -4,9 +4,11 @@ import 'mocha'
 import { expect } from 'chai'
 import { User } from '@shared/models/users/user.model'
 import {
+  blockUser,
   getMyUserInformation,
   installPlugin,
   setAccessTokensToServers,
+  unblockUser,
   uninstallPlugin,
   updatePluginSettings,
   uploadVideo,
@@ -17,6 +19,7 @@ import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/ext
 describe('Official plugin auth-ldap', function () {
   let server: ServerInfo
   let accessToken: string
+  let userId: number
 
   before(async function () {
     this.timeout(30000)
@@ -90,10 +93,24 @@ describe('Official plugin auth-ldap', function () {
 
     expect(body.username).to.equal('fry')
     expect(body.email).to.equal('fry@planetexpress.com')
+
+    userId = body.id
   })
 
   it('Should upload a video', async function () {
     await uploadVideo(server.url, accessToken, { name: 'my super video' })
+  })
+
+  it('Should not be able to login if the user is banned', async function () {
+    await blockUser(server.url, userId, server.accessToken)
+
+    await userLogin(server, { username: 'fry@planetexpress.com', password: 'fry' }, 400)
+  })
+
+  it('Should be able to login if the user is unbanned', async function () {
+    await unblockUser(server.url, userId, server.accessToken)
+
+    await userLogin(server, { username: 'fry@planetexpress.com', password: 'fry' })
   })
 
   it('Should not login if the plugin is uninstalled', async function () {
