@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { VideoDetails } from '../../../../shared/models/videos'
+import * as chai from 'chai'
+import { readdir } from 'fs-extra'
+import * as magnetUtil from 'magnet-uri'
+import { join } from 'path'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   checkSegmentHash,
   checkVideoFilesWereRemoved,
@@ -21,29 +24,23 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   unfollow,
-  updateCustomConfig,
-  updateCustomSubConfig,
   uploadVideo,
   viewVideo,
   wait,
   waitUntilLog
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-
-import * as magnetUtil from 'magnet-uri'
 import {
   addVideoRedundancy,
   listVideoRedundancies,
   removeVideoRedundancy,
   updateRedundancy
 } from '../../../../shared/extra-utils/server/redundancy'
-import { ActorFollow } from '../../../../shared/models/actors'
-import { readdir } from 'fs-extra'
-import { join } from 'path'
-import { VideoRedundancy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../../shared/models/redundancy'
 import { getStats } from '../../../../shared/extra-utils/server/stats'
+import { ActorFollow } from '../../../../shared/models/actors'
+import { VideoRedundancy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../../shared/models/redundancy'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { VideoDetails } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -258,11 +255,11 @@ async function checkStatsGlobal (strategy: VideoRedundancyStrategyWithManual) {
   return stat
 }
 
-async function checkStatsWith1Redundancy (strategy: VideoRedundancyStrategyWithManual) {
+async function checkStatsWith1Redundancy (strategy: VideoRedundancyStrategyWithManual, onlyHls = false) {
   const stat = await checkStatsGlobal(strategy)
 
   expect(stat.totalUsed).to.be.at.least(1).and.below(409601)
-  expect(stat.totalVideoFiles).to.equal(4)
+  expect(stat.totalVideoFiles).to.equal(onlyHls ? 4 : 8)
   expect(stat.totalVideos).to.equal(1)
 }
 
@@ -519,7 +516,7 @@ describe('Test videos redundancy', function () {
       await waitJobs(servers)
 
       await check1PlaylistRedundancies()
-      await checkStatsWith1Redundancy(strategy)
+      await checkStatsWith1Redundancy(strategy, true)
     })
 
     it('Should remove the video and the redundancy files', async function () {
@@ -532,6 +529,10 @@ describe('Test videos redundancy', function () {
       for (const server of servers) {
         await checkVideoFilesWereRemoved(video1Server2UUID, server.internalServerNumber)
       }
+    })
+
+    after(async function () {
+      await cleanupTests(servers)
     })
   })
 

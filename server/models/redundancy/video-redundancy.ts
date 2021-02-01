@@ -1,5 +1,5 @@
 import { sample } from 'lodash'
-import { col, FindOptions, fn, literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -36,7 +36,6 @@ import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoFileModel } from '../video/video-file'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
-import { forEachSeries } from 'async'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
