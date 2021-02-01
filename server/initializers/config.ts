@@ -72,6 +72,11 @@ const CONFIG = {
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides'))
   },
+  S3: {
+    HOST: config.get<string>('s3.host'),
+    KEY_ID: config.get<string>('s3.key_id'),
+    KEY_SECRET: config.get<string>('s3.key_secret')
+  },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
     WS: config.get<boolean>('webserver.https') === true ? 'wss' : 'ws',
