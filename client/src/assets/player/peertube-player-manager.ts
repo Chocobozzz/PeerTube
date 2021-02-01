@@ -223,7 +223,7 @@ export class PeertubePlayerManager {
     const plugins: VideoJSPluginOptions = {
       peertube: {
         mode,
-        autoplay, // Use peertube plugin autoplay because we get the file by webtorrent
+        autoplay, // Use peertube plugin autoplay because we could get the file by webtorrent
         videoViewUrl: commonOptions.videoViewUrl,
         videoDuration: commonOptions.videoDuration,
         userWatching: commonOptions.userWatching,

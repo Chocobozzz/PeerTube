@@ -10,6 +10,7 @@ import { labelFormatter } from '../server/helpers/logger'
 import { CONFIG } from '../server/initializers/config'
 import { mtimeSortFilesDesc } from '../shared/core-utils/logs/logs'
 import { inspect } from 'util'
+import { format as sqlFormat } from 'sql-formatter'
 
 program
   .option('-l, --level [level]', 'Level log (debug/info/warn/error)')
@@ -21,7 +22,8 @@ const excludedKeys = {
   message: true,
   splat: true,
   timestamp: true,
-  label: true
+  label: true,
+  sql: true
 }
 function keysExcluder (key, value) {
   return excludedKeys[key] === true ? undefined : value
@@ -31,6 +33,17 @@ const loggerFormat = winston.format.printf((info) => {
   let additionalInfos = JSON.stringify(info, keysExcluder, 2)
   if (additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
+
+  if (info.sql) {
+    if (CONFIG.LOG.PRETTIFY_SQL) {
+      additionalInfos += '\n' + sqlFormat(info.sql, {
+        language: 'sql',
+        ident: '  '
+      })
+    } else {
+      additionalInfos += ' - ' + info.sql
+    }
+  }
 
   return `[${info.label}] ${toTimeFormat(info.timestamp)} ${info.level}: ${info.message}${additionalInfos}`
 })
