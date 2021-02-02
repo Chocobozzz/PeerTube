@@ -123,7 +123,7 @@ describe('Test HLS videos', function () {
 
       await waitJobs(servers)
 
-      await checkHlsPlaylist(servers, videoAudioUUID, hlsOnly, [ DEFAULT_AUDIO_RESOLUTION ])
+      await checkHlsPlaylist(servers, videoAudioUUID, hlsOnly, [ DEFAULT_AUDIO_RESOLUTION, 360, 240 ])
     })
 
     it('Should update the video', async function () {
