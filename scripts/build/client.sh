@@ -43,7 +43,12 @@ rm -rf ./dist ./compiled
 
 # Don't build other languages if --light arg is provided
 if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
-    npm run ng build -- --prod --output-path "dist/build"
+    additionalParams=""
+    if [ ! -z ${1+x} ] && [ "$1" == "--source-map" ]; then
+        additionalParams="--sourceMap=true"
+    fi
+
+    npm run ng build -- --prod --output-path "dist/build" $additionalParams
 
     for key in "${!languages[@]}"; do
         lang=${languages[$key]}
