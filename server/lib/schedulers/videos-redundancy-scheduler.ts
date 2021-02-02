@@ -301,7 +301,15 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       const toDelete = await VideoRedundancyModel.loadOldestLocalExpired(redundancy.strategy, redundancy.minLifetime)
       if (!toDelete) return
 
-      await removeVideoRedundancy(toDelete)
+      const videoId = toDelete.VideoFile
+        ? toDelete.VideoFile.videoId
+        : toDelete.VideoStreamingPlaylist.videoId
+
+      const redundancies = await VideoRedundancyModel.listLocalByVideoId(videoId)
+
+      for (const redundancy of redundancies) {
+        await removeVideoRedundancy(redundancy)
+      }
     }
   }
 

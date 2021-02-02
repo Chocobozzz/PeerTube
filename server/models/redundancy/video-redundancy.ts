@@ -185,6 +185,57 @@ export class VideoRedundancyModel extends Model {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
+  static async listLocalByVideoId (videoId: number): Promise<MVideoRedundancyVideo[]> {
+    const actor = await getServerActor()
+
+    const queryStreamingPlaylist = {
+      where: {
+        actorId: actor.id
+      },
+      include: [
+        {
+          model: VideoStreamingPlaylistModel.unscoped(),
+          required: true,
+          include: [
+            {
+              model: VideoModel.unscoped(),
+              required: true,
+              where: {
+                id: videoId
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    const queryFiles = {
+      where: {
+        actorId: actor.id
+      },
+      include: [
+        {
+          model: VideoFileModel,
+          required: true,
+          include: [
+            {
+              model: VideoModel,
+              required: true,
+              where: {
+                id: videoId
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    return Promise.all([
+      VideoRedundancyModel.findAll(queryStreamingPlaylist),
+      VideoRedundancyModel.findAll(queryFiles)
+    ]).then(([ r1, r2 ]) => r1.concat(r2))
+  }
+
   static async loadLocalByStreamingPlaylistId (videoStreamingPlaylistId: number): Promise<MVideoRedundancyVideo> {
     const actor = await getServerActor()
 
