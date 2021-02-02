@@ -1826,7 +1826,7 @@ export class VideoModel extends Model {
   }
 
   generateThumbnailName () {
-    return this.uuid + '.jpg'
+    return this.uuid + '_' + +((new Date()).getTime() / 1000) + '.jpg'
   }
 
   getMiniature () {
@@ -1836,7 +1836,7 @@ export class VideoModel extends Model {
   }
 
   generatePreviewName () {
-    return this.uuid + '.jpg'
+    return this.uuid + '_' + +((new Date()).getTime() / 1000) + '.jpg'
   }
 
   hasPreview () {

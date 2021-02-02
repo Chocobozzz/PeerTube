@@ -1,6 +1,7 @@
 import { join } from 'path'
 import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
+import { ThumbnailModel } from '../../models/video/thumbnail'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
 import { doRequestAndSaveToFile } from '@server/helpers/requests'
 
@@ -16,13 +17,14 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
     return this.instance || (this.instance = new this())
   }
 
-  async getFilePathImpl (videoUUID: string) {
-    const video = await VideoModel.loadByUUID(videoUUID)
+  async getFilePathImpl (filename: string) {
+    const { videoId } = await ThumbnailModel.loadByName(filename)
+    const video = await VideoModel.load(videoId)
     if (!video) return undefined
 
     if (video.isOwned()) return { isOwned: true, path: video.getPreview().getPath() }
 
-    return this.loadRemoteFile(videoUUID)
+    return this.loadRemoteFile(video.uuid)
   }
 
   protected async loadRemoteFile (key: string) {
