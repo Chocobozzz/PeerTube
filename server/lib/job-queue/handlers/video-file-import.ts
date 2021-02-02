@@ -23,10 +23,21 @@ async function processVideoFileImport (job: Bull.Job) {
     return undefined
   }
 
+  const data = await getVideoFileResolution(payload.filePath)
+
   await updateVideoFile(video, payload.filePath)
 
   const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
-  await onNewWebTorrentFileResolution(video, user)
+
+  const newResolutionPayload = {
+    type: 'new-resolution-to-webtorrent' as 'new-resolution-to-webtorrent',
+    videoUUID: video.uuid,
+    resolution: data.videoFileResolution,
+    isPortraitMode: data.isPortraitMode,
+    copyCodecs: false,
+    isNewVideo: false
+  }
+  await onNewWebTorrentFileResolution(video, user, newResolutionPayload)
 
   return video
 }

@@ -189,7 +189,7 @@ async function onVideoFileOptimizer (
 async function onNewWebTorrentFileResolution (
   video: MVideoUUID,
   user: MUserId,
-  payload?: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload
+  payload: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload
 ) {
   await publishAndFederateIfNeeded(video)
 

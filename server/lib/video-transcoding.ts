@@ -334,9 +334,9 @@ async function generateHlsPlaylistCommon (options: {
 
   // Move playlist file
   const playlistPath = join(baseHlsDirectory, playlistFilename)
-  await move(playlistFileTranscodePath, playlistPath)
+  await move(playlistFileTranscodePath, playlistPath, { overwrite: true })
   // Move video file
-  await move(join(videoTranscodedBasePath, videoFilename), videoFilePath)
+  await move(join(videoTranscodedBasePath, videoFilename), videoFilePath, { overwrite: true })
   // Cleanup directory
   await remove(videoTranscodedBasePath)
 
