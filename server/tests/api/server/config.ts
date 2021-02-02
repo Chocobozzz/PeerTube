@@ -375,7 +375,7 @@ describe('Test config', function () {
       trending: {
         videos: {
           algorithms: {
-            enabled: [ 'hot', 'most-viewed', 'most-liked' ],
+            enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
             default: 'hot'
           }
         }

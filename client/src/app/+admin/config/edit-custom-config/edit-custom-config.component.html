@@ -271,6 +271,7 @@
                   <option i18n value="/videos/overview">Discover videos</option>
                   <optgroup i18n-label label="Trending pages">
                     <option i18n value="/videos/trending">Default trending page</option>
+                    <option i18n value="/videos/trending?alg=best" [disabled]="!trendingVideosAlgorithmsEnabledIncludes('best')">Best videos</option>
                     <option i18n value="/videos/trending?alg=hot" [disabled]="!trendingVideosAlgorithmsEnabledIncludes('hot')">Hot videos</option>
                     <option i18n value="/videos/trending?alg=most-viewed" [disabled]="!trendingVideosAlgorithmsEnabledIncludes('most-viewed')">Most viewed videos</option>
                     <option i18n value="/videos/trending?alg=most-liked" [disabled]="!trendingVideosAlgorithmsEnabledIncludes('most-liked')">Most liked videos</option>
@@ -288,6 +289,7 @@
                   <label i18n for="trendingVideosAlgorithmsDefault">Default trending page</label>
                   <div class="peertube-select-container">
                     <select id="trendingVideosAlgorithmsDefault" formControlName="default" class="form-control">
+                      <option i18n value="best">Best videos</option>
                       <option i18n value="hot">Hot videos</option>
                       <option i18n value="most-viewed">Most viewed videos</option>
                       <option i18n value="most-liked">Most liked videos</option>

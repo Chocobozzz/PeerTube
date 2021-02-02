@@ -164,7 +164,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
     trending: {
       videos: {
         algorithms: {
-          enabled: [ 'hot', 'most-viewed', 'most-liked' ],
+          enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
           default: 'hot'
         }
       }

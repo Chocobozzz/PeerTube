@@ -108,7 +108,8 @@ trending:
     interval_days: 7 # Compute trending videos for the last x days
     algorithms:
       enabled:
-        - 'hot' # adaptation of the Reddit 'Hot' algorithm
+        - 'best' # adaptation of Reddit's 'Best' algorithm (Hot minus History)
+        - 'hot' # adaptation of Reddit's 'Hot' algorithm
         - 'most-viewed' # default, used initially by PeerTube as the trending page
         - 'most-liked'
       default: 'most-viewed'

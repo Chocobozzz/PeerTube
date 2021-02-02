@@ -72,7 +72,7 @@ const SORTABLE_COLUMNS = {
   FOLLOWERS: [ 'createdAt', 'state', 'score' ],
   FOLLOWING: [ 'createdAt', 'redundancyAllowed', 'state' ],
 
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot' ],
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
 
   // Don't forget to update peertube-search-index with the same values
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],

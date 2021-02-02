@@ -131,7 +131,7 @@ export class ServerService {
       videos: {
         intervalDays: 0,
         algorithms: {
-          enabled: [ 'hot', 'most-viewed', 'most-liked' ],
+          enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
           default: 'most-viewed'
         }
       }
