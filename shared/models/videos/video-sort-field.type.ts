@@ -8,4 +8,5 @@ export type VideoSortField =
 
   // trending sorts
   'trending' | '-trending' |
-  'hot' | '-hot'
+  'hot' | '-hot' |
+  'best' | '-best'

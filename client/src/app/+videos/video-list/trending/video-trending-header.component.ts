@@ -36,6 +36,13 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
 
     this.buttons = [
       {
+        label: $localize`:A variant of Trending videos based on the number of recent interactions, minus user history:Best`,
+        iconName: 'award',
+        value: 'best',
+        tooltip: $localize`Videos totalizing the most interactions for recent videos, minus user history`,
+        hidden: true
+      },
+      {
         label: $localize`:A variant of Trending videos based on the number of recent interactions:Hot`,
         iconName: 'flame',
         value: 'hot',

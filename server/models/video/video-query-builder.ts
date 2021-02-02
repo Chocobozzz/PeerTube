@@ -31,8 +31,8 @@ export type BuildVideosQueryOptions = {
 
   videoPlaylistId?: number
 
+  trendingAlgorithm?: string // best, hot, or any other algorithm implemented
   trendingDays?: number
-  hot?: boolean
 
   user?: MUserAccountId
   historyOfUser?: MUserId
@@ -252,7 +252,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
       attributes.push('COALESCE(SUM("videoView"."views"), 0) AS "score"')
 
       group = 'GROUP BY "video"."id"'
-    } else if (options.hot) {
+    } else if ([ 'best', 'hot' ].includes(options.trendingAlgorithm)) {
       /**
        * "Hotness" is a measure based on absolute view/comment/like/dislike numbers,
        * with fixed weights only applied to their log values.
@@ -269,28 +269,39 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
        */
       const weights = {
         like: 3,
-        dislike: 3,
+        dislike: -3,
         view: 1 / 12,
-        comment: 2 // a comment takes more time than a like to do, but can be done multiple times
+        comment: 2, // a comment takes more time than a like to do, but can be done multiple times
+        history: -2
       }
 
       joins.push('LEFT JOIN "videoComment" ON "video"."id" = "videoComment"."videoId"')
 
-      attributes.push(
+      let attribute =
         `LOG(GREATEST(1, "video"."likes" - 1)) * ${weights.like} ` + // likes (+)
-        `- LOG(GREATEST(1, "video"."dislikes" - 1)) * ${weights.dislike} ` + // dislikes (-)
+        `+ LOG(GREATEST(1, "video"."dislikes" - 1)) * ${weights.dislike} ` + // dislikes (-)
         `+ LOG("video"."views" + 1) * ${weights.view} ` + // views (+)
         `+ LOG(GREATEST(1, COUNT(DISTINCT "videoComment"."id"))) * ${weights.comment} ` + // comments (+)
-        '+ (SELECT EXTRACT(epoch FROM "video"."publishedAt") / 47000) ' + // base score (in number of half-days)
-        'AS "score"'
-      )
+        '+ (SELECT EXTRACT(epoch FROM "video"."publishedAt") / 47000) ' // base score (in number of half-days)
+
+      if (options.trendingAlgorithm === 'best' && options.user) {
+        joins.push(
+          'LEFT JOIN "userVideoHistory" ON "video"."id" = "userVideoHistory"."videoId" AND "userVideoHistory"."userId" = :bestUser'
+        )
+        replacements.bestUser = options.user.id
+
+        attribute += `+ POWER(COUNT(DISTINCT "userVideoHistory"."id"), 2.0) * ${weights.history} `
+      }
+
+      attribute += 'AS "score"'
+      attributes.push(attribute)
 
       group = 'GROUP BY "video"."id"'
     }
   }
 
   if (options.historyOfUser) {
-    joins.push('INNER JOIN "userVideoHistory" on "video"."id" = "userVideoHistory"."videoId"')
+    joins.push('INNER JOIN "userVideoHistory" ON "video"."id" = "userVideoHistory"."videoId"')
 
     and.push('"userVideoHistory"."userId" = :historyOfUser')
     replacements.historyOfUser = options.historyOfUser.id
@@ -410,7 +421,7 @@ function buildOrder (value: string) {
 
   if (field.toLowerCase() === 'random') return 'ORDER BY RANDOM()'
 
-  if ([ 'trending', 'hot' ].includes(field.toLowerCase())) { // Sort by aggregation
+  if ([ 'trending', 'hot', 'best' ].includes(field.toLowerCase())) { // Sort by aggregation
     return `ORDER BY "score" ${direction}, "video"."views" ${direction}`
   }
 
