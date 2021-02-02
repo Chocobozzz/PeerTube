@@ -36,6 +36,10 @@ my-input-toggle-hidden {
 .filters {
   margin-top: 30px;
 
+  .advanced-filters.show {
+    overflow: visible !important;
+  }
+
   .advanced-filters-button {
     display: flex;
     justify-content: center;

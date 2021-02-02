@@ -12,6 +12,7 @@ import {
   Notifier,
   PeerTubeSocket,
   RestExtractor,
+  ScreenService,
   ServerService,
   UserService
 } from '@app/core'
@@ -126,14 +127,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private hotkeysService: HotkeysService,
     private hooks: HooksService,
     private peertubeSocket: PeerTubeSocket,
+    private screenService: ScreenService,
     private location: PlatformLocation,
     @Inject(LOCALE_ID) private localeId: string
-  ) {
-    this.tooltipLike = $localize`Like this video`
-    this.tooltipDislike = $localize`Dislike this video`
-    this.tooltipSupport = $localize`Support options for this video`
-    this.tooltipSaveToPlaylist = $localize`Save to playlist`
-  }
+  ) { }
 
   get user () {
     return this.authService.getUser()
@@ -144,6 +141,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit () {
+    // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
+    if (this.user || !this.screenService.isInMobileView()) {
+      this.tooltipLike = $localize`Like this video`
+      this.tooltipDislike = $localize`Dislike this video`
+      this.tooltipSupport = $localize`Support options for this video`
+      this.tooltipSaveToPlaylist = $localize`Save to playlist`
+    }
+
     PeertubePlayerManager.initState()
 
     this.serverConfig = this.serverService.getTmpConfig()
