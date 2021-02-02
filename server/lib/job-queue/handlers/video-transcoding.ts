@@ -111,6 +111,8 @@ async function handleWebTorrentMergeAudioJob (job: Bull.Job, payload: MergeAudio
   await mergeAudioVideofile(video, payload.resolution, job)
 
   await retryTransactionWrapper(onNewWebTorrentFileResolution, video, user, payload)
+
+  await createLowerResolutionsJobs(video, user, payload.resolution, false)
 }
 
 async function handleWebTorrentOptimizeJob (job: Bull.Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
