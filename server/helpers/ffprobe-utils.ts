@@ -262,6 +262,10 @@ async function canDoQuickAudioTranscode (path: string, probe?: ffmpeg.FfprobeDat
   const maxAudioBitrate = getMaxAudioBitrate('aac', audioBitrate)
   if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
 
+  const channelLayout = parsedAudio.audioStream['channel_layout']
+  // Causes playback issues with Chrome
+  if (!channelLayout || channelLayout === 'unknown') return false
+
   return true
 }
 
