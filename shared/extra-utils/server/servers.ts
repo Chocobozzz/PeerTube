@@ -272,8 +272,12 @@ async function reRunServer (server: ServerInfo, configOverride?: any) {
   return server
 }
 
-function checkTmpIsEmpty (server: ServerInfo) {
-  return checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css' ])
+async function checkTmpIsEmpty (server: ServerInfo) {
+  await checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css', 'hls' ])
+
+  if (await pathExists(join('test' + server.internalServerNumber, 'tmp', 'hls'))) {
+    await checkDirectoryIsEmpty(server, 'tmp/hls')
+  }
 }
 
 async function checkDirectoryIsEmpty (server: ServerInfo, directory: string, exceptions: string[] = []) {
