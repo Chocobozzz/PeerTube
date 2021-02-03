@@ -18,6 +18,12 @@
       .icon-logo {
         background-image: url(/client/assets/images/logo.svg?[logoContentHash]);
       }
+      .script-disclaimer {
+        display: block;
+        font-size: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
     </style>
 
     <!-- base url -->
@@ -37,11 +43,23 @@
   <body id="custom-css">
 
     <noscript>
-      <p>It seems you are either <strong>blocking or disabling Javascript</strong> on your browser, and we totally get that. However this endpoint uses Angular, so the front end is in full JavaScript and won't work without it.</p>
+      <div class="script-disclaimer">
+        <h1>PeerTube</h1>
 
-      <p>There might be numerous reasons you refuse to use JavaScript. If it just has to do with security (or lack thereof) of JavaScript-based web applications, then depending on your threat menace you might want to go through the code running on the node you are trying to access, and look for security audits.</p>
+        <h2>JavaScript required</h2>
 
-      <p>There are other non JS-based unofficial clients to access PeerTube. You can find a list maintained by the PeerTube project in <a href="https://framagit.org/framasoft/peertube/documentation/-/raw/master/use-third-party-application.md">the thid-party applications section</a>. You can also develop your own as our code is open source and libre software under the <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" target="_blank" rel="noopener">GNU AGPLv3.0</a> and documented on <a href="https://docs.joinpeertube.org/api-rest-reference.html">docs.joinpeertube.org</a>.</p>
+        <p>It seems you've either blocked or disabled JavaScript in your web browser. We totally get that. However, this frontend won't work without it.</p>
+
+        <p>If you are concerned about the security and privacy (or lack thereof) of JavaScript web applications, you may like to review the source code of the instance you're accessing, or look for security audits.</p>
+
+        <h2>Your options</h2>
+
+        <ul>
+          <li>Allow JavaScript in your browser</li>
+          <li><a href="https://framagit.org/framasoft/peertube/documentation/-/raw/master/use-third-party-application.md">Use a third-party application to browse</a></li>
+          <li>Review the source code on <a href="https://github.com/Chocobozzz/PeerTube">GitHub</a> or <a href="https://framagit.org/framasoft/peertube/PeerTube">Framasoft's GitLab</a>
+        </ul>
+      </div>
     </noscript>
 
     <div id="incompatible-browser" class="alert alert-danger" style="display: none">
