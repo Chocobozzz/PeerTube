@@ -88,7 +88,7 @@ export class PeerTubeEmbed {
       .then((res: Response) => {
         if (res.status !== HttpStatusCode.UNAUTHORIZED_401) return res
 
-        const refreshingTokenPromise = new Promise((resolve, reject) => {
+        const refreshingTokenPromise = new Promise<void>((resolve, reject) => {
           const clientId: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
           const clientSecret: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
 

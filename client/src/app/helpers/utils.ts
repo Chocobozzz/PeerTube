@@ -24,7 +24,7 @@ function populateAsyncUserVideoChannels (
   authService: AuthService,
   channel: SelectChannelItem[]
 ) {
-  return new Promise(res => {
+  return new Promise<void>(res => {
     authService.userInformationLoaded
       .subscribe(
         () => {

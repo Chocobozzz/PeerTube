@@ -22,7 +22,7 @@ module.exports = function () {
        */
       extensions: [ '.ts', '.js', '.json', '.scss' ],
 
-      modules: [ helpers.root('src'), helpers.root('node_modules') ],
+      modules: [ helpers.root('src'), 'node_modules' ],
 
       alias: {
         'video.js$': path.resolve('node_modules/video.js/core.js'),
