@@ -71,12 +71,12 @@ body {
   background-color: pvar(--mainHoverColor);
 }
 
+noscript,
 #incompatible-browser {
-  display: none;
-  text-align: center;
-  position: absolute;
-  width: 100%;
-  top: 45%;
+  display: block;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 1rem auto;
 }
 
 strong {
