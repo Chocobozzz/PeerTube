@@ -195,7 +195,7 @@ async function updateYoutubeDLBinary () {
 
   await ensureDir(binDirectory)
 
-  return new Promise(res => {
+  return new Promise<void>(res => {
     request.get(url, { followRedirect: false }, (err, result) => {
       if (err) {
         logger.error('Cannot update youtube-dl.', { err })

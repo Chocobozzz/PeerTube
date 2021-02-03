@@ -12,12 +12,14 @@ program
   .option('-p, --plugin-path [pluginPath]', 'Path of the plugin you want to install')
   .parse(process.argv)
 
-if (!program['npmName'] && !program['pluginPath']) {
+const options = program.opts()
+
+if (!options.npmName && !options.pluginPath) {
   console.error('You need to specify a plugin name with the desired version, or a plugin path.')
   process.exit(-1)
 }
 
-if (program['pluginPath'] && !isAbsolute(program['pluginPath'])) {
+if (options.pluginPath && !isAbsolute(options.pluginPath)) {
   console.error('Plugin path should be absolute.')
   process.exit(-1)
 }
@@ -32,6 +34,6 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  const toInstall = program['npmName'] || program['pluginPath']
-  await PluginManager.Instance.install(toInstall, program['pluginVersion'], !!program['pluginPath'])
+  const toInstall = options.npmName || options.pluginPath
+  await PluginManager.Instance.install(toInstall, options.pluginVersion, !!options.pluginPath)
 }

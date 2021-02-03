@@ -41,6 +41,7 @@ class InboxManager {
 
   addInboxMessage (options: QueueParam) {
     this.inboxQueue.push(options)
+      .catch(err => logger.error('Cannot add options in inbox queue.', { options, err }))
   }
 
   static get Instance () {

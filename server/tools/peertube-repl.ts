@@ -82,7 +82,6 @@ const start = async () => {
   }
   replServer.defineCommand('reset', resetCommand)
   replServer.defineCommand('r', resetCommand)
-
 }
 
 start()

@@ -9,7 +9,9 @@ program
   .option('-n, --npm-name [npmName]', 'Package name to install')
   .parse(process.argv)
 
-if (!program['npmName']) {
+const options = program.opts()
+
+if (!options.npmName) {
   console.error('You need to specify the plugin name.')
   process.exit(-1)
 }
@@ -25,6 +27,6 @@ async function run () {
 
   await initDatabaseModels(true)
 
-  const toUninstall = program['npmName']
+  const toUninstall = options.npmName
   await PluginManager.Instance.uninstall(toUninstall)
 }

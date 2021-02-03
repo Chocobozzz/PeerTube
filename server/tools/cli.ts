@@ -69,23 +69,25 @@ function deleteSettings () {
 }
 
 function getRemoteObjectOrDie (
-  program: any,
+  program: CommanderStatic,
   settings: Settings,
   netrc: Netrc
 ): { url: string, username: string, password: string } {
-  if (!program['url'] || !program['username'] || !program['password']) {
+  const options = program.opts()
+
+  if (!options.url || !options.username || !options.password) {
     // No remote and we don't have program parameters: quit
     if (settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
-      if (!program['url']) console.error('--url field is required.')
-      if (!program['username']) console.error('--username field is required.')
-      if (!program['password']) console.error('--password field is required.')
+      if (!options.url) console.error('--url field is required.')
+      if (!options.username) console.error('--username field is required.')
+      if (!options.password) console.error('--password field is required.')
 
       return process.exit(-1)
     }
 
-    let url: string = program['url']
-    let username: string = program['username']
-    let password: string = program['password']
+    let url: string = options.url
+    let username: string = options.username
+    let password: string = options.password
 
     if (!url && settings.default !== -1) url = settings.remotes[settings.default]
 
@@ -98,9 +100,9 @@ function getRemoteObjectOrDie (
   }
 
   return {
-    url: program['url'],
-    username: program['username'],
-    password: program['password']
+    url: options.url,
+    username: options.username,
+    password: options.password
   }
 }
 
@@ -127,6 +129,8 @@ function buildCommonVideoOptions (command: CommanderStatic) {
 }
 
 async function buildVideoAttributesFromCommander (url: string, command: CommanderStatic, defaultAttributes: any = {}) {
+  const options = command.opts()
+
   const defaultBooleanAttributes = {
     nsfw: false,
     commentsEnabled: true,
@@ -137,8 +141,8 @@ async function buildVideoAttributesFromCommander (url: string, command: Commande
   const booleanAttributes: { [id in keyof typeof defaultBooleanAttributes]: boolean } | {} = {}
 
   for (const key of Object.keys(defaultBooleanAttributes)) {
-    if (command[key] !== undefined) {
-      booleanAttributes[key] = command[key]
+    if (options[key] !== undefined) {
+      booleanAttributes[key] = options[key]
     } else if (defaultAttributes[key] !== undefined) {
       booleanAttributes[key] = defaultAttributes[key]
     } else {
@@ -147,20 +151,20 @@ async function buildVideoAttributesFromCommander (url: string, command: Commande
   }
 
   const videoAttributes = {
-    name: command['videoName'] || defaultAttributes.name,
-    category: command['category'] || defaultAttributes.category || undefined,
-    licence: command['licence'] || defaultAttributes.licence || undefined,
-    language: command['language'] || defaultAttributes.language || undefined,
-    privacy: command['privacy'] || defaultAttributes.privacy || VideoPrivacy.PUBLIC,
-    support: command['support'] || defaultAttributes.support || undefined,
-    description: command['videoDescription'] || defaultAttributes.description || undefined,
-    tags: command['tags'] || defaultAttributes.tags || undefined
+    name: options.videoName || defaultAttributes.name,
+    category: options.category || defaultAttributes.category || undefined,
+    licence: options.licence || defaultAttributes.licence || undefined,
+    language: options.language || defaultAttributes.language || undefined,
+    privacy: options.privacy || defaultAttributes.privacy || VideoPrivacy.PUBLIC,
+    support: options.support || defaultAttributes.support || undefined,
+    description: options.videoDescription || defaultAttributes.description || undefined,
+    tags: options.tags || defaultAttributes.tags || undefined
   }
 
   Object.assign(videoAttributes, booleanAttributes)
 
-  if (command['channelName']) {
-    const res = await getVideoChannel(url, command['channelName'])
+  if (options.channelName) {
+    const res = await getVideoChannel(url, options.channelName)
     const videoChannel: VideoChannel = res.body
 
     Object.assign(videoAttributes, { channelId: videoChannel.id })
@@ -173,7 +177,7 @@ async function buildVideoAttributesFromCommander (url: string, command: Commande
   return videoAttributes
 }
 
-function getServerCredentials (program: any) {
+function getServerCredentials (program: CommanderStatic) {
   return Promise.all([ getSettings(), getNetrc() ])
                 .then(([ settings, netrc ]) => {
                   return getRemoteObjectOrDie(program, settings, netrc)

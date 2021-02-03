@@ -61,7 +61,7 @@ const consoleLoggerFormat = winston.format.printf(info => {
     if (CONFIG.LOG.PRETTIFY_SQL) {
       additionalInfos += '\n' + sqlFormat(info.sql, {
         language: 'sql',
-        ident: '  '
+        indent: '  '
       })
     } else {
       additionalInfos += ' - ' + info.sql

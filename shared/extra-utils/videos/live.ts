@@ -98,7 +98,7 @@ function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, fixtureName = '
 }
 
 function waitFfmpegUntilError (command: ffmpeg.FfmpegCommand, successAfterMS = 10000) {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     command.on('error', err => {
       return rej(err)
     })

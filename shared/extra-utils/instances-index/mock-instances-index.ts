@@ -4,7 +4,7 @@ export class MockInstancesIndex {
   private readonly indexInstances: { host: string, createdAt: string }[] = []
 
   initialize () {
-    return new Promise(res => {
+    return new Promise<void>(res => {
       const app = express()
 
       app.use('/', (req: express.Request, res: express.Response, next: express.NextFunction) => {

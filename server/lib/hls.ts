@@ -111,7 +111,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
   logger.info('Importing HLS playlist %s', playlistUrl)
 
-  return new Promise<string>(async (res, rej) => {
+  return new Promise<void>(async (res, rej) => {
     const tmpDirectory = join(CONFIG.STORAGE.TMP_DIR, await generateRandomString(10))
 
     await ensureDir(tmpDirectory)

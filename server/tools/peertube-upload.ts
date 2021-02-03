@@ -22,16 +22,18 @@ command
   .option('-f, --file <file>', 'Video absolute file path')
   .parse(process.argv)
 
+const options = command.opts()
+
 getServerCredentials(command)
   .then(({ url, username, password }) => {
-    if (!program['videoName'] || !program['file']) {
-      if (!program['videoName']) console.error('--video-name is required.')
-      if (!program['file']) console.error('--file is required.')
+    if (!options.videoName || !options.file) {
+      if (!options.videoName) console.error('--video-name is required.')
+      if (!options.file) console.error('--file is required.')
 
       process.exit(-1)
     }
 
-    if (isAbsolute(program['file']) === false) {
+    if (isAbsolute(options.file) === false) {
       console.error('File path should be absolute.')
       process.exit(-1)
     }
@@ -46,21 +48,21 @@ getServerCredentials(command)
 async function run (url: string, username: string, password: string) {
   const accessToken = await getAccessToken(url, username, password)
 
-  await access(program['file'], constants.F_OK)
+  await access(options.file, constants.F_OK)
 
-  console.log('Uploading %s video...', program['videoName'])
+  console.log('Uploading %s video...', options.videoName)
 
   const videoAttributes = await buildVideoAttributesFromCommander(url, program)
 
   Object.assign(videoAttributes, {
-    fixture: program['file'],
-    thumbnailfile: program['thumbnail'],
-    previewfile: program['preview']
+    fixture: options.file,
+    thumbnailfile: options.thumbnail,
+    previewfile: options.preview
   })
 
   try {
     await uploadVideo(url, accessToken, videoAttributes)
-    console.log(`Video ${program['videoName']} uploaded.`)
+    console.log(`Video ${options.videoName} uploaded.`)
     process.exit(0)
   } catch (err) {
     console.error(require('util').inspect(err))

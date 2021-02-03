@@ -82,9 +82,9 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     account: video.VideoChannel.Account.toFormattedSummaryJSON(),
     channel: video.VideoChannel.toFormattedSummaryJSON(),
 
-    userHistory: userHistory ? {
-      currentTime: userHistory.currentTime
-    } : undefined,
+    userHistory: userHistory
+      ? { currentTime: userHistory.currentTime }
+      : undefined,
 
     // Can be added by external plugins
     pluginData: (video as any).pluginData

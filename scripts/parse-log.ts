@@ -17,6 +17,8 @@ program
   .option('-f, --files [file...]', 'Files to parse. If not provided, the script will parse the latest log file from config)')
   .parse(process.argv)
 
+const options = program.opts()
+
 const excludedKeys = {
   level: true,
   message: true,
@@ -38,7 +40,7 @@ const loggerFormat = winston.format.printf((info) => {
     if (CONFIG.LOG.PRETTIFY_SQL) {
       additionalInfos += '\n' + sqlFormat(info.sql, {
         language: 'sql',
-        ident: '  '
+        indent: '  '
       })
     } else {
       additionalInfos += ' - ' + info.sql
@@ -51,7 +53,7 @@ const loggerFormat = winston.format.printf((info) => {
 const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
-      level: program['level'] || 'debug',
+      level: options.level || 'debug',
       stderrLevels: [],
       format: winston.format.combine(
         winston.format.splat(),
@@ -76,7 +78,7 @@ run()
   .catch(err => console.error(err))
 
 function run () {
-  return new Promise(async res => {
+  return new Promise<void>(async res => {
     const files = await getFiles()
 
     for (const file of files) {
@@ -114,7 +116,7 @@ async function getNewestFile (files: string[], basePath: string) {
 }
 
 async function getFiles () {
-  if (program['files']) return program['files']
+  if (options.files) return options.files
 
   const logFiles = await readdir(CONFIG.STORAGE.LOG_DIR)
 

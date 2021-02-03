@@ -14,7 +14,7 @@ export class MockBlocklist {
   private server: Server
 
   initialize () {
-    return new Promise(res => {
+    return new Promise<void>(res => {
       const app = express()
 
       app.get('/blocklist', (req: express.Request, res: express.Response) => {

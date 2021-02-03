@@ -21,19 +21,21 @@ function reportAbuse (options: {
 }) {
   const path = '/api/v1/abuses'
 
-  const video = options.videoId ? {
-    id: options.videoId,
-    startAt: options.startAt,
-    endAt: options.endAt
-  } : undefined
+  const video = options.videoId
+    ? {
+      id: options.videoId,
+      startAt: options.startAt,
+      endAt: options.endAt
+    }
+    : undefined
 
-  const comment = options.commentId ? {
-    id: options.commentId
-  } : undefined
+  const comment = options.commentId
+    ? { id: options.commentId }
+    : undefined
 
-  const account = options.accountId ? {
-    id: options.accountId
-  } : undefined
+  const account = options.accountId
+    ? { id: options.accountId }
+    : undefined
 
   const body = {
     account,

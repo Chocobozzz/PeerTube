@@ -14,12 +14,14 @@ program
   .option('--generate-hls', 'Generate HLS playlist')
   .parse(process.argv)
 
-if (program['video'] === undefined) {
+const options = program.opts()
+
+if (options.video === undefined) {
   console.error('All parameters are mandatory.')
   process.exit(-1)
 }
 
-if (program.resolution !== undefined && Number.isNaN(+program.resolution)) {
+if (options.resolution !== undefined && Number.isNaN(+options.resolution)) {
   console.error('The resolution must be an integer (example: 1080).')
   process.exit(-1)
 }
@@ -34,15 +36,15 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(program['video'])
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(options.video)
   if (!video) throw new Error('Video not found.')
 
   const dataInput: VideoTranscodingPayload[] = []
   const { videoFileResolution } = await video.getMaxQualityResolution()
 
-  if (program.generateHls) {
-    const resolutionsEnabled = program.resolution
-      ? [ program.resolution ]
+  if (options.generateHls) {
+    const resolutionsEnabled = options.resolution
+      ? [ options.resolution ]
       : computeResolutionsToTranscode(videoFileResolution, 'vod').concat([ videoFileResolution ])
 
     for (const resolution of resolutionsEnabled) {
@@ -54,12 +56,12 @@ async function run () {
         copyCodecs: false
       })
     }
-  } else if (program.resolution !== undefined) {
+  } else if (options.resolution !== undefined) {
     dataInput.push({
       type: 'new-resolution-to-webtorrent',
       videoUUID: video.uuid,
       isNewVideo: false,
-      resolution: program.resolution
+      resolution: options.resolution
     })
   } else {
     dataInput.push({

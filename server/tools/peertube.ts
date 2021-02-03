@@ -69,17 +69,12 @@ getSettings()
       : 'instance ' + settings.remotes[settings.default] + ' selected'
 
     program
-      .on('--help', function () {
-        console.log()
-        console.log('  State: ' + state)
-        console.log()
-        console.log('  Examples:')
-        console.log()
-        console.log('    $ peertube auth add -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"')
-        console.log('    $ peertube up <videoFile>')
-        console.log('    $ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10')
-        console.log()
-      })
+      .addHelpText('after', '\n\n  State: ' + state + '\n\n' +
+        '  Examples:\n\n' +
+        '    $ peertube auth add -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"\n' +
+        '    $ peertube up <videoFile>\n' +
+        '    $ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10\n'
+      )
       .parse(process.argv)
   })
   .catch(err => console.error(err))

@@ -49,7 +49,7 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
 }
 
 function authenticatePromiseIfNeeded (req: express.Request, res: express.Response, authenticateInQuery = false) {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     // Already authenticated? (or tried to)
     if (res.locals.oauth?.token.User) return resolve()
 

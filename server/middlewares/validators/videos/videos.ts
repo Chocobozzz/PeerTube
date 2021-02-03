@@ -2,8 +2,10 @@ import * as express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
+import { ExpressPromiseHandler } from '@server/types/express'
 import { MVideoFullLight } from '@server/types/models'
 import { ServerErrorCode, UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
 import {
   exists,
@@ -54,7 +56,6 @@ import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -411,7 +412,7 @@ function getCommonVideoEditAttributes () {
       .optional()
       .customSanitizer(toIntOrNull)
       .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy')
-  ] as (ValidationChain | express.Handler)[]
+  ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
 const commonVideosFiltersValidator = [

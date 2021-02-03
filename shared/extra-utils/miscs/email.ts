@@ -1,4 +1,5 @@
 import { ChildProcess, fork } from 'child_process'
+import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
 import { parallelTests } from '../server/servers'
 
@@ -10,7 +11,7 @@ class MockSmtpServer {
   private emails: object[]
 
   private constructor () {
-    this.emailChildProcess = fork(`${__dirname}/email-child-process`, [])
+    this.emailChildProcess = fork(join(__dirname, 'email-child-process'), [])
 
     this.emailChildProcess.on('message', (msg: any) => {
       if (msg.email) {
@@ -27,7 +28,7 @@ class MockSmtpServer {
 
       if (this.started) {
         this.emails = emailsCollection
-        return res()
+        return res(undefined)
       }
 
       // ensure maildev isn't started until

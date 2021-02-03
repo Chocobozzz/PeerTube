@@ -66,7 +66,8 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('--default', 'add the entry as the new default')
-  .action(options => {
+  .action((options: program.OptionValues) => {
+    /* eslint-disable no-import-assign */
     prompt.override = options
     prompt.start()
     prompt.get({
@@ -102,7 +103,7 @@ program
         process.exit(-1)
       }
 
-      await setInstance(result.url, result.username, result.password, program['default'])
+      await setInstance(result.url, result.username, result.password, options.default)
 
       process.exit(0)
     })
@@ -160,15 +161,12 @@ program
     }
   })
 
-program.on('--help', function () {
-  console.log('  Examples:')
-  console.log()
-  console.log('    $ peertube auth add -u https://peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"')
-  console.log('    $ peertube auth add -u https://peertube.cpy.re -U root')
-  console.log('    $ peertube auth list')
-  console.log('    $ peertube auth del https://peertube.cpy.re')
-  console.log()
-})
+program.addHelpText('after', '\n\n  Examples:\n\n' +
+  '    $ peertube auth add -u https://peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"\n' +
+  '    $ peertube auth add -u https://peertube.cpy.re -U root\n' +
+  '    $ peertube auth list\n' +
+  '    $ peertube auth del https://peertube.cpy.re\n'
+)
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()

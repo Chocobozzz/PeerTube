@@ -1,10 +1,11 @@
 import * as express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
+import { ExpressPromiseHandler } from '@server/types/express'
+import { MUserAccountId } from '@server/types/models'
 import { UserRight, VideoPlaylistCreate, VideoPlaylistUpdate } from '../../../../shared'
-import { logger } from '../../../helpers/logger'
-import { areValidationErrors } from '../utils'
-import { isVideoImage } from '../../../helpers/custom-validators/videos'
-import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 import {
   isArrayOf,
   isIdOrUUIDValid,
@@ -21,15 +22,15 @@ import {
   isVideoPlaylistTimestampValid,
   isVideoPlaylistTypeValid
 } from '../../../helpers/custom-validators/video-playlists'
+import { isVideoImage } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
-import { authenticatePromiseIfNeeded } from '../../oauth'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
+import { logger } from '../../../helpers/logger'
 import { doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoPlaylistFetchType } from '../../../helpers/middlewares'
+import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
+import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { MVideoPlaylist } from '../../../types/models/video/video-playlist'
-import { MUserAccountId } from '@server/types/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { authenticatePromiseIfNeeded } from '../../oauth'
+import { areValidationErrors } from '../utils'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')
@@ -395,7 +396,7 @@ function getCommonPlaylistEditAttributes () {
     body('videoChannelId')
       .optional()
       .customSanitizer(toIntOrNull)
-  ] as (ValidationChain | express.Handler)[]
+  ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
 function checkUserCanManageVideoPlaylist (user: MUserAccountId, videoPlaylist: MVideoPlaylist, right: UserRight, res: express.Response) {

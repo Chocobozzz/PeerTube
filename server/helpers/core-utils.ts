@@ -5,12 +5,12 @@
   Useful to avoid circular dependencies.
 */
 
-import { createHash, HexBase64Latin1Encoding, randomBytes } from 'crypto'
+import { exec, ExecOptions } from 'child_process'
+import { BinaryToTextEncoding, createHash, randomBytes } from 'crypto'
+import { truncate } from 'lodash'
 import { basename, isAbsolute, join, resolve } from 'path'
 import * as pem from 'pem'
 import { URL } from 'url'
-import { truncate } from 'lodash'
-import { exec, ExecOptions } from 'child_process'
 
 const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
   if (!oldObject || typeof oldObject !== 'object') {
@@ -205,11 +205,11 @@ function peertubeTruncate (str: string, options: { length: number, separator?: R
   return truncate(str, options)
 }
 
-function sha256 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') {
+function sha256 (str: string | Buffer, encoding: BinaryToTextEncoding = 'hex') {
   return createHash('sha256').update(str).digest(encoding)
 }
 
-function sha1 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') {
+function sha1 (str: string | Buffer, encoding: BinaryToTextEncoding = 'hex') {
   return createHash('sha1').update(str).digest(encoding)
 }
 

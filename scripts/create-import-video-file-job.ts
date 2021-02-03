@@ -13,7 +13,9 @@ program
   .description('Import a video file to replace an already uploaded file or to add a new resolution')
   .parse(process.argv)
 
-if (program['video'] === undefined || program['import'] === undefined) {
+const options = program.opts()
+
+if (options.video === undefined || options.import === undefined) {
   console.error('All parameters are mandatory.')
   process.exit(-1)
 }
@@ -28,13 +30,13 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  const video = await VideoModel.loadByUUID(program['video'])
+  const video = await VideoModel.loadByUUID(options.video)
   if (!video) throw new Error('Video not found.')
   if (video.isOwned() === false) throw new Error('Cannot import files of a non owned video.')
 
   const dataInput = {
     videoUUID: video.uuid,
-    filePath: resolve(program['import'])
+    filePath: resolve(options.import)
   }
 
   await JobQueue.Instance.init()

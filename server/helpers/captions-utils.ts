@@ -30,7 +30,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function convertSrtToVtt (source: string, destination: string) {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     const file = createReadStream(source)
     const converter = srt2vtt()
     const writer = createWriteStream(destination)

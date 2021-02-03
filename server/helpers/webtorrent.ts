@@ -149,7 +149,7 @@ function safeWebtorrentDestroy (
   downloadedFile?: { directoryPath: string, filepath: string },
   torrentName?: string
 ) {
-  return new Promise(res => {
+  return new Promise<void>(res => {
     webtorrent.destroy(err => {
       // Delete torrent file
       if (torrentName) {

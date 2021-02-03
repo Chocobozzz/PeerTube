@@ -65,7 +65,7 @@ const downloadImageQueue = queue<DownloadImageQueueTask, Error>((task, cb) => {
 }, QUEUE_CONCURRENCY.AVATAR_PROCESS_IMAGE)
 
 function pushAvatarProcessInQueue (task: DownloadImageQueueTask) {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     downloadImageQueue.push(task, err => {
       if (err) return rej(err)
 

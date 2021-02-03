@@ -76,6 +76,7 @@ const lru = new AsyncLRU({
   }
 })
 
+/* eslint-disable no-import-assign */
 jsonld.documentLoader = (url) => {
   return new Promise((res, rej) => {
     lru.get(url, (err, value) => {
