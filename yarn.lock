@@ -1118,10 +1118,10 @@ anymatch@~3.1.1:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-apicache@^1.4.0:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/apicache/-/apicache-1.5.3.tgz#8977b358bf7d579d55fe3d183c907ae5dbcfb357"
-  integrity sha512-n1h39Bt7tMiJMV0u0tFlhigig8Uo/wJmKoj6WE/OwvZ+WbFchn7jnXleotZOzZTUBtr0Tg9iJshHnJDAGQbAEQ==
+apicache@1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/apicache/-/apicache-1.5.2.tgz#2cb0697d9b1b612b505b1a44face66d48b1d1404"
+  integrity sha512-jO8ie/Zqmr3MxLQSVNsHiQo5R1tbbP1TnpI6xOnRJv9wUOSP+YnZkULWmdo3fE7PHBSxIQzgIsEHGa6H5hKH9Q==
 
 append-field@^1.0.0:
   version "1.0.0"

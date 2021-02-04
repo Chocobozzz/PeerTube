@@ -39,7 +39,6 @@ You need to follow all the following steps even if you are on a PeerTube server 
 ### Dependencies
 
 Install the [PeerTube dependencies](dependencies.md) except PostgreSQL and Redis.
-PeerTube supports NodeJS 12.
 
 ### Installation
 
@@ -348,7 +347,7 @@ $ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
 ```
 
-### REPL ([Read Eval Print Loop](https://nodejs.org/docs/latest-v10.x/api/repl.html))
+### REPL (Read Eval Print Loop)
 
 If you want to interact with the application libraries and objects even when PeerTube is not running, there is a REPL for that.
 

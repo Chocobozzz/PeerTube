@@ -1,4 +1,4 @@
-FROM node:10-buster-slim
+FROM node:12-buster-slim
 
 # Allow to pass extra options to the npm run build
 # eg: --light --light-fr to not build all client languages
