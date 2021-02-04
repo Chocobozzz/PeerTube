@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="5f61f85f3c9e196f7044fec4dfe165b081e14a3f" datatype="html">
         <source>The notification concerns a video now unavailable</source>
-        <target state="translated">Уведомление касается видео которое сейчас недоступно</target>
+        <target state="translated">Уведомление касается видео, которое сейчас недоступно</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="03ccba66e74e25303828fc37062dda862ec272dc" datatype="html">
@@ -89,17 +89,17 @@
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="translated">Недавно добавленное видео <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> была <x id="START_LINK_1"/>автоматически заблокирована<x id="CLOSE_LINK"/></target>
+        <target state="translated">Недавно добавленное видео <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> было <x id="START_LINK_1"/>автоматически заблокировано<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> commented your video <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> прокомментировало ваше видео <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> прокомментировал ваше видео <x id="START_LINK_1"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="4d2311a5156bd322cc7e2ebafcf6063ba8232e63" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
-        <target state="translated">Уведомление касается комментария который сейчас недоступен</target>
+        <target state="translated">Уведомление касается комментария, который сейчас недоступен</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="b187dd5f406f4195b326ab01fa81f823025821b9" datatype="html">
@@ -109,12 +109,12 @@
       </trans-unit>
       <trans-unit id="78dea99c581be394bf509426e114c9cda9f5825d" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> succeeded </source>
-        <target state="translated"><x id="START_LINK"/>Импорт вашего видео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> завершено </target>
+        <target state="translated"><x id="START_LINK"/>Импорт вашего видео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> завершён </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="dc586a7c70baa9217d98f58f4701fc3a29cd9d4d" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> failed </source>
-        <target state="translated"><x id="START_LINK"/>Импорт вашего видео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> не выполнена </target>
+        <target state="translated"><x id="START_LINK"/>Импорт вашего видео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> не удался </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="55c81d14a4e11004f0bcda5a47575f316e85e43e" datatype="html">
@@ -129,22 +129,22 @@
       </trans-unit>
       <trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> mentioned you on <x id="START_LINK_1"/>video <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> упомянуло вас в <x id="START_LINK_1"/>видео <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> упомянул вас в <x id="START_LINK_1"/>видео <x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">Ваш экземпляр имеет <x id="START_LINK"/>нового подписчика<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> ожидающего вашего согласия<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">На вашем сервере появился <x id="START_LINK"/>новый подписчик<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/>, ожидающий вашего согласия<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">Ваш экземпляр автоматически подписался на <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated">Ваш сервер автоматически подписан на <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="d60604b8e42b3e6f9612ae780b2547b537250849" datatype="html">
         <source>The notification points to content now unavailable</source>
-        <target state="translated">Уведомление указывает на недоступный контент</target>
+        <target state="translated">Уведомление касается недоступного контента</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">190</context></context-group>
       </trans-unit>
       <trans-unit id="3fb9a5f7268114445d8c109a8f48102e93471f5a" datatype="html">
@@ -203,7 +203,7 @@
       </trans-unit>
       <trans-unit id="04f47b9519b96ac834a111c0e113d18c77d177de" datatype="html">
         <source>Please describe the issue...</source>
-        <target state="translated">Пожалуйста, опишите эту проблему...</target>
+        <target state="translated">Пожалуйста, опишите проблему...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">80</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
@@ -356,7 +356,7 @@
       </trans-unit>
       <trans-unit id="a5065c0f26fbd00b6f6ac0cf948535a44fffbd45" datatype="html">
         <source>Blocking this live will automatically terminate the live stream.</source>
-        <target state="translated">Блокирование этой прямой трансляции автоматически его завершит.</target>
+        <target state="translated">Блокирование этой прямой трансляции автоматически её завершит.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="0cd0f27936731dabfd8d89277b781d5dd664bc89" datatype="html">
@@ -384,7 +384,7 @@
       </trans-unit>
       <trans-unit id="7ac18f5bb1a9b9f245acc8497c2f165a7e9f8510" datatype="html">
         <source><x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}   "/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}   "/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {1 просмотр} other {{{ video.views | myNumberFormatter }} просмотра(-ов)}}   "/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -392,7 +392,7 @@
       </trans-unit>
       <trans-unit id="bcd730167966d931a8956022c370de9ac26bc3ac" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 просмотр} other {<x id="INTERPOLATION"/> просмотров}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
@@ -400,7 +400,7 @@
       </trans-unit>
       <trans-unit id="2a6ba0b4ffe992ddd03f40ee75b879996bdfb5f7" datatype="html">
         <source><x id="ICU" equiv-text="{video.views, plural, =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}   "/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{video.views, plural, =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}   "/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {1 просмотр} other {{{ video.views | myNumberFormatter }} просмотров}}   "/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7,8</context>
