@@ -134,7 +134,7 @@ To generate the certificate for your domain as required to make https work you c
 
 ```
 $ sudo systemctl stop nginx
-$ sudo certbot certonly --standalone --post-hook "systemctl start nginx"
+$ sudo certbot certonly --standalone --post-hook "systemctl restart nginx"
 $ sudo systemctl reload nginx
 ```
 
