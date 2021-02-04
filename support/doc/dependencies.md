@@ -25,7 +25,7 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 1. On a fresh Debian/Ubuntu, as root user, install basic utility programs needed for the installation
 
 ```
-# apt-get install curl sudo unzip vim
+# apt-get install curl sudo unzip vim cron
 ```
 
 2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access
