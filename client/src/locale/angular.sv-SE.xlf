@@ -1538,7 +1538,7 @@
       </trans-unit>
       <trans-unit id="71199007d5e526f837623a669b946e0784b1d475" datatype="html">
         <source>You might need to check your account is allowed by the <x id="INTERPOLATION" equiv-text="y the {{ getRessourceNam"/> or instance owner. </source>
-        <target state="new"> You might need to check your account is allowed by the <x id="INTERPOLATION" equiv-text="y the {{ getRessourceNam"/> or instance owner. </target>
+        <target state="translated">Du kan behöva kontrollera att ditt konto tillåts av <x id="INTERPOLATION" equiv-text="y the {{ getRessourceNam"/> eller instansens ägare. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">25,27</context>
@@ -2669,7 +2669,7 @@
       </trans-unit>
       <trans-unit id="6670e588ad98a777c18f30096aeff7687d53c1c4" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example). </target>
+        <target state="translated">Du kan kommentera med ett konto på en ActivityPub-kompatibel instans (som PeerTube, Mastodon eller Pleroma).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">60,61</context>
@@ -3663,7 +3663,7 @@
       </trans-unit>
       <trans-unit id="676860092433275829" datatype="html">
         <source>Hot</source>
-        <target state="new">Hot</target>
+        <target state="translated">Hett</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -3672,7 +3672,7 @@
       </trans-unit>
       <trans-unit id="8744258957546686807" datatype="html">
         <source>Videos totalizing the most interactions for recent videos</source>
-        <target state="new">Videos totalizing the most interactions for recent videos</target>
+        <target state="translated">Nya videor med flest interaktioner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -3680,7 +3680,7 @@
       </trans-unit>
       <trans-unit id="6931955094841595224" datatype="html">
         <source>Videos totalizing the most views during the last 24 hours</source>
-        <target state="new">Videos totalizing the most views during the last 24 hours</target>
+        <target state="translated">Videor med flest visningar under det senaste dygnet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -3688,7 +3688,7 @@
       </trans-unit>
       <trans-unit id="7112532281224432421" datatype="html">
         <source>Likes</source>
-        <target state="new">Likes</target>
+        <target state="translated">Gilla-markeringar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -3697,7 +3697,7 @@
       </trans-unit>
       <trans-unit id="1671858302647356245" datatype="html">
         <source>Videos that have the most likes</source>
-        <target state="new">Videos that have the most likes</target>
+        <target state="translated">Mest gillade videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -3858,7 +3858,7 @@
       </trans-unit>
       <trans-unit id="470f42cad5ddf069fb8e9ed3489c9614ce897664" datatype="html">
         <source>Priority <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = highest priority)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></source>
-        <target state="new">Priority <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = highest priority)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></target>
+        <target state="translated">Prioritet <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 är högst)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">47</context>
@@ -3866,7 +3866,7 @@
       </trans-unit>
       <trans-unit id="15793f4cbc261bedbc60f7105533dde536a3f42b" datatype="html">
         <source>Progress</source>
-        <target state="new">Progress</target>
+        <target state="translated">Förlopp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">49</context>
@@ -4151,7 +4151,7 @@
       </trans-unit>
       <trans-unit id="caa128fe5c4b611830f6138e844709c348f07948" datatype="html">
         <source>Trending pages</source>
-        <target state="new">Trending pages</target>
+        <target state="translated">Trend-sidor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">272</context>
@@ -4159,7 +4159,7 @@
       </trans-unit>
       <trans-unit id="7ff3a800cb0c5a325a0cae4b17bb29ea8ffc296e" datatype="html">
         <source>Default trending page</source>
-        <target state="new">Default trending page</target>
+        <target state="translated">Standardsida för populära videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">273</context>
@@ -4171,7 +4171,7 @@
       </trans-unit>
       <trans-unit id="6a97e13f1b72ca231709862b0004940e6659060d" datatype="html">
         <source>Hot videos</source>
-        <target state="new">Hot videos</target>
+        <target state="translated">Heta videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">274</context>
@@ -4183,7 +4183,7 @@
       </trans-unit>
       <trans-unit id="608d88bcaaddeb4e32d28a527f662f17e580f371" datatype="html">
         <source>Most viewed videos</source>
-        <target state="new">Most viewed videos</target>
+        <target state="translated">Mest visade videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">275</context>
@@ -4593,7 +4593,7 @@
       </trans-unit>
       <trans-unit id="778da1f797d3b1f106517fb0c86457c39c91e361" datatype="html">
         <source>Live transcoding profile</source>
-        <target state="new">Live transcoding profile</target>
+        <target state="translated">Profil för omkodning av direktsändningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1048</context>
@@ -4601,7 +4601,7 @@
       </trans-unit>
       <trans-unit id="8d34030874e3105dd85b6654e2ed29d930d75d15" datatype="html">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new live transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">lägg till fler omkodningsprofiler med PeerTube-tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1049</context>
@@ -4640,7 +4640,7 @@
       </trans-unit>
       <trans-unit id="d233fe10aafd9712c7c67c8101710313683522e9" datatype="html">
         <source>x264, targeting maximum device compatibility</source>
-        <target state="new">x264, targeting maximum device compatibility</target>
+        <target state="translated">x264, för att stödja flest enheter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">900</context>
@@ -4754,7 +4754,7 @@
       </trans-unit>
       <trans-unit id="81c92a792ba952ed92ec3c4279da00fc3e59a6a7" datatype="html">
         <source>Transcoding profile</source>
-        <target state="new">Transcoding profile</target>
+        <target state="translated">Omkodningsprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">887</context>
@@ -4762,7 +4762,7 @@
       </trans-unit>
       <trans-unit id="8e2902ec95ffc25eb8521384bfee7291cd615ec1" datatype="html">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">lägg till fler omkodningsprofiler med PeerTube-tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">888</context>
@@ -6007,7 +6007,7 @@
       </trans-unit>
       <trans-unit id="2131232107132374967" datatype="html">
         <source>Search videos within account</source>
-        <target state="new">Search videos within account</target>
+        <target state="translated">Sök efter videor från ett konto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">61</context>
@@ -6055,7 +6055,7 @@
       </trans-unit>
       <trans-unit id="230b7aa1bc012b2e5bafc1f24b6aa734a978183c" datatype="html">
         <source>Search videos</source>
-        <target state="new">Search videos</target>
+        <target state="translated">Sök videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">48</context>
@@ -7253,7 +7253,7 @@
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="new">URL parameter is missing in URL parameters</target>
+        <target state="translated">URL-parameter saknas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -7261,7 +7261,7 @@
       </trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
-        <target state="new">Cannot access to the remote resource</target>
+        <target state="translated">Kan inte komma åt fjärresursen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -7269,7 +7269,7 @@
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
-        <target state="new">Remote interaction</target>
+        <target state="translated">Fjärrinteraktion</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -7666,7 +7666,7 @@
       </trans-unit>
       <trans-unit id="7460399579150761114" datatype="html">
         <source>function is not implemented</source>
-        <target state="new">function is not implemented</target>
+        <target state="translated">funktionen är inte tagen i bruk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.ts</context>
           <context context-type="linenumber">295</context>
@@ -7943,7 +7943,7 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="new">Handle is required.</target>
+        <target state="translated">Söknamn måste uppges.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -7951,7 +7951,7 @@
       </trans-unit>
       <trans-unit id="4415706443503032539" datatype="html">
         <source>Handle must be valid (chocobozzz@example.com).</source>
-        <target state="new">Handle must be valid (chocobozzz@example.com).</target>
+        <target state="translated">Söknamnet måste vara giltigt (chocobozzz@example.com).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">49</context>
