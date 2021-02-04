@@ -149,6 +149,7 @@ Since our nginx template supports webroot renewal, we suggest you to update the 
 
 ```
 $ # Replace authenticator = standalone by authenticator = webroot
+$ # Add webroot_path = /var/www/certbot
 $ sudo vim /etc/letsencrypt/renewal/your-domain.com.conf
 ```
 
