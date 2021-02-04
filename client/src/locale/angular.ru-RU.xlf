@@ -1475,7 +1475,7 @@
       </trans-unit>
       <trans-unit id="240af974b7dde338d2db87e36f3c59611729bc6b" datatype="html">
         <source>We couldn't find any <x id="INTERPOLATION" equiv-text="d any {{ getRessourceNam"/> tied to the URL <x id="INTERPOLATION_1" equiv-text="e URL {{ pathn"/> you were looking for. </source>
-        <target state="new"> We couldn't find any <x id="INTERPOLATION" equiv-text="d any {{ getRessourceNam"/> tied to the URL <x id="INTERPOLATION_1" equiv-text="e URL {{ pathn"/> you were looking for. </target>
+        <target state="translated">Мы не смогли найти ни одного <x id="INTERPOLATION" equiv-text="d any {{ getRessourceNam"/> tсвязанного URL <x id="INTERPOLATION_1" equiv-text="e URL {{ pathn"/> что вы искали. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -2758,7 +2758,7 @@
       </trans-unit>
       <trans-unit id="70b989779eb53e6ff14d810336677dbc3bde4202" datatype="html">
         <source>Feed URL</source>
-        <target state="new">Feed URL</target>
+        <target state="translated">Адрес фида</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2766,7 +2766,7 @@
       </trans-unit>
       <trans-unit id="87752e8ea0b8d9cc97d85d89a74b828c031242d2" datatype="html">
         <source>Feed Token</source>
-        <target state="new">Feed Token</target>
+        <target state="translated">Токен фида</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3842,7 +3842,7 @@
       </trans-unit>
       <trans-unit id="15793f4cbc261bedbc60f7105533dde536a3f42b" datatype="html">
         <source>Progress</source>
-        <target state="new">Progress</target>
+        <target state="translated">Прогресс</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">49</context>
@@ -4238,7 +4238,7 @@
       </trans-unit>
       <trans-unit id="b4d3a94d4c67e02c861a8c7c66c34b74ad2ddf0d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {user} other {users}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {пользователь} other {пользователей}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">390</context></context-group>
       </trans-unit>
       <trans-unit id="25de1b6d18bda68f72a31c4ce8aa1c493584764f" datatype="html">
