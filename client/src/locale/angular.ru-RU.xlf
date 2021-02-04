@@ -5532,7 +5532,7 @@
       </trans-unit>
       <trans-unit id="4b0ca852bafa5037c4e64c7b18f9cd1e14b799de" datatype="html">
         <source>Subject</source>
-        <target state="translated">Объект</target>
+        <target state="translated">Тема обращения</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="d2815c9b510b8172d8cac4008b9709df69d636df">
