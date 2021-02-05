@@ -527,6 +527,9 @@ export class PeertubePlayerManager {
   }
 
   private static addHotkeysOptions (plugins: VideoJSPluginOptions) {
+    const isNaked = (event: KeyboardEvent, key: string) =>
+      (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && event.key === key)
+
     Object.assign(plugins, {
       hotkeys: {
         skipInitialFocus: true,
@@ -542,7 +545,7 @@ export class PeertubePlayerManager {
 
         fullscreenKey: function (event: KeyboardEvent) {
           // fullscreen with the f key or Ctrl+Enter
-          return event.key === 'f' || (event.ctrlKey && event.key === 'Enter')
+          return isNaked(event, 'f') || (!event.altKey && event.ctrlKey && event.key === 'Enter')
         },
 
         seekStep: function (event: KeyboardEvent) {
@@ -561,7 +564,7 @@ export class PeertubePlayerManager {
         customKeys: {
           increasePlaybackRateKey: {
             key: function (event: KeyboardEvent) {
-              return event.key === '>'
+              return isNaked(event, '>')
             },
             handler: function (player: videojs.Player) {
               const newValue = Math.min(player.playbackRate() + 0.1, 5)
@@ -570,7 +573,7 @@ export class PeertubePlayerManager {
           },
           decreasePlaybackRateKey: {
             key: function (event: KeyboardEvent) {
-              return event.key === '<'
+              return isNaked(event, '<')
             },
             handler: function (player: videojs.Player) {
               const newValue = Math.max(player.playbackRate() - 0.1, 0.10)
@@ -579,7 +582,7 @@ export class PeertubePlayerManager {
           },
           frameByFrame: {
             key: function (event: KeyboardEvent) {
-              return event.key === '.'
+              return isNaked(event, '.')
             },
             handler: function (player: videojs.Player) {
               player.pause()
