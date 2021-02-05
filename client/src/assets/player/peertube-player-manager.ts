@@ -543,22 +543,17 @@ export class PeertubePlayerManager {
         enableVolumeScroll: false,
         enableModifiersForNumbers: false,
 
+        rewindKey: function (event: KeyboardEvent) {
+          return isNaked(event, 'ArrowLeft')
+        },
+
+        forwardKey: function (event: KeyboardEvent) {
+          return isNaked(event, 'ArrowRight')
+        },
+
         fullscreenKey: function (event: KeyboardEvent) {
           // fullscreen with the f key or Ctrl+Enter
           return isNaked(event, 'f') || (!event.altKey && event.ctrlKey && event.key === 'Enter')
-        },
-
-        seekStep: function (event: KeyboardEvent) {
-          // mimic VLC seek behavior, and default to 5 (original value is 5).
-          if (event.ctrlKey && event.altKey) {
-            return 5 * 60
-          } else if (event.ctrlKey) {
-            return 60
-          } else if (event.altKey) {
-            return 10
-          } else {
-            return 5
-          }
         },
 
         customKeys: {
