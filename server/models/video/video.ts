@@ -1658,17 +1658,18 @@ export class VideoModel extends Model {
       'createdAt',
       'updatedAt'
     ]
+    const buildOpts = { raw: true }
 
     function buildActor (rowActor: any) {
       const avatarModel = rowActor.Avatar.id !== null
-        ? new AvatarModel(pick(rowActor.Avatar, avatarKeys))
+        ? new AvatarModel(pick(rowActor.Avatar, avatarKeys), buildOpts)
         : null
 
       const serverModel = rowActor.Server.id !== null
-        ? new ServerModel(pick(rowActor.Server, serverKeys))
+        ? new ServerModel(pick(rowActor.Server, serverKeys), buildOpts)
         : null
 
-      const actorModel = new ActorModel(pick(rowActor, actorKeys))
+      const actorModel = new ActorModel(pick(rowActor, actorKeys), buildOpts)
       actorModel.Avatar = avatarModel
       actorModel.Server = serverModel
 
@@ -1679,11 +1680,11 @@ export class VideoModel extends Model {
       if (!videosMemo[row.id]) {
         // Build Channel
         const channel = row.VideoChannel
-        const channelModel = new VideoChannelModel(pick(channel, [ 'id', 'name', 'description', 'actorId' ]))
+        const channelModel = new VideoChannelModel(pick(channel, [ 'id', 'name', 'description', 'actorId' ]), buildOpts)
         channelModel.Actor = buildActor(channel.Actor)
 
         const account = row.VideoChannel.Account
-        const accountModel = new AccountModel(pick(account, [ 'id', 'name' ]))
+        const accountModel = new AccountModel(pick(account, [ 'id', 'name' ]), buildOpts)
         accountModel.Actor = buildActor(account.Actor)
 
         channelModel.Account = accountModel
@@ -1704,28 +1705,28 @@ export class VideoModel extends Model {
       const videoModel = videosMemo[row.id]
 
       if (row.userVideoHistory?.id && !historyDone.has(row.userVideoHistory.id)) {
-        const historyModel = new UserVideoHistoryModel(pick(row.userVideoHistory, [ 'id', 'currentTime' ]))
+        const historyModel = new UserVideoHistoryModel(pick(row.userVideoHistory, [ 'id', 'currentTime' ]), buildOpts)
         videoModel.UserVideoHistories.push(historyModel)
 
         historyDone.add(row.userVideoHistory.id)
       }
 
       if (row.Thumbnails?.id && !thumbnailsDone.has(row.Thumbnails.id)) {
-        const thumbnailModel = new ThumbnailModel(pick(row.Thumbnails, [ 'id', 'type', 'filename' ]))
+        const thumbnailModel = new ThumbnailModel(pick(row.Thumbnails, [ 'id', 'type', 'filename' ]), buildOpts)
         videoModel.Thumbnails.push(thumbnailModel)
 
         thumbnailsDone.add(row.Thumbnails.id)
       }
 
       if (row.VideoFiles?.id && !videoFilesDone.has(row.VideoFiles.id)) {
-        const videoFileModel = new VideoFileModel(pick(row.VideoFiles, videoFileKeys))
+        const videoFileModel = new VideoFileModel(pick(row.VideoFiles, videoFileKeys), buildOpts)
         videoModel.VideoFiles.push(videoFileModel)
 
         videoFilesDone.add(row.VideoFiles.id)
       }
 
       if (row.VideoStreamingPlaylists?.id && !videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id]) {
-        const streamingPlaylist = new VideoStreamingPlaylistModel(pick(row.VideoStreamingPlaylists, videoStreamingPlaylistKeys))
+        const streamingPlaylist = new VideoStreamingPlaylistModel(pick(row.VideoStreamingPlaylists, videoStreamingPlaylistKeys), buildOpts)
         streamingPlaylist.VideoFiles = []
 
         videoModel.VideoStreamingPlaylists.push(streamingPlaylist)
@@ -1736,7 +1737,7 @@ export class VideoModel extends Model {
       if (row.VideoStreamingPlaylists?.VideoFiles?.id && !videoFilesDone.has(row.VideoStreamingPlaylists.VideoFiles.id)) {
         const streamingPlaylist = videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id]
 
-        const videoFileModel = new VideoFileModel(pick(row.VideoStreamingPlaylists.VideoFiles, videoFileKeys))
+        const videoFileModel = new VideoFileModel(pick(row.VideoStreamingPlaylists.VideoFiles, videoFileKeys), buildOpts)
         streamingPlaylist.VideoFiles.push(videoFileModel)
 
         videoFilesDone.add(row.VideoStreamingPlaylists.VideoFiles.id)
