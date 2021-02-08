@@ -1150,7 +1150,7 @@
       </trans-unit>
       <trans-unit id="2a94cfa351109b958a00ee927cd87ada8da44c1e" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="new"> If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </target>
+        <target state="translated">Если вы хотите открыть регистрацию, определите, какие будут <x id="START_TAG_STRONG"/>ваши правила модерации<x id="CLOSE_TAG_STRONG"/> и <x id="START_TAG_STRONG"/> условия обслуживания экземпляра<x id="CLOSE_TAG_STRONG"/>, а также укажите категории и языки, на которых говорят ваши модераторы. Таким образом, вы поможете пользователям зарегистрироваться на <x id="START_TAG_STRONG"/>соответствующем<x id="CLOSE_TAG_STRONG"/> экземпляре PeerTube. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
@@ -3834,7 +3834,7 @@
       </trans-unit>
       <trans-unit id="470f42cad5ddf069fb8e9ed3489c9614ce897664" datatype="html">
         <source>Priority <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = highest priority)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></source>
-        <target state="new">Priority <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = highest priority)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></target>
+        <target state="translated">Приоритет <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = наивысший приоритет)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">47</context>
@@ -3855,7 +3855,7 @@
       </trans-unit>
       <trans-unit id="50140de8e198dcb486966365d1d4c01fd910cc46" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</source>
-        <target state="new">No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</target>
+        <target state="translated">Нет <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> задача не найдена.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
@@ -4549,7 +4549,7 @@
       </trans-unit>
       <trans-unit id="9f667199fbfe1db90e4f3b1a6634f6036db93ad0" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {трансляция} other {трансляции}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">968</context></context-group>
       </trans-unit>
       <trans-unit id="4bddd185b531fa5ef6a1b5cebf46de5565968cb1" datatype="html">
@@ -4559,7 +4559,7 @@
       </trans-unit>
       <trans-unit id="7f5b08538d16c5f243789b4af4b3d888028ef2f9" datatype="html">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="new"> Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some. </target>
+        <target state="translated">То же, что и транскодирование VOD, транскодирование потокового видео, чтобы оно было в потоковой форме, которую может воспроизводить любое устройство. Требуется мощный процессор и это, как минимум.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">992</context></context-group>
       </trans-unit>
       <trans-unit id="5ff339e5bc9b41411ce6401774483b0d6f8cbca8" datatype="html">
@@ -4610,7 +4610,7 @@
       </trans-unit>
       <trans-unit id="54ffeb00b5c4525b0fe6deecb093e3db97d259f6" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {} =1 {thread} other {threads}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {} =1 {thread} other {threads}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {} =1 {поток} other {потоки}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">879</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1040</context></context-group>
       </trans-unit>
@@ -4640,7 +4640,7 @@
       </trans-unit>
       <trans-unit id="ee4b28ab2d3293d453dec75c6654c6425705283c" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="translated">Обработайте загруженные видео, чтобы они были в потоковой форме, которую можно было воспроизвести на любом устройстве. Хотя это требует больших ресурсов, это важная часть PeerTube, так что действуйте осторожно.</target>
+        <target state="translated">Обработайте загруженные видео, чтобы они были в потоковой форме, которую можно воспроизвести на любом устройстве. Хотя это требует больших ресурсов, это важная часть PeerTube, так что действуйте осторожно.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">750</context></context-group>
       </trans-unit>
       <trans-unit id="dd61ba82a1fe37408ee715264241c078530f8c6f" datatype="html">
@@ -4655,7 +4655,7 @@
       </trans-unit>
       <trans-unit id="5789fe6bacfbf750afc62f0399cadf899b67f348" datatype="html">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                                  "/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                                  "/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Если вы также включили поддержку HLS, объем хранилища видео увеличится на 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                                  "/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Если отключено, прекращает федерацию с экземплярами PeerTube &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">805</context></context-group>
       </trans-unit>
       <trans-unit id="db8369ea3a140ba4a114648ba204fb1a55ba742e" datatype="html">
