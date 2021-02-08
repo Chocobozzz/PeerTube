@@ -116,6 +116,16 @@ function checkConfig () {
     if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && CONFIG.TRANSCODING.HLS.ENABLED === false) {
       return 'You need to enable at least WebTorrent transcoding or HLS transcoding.'
     }
+
+    if (CONFIG.TRANSCODING.CONCURRENCY <= 0) {
+      return 'Transcoding concurrency should be > 0'
+    }
+  }
+
+  if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED || CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED) {
+    if (CONFIG.IMPORT.VIDEOS.CONCURRENCY <= 0) {
+      return 'Video import concurrency should be > 0'
+    }
   }
 
   // Broadcast message

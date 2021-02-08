@@ -87,6 +87,7 @@ export interface CustomConfig {
     allowAudioFiles: boolean
 
     threads: number
+    concurrency: number
 
     profile: string
 
@@ -120,6 +121,8 @@ export interface CustomConfig {
 
   import: {
     videos: {
+      concurrency: number
+
       http: {
         enabled: boolean
       }

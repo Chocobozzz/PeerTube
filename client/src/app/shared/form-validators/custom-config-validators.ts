@@ -65,6 +65,14 @@ export const TRANSCODING_THREADS_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const CONCURRENCY_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(1)],
+  MESSAGES: {
+    'required': $localize`Concurrency is required.`,
+    'min': $localize`Concurrency should be greater or equal to 1.`
+  }
+}
+
 export const INDEX_URL_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [Validators.pattern(/^https:\/\//)],
   MESSAGES: {

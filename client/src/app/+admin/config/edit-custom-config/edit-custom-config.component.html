@@ -436,7 +436,24 @@
           <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
             <ng-container formGroupName="import">
+
               <ng-container formGroupName="videos">
+
+                <div class="form-group mt-4">
+                  <label i18n for="importConcurrency">Import jobs concurrency</label>
+                  <span class="text-muted ml-1">
+                    <span i18n>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
+                  </span>
+
+                  <div class="peertube-select-container">
+                    <select id="importConcurrency" formControlName="concurrency" class="form-control">
+                      <option *ngFor="let option of concurrencyOptions" [value]="option">
+                        {{ option }}
+                      </option>
+                    </select>
+                  </div>
+                  <div *ngIf="formErrors.import.concurrency" class="form-error">{{ formErrors.import.concurrency }}</div>
+                </div>
 
                 <div class="form-group" formGroupName="http">
                   <my-peertube-checkbox
@@ -883,6 +900,22 @@
                   </select>
                 </div>
                 <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
+              </div>
+
+              <div class="form-group mt-4" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                <label i18n for="transcodingConcurrency">Transcoding jobs concurrency</label>
+                <span class="text-muted ml-1">
+                  <span i18n>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart.</span>
+                </span>
+
+                <div class="peertube-select-container">
+                  <select id="transcodingConcurrency" formControlName="concurrency" class="form-control">
+                    <option *ngFor="let option of concurrencyOptions" [value]="option">
+                      {{ option }}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="formErrors.transcoding.concurrency" class="form-error">{{ formErrors.transcoding.concurrency }}</div>
               </div>
 
               <div class="form-group mt-4" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
