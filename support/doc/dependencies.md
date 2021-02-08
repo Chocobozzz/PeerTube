@@ -39,7 +39,7 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 
 ```
 sudo apt update
-sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev
+sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev cron
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 ```
