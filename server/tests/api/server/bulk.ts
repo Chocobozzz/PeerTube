@@ -99,7 +99,7 @@ describe('Test bulk actions', function () {
     }
 
     before(async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1 server 1' })
       await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 2 server 1' })
