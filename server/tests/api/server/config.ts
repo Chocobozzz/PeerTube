@@ -70,6 +70,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.transcoding.allowAdditionalExtensions).to.be.false
   expect(data.transcoding.allowAudioFiles).to.be.false
   expect(data.transcoding.threads).to.equal(2)
+  expect(data.transcoding.concurrency).to.equal(2)
   expect(data.transcoding.profile).to.equal('default')
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
@@ -97,6 +98,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.live.transcoding.resolutions['1440p']).to.be.false
   expect(data.live.transcoding.resolutions['2160p']).to.be.false
 
+  expect(data.import.videos.concurrency).to.equal(2)
   expect(data.import.videos.http.enabled).to.be.true
   expect(data.import.videos.torrent.enabled).to.be.true
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.false
@@ -159,6 +161,7 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.transcoding.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
+  expect(data.transcoding.concurrency).to.equal(3)
   expect(data.transcoding.allowAdditionalExtensions).to.be.true
   expect(data.transcoding.allowAudioFiles).to.be.true
   expect(data.transcoding.profile).to.equal('vod_profile')
@@ -186,6 +189,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.transcoding.resolutions['1080p']).to.be.true
   expect(data.live.transcoding.resolutions['2160p']).to.be.true
 
+  expect(data.import.videos.concurrency).to.equal(4)
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.true
@@ -323,6 +327,7 @@ describe('Test config', function () {
         allowAdditionalExtensions: true,
         allowAudioFiles: true,
         threads: 1,
+        concurrency: 3,
         profile: 'vod_profile',
         resolutions: {
           '0p': false,
@@ -364,6 +369,7 @@ describe('Test config', function () {
       },
       import: {
         videos: {
+          concurrency: 4,
           http: {
             enabled: false
           },

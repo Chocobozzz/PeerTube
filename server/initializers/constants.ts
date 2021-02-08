@@ -146,14 +146,12 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-redundancy': 1,
   'video-live-ending': 1
 }
-const JOB_CONCURRENCY: { [id in JobType]: number } = {
+const JOB_CONCURRENCY: { [id in JobType]?: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 1,
   'activitypub-follow': 1,
   'video-file-import': 1,
-  'video-transcoding': 1,
-  'video-import': 1,
   'email': 5,
   'videos-views': 1,
   'activitypub-refresher': 1,

@@ -9,6 +9,7 @@ import {
   ADMIN_EMAIL_VALIDATOR,
   CACHE_CAPTIONS_SIZE_VALIDATOR,
   CACHE_PREVIEWS_SIZE_VALIDATOR,
+  CONCURRENCY_VALIDATOR,
   INDEX_URL_VALIDATOR,
   INSTANCE_NAME_VALIDATOR,
   INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
@@ -36,6 +37,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
   resolutions: { id: string, label: string, description?: string }[] = []
   liveResolutions: { id: string, label: string, description?: string }[] = []
+  concurrencyOptions: number[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
   liveMaxDurationOptions: { label: string, value: number }[] = []
 
@@ -103,6 +105,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       { value: 4, label: '4' },
       { value: 8, label: '8' }
     ]
+    this.concurrencyOptions = [ 1, 2, 3, 4, 5, 6 ]
 
     this.vodTranscodingProfileOptions = [ 'default' ]
     this.liveTranscodingProfileOptions = [ 'default' ]
@@ -230,6 +233,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       },
       import: {
         videos: {
+          concurrency: CONCURRENCY_VALIDATOR,
           http: {
             enabled: null
           },
@@ -262,6 +266,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         allowAdditionalExtensions: null,
         allowAudioFiles: null,
         profile: null,
+        concurrency: CONCURRENCY_VALIDATOR,
         resolutions: {},
         hls: {
           enabled: null

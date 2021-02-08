@@ -71,6 +71,7 @@ transcoding:
   allow_additional_extensions: false
   allow_audio_files: false
   threads: 2
+  concurrency: 2
   resolutions:
     0p: false
     240p: true
@@ -106,6 +107,7 @@ live:
 
 import:
   videos:
+    concurrency: 2
     http:
       enabled: true
       proxy:

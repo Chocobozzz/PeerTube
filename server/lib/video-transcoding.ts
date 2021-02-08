@@ -272,7 +272,7 @@ async function generateHlsPlaylistCommon (options: {
   const { type, video, inputPath, resolution, copyCodecs, isPortraitMode, isAAC, job } = options
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
 
-  const videoTranscodedBasePath = join(transcodeDirectory, type, video.uuid)
+  const videoTranscodedBasePath = join(transcodeDirectory, type)
   await ensureDir(videoTranscodedBasePath)
 
   const videoFilename = generateVideoStreamingPlaylistName(video.uuid, resolution)
@@ -337,8 +337,6 @@ async function generateHlsPlaylistCommon (options: {
   await move(playlistFileTranscodePath, playlistPath, { overwrite: true })
   // Move video file
   await move(join(videoTranscodedBasePath, videoFilename), videoFilePath, { overwrite: true })
-  // Cleanup directory
-  await remove(videoTranscodedBasePath)
 
   const stats = await stat(videoFilePath)
 

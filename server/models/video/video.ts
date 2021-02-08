@@ -345,7 +345,6 @@ export type AvailableForListIDsOptions = {
       include: [
         {
           model: VideoFileModel,
-          separate: true, // We may have multiple files, having multiple redundancies so let's separate this join
           required: false,
           include: subInclude
         }
@@ -372,7 +371,6 @@ export type AvailableForListIDsOptions = {
       include: [
         {
           model: VideoStreamingPlaylistModel.unscoped(),
-          separate: true, // We may have multiple streaming playlists, having multiple redundancies so let's separate this join
           required: false,
           include: subInclude
         }
@@ -1689,7 +1687,7 @@ export class VideoModel extends Model {
 
         channelModel.Account = accountModel
 
-        const videoModel = new VideoModel(pick(row, videoKeys))
+        const videoModel = new VideoModel(pick(row, videoKeys), buildOpts)
         videoModel.VideoChannel = channelModel
 
         videoModel.UserVideoHistories = []

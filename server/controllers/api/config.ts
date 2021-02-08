@@ -417,6 +417,7 @@ function customConfig (): CustomConfig {
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
       allowAudioFiles: CONFIG.TRANSCODING.ALLOW_AUDIO_FILES,
       threads: CONFIG.TRANSCODING.THREADS,
+      concurrency: CONFIG.TRANSCODING.CONCURRENCY,
       profile: CONFIG.TRANSCODING.PROFILE,
       resolutions: {
         '0p': CONFIG.TRANSCODING.RESOLUTIONS['0p'],
@@ -458,6 +459,7 @@ function customConfig (): CustomConfig {
     },
     import: {
       videos: {
+        concurrency: CONFIG.IMPORT.VIDEOS.CONCURRENCY,
         http: {
           enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
         },

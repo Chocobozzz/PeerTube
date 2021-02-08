@@ -53,7 +53,8 @@ async function run () {
         videoUUID: video.uuid,
         resolution,
         isPortraitMode: false,
-        copyCodecs: false
+        copyCodecs: false,
+        isMaxQuality: false
       })
     }
   } else if (options.resolution !== undefined) {

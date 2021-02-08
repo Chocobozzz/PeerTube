@@ -106,6 +106,7 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   isPortraitMode?: boolean
   resolution: VideoResolution
   copyCodecs: boolean
+  isMaxQuality: boolean
 }
 
 export interface NewResolutionTranscodingPayload extends BaseTranscodingPayload {
