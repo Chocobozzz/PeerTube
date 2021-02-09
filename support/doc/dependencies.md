@@ -342,6 +342,37 @@ rc-service redis start
 rc-service postgresql-11 start
 ```
 
+## OpenBSD
+
+1. Install Packages:
+
+```
+pkg_add sudo bash wget git python nginx pkgconf postgresql-server postgresql-contrib redis openssl
+```
+
+2. Install yarn:
+
+```
+npm install --global yarn
+```
+
+3. Allow users in the wheel group to use sudo
+
+```
+visudo
+```
+Uncomment line #43:
+
+```
+%wheel ALL=(ALL) ALL
+```
+
+4. Enable services:
+
+```
+rcctl enable postgresql redis nginx
+```
+
 ## Other distributions
 
 Feel free to update this file in a pull request!
