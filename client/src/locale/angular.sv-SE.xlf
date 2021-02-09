@@ -2221,7 +2221,7 @@
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
         <source>Upload a file</source>
-        <target>Lada upp en fil</target>
+        <target>Ladda upp en fil</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470">
