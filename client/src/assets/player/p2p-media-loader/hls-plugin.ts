@@ -236,6 +236,27 @@ class Html5Hlsjs {
     }
   }
 
+  private _handleNetworkError (error: any) {
+    if (this.errorCounts[ Hlsjs.ErrorTypes.NETWORK_ERROR] <= 5) {
+      console.info('trying to recover network error')
+
+      // Wait 1 second and retry
+      setTimeout(() => this.hls.startLoad(), 1000)
+
+      // Reset error count on success
+      this.hls.once(Hlsjs.Events.FRAG_LOADED, () => {
+        this.errorCounts[ Hlsjs.ErrorTypes.NETWORK_ERROR] = 0
+      })
+
+      return
+    }
+
+    console.info('bubbling network error up to VIDEOJS')
+    this.hls.destroy()
+    this.tech.error = () => error
+    this.tech.trigger('error')
+  }
+
   private _onError (_event: any, data: Hlsjs.errorData) {
     const error: { message: string, code?: number } = {
       message: `HLS.js error: ${data.type} - fatal: ${data.fatal} - ${data.details}`
@@ -249,10 +270,8 @@ class Html5Hlsjs {
     if (!data.fatal) return
 
     if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
-      console.info('bubbling network error up to VIDEOJS')
       error.code = 2
-      this.tech.error = () => error as any
-      this.tech.trigger('error')
+      this._handleNetworkError(error)
     } else if (data.type === Hlsjs.ErrorTypes.MEDIA_ERROR && data.details !== 'manifestIncompatibleCodecsError') {
       error.code = 3
       this._handleMediaError(error)
