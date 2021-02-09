@@ -37,12 +37,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
   resolutions: { id: string, label: string, description?: string }[] = []
   liveResolutions: { id: string, label: string, description?: string }[] = []
-  concurrencyOptions: number[] = []
-  transcodingThreadOptions: { label: string, value: number }[] = []
-  liveMaxDurationOptions: { label: string, value: number }[] = []
 
-  vodTranscodingProfileOptions: string[] = []
-  liveTranscodingProfileOptions: string[] = []
+  transcodingThreadOptions: SelectOptionsItem[] = []
+  liveMaxDurationOptions: SelectOptionsItem[] = []
 
   languageItems: SelectOptionsItem[] = []
   categoryItems: SelectOptionsItem[] = []
@@ -99,23 +96,22 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
     this.liveResolutions = this.resolutions.filter(r => r.id !== '0p')
 
     this.transcodingThreadOptions = [
-      { value: 0, label: $localize`Auto (via ffmpeg)` },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 4, label: '4' },
-      { value: 8, label: '8' }
+      { id: 0, label: $localize`Auto (via ffmpeg)` },
+      { id: 1, label: '1' },
+      { id: 2, label: '2' },
+      { id: 4, label: '4' },
+      { id: 8, label: '8' },
+      { id: 12, label: '12' },
+      { id: 16, label: '16' },
+      { id: 32, label: '32' }
     ]
-    this.concurrencyOptions = [ 1, 2, 3, 4, 5, 6 ]
-
-    this.vodTranscodingProfileOptions = [ 'default' ]
-    this.liveTranscodingProfileOptions = [ 'default' ]
 
     this.liveMaxDurationOptions = [
-      { value: -1, label: $localize`No limit` },
-      { value: 1000 * 3600, label: $localize`1 hour` },
-      { value: 1000 * 3600 * 3, label: $localize`3 hours` },
-      { value: 1000 * 3600 * 5, label: $localize`5 hours` },
-      { value: 1000 * 3600 * 10, label: $localize`10 hours` }
+      { id: -1, label: $localize`No limit` },
+      { id: 1000 * 3600, label: $localize`1 hour` },
+      { id: 1000 * 3600 * 3, label: $localize`3 hours` },
+      { id: 1000 * 3600 * 5, label: $localize`5 hours` },
+      { id: 1000 * 3600 * 10, label: $localize`10 hours` }
     ]
   }
 
@@ -137,11 +133,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   }
 
   getAvailableTranscodingProfile (type: 'live' | 'vod') {
-    if (type === 'live') {
-      return this.serverConfig.live.transcoding.availableProfiles
-    }
+    const profiles = type === 'live'
+      ? this.serverConfig.live.transcoding.availableProfiles
+      : this.serverConfig.transcoding.availableProfiles
 
-    return this.serverConfig.transcoding.availableProfiles
+    return profiles.map(p => ({ id: p, label: p }))
   }
 
   getTotalTranscodingThreads () {

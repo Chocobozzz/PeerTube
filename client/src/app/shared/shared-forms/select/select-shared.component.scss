@@ -30,3 +30,18 @@ ng-select ::ng-deep {
     width: 20px;
   }
 }
+
+.root {
+  display:flex;
+
+  > my-select-options {
+    flex-grow: 1;
+  }
+}
+
+input[type=text] {
+  margin-left: 5px;
+
+  @include peertube-input-text($form-base-input-width);
+  display: block;
+}

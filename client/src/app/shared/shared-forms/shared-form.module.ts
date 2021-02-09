@@ -7,13 +7,19 @@ import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
 import { DynamicFormFieldComponent } from './dynamic-form-field.component'
 import { FormValidatorService } from './form-validator.service'
-import { InputToggleHiddenComponent } from './input-toggle-hidden.component'
 import { InputSwitchComponent } from './input-switch.component'
+import { InputToggleHiddenComponent } from './input-toggle-hidden.component'
 import { MarkdownTextareaComponent } from './markdown-textarea.component'
 import { PeertubeCheckboxComponent } from './peertube-checkbox.component'
 import { PreviewUploadComponent } from './preview-upload.component'
 import { ReactiveFileComponent } from './reactive-file.component'
-import { SelectChannelComponent, SelectCheckboxComponent, SelectOptionsComponent, SelectTagsComponent } from './select'
+import {
+  SelectChannelComponent,
+  SelectCheckboxComponent,
+  SelectCustomValueComponent,
+  SelectOptionsComponent,
+  SelectTagsComponent
+} from './select'
 import { TextareaAutoResizeDirective } from './textarea-autoresize.directive'
 import { TimestampInputComponent } from './timestamp-input.component'
 
@@ -44,6 +50,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectOptionsComponent,
     SelectTagsComponent,
     SelectCheckboxComponent,
+    SelectCustomValueComponent,
 
     DynamicFormFieldComponent
   ],
@@ -69,6 +76,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectOptionsComponent,
     SelectTagsComponent,
     SelectCheckboxComponent,
+    SelectCustomValueComponent,
 
     DynamicFormFieldComponent
   ],

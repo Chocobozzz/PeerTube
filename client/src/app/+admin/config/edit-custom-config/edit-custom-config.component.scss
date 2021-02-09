@@ -42,7 +42,8 @@ input[type=checkbox] {
   @include peertube-select-container($form-base-input-width);
 }
 
-ng-select,
+my-select-options,
+my-select-custom-value,
 my-select-checkbox {
   @include responsive-width($form-base-input-width);
 

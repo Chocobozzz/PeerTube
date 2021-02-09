@@ -445,13 +445,11 @@
                     <span i18n>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
                   </span>
 
-                  <div class="peertube-select-container">
-                    <select id="importConcurrency" formControlName="concurrency" class="form-control">
-                      <option *ngFor="let option of concurrencyOptions" [value]="option">
-                        {{ option }}
-                      </option>
-                    </select>
+                  <div class="number-with-unit">
+                    <input type="number" name="importConcurrency" formControlName="concurrency" />
+                    <span i18n>jobs in parallel</span>
                   </div>
+
                   <div *ngIf="formErrors.import.concurrency" class="form-error">{{ formErrors.import.concurrency }}</div>
                 </div>
 
@@ -892,13 +890,13 @@
                   <ng-container *ngIf="!getTotalTranscodingThreads().atMost" i18n>will claim at least {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with live transcoding</ng-container>
                 </span>
 
-                <div class="peertube-select-container">
-                  <select id="transcodingThreads" formControlName="threads" class="form-control">
-                    <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
-                      {{ transcodingThreadOption.label }} {transcodingThreadOption.value, plural, =0 {} =1 {thread} other {threads}}
-                    </option>
-                  </select>
-                </div>
+                <my-select-custom-value
+                  id="transcodingThreads"
+                  [items]="transcodingThreadOptions"
+                  formControlName="threads"
+                  [clearable]="false"
+                ></my-select-custom-value>
+
                 <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
               </div>
 
@@ -908,13 +906,11 @@
                   <span i18n>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart.</span>
                 </span>
 
-                <div class="peertube-select-container">
-                  <select id="transcodingConcurrency" formControlName="concurrency" class="form-control">
-                    <option *ngFor="let option of concurrencyOptions" [value]="option">
-                      {{ option }}
-                    </option>
-                  </select>
+                <div class="number-with-unit">
+                  <input type="number" name="transcodingConcurrency" formControlName="concurrency" />
+                  <span i18n>jobs in parallel</span>
                 </div>
+
                 <div *ngIf="formErrors.transcoding.concurrency" class="form-error">{{ formErrors.transcoding.concurrency }}</div>
               </div>
 
@@ -922,7 +918,7 @@
                 <label i18n for="transcodingProfile">Transcoding profile</label>
                 <span class="text-muted ml-1" i18n>new transcoding profiles can be added by PeerTube plugins</span>
 
-                <ng-select
+                <my-select-options
                   id="transcodingProfile"
                   formControlName="profile"
                   [items]="getAvailableTranscodingProfile('vod')"
@@ -935,7 +931,7 @@
                       <span class="text-muted" i18n>x264, targeting maximum device compatibility</span>
                     </ng-container>
                   </ng-template>
-                </ng-select>
+                </my-select-options>
                 <div *ngIf="formErrors.transcoding.profile" class="form-error">{{ formErrors.transcoding.profile }}</div>
               </div>
 
@@ -1007,10 +1003,10 @@
                     <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isLiveEnabled() }">
                       <label i18n for="liveMaxDuration">Max live duration</label>
 
-                      <ng-select
+                      <my-select-options
                         labelForId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"
-                        bindLabel="label" bindValue="value" [clearable]="false" [searchable]="false"
-                      ></ng-select>
+                        bindLabel="label" bindValue="value" [clearable]="false" [searchable]="true"
+                      ></my-select-options>
                     </div>
 
                   </ng-container>
@@ -1069,13 +1065,12 @@
                     <ng-container *ngIf="!getTotalTranscodingThreads().atMost" i18n>will claim at least {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with VOD transcoding</ng-container>
                   </span>
 
-                  <div class="peertube-select-container">
-                    <select id="liveTranscodingThreads" formControlName="threads" class="form-control">
-                      <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
-                        {{ transcodingThreadOption.label }} {transcodingThreadOption.value, plural, =0 {} =1 {thread} other {threads}}
-                      </option>
-                    </select>
-                  </div>
+                  <my-select-custom-value
+                    id="liveTranscodingThreads"
+                    [items]="transcodingThreadOptions"
+                    formControlName="threads"
+                    [clearable]="false"
+                  ></my-select-custom-value>
                   <div *ngIf="formErrors.live.transcoding.threads" class="form-error">{{ formErrors.live.transcoding.threads }}</div>
                 </div>
 
@@ -1083,7 +1078,7 @@
                   <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
                   <span class="text-muted ml-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
 
-                  <ng-select
+                  <my-select-options
                     id="liveTranscodingProfile"
                     formControlName="profile"
                     [items]="getAvailableTranscodingProfile('live')"
@@ -1096,7 +1091,7 @@
                         <span class="text-muted" i18n>x264, targeting maximum device compatibility</span>
                       </ng-container>
                     </ng-template>
-                  </ng-select>
+                  </my-select-options>
                   <div *ngIf="formErrors.live.transcoding.profile" class="form-error">{{ formErrors.live.transcoding.profile }}</div>
                 </div>
 

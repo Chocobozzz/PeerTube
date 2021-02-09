@@ -1,0 +1,14 @@
+<div class="root">
+  <my-select-options
+    [items]="itemsWithCustom"
+    [clearable]="clearable"
+    [searchable]="searchable"
+    [groupBy]="groupBy"
+    [labelForId]="labelForId"
+
+    [(ngModel)]="selectedId"
+    (ngModelChange)="onModelChange()"
+  ></my-select-options>
+
+  <input *ngIf="isCustomValue()" [(ngModel)]="customValue" (ngModelChange)="onModelChange()" type="text" class="form-control" />
+</div>
