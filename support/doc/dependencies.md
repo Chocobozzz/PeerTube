@@ -347,7 +347,7 @@ rc-service postgresql-11 start
 1. Install Packages:
 
 ```
-pkg_add sudo bash wget git python nginx pkgconf postgresql-server postgresql-contrib redis openssl
+pkg_add sudo bash wget git python nginx pkgconf postgresql-server postgresql-contrib redis openssl libvips
 ```
 
 2. Install yarn:
