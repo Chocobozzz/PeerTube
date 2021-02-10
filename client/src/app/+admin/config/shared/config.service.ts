@@ -12,11 +12,12 @@ export class ConfigService {
 
   videoQuotaOptions: SelectOptionsItem[] = []
   videoQuotaDailyOptions: SelectOptionsItem[] = []
+  transcodingThreadOptions: SelectOptionsItem[] = []
 
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor
-    ) {
+  ) {
     this.videoQuotaOptions = [
       { id: -1, label: $localize`Unlimited` },
       { id: 0, label: $localize`None - no upload possible` },
@@ -43,6 +44,17 @@ export class ConfigService {
       { id: 10 * 1024 * 1024 * 1024, label: $localize`10GB` },
       { id: 20 * 1024 * 1024 * 1024, label: $localize`20GB` },
       { id: 50 * 1024 * 1024 * 1024, label: $localize`50GB` }
+    ]
+
+    this.transcodingThreadOptions = [
+      { id: 0, label: $localize`Auto (via ffmpeg)` },
+      { id: 1, label: '1' },
+      { id: 2, label: '2' },
+      { id: 4, label: '4' },
+      { id: 8, label: '8' },
+      { id: 12, label: '12' },
+      { id: 16, label: '16' },
+      { id: 32, label: '32' }
     ]
   }
 
