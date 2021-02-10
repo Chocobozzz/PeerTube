@@ -1,4 +1,6 @@
 
+import { forkJoin } from 'rxjs'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
@@ -12,6 +14,9 @@ import {
   INDEX_URL_VALIDATOR,
   INSTANCE_NAME_VALIDATOR,
   INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
+  MAX_INSTANCE_LIVES_VALIDATOR,
+  MAX_LIVE_DURATION_VALIDATOR,
+  MAX_USER_LIVES_VALIDATOR,
   SEARCH_INDEX_URL_VALIDATOR,
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
@@ -20,8 +25,6 @@ import {
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { CustomConfig, ServerConfig } from '@shared/models'
-import { forkJoin } from 'rxjs'
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { EditConfigurationService } from './edit-configuration.service'
 
 @Component({
@@ -156,9 +159,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       live: {
         enabled: null,
 
-        maxDuration: null,
-        maxInstanceLives: null,
-        maxUserLives: null,
+        maxDuration: MAX_LIVE_DURATION_VALIDATOR,
+        maxInstanceLives: MAX_INSTANCE_LIVES_VALIDATOR,
+        maxUserLives: MAX_USER_LIVES_VALIDATOR,
         allowReplay: null,
 
         transcoding: {

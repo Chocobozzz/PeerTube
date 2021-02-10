@@ -56,6 +56,8 @@
     <div class="col-md-5 col-xl-5">
       <span class="form-error submit-error" i18n *ngIf="!form.valid">
         It seems like the configuration is invalid. Please search for potential errors in the different tabs.
+
+        {{ formErrors }}
       </span>
 
       <span class="form-error submit-error" i18n *ngIf="!hasLiveAllowReplayConsistentOptions()">
