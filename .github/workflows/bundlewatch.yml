@@ -41,4 +41,5 @@ jobs:
         uses: jackyef/bundlewatch-gh-action@master
         with:
           build-script: npm run build -- --analyze-bundle
+          branch-base: develop
           bundlewatch-github-token: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
