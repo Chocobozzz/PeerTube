@@ -1,7 +1,9 @@
 import { forkJoin } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { Notifier } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
@@ -22,7 +24,6 @@ import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@a
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
 import { CustomConfig, ServerConfig } from '@shared/models'
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -30,7 +31,6 @@ import { SelectOptionsItem } from 'src/types/select-options-item.model'
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit, AfterViewChecked {
-  // FIXME: use built-in router
   @ViewChild('nav') nav: NgbNav
 
   initDone = false
@@ -47,9 +47,13 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
   signupAlertMessage: string
 
+  activeNav: string
+
   private serverConfig: ServerConfig
 
   constructor (
+    private router: Router,
+    private route: ActivatedRoute,
     private viewportScroller: ViewportScroller,
     protected formValidatorService: FormValidatorService,
     private notifier: Notifier,
@@ -352,6 +356,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
       formGroupData.live.transcoding.resolutions[resolution.id] = null
     }
 
+    if (this.route.snapshot.fragment) {
+      this.onNavChange(this.route.snapshot.fragment)
+    }
+
     this.buildForm(formGroupData)
     this.loadForm()
 
@@ -438,6 +446,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
     }
 
     return true
+  }
+
+  onNavChange (newActiveNav: string) {
+    this.activeNav = newActiveNav
+
+    this.router.navigate([], { fragment: this.activeNav })
   }
 
   private updateForm () {
