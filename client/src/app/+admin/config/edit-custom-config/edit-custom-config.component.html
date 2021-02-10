@@ -54,11 +54,16 @@
   <div class="form-row mt-4"> <!-- submit placement block -->
     <div class="col-md-7 col-xl-5"></div>
     <div class="col-md-5 col-xl-5">
-      <span class="form-error submit-error" i18n *ngIf="!form.valid">
-        It seems like the configuration is invalid. Please search for potential errors in the different tabs.
 
-        {{ formErrors }}
-      </span>
+      <div class="form-error submit-error" i18n *ngIf="!form.valid">
+        There are errors in the form:
+
+        <ul>
+          <li *ngFor="let error of grabAllErrors()">
+            {{ error }}
+          </li>
+        </ul>
+      </div>
 
       <span class="form-error submit-error" i18n *ngIf="!hasLiveAllowReplayConsistentOptions()">
         You cannot allow live replay if you don't enable transcoding.
