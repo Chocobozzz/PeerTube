@@ -50,8 +50,20 @@ export class EditBasicConfigurationComponent implements OnInit {
     return this.form.value['signup']['enabled'] === true
   }
 
+  getDisabledSignupClass () {
+    return { 'disabled-checkbox-extra': !this.isSignupEnabled() }
+  }
+
+  hasUnlimitedSignup () {
+    return this.form.value['signup']['limit'] === -1
+  }
+
   isSearchIndexEnabled () {
     return this.form.value['search']['searchIndex']['enabled'] === true
+  }
+
+  getDisabledSearchIndexClass () {
+    return { 'disabled-checkbox-extra': !this.isSearchIndexEnabled() }
   }
 
   isAutoFollowIndexEnabled () {

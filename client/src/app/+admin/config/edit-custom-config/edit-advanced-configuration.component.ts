@@ -11,4 +11,8 @@ import { FormGroup } from '@angular/forms'
 export class EditAdvancedConfigurationComponent {
   @Input() form: FormGroup
   @Input() formErrors: any
+
+  getCacheSize (type: 'captions' | 'previews') {
+    return this.form.value['cache'][type]['size']
+  }
 }

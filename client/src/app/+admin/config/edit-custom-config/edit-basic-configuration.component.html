@@ -25,6 +25,7 @@
 
       <div class="form-group" formGroupName="instance">
         <label i18n for="instanceDefaultClientRoute">Landing page</label>
+
         <div class="peertube-select-container">
           <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute" class="form-control">
             <option i18n value="/videos/overview">Discover videos</option>
@@ -41,6 +42,7 @@
             <option i18n value="/videos/local">Local videos</option>
           </select>
         </div>
+
         <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error">{{ formErrors.instance.defaultClientRoute }}</div>
       </div>
 
@@ -48,6 +50,7 @@
         <ng-container formGroupName="videos">
           <ng-container formGroupName="algorithms">
             <label i18n for="trendingVideosAlgorithmsDefault">Default trending page</label>
+
             <div class="peertube-select-container">
               <select id="trendingVideosAlgorithmsDefault" formControlName="default" class="form-control">
                 <option i18n value="best">Best videos</option>
@@ -56,6 +59,7 @@
                 <option i18n value="most-liked">Most liked videos</option>
               </select>
             </div>
+
             <div *ngIf="formErrors.trending.videos.algorithms.default" class="form-error">{{ formErrors.trending.videos.algorithms.default }}</div>
           </ng-container>
         </ng-container>
@@ -92,6 +96,7 @@
 
         <div class="form-group">
           <label i18n for="broadcastMessageLevel">Broadcast message level</label>
+
           <div class="peertube-select-container">
             <select id="broadcastMessageLevel" formControlName="level" class="form-control">
               <option value="info">info</option>
@@ -99,15 +104,18 @@
               <option value="error">error</option>
             </select>
           </div>
+
           <div *ngIf="formErrors.broadcastMessage.level" class="form-error">{{ formErrors.broadcastMessage.level }}</div>
         </div>
 
         <div class="form-group">
           <label i18n for="broadcastMessageMessage">Message</label><my-help helpType="markdownText"></my-help>
+
           <my-markdown-textarea
             name="broadcastMessageMessage" formControlName="message" textareaMaxWidth="500px"
             [classes]="{ 'input-error': formErrors['broadcastMessage.message'] }"
           ></my-markdown-textarea>
+
           <div *ngIf="formErrors.broadcastMessage.message" class="form-error">{{ formErrors.broadcastMessage.message }}</div>
         </div>
 
@@ -139,13 +147,14 @@
             </ng-container>
 
             <ng-container ngProjectAs="extra">
-              <my-peertube-checkbox [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }"
+              <my-peertube-checkbox [ngClass]="getDisabledSignupClass()"
                 inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
                 i18n-labelText labelText="Signup requires email verification"
               ></my-peertube-checkbox>
 
-              <div [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }" class="mt-3">
+              <div [ngClass]="getDisabledSignupClass()" class="mt-3">
                 <label i18n for="signupLimit">Signup limit</label>
+
                 <div class="number-with-unit">
                   <input
                     type="number" min="-1" id="signupLimit" class="form-control"
@@ -153,8 +162,10 @@
                   >
                   <span i18n>{form.value['signup']['limit'], plural, =1 {user} other {users}}</span>
                 </div>
+
                 <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
-                <small *ngIf="form.value['signup']['limit'] === -1" class="text-muted">Signup won't be limited to a fixed number of users.</small>
+
+                <small i18n *ngIf="hasUnlimitedSignup()" class="text-muted">Signup won't be limited to a fixed number of users.</small>
               </div>
             </ng-container>
           </my-peertube-checkbox>
@@ -207,9 +218,7 @@
 
           <div class="form-group mt-4">
             <label i18n for="importConcurrency">Import jobs concurrency</label>
-            <span class="text-muted ml-1">
-              <span i18n>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
-            </span>
+            <span i18n class="text-muted ml-1">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
 
             <div class="number-with-unit">
               <input type="number" name="importConcurrency" formControlName="concurrency" />
@@ -307,24 +316,26 @@
               </ng-container>
 
               <ng-container ngProjectAs="extra">
-                <div [ngClass]="{ 'disabled-checkbox-extra': !isSearchIndexEnabled() }">
+                <div [ngClass]="getDisabledSearchIndexClass()">
                   <label i18n for="searchIndexUrl">Search index URL</label>
+
                   <input
                     type="text"  id="searchIndexUrl" class="form-control"
                     formControlName="url" [ngClass]="{ 'input-error': formErrors['search.searchIndex.url'] }"
                   >
+
                   <div *ngIf="formErrors.search.searchIndex.url" class="form-error">{{ formErrors.search.searchIndex.url }}</div>
                 </div>
 
                 <div class="mt-3">
-                  <my-peertube-checkbox [ngClass]="{ 'disabled-checkbox-extra': !isSearchIndexEnabled() }"
+                  <my-peertube-checkbox [ngClass]="getDisabledSearchIndexClass()"
                     inputName="searchIndexDisableLocalSearch" formControlName="disableLocalSearch"
                     i18n-labelText labelText="Disable local search in search bar"
                   ></my-peertube-checkbox>
                 </div>
 
                 <div class="mt-3">
-                  <my-peertube-checkbox [ngClass]="{ 'disabled-checkbox-extra': !isSearchIndexEnabled() }"
+                  <my-peertube-checkbox [ngClass]="getDisabledSearchIndexClass()"
                     inputName="searchIndexIsDefaultSearch" formControlName="isDefaultSearch"
                     i18n-labelText labelText="Search bar uses the global search index by default"
                   >
@@ -433,10 +444,12 @@
 
       <div class="form-group" formGroupName="admin">
         <label i18n for="adminEmail">Admin email</label>
+
         <input
           type="text" id="adminEmail" class="form-control"
           formControlName="email" [ngClass]="{ 'input-error': formErrors['admin.email'] }"
         >
+
         <div *ngIf="formErrors.admin.email" class="form-error">{{ formErrors.admin.email }}</div>
       </div>
 
@@ -471,6 +484,7 @@
               type="text" id="servicesTwitterUsername" class="form-control"
               formControlName="username" [ngClass]="{ 'input-error': formErrors['services.twitter.username'] }"
             >
+
             <div *ngIf="formErrors.services.twitter.username" class="form-error">{{ formErrors.services.twitter.username }}</div>
           </div>
 

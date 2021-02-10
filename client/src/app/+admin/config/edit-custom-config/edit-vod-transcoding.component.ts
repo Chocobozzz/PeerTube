@@ -34,7 +34,13 @@ export class EditVODTranscodingComponent implements OnInit {
   getAvailableTranscodingProfile () {
     const profiles = this.serverConfig.transcoding.availableProfiles
 
-    return profiles.map(p => ({ id: p, label: p }))
+    return profiles.map(p => {
+      const description = p === 'default'
+        ? $localize`x264, targeting maximum device compatibility`
+        : ''
+
+      return { id: p, label: p, description }
+    })
   }
 
   getResolutionKey (resolution: string) {
@@ -43,6 +49,10 @@ export class EditVODTranscodingComponent implements OnInit {
 
   isTranscodingEnabled () {
     return this.editConfigurationService.isTranscodingEnabled(this.form)
+  }
+
+  getTranscodingDisabledClass () {
+    return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() }
   }
 
   getTotalTranscodingThreads () {

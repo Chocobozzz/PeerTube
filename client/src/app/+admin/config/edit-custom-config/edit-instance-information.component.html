@@ -11,28 +11,34 @@
 
         <div class="form-group">
           <label i18n for="instanceName">Name</label>
+
           <input
             type="text" id="instanceName" class="form-control"
             formControlName="name" [ngClass]="{ 'input-error': formErrors.instance.name }"
           >
+
           <div *ngIf="formErrors.instance.name" class="form-error">{{ formErrors.instance.name }}</div>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceShortDescription">Short description</label>
+
           <textarea
             id="instanceShortDescription" formControlName="shortDescription" class="form-control small"
             [ngClass]="{ 'input-error': formErrors['instance.shortDescription'] }"
           ></textarea>
+
           <div *ngIf="formErrors.instance.shortDescription" class="form-error">{{ formErrors.instance.shortDescription }}</div>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
+
           <my-markdown-textarea
             name="instanceDescription" formControlName="description" textareaMaxWidth="500px"
             [classes]="{ 'input-error': formErrors['instance.description'] }"
           ></my-markdown-textarea>
+
           <div *ngIf="formErrors.instance.description" class="form-error">{{ formErrors.instance.description }}</div>
         </div>
 
@@ -111,24 +117,29 @@
               <option i18n value="display">Display</option>
             </select>
           </div>
+
           <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error">{{ formErrors.instance.defaultNSFWPolicy }}</div>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
+
           <my-markdown-textarea
             name="instanceTerms" formControlName="terms" textareaMaxWidth="500px"
             [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
           ></my-markdown-textarea>
+
           <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
+
           <my-markdown-textarea
             name="instanceCodeOfConduct" formControlName="codeOfConduct" textareaMaxWidth="500px"
             [ngClass]="{ 'input-error': formErrors['instance.codeOfConduct'] }"
           ></my-markdown-textarea>
+
           <div *ngIf="formErrors.instance.codeOfConduct" class="form-error">{{ formErrors.instance.codeOfConduct }}</div>
         </div>
 
@@ -140,6 +151,7 @@
             name="instanceModerationInformation" formControlName="moderationInformation" textareaMaxWidth="500px"
             [ngClass]="{ 'input-error': formErrors['instance.moderationInformation'] }"
           ></my-markdown-textarea>
+
           <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
         </div>
 
@@ -173,6 +185,7 @@
             name="instanceCreationReason" formControlName="creationReason" textareaMaxWidth="500px"
             [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
           ></my-markdown-textarea>
+
           <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
         </div>
 
@@ -184,6 +197,7 @@
             name="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" textareaMaxWidth="500px"
             [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
           ></my-markdown-textarea>
+
           <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
         </div>
 
@@ -195,6 +209,7 @@
             name="instanceBusinessModel" formControlName="businessModel" textareaMaxWidth="500px"
             [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
           ></my-markdown-textarea>
+
           <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
         </div>
 

@@ -42,7 +42,13 @@ export class EditLiveConfigurationComponent implements OnInit {
   getAvailableTranscodingProfile () {
     const profiles = this.serverConfig.live.transcoding.availableProfiles
 
-    return profiles.map(p => ({ id: p, label: p }))
+    return profiles.map(p => {
+      const description = p === 'default'
+        ? $localize`x264, targeting maximum device compatibility`
+        : ''
+
+      return { id: p, label: p, description }
+    })
   }
 
   getResolutionKey (resolution: string) {
@@ -55,6 +61,14 @@ export class EditLiveConfigurationComponent implements OnInit {
 
   isLiveEnabled () {
     return this.editConfigurationService.isLiveEnabled(this.form)
+  }
+
+  getDisabledLiveClass () {
+    return { 'disabled-checkbox-extra': !this.isLiveEnabled() }
+  }
+
+  getDisabledLiveTranscodingClass () {
+    return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isLiveTranscodingEnabled() }
   }
 
   isLiveTranscodingEnabled () {
