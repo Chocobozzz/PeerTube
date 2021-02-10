@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input, OnChanges } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { SelectOptionsItem } from './select-options.component'
+import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
 @Component({
   selector: 'my-select-custom-value',
@@ -20,6 +20,8 @@ export class SelectCustomValueComponent implements ControlValueAccessor, OnChang
   @Input() searchable = false
   @Input() groupBy: string
   @Input() labelForId: string
+  @Input() inputSuffix: string
+  @Input() inputType = 'text'
 
   customValue: number | string = ''
   selectedId: number | string

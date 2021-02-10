@@ -1,13 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-
-export type SelectOptionsItem = {
-  id: string | number
-  label: string
-  description?: string
-  group?: string
-  groupLabel?: string
-}
+import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
 @Component({
   selector: 'my-select-options',

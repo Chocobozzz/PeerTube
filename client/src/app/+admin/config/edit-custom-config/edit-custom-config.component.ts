@@ -19,9 +19,10 @@ import {
   TRANSCODING_THREADS_VALIDATOR
 } from '@app/shared/form-validators/custom-config-validators'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService, SelectOptionsItem } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
 import { CustomConfig, ServerConfig } from '@shared/models'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
 
 @Component({
   selector: 'my-edit-custom-config',

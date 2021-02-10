@@ -1,13 +1,7 @@
-import { Component, forwardRef, Input } from '@angular/core'
+import { Component, forwardRef, Input, OnChanges } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { VideoChannel } from '@app/shared/shared-main'
-
-export type SelectChannelItem = {
-  id: number
-  label: string
-  support: string
-  avatarPath?: string
-}
+import { SelectChannelItem } from '../../../../types/select-options-item.model'
 
 @Component({
   selector: 'my-select-channel',
@@ -21,9 +15,10 @@ export type SelectChannelItem = {
     }
   ]
 })
-export class SelectChannelComponent implements ControlValueAccessor {
+export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
   @Input() items: SelectChannelItem[] = []
 
+  channels: SelectChannelItem[] = []
   selectedId: number
 
   // ng-select options
@@ -32,10 +27,14 @@ export class SelectChannelComponent implements ControlValueAccessor {
   clearable = false
   searchable = false
 
-  get channels () {
-    return this.items.map(c => Object.assign(c, {
-      avatarPath: c.avatarPath ? c.avatarPath : VideoChannel.GET_DEFAULT_AVATAR_URL()
-    }))
+  ngOnChanges () {
+    this.channels = this.items.map(c => {
+      const avatarPath = c.avatarPath
+        ? c.avatarPath
+        : VideoChannel.GET_DEFAULT_AVATAR_URL()
+
+      return Object.assign({}, c, { avatarPath })
+    })
   }
 
   propagateChange = (_: any) => { /* empty */ }

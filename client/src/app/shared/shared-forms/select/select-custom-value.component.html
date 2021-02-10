@@ -10,5 +10,9 @@
     (ngModelChange)="onModelChange()"
   ></my-select-options>
 
-  <input *ngIf="isCustomValue()" [(ngModel)]="customValue" (ngModelChange)="onModelChange()" type="text" class="form-control" />
+  <ng-container *ngIf="isCustomValue()">
+    <input [(ngModel)]="customValue" (ngModelChange)="onModelChange()" [type]="inputType" class="form-control" />
+
+    <span *ngIf="inputSuffix" class="input-suffix">{{ inputSuffix }}</span>
+  </ng-container>
 </div>

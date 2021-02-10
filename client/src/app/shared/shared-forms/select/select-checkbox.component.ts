@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { SelectOptionsItem } from './select-options.component'
+import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
 export type ItemSelectCheckboxValue = { id?: string | number, group?: string } | string
 

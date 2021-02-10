@@ -1,10 +1,10 @@
+import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { DatePipe } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Notifier } from '@app/core'
-import { SelectChannelItem } from '@app/shared/shared-forms'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { environment } from '../../environments/environment'
 import { AuthService } from '../core/auth'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 // Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 function getParameterByName (name: string, url: string) {

@@ -3,9 +3,10 @@ import { forkJoin, Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
-import { FormReactive, FormValidatorService, ItemSelectCheckboxValue, SelectOptionsItem } from '@app/shared/shared-forms'
+import { FormReactive, FormValidatorService, ItemSelectCheckboxValue } from '@app/shared/shared-forms'
 import { UserUpdateMe } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
+import { SelectOptionsItem } from '../../../types/select-options-item.model'
 
 @Component({
   selector: 'my-user-video-settings',

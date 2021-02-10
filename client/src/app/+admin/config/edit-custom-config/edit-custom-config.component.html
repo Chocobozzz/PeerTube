@@ -402,25 +402,29 @@
             <ng-container formGroupName="user">
               <div class="form-group">
                 <label i18n for="userVideoQuota">Default video quota per user</label>
-                <div class="peertube-select-container">
-                  <select id="userVideoQuota" formControlName="videoQuota" class="form-control">
-                    <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value" [disabled]="videoQuotaOption.disabled">
-                      {{ videoQuotaOption.label }}
-                    </option>
-                  </select>
-                </div>
+
+                <my-select-custom-value
+                  id="userVideoQuota"
+                  [items]="videoQuotaOptions"
+                  formControlName="videoQuota"
+                  i18n-inputSuffix inputSuffix="bytes" inputType="number"
+                  [clearable]="false"
+                ></my-select-custom-value>
+
                 <div *ngIf="formErrors.user.videoQuota" class="form-error">{{ formErrors.user.videoQuota }}</div>
               </div>
 
               <div class="form-group">
                 <label i18n for="userVideoQuotaDaily">Default daily upload limit per user</label>
-                <div class="peertube-select-container">
-                  <select id="userVideoQuotaDaily" formControlName="videoQuotaDaily" class="form-control">
-                    <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value" [disabled]="videoQuotaDailyOption.disabled">
-                      {{ videoQuotaDailyOption.label }}
-                    </option>
-                  </select>
-                </div>
+
+                <my-select-custom-value
+                  id="userVideoQuotaDaily"
+                  [items]="videoQuotaDailyOptions"
+                  formControlName="videoQuotaDaily"
+                  i18n-inputSuffix inputSuffix="bytes" inputType="number"
+                  [clearable]="false"
+                ></my-select-custom-value>
+
                 <div *ngIf="formErrors.user.videoQuotaDaily" class="form-error">{{ formErrors.user.videoQuotaDaily }}</div>
               </div>
             </ng-container>
