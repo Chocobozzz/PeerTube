@@ -6,6 +6,7 @@ import { resolve } from 'path'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
+import { isUUIDValid } from '@server/helpers/custom-validators/misc'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
@@ -29,6 +30,11 @@ run()
 
 async function run () {
   await initDatabaseModels(true)
+
+  if (isUUIDValid(options.video) === false) {
+    console.error('%s is not a valid video UUID.', options.video)
+    return
+  }
 
   const video = await VideoModel.loadByUUID(options.video)
   if (!video) throw new Error('Video not found.')
