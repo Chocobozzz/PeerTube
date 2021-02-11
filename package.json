@@ -232,7 +232,7 @@
   "bundlewatch": {
     "files": [
       {
-        "path": "client/dist/en-US/*-es2015.js",
+        "path": "client/dist/en-US/*.js",
         "maxSize": "1mb"
       },
       {
