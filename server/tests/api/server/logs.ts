@@ -30,7 +30,7 @@ describe('Test logs', function () {
   describe('With the standard log file', function () {
 
     it('Should get logs with a start date', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       await uploadVideo(server.url, server.accessToken, { name: 'video 1' })
       await waitJobs([ server ])
@@ -48,7 +48,7 @@ describe('Test logs', function () {
     })
 
     it('Should get logs with an end date', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       await uploadVideo(server.url, server.accessToken, { name: 'video 3' })
       await waitJobs([ server ])
@@ -72,7 +72,7 @@ describe('Test logs', function () {
     })
 
     it('Should get filter by level', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       const now = new Date()
 
@@ -95,6 +95,8 @@ describe('Test logs', function () {
     })
 
     it('Should log ping requests', async function () {
+      this.timeout(10000)
+
       const now = new Date()
 
       await makePingRequest(server)
@@ -125,7 +127,7 @@ describe('Test logs', function () {
 
   describe('With the audit log', function () {
     it('Should get logs with a start date', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       await uploadVideo(server.url, server.accessToken, { name: 'video 7' })
       await waitJobs([ server ])
@@ -151,7 +153,7 @@ describe('Test logs', function () {
     })
 
     it('Should get logs with an end date', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       await uploadVideo(server.url, server.accessToken, { name: 'video 9' })
       await waitJobs([ server ])
