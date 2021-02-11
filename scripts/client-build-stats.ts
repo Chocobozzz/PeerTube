@@ -20,13 +20,16 @@ run()
 async function buildResult (path: string) {
   const distFiles = await readdir(path)
 
-  const files: { [ name: string ]: number } = {}
+  const files: { name: string, size: number }[] = []
 
   for (const file of distFiles) {
     const filePath = join(path, file)
 
     const statsResult = await stat(filePath)
-    files[file] = statsResult.size
+    files.push({
+      name: file,
+      size: statsResult.size
+    })
   }
 
   return files
