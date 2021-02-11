@@ -24,8 +24,13 @@ async function register ({
     registerHook({
       target: 'action:api.video.viewed',
       handler: async ({ video }) => {
-        const videoFromDB = await peertubeHelpers.videos.loadByUrl(video.url)
-        logger.info('video from DB uuid is %s.', videoFromDB.uuid)
+        const videoFromDB1 = await peertubeHelpers.videos.loadByUrl(video.url)
+        const videoFromDB2 = await peertubeHelpers.videos.loadByIdOrUUID(video.id)
+        const videoFromDB3 = await peertubeHelpers.videos.loadByIdOrUUID(video.uuid)
+
+        if (videoFromDB1.uuid !== videoFromDB2.uuid || videoFromDB2.uuid !== videoFromDB3.uuid) return
+
+        logger.info('video from DB uuid is %s.', videoFromDB1.uuid)
 
         await peertubeHelpers.videos.removeVideo(video.id)
 

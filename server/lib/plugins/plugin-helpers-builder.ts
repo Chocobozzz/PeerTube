@@ -63,6 +63,10 @@ function buildVideosHelpers () {
       return VideoModel.loadByUrl(url)
     },
 
+    loadByIdOrUUID: (id: number | string) => {
+      return VideoModel.load(id)
+    },
+
     removeVideo: (id: number) => {
       return sequelizeTypescript.transaction(async t => {
         const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(id, t)

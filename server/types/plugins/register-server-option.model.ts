@@ -30,6 +30,7 @@ export type PeerTubeHelpers = {
 
   videos: {
     loadByUrl: (url: string) => Promise<MVideoThumbnail>
+    loadByIdOrUUID: (id: number | string) => Promise<MVideoThumbnail>
 
     removeVideo: (videoId: number) => Promise<void>
   }
