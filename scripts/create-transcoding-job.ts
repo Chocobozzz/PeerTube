@@ -7,6 +7,7 @@ import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
 import { computeResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
 import { VideoTranscodingPayload } from '@shared/models'
+import { CONFIG } from '@server/initializers/config'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
@@ -42,7 +43,8 @@ async function run () {
   const dataInput: VideoTranscodingPayload[] = []
   const { videoFileResolution } = await video.getMaxQualityResolution()
 
-  if (options.generateHls) {
+  // Generate HLS files
+  if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     const resolutionsEnabled = options.resolution
       ? [ options.resolution ]
       : computeResolutionsToTranscode(videoFileResolution, 'vod').concat([ videoFileResolution ])
@@ -57,19 +59,26 @@ async function run () {
         isMaxQuality: false
       })
     }
-  } else if (options.resolution !== undefined) {
-    dataInput.push({
-      type: 'new-resolution-to-webtorrent',
-      videoUUID: video.uuid,
-      isNewVideo: false,
-      resolution: options.resolution
-    })
   } else {
-    dataInput.push({
-      type: 'optimize-to-webtorrent',
-      videoUUID: video.uuid,
-      isNewVideo: false
-    })
+    if (options.resolution !== undefined) {
+      dataInput.push({
+        type: 'new-resolution-to-webtorrent',
+        videoUUID: video.uuid,
+        isNewVideo: false,
+        resolution: options.resolution
+      })
+    } else {
+      if (video.VideoFiles.length === 0) {
+        console.error('Cannot regenerate webtorrent files with a HLS only video.')
+        return
+      }
+
+      dataInput.push({
+        type: 'optimize-to-webtorrent',
+        videoUUID: video.uuid,
+        isNewVideo: false
+      })
+    }
   }
 
   await JobQueue.Instance.init()
