@@ -6,12 +6,12 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
-import { VideoShareModel } from '../../../models/video/video-share'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
+import { VideoShareModel } from '../../../models/video/video-share'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
+import { forwardVideoRelatedActivity } from '../send/utils'
+import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   const { activity, byActor } = options
@@ -22,9 +22,7 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   }
 
   if (activityToUndo.type === 'Create') {
-    if (activityToUndo.object.type === 'Dislike') {
-      return retryTransactionWrapper(processUndoDislike, byActor, activity)
-    } else if (activityToUndo.object.type === 'CacheFile') {
+    if (activityToUndo.object.type === 'CacheFile') {
       return retryTransactionWrapper(processUndoCacheFile, byActor, activity)
     }
   }

@@ -49,7 +49,7 @@ Be part of a network of multiple small federated, interoperable video hosting pr
     <img alt="test suite status" src="https://github.com/Chocobozzz/PeerTube/workflows/Test%20Suite/badge.svg" />
   </a>
 
-  <a href="http://standardjs.com/">
+  <a href="https://standardjs.com/">
     <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide" />
   </a>
 </p>
@@ -58,7 +58,7 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
 <p align="center">
   <a href="https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3">
-    <img src="http://lutim.cpy.re/9CLXh0Ys.png" alt="screenshot" />
+    <img src="https://lutim.cpy.re/9CLXh0Ys.png" alt="screenshot" />
   </a>
 </p>
 
@@ -190,4 +190,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
