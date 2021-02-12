@@ -80,8 +80,6 @@ export type VideoImportYoutubeDLPayload = {
   type: VideoImportYoutubeDLPayloadType
   videoImportId: number
 
-  generateThumbnail: boolean
-  generatePreview: boolean
   fileExt?: string
 }
 export type VideoImportTorrentPayload = {

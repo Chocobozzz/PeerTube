@@ -57,10 +57,7 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
 
   const options = {
     type: payload.type,
-    videoImportId: payload.videoImportId,
-
-    generateThumbnail: true,
-    generatePreview: true
+    videoImportId: payload.videoImportId
   }
   const target = {
     torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
@@ -75,10 +72,7 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
   const videoImport = await getVideoImportOrDie(payload.videoImportId)
   const options = {
     type: payload.type,
-    videoImportId: videoImport.id,
-
-    generateThumbnail: payload.generateThumbnail,
-    generatePreview: payload.generatePreview
+    videoImportId: videoImport.id
   }
 
   return processFile(
@@ -100,9 +94,6 @@ async function getVideoImportOrDie (videoImportId: number) {
 type ProcessFileOptions = {
   type: VideoImportYoutubeDLPayloadType | VideoImportTorrentPayloadType
   videoImportId: number
-
-  generateThumbnail: boolean
-  generatePreview: boolean
 }
 async function processFile (downloader: () => Promise<string>, videoImport: MVideoImportDefault, options: ProcessFileOptions) {
   let tempVideoPath: string
@@ -167,18 +158,18 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
-    // Process thumbnail
+    // Generate miniature if the import did not created it
     let thumbnailModel: MThumbnail
     let thumbnailSave: object
-    if (options.generateThumbnail) {
+    if (!videoImportWithFiles.Video.getMiniature()) {
       thumbnailModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.MINIATURE)
       thumbnailSave = thumbnailModel.toJSON()
     }
 
-    // Process preview
+    // Generate preview if the import did not created it
     let previewModel: MThumbnail
     let previewSave: object
-    if (options.generatePreview) {
+    if (!videoImportWithFiles.Video.getPreview()) {
       previewModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.PREVIEW)
       previewSave = previewModel.toJSON()
     }
