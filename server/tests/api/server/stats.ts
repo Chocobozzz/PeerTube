@@ -70,6 +70,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(2)
     expect(data.totalInstanceFollowing).to.equal(1)
+    expect(data.totalLocalPlaylists).to.equal(0)
   })
 
   it('Should have the correct stats on instance 2', async function () {
@@ -85,6 +86,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(1)
     expect(data.totalInstanceFollowing).to.equal(1)
+    expect(data.totalLocalPlaylists).to.equal(0)
   })
 
   it('Should have the correct stats on instance 3', async function () {
@@ -99,6 +101,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowing).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(0)
+    expect(data.totalLocalPlaylists).to.equal(0)
   })
 
   it('Should have the correct total videos stats after an unfollow', async function () {
@@ -113,7 +116,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(0)
   })
 
-  it('Should have the correct active users stats', async function () {
+  it('Should have the correct active user/channels stats', async function () {
     const server = servers[0]
 
     {
@@ -122,6 +125,10 @@ describe('Test stats (excluding redundancy)', function () {
       expect(data.totalDailyActiveUsers).to.equal(1)
       expect(data.totalWeeklyActiveUsers).to.equal(1)
       expect(data.totalMonthlyActiveUsers).to.equal(1)
+
+      expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
     }
 
     {
