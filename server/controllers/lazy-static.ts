@@ -18,7 +18,7 @@ lazyStaticRouter.use(
 )
 
 lazyStaticRouter.use(
-  LAZY_STATIC_PATHS.PREVIEWS + ':uuid.jpg',
+  LAZY_STATIC_PATHS.PREVIEWS + ':filename',
   asyncMiddleware(getPreview)
 )
 
@@ -71,7 +71,7 @@ async function getAvatar (req: express.Request, res: express.Response) {
 }
 
 async function getPreview (req: express.Request, res: express.Response) {
-  const result = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
+  const result = await VideosPreviewCache.Instance.getFilePath(req.params.filename)
   if (!result) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.SERVER })

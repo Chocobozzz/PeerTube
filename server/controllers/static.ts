@@ -1,5 +1,15 @@
 import * as cors from 'cors'
 import * as express from 'express'
+import { join } from 'path'
+import { getRegisteredPlugins, getRegisteredThemes } from '@server/controllers/api/config'
+import { serveIndexHTML } from '@server/lib/client-html'
+import { getTorrentFilePath, getVideoFilePath } from '@server/lib/video-paths'
+import { MVideoFile, MVideoFullLight } from '@server/types/models'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { VideoStreamingPlaylistType } from '@shared/models/videos/video-streaming-playlist.type'
+import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
+import { root } from '../helpers/core-utils'
+import { CONFIG, isEmailEnabled } from '../initializers/config'
 import {
   CONSTRAINTS_FIELDS,
   DEFAULT_THEME_NAME,
@@ -11,24 +21,13 @@ import {
   STATIC_PATHS,
   WEBSERVER
 } from '../initializers/constants'
-import { cacheRoute } from '../middlewares/cache'
-import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
-import { VideoModel } from '../models/video/video'
-import { UserModel } from '../models/account/user'
-import { VideoCommentModel } from '../models/video/video-comment'
-import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
-import { join } from 'path'
-import { root } from '../helpers/core-utils'
-import { getEnabledResolutions } from '../lib/video-transcoding'
-import { CONFIG, isEmailEnabled } from '../initializers/config'
-import { getPreview, getVideoCaption } from './lazy-static'
-import { VideoStreamingPlaylistType } from '@shared/models/videos/video-streaming-playlist.type'
-import { MVideoFile, MVideoFullLight } from '@server/types/models'
-import { getTorrentFilePath, getVideoFilePath } from '@server/lib/video-paths'
 import { getThemeOrDefault } from '../lib/plugins/theme-utils'
-import { getRegisteredPlugins, getRegisteredThemes } from '@server/controllers/api/config'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { serveIndexHTML } from '@server/lib/client-html'
+import { getEnabledResolutions } from '../lib/video-transcoding'
+import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
+import { cacheRoute } from '../middlewares/cache'
+import { UserModel } from '../models/account/user'
+import { VideoModel } from '../models/video/video'
+import { VideoCommentModel } from '../models/video/video-comment'
 
 const staticRouter = express.Router()
 
