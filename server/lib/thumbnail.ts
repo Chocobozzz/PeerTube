@@ -27,18 +27,28 @@ function createPlaylistMiniatureFromExisting (
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated, existingThumbnail })
 }
 
-function createPlaylistMiniatureFromUrl (fileUrl: string, playlist: MVideoPlaylistThumbnail, size?: ImageSize) {
+function createPlaylistMiniatureFromUrl (downloadUrl: string, playlist: MVideoPlaylistThumbnail, size?: ImageSize) {
   const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
 
-  const thumbnailCreator = () => downloadImage(fileUrl, basePath, filename, { width, height })
+  // Only save the file URL if it is a remote playlist
+  const fileUrl = playlist.isOwned()
+    ? null
+    : downloadUrl
+
+  const thumbnailCreator = () => downloadImage(downloadUrl, basePath, filename, { width, height })
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
-function createVideoMiniatureFromUrl (fileUrl: string, video: MVideoThumbnail, type: ThumbnailType, size?: ImageSize) {
+function createVideoMiniatureFromUrl (downloadUrl: string, video: MVideoThumbnail, type: ThumbnailType, size?: ImageSize) {
   const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-  const thumbnailCreator = () => downloadImage(fileUrl, basePath, filename, { width, height })
 
+  // Only save the file URL if it is a remote video
+  const fileUrl = video.isOwned()
+    ? null
+    : downloadUrl
+
+  const thumbnailCreator = () => downloadImage(downloadUrl, basePath, filename, { width, height })
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 

@@ -1,3 +1,4 @@
+import { remove } from 'fs-extra'
 import { join } from 'path'
 import {
   AfterDestroy,
@@ -12,15 +13,14 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
+import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
+import { MThumbnailVideo, MVideoAccountLight } from '@server/types/models'
+import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { logger } from '../../helpers/logger'
-import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
+import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
-import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
-import { MVideoAccountLight } from '@server/types/models'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 
 @Table({
   tableName: 'thumbnail',
@@ -30,6 +30,10 @@ import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
     },
     {
       fields: [ 'videoPlaylistId' ],
+      unique: true
+    },
+    {
+      fields: [ 'filename', 'type' ],
       unique: true
     }
   ]
@@ -114,18 +118,21 @@ export class ThumbnailModel extends Model {
             .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, err))
   }
 
-  static loadByName (filename: string) {
+  static loadWithVideoByName (filename: string, thumbnailType: ThumbnailType): Promise<MThumbnailVideo> {
     const query = {
       where: {
-        filename
-      }
+        filename,
+        type: thumbnailType
+      },
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ]
     }
 
     return ThumbnailModel.findOne(query)
-  }
-
-  static generateDefaultPreviewName (videoUUID: string) {
-    return videoUUID + '.jpg'
   }
 
   getFileUrl (video: MVideoAccountLight) {

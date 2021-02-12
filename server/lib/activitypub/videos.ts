@@ -5,6 +5,7 @@ import { join } from 'path'
 import * as request from 'request'
 import * as sequelize from 'sequelize'
 import { VideoLiveModel } from '@server/models/video/video-live'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
@@ -15,7 +16,7 @@ import {
   ActivityUrlObject,
   ActivityVideoUrlObject
 } from '../../../shared/index'
-import { VideoObject } from '../../../shared/models/activitypub/objects'
+import { ActivityIconObject, VideoObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -76,7 +77,6 @@ import { sendCreateVideo, sendUpdateVideo } from './send'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { addVideoComments } from './video-comments'
 import { createRates } from './video-rates'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   const video = videoArg as MVideoAP
@@ -360,7 +360,7 @@ async function updateVideoFromAP (options: {
       if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)
 
       if (videoUpdated.getPreview()) {
-        const previewUrl = videoUpdated.getPreview().getFileUrl(videoUpdated)
+        const previewUrl = getPreviewUrl(getPreviewFromIcons(videoObject), video)
         const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
         await videoUpdated.addAndSaveThumbnail(previewModel, t)
       }
@@ -597,9 +597,7 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
 
     const previewIcon = getPreviewFromIcons(videoObject)
-    const previewUrl = previewIcon
-      ? previewIcon.url
-      : buildRemoteVideoBaseUrl(videoCreated, join(STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
+    const previewUrl = getPreviewUrl(previewIcon, videoCreated)
     const previewModel = createPlaceholderThumbnail(previewUrl, videoCreated, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
@@ -822,7 +820,11 @@ function getThumbnailFromIcons (videoObject: VideoObject) {
 function getPreviewFromIcons (videoObject: VideoObject) {
   const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minWidth)
 
-  // FIXME: don't put a fallback here for compatibility with PeerTube <2.2
-
   return maxBy(validIcons, 'width')
+}
+
+function getPreviewUrl (previewIcon: ActivityIconObject, video: MVideoAccountLight) {
+  return previewIcon
+    ? previewIcon.url
+    : buildRemoteVideoBaseUrl(video, join(STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
 }

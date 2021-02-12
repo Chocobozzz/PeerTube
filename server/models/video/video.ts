@@ -130,6 +130,7 @@ import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
+import { v4 as uuidv4 } from 'uuid'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -1827,7 +1828,7 @@ export class VideoModel extends Model {
   }
 
   generateThumbnailName () {
-    return this.uuid + '.jpg'
+    return uuidv4() + '.jpg'
   }
 
   getMiniature () {
@@ -1837,7 +1838,7 @@ export class VideoModel extends Model {
   }
 
   generatePreviewName () {
-    return this.uuid + '.jpg'
+    return uuidv4() + '.jpg'
   }
 
   hasPreview () {
