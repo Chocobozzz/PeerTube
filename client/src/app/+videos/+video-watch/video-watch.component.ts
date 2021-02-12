@@ -541,6 +541,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // Re init attributes
     this.descriptionLoading = false
     this.completeDescriptionShown = false
+    this.completeVideoDescription = undefined
     this.remoteServerDown = false
     this.currentTime = undefined
 
