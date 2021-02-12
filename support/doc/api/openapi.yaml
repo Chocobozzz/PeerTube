@@ -23,7 +23,7 @@ info:
     - [Go](https://framagit.org/framasoft/peertube/clients/go)
     - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
 
-    See the [Quick Start guide](https://docs.joinpeertube.org/#/api-rest-getting-started) so you can play with the PeerTube API.
+    See the [Quick Start guide](https://docs.joinpeertube.org/api-rest-getting-started) so you can play with the PeerTube API.
 
     # Authentication
 
@@ -34,7 +34,7 @@ info:
     ## Roles
 
     Accounts are given permissions based on their role. There are three roles on
-    PeerTube: Administrator, Moderator, and User. See the [roles guide](https://docs.joinpeertube.org/#/admin-managing-users?id=roles) for a detail of their permissions.
+    PeerTube: Administrator, Moderator, and User. See the [roles guide](https://docs.joinpeertube.org/admin-managing-users?id=roles) for a detail of their permissions.
 
     # Errors
 
@@ -95,7 +95,7 @@ tags:
       information across its social graph by posting activities to actors' inbox
       endpoints.
     externalDocs:
-      url: https://docs.joinpeertube.org/#/admin-following-instances?id=instances-follows
+      url: https://docs.joinpeertube.org/admin-following-instances?id=instances-follows
   - name: Instance Redundancy
     description: >
       Redundancy is part of the inter-server solidarity that PeerTube fosters.
@@ -103,12 +103,12 @@ tags:
       to the policy of video selection of your choice. Note that you have a similar functionality
       to mirror individual videos, see `Video Mirroring`.
     externalDocs:
-      url: https://docs.joinpeertube.org/#/admin-following-instances?id=instances-redundancy
+      url: https://docs.joinpeertube.org/admin-following-instances?id=instances-redundancy
   - name: Plugins
     description: >
       Managing plugins installed from a local path or from NPM, or search for new ones.
     externalDocs:
-      url: https://docs.joinpeertube.org/#/api-plugins
+      url: https://docs.joinpeertube.org/api-plugins
   - name: Abuses
     description: |
       Abuses deal with reports of local or remote videos/comments/accounts alike.
@@ -3815,7 +3815,7 @@ components:
 
         - Have an account with sufficient authorization levels
 
-        - [Generate](https://docs.joinpeertube.org/#/api-rest-getting-started) a
+        - [Generate](https://docs.joinpeertube.org/api-rest-getting-started) a
         Bearer Token
 
         - Make Authenticated Requests
