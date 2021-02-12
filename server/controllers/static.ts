@@ -93,25 +93,6 @@ staticRouter.use(
   express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
 )
 
-// DEPRECATED: use lazy-static route instead
-const avatarsPhysicalPath = CONFIG.STORAGE.AVATARS_DIR
-staticRouter.use(
-  STATIC_PATHS.AVATARS,
-  express.static(avatarsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
-)
-
-// DEPRECATED: use lazy-static route instead
-staticRouter.use(
-  STATIC_PATHS.PREVIEWS + ':uuid.jpg',
-  asyncMiddleware(getPreview)
-)
-
-// DEPRECATED: use lazy-static route instead
-staticRouter.use(
-  STATIC_PATHS.VIDEO_CAPTIONS + ':videoId-:captionLanguage([a-z]+).vtt',
-  asyncMiddleware(getVideoCaption)
-)
-
 // robots.txt service
 staticRouter.get('/robots.txt',
   asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ROBOTS)),
