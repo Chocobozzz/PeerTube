@@ -1,12 +1,12 @@
-import { join } from 'path'
-import { CONFIG } from '../initializers/config'
-import * as srt2vtt from 'srt-to-vtt'
 import { createReadStream, createWriteStream, move, remove } from 'fs-extra'
-import { MVideoCaptionFormattable } from '@server/types/models'
+import { join } from 'path'
+import * as srt2vtt from 'srt-to-vtt'
+import { MVideoCaption } from '@server/types/models'
+import { CONFIG } from '../initializers/config'
 
-async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: MVideoCaptionFormattable) {
+async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: MVideoCaption) {
   const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR
-  const destination = join(videoCaptionsDir, videoCaption.getCaptionName())
+  const destination = join(videoCaptionsDir, videoCaption.filename)
 
   // Convert this srt file to vtt
   if (physicalFile.path.endsWith('.srt')) {
@@ -17,7 +17,7 @@ async function moveAndProcessCaptionFile (physicalFile: { filename: string, path
   }
 
   // This is important in case if there is another attempt in the retry process
-  physicalFile.filename = videoCaption.getCaptionName()
+  physicalFile.filename = videoCaption.filename
   physicalFile.path = destination
 }
 

@@ -28,6 +28,7 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
     return this.loadRemoteFile(thumbnail.Video.uuid)
   }
 
+  // Key is the video UUID
   protected async loadRemoteFile (key: string) {
     const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(key)
     if (!video) return undefined
