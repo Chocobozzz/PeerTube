@@ -23,7 +23,7 @@ lazyStaticRouter.use(
 )
 
 lazyStaticRouter.use(
-  LAZY_STATIC_PATHS.VIDEO_CAPTIONS + ':videoId-:captionLanguage([a-z]+).vtt',
+  LAZY_STATIC_PATHS.VIDEO_CAPTIONS + ':filename',
   asyncMiddleware(getVideoCaption)
 )
 
@@ -78,10 +78,7 @@ async function getPreview (req: express.Request, res: express.Response) {
 }
 
 async function getVideoCaption (req: express.Request, res: express.Response) {
-  const result = await VideosCaptionCache.Instance.getFilePath({
-    videoId: req.params.videoId,
-    language: req.params.captionLanguage
-  })
+  const result = await VideosCaptionCache.Instance.getFilePath(req.params.filename)
   if (!result) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.SERVER })

@@ -166,6 +166,9 @@ async function createThumbnailFromFunction (parameters: {
 }) {
   const { thumbnailCreator, filename, width, height, type, existingThumbnail, automaticallyGenerated = null, fileUrl = null } = parameters
 
+  // Remove old file
+  if (existingThumbnail) await existingThumbnail.removeThumbnail()
+
   const thumbnail = existingThumbnail || new ThumbnailModel()
 
   thumbnail.filename = filename

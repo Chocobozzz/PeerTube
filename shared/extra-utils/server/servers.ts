@@ -5,7 +5,7 @@ import { ChildProcess, exec, fork } from 'child_process'
 import { copy, ensureDir, pathExists, readdir, readFile, remove } from 'fs-extra'
 import { join } from 'path'
 import { randomInt } from '../../core-utils/miscs/miscs'
-import { VideoChannel } from '../../models/videos'
+import { Video, VideoChannel } from '../../models/videos'
 import { buildServerDirectory, getFileSize, isGithubCI, root, wait } from '../miscs/miscs'
 import { makeGetRequest } from '../requests/requests'
 

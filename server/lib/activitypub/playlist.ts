@@ -99,8 +99,6 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
     return Promise.resolve()
   })
 
-  logger.info('toto', { playlist, id: playlist.id })
-
   const refreshedPlaylist = await VideoPlaylistModel.loadWithAccountAndChannel(playlist.id, null)
 
   if (playlistObject.icon) {

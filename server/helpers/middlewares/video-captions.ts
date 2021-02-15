@@ -9,7 +9,6 @@ async function doesVideoCaptionExist (video: MVideoId, language: string, res: Re
   if (!videoCaption) {
     res.status(HttpStatusCode.NOT_FOUND_404)
        .json({ error: 'Video caption not found' })
-       .end()
 
     return false
   }

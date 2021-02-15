@@ -56,6 +56,7 @@ import {
   MVideoAccountLightBlacklistAllFiles,
   MVideoAP,
   MVideoAPWithoutCaption,
+  MVideoCaption,
   MVideoFile,
   MVideoFullLight,
   MVideoId,
@@ -90,7 +91,7 @@ async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVid
     // Fetch more attributes that we will need to serialize in AP object
     if (isArray(video.VideoCaptions) === false) {
       video.VideoCaptions = await video.$get('VideoCaptions', {
-        attributes: [ 'language' ],
+        attributes: [ 'filename', 'language' ],
         transaction
       })
     }
@@ -423,7 +424,14 @@ async function updateVideoFromAP (options: {
         await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(videoUpdated.id, t)
 
         const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
-          return VideoCaptionModel.insertOrReplaceLanguage(videoUpdated.id, c.identifier, c.url, t)
+          const caption = new VideoCaptionModel({
+            videoId: videoUpdated.id,
+            filename: VideoCaptionModel.generateCaptionName(c.identifier),
+            language: c.identifier,
+            fileUrl: c.url
+          }) as MVideoCaption
+
+          return VideoCaptionModel.insertOrReplaceLanguage(caption, t)
         })
         await Promise.all(videoCaptionsPromises)
       }
@@ -629,7 +637,14 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
 
     // Process captions
     const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
-      return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, c.url, t)
+      const caption = new VideoCaptionModel({
+        videoId: videoCreated.id,
+        filename: VideoCaptionModel.generateCaptionName(c.identifier),
+        language: c.identifier,
+        fileUrl: c.url
+      }) as MVideoCaption
+
+      return VideoCaptionModel.insertOrReplaceLanguage(caption, t)
     })
     await Promise.all(videoCaptionsPromises)
 

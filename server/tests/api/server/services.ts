@@ -2,24 +2,25 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { Video, VideoPlaylistPrivacy } from '@shared/models'
 import {
+  addVideoInPlaylist,
+  createVideoPlaylist,
   getOEmbed,
   getVideosList,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  uploadVideo,
-  createVideoPlaylist,
-  addVideoInPlaylist
+  uploadVideo
 } from '../../../../shared/extra-utils'
 import { cleanupTests, flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
-import { VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test services', function () {
   let server: ServerInfo = null
   let playlistUUID: string
+  let video: Video
 
   before(async function () {
     this.timeout(30000)
@@ -36,7 +37,7 @@ describe('Test services', function () {
       await uploadVideo(server.url, server.accessToken, videoAttributes)
 
       const res = await getVideosList(server.url)
-      server.video = res.body.data[0]
+      video = res.body.data[0]
     }
 
     {
@@ -57,23 +58,23 @@ describe('Test services', function () {
         token: server.accessToken,
         playlistId: res.body.videoPlaylist.id,
         elementAttrs: {
-          videoId: server.video.id
+          videoId: video.id
         }
       })
     }
   })
 
   it('Should have a valid oEmbed video response', async function () {
-    const oembedUrl = 'http://localhost:' + server.port + '/videos/watch/' + server.video.uuid
+    const oembedUrl = 'http://localhost:' + server.port + '/videos/watch/' + video.uuid
 
     const res = await getOEmbed(server.url, oembedUrl)
     const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
-      `src="http://localhost:${server.port}/videos/embed/${server.video.uuid}" ` +
+      `src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
       'frameborder="0" allowfullscreen></iframe>'
-    const expectedThumbnailUrl = 'http://localhost:' + server.port + '/lazy-static/previews/' + server.video.uuid + '.jpg'
+    const expectedThumbnailUrl = 'http://localhost:' + server.port + video.previewPath
 
     expect(res.body.html).to.equal(expectedHtml)
-    expect(res.body.title).to.equal(server.video.name)
+    expect(res.body.title).to.equal(video.name)
     expect(res.body.author_name).to.equal(server.videoChannel.displayName)
     expect(res.body.width).to.equal(560)
     expect(res.body.height).to.equal(315)
@@ -101,18 +102,18 @@ describe('Test services', function () {
   })
 
   it('Should have a valid oEmbed response with small max height query', async function () {
-    const oembedUrl = 'http://localhost:' + server.port + '/videos/watch/' + server.video.uuid
+    const oembedUrl = 'http://localhost:' + server.port + '/videos/watch/' + video.uuid
     const format = 'json'
     const maxHeight = 50
     const maxWidth = 50
 
     const res = await getOEmbed(server.url, oembedUrl, format, maxHeight, maxWidth)
     const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts" ' +
-      `src="http://localhost:${server.port}/videos/embed/${server.video.uuid}" ` +
+      `src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
       'frameborder="0" allowfullscreen></iframe>'
 
     expect(res.body.html).to.equal(expectedHtml)
-    expect(res.body.title).to.equal(server.video.name)
+    expect(res.body.title).to.equal(video.name)
     expect(res.body.author_name).to.equal(server.videoChannel.displayName)
     expect(res.body.height).to.equal(50)
     expect(res.body.width).to.equal(50)

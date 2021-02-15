@@ -471,7 +471,7 @@ export class VideoPlaylistModel extends Model {
   generateThumbnailName () {
     const extension = '.jpg'
 
-    return 'playlist-' + this.uuid + extension
+    return 'playlist-' + uuidv4() + extension
   }
 
   getThumbnailUrl () {

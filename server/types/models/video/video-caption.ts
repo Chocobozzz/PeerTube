@@ -1,5 +1,5 @@
+import { PickWith } from '@shared/core-utils'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
-import { FunctionProperties, PickWith } from '@shared/core-utils'
 import { MVideo, MVideoUUID } from './video'
 
 type Use<K extends keyof VideoCaptionModel, M> = PickWith<VideoCaptionModel, K, M>
@@ -22,6 +22,6 @@ export type MVideoCaptionVideo =
 // Format for API or AP object
 
 export type MVideoCaptionFormattable =
-  FunctionProperties<MVideoCaption> &
+  MVideoCaption &
   Pick<MVideoCaption, 'language'> &
   Use<'Video', MVideoUUID>
