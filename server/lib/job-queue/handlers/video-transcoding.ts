@@ -128,7 +128,7 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
     // Remove webtorrent files if not enabled
     for (const file of video.VideoFiles) {
       await video.removeFile(file)
-      await video.removeTorrent(file)
+      await file.removeTorrent()
       await file.destroy()
     }
 

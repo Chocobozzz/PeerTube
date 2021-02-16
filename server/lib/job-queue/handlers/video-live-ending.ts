@@ -85,7 +85,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   await video.save()
 
   // Remove old HLS playlist video files
-  const videoWithFiles = await VideoModel.loadWithFiles(video.id)
+  const videoWithFiles = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
 
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)

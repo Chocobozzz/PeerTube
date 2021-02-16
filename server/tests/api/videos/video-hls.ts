@@ -52,7 +52,7 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
       expect(file).to.not.be.undefined
 
       expect(file.magnetUri).to.have.lengthOf.above(2)
-      expect(file.torrentUrl).to.equal(`${baseUrl}/static/torrents/${videoDetails.uuid}-${file.resolution.id}-hls.torrent`)
+      expect(file.torrentUrl).to.equal(`http://${server.host}/lazy-static/torrents/${videoDetails.uuid}-${file.resolution.id}-hls.torrent`)
       expect(file.fileUrl).to.equal(
         `${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/${videoDetails.uuid}-${file.resolution.id}-fragmented.mp4`
       )

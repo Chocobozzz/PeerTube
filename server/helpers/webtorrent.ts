@@ -1,20 +1,19 @@
+import * as createTorrent from 'create-torrent'
+import { createWriteStream, ensureDir, remove, writeFile } from 'fs-extra'
+import * as magnetUtil from 'magnet-uri'
+import * as parseTorrent from 'parse-torrent'
+import { dirname, join } from 'path'
+import * as WebTorrent from 'webtorrent'
+import { isArray } from '@server/helpers/custom-validators/misc'
+import { WEBSERVER } from '@server/initializers/constants'
+import { generateTorrentFileName, getVideoFilePath } from '@server/lib/video-paths'
+import { MVideo, MVideoWithHost } from '@server/types/models/video/video'
+import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file'
+import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
+import { CONFIG } from '../initializers/config'
+import { promisify2 } from './core-utils'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
-import * as WebTorrent from 'webtorrent'
-import { createWriteStream, ensureDir, remove, writeFile } from 'fs-extra'
-import { CONFIG } from '../initializers/config'
-import { dirname, join } from 'path'
-import * as createTorrent from 'create-torrent'
-import { promisify2 } from './core-utils'
-import { MVideo } from '@server/types/models/video/video'
-import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file'
-import { isStreamingPlaylist, MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
-import { WEBSERVER } from '@server/initializers/constants'
-import * as parseTorrent from 'parse-torrent'
-import * as magnetUtil from 'magnet-uri'
-import { isArray } from '@server/helpers/custom-validators/misc'
-import { getTorrentFileName, getVideoFilePath } from '@server/lib/video-paths'
-import { extractVideo } from '@server/helpers/video'
 
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 
@@ -78,10 +77,12 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
   })
 }
 
-async function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
-  const video = extractVideo(videoOrPlaylist)
-  const { baseUrlHttp } = video.getBaseUrls()
-
+// FIXME: refactor/merge videoOrPlaylist and video arguments
+async function createTorrentAndSetInfoHash (
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
+  video: MVideoWithHost,
+  videoFile: MVideoFile
+) {
   const options = {
     // Keep the extname, it's used by the client to stream the file inside a web browser
     name: `${video.name} ${videoFile.resolution}p${videoFile.extname}`,
@@ -90,33 +91,33 @@ async function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreaming
       [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
       [ WEBSERVER.URL + '/tracker/announce' ]
     ],
-    urlList: [ videoOrPlaylist.getVideoFileUrl(videoFile, baseUrlHttp) ]
+    urlList: [ videoFile.getFileUrl(video) ]
   }
 
   const torrent = await createTorrentPromise(getVideoFilePath(videoOrPlaylist, videoFile), options)
 
-  const filePath = join(CONFIG.STORAGE.TORRENTS_DIR, getTorrentFileName(videoOrPlaylist, videoFile))
-  logger.info('Creating torrent %s.', filePath)
+  const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
+  const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
+  logger.info('Creating torrent %s.', torrentPath)
 
-  await writeFile(filePath, torrent)
+  await writeFile(torrentPath, torrent)
 
   const parsedTorrent = parseTorrent(torrent)
   videoFile.infoHash = parsedTorrent.infoHash
+  videoFile.torrentFilename = torrentFilename
 }
 
+// FIXME: merge/refactor videoOrPlaylist and video arguments
 function generateMagnetUri (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
+  video: MVideoWithHost,
   videoFile: MVideoFileRedundanciesOpt,
   baseUrlHttp: string,
   baseUrlWs: string
 ) {
-  const video = isStreamingPlaylist(videoOrPlaylist)
-    ? videoOrPlaylist.Video
-    : videoOrPlaylist
-
-  const xs = videoOrPlaylist.getTorrentUrl(videoFile, baseUrlHttp)
+  const xs = videoFile.getTorrentUrl()
   const announce = videoOrPlaylist.getTrackerUrls(baseUrlHttp, baseUrlWs)
-  let urlList = [ videoOrPlaylist.getVideoFileUrl(videoFile, baseUrlHttp) ]
+  let urlList = [ videoFile.getFileUrl(video) ]
 
   const redundancies = videoFile.RedundancyVideos
   if (isArray(redundancies)) urlList = urlList.concat(redundancies.map(r => r.fileUrl))

@@ -15,8 +15,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { v4 as uuidv4 } from 'uuid'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
-import { MVideoAccountLight, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
+import { MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo, MVideoWithHost } from '@server/types/models'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { logger } from '../../helpers/logger'
@@ -24,7 +25,6 @@ import { CONFIG } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants'
 import { buildWhereIdOrUUID, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { v4 as uuidv4 } from 'uuid'
 
 export enum ScopeNames {
   WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'
@@ -204,7 +204,7 @@ export class VideoCaptionModel extends Model {
     return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.filename)
   }
 
-  getFileUrl (video: MVideoAccountLight) {
+  getFileUrl (video: MVideoWithHost) {
     if (!this.Video) this.Video = video as VideoModel
 
     if (video.isOwned()) return WEBSERVER.URL + this.getCaptionStaticPath()

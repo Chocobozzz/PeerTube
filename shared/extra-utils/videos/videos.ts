@@ -11,7 +11,7 @@ import validator from 'validator'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
 import { buildAbsoluteFixturePath, buildServerDirectory, dateIsValid, immutableAssign, testImage, webtorrentAdd } from '../miscs/miscs'
-import { makeGetRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
+import { makeGetRequest, makePutBodyRequest, makeRawRequest, makeUploadRequest } from '../requests/requests'
 import { waitJobs } from '../server/jobs'
 import { ServerInfo } from '../server/servers'
 import { getMyUserInformation } from '../users/users'
@@ -544,6 +544,9 @@ async function completeVideoCheck (
   if (!attributes.likes) attributes.likes = 0
   if (!attributes.dislikes) attributes.dislikes = 0
 
+  const host = new URL(url).host
+  const originHost = attributes.account.host
+
   expect(video.name).to.equal(attributes.name)
   expect(video.category.id).to.equal(attributes.category)
   expect(video.category.label).to.equal(attributes.category !== null ? VIDEO_CATEGORIES[attributes.category] : 'Misc')
@@ -603,8 +606,21 @@ async function completeVideoCheck (
     if (attributes.files.length > 1) extension = '.mp4'
 
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`http://${attributes.account.host}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
-    expect(file.fileUrl).to.equal(`http://${attributes.account.host}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
+
+    expect(file.torrentDownloadUrl).to.equal(`http://${host}/download/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
+    expect(file.torrentUrl).to.equal(`http://${host}/lazy-static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
+
+    expect(file.fileUrl).to.equal(`http://${originHost}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
+    expect(file.fileDownloadUrl).to.equal(`http://${originHost}/download/videos/${videoDetails.uuid}-${file.resolution.id}${extension}`)
+
+    await Promise.all([
+      makeRawRequest(file.torrentUrl, 200),
+      makeRawRequest(file.torrentDownloadUrl, 200),
+      makeRawRequest(file.metadataUrl, 200),
+      // Backward compatibility
+      makeRawRequest(`http://${originHost}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`, 200)
+    ])
+
     expect(file.resolution.id).to.equal(attributeFile.resolution)
     expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
 

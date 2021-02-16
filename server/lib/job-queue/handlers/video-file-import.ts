@@ -2,9 +2,9 @@ import * as Bull from 'bull'
 import { copy, stat } from 'fs-extra'
 import { extname } from 'path'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { getVideoFilePath } from '@server/lib/video-paths'
+import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { UserModel } from '@server/models/account/user'
-import { MVideoFile, MVideoWithFile } from '@server/types/models'
+import { MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoFileImportPayload } from '@shared/models'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
@@ -50,14 +50,16 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateVideoFile (video: MVideoWithFile, inputFilePath: string) {
+async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
   const { size } = await stat(inputFilePath)
   const fps = await getVideoFileFPS(inputFilePath)
 
+  const fileExt = extname(inputFilePath)
   let updatedVideoFile = new VideoFileModel({
     resolution: videoFileResolution,
-    extname: extname(inputFilePath),
+    extname: fileExt,
+    filename: generateVideoFilename(video, false, videoFileResolution, fileExt),
     size,
     fps,
     videoId: video.id
@@ -68,7 +70,7 @@ async function updateVideoFile (video: MVideoWithFile, inputFilePath: string) {
   if (currentVideoFile) {
     // Remove old file and old torrent
     await video.removeFile(currentVideoFile)
-    await video.removeTorrent(currentVideoFile)
+    await currentVideoFile.removeTorrent()
     // Remove the old video file from the array
     video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
 
@@ -83,7 +85,7 @@ async function updateVideoFile (video: MVideoWithFile, inputFilePath: string) {
   const outputPath = getVideoFilePath(video, updatedVideoFile)
   await copy(inputFilePath, outputPath)
 
-  await createTorrentAndSetInfoHash(video, updatedVideoFile)
+  await createTorrentAndSetInfoHash(video, video, updatedVideoFile)
 
   await updatedVideoFile.save()
 

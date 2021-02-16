@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
-import { join } from 'path'
+import { basename, join } from 'path'
 import * as request from 'request'
 import * as sequelize from 'sequelize'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -30,11 +30,11 @@ import { doRequest } from '../../helpers/requests'
 import { fetchVideoByUrl, getExtFromMimetype, VideoFetchByUrlType } from '../../helpers/video'
 import {
   ACTIVITY_PUB,
+  LAZY_STATIC_PATHS,
   MIMETYPES,
   P2P_MEDIA_LOADER_PEER_VERSION,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
-  STATIC_PATHS,
   THUMBNAILS_SIZE
 } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
@@ -51,6 +51,8 @@ import {
   MChannelDefault,
   MChannelId,
   MStreamingPlaylist,
+  MStreamingPlaylistFilesVideo,
+  MStreamingPlaylistVideo,
   MVideo,
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
@@ -61,7 +63,8 @@ import {
   MVideoFullLight,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnail
+  MVideoThumbnail,
+  MVideoWithHost
 } from '../../types/models'
 import { MThumbnail } from '../../types/models/video/thumbnail'
 import { FilteredModelAttributes } from '../../types/sequelize'
@@ -72,6 +75,7 @@ import { PeerTubeSocket } from '../peertube-socket'
 import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '../thumbnail'
 import { setVideoTags } from '../video'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
+import { generateTorrentFileName } from '../video-paths'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { crawlCollectionPage } from './crawl'
 import { sendCreateVideo, sendUpdateVideo } from './send'
@@ -405,7 +409,8 @@ async function updateVideoFromAP (options: {
 
         for (const playlistAttributes of streamingPlaylistAttributes) {
           const streamingPlaylistModel = await VideoStreamingPlaylistModel.upsert(playlistAttributes, { returning: true, transaction: t })
-                                     .then(([ streamingPlaylist ]) => streamingPlaylist)
+                                     .then(([ streamingPlaylist ]) => streamingPlaylist as MStreamingPlaylistFilesVideo)
+          streamingPlaylistModel.Video = videoUpdated
 
           const newVideoFiles: MVideoFile[] = videoFileActivityUrlToDBAttributes(streamingPlaylistModel, playlistAttributes.tagAPObject)
             .map(a => new VideoFileModel(a))
@@ -637,13 +642,14 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
       videoCreated.VideoStreamingPlaylists = []
 
       for (const playlistAttributes of streamingPlaylistsAttributes) {
-        const playlistModel = await VideoStreamingPlaylistModel.create(playlistAttributes, { transaction: t })
+        const playlist = await VideoStreamingPlaylistModel.create(playlistAttributes, { transaction: t }) as MStreamingPlaylistFilesVideo
+        playlist.Video = videoCreated
 
-        const playlistFiles = videoFileActivityUrlToDBAttributes(playlistModel, playlistAttributes.tagAPObject)
+        const playlistFiles = videoFileActivityUrlToDBAttributes(playlist, playlistAttributes.tagAPObject)
         const videoFilePromises = playlistFiles.map(f => VideoFileModel.create(f, { transaction: t }))
-        playlistModel.VideoFiles = await Promise.all(videoFilePromises)
+        playlist.VideoFiles = await Promise.all(videoFilePromises)
 
-        videoCreated.VideoStreamingPlaylists.push(playlistModel)
+        videoCreated.VideoStreamingPlaylists.push(playlist)
       }
 
       // Process tags
@@ -766,7 +772,7 @@ function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObjec
 }
 
 function videoFileActivityUrlToDBAttributes (
-  videoOrPlaylist: MVideo | MStreamingPlaylist,
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   urls: (ActivityTagObject | ActivityUrlObject)[]
 ) {
   const fileUrls = urls.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
@@ -786,6 +792,10 @@ function videoFileActivityUrlToDBAttributes (
       throw new Error('Cannot parse magnet URI ' + magnet.href)
     }
 
+    const torrentUrl = Array.isArray(parsed.xs)
+      ? parsed.xs[0]
+      : parsed.xs
+
     // Fetch associated metadata url, if any
     const metadata = urls.filter(isAPVideoFileMetadataObject)
                          .find(u => {
@@ -794,18 +804,30 @@ function videoFileActivityUrlToDBAttributes (
                              u.rel.includes(fileUrl.mediaType)
                          })
 
-    const mediaType = fileUrl.mediaType
+    const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrl.mediaType)
+    const resolution = fileUrl.height
+    const videoId = (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? null : videoOrPlaylist.id
+    const videoStreamingPlaylistId = (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? videoOrPlaylist.id : null
+
     const attribute = {
-      extname: getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, mediaType),
+      extname,
       infoHash: parsed.infoHash,
-      resolution: fileUrl.height,
+      resolution,
       size: fileUrl.size,
       fps: fileUrl.fps || -1,
       metadataUrl: metadata?.href,
 
+      // Use the name of the remote file because we don't proxify video file requests
+      filename: basename(fileUrl.href),
+      fileUrl: fileUrl.href,
+
+      torrentUrl,
+      // Use our own torrent name since we proxify torrent requests
+      torrentFilename: generateTorrentFileName(videoOrPlaylist, resolution),
+
       // This is a video file owned by a video or by a streaming playlist
-      videoId: (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? null : videoOrPlaylist.id,
-      videoStreamingPlaylistId: (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? videoOrPlaylist.id : null
+      videoId,
+      videoStreamingPlaylistId
     }
 
     attributes.push(attribute)
@@ -862,8 +884,8 @@ function getPreviewFromIcons (videoObject: VideoObject) {
   return maxBy(validIcons, 'width')
 }
 
-function getPreviewUrl (previewIcon: ActivityIconObject, video: MVideoAccountLight) {
+function getPreviewUrl (previewIcon: ActivityIconObject, video: MVideoWithHost) {
   return previewIcon
     ? previewIcon.url
-    : buildRemoteVideoBaseUrl(video, join(STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
+    : buildRemoteVideoBaseUrl(video, join(LAZY_STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
 }

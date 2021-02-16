@@ -16,7 +16,7 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MUserId, MVideoLive, MVideoLiveVideo } from '@server/types/models'
+import { MStreamingPlaylist, MStreamingPlaylistVideo, MUserId, MVideoLive, MVideoLiveVideo } from '@server/types/models'
 import { VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { buildSha256Segment } from './hls'
@@ -277,7 +277,7 @@ class LiveManager {
     return this.runMuxing({
       sessionId,
       videoLive,
-      playlist: videoStreamingPlaylist,
+      playlist: Object.assign(videoStreamingPlaylist, { Video: video }),
       rtmpUrl,
       fps,
       allResolutions
@@ -287,7 +287,7 @@ class LiveManager {
   private async runMuxing (options: {
     sessionId: string
     videoLive: MVideoLiveVideo
-    playlist: MStreamingPlaylist
+    playlist: MStreamingPlaylistVideo
     rtmpUrl: string
     fps: number
     allResolutions: number[]

@@ -103,7 +103,8 @@ import {
   webfingerRouter,
   trackerRouter,
   createWebsocketTrackerServer,
-  botsRouter
+  botsRouter,
+  downloadRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
@@ -123,6 +124,7 @@ import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
 import { LiveManager } from './server/lib/live-manager'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
+import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 
 // ----------- Command line -----------
 
@@ -202,6 +204,7 @@ app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
+app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
 
 // Client files, last valid routes!
@@ -258,6 +261,7 @@ async function startApplication () {
   // Caches initializations
   VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, FILES_CACHE.PREVIEWS.MAX_AGE)
   VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE)
+  VideosTorrentCache.Instance.init(CONFIG.CACHE.TORRENTS.SIZE, FILES_CACHE.TORRENTS.MAX_AGE)
 
   // Enable Schedulers
   ActorFollowScheduler.Instance.enable()

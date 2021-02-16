@@ -1,13 +1,13 @@
 import * as Bluebird from 'bluebird'
+import { URL } from 'url'
 import validator from 'validator'
+import { ContextType } from '@shared/models/activitypub/context'
 import { ResultList } from '../../shared/models'
 import { Activity } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB, REMOTE_SCHEME } from '../initializers/constants'
-import { signJsonLDObject } from './peertube-crypto'
+import { MActor, MVideoWithHost } from '../types/models'
 import { pageToStartAndCount } from './core-utils'
-import { URL } from 'url'
-import { MActor, MVideoAccountLight } from '../types/models'
-import { ContextType } from '@shared/models/activitypub/context'
+import { signJsonLDObject } from './peertube-crypto'
 
 function getContextData (type: ContextType) {
   const context: any[] = [
@@ -201,8 +201,8 @@ function checkUrlsSameHost (url1: string, url2: string) {
   return idHost && actorHost && idHost.toLowerCase() === actorHost.toLowerCase()
 }
 
-function buildRemoteVideoBaseUrl (video: MVideoAccountLight, path: string) {
-  const host = video.VideoChannel.Account.Actor.Server.host
+function buildRemoteVideoBaseUrl (video: MVideoWithHost, path: string) {
+  const host = video.VideoChannel.Actor.Server.host
 
   return REMOTE_SCHEME.HTTP + '://' + host + path
 }

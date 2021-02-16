@@ -24,10 +24,11 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { v4 as uuidv4 } from 'uuid'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live-manager'
-import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { VideoFile } from '@shared/models/videos/video-file.model'
@@ -60,7 +61,6 @@ import {
   CONSTRAINTS_FIELDS,
   LAZY_STATIC_PATHS,
   REMOTE_SCHEME,
-  STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
@@ -78,6 +78,7 @@ import {
   MStreamingPlaylistFilesVideo,
   MUserAccountId,
   MUserId,
+  MVideo,
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
   MVideoAP,
@@ -130,7 +131,6 @@ import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
-import { v4 as uuidv4 } from 'uuid'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -790,7 +790,7 @@ export class VideoModel extends Model {
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
         tasks.push(instance.removeFile(file))
-        tasks.push(instance.removeTorrent(file))
+        tasks.push(file.removeTorrent())
       })
 
       // Remove playlists file
@@ -853,18 +853,14 @@ export class VideoModel extends Model {
     return undefined
   }
 
-  static listLocal (): Promise<MVideoWithAllFiles[]> {
+  static listLocal (): Promise<MVideo[]> {
     const query = {
       where: {
         remote: false
       }
     }
 
-    return VideoModel.scope([
-      ScopeNames.WITH_WEBTORRENT_FILES,
-      ScopeNames.WITH_STREAMING_PLAYLISTS,
-      ScopeNames.WITH_THUMBNAILS
-    ]).findAll(query)
+    return VideoModel.findAll(query)
   }
 
   static listAllAndSharedByActorForOutbox (actorId: number, start: number, count: number) {
@@ -1623,6 +1619,10 @@ export class VideoModel extends Model {
       'resolution',
       'size',
       'extname',
+      'filename',
+      'fileUrl',
+      'torrentFilename',
+      'torrentUrl',
       'infoHash',
       'fps',
       'videoId',
@@ -1891,14 +1891,14 @@ export class VideoModel extends Model {
     let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      const result = videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, this.VideoFiles)
+      const result = videoFilesModelToFormattedJSON(this, this, baseUrlHttp, baseUrlWs, this.VideoFiles)
       files = files.concat(result)
     }
 
     for (const p of (this.VideoStreamingPlaylists || [])) {
       p.Video = this
 
-      const result = videoFilesModelToFormattedJSON(p, baseUrlHttp, baseUrlWs, p.VideoFiles)
+      const result = videoFilesModelToFormattedJSON(p, this, baseUrlHttp, baseUrlWs, p.VideoFiles)
       files = files.concat(result)
     }
 
@@ -1956,12 +1956,6 @@ export class VideoModel extends Model {
       .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
 
-  removeTorrent (videoFile: MVideoFile) {
-    const torrentPath = getTorrentFilePath(this, videoFile)
-    return remove(torrentPath)
-      .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
-  }
-
   async removeStreamingPlaylistFiles (streamingPlaylist: MStreamingPlaylist, isRedundancy = false) {
     const directoryPath = getHLSDirectory(this, isRedundancy)
 
@@ -1977,7 +1971,7 @@ export class VideoModel extends Model {
 
       // Remove physical files and torrents
       await Promise.all(
-        streamingPlaylistWithFiles.VideoFiles.map(file => streamingPlaylistWithFiles.removeTorrent(file))
+        streamingPlaylistWithFiles.VideoFiles.map(file => file.removeTorrent())
       )
     }
   }
@@ -2052,34 +2046,6 @@ export class VideoModel extends Model {
 
   getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
     return [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
-  }
-
-  getTorrentUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.TORRENTS + getTorrentFileName(this, videoFile)
-  }
-
-  getTorrentDownloadUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + getTorrentFileName(this, videoFile)
-  }
-
-  getVideoFileUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.WEBSEED + getVideoFilename(this, videoFile)
-  }
-
-  getVideoFileMetadataUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    const path = '/api/v1/videos/'
-
-    return this.isOwned()
-      ? baseUrlHttp + path + this.uuid + '/metadata/' + videoFile.id
-      : videoFile.metadataUrl
-  }
-
-  getVideoRedundancyUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.REDUNDANCY + getVideoFilename(this, videoFile)
-  }
-
-  getVideoFileDownloadUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.VIDEOS + getVideoFilename(this, videoFile)
   }
 
   getBandwidthBits (videoFile: MVideoFile) {

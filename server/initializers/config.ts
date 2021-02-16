@@ -266,6 +266,9 @@ const CONFIG = {
     },
     VIDEO_CAPTIONS: {
       get SIZE () { return config.get<number>('cache.captions.size') }
+    },
+    TORRENTS: {
+      get SIZE () { return config.get<number>('cache.torrents.size') }
     }
   },
   INSTANCE: {

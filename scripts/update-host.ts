@@ -116,8 +116,10 @@ async function run () {
 
   console.log('Updating video and torrent files.')
 
-  const videos = await VideoModel.listLocal()
-  for (const video of videos) {
+  const localVideos = await VideoModel.listLocal()
+  for (const localVideo of localVideos) {
+    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(localVideo.id)
+
     console.log('Updating video ' + video.uuid)
 
     video.url = getLocalVideoActivityPubUrl(video)
@@ -125,7 +127,7 @@ async function run () {
 
     for (const file of video.VideoFiles) {
       console.log('Updating torrent file %s of video %s.', file.resolution, video.uuid)
-      await createTorrentAndSetInfoHash(video, file)
+      await createTorrentAndSetInfoHash(video, video, file)
     }
 
     for (const playlist of video.VideoStreamingPlaylists) {
