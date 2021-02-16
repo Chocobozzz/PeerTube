@@ -215,7 +215,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video,
     files: req.files,
-    fallback: type => generateVideoMiniature(video, videoFile, type)
+    fallback: type => generateVideoMiniature({ video, videoFile, type })
   })
 
   // Create the torrent file

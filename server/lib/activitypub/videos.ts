@@ -313,7 +313,11 @@ async function updateVideoFromAP (options: {
     let thumbnailModel: MThumbnail
 
     try {
-      thumbnailModel = await createVideoMiniatureFromUrl(getThumbnailFromIcons(videoObject).url, video, ThumbnailType.MINIATURE)
+      thumbnailModel = await createVideoMiniatureFromUrl({
+        downloadUrl: getThumbnailFromIcons(videoObject).url,
+        video,
+        type: ThumbnailType.MINIATURE
+      })
     } catch (err) {
       logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err })
     }
@@ -362,7 +366,12 @@ async function updateVideoFromAP (options: {
 
       if (videoUpdated.getPreview()) {
         const previewUrl = getPreviewUrl(getPreviewFromIcons(videoObject), video)
-        const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
+        const previewModel = createPlaceholderThumbnail({
+          fileUrl: previewUrl,
+          video,
+          type: ThumbnailType.PREVIEW,
+          size: PREVIEWS_SIZE
+        })
         await videoUpdated.addAndSaveThumbnail(previewModel, t)
       }
 
@@ -585,11 +594,14 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
   const videoData = await videoActivityObjectToDBAttributes(channel, videoObject, videoObject.to)
   const video = VideoModel.build(videoData) as MVideoThumbnail
 
-  const promiseThumbnail = createVideoMiniatureFromUrl(getThumbnailFromIcons(videoObject).url, video, ThumbnailType.MINIATURE)
-    .catch(err => {
-      logger.error('Cannot create miniature from url.', { err })
-      return undefined
-    })
+  const promiseThumbnail = createVideoMiniatureFromUrl({
+    downloadUrl: getThumbnailFromIcons(videoObject).url,
+    video,
+    type: ThumbnailType.MINIATURE
+  }).catch(err => {
+    logger.error('Cannot create miniature from url.', { err })
+    return undefined
+  })
 
   let thumbnailModel: MThumbnail
   if (waitThumbnail === true) {
@@ -597,81 +609,93 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
   }
 
   const { autoBlacklisted, videoCreated } = await sequelizeTypescript.transaction(async t => {
-    const sequelizeOptions = { transaction: t }
+    try {
+      const sequelizeOptions = { transaction: t }
 
-    const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
-    videoCreated.VideoChannel = channel
+      const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
+      videoCreated.VideoChannel = channel
 
-    if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
+      if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
 
-    const previewIcon = getPreviewFromIcons(videoObject)
-    const previewUrl = getPreviewUrl(previewIcon, videoCreated)
-    const previewModel = createPlaceholderThumbnail(previewUrl, videoCreated, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
-
-    if (thumbnailModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
-
-    // Process files
-    const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject.url)
-
-    const videoFilePromises = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
-    const videoFiles = await Promise.all(videoFilePromises)
-
-    const streamingPlaylistsAttributes = streamingPlaylistActivityUrlToDBAttributes(videoCreated, videoObject, videoFiles)
-    videoCreated.VideoStreamingPlaylists = []
-
-    for (const playlistAttributes of streamingPlaylistsAttributes) {
-      const playlistModel = await VideoStreamingPlaylistModel.create(playlistAttributes, { transaction: t })
-
-      const playlistFiles = videoFileActivityUrlToDBAttributes(playlistModel, playlistAttributes.tagAPObject)
-      const videoFilePromises = playlistFiles.map(f => VideoFileModel.create(f, { transaction: t }))
-      playlistModel.VideoFiles = await Promise.all(videoFilePromises)
-
-      videoCreated.VideoStreamingPlaylists.push(playlistModel)
-    }
-
-    // Process tags
-    const tags = videoObject.tag
-                            .filter(isAPHashTagObject)
-                            .map(t => t.name)
-    await setVideoTags({ video: videoCreated, tags, transaction: t })
-
-    // Process captions
-    const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
-      const caption = new VideoCaptionModel({
-        videoId: videoCreated.id,
-        filename: VideoCaptionModel.generateCaptionName(c.identifier),
-        language: c.identifier,
-        fileUrl: c.url
-      }) as MVideoCaption
-
-      return VideoCaptionModel.insertOrReplaceLanguage(caption, t)
-    })
-    await Promise.all(videoCaptionsPromises)
-
-    videoCreated.VideoFiles = videoFiles
-
-    if (videoCreated.isLive) {
-      const videoLive = new VideoLiveModel({
-        streamKey: null,
-        saveReplay: videoObject.liveSaveReplay,
-        permanentLive: videoObject.permanentLive,
-        videoId: videoCreated.id
+      const previewUrl = getPreviewUrl(getPreviewFromIcons(videoObject), videoCreated)
+      const previewModel = createPlaceholderThumbnail({
+        fileUrl: previewUrl,
+        video: videoCreated,
+        type: ThumbnailType.PREVIEW,
+        size: PREVIEWS_SIZE
       })
 
-      videoCreated.VideoLive = await videoLive.save({ transaction: t })
+      if (thumbnailModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
+
+      // Process files
+      const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject.url)
+
+      const videoFilePromises = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
+      const videoFiles = await Promise.all(videoFilePromises)
+
+      const streamingPlaylistsAttributes = streamingPlaylistActivityUrlToDBAttributes(videoCreated, videoObject, videoFiles)
+      videoCreated.VideoStreamingPlaylists = []
+
+      for (const playlistAttributes of streamingPlaylistsAttributes) {
+        const playlistModel = await VideoStreamingPlaylistModel.create(playlistAttributes, { transaction: t })
+
+        const playlistFiles = videoFileActivityUrlToDBAttributes(playlistModel, playlistAttributes.tagAPObject)
+        const videoFilePromises = playlistFiles.map(f => VideoFileModel.create(f, { transaction: t }))
+        playlistModel.VideoFiles = await Promise.all(videoFilePromises)
+
+        videoCreated.VideoStreamingPlaylists.push(playlistModel)
+      }
+
+      // Process tags
+      const tags = videoObject.tag
+                              .filter(isAPHashTagObject)
+                              .map(t => t.name)
+      await setVideoTags({ video: videoCreated, tags, transaction: t })
+
+      // Process captions
+      const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
+        const caption = new VideoCaptionModel({
+          videoId: videoCreated.id,
+          filename: VideoCaptionModel.generateCaptionName(c.identifier),
+          language: c.identifier,
+          fileUrl: c.url
+        }) as MVideoCaption
+
+        return VideoCaptionModel.insertOrReplaceLanguage(caption, t)
+      })
+      await Promise.all(videoCaptionsPromises)
+
+      videoCreated.VideoFiles = videoFiles
+
+      if (videoCreated.isLive) {
+        const videoLive = new VideoLiveModel({
+          streamKey: null,
+          saveReplay: videoObject.liveSaveReplay,
+          permanentLive: videoObject.permanentLive,
+          videoId: videoCreated.id
+        })
+
+        videoCreated.VideoLive = await videoLive.save({ transaction: t })
+      }
+
+      const autoBlacklisted = await autoBlacklistVideoIfNeeded({
+        video: videoCreated,
+        user: undefined,
+        isRemote: true,
+        isNew: true,
+        transaction: t
+      })
+
+      logger.info('Remote video with uuid %s inserted.', videoObject.uuid)
+
+      return { autoBlacklisted, videoCreated }
+    } catch (err) {
+      // FIXME: Use rollback hook when https://github.com/sequelize/sequelize/pull/13038 is released
+      // Remove thumbnail
+      if (thumbnailModel) await thumbnailModel.removeThumbnail()
+
+      throw err
     }
-
-    const autoBlacklisted = await autoBlacklistVideoIfNeeded({
-      video: videoCreated,
-      user: undefined,
-      isRemote: true,
-      isNew: true,
-      transaction: t
-    })
-
-    logger.info('Remote video with uuid %s inserted.', videoObject.uuid)
-
-    return { autoBlacklisted, videoCreated }
   })
 
   if (waitThumbnail === false) {

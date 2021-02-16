@@ -282,7 +282,7 @@ async function processPreview (req: express.Request, video: MVideoThumbnail): Pr
 
 async function processThumbnailFromUrl (url: string, video: MVideoThumbnail) {
   try {
-    return createVideoMiniatureFromUrl(url, video, ThumbnailType.MINIATURE)
+    return createVideoMiniatureFromUrl({ downloadUrl: url, video, type: ThumbnailType.MINIATURE })
   } catch (err) {
     logger.warn('Cannot generate video thumbnail %s for %s.', url, video.url, { err })
     return undefined
@@ -291,14 +291,14 @@ async function processThumbnailFromUrl (url: string, video: MVideoThumbnail) {
 
 async function processPreviewFromUrl (url: string, video: MVideoThumbnail) {
   try {
-    return createVideoMiniatureFromUrl(url, video, ThumbnailType.PREVIEW)
+    return createVideoMiniatureFromUrl({ downloadUrl: url, video, type: ThumbnailType.PREVIEW })
   } catch (err) {
     logger.warn('Cannot generate video preview %s for %s.', url, video.url, { err })
     return undefined
   }
 }
 
-function insertIntoDB (parameters: {
+async function insertIntoDB (parameters: {
   video: MVideoThumbnail
   thumbnailModel: MThumbnail
   previewModel: MThumbnail
@@ -309,7 +309,7 @@ function insertIntoDB (parameters: {
 }): Promise<MVideoImportFormattable> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters
 
-  return sequelizeTypescript.transaction(async t => {
+  const videoImport = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     // Save video object in database
@@ -339,4 +339,6 @@ function insertIntoDB (parameters: {
 
     return videoImport
   })
+
+  return videoImport
 }

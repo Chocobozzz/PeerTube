@@ -20,7 +20,7 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
   }
 
   async getFilePathImpl (filename: string) {
-    const thumbnail = await ThumbnailModel.loadWithVideoByName(filename, ThumbnailType.PREVIEW)
+    const thumbnail = await ThumbnailModel.loadWithVideoByFilename(filename, ThumbnailType.PREVIEW)
     if (!thumbnail) return undefined
 
     if (thumbnail.Video.isOwned()) return { isOwned: true, path: thumbnail.getPath() }

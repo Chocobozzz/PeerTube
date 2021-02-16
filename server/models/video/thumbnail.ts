@@ -3,6 +3,8 @@ import { join } from 'path'
 import {
   AfterDestroy,
   AllowNull,
+  BeforeCreate,
+  BeforeUpdate,
   BelongsTo,
   Column,
   CreatedAt,
@@ -14,7 +16,8 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
-import { MThumbnailVideo, MVideoAccountLight } from '@server/types/models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
+import { MThumbnail, MThumbnailVideo, MVideoAccountLight } from '@server/types/models'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
@@ -96,6 +99,9 @@ export class ThumbnailModel extends Model {
   @UpdatedAt
   updatedAt: Date
 
+  // If this thumbnail replaced existing one, track the old name
+  previousThumbnailFilename: string
+
   private static readonly types: { [ id in ThumbnailType ]: { label: string, directory: string, staticPath: string } } = {
     [ThumbnailType.MINIATURE]: {
       label: 'miniature',
@@ -109,6 +115,12 @@ export class ThumbnailModel extends Model {
     }
   }
 
+  @BeforeCreate
+  @BeforeUpdate
+  static removeOldFile (instance: ThumbnailModel, options) {
+    return afterCommitIfTransaction(options.transaction, () => instance.removePreviousFilenameIfNeeded())
+  }
+
   @AfterDestroy
   static removeFiles (instance: ThumbnailModel) {
     logger.info('Removing %s file %s.', ThumbnailModel.types[instance.type].label, instance.filename)
@@ -118,7 +130,18 @@ export class ThumbnailModel extends Model {
             .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, err))
   }
 
-  static loadWithVideoByName (filename: string, thumbnailType: ThumbnailType): Promise<MThumbnailVideo> {
+  static loadByFilename (filename: string, thumbnailType: ThumbnailType): Promise<MThumbnail> {
+    const query = {
+      where: {
+        filename,
+        type: thumbnailType
+      }
+    }
+
+    return ThumbnailModel.findOne(query)
+  }
+
+  static loadWithVideoByFilename (filename: string, thumbnailType: ThumbnailType): Promise<MThumbnailVideo> {
     const query = {
       where: {
         filename,
@@ -150,7 +173,22 @@ export class ThumbnailModel extends Model {
     return join(directory, this.filename)
   }
 
+  getPreviousPath () {
+    const directory = ThumbnailModel.types[this.type].directory
+    return join(directory, this.previousThumbnailFilename)
+  }
+
   removeThumbnail () {
     return remove(this.getPath())
+  }
+
+  removePreviousFilenameIfNeeded () {
+    if (!this.previousThumbnailFilename) return
+
+    const previousPath = this.getPreviousPath()
+    remove(previousPath)
+      .catch(err => logger.error('Cannot remove previous thumbnail file %s.', previousPath, { err }))
+
+    this.previousThumbnailFilename = undefined
   }
 }
