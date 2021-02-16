@@ -208,6 +208,8 @@ cache:
     size: 500 # Max number of previews you want to cache
   captions:
     size: 500 # Max number of video captions/subtitles you want to cache
+  torrents:
+    size: 500 # Max number of video torrents you want to cache
 
 admin:
   # Used to generate the root user at first startup

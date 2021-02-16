@@ -18,14 +18,14 @@ import { VideosRedundancyStrategy } from '../../../shared/models/redundancy'
 import { logger } from '../../helpers/logger'
 import { downloadWebTorrentVideo, generateMagnetUri } from '../../helpers/webtorrent'
 import { CONFIG } from '../../initializers/config'
-import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT, WEBSERVER } from '../../initializers/constants'
+import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../../initializers/constants'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { getLocalVideoCacheFileActivityPubUrl, getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url'
 import { getOrCreateVideoAndAccountAndChannel } from '../activitypub/videos'
 import { downloadPlaylistSegments } from '../hls'
 import { removeVideoRedundancy } from '../redundancy'
-import { getVideoFilename } from '../video-paths'
+import { generateHLSRedundancyUrl, generateWebTorrentRedundancyUrl } from '../video-paths'
 import { AbstractScheduler } from './abstract-scheduler'
 
 type CandidateToDuplicate = {
@@ -222,17 +222,17 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, strategy)
 
     const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
-    const magnetUri = generateMagnetUri(video, file, baseUrlHttp, baseUrlWs)
+    const magnetUri = generateMagnetUri(video, video, file, baseUrlHttp, baseUrlWs)
 
     const tmpPath = await downloadWebTorrentVideo({ magnetUri }, VIDEO_IMPORT_TIMEOUT)
 
-    const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, getVideoFilename(video, file))
+    const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, file.filename)
     await move(tmpPath, destPath, { overwrite: true })
 
     const createdModel: MVideoRedundancyFileVideo = await VideoRedundancyModel.create({
       expiresOn,
       url: getLocalVideoCacheFileActivityPubUrl(file),
-      fileUrl: video.getVideoRedundancyUrl(file, WEBSERVER.URL),
+      fileUrl: generateWebTorrentRedundancyUrl(file),
       strategy,
       videoFileId: file.id,
       actorId: serverActor.id
@@ -271,7 +271,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const createdModel: MVideoRedundancyStreamingPlaylistVideo = await VideoRedundancyModel.create({
       expiresOn,
       url: getLocalVideoCacheStreamingPlaylistActivityPubUrl(video, playlist),
-      fileUrl: playlist.getVideoRedundancyUrl(WEBSERVER.URL),
+      fileUrl: generateHLSRedundancyUrl(video, playlistArg),
       strategy,
       videoStreamingPlaylistId: playlist.id,
       actorId: serverActor.id

@@ -34,7 +34,9 @@ async function run () {
 
   const localVideos = await VideoModel.listLocal()
 
-  for (const video of localVideos) {
+  for (const localVideo of localVideos) {
+    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(localVideo.id)
+
     currentVideoId = video.id
 
     for (const file of video.VideoFiles) {
@@ -70,7 +72,7 @@ async function run () {
 
         console.log('Failed to optimize %s, restoring original', basename(currentFile))
         await move(backupFile, currentFile, { overwrite: true })
-        await createTorrentAndSetInfoHash(video, file)
+        await createTorrentAndSetInfoHash(video, video, file)
         await file.save()
       }
     }

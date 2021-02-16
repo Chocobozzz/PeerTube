@@ -12,7 +12,7 @@ import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from 
 import { sequelizeTypescript } from '../initializers/database'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
-import { getVideoFilename, getVideoFilePath } from './video-paths'
+import { getVideoFilePath } from './video-paths'
 
 async function updateStreamingPlaylistsInfohashesIfNeeded () {
   const playlistsToUpdate = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
@@ -93,7 +93,7 @@ async function updateSha256VODSegments (video: MVideoWithFile) {
     }
     await close(fd)
 
-    const videoFilename = getVideoFilename(hlsPlaylist, file)
+    const videoFilename = file.filename
     json[videoFilename] = rangeHashes
   }
 

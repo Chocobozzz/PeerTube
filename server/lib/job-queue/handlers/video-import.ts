@@ -6,7 +6,7 @@ import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
-import { getVideoFilePath } from '@server/lib/video-paths'
+import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import {
@@ -116,10 +116,12 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const duration = await getDurationFromVideoFile(tempVideoPath)
 
     // Prepare video file object for creation in database
+    const fileExt = extname(tempVideoPath)
     const videoFileData = {
-      extname: extname(tempVideoPath),
+      extname: fileExt,
       resolution: videoFileResolution,
       size: stats.size,
+      filename: generateVideoFilename(videoImport.Video, false, videoFileResolution, fileExt),
       fps,
       videoId: videoImport.videoId
     }
@@ -183,7 +185,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
 
     // Create torrent
-    await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoFile)
+    await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoImportWithFiles.Video, videoFile)
 
     const videoFileSave = videoFile.toJSON()
 

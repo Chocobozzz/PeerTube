@@ -3,10 +3,7 @@ import * as express from 'express'
 import { join } from 'path'
 import { getRegisteredPlugins, getRegisteredThemes } from '@server/controllers/api/config'
 import { serveIndexHTML } from '@server/lib/client-html'
-import { getTorrentFilePath, getVideoFilePath } from '@server/lib/video-paths'
-import { MVideoFile, MVideoFullLight } from '@server/types/models'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { VideoStreamingPlaylistType } from '@shared/models/videos/video-streaming-playlist.type'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
 import { root } from '../helpers/core-utils'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
@@ -16,14 +13,13 @@ import {
   HLS_STREAMING_PLAYLIST_DIRECTORY,
   PEERTUBE_VERSION,
   ROUTE_CACHE_LIFETIME,
-  STATIC_DOWNLOAD_PATHS,
   STATIC_MAX_AGE,
   STATIC_PATHS,
   WEBSERVER
 } from '../initializers/constants'
 import { getThemeOrDefault } from '../lib/plugins/theme-utils'
 import { getEnabledResolutions } from '../lib/video-transcoding'
-import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
+import { asyncMiddleware } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache'
 import { UserModel } from '../models/account/user'
 import { VideoModel } from '../models/video/video'
@@ -37,45 +33,21 @@ staticRouter.use(cors())
   Cors is very important to let other servers access torrent and video files
 */
 
+// FIXME: deprecated in 3.2, use lazy-statics instead
 const torrentsPhysicalPath = CONFIG.STORAGE.TORRENTS_DIR
 staticRouter.use(
   STATIC_PATHS.TORRENTS,
-  cors(),
   express.static(torrentsPhysicalPath, { maxAge: 0 }) // Don't cache because we could regenerate the torrent file
 )
-staticRouter.use(
-  STATIC_DOWNLOAD_PATHS.TORRENTS + ':id-:resolution([0-9]+).torrent',
-  asyncMiddleware(videosDownloadValidator),
-  downloadTorrent
-)
-staticRouter.use(
-  STATIC_DOWNLOAD_PATHS.TORRENTS + ':id-:resolution([0-9]+)-hls.torrent',
-  asyncMiddleware(videosDownloadValidator),
-  downloadHLSVideoFileTorrent
-)
 
-// Videos path for webseeding
+// Videos path for webseed
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
-  cors(),
   express.static(CONFIG.STORAGE.VIDEOS_DIR, { fallthrough: false }) // 404 because we don't have this video
 )
 staticRouter.use(
   STATIC_PATHS.REDUNDANCY,
-  cors(),
   express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404 because we don't have this video
-)
-
-staticRouter.use(
-  STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
-  asyncMiddleware(videosDownloadValidator),
-  downloadVideoFile
-)
-
-staticRouter.use(
-  STATIC_DOWNLOAD_PATHS.HLS_VIDEOS + ':id-:resolution([0-9]+)-fragmented.:extension',
-  asyncMiddleware(videosDownloadValidator),
-  downloadHLSVideoFile
 )
 
 // HLS
@@ -325,60 +297,6 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
   }
 
   return res.send(json).end()
-}
-
-function downloadTorrent (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
-
-  const videoFile = getVideoFile(req, video.VideoFiles)
-  if (!videoFile) return res.status(HttpStatusCode.NOT_FOUND_404).end()
-
-  return res.download(getTorrentFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p.torrent`)
-}
-
-function downloadHLSVideoFileTorrent (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
-
-  const playlist = getHLSPlaylist(video)
-  if (!playlist) return res.status(HttpStatusCode.NOT_FOUND_404).end
-
-  const videoFile = getVideoFile(req, playlist.VideoFiles)
-  if (!videoFile) return res.status(HttpStatusCode.NOT_FOUND_404).end()
-
-  return res.download(getTorrentFilePath(playlist, videoFile), `${video.name}-${videoFile.resolution}p-hls.torrent`)
-}
-
-function downloadVideoFile (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
-
-  const videoFile = getVideoFile(req, video.VideoFiles)
-  if (!videoFile) return res.status(HttpStatusCode.NOT_FOUND_404).end()
-
-  return res.download(getVideoFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p${videoFile.extname}`)
-}
-
-function downloadHLSVideoFile (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
-  const playlist = getHLSPlaylist(video)
-  if (!playlist) return res.status(HttpStatusCode.NOT_FOUND_404).end
-
-  const videoFile = getVideoFile(req, playlist.VideoFiles)
-  if (!videoFile) return res.status(HttpStatusCode.NOT_FOUND_404).end()
-
-  const filename = `${video.name}-${videoFile.resolution}p-${playlist.getStringType()}${videoFile.extname}`
-  return res.download(getVideoFilePath(playlist, videoFile), filename)
-}
-
-function getVideoFile (req: express.Request, files: MVideoFile[]) {
-  const resolution = parseInt(req.params.resolution, 10)
-  return files.find(f => f.resolution === resolution)
-}
-
-function getHLSPlaylist (video: MVideoFullLight) {
-  const playlist = video.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
-  if (!playlist) return undefined
-
-  return Object.assign(playlist, { Video: video })
 }
 
 function getCup (req: express.Request, res: express.Response, next: express.NextFunction) {

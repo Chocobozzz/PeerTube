@@ -7,7 +7,7 @@ import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { LiveManager } from '@server/lib/live-manager'
 import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
-import { getVideoFilePath } from '@server/lib/video-paths'
+import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoFullLight } from '@server/types/models'
 import { VideoCreate, VideoState, VideoUpdate } from '../../../../shared'
@@ -189,6 +189,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   videoData.duration = videoPhysicalFile['duration'] // duration was added by a previous middleware
 
   const video = new VideoModel(videoData) as MVideoFullLight
+  video.VideoChannel = res.locals.videoChannel
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = new VideoFileModel({
@@ -205,6 +206,8 @@ async function addVideo (req: express.Request, res: express.Response) {
     videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).videoFileResolution
   }
 
+  videoFile.filename = generateVideoFilename(video, false, videoFile.resolution, videoFile.extname)
+
   // Move physical file
   const destination = getVideoFilePath(video, videoFile)
   await move(videoPhysicalFile.path, destination)
@@ -219,7 +222,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   })
 
   // Create the torrent file
-  await createTorrentAndSetInfoHash(video, videoFile)
+  await createTorrentAndSetInfoHash(video, video, videoFile)
 
   const { videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
