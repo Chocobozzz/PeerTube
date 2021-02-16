@@ -158,6 +158,12 @@ export class ThumbnailModel extends Model {
     return ThumbnailModel.findOne(query)
   }
 
+  static buildPath (type: ThumbnailType, filename: string) {
+    const directory = ThumbnailModel.types[type].directory
+
+    return join(directory, filename)
+  }
+
   getFileUrl (video: MVideoAccountLight) {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
@@ -169,13 +175,11 @@ export class ThumbnailModel extends Model {
   }
 
   getPath () {
-    const directory = ThumbnailModel.types[this.type].directory
-    return join(directory, this.filename)
+    return ThumbnailModel.buildPath(this.type, this.filename)
   }
 
   getPreviousPath () {
-    const directory = ThumbnailModel.types[this.type].directory
-    return join(directory, this.previousThumbnailFilename)
+    return ThumbnailModel.buildPath(this.type, this.previousThumbnailFilename)
   }
 
   removeThumbnail () {

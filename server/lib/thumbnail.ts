@@ -1,5 +1,6 @@
+import chaiJsonSchema = require('chai-json-schema')
+import { copy, move } from 'fs-extra'
 import { join } from 'path'
-
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
 import { processImage } from '../helpers/image-utils'
@@ -69,7 +70,19 @@ function createVideoMiniatureFromUrl (options: {
     ? null
     : downloadUrl
 
-  const thumbnailCreator = () => downloadImage(downloadUrl, basePath, filename, { width, height })
+  // If the thumbnail URL did not change
+  const existingUrl = existingThumbnail
+    ? existingThumbnail.fileUrl
+    : null
+
+  // If the thumbnail URL did not change and has a unique filename (introduced in 3.2), avoid thumbnail processing
+  const thumbnailUrlChanged = !existingUrl || existingUrl !== downloadUrl || downloadUrl.endsWith(`${video.uuid}.jpg`)
+  const thumbnailCreator = () => {
+    if (thumbnailUrlChanged) return downloadImage(downloadUrl, basePath, filename, { width, height })
+
+    return copy(existingThumbnail.getPath(), ThumbnailModel.buildPath(type, filename))
+  }
+
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
