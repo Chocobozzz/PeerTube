@@ -3750,7 +3750,7 @@
       </trans-unit>
       <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="      {{ pagination.totalIt"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {resultado} other {resultados}}"/> para "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> para "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
@@ -4795,7 +4795,7 @@
       </trans-unit>
       <trans-unit id="2617a5e882c412157aab6edaa5964e328fcf7f52" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Require ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Crear listas HLS e ficheiros MP4 fragmentados resultando nunha mellor reprodución que con WebTorrent plano:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>O cambio de resolución é máis suave<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Reprodución máis rápida especialmente cos vídeos longos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Reprodución máis estable (menos fallos/carga infinita)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Se tamén activaches o soporte WebTorrent, multiplicarás a almacenaxe dos vídeos por 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">99,108</context>
@@ -4808,7 +4808,7 @@
       </trans-unit>
       <trans-unit id="6e60626527b51ae94c25e4f0c818be986924a837" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="new"> The original file resolution will be the default target if no option is selected. </target>
+        <target state="translated">A resolución orixinal do ficheiro será o obxectivo por defecto se non se escolle outra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">132,133</context>
@@ -4821,7 +4821,7 @@
       </trans-unit>
       <trans-unit id="8408a830c3dde8093ee59f4dcab0b58de11a3763" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">reclamará como máximo <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> coa transcodificación en directo </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">146,148</context>
@@ -4829,7 +4829,7 @@
       </trans-unit>
       <trans-unit id="b6080c78f1489c16ea22a7c62fa1ff1a823ae95f" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">reclamará como mínimo <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> coa transcodificación en directo </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">150,152</context>
@@ -4837,7 +4837,7 @@
       </trans-unit>
       <trans-unit id="024547d05ff8ffac40acc22e5f622a9e4ce7c8c4" datatype="html">
         <source>Transcoding jobs concurrency</source>
-        <target state="new">Transcoding jobs concurrency</target>
+        <target state="translated">Concurrencia de tarefas de transcodificación</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">166</context>
@@ -4845,7 +4845,7 @@
       </trans-unit>
       <trans-unit id="7f01873ceaaa6f7f6a537e63297c408f0b81a8bd" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="new">allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</target>
+        <target state="translated">permite transcodificar varios ficheiros en paralelo. ⚠️ Require o reinicio de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">167</context>
@@ -4868,7 +4868,7 @@
       </trans-unit>
       <trans-unit id="7e1ada48d1911a7ab02c5ba2519fa2d14240945a" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="new"> Some files are not federated, and fetched when necessary. Define their caching policies. </target>
+        <target state="translated">Algúns ficheiros non se federan, obtéñense cando son necesarios. Definir as regras de almacenaxe.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -4881,7 +4881,7 @@
       </trans-unit>
       <trans-unit id="64900cccfb1346d742551801b2260df01b4fc521" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {imaxe na caché} other {imaxes na aché}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
@@ -4894,7 +4894,7 @@
       </trans-unit>
       <trans-unit id="9650f187bc6461dfe36caf7ae5dab69d1faf754e" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {descrición na caché} other {descricións na caché}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -4907,7 +4907,7 @@
       </trans-unit>
       <trans-unit id="ff71044c7bbbc9fdbbaa9209a218e4900fbde590" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="new"> Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill. </target>
+        <target state="translated">Pequenas modificacións para túa instancia PeerTube para cando a creación dun complemento ou tema a estragan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">51,52</context>
@@ -4920,7 +4920,7 @@
       </trans-unit>
       <trans-unit id="c309dbd2f97cc76a685eaba5692b877676812982" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"> Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">Escribir código JavaScript directamente.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Examplo: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('teño unha instancia que é un primor');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">64</context>
@@ -4928,13 +4928,7 @@
       </trans-unit>
       <trans-unit id="3a3172c4d8c5a080a0603423e175c1e4457951b6" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"> Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/>
-color: red;
-<x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/>
-color: red;
-<x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">Escribir código CSS directamente. Examplo:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Anteceder con <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> para sobrescribir estilos. Exemplo:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">83,94</context>
@@ -4952,7 +4946,7 @@ color: red;
       </trans-unit>
       <trans-unit id="a472641d98652e6f8b4dabb9aa3fbf805d18f6e5" datatype="html">
         <source>There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></source>
-        <target state="new"> There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
+        <target state="translated">Hai erros no formulario: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">59,65</context>
@@ -6282,7 +6276,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6659155428791414865" datatype="html">
         <source>x264, targeting maximum device compatibility</source>
-        <target state="new">x264, targeting maximum device compatibility</target>
+        <target state="translated">x264, co obxectivo da mellor compatibilidade con dispositivos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -6294,7 +6288,7 @@ color: red;
       </trans-unit>
       <trans-unit id="f157a6b81f7de696ad6915dbfb0be299b5fa04bf" datatype="html">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="new"> Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically. </target>
+        <target state="translated">Non é doado estimar as capacidades do servidor para transcodificar e retransmitir vídeos e non podemos axustar PeerTube automáticamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -6302,7 +6296,7 @@ color: red;
       </trans-unit>
       <trans-unit id="0e6c8311c537859bea4cfb037a5c10b58c9d4ade" datatype="html">
         <source>However, you may want to read our guidelines before tweaking the following values.</source>
-        <target state="new"> However, you may want to read our guidelines before tweaking the following values. </target>
+        <target state="translated">Porén, podes ler as nosas guías antes de modificar os seguintes valores.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -6310,7 +6304,7 @@ color: red;
       </trans-unit>
       <trans-unit id="a8c8c6816d427a39f9be727d83b3c377f2f08cf6" datatype="html">
         <source>Read guidelines</source>
-        <target state="new"> Read guidelines </target>
+        <target state="translated">Ler guías</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">17,18</context>
@@ -6318,7 +6312,7 @@ color: red;
       </trans-unit>
       <trans-unit id="f15db977c871ea5765c464c26b04c1976cd2e5df" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="new"> Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully. </target>
+        <target state="translated">Procesar os vídeos subidos para poder ser retransmitidos de xeito compatible con calquera dispositivo. A costa de maiores recursos, esta é unha parte crítica de PeerTube, ten coidado.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -6437,7 +6431,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5514849824631859021" datatype="html">
         <source>100GB</source>
-        <target state="new">100GB</target>
+        <target state="translated">100GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -6445,7 +6439,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8245180845645676506" datatype="html">
         <source>200GB</source>
-        <target state="new">200GB</target>
+        <target state="translated">200GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -6453,7 +6447,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5468089754278798237" datatype="html">
         <source>500GB</source>
-        <target state="new">500GB</target>
+        <target state="translated">500GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -6476,7 +6470,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7641416475804061087" datatype="html">
         <source>10GB</source>
-        <target state="new">10GB</target>
+        <target state="translated">10GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">44</context>
@@ -8066,7 +8060,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
-        <target state="new">Max live duration is required.</target>
+        <target state="translated">Requírese unha duración máx. do directo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">71</context>
@@ -8074,7 +8068,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
-        <target state="new">Max live duration should be greater or equal to -1.</target>
+        <target state="translated">A duración máxima do directo ten que ser maior ou igual a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -8082,7 +8076,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
-        <target state="new">Max instance lives is required.</target>
+        <target state="translated">Requírese un número máx. de directos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">79</context>
@@ -8090,7 +8084,7 @@ color: red;
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
-        <target state="new">Max instance lives should be greater or equal to -1.</target>
+        <target state="translated">O número máx. de directos debe ser maior ou igual a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -8098,7 +8092,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="new">Max user lives is required.</target>
+        <target state="translated">Requírese un número máx. de usuarias en directo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
@@ -8106,7 +8100,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
-        <target state="new">Max user lives should be greater or equal to -1.</target>
+        <target state="translated">O número máx. de usuarias en directo debe ser igual ou superior a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -8114,7 +8108,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
-        <target state="new">Concurrency is required.</target>
+        <target state="translated">Requírese un valor para concurrencia.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">95</context>
@@ -8122,7 +8116,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
-        <target state="new">Concurrency should be greater or equal to 1.</target>
+        <target state="translated">A concurrencia debe ser maior ou igual a 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">96</context>
@@ -8632,7 +8626,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
         <source>Custom value...</source>
-        <target state="new">Custom value...</target>
+        <target state="translated">Valor personalizado...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-custom-value.component.ts</context>
           <context context-type="linenumber">69</context>
