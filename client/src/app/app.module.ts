@@ -1,7 +1,7 @@
 import 'focus-visible'
 import { environment } from 'src/environments/environment'
 import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
-import { NgModule } from '@angular/core'
+import { ErrorHandler, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import { ServerService } from '@app/core'
@@ -24,6 +24,7 @@ import { SharedGlobalIconModule } from './shared/shared-icons'
 import { SharedInstanceModule } from './shared/shared-instance'
 import { SharedMainModule } from './shared/shared-main'
 import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings'
+import { CustomErrorHandler } from './custom-error-handler'
 
 registerLocaleData(localeOc, 'oc')
 
@@ -83,6 +84,10 @@ registerLocaleData(localeOc, 'oc')
     {
       provide: APP_BASE_HREF,
       useValue: '/'
+    },
+    {
+      provide: ErrorHandler,
+      useClass: CustomErrorHandler
     }
   ]
 })
