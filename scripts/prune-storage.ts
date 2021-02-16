@@ -95,7 +95,7 @@ function doesVideoExist (keepOnlyOwned: boolean) {
 
 function doesThumbnailExist (keepOnlyOwned: boolean, type: ThumbnailType) {
   return async (file: string) => {
-    const thumbnail = await ThumbnailModel.loadWithVideoByName(file, type)
+    const thumbnail = await ThumbnailModel.loadByFilename(file, type)
     if (!thumbnail) return false
 
     if (keepOnlyOwned) {

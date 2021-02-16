@@ -103,7 +103,7 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
 
   if (playlistObject.icon) {
     try {
-      const thumbnailModel = await createPlaylistMiniatureFromUrl(playlistObject.icon.url, refreshedPlaylist)
+      const thumbnailModel = await createPlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist: refreshedPlaylist })
       await refreshedPlaylist.setAndSaveThumbnail(thumbnailModel, undefined)
     } catch (err) {
       logger.warn('Cannot generate thumbnail of %s.', playlistObject.id, { err })

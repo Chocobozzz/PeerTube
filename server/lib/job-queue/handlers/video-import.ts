@@ -162,7 +162,11 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     let thumbnailModel: MThumbnail
     let thumbnailSave: object
     if (!videoImportWithFiles.Video.getMiniature()) {
-      thumbnailModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.MINIATURE)
+      thumbnailModel = await generateVideoMiniature({
+        video: videoImportWithFiles.Video,
+        videoFile,
+        type: ThumbnailType.MINIATURE
+      })
       thumbnailSave = thumbnailModel.toJSON()
     }
 
@@ -170,7 +174,11 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     let previewModel: MThumbnail
     let previewSave: object
     if (!videoImportWithFiles.Video.getPreview()) {
-      previewModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.PREVIEW)
+      previewModel = await generateVideoMiniature({
+        video: videoImportWithFiles.Video,
+        videoFile,
+        type: ThumbnailType.PREVIEW
+      })
       previewSave = previewModel.toJSON()
     }
 
