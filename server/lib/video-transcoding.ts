@@ -166,6 +166,7 @@ async function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoRes
 
   // Important to do this before getVideoFilename() to take in account the new file extension
   inputVideoFile.extname = newExtname
+  inputVideoFile.filename = generateVideoFilename(video, false, inputVideoFile.resolution, newExtname)
 
   const videoOutputPath = getVideoFilePath(video, inputVideoFile)
   // ffmpeg generated a new video file, so update the video duration

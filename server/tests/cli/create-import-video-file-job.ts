@@ -22,9 +22,9 @@ const expect = chai.expect
 
 function assertVideoProperties (video: VideoFile, resolution: number, extname: string, size?: number) {
   expect(video).to.have.nested.property('resolution.id', resolution)
-  expect(video).to.have.property('magnetUri').that.includes(`.${extname}`)
   expect(video).to.have.property('torrentUrl').that.includes(`-${resolution}.torrent`)
   expect(video).to.have.property('fileUrl').that.includes(`.${extname}`)
+  expect(video).to.have.property('magnetUri').that.includes(`.${extname}`)
   expect(video).to.have.property('size').that.is.above(0)
 
   if (size) expect(video.size).to.equal(size)
