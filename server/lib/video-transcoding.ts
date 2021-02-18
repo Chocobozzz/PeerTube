@@ -254,7 +254,7 @@ async function onWebTorrentVideoFileTranscoding (
   videoFile.fps = fps
   videoFile.metadata = metadata
 
-  await createTorrentAndSetInfoHash(video, video, videoFile)
+  await createTorrentAndSetInfoHash(video, videoFile)
 
   await VideoFileModel.customUpsert(videoFile, 'video', undefined)
   video.VideoFiles = await video.$get('VideoFiles')
@@ -350,7 +350,7 @@ async function generateHlsPlaylistCommon (options: {
   newVideoFile.fps = await getVideoFileFPS(videoFilePath)
   newVideoFile.metadata = await getMetadataFromFile(videoFilePath)
 
-  await createTorrentAndSetInfoHash(videoStreamingPlaylist, video, newVideoFile)
+  await createTorrentAndSetInfoHash(videoStreamingPlaylist, newVideoFile)
 
   await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
   videoStreamingPlaylist.VideoFiles = await videoStreamingPlaylist.$get('VideoFiles')

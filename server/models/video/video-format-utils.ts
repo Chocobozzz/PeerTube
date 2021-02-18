@@ -14,11 +14,11 @@ import {
 } from '../../lib/activitypub/url'
 import {
   MStreamingPlaylistRedundanciesOpt,
+  MVideo,
   MVideoAP,
   MVideoFile,
   MVideoFormattable,
-  MVideoFormattableDetails,
-  MVideoWithHost
+  MVideoFormattableDetails
 } from '../../types/models'
 import { MVideoFileRedundanciesOpt } from '../../types/models/video/video-file'
 import { VideoModel } from './video'
@@ -225,7 +225,7 @@ function videoFilesModelToFormattedJSON (
 
 function addVideoFilesInAPAcc (
   acc: ActivityUrlObject[] | ActivityTagObject[],
-  video: MVideoWithHost,
+  video: MVideo,
   files: MVideoFile[]
 ) {
   const trackerUrls = video.getTrackerUrls()

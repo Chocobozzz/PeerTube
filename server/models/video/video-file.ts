@@ -423,7 +423,7 @@ export class VideoFileModel extends Model {
     return !!this.videoStreamingPlaylistId
   }
 
-  getFileUrl (video: MVideoWithHost) {
+  getFileUrl (video: MVideo) {
     if (!this.Video) this.Video = video as VideoModel
 
     if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
@@ -449,7 +449,7 @@ export class VideoFileModel extends Model {
     return buildRemoteVideoBaseUrl(video, path)
   }
 
-  getRemoteTorrentUrl (video: MVideoWithHost) {
+  getRemoteTorrentUrl (video: MVideo) {
     if (video.isOwned()) throw new Error(`Video ${video.url} is not a remote video`)
 
     return this.torrentUrl

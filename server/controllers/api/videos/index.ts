@@ -222,7 +222,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   })
 
   // Create the torrent file
-  await createTorrentAndSetInfoHash(video, video, videoFile)
+  await createTorrentAndSetInfoHash(video, videoFile)
 
   const { videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }

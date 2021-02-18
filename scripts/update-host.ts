@@ -127,7 +127,7 @@ async function run () {
 
     for (const file of video.VideoFiles) {
       console.log('Updating torrent file %s of video %s.', file.resolution, video.uuid)
-      await createTorrentAndSetInfoHash(video, video, file)
+      await createTorrentAndSetInfoHash(video, file)
     }
 
     for (const playlist of video.VideoStreamingPlaylists) {

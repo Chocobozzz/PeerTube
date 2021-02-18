@@ -72,7 +72,7 @@ async function run () {
 
         console.log('Failed to optimize %s, restoring original', basename(currentFile))
         await move(backupFile, currentFile, { overwrite: true })
-        await createTorrentAndSetInfoHash(video, video, file)
+        await createTorrentAndSetInfoHash(video, file)
         await file.save()
       }
     }
