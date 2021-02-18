@@ -912,7 +912,7 @@ function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {
 
   const trackers = object.url.filter(u => isAPVideoTrackerUrlObject(u))
     .map((u: ActivityTrackerUrlObject) => {
-      if (u.rel.includes('websocket')) wsFound = true
+      if (isArray(u.rel) && u.rel.includes('websocket')) wsFound = true
 
       return u.href
     })

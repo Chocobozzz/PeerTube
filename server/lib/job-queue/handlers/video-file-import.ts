@@ -82,7 +82,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   await copy(inputFilePath, outputPath)
 
   video.VideoFiles.push(newVideoFile)
-  await createTorrentAndSetInfoHash(video, video, newVideoFile)
+  await createTorrentAndSetInfoHash(video, newVideoFile)
 
   await newVideoFile.save()
 }

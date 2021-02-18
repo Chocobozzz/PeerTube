@@ -7,13 +7,14 @@ import * as WebTorrent from 'webtorrent'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { WEBSERVER } from '@server/initializers/constants'
 import { generateTorrentFileName, getVideoFilePath } from '@server/lib/video-paths'
-import { MVideo, MVideoWithHost } from '@server/types/models/video/video'
+import { MVideo } from '@server/types/models/video/video'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file'
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
 import { CONFIG } from '../initializers/config'
 import { promisify2 } from './core-utils'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
+import { extractVideo } from './video'
 
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 
@@ -77,12 +78,12 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
   })
 }
 
-// FIXME: refactor/merge videoOrPlaylist and video arguments
 async function createTorrentAndSetInfoHash (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
-  video: MVideoWithHost,
   videoFile: MVideoFile
 ) {
+  const video = extractVideo(videoOrPlaylist)
+
   const options = {
     // Keep the extname, it's used by the client to stream the file inside a web browser
     name: `${video.name} ${videoFile.resolution}p${videoFile.extname}`,
@@ -108,7 +109,7 @@ async function createTorrentAndSetInfoHash (
 }
 
 function generateMagnetUri (
-  video: MVideoWithHost,
+  video: MVideo,
   videoFile: MVideoFileRedundanciesOpt,
   trackerUrls: string[]
 ) {
