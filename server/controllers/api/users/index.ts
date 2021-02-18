@@ -307,7 +307,10 @@ async function removeUser (req: express.Request, res: express.Response) {
 
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
-  await user.destroy()
+  await sequelizeTypescript.transaction(async t => {
+    // Use a transaction to avoid inconsistencies with hooks (account/channel deletion & federation)
+    await user.destroy({ transaction: t })
+  })
 
   Hooks.runAction('action:api.user.deleted', { user })
 
