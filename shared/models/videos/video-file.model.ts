@@ -17,6 +17,5 @@ export interface VideoFile {
   metadata?: VideoFileMetadata
   metadataUrl?: string
 
-  // FIXME: deprecated in 3.2
-  magnetUri: string
+  magnetUri: string | null
 }

@@ -188,9 +188,12 @@ function sortByResolutionDesc (fileA: MVideoFile, fileB: MVideoFile) {
 
 function videoFilesModelToFormattedJSON (
   video: MVideoFormattableDetails,
-  videoFiles: MVideoFileRedundanciesOpt[]
+  videoFiles: MVideoFileRedundanciesOpt[],
+  includeMagnet = true
 ): VideoFile[] {
-  const trackerUrls = video.getTrackerUrls()
+  const trackerUrls = includeMagnet
+    ? video.getTrackerUrls()
+    : []
 
   return [ ...videoFiles ]
     .filter(f => !f.isLive())
@@ -202,8 +205,9 @@ function videoFilesModelToFormattedJSON (
           label: videoFile.resolution + 'p'
         },
 
-        // FIXME: deprecated in 3.2
-        magnetUri: generateMagnetUri(video, videoFile, trackerUrls),
+        magnetUri: includeMagnet
+          ? generateMagnetUri(video, videoFile, trackerUrls)
+          : undefined,
 
         size: videoFile.size,
         fps: videoFile.fps,
