@@ -42,7 +42,7 @@ jobs:
     env:
       PGUSER: peertube
       PGHOST: localhost
-      NODE_PENDING_JOB_WAIT: 2000
+      NODE_PENDING_JOB_WAIT: 500
 
     steps:
       - uses: actions/checkout@v2
@@ -93,7 +93,7 @@ jobs:
       - name: Run Test
         # external-plugins tests only run on schedule
         if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
-        run: NODE_PENDING_JOB_WAIT=2000 npm run ci -- ${{ matrix.test_suite }}
+        run: npm run ci -- ${{ matrix.test_suite }}
 
       - name: Display errors
         if: ${{ always() }}

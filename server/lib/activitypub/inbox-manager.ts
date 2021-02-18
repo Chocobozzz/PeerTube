@@ -35,13 +35,17 @@ class InboxManager {
     })
 
     setInterval(() => {
-      StatsManager.Instance.updateInboxStats(this.messagesProcessed, this.inboxQueue.length())
+      StatsManager.Instance.updateInboxStats(this.messagesProcessed, this.getActivityPubMessagesWaiting())
     }, SCHEDULER_INTERVALS_MS.updateInboxStats)
   }
 
   addInboxMessage (options: QueueParam) {
     this.inboxQueue.push(options)
       .catch(err => logger.error('Cannot add options in inbox queue.', { options, err }))
+  }
+
+  getActivityPubMessagesWaiting () {
+    return this.inboxQueue.length() + this.inboxQueue.running()
   }
 
   static get Instance () {
