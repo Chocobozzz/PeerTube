@@ -36,7 +36,7 @@ export class TrackerModel extends Model {
     const query = {
       include: [
         {
-          attributes: [ 'id', 'trackerId' ],
+          attributes: [ 'id' ],
           model: VideoModel.unscoped(),
           required: true,
           where: { id: videoId }

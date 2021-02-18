@@ -1,6 +1,5 @@
-import { copy } from 'fs-extra'
 import { join } from 'path'
-import { logger } from '@server/helpers/logger'
+
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
 import { processImage } from '../helpers/image-utils'

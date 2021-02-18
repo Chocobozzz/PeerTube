@@ -25,6 +25,7 @@ const customConfigUpdateValidator = [
 
   body('cache.previews.size').isInt().withMessage('Should have a valid previews cache size'),
   body('cache.captions.size').isInt().withMessage('Should have a valid captions cache size'),
+  body('cache.torrents.size').isInt().withMessage('Should have a valid torrents cache size'),
 
   body('signup.enabled').isBoolean().withMessage('Should have a valid signup enabled boolean'),
   body('signup.limit').isInt().withMessage('Should have a valid signup limit'),

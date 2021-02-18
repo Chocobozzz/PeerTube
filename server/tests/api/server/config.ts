@@ -55,6 +55,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.cache.previews.size).to.equal(1)
   expect(data.cache.captions.size).to.equal(1)
+  expect(data.cache.torrents.size).to.equal(1)
 
   expect(data.signup.enabled).to.be.true
   expect(data.signup.limit).to.equal(4)
@@ -144,6 +145,7 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.cache.previews.size).to.equal(2)
   expect(data.cache.captions.size).to.equal(3)
+  expect(data.cache.torrents.size).to.equal(4)
 
   expect(data.signup.enabled).to.be.false
   expect(data.signup.limit).to.equal(5)
@@ -305,6 +307,9 @@ describe('Test config', function () {
         },
         captions: {
           size: 3
+        },
+        torrents: {
+          size: 4
         }
       },
       signup: {

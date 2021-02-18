@@ -395,6 +395,9 @@ function customConfig (): CustomConfig {
       },
       captions: {
         size: CONFIG.CACHE.VIDEO_CAPTIONS.SIZE
+      },
+      torrents: {
+        size: CONFIG.CACHE.TORRENTS.SIZE
       }
     },
     signup: {

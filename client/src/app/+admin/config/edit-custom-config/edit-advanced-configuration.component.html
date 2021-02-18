@@ -38,6 +38,20 @@
 
           <div *ngIf="formErrors.cache.captions.size" class="form-error">{{ formErrors.cache.captions.size }}</div>
         </div>
+
+        <div class="form-group" formGroupName="torrents">
+          <label i18n for="cacheTorrentsSize">Number of video torrents to keep in cache</label>
+
+          <div class="number-with-unit">
+            <input
+              type="number" min="0" id="cacheTorrentsSize" class="form-control"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.torrents.size'] }"
+            >
+            <span i18n>{getCacheSize('torrents'), plural, =1 {cached torrent} other {cached torrents}}</span>
+          </div>
+
+          <div *ngIf="formErrors.cache.torrents.size" class="form-error">{{ formErrors.cache.torrents.size }}</div>
+        </div>
       </ng-container>
 
     </div>

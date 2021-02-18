@@ -61,6 +61,8 @@ cache:
     size: 1
   captions:
     size: 1
+  torrents:
+    size: 1
 
 signup:
   enabled: true

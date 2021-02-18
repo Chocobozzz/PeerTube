@@ -90,6 +90,9 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       },
       captions: {
         size: 3
+      },
+      torrents: {
+        size: 4
       }
     },
     signup: {
