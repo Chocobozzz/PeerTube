@@ -274,7 +274,7 @@ export class UserService {
 
     return new User({
       // local storage keys
-      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY) as NSFWPolicyType,
+      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY),
       webTorrentEnabled: this.localStorageService.getItem(UserLocalStorageKeys.WEBTORRENT_ENABLED) !== 'false',
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,
