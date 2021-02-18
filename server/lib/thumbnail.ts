@@ -1,5 +1,6 @@
 import { copy } from 'fs-extra'
 import { join } from 'path'
+import { logger } from '@server/helpers/logger'
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
 import { processImage } from '../helpers/image-utils'
@@ -62,7 +63,7 @@ function createVideoMiniatureFromUrl (options: {
   size?: ImageSize
 }) {
   const { downloadUrl, video, type, size } = options
-  const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+  const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
 
   // Only save the file URL if it is a remote video
   const fileUrl = video.isOwned()
@@ -76,10 +77,16 @@ function createVideoMiniatureFromUrl (options: {
 
   // If the thumbnail URL did not change and has a unique filename (introduced in 3.2), avoid thumbnail processing
   const thumbnailUrlChanged = !existingUrl || existingUrl !== downloadUrl || downloadUrl.endsWith(`${video.uuid}.jpg`)
+
+  // Do not change the thumbnail filename if the file did not change
+  const filename = thumbnailUrlChanged
+    ? updatedFilename
+    : existingThumbnail.filename
+
   const thumbnailCreator = () => {
     if (thumbnailUrlChanged) return downloadImage(downloadUrl, basePath, filename, { width, height })
 
-    return copy(existingThumbnail.getPath(), ThumbnailModel.buildPath(type, filename))
+    return Promise.resolve()
   }
 
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
@@ -236,7 +243,7 @@ async function createThumbnailFromFunction (parameters: {
     fileUrl = null
   } = parameters
 
-  const oldFilename = existingThumbnail
+  const oldFilename = existingThumbnail && existingThumbnail.filename !== filename
     ? existingThumbnail.filename
     : undefined
 
@@ -248,7 +255,8 @@ async function createThumbnailFromFunction (parameters: {
   thumbnail.type = type
   thumbnail.fileUrl = fileUrl
   thumbnail.automaticallyGenerated = automaticallyGenerated
-  thumbnail.previousThumbnailFilename = oldFilename
+
+  if (oldFilename) thumbnail.previousThumbnailFilename = oldFilename
 
   await thumbnailCreator()
 

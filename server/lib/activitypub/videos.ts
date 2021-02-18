@@ -3,7 +3,8 @@ import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import { basename, join } from 'path'
 import * as request from 'request'
-import * as sequelize from 'sequelize'
+import { Transaction } from 'sequelize/types'
+import { TrackerModel } from '@server/models/server/tracker'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import {
@@ -16,12 +17,16 @@ import {
   ActivityUrlObject,
   ActivityVideoUrlObject
 } from '../../../shared/index'
-import { ActivityIconObject, VideoObject } from '../../../shared/models/activitypub/objects'
+import { ActivityIconObject, ActivityTrackerUrlObject, VideoObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { buildRemoteVideoBaseUrl, checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { isAPVideoFileMetadataObject, sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
+import {
+  isAPVideoFileUrlMetadataObject,
+  isAPVideoTrackerUrlObject,
+  sanitizeAndCheckVideoTorrentObject
+} from '../../helpers/custom-validators/activitypub/videos'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
@@ -83,7 +88,7 @@ import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { addVideoComments } from './video-comments'
 import { createRates } from './video-rates'
 
-async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVideo: boolean, transaction?: sequelize.Transaction) {
+async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVideo: boolean, transaction?: Transaction) {
   const video = videoArg as MVideoAP
 
   if (
@@ -433,6 +438,12 @@ async function updateVideoFromAP (options: {
         await setVideoTags({ video: videoUpdated, tags, transaction: t, defaultValue: videoUpdated.Tags })
       }
 
+      // Update trackers
+      {
+        const trackers = getTrackerUrls(videoObject, videoUpdated)
+        await setVideoTrackers({ video: videoUpdated, trackers, transaction: t })
+      }
+
       {
         // Update captions
         await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(videoUpdated.id, t)
@@ -577,7 +588,7 @@ function isAPVideoUrlObject (url: any): url is ActivityVideoUrlObject {
   return MIMETYPES.VIDEO.MIMETYPE_EXT[urlMediaType] && urlMediaType.startsWith('video/')
 }
 
-function isAPStreamingPlaylistUrlObject (url: ActivityUrlObject): url is ActivityPlaylistUrlObject {
+function isAPStreamingPlaylistUrlObject (url: any): url is ActivityPlaylistUrlObject {
   return url && url.mediaType === 'application/x-mpegURL'
 }
 
@@ -670,6 +681,12 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
         return VideoCaptionModel.insertOrReplaceLanguage(caption, t)
       })
       await Promise.all(videoCaptionsPromises)
+
+      // Process trackers
+      {
+        const trackers = getTrackerUrls(videoObject, videoCreated)
+        await setVideoTrackers({ video: videoCreated, trackers, transaction: t })
+      }
 
       videoCreated.VideoFiles = videoFiles
 
@@ -797,7 +814,7 @@ function videoFileActivityUrlToDBAttributes (
       : parsed.xs
 
     // Fetch associated metadata url, if any
-    const metadata = urls.filter(isAPVideoFileMetadataObject)
+    const metadata = urls.filter(isAPVideoFileUrlMetadataObject)
                          .find(u => {
                            return u.height === fileUrl.height &&
                              u.fps === fileUrl.fps &&
@@ -888,4 +905,34 @@ function getPreviewUrl (previewIcon: ActivityIconObject, video: MVideoWithHost) 
   return previewIcon
     ? previewIcon.url
     : buildRemoteVideoBaseUrl(video, join(LAZY_STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
+}
+
+function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {
+  let wsFound = false
+
+  const trackers = object.url.filter(u => isAPVideoTrackerUrlObject(u))
+    .map((u: ActivityTrackerUrlObject) => {
+      if (u.rel.includes('websocket')) wsFound = true
+
+      return u.href
+    })
+
+  if (wsFound) return trackers
+
+  return [
+    buildRemoteVideoBaseUrl(video, '/tracker/socket', REMOTE_SCHEME.WS),
+    buildRemoteVideoBaseUrl(video, '/tracker/announce')
+  ]
+}
+
+async function setVideoTrackers (options: {
+  video: MVideo
+  trackers: string[]
+  transaction?: Transaction
+}) {
+  const { video, trackers, transaction } = options
+
+  const trackerInstances = await TrackerModel.findOrCreateTrackers(trackers, transaction)
+
+  await video.$set('Trackers', trackerInstances, { transaction })
 }

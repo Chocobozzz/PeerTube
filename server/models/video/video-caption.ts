@@ -16,7 +16,6 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { v4 as uuidv4 } from 'uuid'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo, MVideoWithHost } from '@server/types/models'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
@@ -208,9 +207,7 @@ export class VideoCaptionModel extends Model {
     if (!this.Video) this.Video = video as VideoModel
 
     if (video.isOwned()) return WEBSERVER.URL + this.getCaptionStaticPath()
-    if (this.fileUrl) return this.fileUrl
 
-    // Fallback if we don't have a file URL
-    return buildRemoteVideoBaseUrl(video, this.getCaptionStaticPath())
+    return this.fileUrl
   }
 }

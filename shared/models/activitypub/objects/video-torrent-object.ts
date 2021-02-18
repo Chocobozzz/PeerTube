@@ -40,11 +40,14 @@ export interface VideoObject {
   icon: ActivityIconObject[]
 
   url: ActivityUrlObject[]
+
   likes: string
   dislikes: string
   shares: string
   comments: string
+
   attributedTo: ActivityPubAttributedTo[]
+
   to?: string[]
   cc?: string[]
 }

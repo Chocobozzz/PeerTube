@@ -15,7 +15,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { MThumbnail, MThumbnailVideo, MVideoWithHost } from '@server/types/models'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
@@ -168,10 +167,8 @@ export class ThumbnailModel extends Model {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
     if (video.isOwned()) return WEBSERVER.URL + staticPath
-    if (this.fileUrl) return this.fileUrl
 
-    // Fallback if we don't have a file URL
-    return buildRemoteVideoBaseUrl(video, staticPath)
+    return this.fileUrl
   }
 
   getPath () {

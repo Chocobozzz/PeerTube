@@ -201,10 +201,12 @@ function checkUrlsSameHost (url1: string, url2: string) {
   return idHost && actorHost && idHost.toLowerCase() === actorHost.toLowerCase()
 }
 
-function buildRemoteVideoBaseUrl (video: MVideoWithHost, path: string) {
+function buildRemoteVideoBaseUrl (video: MVideoWithHost, path: string, scheme?: string) {
+  if (!scheme) scheme = REMOTE_SCHEME.HTTP
+
   const host = video.VideoChannel.Actor.Server.host
 
-  return REMOTE_SCHEME.HTTP + '://' + host + path
+  return scheme + '://' + host + path
 }
 
 // ---------------------------------------------------------------------------

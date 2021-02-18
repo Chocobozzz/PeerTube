@@ -14,8 +14,6 @@ import {
 } from '../../lib/activitypub/url'
 import {
   MStreamingPlaylistRedundanciesOpt,
-  MStreamingPlaylistVideo,
-  MVideo,
   MVideoAP,
   MVideoFile,
   MVideoFormattable,
@@ -127,8 +125,6 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
     }
   })
 
-  const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
-
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
 
   const streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
@@ -147,14 +143,14 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
       label: VideoModel.getStateLabel(video.state)
     },
 
-    trackerUrls: video.getTrackerUrls(baseUrlHttp, baseUrlWs),
+    trackerUrls: video.getTrackerUrls(),
 
     files: [],
     streamingPlaylists
   }
 
   // Format and sort video files
-  detailsJson.files = videoFilesModelToFormattedJSON(video, video, baseUrlHttp, baseUrlWs, video.VideoFiles)
+  detailsJson.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
 
   return Object.assign(formattedJson, detailsJson)
 }
@@ -165,17 +161,13 @@ function streamingPlaylistsModelToFormattedJSON (
 ): VideoStreamingPlaylist[] {
   if (isArray(playlists) === false) return []
 
-  const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
-
   return playlists
     .map(playlist => {
-      const playlistWithVideo = Object.assign(playlist, { Video: video })
-
       const redundancies = isArray(playlist.RedundancyVideos)
         ? playlist.RedundancyVideos.map(r => ({ baseUrl: r.fileUrl }))
         : []
 
-      const files = videoFilesModelToFormattedJSON(playlistWithVideo, video, baseUrlHttp, baseUrlWs, playlist.VideoFiles)
+      const files = videoFilesModelToFormattedJSON(video, playlist.VideoFiles)
 
       return {
         id: playlist.id,
@@ -194,14 +186,12 @@ function sortByResolutionDesc (fileA: MVideoFile, fileB: MVideoFile) {
   return -1
 }
 
-// FIXME: refactor/merge model and video arguments
 function videoFilesModelToFormattedJSON (
-  model: MVideo | MStreamingPlaylistVideo,
   video: MVideoFormattableDetails,
-  baseUrlHttp: string,
-  baseUrlWs: string,
   videoFiles: MVideoFileRedundanciesOpt[]
 ): VideoFile[] {
+  const trackerUrls = video.getTrackerUrls()
+
   return [ ...videoFiles ]
     .filter(f => !f.isLive())
     .sort(sortByResolutionDesc)
@@ -213,7 +203,7 @@ function videoFilesModelToFormattedJSON (
         },
 
         // FIXME: deprecated in 3.2
-        magnetUri: generateMagnetUri(model, video, videoFile, baseUrlHttp, baseUrlWs),
+        magnetUri: generateMagnetUri(video, videoFile, trackerUrls),
 
         size: videoFile.size,
         fps: videoFile.fps,
@@ -229,15 +219,13 @@ function videoFilesModelToFormattedJSON (
     })
 }
 
-// FIXME: refactor/merge model and video arguments
 function addVideoFilesInAPAcc (
   acc: ActivityUrlObject[] | ActivityTagObject[],
-  model: MVideoAP | MStreamingPlaylistVideo,
   video: MVideoWithHost,
-  baseUrlHttp: string,
-  baseUrlWs: string,
   files: MVideoFile[]
 ) {
+  const trackerUrls = video.getTrackerUrls()
+
   const sortedFiles = [ ...files ]
     .filter(f => !f.isLive())
     .sort(sortByResolutionDesc)
@@ -271,14 +259,13 @@ function addVideoFilesInAPAcc (
     acc.push({
       type: 'Link',
       mediaType: 'application/x-bittorrent;x-scheme-handler/magnet' as 'application/x-bittorrent;x-scheme-handler/magnet',
-      href: generateMagnetUri(model, video, file, baseUrlHttp, baseUrlWs),
+      href: generateMagnetUri(video, file, trackerUrls),
       height: file.resolution
     })
   }
 }
 
 function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
-  const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
   if (!video.Tags) video.Tags = []
 
   const tag = video.Tags.map(t => ({
@@ -319,7 +306,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     }
   ]
 
-  addVideoFilesInAPAcc(url, video, video, baseUrlHttp, baseUrlWs, video.VideoFiles || [])
+  addVideoFilesInAPAcc(url, video, video.VideoFiles || [])
 
   for (const playlist of (video.VideoStreamingPlaylists || [])) {
     const tag = playlist.p2pMediaLoaderInfohashes
@@ -331,14 +318,26 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       href: playlist.segmentsSha256Url
     })
 
-    const playlistWithVideo = Object.assign(playlist, { Video: video })
-    addVideoFilesInAPAcc(tag, playlistWithVideo, video, baseUrlHttp, baseUrlWs, playlist.VideoFiles || [])
+    addVideoFilesInAPAcc(tag, video, playlist.VideoFiles || [])
 
     url.push({
       type: 'Link',
       mediaType: 'application/x-mpegURL' as 'application/x-mpegURL',
       href: playlist.playlistUrl,
       tag
+    })
+  }
+
+  for (const trackerUrl of video.getTrackerUrls()) {
+    const rel2 = trackerUrl.startsWith('http')
+      ? 'http'
+      : 'websocket'
+
+    url.push({
+      type: 'Link',
+      name: `tracker-${rel2}`,
+      rel: [ 'tracker', rel2 ],
+      href: trackerUrl
     })
   }
 

@@ -107,16 +107,13 @@ async function createTorrentAndSetInfoHash (
   videoFile.torrentFilename = torrentFilename
 }
 
-// FIXME: merge/refactor videoOrPlaylist and video arguments
 function generateMagnetUri (
-  videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   video: MVideoWithHost,
   videoFile: MVideoFileRedundanciesOpt,
-  baseUrlHttp: string,
-  baseUrlWs: string
+  trackerUrls: string[]
 ) {
   const xs = videoFile.getTorrentUrl()
-  const announce = videoOrPlaylist.getTrackerUrls(baseUrlHttp, baseUrlWs)
+  const announce = trackerUrls
   let urlList = [ videoFile.getFileUrl(video) ]
 
   const redundancies = videoFile.RedundancyVideos

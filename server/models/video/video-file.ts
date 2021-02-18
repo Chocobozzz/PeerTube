@@ -427,10 +427,8 @@ export class VideoFileModel extends Model {
     if (!this.Video) this.Video = video as VideoModel
 
     if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
-    if (this.fileUrl) return this.fileUrl
 
-    // Fallback if we don't have a file URL
-    return buildRemoteVideoBaseUrl(video, this.getFileStaticPath(video))
+    return this.fileUrl
   }
 
   getFileStaticPath (video: MVideo) {
@@ -454,10 +452,7 @@ export class VideoFileModel extends Model {
   getRemoteTorrentUrl (video: MVideoWithHost) {
     if (video.isOwned()) throw new Error(`Video ${video.url} is not a remote video`)
 
-    if (this.torrentUrl) return this.torrentUrl
-
-    // Fallback if we don't have a torrent URL
-    return buildRemoteVideoBaseUrl(video, this.getTorrentStaticPath())
+    return this.torrentUrl
   }
 
   // We proxify torrent requests so use a local URL

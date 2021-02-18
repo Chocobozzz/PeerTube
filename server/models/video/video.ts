@@ -60,7 +60,6 @@ import {
   API_VERSION,
   CONSTRAINTS_FIELDS,
   LAZY_STATIC_PATHS,
-  REMOTE_SCHEME,
   STATIC_PATHS,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
@@ -107,6 +106,8 @@ import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { ServerModel } from '../server/server'
+import { TrackerModel } from '../server/tracker'
+import { VideoTrackerModel } from '../server/video-tracker'
 import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { TagModel } from './tag'
@@ -137,6 +138,7 @@ export enum ScopeNames {
   FOR_API = 'FOR_API',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
+  WITH_TRACKERS = 'WITH_TRACKERS',
   WITH_WEBTORRENT_FILES = 'WITH_WEBTORRENT_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
@@ -319,6 +321,14 @@ export type AvailableForListIDsOptions = {
   },
   [ScopeNames.WITH_TAGS]: {
     include: [ TagModel ]
+  },
+  [ScopeNames.WITH_TRACKERS]: {
+    include: [
+      {
+        attributes: [ 'id', 'url' ],
+        model: TrackerModel
+      }
+    ]
   },
   [ScopeNames.WITH_BLACKLISTED]: {
     include: [
@@ -615,6 +625,13 @@ export class VideoModel extends Model {
     onDelete: 'CASCADE'
   })
   Tags: TagModel[]
+
+  @BelongsToMany(() => TrackerModel, {
+    foreignKey: 'videoId',
+    through: () => VideoTrackerModel,
+    onDelete: 'CASCADE'
+  })
+  Trackers: TrackerModel[]
 
   @HasMany(() => ThumbnailModel, {
     foreignKey: {
@@ -1436,6 +1453,7 @@ export class VideoModel extends Model {
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_THUMBNAILS,
       ScopeNames.WITH_LIVE,
+      ScopeNames.WITH_TRACKERS,
       { method: [ ScopeNames.WITH_WEBTORRENT_FILES, true ] },
       { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] }
     ]
@@ -1887,18 +1905,15 @@ export class VideoModel extends Model {
   }
 
   getFormattedVideoFilesJSON (): VideoFile[] {
-    const { baseUrlHttp, baseUrlWs } = this.getBaseUrls()
     let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      const result = videoFilesModelToFormattedJSON(this, this, baseUrlHttp, baseUrlWs, this.VideoFiles)
+      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles)
       files = files.concat(result)
     }
 
     for (const p of (this.VideoStreamingPlaylists || [])) {
-      p.Video = this
-
-      const result = videoFilesModelToFormattedJSON(p, this, baseUrlHttp, baseUrlWs, p.VideoFiles)
+      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles)
       files = files.concat(result)
     }
 
@@ -2030,25 +2045,18 @@ export class VideoModel extends Model {
     return false
   }
 
-  getBaseUrls () {
-    if (this.isOwned()) {
-      return {
-        baseUrlHttp: WEBSERVER.URL,
-        baseUrlWs: WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT
-      }
-    }
-
-    return {
-      baseUrlHttp: REMOTE_SCHEME.HTTP + '://' + this.VideoChannel.Account.Actor.Server.host,
-      baseUrlWs: REMOTE_SCHEME.WS + '://' + this.VideoChannel.Account.Actor.Server.host
-    }
-  }
-
-  getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
-    return [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
-  }
-
   getBandwidthBits (videoFile: MVideoFile) {
     return Math.ceil((videoFile.size * 8) / this.duration)
+  }
+
+  getTrackerUrls () {
+    if (this.isOwned()) {
+      return [
+        WEBSERVER.URL + '/tracker/announce',
+        WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket'
+      ]
+    }
+
+    return this.Trackers.map(t => t.url)
   }
 }
