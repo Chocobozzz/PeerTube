@@ -105,6 +105,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         },
         captions: {
           size: CACHE_CAPTIONS_SIZE_VALIDATOR
+        },
+        torrents: {
+          size: CACHE_CAPTIONS_SIZE_VALIDATOR
         }
       },
       signup: {

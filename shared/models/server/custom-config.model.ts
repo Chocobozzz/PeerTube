@@ -59,6 +59,10 @@ export interface CustomConfig {
     captions: {
       size: number
     }
+
+    torrents: {
+      size: number
+    }
   }
 
   signup: {

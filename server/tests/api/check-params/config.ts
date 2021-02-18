@@ -65,6 +65,9 @@ describe('Test config API validators', function () {
       },
       captions: {
         size: 3
+      },
+      torrents: {
+        size: 4
       }
     },
     signup: {
