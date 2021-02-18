@@ -1904,16 +1904,16 @@ export class VideoModel extends Model {
     return videoModelToFormattedDetailsJSON(this)
   }
 
-  getFormattedVideoFilesJSON (): VideoFile[] {
+  getFormattedVideoFilesJSON (includeMagnet = true): VideoFile[] {
     let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles)
+      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, includeMagnet)
       files = files.concat(result)
     }
 
     for (const p of (this.VideoStreamingPlaylists || [])) {
-      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles)
+      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, includeMagnet)
       files = files.concat(result)
     }
 
