@@ -9,7 +9,7 @@ import { isStreamingPlaylist, MStreamingPlaylist, MStreamingPlaylistVideo, MVide
 function generateVideoFilename (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, isHls: boolean, resolution: number, extname: string) {
   const video = extractVideo(videoOrPlaylist)
 
-  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.2
+  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.1
   // const uuid = uuidv4()
   const uuid = video.uuid
 
@@ -69,7 +69,7 @@ function generateTorrentFileName (videoOrPlaylist: MVideo | MStreamingPlaylistVi
   const video = extractVideo(videoOrPlaylist)
   const extension = '.torrent'
 
-  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.2
+  // FIXME: use a generated uuid instead, that will break compatibility with PeerTube < 3.1
   // const uuid = uuidv4()
   const uuid = video.uuid
 

@@ -74,7 +74,7 @@ function createVideoMiniatureFromUrl (options: {
     ? existingThumbnail.fileUrl
     : null
 
-  // If the thumbnail URL did not change and has a unique filename (introduced in 3.2), avoid thumbnail processing
+  // If the thumbnail URL did not change and has a unique filename (introduced in 3.1), avoid thumbnail processing
   const thumbnailUrlChanged = !existingUrl || existingUrl !== downloadUrl || downloadUrl.endsWith(`${video.uuid}.jpg`)
 
   // Do not change the thumbnail filename if the file did not change

@@ -34,6 +34,7 @@ staticRouter.use(cors())
 */
 
 // FIXME: deprecated in 3.2, use lazy-statics instead
+// Due to historical reasons, we can't really remove this controller
 const torrentsPhysicalPath = CONFIG.STORAGE.TORRENTS_DIR
 staticRouter.use(
   STATIC_PATHS.TORRENTS,
