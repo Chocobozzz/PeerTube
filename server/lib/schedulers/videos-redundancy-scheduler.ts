@@ -1,6 +1,7 @@
 import { move } from 'fs-extra'
 import { join } from 'path'
 import { getServerActor } from '@server/models/application/application'
+import { TrackerModel } from '@server/models/server/tracker'
 import { VideoModel } from '@server/models/video/video'
 import {
   MStreamingPlaylist,
@@ -221,8 +222,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, strategy)
 
-    const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
-    const magnetUri = generateMagnetUri(video, video, file, baseUrlHttp, baseUrlWs)
+    const trackerUrls = await TrackerModel.listUrlsByVideoId(video.id)
+    const magnetUri = generateMagnetUri(video, file, trackerUrls)
 
     const tmpPath = await downloadWebTorrentVideo({ magnetUri }, VIDEO_IMPORT_TIMEOUT)
 

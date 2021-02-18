@@ -1,5 +1,6 @@
 import { PickWith, PickWithOpt } from '@shared/core-utils'
 import { VideoModel } from '../../../models/video/video'
+import { MTrackerUrl } from '../server/tracker'
 import { MUserVideoHistoryTime } from '../user/user-video-history'
 import { MScheduleVideoUpdate } from './schedule-video-update'
 import { MTag } from './tag'
@@ -216,4 +217,5 @@ export type MVideoFormattableDetails =
   Use<'VideoChannel', MChannelFormattable> &
   Use<'Tags', MTag[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]> &
-  Use<'VideoFiles', MVideoFileRedundanciesOpt[]>
+  Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
+  Use<'Trackers', MTrackerUrl[]>

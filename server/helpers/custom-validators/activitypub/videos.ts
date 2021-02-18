@@ -1,4 +1,7 @@
 import validator from 'validator'
+import { logger } from '@server/helpers/logger'
+import { ActivityTrackerUrlObject, ActivityVideoFileMetadataUrlObject } from '@shared/models'
+import { VideoState } from '../../../../shared/models/videos'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { peertubeTruncate } from '../../core-utils'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
@@ -11,9 +14,6 @@ import {
   isVideoViewsValid
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
-import { VideoState } from '../../../../shared/models/videos'
-import { logger } from '@server/helpers/logger'
-import { ActivityVideoFileMetadataObject } from '@shared/models'
 
 function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
@@ -84,6 +84,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
 
 function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
+    // Video file link
     (
       ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.includes(url.mediaType) &&
       isActivityPubUrlValid(url.href) &&
@@ -91,29 +92,39 @@ function isRemoteVideoUrlValid (url: any) {
       validator.isInt(url.size + '', { min: 0 }) &&
       (!url.fps || validator.isInt(url.fps + '', { min: -1 }))
     ) ||
+    // Torrent link
     (
       ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.includes(url.mediaType) &&
       isActivityPubUrlValid(url.href) &&
       validator.isInt(url.height + '', { min: 0 })
     ) ||
+    // Magnet link
     (
       ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.includes(url.mediaType) &&
       validator.isLength(url.href, { min: 5 }) &&
       validator.isInt(url.height + '', { min: 0 })
     ) ||
+    // HLS playlist link
     (
       (url.mediaType || url.mimeType) === 'application/x-mpegURL' &&
       isActivityPubUrlValid(url.href) &&
       isArray(url.tag)
     ) ||
-    isAPVideoFileMetadataObject(url)
+    isAPVideoTrackerUrlObject(url) ||
+    isAPVideoFileUrlMetadataObject(url)
 }
 
-function isAPVideoFileMetadataObject (url: any): url is ActivityVideoFileMetadataObject {
+function isAPVideoFileUrlMetadataObject (url: any): url is ActivityVideoFileMetadataUrlObject {
   return url &&
     url.type === 'Link' &&
     url.mediaType === 'application/json' &&
     isArray(url.rel) && url.rel.includes('metadata')
+}
+
+function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlObject {
+  return isArray(url.rel) &&
+    url.rel.includes('tracker') &&
+    isActivityPubUrlValid(url.href)
 }
 
 // ---------------------------------------------------------------------------
@@ -123,7 +134,8 @@ export {
   isRemoteStringIdentifierValid,
   sanitizeAndCheckVideoTorrentObject,
   isRemoteVideoUrlValid,
-  isAPVideoFileMetadataObject
+  isAPVideoFileUrlMetadataObject,
+  isAPVideoTrackerUrlObject
 }
 
 // ---------------------------------------------------------------------------

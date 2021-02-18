@@ -1,3 +1,5 @@
+import { TrackerModel } from '@server/models/server/tracker'
+import { VideoTrackerModel } from '@server/models/server/video-tracker'
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { isTestInstance } from '../helpers/core-utils'
@@ -128,6 +130,8 @@ async function initDatabaseModels (silent: boolean) {
     VideoPlaylistModel,
     VideoPlaylistElementModel,
     ThumbnailModel,
+    TrackerModel,
+    VideoTrackerModel,
     PluginModel
   ])
 
