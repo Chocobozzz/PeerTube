@@ -1,20 +1,18 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import { accessSync, constants } from 'fs'
-import { join } from 'path'
-import { promisify } from 'util'
-
 import * as program from 'commander'
+import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { truncate } from 'lodash'
+import { join } from 'path'
 import * as prompt from 'prompt'
-
-import { doRequestAndSaveToFile } from '../helpers/requests'
-import { CONSTRAINTS_FIELDS } from '../initializers/constants'
-import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/extra-utils/index'
+import { promisify } from 'util'
+import { advancedVideosSearch, getClient, getVideoCategories, login, uploadVideo } from '../../shared/extra-utils/index'
 import { sha256 } from '../helpers/core-utils'
+import { doRequestAndSaveToFile } from '../helpers/requests'
 import { buildOriginallyPublishedAt, getYoutubeDLVideoFormat, safeGetYoutubeDL } from '../helpers/youtube-dl'
+import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getLogger, getServerCredentials } from './cli'
 
 type UserInfo = {
@@ -150,7 +148,7 @@ async function processVideo (parameters: {
     return
   }
 
-  const result = await searchVideoWithSort(url, videoInfo.title, '-match')
+  const result = await advancedVideosSearch(url, { search: videoInfo.title, sort: '-match', searchTarget: 'local' })
 
   log.info('############################################################\n')
 
