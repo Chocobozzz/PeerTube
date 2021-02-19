@@ -314,7 +314,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a notification before the video is published', async function () {
-      this.timeout(40000)
+      this.timeout(50000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 

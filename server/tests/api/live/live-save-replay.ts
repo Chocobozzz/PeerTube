@@ -23,9 +23,11 @@ import {
   testFfmpegStreamError,
   updateCustomSubConfig,
   updateVideo,
+  wait,
   waitJobs,
   waitUntilLiveEnded,
-  waitUntilLivePublished
+  waitUntilLivePublished,
+  waitUntilLiveSaved
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -78,6 +80,12 @@ describe('Save replay setting', function () {
   async function waitUntilLivePublishedOnAllServers (videoId: string) {
     for (const server of servers) {
       await waitUntilLivePublished(server.url, server.accessToken, videoId)
+    }
+  }
+
+  async function waitUntilLiveSavedOnAllServers (videoId: string) {
+    for (const server of servers) {
+      await waitUntilLiveSaved(server.url, server.accessToken, videoId)
     }
   }
 
@@ -158,8 +166,6 @@ describe('Save replay setting', function () {
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.LIVE_ENDED)
 
-      await waitJobs(servers)
-
       // No resolutions saved since we did not save replay
       await checkLiveCleanup(servers[0], liveVideoUUID, [])
     })
@@ -188,6 +194,8 @@ describe('Save replay setting', function () {
       await getVideo(servers[0].url, liveVideoUUID, HttpStatusCode.UNAUTHORIZED_401)
       await getVideo(servers[1].url, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
 
+      await wait(5000)
+      await waitJobs(servers)
       await checkLiveCleanup(servers[0], liveVideoUUID, [])
     })
 
@@ -208,6 +216,7 @@ describe('Save replay setting', function () {
         removeVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
       ])
 
+      await wait(5000)
       await waitJobs(servers)
 
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
@@ -245,6 +254,7 @@ describe('Save replay setting', function () {
 
       await stopFfmpeg(ffmpegCommand)
 
+      await waitUntilLiveSavedOnAllServers(liveVideoUUID)
       await waitJobs(servers)
 
       // Live has been transcoded
@@ -292,6 +302,8 @@ describe('Save replay setting', function () {
       await getVideo(servers[0].url, liveVideoUUID, HttpStatusCode.UNAUTHORIZED_401)
       await getVideo(servers[1].url, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
 
+      await wait(5000)
+      await waitJobs(servers)
       await checkLiveCleanup(servers[0], liveVideoUUID, [ 720 ])
     })
 
@@ -311,6 +323,7 @@ describe('Save replay setting', function () {
         testFfmpegStreamError(ffmpegCommand, true)
       ])
 
+      await wait(5000)
       await waitJobs(servers)
 
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)

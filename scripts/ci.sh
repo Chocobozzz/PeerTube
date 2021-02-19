@@ -10,11 +10,8 @@ fi
 killall -q peertube || true
 
 retries=3
-jobs=2
 
 runTest () {
-    retries=3
-
     jobname=$1
     shift
 
