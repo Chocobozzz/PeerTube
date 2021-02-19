@@ -166,8 +166,6 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
     }
   }
 
-  logger.info('coucou', { resultList })
-
   if (resultList.data.length === 0) {
     return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
   }

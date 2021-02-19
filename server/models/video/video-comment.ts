@@ -483,20 +483,26 @@ export class VideoCommentModel extends Model {
       order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ] as Order,
       where: {
         videoId,
-        [Op.or]: [
-          { id: threadId },
-          { originCommentId: threadId }
-        ],
-        [Op.or]: [
+        [Op.and]: [
           {
-            accountId: {
-              [Op.notIn]: Sequelize.literal(
-                '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
-              )
-            }
+            [Op.or]: [
+              { id: threadId },
+              { originCommentId: threadId }
+            ]
           },
           {
-            accountId: null
+            [Op.or]: [
+              {
+                accountId: {
+                  [Op.notIn]: Sequelize.literal(
+                    '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
+                  )
+                }
+              },
+              {
+                accountId: null
+              }
+            ]
           }
         ]
       }
