@@ -195,12 +195,14 @@ describe('Test stats (excluding redundancy)', function () {
 
     await waitJobs(servers)
 
+    await wait(6000)
+
     const res2 = await getStats(servers[1].url)
     const second: ServerStats = res2.body
 
     expect(second.totalActivityPubMessagesProcessed).to.be.greaterThan(first.totalActivityPubMessagesProcessed)
 
-    await wait(5000)
+    await wait(6000)
 
     const res3 = await getStats(servers[1].url)
     const third: ServerStats = res3.body
