@@ -21,15 +21,20 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   comments: VideoComment[] = []
   highlightedThread: VideoComment
+
   sort = '-createdAt'
+
   componentPagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 10,
     totalItems: null
   }
+  totalNotDeletedComments: number
+
   inReplyToCommentId: number
   commentReplyRedraftValue: string
   commentThreadRedraftValue: string
+
   threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
   threadLoading: { [ id: number ]: boolean } = {}
 
@@ -122,8 +127,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     obs.subscribe(
       res => {
         this.comments = this.comments.concat(res.data)
-        // Client does not display removed comments
-        this.componentPagination.totalItems = res.total - this.comments.filter(c => c.isDeleted).length
+        this.componentPagination.totalItems = res.total
+        this.totalNotDeletedComments = res.totalNotDeletedComments
 
         this.onDataSubject.next(res.data)
         this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
@@ -241,6 +246,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       this.inReplyToCommentId = undefined
       this.componentPagination.currentPage = 1
       this.componentPagination.totalItems = null
+      this.totalNotDeletedComments = null
 
       this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video.uuid)
       this.loadMoreThreads()

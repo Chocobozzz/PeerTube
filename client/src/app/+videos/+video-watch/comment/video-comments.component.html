@@ -1,10 +1,10 @@
 <div>
   <div class="title-block">
     <h2 class="title-page title-page-single">
-      <ng-container *ngIf="componentPagination.totalItems > 0; then hasComments; else noComments"></ng-container>
+      <ng-container *ngIf="totalNotDeletedComments > 0; then hasComments; else noComments"></ng-container>
       <ng-template #hasComments>
-        <ng-container i18n *ngIf="componentPagination.totalItems === 1; else manyComments">1 Comment</ng-container>
-        <ng-template i18n #manyComments>{{ componentPagination.totalItems }} Comments</ng-template>
+        <ng-container i18n *ngIf="totalNotDeletedComments === 1; else manyComments">1 Comment</ng-container>
+        <ng-template i18n #manyComments>{{ totalNotDeletedComments }} Comments</ng-template>
       </ng-template>
       <ng-template i18n #noComments>Comments</ng-template>
     </h2>
@@ -30,7 +30,7 @@
       [textValue]="commentThreadRedraftValue"
     ></my-video-comment-add>
 
-    <div *ngIf="componentPagination.totalItems === 0 && comments.length === 0" i18n>No comments.</div>
+    <div *ngIf="totalNotDeletedComments === 0 && comments.length === 0" i18n>No comments.</div>
 
     <div
       class="comment-threads"

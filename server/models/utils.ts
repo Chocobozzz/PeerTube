@@ -134,7 +134,7 @@ function buildBlockedAccountSQL (blockerIds: number[]) {
   const blockerIdsString = blockerIds.join(', ')
 
   return 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +
-    ' UNION ALL ' +
+    ' UNION ' +
     'SELECT "account"."id" AS "id" FROM account INNER JOIN "actor" ON account."actorId" = actor.id ' +
     'INNER JOIN "serverBlocklist" ON "actor"."serverId" = "serverBlocklist"."targetServerId" ' +
     'WHERE "serverBlocklist"."accountId" IN (' + blockerIdsString + ')'

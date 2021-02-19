@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { ResultList, UserRight } from '../../../../shared/models'
+import { ResultList, ThreadsResultList, UserRight } from '../../../../shared/models'
 import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -30,6 +30,7 @@ import {
 import { AccountModel } from '../../../models/account/account'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { logger } from '@server/helpers/logger'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -108,7 +109,7 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
   const video = res.locals.onlyVideo
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
-  let resultList: ResultList<VideoCommentModel>
+  let resultList: ThreadsResultList<VideoCommentModel>
 
   if (video.commentsEnabled === true) {
     const apiOptions = await Hooks.wrapObject({
@@ -128,11 +129,15 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
   } else {
     resultList = {
       total: 0,
+      totalNotDeletedComments: 0,
       data: []
     }
   }
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json({
+    ...getFormattedObjects(resultList.data, resultList.total),
+    totalNotDeletedComments: resultList.totalNotDeletedComments
+  })
 }
 
 async function listVideoThreadComments (req: express.Request, res: express.Response) {
@@ -160,6 +165,8 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
       data: []
     }
   }
+
+  logger.info('coucou', { resultList })
 
   if (resultList.data.length === 0) {
     return res.sendStatus(HttpStatusCode.NOT_FOUND_404)

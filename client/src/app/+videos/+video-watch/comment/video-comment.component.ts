@@ -62,6 +62,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     if (!this.commentTree) {
       this.commentTree = {
         comment: this.comment,
+        hasDisplayedChildren: false,
         children: []
       }
 
@@ -70,6 +71,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
     this.commentTree.children.unshift({
       comment: createdComment,
+      hasDisplayedChildren: false,
       children: []
     })
 
@@ -133,8 +135,11 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
   }
 
-  isNotDeletedOrDeletedWithReplies () {
-    return !this.comment.isDeleted || this.comment.isDeleted && this.comment.totalReplies !== 0
+  isCommentDisplayed () {
+    // Not deleted
+    return !this.comment.isDeleted ||
+      this.comment.totalReplies !== 0 || // Or root comment thread has replies
+      (this.commentTree?.hasDisplayedChildren) // Or this is a reply that have other replies
   }
 
   private getUserIfNeeded (account: Account) {

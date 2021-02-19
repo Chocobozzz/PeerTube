@@ -414,7 +414,15 @@ export class VideoCommentModel extends Model {
 
     const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ videoId, user, isVideoOwned })
 
-    const query = {
+    const accountBlockedWhere = {
+      accountId: {
+        [Op.notIn]: Sequelize.literal(
+          '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
+        )
+      }
+    }
+
+    const queryList = {
       offset: start,
       limit: count,
       order: getCommentSort(sort),
@@ -428,13 +436,7 @@ export class VideoCommentModel extends Model {
           },
           {
             [Op.or]: [
-              {
-                accountId: {
-                  [Op.notIn]: Sequelize.literal(
-                    '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
-                  )
-                }
-              },
+              accountBlockedWhere,
               {
                 accountId: null
               }
@@ -444,19 +446,27 @@ export class VideoCommentModel extends Model {
       }
     }
 
-    const scopes: (string | ScopeOptions)[] = [
+    const scopesList: (string | ScopeOptions)[] = [
       ScopeNames.WITH_ACCOUNT_FOR_API,
       {
         method: [ ScopeNames.ATTRIBUTES_FOR_API, blockerAccountIds ]
       }
     ]
 
-    return VideoCommentModel
-      .scope(scopes)
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    const queryCount = {
+      where: {
+        videoId,
+        deletedAt: null,
+        ...accountBlockedWhere
+      }
+    }
+
+    return Promise.all([
+      VideoCommentModel.scope(scopesList).findAndCountAll(queryList),
+      VideoCommentModel.count(queryCount)
+    ]).then(([ { rows, count }, totalNotDeletedComments ]) => {
+      return { total: count, data: rows, totalNotDeletedComments }
+    })
   }
 
   static async listThreadCommentsForApi (parameters: {
@@ -477,11 +487,18 @@ export class VideoCommentModel extends Model {
           { id: threadId },
           { originCommentId: threadId }
         ],
-        accountId: {
-          [Op.notIn]: Sequelize.literal(
-            '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
-          )
-        }
+        [Op.or]: [
+          {
+            accountId: {
+              [Op.notIn]: Sequelize.literal(
+                '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
+              )
+            }
+          },
+          {
+            accountId: null
+          }
+        ]
       }
     }
 
@@ -492,8 +509,7 @@ export class VideoCommentModel extends Model {
       }
     ]
 
-    return VideoCommentModel
-      .scope(scopes)
+    return VideoCommentModel.scope(scopes)
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
