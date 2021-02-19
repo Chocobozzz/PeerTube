@@ -1,4 +1,5 @@
 import * as express from 'express'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { ResultList, ThreadsResultList, UserRight } from '../../../../shared/models'
 import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
@@ -29,8 +30,6 @@ import {
 } from '../../../middlewares/validators'
 import { AccountModel } from '../../../models/account/account'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import { logger } from '@server/helpers/logger'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
