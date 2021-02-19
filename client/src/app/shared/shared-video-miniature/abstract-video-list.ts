@@ -1,4 +1,4 @@
-import { fromEvent, Observable, Subject, Subscription } from 'rxjs'
+import { fromEvent, Observable, ReplaySubject, Subject, Subscription } from 'rxjs'
 import { debounceTime, switchMap, tap } from 'rxjs/operators'
 import {
   AfterContentInit,
@@ -63,7 +63,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   syndicationItems: Syndication[] = []
 
   loadOnInit = true
-  useUserVideoPreferences = false
+  loadUserVideoPreferences = false
+
   ownerDisplayType: OwnerDisplayType = 'account'
   displayModerationBlock = false
   titleTooltip: string
@@ -97,6 +98,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   onDataSubject = new Subject<any[]>()
 
   userMiniature: User
+
+  protected onUserLoadedSubject = new ReplaySubject<void>(1)
 
   protected serverConfig: ServerConfig
 
@@ -149,10 +152,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
     this.calcPageSizes()
 
     const loadUserObservable = this.loadUserAndSettings()
+    loadUserObservable.subscribe(() => {
+      this.onUserLoadedSubject.next()
 
-    if (this.loadOnInit === true) {
-      loadUserObservable.subscribe(() => this.loadMoreVideos())
-    }
+      if (this.loadOnInit === true) this.loadMoreVideos()
+    })
 
     this.userService.listenAnonymousUpdate()
       .pipe(switchMap(() => this.loadUserAndSettings()))
@@ -374,7 +378,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
       .pipe(tap(user => {
         this.userMiniature = user
 
-        if (!this.useUserVideoPreferences) return
+        if (!this.loadUserVideoPreferences) return
 
         this.languageOneOf = user.videoLanguages
         this.nsfwPolicy = user.nsfwPolicy

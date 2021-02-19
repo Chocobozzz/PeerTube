@@ -17,7 +17,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   sort = '-publishedAt' as VideoSortField
   filter: VideoFilter = 'local'
 
-  useUserVideoPreferences = true
+  loadUserVideoPreferences = true
 
   constructor (
     protected router: Router,

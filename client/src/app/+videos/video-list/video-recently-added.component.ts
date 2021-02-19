@@ -17,7 +17,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   sort: VideoSortField = '-publishedAt'
   groupByDate = true
 
-  useUserVideoPreferences = true
+  loadUserVideoPreferences = true
 
   constructor (
     protected route: ActivatedRoute,

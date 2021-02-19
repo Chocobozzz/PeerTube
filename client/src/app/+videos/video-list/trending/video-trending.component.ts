@@ -19,7 +19,7 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   titlePage: string
   defaultSort: VideoSortField = '-trending'
 
-  useUserVideoPreferences = true
+  loadUserVideoPreferences = true
 
   private algorithmChangeSub: Subscription
 

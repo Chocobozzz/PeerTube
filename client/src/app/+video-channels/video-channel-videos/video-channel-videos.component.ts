@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import { first, tap } from 'rxjs/operators'
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -18,6 +18,7 @@ import { VideoFilter } from '@shared/models'
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   loadOnInit = false
+  loadUserVideoPreferences = true
 
   filter: VideoFilter = null
 
@@ -53,14 +54,15 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     this.enableAllFilterIfPossible()
 
     // Parent get the video channel for us
-    this.videoChannelSub = this.videoChannelService.videoChannelLoaded
-                               .pipe(first())
-                               .subscribe(videoChannel => {
-                                 this.videoChannel = videoChannel
+    this.videoChannelSub = forkJoin([
+      this.videoChannelService.videoChannelLoaded.pipe(first()),
+      this.onUserLoadedSubject.pipe(first())
+    ]).subscribe(([ videoChannel ]) => {
+      this.videoChannel = videoChannel
 
-                                 this.reloadVideos()
-                                 this.generateSyndicationList()
-                               })
+      this.reloadVideos()
+      this.generateSyndicationList()
+    })
   }
 
   ngOnDestroy () {

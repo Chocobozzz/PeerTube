@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import { first, tap } from 'rxjs/operators'
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -16,6 +16,7 @@ import { VideoFilter } from '@shared/models'
 export class AccountSearchComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   loadOnInit = false
+  loadUserVideoPreferences = true
 
   search = ''
   filter: VideoFilter = null
@@ -46,14 +47,14 @@ export class AccountSearchComponent extends AbstractVideoList implements OnInit,
     this.enableAllFilterIfPossible()
 
     // Parent get the account for us
-    this.accountSub = this.accountService.accountLoaded
-                          .pipe(first())
-                          .subscribe(account => {
-                            this.account = account
+    this.accountSub = forkJoin([
+      this.accountService.accountLoaded.pipe(first()),
+      this.onUserLoadedSubject.pipe(first())
+    ]).subscribe(([ account ]) => {
+      this.account = account
 
-                            this.reloadVideos()
-                            this.generateSyndicationList()
-                          })
+      this.reloadVideos()
+    })
   }
 
   ngOnDestroy () {
