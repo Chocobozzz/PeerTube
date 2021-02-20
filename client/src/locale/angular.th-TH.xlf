@@ -21,13 +21,13 @@
       </trans-unit>
       <trans-unit id="f50983ee112befc1afddea5c570283db67e20fed" datatype="html">
         <source>Channel avatar</source>
-        <target state="new">Channel avatar</target>
+        <target state="translated">รูปแทนตัวตนของช่อง</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="879fef27271d8247d791381cf1f9bb0eb8974166" datatype="html">
         <source>Account avatar</source>
-        <target state="new">Account avatar</target>
+        <target state="translated">รูปแทนตัวตนของบัญชี</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">7</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">23</context></context-group>
@@ -65,13 +65,7 @@
       </trans-unit>
       <trans-unit id="b1393385d75d42dfb7e893e3e99290bcc697e791" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been blocked </source>
-        <target state="new">
-          Your video 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blocked
-        
-        </target>
+        <target state="translated">วิดีโอ <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> ของคุณถูกบล็อก </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="552e90b955a7121d58f6e5a38b68c7e90f5ed90c" datatype="html">
@@ -142,14 +136,7 @@
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="new">
-          The recently added video 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>automatically blocked
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">วิดีโอ <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> ที่เพิ่งเพิ่มได้ถูก<x id="START_LINK_1"/>บล็อกโดยอัตโนมัติ<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
@@ -939,7 +926,7 @@
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">ไฟล์ <x id="PH" equiv-text="name"/> ของคุณใหญ่เกินไป (ขนาดสูงสุด: <x id="PH_1" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">196</context>
@@ -1094,7 +1081,7 @@
       </trans-unit>
       <trans-unit id="b87e81682959464211443afc3e23c506865d2eda" datatype="html">
         <source>I forgot my password</source>
-        <target state="new">I forgot my password</target>
+        <target state="translated">ฉันลืมรหัสผ่าน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">47</context>
@@ -1500,7 +1487,7 @@
       </trans-unit>
       <trans-unit id="5ef7ce1bada0c3d3b4e5e299dad0d336f7897a34" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2021</target>
+        <target state="translated">ขับเคลื่อนโดย PeerTube - กอปปีเลฟต์ 2015-2021</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="85b79c9064aed1ead31ace985f31aa1363f6bdaf" datatype="html">
@@ -8254,7 +8241,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
         <source>Your account is blocked.</source>
-        <target state="new">Your account is blocked.</target>
+        <target state="translated">บัญชีของคุณถูกบล็อก</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="7939914198003891823" datatype="html">
