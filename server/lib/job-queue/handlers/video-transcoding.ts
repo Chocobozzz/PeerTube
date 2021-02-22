@@ -3,6 +3,7 @@ import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
 import { JOB_PRIORITY } from '@server/initializers/constants'
 import { getJobTranscodingPriorityMalus, publishAndFederateIfNeeded } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
+import { UserModel } from '@server/models/account/user'
 import { MUser, MUserId, MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
 import {
   HLSTranscodingPayload,
@@ -26,7 +27,6 @@ import {
   transcodeNewWebTorrentResolution
 } from '../../video-transcoding'
 import { JobQueue } from '../job-queue'
-import { UserModel } from '@server/models/account/user'
 
 type HandlerFunction = (job: Bull.Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<any>
 
@@ -168,11 +168,11 @@ async function onVideoFileOptimizer (
       copyCodecs: transcodeType !== 'quick-transcode',
       isMaxQuality: true
     })
-    await createHlsJobIfEnabled(user, originalFileHLSPayload)
+    const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
 
     const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, videoFileResolution, isPortraitMode, 'webtorrent')
 
-    if (!hasNewResolutions) {
+    if (!hasHls && !hasNewResolutions) {
       // No transcoding to do, it's now published
       videoPublished = await videoDatabase.publishIfNeededAndSave(t)
     }
@@ -212,7 +212,7 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
   copyCodecs: boolean
   isMaxQuality: boolean
 }) {
-  if (!payload || CONFIG.TRANSCODING.HLS.ENABLED !== true) return
+  if (!payload || CONFIG.TRANSCODING.HLS.ENABLED !== true) return false
 
   const jobOptions = {
     priority: JOB_PRIORITY.TRANSCODING.NEW_RESOLUTION + await getJobTranscodingPriorityMalus(user)
@@ -227,7 +227,9 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
     isMaxQuality: payload.isMaxQuality
   }
 
-  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: hlsTranscodingPayload }, jobOptions)
+  JobQueue.Instance.createJob({ type: 'video-transcoding', payload: hlsTranscodingPayload }, jobOptions)
+
+  return true
 }
 
 async function createLowerResolutionsJobs (
@@ -239,16 +241,7 @@ async function createLowerResolutionsJobs (
 ) {
   // Create transcoding jobs if there are enabled resolutions
   const resolutionsEnabled = computeResolutionsToTranscode(videoFileResolution, 'vod')
-  logger.info(
-    'Resolutions computed for video %s and origin file resolution of %d.', video.uuid, videoFileResolution,
-    { resolutions: resolutionsEnabled }
-  )
-
-  if (resolutionsEnabled.length === 0) {
-    logger.info('No transcoding jobs created for video %s (no resolutions).', video.uuid)
-
-    return false
-  }
+  const resolutionCreated: number[] = []
 
   for (const resolution of resolutionsEnabled) {
     let dataInput: VideoTranscodingPayload
@@ -274,6 +267,10 @@ async function createLowerResolutionsJobs (
       }
     }
 
+    if (!dataInput) continue
+
+    resolutionCreated.push(resolution)
+
     const jobOptions = {
       priority: JOB_PRIORITY.TRANSCODING.NEW_RESOLUTION + await getJobTranscodingPriorityMalus(user)
     }
@@ -281,7 +278,16 @@ async function createLowerResolutionsJobs (
     JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput }, jobOptions)
   }
 
-  logger.info('Transcoding jobs created for uuid %s.', video.uuid, { resolutionsEnabled })
+  if (resolutionCreated.length === 0) {
+    logger.info('No transcoding jobs created for video %s (no resolutions).', video.uuid)
+
+    return false
+  }
+
+  logger.info(
+    'New resolutions %s transcoding jobs created for video %s and origin file resolution of %d.', type, video.uuid, videoFileResolution,
+    { resolutionCreated }
+  )
 
   return true
 }
