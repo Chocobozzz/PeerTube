@@ -199,6 +199,7 @@
     "@types/webtorrent": "^0.109.0",
     "@types/ws": "^7.2.1",
     "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "autocannon": "^7.0.4",
     "chai": "^4.1.1",
     "chai-json-schema": "^1.5.0",
     "chai-xml": "^0.4.0",
