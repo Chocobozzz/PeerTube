@@ -553,6 +553,19 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (res === false) return this.location.back()
     }
 
+    this.buildPlayer(urlOptions)
+      .catch(err => console.error('Cannot build the player', err))
+
+    this.setVideoDescriptionHTML()
+    this.setVideoLikesBarTooltipText()
+
+    this.setOpenGraphTags()
+    this.checkUserRating()
+
+    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', { videojs })
+  }
+
+  private async buildPlayer (urlOptions: URLOptions) {
     const videoState = this.video.state.id
     if (videoState === VideoState.LIVE_ENDED || videoState === VideoState.WAITING_FOR_LIVE) return
 
@@ -568,7 +581,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     const params = {
       video: this.video,
-      videoCaptions,
+      videoCaptions: this.videoCaptions,
       urlOptions,
       user: this.user
     }
@@ -642,14 +655,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.hooks.runAction('action:video-watch.player.loaded', 'video-watch', { player: this.player, videojs, video: this.video })
     })
-
-    this.setVideoDescriptionHTML()
-    this.setVideoLikesBarTooltipText()
-
-    this.setOpenGraphTags()
-    this.checkUserRating()
-
-    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', { videojs })
   }
 
   private autoplayNext () {
