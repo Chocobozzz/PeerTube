@@ -11,7 +11,7 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import {
   AuthService,
   ComponentPaginationLight,
@@ -199,6 +199,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
     // No more results
     if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
 
+    console.log('near of bottom')
     this.pagination.currentPage += 1
 
     this.setScrollRouteParams()
@@ -322,10 +323,17 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   // On videos hook for children that want to do something
   protected onMoreVideos () { /* empty */ }
 
-  protected loadRouteParams (routeParams: { [ key: string ]: any }) {
-    this.sort = routeParams[ 'sort' ] as VideoSortField || this.defaultSort
-    this.categoryOneOf = routeParams[ 'categoryOneOf' ]
-    this.angularState = routeParams[ 'a-state' ]
+  protected load () { /* empty */ }
+
+  // Hook if the page has custom route params
+  protected loadPageRouteParams (_queryParams: Params) { /* empty */ }
+
+  protected loadRouteParams (queryParams: Params) {
+    this.sort = queryParams[ 'sort' ] as VideoSortField || this.defaultSort
+    this.categoryOneOf = queryParams[ 'categoryOneOf' ]
+    this.angularState = queryParams[ 'a-state' ]
+
+    this.loadPageRouteParams(queryParams)
   }
 
   protected buildLocalFilter (existing: VideoFilter, base: VideoFilter) {

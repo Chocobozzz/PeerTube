@@ -1,12 +1,13 @@
+import { Subscription } from 'rxjs'
+import { first, switchMap } from 'rxjs/operators'
 import { Component, ComponentFactoryResolver, Injector, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { AbstractVideoList } from '@app/shared/shared-video-miniature'
 import { VideoSortField } from '@shared/models'
-import { Subscription } from 'rxjs'
 import { VideoTrendingHeaderComponent } from './video-trending-header.component'
 
 @Component({
@@ -48,12 +49,18 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
     this.generateSyndicationList()
 
-    this.algorithmChangeSub = this.route.queryParams.subscribe(
-      queryParams => {
-        const algorithm = queryParams['alg'] || RedirectService.DEFAULT_TRENDING_ALGORITHM
+    // Subscribe to alg change after we loaded the data
+    // The initial alg load is handled by the parent class
+    this.algorithmChangeSub = this.onDataSubject
+      .pipe(
+        first(),
+        switchMap(() => this.route.queryParams)
+      ).subscribe(queryParams => {
+        const oldSort = this.sort
 
-        this.sort = this.parseAlgorithm(algorithm)
-        this.reloadVideos()
+        this.loadPageRouteParams(queryParams)
+
+        if (oldSort !== this.sort) this.reloadVideos()
       }
     )
   }
@@ -96,6 +103,12 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
         }
       }]
     })
+  }
+
+  protected loadPageRouteParams (queryParams: Params) {
+    const algorithm = queryParams['alg'] || RedirectService.DEFAULT_TRENDING_ALGORITHM
+
+    this.sort = this.parseAlgorithm(algorithm)
   }
 
   private parseAlgorithm (algorithm: string): VideoSortField {

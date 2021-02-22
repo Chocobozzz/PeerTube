@@ -121,6 +121,8 @@ describe('Test moderation notifications', function () {
       const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + uuidv4())
       const comment = resComment.body.comment
 
+      await waitJobs(servers)
+
       await reportAbuse({ url: servers[0].url, token: servers[0].accessToken, commentId: comment.id, reason: 'super reason' })
 
       await waitJobs(servers)
