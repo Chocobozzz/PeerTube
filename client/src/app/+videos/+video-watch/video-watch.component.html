@@ -7,7 +7,9 @@
       Please try again later.
     </div>
 
-    <div id="videojs-wrapper"></div>
+    <div id="videojs-wrapper">
+      <img *ngIf="playerPlaceholderImgSrc" [src]="playerPlaceholderImgSrc" alt="Placeholder image" i18n-alt>
+    </div>
 
     <my-video-watch-playlist
       #videoWatchPlaylist
