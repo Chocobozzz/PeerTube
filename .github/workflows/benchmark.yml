@@ -1,15 +1,11 @@
-name: Test Suite
+name: Benchmark
 
 on:
   push:
     branches:
-      - develop
-      - master
       - ci
-  pull_request:
-    types: [synchronize, opened]
   schedule:
-    - cron: '0 3 * * 1-5'
+    - cron: '0 4 * * *'
 
 jobs:
 
@@ -29,16 +25,6 @@ jobs:
         env:
           POSTGRES_USER: peertube
           POSTGRES_HOST_AUTH_METHOD: trust
-
-      ldap:
-        image: chocobozzz/docker-test-openldap
-        ports:
-          - 10389:10389
-
-    strategy:
-      fail-fast: false
-      matrix:
-        test_suite: [ misc, api-1, api-2, api-3, api-4, cli, lint, external-plugins ]
 
     env:
       PGUSER: peertube
@@ -86,30 +72,50 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Set env test variable (schedule)
-        if: github.event_name != 'schedule'
+      - name: Build
         run: |
-          echo "DISABLE_HTTP_IMPORT_TESTS=true" >> $GITHUB_ENV
+          startClient=`date +%s`
+          npm run build:client
+          endClient=`date +%s`
+          clientBuildTime=$((endClient-startClient))
 
-      - name: Run Test
-        # external-plugins tests only run on schedule
-        if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
-        run: npm run ci -- ${{ matrix.test_suite }}
+          startServer=`date +%s`
+          npm run build:server
+          endServer=`date +%s`
+          serverBuildTime=$((endServer-startServer))
 
-      - name: Display errors
-        if: ${{ always() }}
+          echo '{"clientBuildTime":'$clientBuildTime',"serverBuildTime":'$serverBuildTime'}'> build-time.json
+
+      - name: Run benchmark
         run: |
-          ( \
-            test -f dist/scripts/parse-log.js && \
-            cat *-ci.log | uniq -c && \
-            NODE_ENV=test node dist/scripts/parse-log.js -l error -f artifacts/*.log \
-          ) || \
-          echo "parse-log.js script does not exist, skipping."
+          node dist/scripts/benchmark.js benchmark.json
 
-      - name: Upload logs
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: test-storages-${{ matrix.test_suite }}
-          path: artifacts
-          retention-days: 7
+      - name: Display result
+        run: |
+          cat benchmark.json build-time.json
+
+      - name: Upload benchmark result
+        env:
+          STATS_DEPLOYEMENT_KNOWN_HOSTS: ${{ secrets.STATS_DEPLOYEMENT_KNOWN_HOSTS }}
+          STATS_DEPLOYEMENT_KEY: ${{ secrets.STATS_DEPLOYEMENT_KEY }}
+          STATS_DEPLOYEMENT_USER: ${{ secrets.STATS_DEPLOYEMENT_USER }}
+          STATS_DEPLOYEMENT_HOST: ${{ secrets.STATS_DEPLOYEMENT_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700  ~/.ssh
+          if [ ! -z ${STATS_DEPLOYEMENT_KNOWN_HOSTS+x} ]; then
+            echo "Adding ssh key to known hosts"
+            echo -e "${STATS_DEPLOYEMENT_KNOWN_HOSTS}" > ~/.ssh/known_hosts;
+          fi
+
+          eval `ssh-agent -s`
+
+          if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
+            echo "Adding ssh reployement key"
+            ssh-add <(echo "${STATS_DEPLOYEMENT_KEY}");
+          fi
+
+          if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
+            echo "Uploading files"
+            scp benchmark.json build-time.json ${STATS_DEPLOYEMENT_USER}@${STATS_DEPLOYEMENT_HOST}:../../web/peertube-stats;
+          fi
