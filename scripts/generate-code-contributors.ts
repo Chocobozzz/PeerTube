@@ -30,7 +30,7 @@ async function run () {
     console.log(' * [Marie-Cécile Godwin Paccard](https://mcgodwin.com/)')
 
     console.log('\n\n# Icons\n')
-    console.log(' * [Feather Icons](feathericons.com/) (MIT)')
+    console.log(' * [Feather Icons](https://feathericons.com) (MIT)')
     console.log(' * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg` by Material UI (Apache 2.0)')
     console.log(' * `support` by Chocobozzz (CC-BY)')
     console.log(' * `language` by Aaron Jin (CC-BY)')
