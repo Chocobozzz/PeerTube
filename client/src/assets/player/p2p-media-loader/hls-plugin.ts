@@ -102,9 +102,8 @@ class Html5Hlsjs {
   private dvrDuration: number = null
   private edgeMargin: number = null
 
-  private handlers: { [ id in 'play' | 'addtrack' | 'playing' | 'textTracksChange' | 'audioTracksChange' ]: EventListener } = {
+  private handlers: { [ id in 'play' | 'playing' | 'textTracksChange' | 'audioTracksChange' ]: EventListener } = {
     play: null,
-    addtrack: null,
     playing: null,
     textTracksChange: null,
     audioTracksChange: null
@@ -177,7 +176,6 @@ class Html5Hlsjs {
   // See comment for `initialize` method.
   dispose () {
     this.videoElement.removeEventListener('play', this.handlers.play)
-    this.videoElement.textTracks.removeEventListener('addtrack', this.handlers.addtrack)
     this.videoElement.removeEventListener('playing', this.handlers.playing)
 
     this.player.textTracks().removeEventListener('change', this.handlers.textTracksChange)
@@ -621,9 +619,6 @@ class Html5Hlsjs {
     })
 
     this.hls.attachMedia(this.videoElement)
-
-    this.handlers.addtrack = this._updateTextTrackList.bind(this)
-    this.videoElement.textTracks.addEventListener('addtrack', this.handlers.addtrack)
 
     this.hls.loadSource(this.source.src)
   }
