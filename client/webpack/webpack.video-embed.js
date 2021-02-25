@@ -40,7 +40,11 @@ module.exports = function () {
         : '[name].[hash].bundle.js',
 
       sourceMapFilename: '[file].map',
-      chunkFilename: '[id].[hash].chunk.js',
+
+      chunkFilename: process.env.ANALYZE_BUNDLE === 'true'
+        ? '[name].chunk.js'
+        : '[id].[hash].chunk.js',
+
       publicPath: '/client/standalone/videos/'
     },
 

@@ -28,7 +28,6 @@ import {
   MUserFormattable,
   MUserNotifSettingChannelDefault,
   MUserWithNotificationSetting,
-  MVideoFullLight,
   MVideoWithRights
 } from '@server/types/models'
 import { hasUserRight, USER_ROLE_LABELS } from '../../../shared/core-utils/users'
