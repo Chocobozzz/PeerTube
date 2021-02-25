@@ -2555,7 +2555,7 @@
       </trans-unit>
       <trans-unit id="618601a09164aeae435cd45a92a3688d3ff0c20e" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ totalNotDeletedComments }}"/> Comments</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ totalNotDeletedComments }}"/> Comments</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ totalNotDeletedComments }}"/> Комментарии</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">7</context>
@@ -4279,7 +4279,7 @@
       </trans-unit>
       <trans-unit id="a4e1a07bc238eabff7de74ebbcee7496b84e53ab" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </source>
-        <target state="new"> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </target>
+        <target state="translated">Управление <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>пользователями<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> с целью установки персональной квоты. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">131,132</context>
@@ -4489,7 +4489,7 @@
       </trans-unit>
       <trans-unit id="f818cd57ca344f3b03c7d83cacd400eacd0777fa" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> with other instances. </source>
-        <target state="new"> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> with other instances. </target>
+        <target state="translated">Управление <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>связями<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> с другими экземплярами. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">363,364</context>
@@ -4529,7 +4529,7 @@
       </trans-unit>
       <trans-unit id="946ac76a0edbe07f3400d722ee437bcd9a14b7ef" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </target>
+        <target state="translated">Ознакомьтесь <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>с документацией <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> для получение информации по ожидаемому URL </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">414,415</context>
@@ -4590,7 +4590,7 @@
       </trans-unit>
       <trans-unit id="29aeb409f491bf7e725d326678a866207aaafa61" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;                   "/> to see if you instance is allowed. </source>
-        <target state="new"> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;                   "/> to see if you instance is allowed. </target>
+        <target state="translated">Если ваш экземпляр явно разрешен Twitter, видеоплейер будет встроен в Twitter feed на PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> В противном случае, мы используем ссылку с изображением, которая перенаправит на ваш экземпляр PeerTube.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> Установить данный флаг, сохраните конфигурацию и проверьте , используя видео URL вашего экземпляра (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;                   "/> , чтобы убедиться, что ваш экзмепляр разрешен. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">499,504</context>
