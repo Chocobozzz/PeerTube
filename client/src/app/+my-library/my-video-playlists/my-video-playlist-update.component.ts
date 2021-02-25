@@ -3,7 +3,7 @@ import { map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { populateAsyncUserVideoChannels } from '@app/helpers'
+import { listUserChannels } from '@app/helpers'
 import {
   setPlaylistChannelValidator,
   VIDEO_PLAYLIST_CHANNEL_ID_VALIDATOR,
@@ -51,8 +51,8 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
       setPlaylistChannelValidator(this.form.get('videoChannelId'), privacy)
     })
 
-    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
-      .catch(err => console.error('Cannot populate user video channels.', err))
+    listUserChannels(this.authService)
+      .subscribe(channels => this.userVideoChannels = channels)
 
     this.paramsSub = this.route.params
                          .pipe(
