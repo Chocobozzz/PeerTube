@@ -107,7 +107,6 @@ export type MVideoAccountLight =
 export type MVideoWithRights =
   MVideo &
   Use<'VideoBlacklist', MVideoBlacklistLight> &
-  Use<'Thumbnails', MThumbnail[]> &
   Use<'VideoChannel', MChannelUserId>
 
 // ############################################################################

@@ -356,6 +356,7 @@ export type AvailableForListIDsOptions = {
       include: [
         {
           model: VideoFileModel,
+          separate: true,
           required: false,
           include: subInclude
         }
@@ -383,6 +384,7 @@ export type AvailableForListIDsOptions = {
         {
           model: VideoStreamingPlaylistModel.unscoped(),
           required: false,
+          separate: true,
           include: subInclude
         }
       ]
@@ -1312,8 +1314,7 @@ export class VideoModel extends Model {
 
     return VideoModel.scope([
       ScopeNames.WITH_BLACKLISTED,
-      ScopeNames.WITH_USER_ID,
-      ScopeNames.WITH_THUMBNAILS
+      ScopeNames.WITH_USER_ID
     ]).findOne(options)
   }
 
