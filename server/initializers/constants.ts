@@ -440,6 +440,7 @@ const MIMETYPES = {
       'audio/flac': '.flac',
       '‎audio/aac': '.aac',
       'audio/m4a': '.m4a',
+      'audio/mp4': '.m4a',
       'audio/x-m4a': '.m4a',
       'audio/ac3': '.ac3'
     },
