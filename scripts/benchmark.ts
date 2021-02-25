@@ -34,12 +34,47 @@ function buildAuthorizationHeader () {
   }
 }
 
+function buildAPHeader () {
+  return {
+    Accept: 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'
+  }
+}
+
 async function run () {
   console.log('Preparing server...')
 
   await prepare()
 
   const tests = [
+    {
+      title: 'AP - account peertube',
+      path: '/accounts/peertube',
+      headers: buildAPHeader(),
+      expecter: (client, statusCode) => {
+        const body = client.resData[0].body
+
+        return statusCode === 200 && body.startsWith('{"type":')
+      }
+    },
+    {
+      title: 'AP - video',
+      path: '/videos/watch/' + video.uuid,
+      headers: buildAPHeader(),
+      expecter: (client, statusCode) => {
+        const body = client.resData[0].body
+
+        return statusCode === 200 && body.startsWith('{"type":"Video"')
+      }
+    },
+    {
+      title: 'Misc - webfinger peertube',
+      path: '/.well-known/webfinger?resource=acct:peertube@' + server.host,
+      expecter: (client, statusCode) => {
+        const body = client.resData[0].body
+
+        return statusCode === 200 && body.startsWith('{"subject":')
+      }
+    },
     {
       title: 'API - unread notifications',
       path: '/api/v1/users/me/notifications?start=0&count=0&unread=true',
@@ -110,6 +145,15 @@ async function run () {
         const body = client.resData[0].body
 
         return statusCode === 200 && body.includes('<title>my super')
+      }
+    },
+    {
+      title: 'HTML - video embed',
+      path: '/videos/embed/' + video.uuid,
+      expecter: (client, statusCode) => {
+        const body = client.resData[0].body
+
+        return statusCode === 200 && body.includes('embed')
       }
     },
     {
