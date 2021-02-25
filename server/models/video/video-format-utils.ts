@@ -205,7 +205,7 @@ function videoFilesModelToFormattedJSON (
           label: videoFile.resolution + 'p'
         },
 
-        magnetUri: includeMagnet
+        magnetUri: includeMagnet && videoFile.torrentFilename
           ? generateMagnetUri(video, videoFile, trackerUrls)
           : undefined,
 

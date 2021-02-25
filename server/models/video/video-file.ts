@@ -457,18 +457,26 @@ export class VideoFileModel extends Model {
 
   // We proxify torrent requests so use a local URL
   getTorrentUrl () {
+    if (!this.torrentFilename) return null
+
     return WEBSERVER.URL + this.getTorrentStaticPath()
   }
 
   getTorrentStaticPath () {
+    if (!this.torrentFilename) return null
+
     return join(LAZY_STATIC_PATHS.TORRENTS, this.torrentFilename)
   }
 
   getTorrentDownloadUrl () {
+    if (!this.torrentFilename) return null
+
     return WEBSERVER.URL + join(STATIC_DOWNLOAD_PATHS.TORRENTS, this.torrentFilename)
   }
 
   removeTorrent () {
+    if (!this.torrentFilename) return null
+
     const torrentPath = getTorrentFilePath(this)
     return remove(torrentPath)
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))

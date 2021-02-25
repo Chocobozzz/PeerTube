@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { HttpStatusCode } from '@shared/core-utils'
 import { expect } from 'chai'
 import { pathExists, readdir, readFile } from 'fs-extra'
 import * as parseTorrent from 'parse-torrent'
@@ -8,9 +7,18 @@ import { extname, join } from 'path'
 import * as request from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 import validator from 'validator'
+import { HttpStatusCode } from '@shared/core-utils'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
-import { buildAbsoluteFixturePath, buildServerDirectory, dateIsValid, immutableAssign, testImage, webtorrentAdd } from '../miscs/miscs'
+import {
+  buildAbsoluteFixturePath,
+  buildServerDirectory,
+  dateIsValid,
+  immutableAssign,
+  testImage,
+  wait,
+  webtorrentAdd
+} from '../miscs/miscs'
 import { makeGetRequest, makePutBodyRequest, makeRawRequest, makeUploadRequest } from '../requests/requests'
 import { waitJobs } from '../server/jobs'
 import { ServerInfo } from '../server/servers'
@@ -423,8 +431,21 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     req.field('originallyPublishedAt', attributes.originallyPublishedAt)
   }
 
-  return req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
+  const res = await req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
             .expect(specialStatus)
+
+  // Wait torrent generation
+  if (specialStatus === HttpStatusCode.OK_200) {
+    let video: VideoDetails
+    do {
+      const resVideo = await getVideoWithToken(url, accessToken, res.body.video.uuid)
+      video = resVideo.body
+
+      await wait(50)
+    } while (!video.files[0].torrentUrl)
+  }
+
+  return res
 }
 
 function updateVideo (
