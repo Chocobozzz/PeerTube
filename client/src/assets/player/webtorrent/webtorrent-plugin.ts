@@ -249,6 +249,8 @@ class WebTorrentPlugin extends Plugin {
     options: PlayOptions,
     done: Function
   ) {
+    if (!magnetOrTorrentUrl) return this.fallbackToHttp(options, done)
+
     console.log('Adding ' + magnetOrTorrentUrl + '.')
 
     const oldTorrent = this.torrent
