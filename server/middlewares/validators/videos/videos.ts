@@ -62,6 +62,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     .custom((value, { req }) => isFileFieldValid(req.files, 'videofile'))
     .withMessage('Should have a file'),
   body('name')
+    .trim()
     .custom(isVideoNameValid)
     .withMessage('Should have a valid name'),
   body('channelId')
@@ -129,6 +130,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('name')
     .optional()
+    .trim()
     .custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('channelId')
     .optional()
