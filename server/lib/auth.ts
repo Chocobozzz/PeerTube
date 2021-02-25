@@ -19,6 +19,7 @@ const oAuthServer = new OAuthServer({
   useErrorHandler: true,
   accessTokenLifetime: OAUTH_LIFETIME.ACCESS_TOKEN,
   refreshTokenLifetime: OAUTH_LIFETIME.REFRESH_TOKEN,
+  allowExtendedTokenAttributes: true,
   continueMiddleware: true,
   model: require('./oauth-model')
 })

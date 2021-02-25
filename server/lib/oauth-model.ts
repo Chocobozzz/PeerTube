@@ -4,7 +4,7 @@ import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
-import { LRU_CACHE } from '../initializers/constants'
+import { LRU_CACHE, OAUTH_LIFETIME } from '../initializers/constants'
 import { Transaction } from 'sequelize'
 import { CONFIG } from '../initializers/config'
 import * as LRUCache from 'lru-cache'
@@ -192,7 +192,15 @@ async function saveToken (token: TokenInfo, client: OAuthClientModel, user: User
   user.lastLoginDate = new Date()
   await user.save()
 
-  return Object.assign(tokenCreated, { client, user })
+  return {
+    accessToken: tokenCreated.accessToken,
+    accessTokenExpiresAt: tokenCreated.accessTokenExpiresAt,
+    refreshToken: tokenCreated.refreshToken,
+    refreshTokenExpiresAt: tokenCreated.refreshTokenExpiresAt,
+    client,
+    user,
+    refresh_token_expires_in: Math.floor((tokenCreated.refreshTokenExpiresAt.getTime() - new Date().getTime()) / 1000)
+  }
 }
 
 // ---------------------------------------------------------------------------
