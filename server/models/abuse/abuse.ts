@@ -434,10 +434,10 @@ export class AbuseModel extends Model {
   }
 
   buildBaseVideoCommentAbuse (this: MAbuseUserFormattable) {
-    if (!this.VideoCommentAbuse) return null
+    // Associated video comment could have been destroyed if the video has been deleted
+    if (!this.VideoCommentAbuse || !this.VideoCommentAbuse.VideoComment) return null
 
-    const abuseModel = this.VideoCommentAbuse
-    const entity = abuseModel.VideoComment
+    const entity = this.VideoCommentAbuse.VideoComment
 
     return {
       id: entity.id,
