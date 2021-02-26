@@ -21,6 +21,7 @@ import {
 import { logger } from '../../helpers/logger'
 import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants'
 import { Redis } from '../redis'
+import { processActivityPubCleaner } from './handlers/activitypub-cleaner'
 import { processActivityPubFollow } from './handlers/activitypub-follow'
 import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
@@ -38,6 +39,7 @@ type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
   { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload } |
   { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
+  { type: 'activitypub-http-cleaner', payload: {} } |
   { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
   { type: 'video-file-import', payload: VideoFileImportPayload } |
   { type: 'video-transcoding', payload: VideoTranscodingPayload } |
@@ -58,6 +60,7 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
+  'activitypub-cleaner': processActivityPubCleaner,
   'activitypub-follow': processActivityPubFollow,
   'video-file-import': processVideoFileImport,
   'video-transcoding': processVideoTranscoding,
@@ -75,6 +78,7 @@ const jobTypes: JobType[] = [
   'activitypub-http-broadcast',
   'activitypub-http-fetcher',
   'activitypub-http-unicast',
+  'activitypub-cleaner',
   'email',
   'video-transcoding',
   'video-file-import',
@@ -233,6 +237,12 @@ class JobQueue {
     this.queues['videos-views'].add({}, {
       repeat: REPEAT_JOBS['videos-views']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
+
+    if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {
+      this.queues['activitypub-cleaner'].add({}, {
+        repeat: REPEAT_JOBS['activitypub-cleaner']
+      }).catch(err => logger.error('Cannot add repeatable job.', { err }))
+    }
   }
 
   private filterJobTypes (jobType?: JobType) {

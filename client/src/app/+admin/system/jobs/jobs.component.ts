@@ -28,6 +28,7 @@ export class JobsComponent extends RestTable implements OnInit {
     'activitypub-http-fetcher',
     'activitypub-http-unicast',
     'activitypub-refresher',
+    'activitypub-cleaner',
     'actor-keys',
     'email',
     'video-file-import',

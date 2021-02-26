@@ -36,7 +36,7 @@ function checkMissedConfig () {
     'rates_limit.login.window', 'rates_limit.login.max', 'rates_limit.ask_send_email.window', 'rates_limit.ask_send_email.max',
     'theme.default',
     'remote_redundancy.videos.accept_from',
-    'federation.videos.federate_unlisted',
+    'federation.videos.federate_unlisted', 'federation.videos.cleanup_remote_interactions',
     'search.remote_uri.users', 'search.remote_uri.anonymous', 'search.search_index.enabled', 'search.search_index.url',
     'search.search_index.disable_local_search', 'search.search_index.is_default_search',
     'live.enabled', 'live.allow_replay', 'live.max_duration', 'live.max_user_lives', 'live.max_instance_lives',

@@ -1,15 +1,16 @@
 import validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
+import { exists } from '../misc'
 import { sanitizeAndCheckActorObject } from './actor'
+import { isCacheFileObjectValid } from './cache-file'
+import { isFlagActivityValid } from './flag'
 import { isActivityPubUrlValid, isBaseActivityValid, isObjectValid } from './misc'
-import { isDislikeActivityValid } from './rate'
+import { isPlaylistObjectValid } from './playlist'
+import { isDislikeActivityValid, isLikeActivityValid } from './rate'
+import { isShareActivityValid } from './share'
 import { sanitizeAndCheckVideoCommentObject } from './video-comments'
 import { sanitizeAndCheckVideoTorrentObject } from './videos'
 import { isViewActivityValid } from './view'
-import { exists } from '../misc'
-import { isCacheFileObjectValid } from './cache-file'
-import { isFlagActivityValid } from './flag'
-import { isPlaylistObjectValid } from './playlist'
 
 function isRootActivityValid (activity: any) {
   return isCollection(activity) || isActivity(activity)
@@ -70,8 +71,11 @@ function checkFlagActivity (activity: any) {
 }
 
 function checkDislikeActivity (activity: any) {
-  return isBaseActivityValid(activity, 'Dislike') &&
-    isDislikeActivityValid(activity)
+  return isDislikeActivityValid(activity)
+}
+
+function checkLikeActivity (activity: any) {
+  return isLikeActivityValid(activity)
 }
 
 function checkCreateActivity (activity: any) {
@@ -118,8 +122,7 @@ function checkRejectActivity (activity: any) {
 }
 
 function checkAnnounceActivity (activity: any) {
-  return isBaseActivityValid(activity, 'Announce') &&
-    isObjectValid(activity.object)
+  return isShareActivityValid(activity)
 }
 
 function checkUndoActivity (activity: any) {
@@ -131,9 +134,4 @@ function checkUndoActivity (activity: any) {
       checkAnnounceActivity(activity.object) ||
       checkCreateActivity(activity.object)
     )
-}
-
-function checkLikeActivity (activity: any) {
-  return isBaseActivityValid(activity, 'Like') &&
-    isObjectValid(activity.object)
 }

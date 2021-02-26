@@ -192,6 +192,12 @@ federation:
   videos:
     federate_unlisted: false
 
+    # Add a weekly job that cleans up remote AP interactions on local videos (shares, rates and comments)
+    # It removes objects that do not exist anymore, and potentially fix their URLs
+    # This setting is opt-in because due to an old bug in PeerTube, remote rates sent by instance before PeerTube 3.0 will be deleted
+    # We still suggest you to enable this setting even if your users will loose most of their video's likes/dislikes
+    cleanup_remote_interactions: false
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

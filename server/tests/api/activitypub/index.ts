@@ -1,3 +1,4 @@
+import './cleaner'
 import './client'
 import './fetch'
 import './refresher'

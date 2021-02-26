@@ -63,6 +63,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   else servers = serversArg as ServerInfo[]
 
   const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
+  const repeatableJobs = [ 'videos-views', 'activitypub-cleaner' ]
   let pendingRequests: boolean
 
   function tasksBuilder () {
@@ -79,7 +80,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
           count: 10,
           sort: '-createdAt'
         }).then(res => res.body.data)
-          .then((jobs: Job[]) => jobs.filter(j => j.type !== 'videos-views'))
+          .then((jobs: Job[]) => jobs.filter(j => !repeatableJobs.includes(j.type)))
           .then(jobs => {
             if (jobs.length !== 0) {
               pendingRequests = true

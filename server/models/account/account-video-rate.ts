@@ -146,10 +146,22 @@ export class AccountVideoRateModel extends Model {
     return AccountVideoRateModel.findAndCountAll(query)
   }
 
+  static listRemoteRateUrlsOfLocalVideos () {
+    const query = `SELECT "accountVideoRate".url FROM "accountVideoRate" ` +
+      `INNER JOIN account ON account.id = "accountVideoRate"."accountId" ` +
+      `INNER JOIN actor ON actor.id = account."actorId" AND actor."serverId" IS NOT NULL ` +
+      `INNER JOIN video ON video.id = "accountVideoRate"."videoId" AND video.remote IS FALSE`
+
+    return AccountVideoRateModel.sequelize.query<{ url: string }>(query, {
+      type: QueryTypes.SELECT,
+      raw: true
+    }).then(rows => rows.map(r => r.url))
+  }
+
   static loadLocalAndPopulateVideo (
     rateType: VideoRateType,
     accountName: string,
-    videoId: number | string,
+    videoId: number,
     t?: Transaction
   ): Promise<MAccountVideoRateAccountVideo> {
     const options: FindOptions = {
@@ -241,21 +253,7 @@ export class AccountVideoRateModel extends Model {
 
       await AccountVideoRateModel.destroy(query)
 
-      const field = type === 'like'
-        ? 'likes'
-        : 'dislikes'
-
-      const rawQuery = `UPDATE "video" SET "${field}" = ` +
-        '(' +
-          'SELECT COUNT(id) FROM "accountVideoRate" WHERE "accountVideoRate"."videoId" = "video"."id" AND type = :rateType' +
-        ') ' +
-        'WHERE "video"."id" = :videoId'
-
-      return AccountVideoRateModel.sequelize.query(rawQuery, {
-        transaction: t,
-        replacements: { videoId, rateType: type },
-        type: QueryTypes.UPDATE
-      })
+      return VideoModel.updateRatesOf(videoId, type, t)
     })
   }
 

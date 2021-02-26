@@ -24,6 +24,25 @@ function getSequelize (internalServerNumber: number) {
   return seq
 }
 
+function deleteAll (internalServerNumber: number, table: string) {
+  const seq = getSequelize(internalServerNumber)
+
+  const options = { type: QueryTypes.DELETE }
+
+  return seq.query(`DELETE FROM "${table}"`, options)
+}
+
+async function getCount (internalServerNumber: number, table: string) {
+  const seq = getSequelize(internalServerNumber)
+
+  const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
+
+  const [ { total } ] = await seq.query<{ total: string }>(`SELECT COUNT(*) as total FROM "${table}"`, options)
+  if (total === null) return 0
+
+  return parseInt(total, 10)
+}
+
 function setActorField (internalServerNumber: number, to: string, field: string, value: string) {
   const seq = getSequelize(internalServerNumber)
 
@@ -63,6 +82,20 @@ async function countVideoViewsOf (internalServerNumber: number, uuid: string) {
   return parseInt(total + '', 10)
 }
 
+function selectQuery (internalServerNumber: number, query: string) {
+  const seq = getSequelize(internalServerNumber)
+  const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
+
+  return seq.query<any>(query, options)
+}
+
+function updateQuery (internalServerNumber: number, query: string) {
+  const seq = getSequelize(internalServerNumber)
+  const options = { type: QueryTypes.UPDATE as QueryTypes.UPDATE }
+
+  return seq.query(query, options)
+}
+
 async function closeAllSequelize (servers: ServerInfo[]) {
   for (const server of servers) {
     if (sequelizes[server.internalServerNumber]) {
@@ -95,6 +128,10 @@ export {
   setActorField,
   countVideoViewsOf,
   setPluginVersion,
+  selectQuery,
+  deleteAll,
+  updateQuery,
   setActorFollowScores,
-  closeAllSequelize
+  closeAllSequelize,
+  getCount
 }

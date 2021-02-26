@@ -1,5 +1,5 @@
 import { uniq } from 'lodash'
-import { FindAndCountOptions, FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindAndCountOptions, FindOptions, Op, Order, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -694,6 +694,18 @@ export class VideoCommentModel extends Model {
       totalLocalVideoComments,
       totalVideoComments
     }
+  }
+
+  static listRemoteCommentUrlsOfLocalVideos () {
+    const query = `SELECT "videoComment".url FROM "videoComment" ` +
+      `INNER JOIN account ON account.id = "videoComment"."accountId" ` +
+      `INNER JOIN actor ON actor.id = "account"."actorId" AND actor."serverId" IS NOT NULL ` +
+      `INNER JOIN video ON video.id = "videoComment"."videoId" AND video.remote IS FALSE`
+
+    return VideoCommentModel.sequelize.query<{ url: string }>(query, {
+      type: QueryTypes.SELECT,
+      raw: true
+    }).then(rows => rows.map(r => r.url))
   }
 
   static cleanOldCommentsOf (videoId: number, beforeUpdatedAt: Date) {
