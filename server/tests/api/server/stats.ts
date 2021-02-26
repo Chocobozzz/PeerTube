@@ -3,11 +3,14 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
+  addVideoChannel,
   cleanupTests,
   createUser,
+  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   follow,
+  getMyUserInformation,
   ServerInfo,
   unfollow,
   updateCustomSubConfig,
@@ -21,6 +24,7 @@ import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { getStats } from '../../../../shared/extra-utils/server/stats'
 import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { ActivityType } from '@shared/models'
 
 const expect = chai.expect
@@ -116,7 +120,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(0)
   })
 
-  it('Should have the correct active user/channels stats', async function () {
+  it('Should have the correct active user stats', async function () {
     const server = servers[0]
 
     {
@@ -125,10 +129,6 @@ describe('Test stats (excluding redundancy)', function () {
       expect(data.totalDailyActiveUsers).to.equal(1)
       expect(data.totalWeeklyActiveUsers).to.equal(1)
       expect(data.totalMonthlyActiveUsers).to.equal(1)
-
-      expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
-      expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
-      expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
     }
 
     {
@@ -139,6 +139,68 @@ describe('Test stats (excluding redundancy)', function () {
       expect(data.totalDailyActiveUsers).to.equal(2)
       expect(data.totalWeeklyActiveUsers).to.equal(2)
       expect(data.totalMonthlyActiveUsers).to.equal(2)
+    }
+  })
+
+  it('Should have the correct active channel stats', async function () {
+    const server = servers[0]
+    const videoChannelProperties = { name: 'second_channel', displayName: 'My second channel' }
+
+    {
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+      expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
+    }
+
+    {
+      await addVideoChannel(server.url, server.accessToken, videoChannelProperties)
+
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+      expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
+    }
+
+    {
+      const resChannel = await getMyUserInformation(server.url, server.accessToken)
+      const videoChannel = server.videoChannel = resChannel.body.videoChannels.find(v => v.name === videoChannelProperties.name)
+
+      await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.webm', channelId: videoChannel.id })
+
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+      expect(data.totalLocalDailyActiveVideoChannels).to.equal(2)
+      expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(2)
+      expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(2)
+    }
+  })
+
+  it('Should have the correct playlist stats', async function () {
+    const server = servers[0]
+
+    {
+      const resStats = await getStats(server.url)
+      const dataStats: ServerStats = resStats.body
+      expect(dataStats.totalLocalPlaylists).to.equal(0)
+    }
+
+    {
+      await createVideoPlaylist({
+        url: server.url,
+        token: server.accessToken,
+        playlistAttrs: {
+          displayName: 'playlist for count',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: server.videoChannel.id
+        }
+      })
+
+      const resStats = await getStats(server.url)
+      const dataStats: ServerStats = resStats.body
+      expect(dataStats.totalLocalPlaylists).to.equal(1)
     }
   })
 
