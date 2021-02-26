@@ -92,7 +92,7 @@ export class UserService {
 
     for (const [ key, value ] of obj) {
       try {
-        if (!value) {
+        if (value === undefined) {
           this.localStorageService.removeItem(key)
           continue
         }
