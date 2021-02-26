@@ -56,6 +56,14 @@ function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): Or
 
       lastSort
     ]
+  } else if (field === 'publishedAt') {
+    return [
+      [ 'ScheduleVideoUpdate', 'updateAt', direction + ' NULLS LAST' ],
+
+      [ Sequelize.col('VideoModel.publishedAt'), direction ],
+
+      lastSort
+    ]
   }
 
   let finalField: string | Col

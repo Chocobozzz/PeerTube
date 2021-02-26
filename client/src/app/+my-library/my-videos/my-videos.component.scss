@@ -5,6 +5,10 @@ input[type=text] {
   @include peertube-input-text(300px);
 }
 
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
 h1 {
   display: flex;
   justify-content: space-between;
