@@ -64,6 +64,7 @@ const customConfigUpdateValidator = [
   body('followers.instance.manualApproval').isBoolean().withMessage('Should have a valid manual approval boolean'),
 
   body('theme.default').custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
+  body('theme.changeable').isBoolean().withMessage('Should have a valid theme changeable boolean'),
 
   body('broadcastMessage.enabled').isBoolean().withMessage('Should have a valid broadcast message enabled boolean'),
   body('broadcastMessage.message').exists().withMessage('Should have a valid broadcast message'),

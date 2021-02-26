@@ -332,7 +332,8 @@ const CONFIG = {
     }
   },
   THEME: {
-    get DEFAULT () { return config.get<string>('theme.default') }
+    get DEFAULT () { return config.get<string>('theme.default') },
+    get CHANGEABLE () { return config.get<boolean>('theme.changeable') }
   },
   BROADCAST_MESSAGE: {
     get ENABLED () { return config.get<boolean>('broadcast_message.enabled') },

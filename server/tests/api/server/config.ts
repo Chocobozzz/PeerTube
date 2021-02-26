@@ -293,7 +293,8 @@ describe('Test config', function () {
         }
       },
       theme: {
-        default: 'default'
+        default: 'default',
+        changeable: true
       },
       services: {
         twitter: {

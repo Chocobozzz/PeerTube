@@ -42,6 +42,7 @@ export interface CustomConfig {
 
   theme: {
     default: string
+    changeable: boolean
   }
 
   services: {

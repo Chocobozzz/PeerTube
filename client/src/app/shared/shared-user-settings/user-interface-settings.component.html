@@ -1,4 +1,5 @@
-<form role="form" (ngSubmit)="updateInterfaceSettings()" [formGroup]="form">
+<form role="form" *ngIf="themeChangeable" (ngSubmit)="updateInterfaceSettings()" [formGroup]="form">
+  <div i18n class="mb-4 mt-4 quick-settings-title">Interface settings</div>
 
   <div class="form-group">
     <label i18n for="theme">Theme</label>

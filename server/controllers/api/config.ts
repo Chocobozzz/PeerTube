@@ -93,7 +93,8 @@ async function getConfig (req: express.Request, res: express.Response) {
     },
     theme: {
       registered: getRegisteredThemes(),
-      default: defaultTheme
+      default: defaultTheme,
+      changeable: CONFIG.THEME.CHANGEABLE
     },
     email: {
       enabled: isEmailEnabled()
@@ -381,7 +382,8 @@ function customConfig (): CustomConfig {
       }
     },
     theme: {
-      default: CONFIG.THEME.DEFAULT
+      default: CONFIG.THEME.DEFAULT,
+      changeable: CONFIG.THEME.CHANGEABLE
     },
     services: {
       twitter: {

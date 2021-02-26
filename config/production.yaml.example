@@ -463,6 +463,7 @@ followings:
 
 theme:
   default: 'default'
+  changeable: true
 
 broadcast_message:
   enabled: false

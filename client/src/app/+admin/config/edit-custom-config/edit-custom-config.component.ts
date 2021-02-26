@@ -91,7 +91,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         }
       },
       theme: {
-        default: null
+        default: null,
+        changeable: null
       },
       services: {
         twitter: {

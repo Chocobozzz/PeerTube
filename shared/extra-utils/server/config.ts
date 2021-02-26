@@ -76,7 +76,8 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       }
     },
     theme: {
-      default: 'default'
+      default: 'default',
+      changeable: true
     },
     services: {
       twitter: {

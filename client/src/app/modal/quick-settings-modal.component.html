@@ -19,8 +19,6 @@
       </ng-container>
     </my-user-video-settings>
 
-    <div i18n class="mb-4 mt-4 quick-settings-title">Interface settings</div>
-
     <my-user-interface-settings
       *ngIf="!isUserLoggedIn()"
       [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true"

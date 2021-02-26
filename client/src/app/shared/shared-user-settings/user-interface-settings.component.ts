@@ -34,6 +34,10 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
                .map(t => t.name)
   }
 
+  get themeChangeable () {
+    return this.serverConfig.theme.changeable
+  }
+
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
@@ -60,25 +64,29 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
   }
 
   updateInterfaceSettings () {
-    const theme = this.form.value['theme']
+    if (this.themeChangeable) {
+      const theme = this.form.value['theme']
 
-    const details: UserUpdateMe = {
-      theme
-    }
+      const details: UserUpdateMe = {
+        theme
+      }
 
-    if (this.authService.isLoggedIn()) {
-      this.userService.updateMyProfile(details).subscribe(
-        () => {
-          this.authService.refreshUserInformation()
+      if (this.authService.isLoggedIn()) {
+        this.userService.updateMyProfile(details).subscribe(
+          () => {
+            this.authService.refreshUserInformation()
 
-          if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
-        },
+            if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
+          },
 
-        err => this.notifier.error(err.message)
-      )
+          err => this.notifier.error(err.message)
+        )
+      } else {
+        this.userService.updateMyAnonymousProfile(details)
+        if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
+      }
     } else {
-      this.userService.updateMyAnonymousProfile(details)
-      if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
+      if (this.notifyOnUpdate) this.notifier.error($localize`You cant change the theme.`)
     }
   }
 }

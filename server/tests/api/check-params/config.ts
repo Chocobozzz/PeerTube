@@ -51,7 +51,8 @@ describe('Test config API validators', function () {
       }
     },
     theme: {
-      default: 'default'
+      default: 'default',
+      changeable: true
     },
     services: {
       twitter: {

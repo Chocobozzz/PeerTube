@@ -70,6 +70,7 @@ export interface ServerConfig {
   theme: {
     registered: ServerConfigTheme[]
     default: string
+    changeable: boolean
   }
 
   email: {

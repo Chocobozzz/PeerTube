@@ -51,7 +51,8 @@ export class ServerService {
     },
     theme: {
       registered: [],
-      default: 'default'
+      default: 'default',
+      changeable: true
     },
     email: {
       enabled: false
