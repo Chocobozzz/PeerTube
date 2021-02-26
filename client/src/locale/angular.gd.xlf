@@ -3685,11 +3685,7 @@
       </trans-unit>
       <trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted instances</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances
-        </target>
+        <target state="translated">A’ sealltainn <x id="INTERPOLATION"/> gu <x id="INTERPOLATION_1"/> à <x id="INTERPOLATION_2"/> ionstans(an) mùchte</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
@@ -3700,7 +3696,7 @@
       </trans-unit>
       <trans-unit id="c7b73cded84adfa978aae675417f4bb688631a71" datatype="html">
         <source>Mute domains</source>
-        <target state="new">Mute domains</target>
+        <target state="translated">Mùch àrainnean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">67</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
@@ -3713,38 +3709,34 @@
       </trans-unit>
       <trans-unit id="33c4091a2a2438ba655caa47ede7f7a82f5f0297" datatype="html">
         <source>No account found matching current filters.</source>
-        <target state="new">No account found matching current filters.</target>
+        <target state="translated">Cha deach cunntas a lorg a fhreagras dha na criathragan làithreach.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">63</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5d3b267bc054bb6b5743dd3d46ee58cff5141697" datatype="html">
         <source>No account found.</source>
-        <target state="new">No account found.</target>
+        <target state="translated">Cha deach cunntas a lorg.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">64</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="2338185419645468935" datatype="html">
         <source>List installed plugins</source>
-        <target state="new">List installed plugins</target>
+        <target state="translated">Seall na plugain stàlaichte</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="8897412584195581488" datatype="html">
         <source>Search plugins</source>
-        <target state="new">Search plugins</target>
+        <target state="translated">Lorg sna plugain</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="4994333937800672218" datatype="html">
         <source>Show plugin</source>
-        <target state="new">Show plugin</target>
+        <target state="translated">Seall am plugan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted accounts</source>
-        <target state="new">Showing 
-          <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to 
-          <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of 
-          <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts
-        </target>
+        <target state="translated">A’ sealltainn <x id="INTERPOLATION"/> gu <x id="INTERPOLATION_1"/> à <x id="INTERPOLATION_2"/> cunntas(an) mùchte</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
@@ -3760,7 +3752,7 @@
       </trans-unit>
       <trans-unit id="5a329cfc387d2231434afc2842ff649392da8921" datatype="html">
         <source>Plugin homepage (new window)</source>
-        <target state="new">Plugin homepage (new window)</target>
+        <target state="translated">Duilleag-dhachaigh a’ phlugain (uinneag ùr)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context><context context-type="linenumber">21</context></context-group>
@@ -3774,12 +3766,12 @@
       </trans-unit>
       <trans-unit id="82c6fc1dfd67a87c2a9f54c221907d0d61c63b88" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="new">Users can resolve distant content</target>
+        <target state="translated">Chan urrainn dhan luchd-chleachdaidh susbaint chèin fhuasgladh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="0fab2b1e25b97842c52a6b95f139bda7e416fde6" datatype="html">
         <source>Close this message</source>
-        <target state="new">Close this message</target>
+        <target state="translated">Dùin an teachdaireachd seo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">34</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
@@ -3792,7 +3784,7 @@
       </trans-unit>
       <trans-unit id="3b79d221458541611e8508d3551dd1ddd76b49d9" datatype="html">
         <source>Display settings</source>
-        <target state="new">Display settings</target>
+        <target state="translated">Roghainnean taisbeanaidh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="1dfba504a0d0bf41da961d89d402dedecde5e30d" datatype="html">
@@ -3802,29 +3794,29 @@
       </trans-unit>
       <trans-unit id="676860092433275829" datatype="html">
         <source>Hot</source>
-        <target state="new">Hot</target>
+        <target state="translated">Brod</target>
         <note priority="1" from="description">A variant of Trending videos based on the number of recent interactions</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="8744258957546686807" datatype="html">
         <source>Videos totalizing the most interactions for recent videos</source>
-        <target state="new">Videos totalizing the most interactions for recent videos</target>
+        <target state="translated">An t-iomlan air na videothan leis na h-eadar-ghìomhan as trice dha na videothan o chionn ghoirid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="6931955094841595224" datatype="html">
         <source>Videos totalizing the most views during the last 24 hours</source>
-        <target state="new">Videos totalizing the most views during the last 24 hours</target>
+        <target state="translated">An t-iomlan air na videothan a chaidh a choimhead orra am broinn an 24 uair a thìde mu dheireadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7112532281224432421" datatype="html">
         <source>Likes</source>
-        <target state="new">Likes</target>
+        <target state="translated">Nas toigh le daoine</target>
         <note priority="1" from="description">A variant of Trending videos based on the number of likes</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1671858302647356245" datatype="html">
         <source>Videos that have the most likes</source>
-        <target state="new">Videos that have the most likes</target>
+        <target state="translated">Videothan as toigh le iomadh duine</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="fcef699ec12dbd6fcf9881d527af2fd775ccfdc7" datatype="html">
@@ -3839,11 +3831,7 @@
       </trans-unit>
       <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="translated">
-          <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> airson “
-          <x id="INTERPOLATION_1" equiv-text="{{ search }}"/>” 
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> airson “<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>” </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
@@ -3859,7 +3847,7 @@
       </trans-unit>
       <trans-unit id="fc06c11db79db253b0d0f1b070cf48e039e8a3a8" datatype="html">
         <source>Plugin npm package (new window)</source>
-        <target state="new">Plugin npm package (new window)</target>
+        <target state="translated">Pacaid npm a’ phlugain (uinneag ùr)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="ba504ef7da4384f035fc148de2d121322aaa7407" datatype="html">
@@ -3891,22 +3879,22 @@
       </trans-unit>
       <trans-unit id="8949443215142664126" datatype="html">
         <source>Delete this comment</source>
-        <target state="new">Delete this comment</target>
+        <target state="translated">Sguab às am beachd seo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="3327751240218085797" datatype="html">
         <source>Delete all comments of this account</source>
-        <target state="new">Delete all comments of this account</target>
+        <target state="translated">Sguab às gach beachd a’ chunntais seo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="2850960459131251840" datatype="html">
         <source>Comments are deleted after a few minutes</source>
-        <target state="new">Comments are deleted after a few minutes</target>
+        <target state="translated">Thèid na beachdan a sguabadh às an ceann corra mionaid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="545410448674339480" datatype="html">
         <source><x id="PH" equiv-text="commentArgs.length"/> comments deleted.</source>
-        <target state="new"><x id="PH" equiv-text="commentArgs.length"/> comments deleted.</target>
+        <target state="translated">Chaidh <x id="PH" equiv-text="commentArgs.length"/> beachd(an) a sguabadh às.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -3914,58 +3902,58 @@
       </trans-unit>
       <trans-unit id="379090446060940062" datatype="html">
         <source>Do you really want to delete all comments of <x id="PH"/>?</source>
-        <target state="new">Do you really want to delete all comments of <x id="PH"/>?</target>
+        <target state="translated">A bheil thu cinnteach gu bheil thu airson a h-uile beachd aig <x id="PH"/> a sguabadh às?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="4539246224625965241" datatype="html">
         <source>Comments of <x id="PH"/> will be deleted in a few minutes</source>
-        <target state="new">Comments of <x id="PH"/> will be deleted in a few minutes</target>
+        <target state="translated">Thèid na beachdan aig <x id="PH"/> a sguabadh às an ceann corra mionaid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="5b8782215fc5ae41cbbb41f92509192b66ee1246" datatype="html">
         <source>Video comments</source>
-        <target state="new">Video comments</target>
+        <target state="translated">Beachdan air videothan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="e92e448d39ae2bbd73d8f44d2f167019fe45a622" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> comments</source>
-        <target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> comments</target>
+        <target state="translated">A’ sealltainn <x id="INTERPOLATION"/> gu <x id="INTERPOLATION_1"/> à <x id="INTERPOLATION_2"/> beachd(ean)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="ebdc173a9acc638a634724d31684849ce15778c8" datatype="html">
         <source>Advanced comments filters</source>
-        <target state="new">Advanced comments filters</target>
+        <target state="translated">Criathragan bheachdan adhartach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="1f689bd2c3f3cfac3c800799545786e56aa5156d" datatype="html">
         <source>Local comments</source>
-        <target state="new">Local comments</target>
+        <target state="translated">Beachdan ionadail</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3c770e01673ea017697b8c8a4feb63aefdd1f999" datatype="html">
         <source>Remote comments</source>
-        <target state="new">Remote comments</target>
+        <target state="translated">Beachdan cèine</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="5cb90e520edbff8862ce9fbec8c377416c1c286b" datatype="html">
         <source>Select all rows</source>
-        <target state="new">Select all rows</target>
+        <target state="translated">Tagh a h-uile ràgh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="555ae4dbd23d5056aeafc8f3f31ebbab170bb917" datatype="html">
         <source>Job type</source>
-        <target state="new">Job type</target>
+        <target state="translated">Seòrsa a h-obrach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="723c95b5d673a557fa120aa65814a9f05c03e610" datatype="html">
         <source>Job state</source>
-        <target state="new">Job state</target>
+        <target state="translated">Staid na h-obrach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="5e85feb6f9f0334366e46ee09ca6b8df52397432" datatype="html">
         <source>any</source>
-        <target state="new">any</target>
+        <target state="translated">staid sam bith</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">21</context>
@@ -3974,7 +3962,7 @@
       </trans-unit>
       <trans-unit id="15d67169976ce05d49bc6e85e51597c957f0e37d" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source>
-        <target state="new">Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</target>
+        <target state="translated">A’ sealltainn <x id="INTERPOLATION"/> gu <x id="INTERPOLATION_1"/> à <x id="INTERPOLATION_2"/> obair/obraichean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc" datatype="html">
@@ -3984,7 +3972,7 @@
       </trans-unit>
       <trans-unit id="470f42cad5ddf069fb8e9ed3489c9614ce897664" datatype="html">
         <source>Priority <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = highest priority)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></source>
-        <target state="new">Priority <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = highest priority)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></target>
+        <target state="translated">Prìomhachas <x id="START_SMALL_TEXT" ctype="x-small" equiv-text="&lt;small&gt;"/>(1 = am prìomhachas as àirde)<x id="CLOSE_SMALL_TEXT" ctype="x-small" equiv-text="&lt;/small&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">47</context>
@@ -3992,7 +3980,7 @@
       </trans-unit>
       <trans-unit id="15793f4cbc261bedbc60f7105533dde536a3f42b" datatype="html">
         <source>Progress</source>
-        <target state="new">Progress</target>
+        <target state="translated">Adhartas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">49</context>
@@ -4000,22 +3988,22 @@
       </trans-unit>
       <trans-unit id="e8d0453dbe7338287c348e1043da4620c218e9c4" datatype="html">
         <source>No jobs found.</source>
-        <target state="new">No jobs found.</target>
+        <target state="translated">Cha deach obair a lorg.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="50140de8e198dcb486966365d1d4c01fd910cc46" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</source>
-        <target state="new">No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</target>
+        <target state="translated">Cha deach obair <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> a lorg.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="34f47c715ccc293a1d86d7cee44515bbe0ab0db0" datatype="html">
         <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
-        <target state="new">No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</target>
+        <target state="translated">Cha deach obair <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> a lorg.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="3fc9776f71b2244ce796c554d1b1d4c583f33c77" datatype="html">
         <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
-        <target state="new">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <target state="translated">Cha deach obair <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> a lorg a tha <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a" datatype="html">
@@ -4026,24 +4014,22 @@
       </trans-unit>
       <trans-unit id="7f34c2aa1c5e1d4bc339995fe325e831d7fbe40a" datatype="html">
         <source>now</source>
-        <target state="new">now</target>
+        <target state="translated">an-dràsta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
-        <target state="new">Loading...</target>
+        <target state="translated">’Ga luchdadh…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="e4ce2d897f4bdce126c9012769654301a587110a" datatype="html">
         <source>By <x id="INTERPOLATION"/> -&gt;</source>
-        <target state="new">By 
-          <x id="INTERPOLATION" equiv-text="{{ log.by }}"/> -&gt;
-        </target>
+        <target state="translated">Le <x id="INTERPOLATION"/> -&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
-        <target state="new">INSTANCE</target>
+        <target state="translated">IONSTANS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
@@ -4065,7 +4051,7 @@
       </trans-unit>
       <trans-unit id="27ea89c8d39a59d9ff6c761fbad00d57b7863849" datatype="html">
         <source>Add a new category</source>
-        <target state="new">Add a new category</target>
+        <target state="translated">Cuir roinn-seòrsa ùr ris</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
