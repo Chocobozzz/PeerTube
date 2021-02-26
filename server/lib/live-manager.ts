@@ -495,7 +495,7 @@ class LiveManager {
 
       await federateVideoIfNeeded(fullVideo, false)
     } catch (err) {
-      logger.error('Cannot save/federate new video state of live streaming.', { err })
+      logger.error('Cannot save/federate new video state of live streaming of video id %d.', videoId, { err })
     }
   }
 
