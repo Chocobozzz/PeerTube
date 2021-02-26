@@ -336,10 +336,15 @@ async function updateVideoFromAP (options: {
 
       videoFieldsSave = video.toJSON()
 
-      // Check actor has the right to update the video
-      const videoChannel = video.VideoChannel
-      if (videoChannel.Account.id !== account.id) {
-        throw new Error('Account ' + account.Actor.url + ' does not own video channel ' + videoChannel.Actor.url)
+      // Check we can update the channel: we trust the remote server
+      const oldVideoChannel = video.VideoChannel
+
+      if (!oldVideoChannel.Actor.serverId || !channel.Actor.serverId) {
+        throw new Error('Cannot check old channel/new channel validity because `serverId` is null')
+      }
+
+      if (oldVideoChannel.Actor.serverId !== channel.Actor.serverId) {
+        throw new Error('New channel ' + channel.Actor.url + ' is not on the same server than new channel ' + oldVideoChannel.Actor.url)
       }
 
       const to = overrideTo || videoObject.to
