@@ -1,15 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
-import { cleanupTests, closeAllSequelize, flushAndRunMultipleServers, ServerInfo, setActorField } from '../../../../shared/extra-utils'
-import { HTTP_SIGNATURE } from '../../../initializers/constants'
-import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
 import * as chai from 'chai'
-import { activityPubContextify, buildSignedActivity } from '../../../helpers/activitypub'
-import { makeFollowRequest, makePOSTAPRequest } from '../../../../shared/extra-utils/requests/activitypub'
 import { buildDigest } from '@server/helpers/peertube-crypto'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import {
+  cleanupTests,
+  closeAllSequelize,
+  flushAndRunMultipleServers,
+  ServerInfo,
+  setActorField,
+  wait
+} from '../../../../shared/extra-utils'
+import { makeFollowRequest, makePOSTAPRequest } from '../../../../shared/extra-utils/requests/activitypub'
+import { activityPubContextify, buildSignedActivity } from '../../../helpers/activitypub'
+import { HTTP_SIGNATURE } from '../../../initializers/constants'
+import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
 
 const expect = chai.expect
 
@@ -130,10 +136,32 @@ describe('Test ActivityPub security', function () {
 
       expect(response.statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
     })
+
+    it('Should refresh the actor keys', async function () {
+      this.timeout(20000)
+
+      // Wait refresh invalidation
+      await wait(10000)
+
+      // Update keys of server 2 to invalid keys
+      // Server 1 should refresh the actor and fail
+      await setKeysOfServer(servers[1], servers[1], invalidKeys.publicKey, invalidKeys.privateKey)
+
+      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
+      const headers = buildGlobalHeaders(body)
+
+      const { response } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
+
+      expect(response.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
   })
 
   describe('When checking Linked Data Signature', function () {
-    before(async () => {
+    before(async function () {
+      this.timeout(10000)
+
+      await setKeysOfServer(servers[0], servers[1], keys.publicKey, keys.privateKey)
+      await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
       await setKeysOfServer(servers[2], servers[2], keys.publicKey, keys.privateKey)
 
       const to = { url: 'http://localhost:' + servers[0].port + '/accounts/peertube' }
@@ -195,6 +223,29 @@ describe('Test ActivityPub security', function () {
       const { response } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
 
       expect(response.statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
+    })
+
+    it('Should refresh the actor keys', async function () {
+      this.timeout(20000)
+
+      // Wait refresh invalidation
+      await wait(10000)
+
+      // Update keys of server 3 to invalid keys
+      // Server 1 should refresh the actor and fail
+      await setKeysOfServer(servers[2], servers[2], invalidKeys.publicKey, invalidKeys.privateKey)
+
+      const body = getAnnounceWithoutContext(servers[1])
+      body.actor = 'http://localhost:' + servers[2].port + '/accounts/peertube'
+
+      const signer: any = { privateKey: keys.privateKey, url: 'http://localhost:' + servers[2].port + '/accounts/peertube' }
+      const signedBody = await buildSignedActivity(signer, body)
+
+      const headers = buildGlobalHeaders(signedBody)
+
+      const { response } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
+
+      expect(response.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
   })
 
