@@ -7,6 +7,7 @@ import {
   ActivitypubHttpBroadcastPayload,
   ActivitypubHttpFetcherPayload,
   ActivitypubHttpUnicastPayload,
+  ActorKeysPayload,
   EmailPayload,
   JobState,
   JobType,
@@ -25,6 +26,7 @@ import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-bro
 import { processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { refreshAPObject } from './handlers/activitypub-refresher'
+import { processActorKeys } from './handlers/actor-keys'
 import { processEmail } from './handlers/email'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
@@ -44,6 +46,7 @@ type CreateJobArgument =
   { type: 'activitypub-refresher', payload: RefreshPayload } |
   { type: 'videos-views', payload: {} } |
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
+  { type: 'actor-keys', payload: ActorKeysPayload } |
   { type: 'video-redundancy', payload: VideoRedundancyPayload }
 
 type CreateJobOptions = {
@@ -63,6 +66,7 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'videos-views': processVideosViews,
   'activitypub-refresher': refreshAPObject,
   'video-live-ending': processVideoLiveEnding,
+  'actor-keys': processActorKeys,
   'video-redundancy': processVideoRedundancy
 }
 
@@ -78,6 +82,7 @@ const jobTypes: JobType[] = [
   'videos-views',
   'activitypub-refresher',
   'video-redundancy',
+  'actor-keys',
   'video-live-ending'
 ]
 

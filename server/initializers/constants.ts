@@ -1,8 +1,8 @@
-import { randomInt } from '../../shared/core-utils/miscs/miscs'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
+import { randomInt } from '../../shared/core-utils/miscs/miscs'
 import {
   AbuseState,
   JobType,
@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 600
+const LAST_MIGRATION_VERSION = 605
 
 // ---------------------------------------------------------------------------
 
@@ -141,6 +141,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-transcoding': 1,
   'video-import': 1,
   'email': 5,
+  'actor-keys': 3,
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
@@ -153,6 +154,7 @@ const JOB_CONCURRENCY: { [id in JobType]?: number } = {
   'activitypub-follow': 1,
   'video-file-import': 1,
   'email': 5,
+  'actor-keys': 1,
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
@@ -167,6 +169,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, // 2 hours
   'email': 60000 * 10, // 10 minutes
+  'actor-keys': 60000 * 20, // 20 minutes
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours

@@ -10,7 +10,7 @@ import { UserNotificationSettingModel } from '../models/account/user-notificatio
 import { ActorModel } from '../models/activitypub/actor'
 import { MAccountDefault, MActorDefault, MChannelActor } from '../types/models'
 import { MUser, MUserDefault, MUserId } from '../types/models/user'
-import { buildActorInstance, setAsyncActorKeys } from './activitypub/actor'
+import { buildActorInstance, generateAndSaveActorKeys } from './activitypub/actor'
 import { getLocalAccountActivityPubUrl } from './activitypub/url'
 import { Emailer } from './emailer'
 import { LiveManager } from './live-manager'
@@ -55,8 +55,8 @@ async function createUserAccountAndChannelAndPlaylist (parameters: {
   })
 
   const [ accountActorWithKeys, channelActorWithKeys ] = await Promise.all([
-    setAsyncActorKeys(account.Actor),
-    setAsyncActorKeys(videoChannel.Actor)
+    generateAndSaveActorKeys(account.Actor),
+    generateAndSaveActorKeys(videoChannel.Actor)
   ])
 
   account.Actor = accountActorWithKeys
@@ -101,7 +101,7 @@ async function createApplicationActor (applicationId: number) {
     type: 'Application'
   })
 
-  accountCreated.Actor = await setAsyncActorKeys(accountCreated.Actor)
+  accountCreated.Actor = await generateAndSaveActorKeys(accountCreated.Actor)
 
   return accountCreated
 }

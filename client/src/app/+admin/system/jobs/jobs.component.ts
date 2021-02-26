@@ -22,11 +22,13 @@ export class JobsComponent extends RestTable implements OnInit {
   jobType: JobTypeClient = 'all'
   jobTypes: JobTypeClient[] = [
     'all',
+
     'activitypub-follow',
     'activitypub-http-broadcast',
     'activitypub-http-fetcher',
     'activitypub-http-unicast',
     'activitypub-refresher',
+    'actor-keys',
     'email',
     'video-file-import',
     'video-import',

@@ -221,7 +221,7 @@ async function createUser (req: express.Request, res: express.Response) {
         id: account.id
       }
     }
-  }).end()
+  })
 }
 
 async function registerUser (req: express.Request, res: express.Response) {

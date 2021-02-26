@@ -39,21 +39,21 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
         label: $localize`:A variant of Trending videos based on the number of recent interactions, minus user history:Best`,
         iconName: 'award',
         value: 'best',
-        tooltip: $localize`Videos totalizing the most interactions for recent videos, minus user history`,
+        tooltip: $localize`Videos with the most interactions for recent videos, minus user history`,
         hidden: true
       },
       {
         label: $localize`:A variant of Trending videos based on the number of recent interactions:Hot`,
         iconName: 'flame',
         value: 'hot',
-        tooltip: $localize`Videos totalizing the most interactions for recent videos`,
+        tooltip: $localize`Videos with the most interactions for recent videos`,
         hidden: true
       },
       {
         label: $localize`:Main variant of Trending videos based on number of recent views:Views`,
         iconName: 'trending',
         value: 'most-viewed',
-        tooltip: $localize`Videos totalizing the most views during the last 24 hours`
+        tooltip: $localize`Videos with the most views during the last 24 hours`
       },
       {
         label: $localize`:A variant of Trending videos based on the number of likes:Likes`,
