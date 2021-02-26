@@ -25,6 +25,17 @@
     <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
     <span class="sr-only" i18n>Clear filters</span>
   </div>
+
+  <div class="peertube-select-container peertube-select-button ml-2">
+    <select [(ngModel)]="sort" (ngModelChange)="onChangeSortColumn()" class="form-control">
+      <option value="undefined" disabled>Sort by</option>
+      <option value="-publishedAt" i18n>Last published first</option>
+      <option value="-createdAt" i18n>Last created first</option>
+      <option value="-views" i18n>Most viewed first</option>
+      <option value="-likes" i18n>Most liked first</option>
+      <option value="-duration" i18n>Longest first</option>
+    </select>
+  </div>
 </div>
 
 <my-videos-selection

@@ -44,6 +44,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   videosSearch: string
   videosSearchChanged = new Subject<string>()
   getVideosObservableFunction = this.getVideosObservable.bind(this)
+  sort: VideoSortField = '-publishedAt'
 
   user: User
 
@@ -81,6 +82,10 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     this.videosSearchChanged.next()
   }
 
+  onChangeSortColumn () {
+    this.videosSelection.reloadVideos()
+  }
+
   disableForReuse () {
     this.videosSelection.disableForReuse()
   }
@@ -92,7 +97,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   getVideosObservable (page: number, sort: VideoSortField) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getMyVideos(newPagination, sort, this.videosSearch)
+    return this.videoService.getMyVideos(newPagination, this.sort, this.videosSearch)
       .pipe(
         tap(res => this.pagination.totalItems = res.total)
       )
