@@ -188,7 +188,7 @@
       </trans-unit>
       <trans-unit id="565e31173ab0ea2c00c311c9051c15d8896a0b80" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Without them, your instance may not be referenced on the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>JoinPeerTube website<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target>Veuillez ne pas oublier de configurer ces champs pour aider des gens à choisir <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>l'instance appropriée <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Sans eux, votre instance pourrait ne pas être référencée sur le <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/> site web de JoinPeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">25,27</context>
@@ -388,7 +388,7 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot;                                                                            rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target>Site web officiel de PeerTube (infos, aide, contribuer...) ; &lt;x id="START_LINK" ctype="x-a" equiv-text="&amp;lt ;a href=&amp;quot ;https ://joinpeertube.org&amp;quot ; target=&amp;quot ;_blank&amp;quot ; rel=&amp;quot ;noopener noreferrer&amp;quot ;&amp;gt ;"/&gt; https ://joinpeertube.org&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&amp;lt ;/a&amp;gt ;"/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">42,43</context>
