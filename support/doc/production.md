@@ -39,8 +39,15 @@ Create the production database and a peertube user inside PostgreSQL:
 
 ```
 $ sudo -u postgres createuser -P peertube
+```
+
+Here you should enter a password for postgresql user peertube, it should be copied in production.yaml file.
+Don’t just hit enter else it will be empty, default production yaml uses peertube here, but it is better you pick a stronger one.
+
+```
 $ sudo -u postgres createdb -O peertube -E UTF8 -T template0 peertube_prod
 ```
+
 
 Then enable extensions PeerTube needs:
 
