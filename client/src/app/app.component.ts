@@ -115,6 +115,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     return this.authService.isLoggedIn()
   }
 
+  isUploadEnabled () {
+    if (this.authService.isLoggedIn()) {
+      return this.authService.getUser().videoQuota !== 0
+    } else {
+      return this.serverConfig.user.videoQuota !== 0
+    }
+  }
+
   hideBroadcastMessage () {
     peertubeLocalStorage.setItem(AppComponent.BROADCAST_MESSAGE_KEY, this.serverConfig.broadcastMessage.message)
 
