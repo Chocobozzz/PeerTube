@@ -2227,7 +2227,7 @@
       </trans-unit>
       <trans-unit id="40e85da538414cc425f42d2b09189ce344865aa1" datatype="html">
         <source>Go Live</source>
-        <target state="translated">Ir ó Directo</target>
+        <target state="translated">Emite en Directo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="975c4cdb9e07ef4c43e2c7aa3f787feabc9a47d2" datatype="html">
@@ -2267,7 +2267,7 @@
       </trans-unit>
       <trans-unit id="d90cc5777a7e16ef76f325c89fe0f9270b9fa827" datatype="html">
         <source>Go live</source>
-        <target state="translated">Ir ó directo</target>
+        <target state="translated">En Directo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1" datatype="html">
