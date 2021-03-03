@@ -197,7 +197,7 @@ const JOB_PRIORITY = {
 const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
 const AP_CLEANER_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-cleaner job
 const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
-const JOB_REQUEST_TIMEOUT = 7000 // 7 seconds
+const REQUEST_TIMEOUT = 7000 // 7 seconds
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
 
@@ -869,7 +869,7 @@ export {
   ABUSE_STATES,
   VIDEO_CHANNELS,
   LRU_CACHE,
-  JOB_REQUEST_TIMEOUT,
+  REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   MEMOIZE_TTL,

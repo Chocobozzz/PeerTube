@@ -1,10 +1,10 @@
 import * as Bull from 'bull'
+import { ActivitypubHttpUnicastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
-import { JOB_REQUEST_TIMEOUT } from '../../../initializers/constants'
+import { REQUEST_TIMEOUT } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
-import { ActivitypubHttpUnicastPayload } from '@shared/models'
+import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
 async function processActivityPubHttpUnicast (job: Bull.Job) {
   logger.info('Processing ActivityPub unicast in job %d.', job.id)
@@ -20,7 +20,7 @@ async function processActivityPubHttpUnicast (job: Bull.Job) {
     uri,
     json: body,
     httpSignature: httpSignatureOptions,
-    timeout: JOB_REQUEST_TIMEOUT,
+    timeout: REQUEST_TIMEOUT,
     headers: buildGlobalHeaders(body)
   }
 

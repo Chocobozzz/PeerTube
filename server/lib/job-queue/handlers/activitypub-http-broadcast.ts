@@ -1,11 +1,11 @@
-import * as Bull from 'bull'
 import * as Bluebird from 'bluebird'
+import * as Bull from 'bull'
+import { ActivitypubHttpBroadcastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
-import { BROADCAST_CONCURRENCY, JOB_REQUEST_TIMEOUT } from '../../../initializers/constants'
+import { BROADCAST_CONCURRENCY, REQUEST_TIMEOUT } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
-import { ActivitypubHttpBroadcastPayload } from '@shared/models'
+import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
 async function processActivityPubHttpBroadcast (job: Bull.Job) {
   logger.info('Processing ActivityPub broadcast in job %d.', job.id)
@@ -20,7 +20,7 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
     uri: '',
     json: body,
     httpSignature: httpSignatureOptions,
-    timeout: JOB_REQUEST_TIMEOUT,
+    timeout: REQUEST_TIMEOUT,
     headers: buildGlobalHeaders(body)
   }
 

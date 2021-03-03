@@ -1,4 +1,4 @@
-import { ACTIVITY_PUB, JOB_REQUEST_TIMEOUT, WEBSERVER } from '../../initializers/constants'
+import { ACTIVITY_PUB, REQUEST_TIMEOUT, WEBSERVER } from '../../initializers/constants'
 import { doRequest } from '../../helpers/requests'
 import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'
@@ -16,7 +16,7 @@ async function crawlCollectionPage <T> (uri: string, handler: HandlerFunction<T>
     uri,
     json: true,
     activityPub: true,
-    timeout: JOB_REQUEST_TIMEOUT
+    timeout: REQUEST_TIMEOUT
   }
 
   const startDate = new Date()
