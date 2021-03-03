@@ -813,7 +813,7 @@
       </trans-unit>
       <trans-unit id="14d3bc3dafb4a09f3c79daac07ebf30e76457f63" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target/>
+        <target>У теорији, неко са довољно техничких вештина могао би да креира скрипту која прати који ИП преузима који видео. У пракси је ово много теже јер:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">88,90</context>
@@ -821,7 +821,7 @@
       </trans-unit>
       <trans-unit id="fc899a02306f4fd2ce20978136d252dd6eb346cf" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target/>
+        <target>На сваки трагач мора да се пошаље HTTP захтев за сваки видео за шпијунирања. Ако желимо да шпијунирамо све PeerTube-ове видео записе, морамо послати онолико захтева колико има видео записа (дакле потенцијално пуно)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">94,96</context>
@@ -845,7 +845,7 @@
       </trans-unit>
       <trans-unit id="a5089b43b2fd8a2639bc7a4cdfaa90e869f51cc3" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target/>
+        <target>Ако је ИП адреса сачувана у трагачу, то не значи да је особа која стоји иза те ИП (ако та особа постоји) гледала видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">109,111</context>
@@ -853,7 +853,7 @@
       </trans-unit>
       <trans-unit id="ff5458261525060246f1f49a740c8d094dc4bac4" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target/>
+        <target>ИП адреса је нејасна информација: обично се редовно мења и може представљати многа особа или ентитете</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">114,115</context>
@@ -869,7 +869,7 @@
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
-        <target/>
+        <target>Најгори сценарио просечне особе која шпијунира своје пријатеље прилично је мало вероватан. Постоје много ефикаснији начини за добијање такве врсте информација.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">126,128</context>
@@ -917,7 +917,7 @@
       </trans-unit>
       <trans-unit id="db4d65ed605b948169d51eac4c1b2ff662088eb7" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target/>
+        <target>PeerTube жели да пружи најбоље могуће контрамере, да вам пружи већи избор и да напади буду мање вероватни. Ево шта смо до сада поставили:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">150,152</context>
@@ -933,7 +933,7 @@
       </trans-unit>
       <trans-unit id="b23c2b01db8b09f1a9bc6144d66291e28f02daf4" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target/>
+        <target>Поставили смо ограничење на фреквенцију захтева коју прима трагач</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">156</context>
@@ -941,7 +941,7 @@
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target/>
+        <target>Дозволити администраторима инстанце да онемогуће P2P из административног интерфејса</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">157</context>
@@ -949,7 +949,7 @@
       </trans-unit>
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target/>
+        <target>На крају, запамтите да P2P увек можете онемогућити пребацивањем у видео уређај или једноставно онемогућавањем WebRTC-а у прегледачу.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">161,163</context>
@@ -1305,7 +1305,7 @@
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
         <source><x id="PH" equiv-text="followers"/> direct account followers</source>
-        <target/>
+        <target><x id="PH" equiv-text="followers"/> директни налога пратиоца</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -1321,7 +1321,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target/>
+        <target>Федерација</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -1489,7 +1489,7 @@
       </trans-unit>
       <trans-unit id="e7845bb59f7887d60f1cf3b7b9fe5cfdb0b7e915" datatype="html">
         <source>Number of previews to keep in cache</source>
-        <target/>
+        <target>Број прегледа који се чувају у кешу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1629,7 +1629,7 @@
       </trans-unit>
       <trans-unit id="caa128fe5c4b611830f6138e844709c348f07948" datatype="html">
         <source>Trending pages</source>
-        <target/>
+        <target>Странице у тренду</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">33</context>
@@ -1637,7 +1637,7 @@
       </trans-unit>
       <trans-unit id="7ff3a800cb0c5a325a0cae4b17bb29ea8ffc296e" datatype="html">
         <source>Default trending page</source>
-        <target/>
+        <target>Подразумевана страница у тренду</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">34</context>
@@ -1661,7 +1661,7 @@
       </trans-unit>
       <trans-unit id="6a97e13f1b72ca231709862b0004940e6659060d" datatype="html">
         <source>Hot videos</source>
-        <target/>
+        <target>Вруће видео записе</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -1673,7 +1673,7 @@
       </trans-unit>
       <trans-unit id="608d88bcaaddeb4e32d28a527f662f17e580f371" datatype="html">
         <source>Most viewed videos</source>
-        <target/>
+        <target>Најгледанији видео записи</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">37</context>
@@ -1685,7 +1685,7 @@
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
         <source>Most liked videos</source>
-        <target/>
+        <target>Видео записи који се највише свиђају</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">38</context>
@@ -1697,7 +1697,7 @@
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
         <source>Recently added videos</source>
-        <target/>
+        <target>Недавно додати видео записи</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">41</context>
@@ -1705,7 +1705,7 @@
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f" datatype="html">
         <source>Local videos</source>
-        <target/>
+        <target>Локални видео записи</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1773,7 +1773,7 @@
       </trans-unit>
       <trans-unit id="a4e1a07bc238eabff7de74ebbcee7496b84e53ab" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </source>
-        <target/>
+        <target>Управљај <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>кориснике<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> да појединачно одреде своју квоту. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">131,132</context>
@@ -1789,7 +1789,7 @@
       </trans-unit>
       <trans-unit id="9bef6fc7194e11d18fdcac6aaccc816fe9ffc5a7" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
-        <target/>
+        <target>⚠️ Ова функционалност захтева пуно пажње и додатне умерености.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">144</context>
@@ -1829,7 +1829,7 @@
       </trans-unit>
       <trans-unit id="35d3d2813759e2497352953adca2175967a69b88" datatype="html">
         <source>Signup won't be limited to a fixed number of users.</source>
-        <target/>
+        <target>Регистрација неће бити ограничена на фиксни број корисника.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">168</context>
@@ -1837,7 +1837,7 @@
       </trans-unit>
       <trans-unit id="ec47d80e9b5608ecd396c32a46ca6b87601e7b20" datatype="html">
         <source>Default video quota per user</source>
-        <target/>
+        <target>Подразумевана квота за видео по кориснику</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">177</context>
@@ -1873,7 +1873,7 @@
       </trans-unit>
       <trans-unit id="493c65a11deddda45b42a39f503fc4bb3f876cf2" datatype="html">
         <source>Default daily upload limit per user</source>
-        <target/>
+        <target>Подразумевано дневно ограничење за отпремање по кориснику</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">191</context>
@@ -1889,7 +1889,7 @@
       </trans-unit>
       <trans-unit id="aaa6659d34c4ad40826f672315a950f9cd5889fe" datatype="html">
         <source>Import jobs concurrency</source>
-        <target/>
+        <target>Увоз послова истовремено</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">220</context>
@@ -1897,7 +1897,7 @@
       </trans-unit>
       <trans-unit id="468798540b556490783816495f2ca43ce57359b7" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
-        <target/>
+        <target>омогућава паралелни увоз више видео записа. ⚠️ Потребно поновно покретање PeerTube-а.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">221</context>
@@ -1925,7 +1925,7 @@
       </trans-unit>
       <trans-unit id="ec3d83c2ae784e843fbe96eb368f9e6e0f26cc2e" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target/>
+        <target>Омогућите увоз помоћу торент датотеке или магнетног URL-а</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">241</context>
@@ -1941,7 +1941,7 @@
       </trans-unit>
       <trans-unit id="c590ac6eba10ab6269e068156a910c7c58328cc5" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
-        <target/>
+        <target>Ако корисник није означен као поуздан, његови видео снимци остаће приватни док их модератор не прегледа.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">258</context>
@@ -2061,7 +2061,7 @@
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
         <source>Other instances can follow yours</source>
-        <target/>
+        <target>Друге инстанце могу да прате ваше</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">375</context>
@@ -2069,7 +2069,7 @@
       </trans-unit>
       <trans-unit id="3d9ffce2b1f284cb60067de15a313d3ecde0875f" datatype="html">
         <source>Manually approve new instance followers</source>
-        <target/>
+        <target>Ручно одобрите нове инстанце пратиоца</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">382</context>
