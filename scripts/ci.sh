@@ -33,7 +33,9 @@ findTestFiles () {
     find $1 -type f -name "*.ts" | grep -v "/index.ts" | xargs echo
 }
 
-if [ "$1" = 'misc' ]; then
+
+case "$1" in 
+misc)   
     npm run build
 
     feedsFiles=$(findTestFiles server/tests/feeds)
@@ -42,14 +44,16 @@ if [ "$1" = 'misc' ]; then
     miscFiles='server/tests/client.ts server/tests/misc-endpoints.ts'
 
     TS_NODE_FILES=true runTest "$1" 1 $feedsFiles $helperFiles $pluginsFiles $miscFiles
-elif [ "$1" = 'cli' ]; then
-    npm run build:server
+;;
+
+cli)
+    pm run build:server
     npm run setup:cli
-
     cliFiles=$(findTestFiles server/tests/cli)
-
     runTest "$1" 1 $cliFiles
-elif [ "$1" = 'api-1' ]; then
+;;
+
+api-1)
     npm run build:server
 
     checkParamFiles=$(findTestFiles server/tests/api/check-params)
@@ -57,7 +61,9 @@ elif [ "$1" = 'api-1' ]; then
     searchFiles=$(findTestFiles server/tests/api/search)
 
     MOCHA_PARALLEL=true runTest "$1" 3 $notificationsFiles $searchFiles $checkParamFiles
-elif [ "$1" = 'api-2' ]; then
+;;
+
+api-2)
     npm run build:server
 
     serverFiles=$(findTestFiles server/tests/api/server)
@@ -65,13 +71,17 @@ elif [ "$1" = 'api-2' ]; then
     liveFiles=$(findTestFiles server/tests/api/live)
 
     MOCHA_PARALLEL=true runTest "$1" 3 $serverFiles $usersFiles $liveFiles
-elif [ "$1" = 'api-3' ]; then
+;;
+
+api-3)
     npm run build:server
 
     videosFiles=$(findTestFiles server/tests/api/videos)
 
     MOCHA_PARALLEL=true runTest "$1" 3 $videosFiles
-elif [ "$1" = 'api-4' ]; then
+;;
+
+api-4)
     npm run build:server
 
     activitypubFiles=$(findTestFiles server/tests/api/moderation)
@@ -79,17 +89,22 @@ elif [ "$1" = 'api-4' ]; then
     activitypubFiles=$(findTestFiles server/tests/api/activitypub)
 
     MOCHA_PARALLEL=true TS_NODE_FILES=true runTest "$1" 2 $activitypubFiles $redundancyFiles $activitypubFiles
-elif [ "$1" = 'external-plugins' ]; then
+;;
+
+external-plugins)
     npm run build:server
 
     externalPluginsFiles=$(findTestFiles server/tests/external-plugins)
 
     runTest "$1" 1 $externalPluginsFiles
-elif [ "$1" = 'lint' ]; then
-    npm run eslint -- --ext .ts "server/**/*.ts" "shared/**/*.ts" "scripts/**/*.ts"
+;;
+
+lint)
+    pm run eslint -- --ext .ts "server/**/*.ts" "shared/**/*.ts" "scripts/**/*.ts"
     npm run swagger-cli -- validate support/doc/api/openapi.yaml
 
     ( cd client
       npm run lint
     )
-fi
+;;
+esac
