@@ -426,7 +426,12 @@ export type AvailableForListIDsOptions = {
       ]
     },
     { fields: [ 'duration' ] },
-    { fields: [ 'views' ] },
+    {
+      fields: [
+        { name: 'views', order: 'DESC' },
+        { name: 'id', order: 'ASC' }
+      ]
+    },
     { fields: [ 'channelId' ] },
     {
       fields: [ 'originallyPublishedAt' ],
