@@ -66,7 +66,7 @@ Download the latest version of the Peertube client, unzip it and remove the zip
 ```
 $ cd /var/www/peertube/versions
 $ sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip"
-$ sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
+$ sudo -u peertube unzip -q peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
 ```
 
 Install Peertube:
