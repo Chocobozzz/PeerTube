@@ -503,7 +503,7 @@
       </trans-unit>
       <trans-unit id="3594371452042277118" datatype="html">
         <source>Videos with the most interactions for recent videos, minus user history</source>
-        <target state="new">Videos with the most interactions for recent videos, minus user history</target>
+        <target state="translated">Vidéos avec le plus d’interactions pour les vidéos récentes, excluant l’historique de l’utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -2548,7 +2548,7 @@
       </trans-unit>
       <trans-unit id="618601a09164aeae435cd45a92a3688d3ff0c20e" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ totalNotDeletedComments }}"/> Comments</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ totalNotDeletedComments }}"/> Comments</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ totalNotDeletedComments }}"/> Commentaires</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">7</context>
@@ -3712,7 +3712,7 @@
       </trans-unit>
       <trans-unit id="2144158274184161635" datatype="html">
         <source>Videos with the most interactions for recent videos</source>
-        <target state="new">Videos with the most interactions for recent videos</target>
+        <target state="translated">Vidéos avec le plus d’interactions pour les vidéos récentes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -3720,7 +3720,7 @@
       </trans-unit>
       <trans-unit id="8312243926314494468" datatype="html">
         <source>Videos with the most views during the last 24 hours</source>
-        <target state="new">Videos with the most views during the last 24 hours</target>
+        <target state="translated">Vidéos les plus vues au cours des dernières 24 heures</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -4040,7 +4040,7 @@
       </trans-unit>
       <trans-unit id="e397362e5419e406411ff3ad73cdf7ab82c357c2" datatype="html">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target state="new"> With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </target>
+        <target state="translated">Avec <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Ne pas lister<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ou <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Flouer les vignettes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, une confirmation sera demandée pour regarder la vidéo. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">107,108</context>
@@ -4169,7 +4169,7 @@
       </trans-unit>
       <trans-unit id="5861c9f9d6db1551439824c0af8b8d3138732200" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>add slight customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>add slight customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Utiliser <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/plugins&quot;&gt;"/>greffons &amp; thèmes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour des changements plus importants, ou <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>ajouter de légères personnalisations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -4454,7 +4454,7 @@
       </trans-unit>
       <trans-unit id="052608ed92b97a1d7856c4a84f73fcb3d0559bd3" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Vous ne devez utiliser que des index de recherche modérés en production, ou <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>héberger le vôtre<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">314,315</context>
@@ -4492,7 +4492,7 @@
       </trans-unit>
       <trans-unit id="f818cd57ca344f3b03c7d83cacd400eacd0777fa" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> with other instances. </source>
-        <target state="new"> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> with other instances. </target>
+        <target state="translated">Gérer <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> avec d’autres instances. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">363,364</context>
@@ -4532,7 +4532,7 @@
       </trans-unit>
       <trans-unit id="946ac76a0edbe07f3400d722ee437bcd9a14b7ef" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </target>
+        <target state="translated">Voir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>la documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> pour plus d’informations sur l’URL prévue </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">414,415</context>
@@ -4575,7 +4575,7 @@
       </trans-unit>
       <trans-unit id="d071b30bb637c60469c0197285047c04c7b91881" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target state="new"> Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value. </target>
+        <target state="translated">Fournissez le compte Twitter représentant votre instance pour améliorer l’aperçu des liens. Si vous n’avez pas de compte Twitter, laissez simplement la valeur par défaut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">470,472</context>
