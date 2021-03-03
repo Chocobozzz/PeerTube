@@ -31,8 +31,8 @@
     "Published": "تم نشرها",
     "To transcode": "إعادة ترميز",
     "To import": "للاستيراد",
-    "Waiting for livestream": "Waiting for livestream",
-    "Livestream ended": "Livestream ended",
+    "Waiting for livestream": "ينتظر البث المباشر",
+    "Livestream ended": "انتهى البث المباشر",
     "Pending": "معلّقة",
     "Success": "نجح",
     "Failed": "فشل",
@@ -244,5 +244,5 @@
     "Chinese": "الصينية",
     "Zulu": "الزولو",
     "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode"
+    "Theater mode": "نمط المسرح"
 }
