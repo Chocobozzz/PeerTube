@@ -440,7 +440,7 @@ async function updateVideoFromAP (options: {
         const tags = videoObject.tag
                                 .filter(isAPHashTagObject)
                                 .map(tag => tag.name)
-        await setVideoTags({ video: videoUpdated, tags, transaction: t, defaultValue: videoUpdated.Tags })
+        await setVideoTags({ video: videoUpdated, tags, transaction: t })
       }
 
       // Update trackers

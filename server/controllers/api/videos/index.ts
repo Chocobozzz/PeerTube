@@ -347,12 +347,13 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (previewModel) await videoInstanceUpdated.addAndSaveThumbnail(previewModel, t)
 
       // Video tags update?
-      await setVideoTags({
-        video: videoInstanceUpdated,
-        tags: videoInfoToUpdate.tags,
-        transaction: t,
-        defaultValue: videoInstanceUpdated.Tags
-      })
+      if (videoInfoToUpdate.tags !== undefined) {
+        await setVideoTags({
+          video: videoInstanceUpdated,
+          tags: videoInfoToUpdate.tags,
+          transaction: t
+        })
+      }
 
       // Video channel update?
       if (res.locals.videoChannel && videoInstanceUpdated.channelId !== res.locals.videoChannel.id) {

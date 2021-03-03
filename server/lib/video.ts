@@ -4,7 +4,7 @@ import { sequelizeTypescript } from '@server/initializers/database'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
 import { FilteredModelAttributes } from '@server/types'
-import { MTag, MThumbnail, MUserId, MVideo, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
+import { MThumbnail, MUserId, MVideo, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
 import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { JobQueue } from './job-queue/job-queue'
@@ -69,18 +69,14 @@ async function setVideoTags (options: {
   video: MVideoTag
   tags: string[]
   transaction?: Transaction
-  defaultValue?: MTag[]
 }) {
-  const { video, tags, transaction, defaultValue } = options
-  // Set tags to the video
-  if (tags) {
-    const tagInstances = await TagModel.findOrCreateTags(tags, transaction)
+  const { video, tags, transaction } = options
 
-    await video.$set('Tags', tagInstances, { transaction })
-    video.Tags = tagInstances
-  } else {
-    video.Tags = defaultValue || []
-  }
+  const internalTags = tags || []
+  const tagInstances = await TagModel.findOrCreateTags(internalTags, transaction)
+
+  await video.$set('Tags', tagInstances, { transaction })
+  video.Tags = tagInstances
 }
 
 async function publishAndFederateIfNeeded (video: MVideoUUID, wasLive = false) {
