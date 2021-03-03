@@ -1,10 +1,138 @@
 # Changelog
 
+## v3.1.0-rc.1 (stable ~ late March)
+
+### IMPORTANT NOTES
+
+ * **Important:** Deprecate NodeJS 10
+ * Support NodeJS 14 and 15
+ * Remove ES5 module support (breaks compatibility with web browsers we didn't support)
+ * PeerTube releases now contain client source maps helping client debugging (for developers and admins).
+ It's the reason why the release size is bigger (we think it's worth it)
+ * Remove deprecated static routes (`/static/avatars/`, `/static/previews/` and `/static/video-captions/`)
+ * PeerTube now uses a unique name for thumbnails, previews and captions allowing to correctly cache these resources.
+ It could break some third party clients that guessed these filenames depending on the video UUID. We'll continue this work in the future
+ for video filenames, so admins can easily cache these files (using multiple reverse proxies etc)
+
+
+### CLI tools
+
+ * Add script printing command to generate a resolution for a given file [#3507](https://github.com/Chocobozzz/PeerTube/pull/3507)
+ * Add `--wait-interval <seconds>` option to video-import script to wait between two video imports [#3310](https://github.com/Chocobozzz/PeerTube/pull/3310)
+
+### Plugins/Themes/Embed API
+
+ * Add server plugin hooks (https://docs.joinpeertube.org/api-plugins):
+   * `filter:api.user.me.videos.list.params` and `filter:api.user.me.videos.list.result`
+ * Add server helpers:
+   * `videos.loadByIdOrUUID`
+ * Add server transcoding helpers (https://docs.joinpeertube.org/contribute-plugins?id=add-new-transcoding-profiles):
+   * `transcodingManager.addVODProfile`
+   * `transcodingManager.addVODEncoderPriority`
+   * `transcodingManager.addLiveProfile`
+   * `transcodingManager.addLiveEncoderPriority`
+
+### Features
+
+ * Transcoding:
+   * Fair transcoding jobs priority: give an higher priority to `optimize` jobs and decrease priority of transcoding jobs depending on the amount of videos uploaded by the user during the last 7 days [#3637](https://github.com/Chocobozzz/PeerTube/pull/3637)
+   * Higher niceness priority for live transcoding compared to vod transcoding [#3577](https://github.com/Chocobozzz/PeerTube/pull/3577)
+   * Allow admins to choose a transcoding profile. New transcoding profiles can be added by PeerTube plugins that can inject custom ffmpeg encoders/parameters
+   * Add transcoding support for 1440p (Quad HD/QHD/WQHD) videos [#3518](https://github.com/Chocobozzz/PeerTube/pull/3518)
+   * Add transcoding progress in admin transcoding jobs list
+   * Use `veryfast` preset for default transcoding profile (same result size but faster)
+   * Transcode audio uploads to lower configured resolutions
+   * Transcode HLS playlists in a `tmp` directory (less bugs/inconsistencies)
+   * Allow admins to choose the transcoding jobs concurrency
+ * Video upload:
+   * Async torrent creation on video upload. We hope that it should fix some weird upload errors
+   * Add `.m4a` audio upload support
+ * Accessibility/UI:
+   * Move orange admin buttons on the left side
+   * Hide title to left menu toggle icon
+   * Add username information in profile settings
+   * Improve about page layout
+   * Add refresh button in jobs list
+   * Add ability to set a custom user quota
+   * Rewrite prose for JavaScript disabled message [#3684](https://github.com/Chocobozzz/PeerTube/pull/3684)
+ * Video import:
+   * Stricter youtube-dl format selectors for import (don't import HDR videos and cap to the max supported resolution) [#3516](https://github.com/Chocobozzz/PeerTube/pull/3516)
+   * Don't publish imported videos before the user submitted the second step form
+   * Allow admins to choose the import jobs concurrency
+ * Implement *hot* and *best* trending algorithms [#3625](https://github.com/Chocobozzz/PeerTube/pull/3625) & [#3681](https://github.com/Chocobozzz/PeerTube/pull/3681)
+ * Admin config:
+   * Add URL fragment support in admin config page to go on the appropriate tab
+   * Improve submit error message
+   * Allow admins to disable ping requests logging [#3550](https://github.com/Chocobozzz/PeerTube/pull/3550)
+   * Add a setting so PeerTube periodically cleans up remote AP interactions
+ * Add ability for admins to update plugin auth field of a particular user
+ * Support `webp` avatar upload
+ * Implement remote comment/subscription
+ * Register a service worker [#3464](https://github.com/Chocobozzz/PeerTube/pull/3464)
+ * Add ability to remove one's avatar for account and channels [#3467](https://github.com/Chocobozzz/PeerTube/pull/3467)
+ * Show first decimal for video views above a thousand [#3564](https://github.com/Chocobozzz/PeerTube/pull/3564)
+ * Allow user to search through their watch history [#3576](https://github.com/Chocobozzz/PeerTube/pull/3576)
+ * Allow users/visitors to search through an account's videos [#3589](https://github.com/Chocobozzz/PeerTube/pull/3589)
+ * Use an HTML link to display feed url
+ * Allow AP resolution for default account/channel pages (`/accounts/:name/video-channels` and `/video-channels/:name/videos`)
+ * Redirect to login on 401, display 403 variant [#3632](https://github.com/Chocobozzz/PeerTube/pull/3632)
+ * Performance:
+   * Optimize videos list API endpoint
+   * Optimize videos list views sort SQL query
+   * Avoid as much as possible to process remote thumbnail
+   * Proxify remote torrent requests from local clients (like we do for captions and previews)
+   * Optimize rate POST endpoint
+ * Tighten hotkeys definitions to not conflict with the web browser hotkeys [#3702](https://github.com/Chocobozzz/PeerTube/pull/3702)
+ * Add more AP stats to stats endpoint
+ * Increase jobs request timeout to 7 seconds
+ * Increase broadcast request concurrency to 30
+
+### Bug fixes
+
+ * Fix remote subscribe input alignment
+ * Fix loading bar for HTTP requests
+ * Fix table header overflow
+ * Disable wait transcoding checkbox instead of hiding it when uploading an incompatible video for the web
+ * Fix sendmail emailer configuration
+ * Add missing niceness to ffmpeg thumbnail process
+ * Videos with only HLS files:
+   * Fix RSS feed
+   * Correctly wait transcoding before federating
+   * Fix redundancy
+   * Correctly remove torrents
+ * Localize decimal separator in video miniatures [#3643](https://github.com/Chocobozzz/PeerTube/pull/3643)
+ * Check banned status on external authentication
+ * Remove all video redundancies when purging the cache
+ * Fix URI search admin config update
+ * Fix broken HLS playback with videos that contain an unknown channel layout
+ * Fix HLS generation after file import script
+ * Ensure we don't receive things from local actors
+ * Try to recover from network errors in HLS player
+ * Fix comments sorting dropdown z-index
+ * Fix create transcoding job script depending on the transcoding configuration
+ * Fix NSFW policy in my videos, account videos and channel videos pages
+ * Fix complete description loading of a previous video
+ * Fix video comments display with deleted comments
+ * Don't override preview image on import
+ * Fix Accept AP messages sending to previously accepted followers
+ * Fix import script when using the instance uses the search index
+ * Fix player freeze on Safari with a video that has many subtitles
+ * Fix anonymous user settings
+ * Fix preview upload with capitalized ext
+ * Fix abuses list crash on deleted video
+ * More robust channel change federation
+ * Fix emptying video tags
+ * Fix broken local actors that do not have a public/private key
+ * Live:
+   * Don't update live attributes if they did not change (allowing to update live metadata even if the live has started)
+   * Fix live RAM usage when ffmpeg is too slow to transcode the RTMP stream
+   * Correctly load live information (description and preview) when not started
+
 ## v3.0.1
 
 ### SECURITY
 
- * **Important** Fix retrieving data of another user if the username contains `_` when fetching *my information*
+ * **Important:** Fix retrieving data of another user if the username contains `_` when fetching *my information*
 
 ### Docker
 
@@ -423,7 +551,7 @@ A new endpoint to report videos will be created in PeerTube 2.4 and will also al
 
 ### Docker
 
- * **Important** Fix HLS storage configuration ([@xcffl](https://github.com/xcffl)): https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/production.yaml#L48
+ * **Important:** Fix HLS storage configuration ([@xcffl](https://github.com/xcffl)): https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/production.yaml#L48
  * Add DKIM support to Docker ([@kimsible](https://github.com/kimsible))
 
 ### Maintenance
@@ -911,7 +1039,7 @@ We added some sections in the documentation website:
 
 ### IMPORTANT NOTES
 
- * **Important** Add `plugins` directory in configuration file. **You should configure it in your production.yaml**
+ * **Important:** Add `plugins` directory in configuration file. **You should configure it in your production.yaml**
  * **Important:** Deprecate NodeJS 8 (support ends on [December 2019](https://github.com/nodejs/Release#release-schedule)). Please upgrade to NodeJS 10.
  * **Important:** Updated nginx template (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
    * Fix long server responses on dual stack servers: https://github.com/Chocobozzz/PeerTube/commit/fd2ddcae8ff4eb10bf7168ac3c8801f06b37627f
@@ -1061,8 +1189,8 @@ We added some sections in the documentation website:
 
 ### Docker
 
- * **Important**: Add host network mode to the reverse proxy section (without this, it could break videos views and P2P: https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666)
- * **Important**: Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml)
+ * **Important:**: Add host network mode to the reverse proxy section (without this, it could break videos views and P2P: https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666)
+ * **Important:**: Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml)
 and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env#L8) to fix IP forwarding issue ([@Nutomic](https://github.com/nutomic))
  * Fix SMTP default configuration ([@Nutomic](https://github.com/nutomic))
 
@@ -1155,7 +1283,7 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
 
 ### Bug fixes
 
- * **Important** Fix invalid `From` email header in contact form that could lead to the blacklisting of your SMTP server
+ * **Important:** Fix invalid `From` email header in contact form that could lead to the blacklisting of your SMTP server
  * Fix too long display name overflow in menu
  * Fix mention notification when a remote account mention a local account that has the same username than yours
  * Fix access to muted servers table for moderators
