@@ -1,5 +1,4 @@
 import { join } from 'path'
-
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
 import { processImage } from '../helpers/image-utils'
@@ -7,7 +6,7 @@ import { downloadImage } from '../helpers/requests'
 import { CONFIG } from '../initializers/config'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
 import { ThumbnailModel } from '../models/video/thumbnail'
-import { MVideoFile, MVideoThumbnail } from '../types/models'
+import { MVideoFile, MVideoThumbnail, MVideoUUID } from '../types/models'
 import { MThumbnail } from '../types/models/video/thumbnail'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
 import { getVideoFilePath } from './video-paths'
@@ -69,13 +68,7 @@ function createVideoMiniatureFromUrl (options: {
     ? null
     : downloadUrl
 
-  // If the thumbnail URL did not change
-  const existingUrl = existingThumbnail
-    ? existingThumbnail.fileUrl
-    : null
-
-  // If the thumbnail URL did not change and has a unique filename (introduced in 3.1), avoid thumbnail processing
-  const thumbnailUrlChanged = !existingUrl || existingUrl !== downloadUrl || downloadUrl.endsWith(`${video.uuid}.jpg`)
+  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, downloadUrl, video)
 
   // Do not change the thumbnail filename if the file did not change
   const filename = thumbnailUrlChanged
@@ -147,9 +140,16 @@ function createPlaceholderThumbnail (options: {
   size: ImageSize
 }) {
   const { fileUrl, video, type, size } = options
-  const { filename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+  const { filename: updatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+
+  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, fileUrl, video)
 
   const thumbnail = existingThumbnail || new ThumbnailModel()
+
+  // Do not change the thumbnail filename if the file did not change
+  const filename = thumbnailUrlChanged
+    ? updatedFilename
+    : existingThumbnail.filename
 
   thumbnail.filename = filename
   thumbnail.height = height
@@ -169,6 +169,15 @@ export {
   createPlaceholderThumbnail,
   createPlaylistMiniatureFromUrl,
   createPlaylistMiniatureFromExisting
+}
+
+function hasThumbnailUrlChanged (existingThumbnail: MThumbnail, downloadUrl: string, video: MVideoUUID) {
+  const existingUrl = existingThumbnail
+    ? existingThumbnail.fileUrl
+    : null
+
+  // If the thumbnail URL did not change and has a unique filename (introduced in 3.1), avoid thumbnail processing
+  return !existingUrl || existingUrl !== downloadUrl || downloadUrl.endsWith(`${video.uuid}.jpg`)
 }
 
 function buildMetadataFromPlaylist (playlist: MVideoPlaylistThumbnail, size: ImageSize) {
