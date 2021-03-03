@@ -116,11 +116,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   isUploadEnabled () {
-    if (this.authService.isLoggedIn()) {
-      return this.authService.getUser().videoQuota !== 0
-    } else {
-      return this.serverConfig.user.videoQuota !== 0
-    }
+    return this.authService.isLoggedIn()
+      ? this.authService.getUser().videoQuota !== 0
+      : this.serverConfig.user.videoQuota !== 0
   }
 
   hideBroadcastMessage () {
