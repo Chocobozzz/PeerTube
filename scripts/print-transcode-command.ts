@@ -48,5 +48,5 @@ async function run (path: string, cmd: any) {
     exit()
   })
 
-  await runCommand(command)
+  await runCommand({ command })
 }

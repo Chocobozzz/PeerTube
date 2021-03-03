@@ -69,7 +69,7 @@ function convertWebPToJPG (path: string, destination: string): Promise<void> {
   const command = ffmpeg(path, { niceness: FFMPEG_NICE.THUMBNAIL })
     .output(destination)
 
-  return runCommand(command)
+  return runCommand({ command, silent: true })
 }
 
 function processGIF (
@@ -82,7 +82,7 @@ function processGIF (
     .size(`${newSize.width}x${newSize.height}`)
     .output(destination)
 
-  return runCommand(command)
+  return runCommand({ command })
 }
 
 async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {
@@ -201,7 +201,7 @@ async function transcode (options: TranscodeOptions) {
 
   command = await builders[options.type](command, options)
 
-  await runCommand(command, options.job)
+  await runCommand({ command, job: options.job })
 
   await fixHLSPlaylistIfNeeded(options)
 }
@@ -649,10 +649,17 @@ function getFFmpeg (input: string, type: 'live' | 'vod') {
   return command
 }
 
-async function runCommand (command: ffmpeg.FfmpegCommand, job?: Job) {
+async function runCommand (options: {
+  command: ffmpeg.FfmpegCommand
+  silent?: boolean // false
+  job?: Job
+}) {
+  const { command, silent = false, job } = options
+
   return new Promise<void>((res, rej) => {
     command.on('error', (err, stdout, stderr) => {
-      logger.error('Error in transcoding job.', { stdout, stderr })
+      if (silent !== true) logger.error('Error in ffmpeg.', { stdout, stderr })
+
       rej(err)
     })
 
