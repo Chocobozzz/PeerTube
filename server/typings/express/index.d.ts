@@ -8,9 +8,9 @@ import {
   MVideoChangeOwnershipFull,
   MVideoFile,
   MVideoImmutable,
+  MVideoLive,
   MVideoPlaylistFull,
-  MVideoPlaylistFullSummary,
-  MVideoLive
+  MVideoPlaylistFullSummary
 } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server'
@@ -43,97 +43,97 @@ declare module 'express' {
   export interface Request {
     query: any
   }
-
   interface Response {
+    locals: PeerTubeLocals
+  }
+}
 
-    locals: {
-      bypassLogin?: {
-        bypass: boolean
-        pluginName: string
-        authName?: string
-        user: {
-          username: string
-          email: string
-          displayName: string
-          role: UserRole
-        }
-      }
-
-      refreshTokenAuthName?: string
-
-      explicitLogout: boolean
-
-      videoAll?: MVideoFullLight
-      onlyImmutableVideo?: MVideoImmutable
-      onlyVideo?: MVideoThumbnail
-      onlyVideoWithRights?: MVideoWithRights
-      videoId?: MVideoIdThumbnail
-
-      videoLive?: MVideoLive
-
-      videoShare?: MVideoShareActor
-
-      videoFile?: MVideoFile
-
-      videoImport?: MVideoImportDefault
-
-      videoBlacklist?: MVideoBlacklist
-
-      videoCaption?: MVideoCaptionVideo
-
-      abuse?: MAbuseReporter
-      abuseMessage?: MAbuseMessage
-
-      videoStreamingPlaylist?: MStreamingPlaylist
-
-      videoChannel?: MChannelAccountDefault
-
-      videoPlaylistFull?: MVideoPlaylistFull
-      videoPlaylistSummary?: MVideoPlaylistFullSummary
-
-      videoPlaylistElement?: MVideoPlaylistElement
-      videoPlaylistElementAP?: MVideoPlaylistElementVideoUrlPlaylistPrivacy
-
-      accountVideoRate?: MAccountVideoRateAccountVideo
-
-      videoCommentFull?: MCommentOwnerVideoReply
-      videoCommentThread?: MComment
-
-      follow?: MActorFollowActorsDefault
-      subscription?: MActorFollowActorsDefaultSubscription
-
-      nextOwner?: MAccountDefault
-      videoChangeOwnership?: MVideoChangeOwnershipFull
-
-      account?: MAccountDefault
-
-      actorUrl?: MActorUrl
-      actorFull?: MActorFull
-
-      user?: MUserDefault
-
-      server?: MServer
-
-      videoRedundancy?: MVideoRedundancyVideo
-
-      accountBlock?: MAccountBlocklist
-      serverBlock?: MServerBlocklist
-
-      oauth?: {
-        token: MOAuthTokenUser
-      }
-
-      signature?: {
-        actor: MActorAccountChannelId
-      }
-
-      authenticated?: boolean
-
-      registeredPlugin?: RegisteredPlugin
-
-      externalAuth?: RegisterServerAuthExternalOptions
-
-      plugin?: MPlugin
+interface PeerTubeLocals {
+  bypassLogin?: {
+    bypass: boolean
+    pluginName: string
+    authName?: string
+    user: {
+      username: string
+      email: string
+      displayName: string
+      role: UserRole
     }
   }
+
+  refreshTokenAuthName?: string
+
+  explicitLogout?: boolean
+
+  videoAll?: MVideoFullLight
+  onlyImmutableVideo?: MVideoImmutable
+  onlyVideo?: MVideoThumbnail
+  onlyVideoWithRights?: MVideoWithRights
+  videoId?: MVideoIdThumbnail
+
+  videoLive?: MVideoLive
+
+  videoShare?: MVideoShareActor
+
+  videoFile?: MVideoFile
+
+  videoImport?: MVideoImportDefault
+
+  videoBlacklist?: MVideoBlacklist
+
+  videoCaption?: MVideoCaptionVideo
+
+  abuse?: MAbuseReporter
+  abuseMessage?: MAbuseMessage
+
+  videoStreamingPlaylist?: MStreamingPlaylist
+
+  videoChannel?: MChannelAccountDefault
+
+  videoPlaylistFull?: MVideoPlaylistFull
+  videoPlaylistSummary?: MVideoPlaylistFullSummary
+
+  videoPlaylistElement?: MVideoPlaylistElement
+  videoPlaylistElementAP?: MVideoPlaylistElementVideoUrlPlaylistPrivacy
+
+  accountVideoRate?: MAccountVideoRateAccountVideo
+
+  videoCommentFull?: MCommentOwnerVideoReply
+  videoCommentThread?: MComment
+
+  follow?: MActorFollowActorsDefault
+  subscription?: MActorFollowActorsDefaultSubscription
+
+  nextOwner?: MAccountDefault
+  videoChangeOwnership?: MVideoChangeOwnershipFull
+
+  account?: MAccountDefault
+
+  actorUrl?: MActorUrl
+  actorFull?: MActorFull
+
+  user?: MUserDefault
+
+  server?: MServer
+
+  videoRedundancy?: MVideoRedundancyVideo
+
+  accountBlock?: MAccountBlocklist
+  serverBlock?: MServerBlocklist
+
+  oauth?: {
+    token: MOAuthTokenUser
+  }
+
+  signature?: {
+    actor: MActorAccountChannelId
+  }
+
+  authenticated?: boolean
+
+  registeredPlugin?: RegisteredPlugin
+
+  externalAuth?: RegisterServerAuthExternalOptions
+
+  plugin?: MPlugin
 }
