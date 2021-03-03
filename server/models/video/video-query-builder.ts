@@ -266,13 +266,14 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
        *  - weights and base score are in number of half-days.
        *  - all comments are counted, regardless of being written by the video author or not
        * see https://github.com/reddit-archive/reddit/blob/master/r2/r2/lib/db/_sorts.pyx#L47-L58
+       *  - we have less interactions than on reddit, so multiply weights by an arbitrary factor
        */
       const weights = {
-        like: 3,
-        dislike: -3,
-        view: 1 / 12,
-        comment: 2, // a comment takes more time than a like to do, but can be done multiple times
-        history: -2
+        like: 3 * 50,
+        dislike: -3 * 50,
+        view: Math.floor((1 / 3) * 50),
+        comment: 2 * 50, // a comment takes more time than a like to do, but can be done multiple times
+        history: -2 * 50
       }
 
       joins.push('LEFT JOIN "videoComment" ON "video"."id" = "videoComment"."videoId"')
@@ -282,7 +283,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
         `+ LOG(GREATEST(1, "video"."dislikes" - 1)) * ${weights.dislike} ` + // dislikes (-)
         `+ LOG("video"."views" + 1) * ${weights.view} ` + // views (+)
         `+ LOG(GREATEST(1, COUNT(DISTINCT "videoComment"."id"))) * ${weights.comment} ` + // comments (+)
-        '+ (SELECT EXTRACT(epoch FROM "video"."publishedAt") / 47000) ' // base score (in number of half-days)
+        '+ (SELECT (EXTRACT(epoch FROM "video"."publishedAt") - 1446156582) / 47000) ' // base score (in number of half-days)
 
       if (options.trendingAlgorithm === 'best' && options.user) {
         joins.push(
