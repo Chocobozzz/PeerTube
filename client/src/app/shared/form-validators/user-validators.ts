@@ -46,7 +46,7 @@ export const USER_HANDLE_VALIDATOR: BuildFormValidator = {
   ],
   MESSAGES: {
     'required': $localize`Handle is required.`,
-    'pattern': $localize`Handle must be valid (chocobozzz@example.com).`
+    'pattern': $localize`Handle must be valid (eg. chocobozzz@example.com).`
   }
 }
 
