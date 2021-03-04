@@ -14,6 +14,9 @@
  It could break some third party clients that guessed these filenames depending on the video UUID. We'll continue this work in the future
  for video filenames, so admins can easily cache these files (using multiple reverse proxies etc)
 
+### Maintenance
+
+ * Fix nginx max body size configuration
 
 ### CLI tools
 
@@ -123,6 +126,7 @@
  * More robust channel change federation
  * Fix emptying video tags
  * Fix broken local actors that do not have a public/private key
+ * Fix bad PeerTube URL for playlist embed
  * Live:
    * Don't update live attributes if they did not change (allowing to update live metadata even if the live has started)
    * Fix live RAM usage when ffmpeg is too slow to transcode the RTMP stream
