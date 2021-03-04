@@ -391,7 +391,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding without additional resolutions', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       liveVideoId = await createLiveWrapper(false)
 
@@ -405,7 +405,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       const resolutions = [ 240, 480 ]
       await updateConf(resolutions)
