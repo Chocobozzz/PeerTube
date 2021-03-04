@@ -4823,7 +4823,7 @@
       </trans-unit>
       <trans-unit id="8d34030874e3105dd85b6654e2ed29d930d75d15" datatype="html">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new live transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">nowe profile transkodowania na żywo mogą zostać dodane przez wtyczki PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="bd9fc4914f5eeb416181cb966d98cadb94282485" datatype="html">
@@ -4934,7 +4934,7 @@
       </trans-unit>
       <trans-unit id="6e60626527b51ae94c25e4f0c818be986924a837" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="new"> The original file resolution will be the default target if no option is selected. </target>
+        <target state="translated">Oryginalna rozdzielczość pliku będzie domyślnym celem, jeżeli nie zaznaczono żadnej opcji.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">132,133</context>
@@ -4971,7 +4971,7 @@
       </trans-unit>
       <trans-unit id="7f01873ceaaa6f7f6a537e63297c408f0b81a8bd" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="new">allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</target>
+        <target state="translated">pozwala na transkodowanie wielu plików równocześnie. ⚠️ Wymaga restartu PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">167</context>
@@ -4984,7 +4984,7 @@
       </trans-unit>
       <trans-unit id="8e2902ec95ffc25eb8521384bfee7291cd615ec1" datatype="html">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">nowe profile transkodowania mogą zostać dodane przez wtyczki PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="f05f4a8b97269a2da6d7fcc6e86fbfafd16e30bd" datatype="html">
@@ -4994,7 +4994,7 @@
       </trans-unit>
       <trans-unit id="7e1ada48d1911a7ab02c5ba2519fa2d14240945a" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="new"> Some files are not federated, and fetched when necessary. Define their caching policies. </target>
+        <target state="translated">Część plików nie jest sfederowana, a pobierana kiedy to konieczne. Określ zasady pamięci podręcznej dla nich.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -5007,7 +5007,7 @@
       </trans-unit>
       <trans-unit id="64900cccfb1346d742551801b2260df01b4fc521" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {obraz w pamięci podręcznej} few {obrazy w pamięci podręcznej} many {obrazów w pamięci podręcznej} other {obrazów w pamięci podręcznej}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
@@ -5028,7 +5028,7 @@
       </trans-unit>
       <trans-unit id="866189a6610f35ef3dcde505a22ed76b788c03dd" datatype="html">
         <source>Number of video torrents to keep in cache</source>
-        <target state="new">Number of video torrents to keep in cache</target>
+        <target state="translated">Liczba torrentów wideo do przechowywania w pamięci podręcznej</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -5036,7 +5036,7 @@
       </trans-unit>
       <trans-unit id="1c1a966d85cb4272fc870ed5177867dfdbd0e751" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {torrent w pamięci podręcznej} few {torrenty w pamięci podręcznej} many {torrentów w pamięci podręcznej} other {torrentów w pamięci podręcznej}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">50</context>
@@ -5049,7 +5049,7 @@
       </trans-unit>
       <trans-unit id="ff71044c7bbbc9fdbbaa9209a218e4900fbde590" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="new"> Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill. </target>
+        <target state="translated">Drobne modyfikacje dla własnej instancji PeerTube, gdy tworzenie wtyczki lub motywu to za dużo.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
@@ -5813,7 +5813,7 @@ color: red;
       </trans-unit>
       <trans-unit id="aed1bb4393932c974d4347ff743a2253cc64ef02" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target state="new">Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <target state="translated">Obserwowane instancje (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -6497,7 +6497,7 @@ color: red;
       </trans-unit>
       <trans-unit id="0e6c8311c537859bea4cfb037a5c10b58c9d4ade" datatype="html">
         <source>However, you may want to read our guidelines before tweaking the following values.</source>
-        <target state="new"> However, you may want to read our guidelines before tweaking the following values. </target>
+        <target state="translated">Możesz jednak przeczytać nasze wskazówki przed dostosowywaniem następujących wartości.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -7560,7 +7560,7 @@ color: red;
       </trans-unit>
       <trans-unit id="d2ade8ba2e32c6fe467932b6b156025fe50da7c3" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="new"> People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
+        <target state="translated">Ludzie mogą Cię znaleźć pod @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -7665,7 +7665,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="new">URL parameter is missing in URL parameters</target>
+        <target state="translated">Brak parametru URL wśród parametrów URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -8350,7 +8350,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
-        <target state="new">Max live duration should be greater or equal to -1.</target>
+        <target state="translated">Maksymalny czas trwania transmisji na żywo musi być większy lub równy -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -8358,7 +8358,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
-        <target state="new">Max instance lives is required.</target>
+        <target state="translated">Maksymalna liczba transmisji na żywo dla instancji jest wymagana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">79</context>
@@ -8366,7 +8366,7 @@ color: red;
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
-        <target state="new">Max instance lives should be greater or equal to -1.</target>
+        <target state="translated">Maksymalna liczba transmisji na żywo na instancji musi być większa lub równa -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -8374,7 +8374,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="new">Max user lives is required.</target>
+        <target state="translated">Maksymalna liczba transmisji na żywo dla użytkownika jest wymagana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
@@ -8382,7 +8382,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
-        <target state="new">Max user lives should be greater or equal to -1.</target>
+        <target state="translated">Maksymalna liczba transmisji na żywo dla użytkownika musi być większa lub równa -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -8835,7 +8835,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1074634769552897790" datatype="html">
         <source>Video name has leading or trailing whitespace.</source>
-        <target state="new">Video name has leading or trailing whitespace.</target>
+        <target state="translated">Nazwa filmu zaczyna się lub kończy białym znakiem.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">18</context>
