@@ -1362,11 +1362,11 @@ paths:
                   example: 4
                 licence:
                   description: Video licence
-                  type: string
-                language:
-                  description: Video language
                   type: integer
                   example: 2
+                language:
+                  description: Video language
+                  type: string
                 description:
                   description: Video description
                   type: string
@@ -1484,10 +1484,12 @@ paths:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
                   description: Video category
-                  type: string
+                  type: integer
+                  example: 4
                 licence:
                   description: Video licence
-                  type: string
+                  type: integer
+                  example: 2
                 language:
                   description: Video language
                   type: string
