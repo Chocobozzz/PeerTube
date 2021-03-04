@@ -496,7 +496,7 @@
       </trans-unit>
       <trans-unit id="4ecb8d97ebb2f37c5b410afccbb78003f75ac35c" datatype="html">
         <source>ON <x id="INTERPOLATION" equiv-text="{{instanceName}}"/></source>
-        <target/>
+        <target>SUR <x id="INTERPOLATION" equiv-text="{{instanceName}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">123</context>
@@ -1188,7 +1188,7 @@
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
         <source>The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/peertube&quot; fragment=&quot;privacy&quot;&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target/>
+        <target>Le <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/peertube&quot; fragment=&quot;privacy&quot;&gt;"/>système de partage<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> implique que certaines informations techniques sur votre système (comme une adresse IP publique) peuvent être envoyées à d'autres pairs, mais contribue grandement à réduire la charge du serveur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">50</context>
