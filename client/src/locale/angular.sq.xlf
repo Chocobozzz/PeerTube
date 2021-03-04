@@ -76,7 +76,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source>
-        <target/>
+        <target>««</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">2</context>
@@ -84,7 +84,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
-        <target/>
+        <target>«</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">3</context>
@@ -92,7 +92,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
-        <target/>
+        <target>»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">4</context>
@@ -100,7 +100,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
-        <target/>
+        <target>»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">5</context>
@@ -140,7 +140,7 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.d.ts</context>
           <context context-type="linenumber">7</context>
@@ -156,7 +156,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
-        <target/>
+        <target>HH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">13</context>
@@ -164,7 +164,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
         <source>Hours</source>
-        <target/>
+        <target>Orë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">15</context>
@@ -188,7 +188,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target/>
+        <target>MM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">35</context>
@@ -196,7 +196,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
         <source>Minutes</source>
-        <target/>
+        <target>Minuta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">37</context>
@@ -220,7 +220,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target/>
+        <target>SS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">57</context>
@@ -228,7 +228,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
         <source>Seconds</source>
-        <target/>
+        <target>Sekonda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">59</context>
@@ -244,7 +244,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">76</context>
@@ -252,7 +252,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">77</context>
@@ -260,7 +260,7 @@
       </trans-unit>
       <trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source>
-        <target/>
+        <target>Mbylle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/toast/toast.d.ts</context>
           <context context-type="linenumber">8</context>
@@ -420,7 +420,7 @@
       </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566" datatype="html">
         <source>Save to</source>
-        <target/>
+        <target>Ruaje te</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">4</context>
@@ -428,7 +428,7 @@
       </trans-unit>
       <trans-unit id="24813b8a3e45f0b57136c18d003027262cfe2d1f" datatype="html">
         <source>Options</source>
-        <target/>
+        <target>Mundësi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">9</context>
@@ -456,7 +456,7 @@
       </trans-unit>
       <trans-unit id="4d20563f7e338a1d09eb756054564ccf7c6a30ef" datatype="html">
         <source>Stop at</source>
-        <target/>
+        <target>Ndalu në</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">31</context>
@@ -488,7 +488,7 @@
       </trans-unit>
       <trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9" datatype="html">
         <source>Display name</source>
-        <target/>
+        <target>Emër në ekran</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">70</context>
@@ -608,7 +608,7 @@
       </trans-unit>
       <trans-unit id="01504bc3847894e0816ec486648854d3835f91b0" datatype="html">
         <source>Video stream</source>
-        <target/>
+        <target>Rrjedhë video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">57</context>
@@ -696,7 +696,7 @@
       </trans-unit>
       <trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b" datatype="html">
         <source>Report video</source>
-        <target/>
+        <target>Raportojeni videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">3</context>
@@ -712,7 +712,7 @@
       </trans-unit>
       <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125" datatype="html">
         <source>Reason...</source>
-        <target/>
+        <target>Arsye…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">16</context>
@@ -812,7 +812,7 @@
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d" datatype="html">
         <source>Blacklisted</source>
-        <target/>
+        <target>Në listë të zezë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context>
           <context context-type="linenumber">41</context>
@@ -884,7 +884,7 @@
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
         <source>Save</source>
-        <target/>
+        <target>Ruaje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">82</context>
@@ -912,7 +912,7 @@
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e" datatype="html">
         <source>No results.</source>
-        <target/>
+        <target>S’ka përfundime.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/videos-selection.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1076,7 +1076,7 @@
       </trans-unit>
       <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c" datatype="html">
         <source>Go to the account page</source>
-        <target/>
+        <target>Shko te faqja e llogarisë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/channel/avatar.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1104,7 +1104,7 @@
       </trans-unit>
       <trans-unit id="c33a843e309de9d67771aa5e666f61e92f4c6216" datatype="html">
         <source>channels subscribed</source>
-        <target/>
+        <target>kanale ku jeni pajtuar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1144,7 +1144,7 @@
       </trans-unit>
       <trans-unit id="5047522cc670b1f4a288bce07f9b1c5061e913ed" datatype="html">
         <source>Subscribe with a Mastodon account:</source>
-        <target/>
+        <target>Pajtohuni me një llogari Mastodon:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">57</context>
@@ -1228,7 +1228,7 @@
       </trans-unit>
       <trans-unit id="ba774dce7a0cbbc29d7086b8557939c7e8d9883d" datatype="html">
         <source>Transcoding in multiple resolutions</source>
-        <target/>
+        <target>Ndërkodim në qartësi të shumta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1300,7 +1300,7 @@
       </trans-unit>
       <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a" datatype="html">
         <source>Torrent import</source>
-        <target/>
+        <target>Importim rrëkeze</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">77</context>
@@ -1308,7 +1308,7 @@
       </trans-unit>
       <trans-unit id="59bdc3dfa4075f92c734588899485db702c8f120" datatype="html">
         <source>Player</source>
-        <target/>
+        <target>Lojtës</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">85</context>
@@ -1316,7 +1316,7 @@
       </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5" datatype="html">
         <source>P2P enabled</source>
-        <target/>
+        <target>P2P e aktivizuar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">89</context>
@@ -1344,7 +1344,7 @@
       </trans-unit>
       <trans-unit id="b8b6a001cca6fa2ba15600ca3a78dfeebf685d60" datatype="html">
         <source>Loading instance statistics...</source>
-        <target/>
+        <target>Po ngarkohen statistika instance…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1372,7 +1372,7 @@
       </trans-unit>
       <trans-unit id="5bc509bb72973f9895241127d5556e9e31051137" datatype="html">
         <source>videos</source>
-        <target/>
+        <target>video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1384,7 +1384,7 @@
       </trans-unit>
       <trans-unit id="bd21b1e6b5674003187e5cbec0e7e2854f9d8388" datatype="html">
         <source>video views</source>
-        <target/>
+        <target>parje videosh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1428,7 +1428,7 @@
       </trans-unit>
       <trans-unit id="1ec99ffe83830affef834fd7beeda8ee313203fe" datatype="html">
         <source>following</source>
-        <target/>
+        <target>ndjekje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">95</context>
@@ -1452,7 +1452,7 @@
       </trans-unit>
       <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020" datatype="html">
         <source>Ban this user</source>
-        <target/>
+        <target>Dëboje këtë përdorues</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1488,7 +1488,7 @@
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target/>
+        <target>Rregulla për video me spec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1524,7 +1524,7 @@
       </trans-unit>
       <trans-unit id="010d24ef3c43b2d8f45a4d6cba7d73e12ee1557e" datatype="html">
         <source>Display</source>
-        <target/>
+        <target>Ekran</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1632,7 +1632,7 @@
       </trans-unit>
       <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808" datatype="html">
         <source>instance default</source>
-        <target/>
+        <target>parazgjedhje instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-interface/my-account-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1656,7 +1656,7 @@
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea" datatype="html">
         <source>Login</source>
-        <target/>
+        <target>Hyrje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1688,7 +1688,7 @@
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453" datatype="html">
         <source>Request new verification email.</source>
-        <target/>
+        <target>Kërkoni email të ri verifikimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">27</context>
@@ -1712,7 +1712,7 @@
       </trans-unit>
       <trans-unit id="51ef29329faccb28d94369897068897d1b3d0478" datatype="html">
         <source>Username or email address</source>
-        <target/>
+        <target>Emër përdoruesi ose adresë email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">37</context>
@@ -1728,7 +1728,7 @@
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407" datatype="html">
         <source>Password</source>
-        <target/>
+        <target>Fjalëkalim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">51</context>
@@ -1764,7 +1764,7 @@
       </trans-unit>
       <trans-unit id="48ff0628dcbb4d37e9687302df3023b8427b48f2" datatype="html">
         <source>Click here to reset your password</source>
-        <target/>
+        <target>Që të ricaktoni fjalëkalimin tuaj, klikoni këtu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">57</context>
@@ -1808,7 +1808,7 @@
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc" datatype="html">
         <source>Email</source>
-        <target/>
+        <target>Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">95</context>
@@ -1880,7 +1880,7 @@
       </trans-unit>
       <trans-unit id="3652e5c6e33165264d5271d06cc04ab7123b6df1" datatype="html">
         <source>Confirmed password</source>
-        <target/>
+        <target>U ripohua fjalëkalimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1988,7 +1988,7 @@
       </trans-unit>
       <trans-unit id="4e020f13aa4db2285047eba96e50dc716fb5f417" datatype="html">
         <source>Use documentation</source>
-        <target/>
+        <target>Përdorni dokumentim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2028,7 +2028,7 @@
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target/>
+        <target>Erdhi koja të formësoni instancën tuaj!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">59</context>
@@ -2060,7 +2060,7 @@
       </trans-unit>
       <trans-unit id="b310fa17f1bbfc4dd61b80c1cfc4116a81a9c76c" datatype="html">
         <source>Configure my instance</source>
-        <target/>
+        <target>Formësoni instancën time</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">86</context>
@@ -2092,7 +2092,7 @@
       </trans-unit>
       <trans-unit id="b6e9a7a198c9882894677a0358d22ed79482808a" datatype="html">
         <source>Instance short description</source>
-        <target/>
+        <target>Përshkrim i shkurtër instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2180,7 +2180,7 @@
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96" datatype="html">
         <source>Change the language</source>
-        <target/>
+        <target>Ndryshoni gjuhën</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/language-chooser.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2220,7 +2220,7 @@
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925" datatype="html">
         <source>Video settings</source>
-        <target/>
+        <target>Rregullime për videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2244,7 +2244,7 @@
       </trans-unit>
       <trans-unit id="1eecebc91b4c671d43617b559cf3933275492931" datatype="html">
         <source>Account settings</source>
-        <target/>
+        <target>Rregullime llogarie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">25</context>
@@ -2328,7 +2328,7 @@
       </trans-unit>
       <trans-unit id="c3346a45c43ae8e5021086880268979b8d2266f3" datatype="html">
         <source>MY LIBRARY</source>
-        <target/>
+        <target>VIDEOTEKA IME</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">82</context>
@@ -2344,7 +2344,7 @@
       </trans-unit>
       <trans-unit id="47546e45bbb476baaaad38244db444c427ddc502" datatype="html">
         <source>Playlists</source>
-        <target/>
+        <target>Luajlista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">91</context>
@@ -2352,7 +2352,7 @@
       </trans-unit>
       <trans-unit id="357064ca9d9ac859eb618e28e8126fa32be049e2" datatype="html">
         <source>Subscriptions</source>
-        <target/>
+        <target>Pajtime</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">96</context>
@@ -2376,7 +2376,7 @@
       </trans-unit>
       <trans-unit id="411ca58f59b00246e15b161e07409df55b5eb6db" datatype="html">
         <source>Discover</source>
-        <target/>
+        <target>Zbuloni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">111</context>
@@ -2384,7 +2384,7 @@
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807" datatype="html">
         <source>Trending</source>
-        <target/>
+        <target>Në modë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">116</context>
@@ -2408,7 +2408,7 @@
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919" datatype="html">
         <source>Administration</source>
-        <target/>
+        <target>Administrim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">140</context>
@@ -2416,7 +2416,7 @@
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a" datatype="html">
         <source>About</source>
-        <target/>
+        <target>Mbi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">148</context>
@@ -2424,7 +2424,7 @@
       </trans-unit>
       <trans-unit id="34746fb1c7f3d2194d99652bdff89e6e14c9c4f4" datatype="html">
         <source>Contact</source>
-        <target/>
+        <target>Kontakt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">160</context>
@@ -2440,7 +2440,7 @@
       </trans-unit>
       <trans-unit id="0530eaf7a05c66b3167da49a57e5af4326f3af15" datatype="html">
         <source>Get help using PeerTube</source>
-        <target/>
+        <target>Merrni ndihmë për përdorimin e PeerTube-it</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">161</context>
@@ -2448,7 +2448,7 @@
       </trans-unit>
       <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
         <source>FAQ</source>
-        <target/>
+        <target>PBR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">162</context>
@@ -2496,7 +2496,7 @@
       </trans-unit>
       <trans-unit id="5c195f8d79bd19e8520c890a2513fe635529b7a7" datatype="html">
         <source>powered by PeerTube</source>
-        <target/>
+        <target>bazuar në PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">171</context>
@@ -2504,7 +2504,7 @@
       </trans-unit>
       <trans-unit id="018843afca0913de849c80fdf962a6a42f5190b4" datatype="html">
         <source>PeerTube website</source>
-        <target/>
+        <target>Sajt PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">171</context>
@@ -2528,7 +2528,7 @@
       </trans-unit>
       <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771" datatype="html">
         <source>View your notifications</source>
-        <target/>
+        <target>Shihni njoftimet tuaja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/avatar-notification.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2544,7 +2544,7 @@
       </trans-unit>
       <trans-unit id="1da23f4068fd3796fbcb24d0c42bb62f92c96829" datatype="html">
         <source>Mark all as read</source>
-        <target/>
+        <target>Vëru të tërave shenjë si të lexuara</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/avatar-notification.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2556,7 +2556,7 @@
       </trans-unit>
       <trans-unit id="341e026e3f317aa3164916cc63a059c961a78b81" datatype="html">
         <source>Update your notification preferences</source>
-        <target/>
+        <target>Përditësoni parapëlqimet tuaja për njoftime</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/avatar-notification.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2572,7 +2572,7 @@
       </trans-unit>
       <trans-unit id="4b3972c3e9485218508a95f7a4ce7758e3f09ced" datatype="html">
         <source>Upload</source>
-        <target/>
+        <target>Ngarkoni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">5</context>
@@ -2580,7 +2580,7 @@
       </trans-unit>
       <trans-unit id="2f8adf9966f3c287b193683af9e1eaba4f526d68" datatype="html">
         <source>In this channel</source>
-        <target/>
+        <target>Në këtë kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2588,7 +2588,7 @@
       </trans-unit>
       <trans-unit id="2fb6c7364664174a205180f7173c4128b350c5ec" datatype="html">
         <source>In this instance</source>
-        <target/>
+        <target>Në këtë instancë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">13</context>
@@ -2660,7 +2660,7 @@
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target/>
+        <target>vetëm instancat e ndjekura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">33</context>
@@ -2736,7 +2736,7 @@
       </trans-unit>
       <trans-unit id="31523e672b9f39a621e5d9e2a22b24bbf9aa8d4d" datatype="html">
         <source>Original publication year</source>
-        <target/>
+        <target>Viti i botimit origjinal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">35</context>
@@ -2752,7 +2752,7 @@
       </trans-unit>
       <trans-unit id="46c36269a23f9105124bbdd58f8c91833b92e565" datatype="html">
         <source>Before...</source>
-        <target/>
+        <target>Para…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">57</context>
@@ -2780,7 +2780,7 @@
       </trans-unit>
       <trans-unit id="4f20f2d5a6882190892e58b85f6ccbedfa737952" datatype="html">
         <source>Yes</source>
-        <target/>
+        <target>Po</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">89</context>
@@ -2868,7 +2868,7 @@
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619" datatype="html">
         <source>Language</source>
-        <target/>
+        <target>Gjuhë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">128</context>
@@ -2932,7 +2932,7 @@
       </trans-unit>
       <trans-unit id="492d2bd18db0cba03f6d9e3b0c42b8639fbe51ab" datatype="html">
         <source>One of these tags</source>
-        <target/>
+        <target>Një nga këto etiketa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">156</context>
@@ -3004,7 +3004,7 @@
       </trans-unit>
       <trans-unit id="c34c61401151c29fb3679638a7d0b95258145ec3" datatype="html">
         <source>This will replace an existing caption!</source>
-        <target/>
+        <target>Kjo do të zëvendësojë një titull ekzistues!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">30</context>
@@ -3012,7 +3012,7 @@
       </trans-unit>
       <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c" datatype="html">
         <source>Add this caption</source>
-        <target/>
+        <target>Shto këtë legjendë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">42</context>
@@ -3028,7 +3028,7 @@
       </trans-unit>
       <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e" datatype="html">
         <source>Title</source>
-        <target/>
+        <target>Titull</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3260,7 +3260,7 @@
       </trans-unit>
       <trans-unit id="b6bfdd386cb0b560d697c93555d8cd8cab00c393" datatype="html">
         <source>Will be deleted on update</source>
-        <target/>
+        <target>Do të fshihet pas përditësimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">200</context>
@@ -3300,7 +3300,7 @@
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604" datatype="html">
         <source>Support</source>
-        <target/>
+        <target>Asistencë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">232</context>
@@ -3316,7 +3316,7 @@
       </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6" datatype="html">
         <source>Original publication date</source>
-        <target/>
+        <target>Datë origjinale botimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">246</context>
@@ -3332,7 +3332,7 @@
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a" datatype="html">
         <source>Enable video comments</source>
-        <target/>
+        <target>Aktivizoni komente videosh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">261</context>
@@ -3368,7 +3368,7 @@
       </trans-unit>
       <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7" datatype="html">
         <source>Sorry, but something went wrong</source>
-        <target/>
+        <target>Na ndjeni, por diç shkoi ters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">48</context>
@@ -3392,7 +3392,7 @@
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb" datatype="html">
         <source>Update</source>
-        <target/>
+        <target>Përditësoje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">69</context>
@@ -3412,7 +3412,7 @@
       </trans-unit>
       <trans-unit id="21add64f0f3ebbedf1150ca822c6e149494ab7a9" datatype="html">
         <source>Select the file to upload</source>
-        <target/>
+        <target>Përzgjidhni kartelën për ngarkim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">6</context>
@@ -3480,7 +3480,7 @@
       </trans-unit>
       <trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3" datatype="html">
         <source>Publish</source>
-        <target/>
+        <target>Publikoni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">87</context>
@@ -3488,7 +3488,7 @@
       </trans-unit>
       <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b" datatype="html">
         <source>Select the torrent to import</source>
-        <target/>
+        <target>Përzgjidhni rrëkezë për importim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">6</context>
@@ -3552,7 +3552,7 @@
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3" datatype="html">
         <source>Upload a file</source>
-        <target/>
+        <target>Ngarkoni një kartelë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">16</context>
@@ -3632,7 +3632,7 @@
       </trans-unit>
       <trans-unit id="51f7d84d38a304f7f056d2dcaf6d733c3ade35f9" datatype="html">
         <source>Share the video</source>
-        <target/>
+        <target>Ndajeni videon me të tjerët</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context>
           <context context-type="linenumber">28</context>
@@ -3700,7 +3700,7 @@
       </trans-unit>
       <trans-unit id="af3ab1a1035c222ccc88816baa236eb95cea7523" datatype="html">
         <source>Display video title</source>
-        <target/>
+        <target>Shfaq titull videoje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context>
           <context context-type="linenumber">144</context>
@@ -3772,7 +3772,7 @@
       </trans-unit>
       <trans-unit id="bd7055d3e38beff538463e75d508d1c75c683710" datatype="html">
         <source>This video is blacklisted.</source>
-        <target/>
+        <target>Kjo video është shtuar në listë bllokimesh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">32</context>
@@ -3836,7 +3836,7 @@
       </trans-unit>
       <trans-unit id="5403a767248e304199592271bba3366d2ca3f903" datatype="html">
         <source>Show less</source>
-        <target/>
+        <target>Shfaq më pak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">180</context>
@@ -3844,7 +3844,7 @@
       </trans-unit>
       <trans-unit id="57bfd54c230fc20caff1f0b321ad42be3bf859a6" datatype="html">
         <source>Origin instance</source>
-        <target/>
+        <target>Instancë origjinë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">192</context>
@@ -3860,7 +3860,7 @@
       </trans-unit>
       <trans-unit id="4c0ba3cde3b3c58b855ffb4beaa5804a2fc3826b" datatype="html">
         <source>Friendly Reminder:</source>
-        <target/>
+        <target>Kujtues Miqësor:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">261</context>
@@ -3896,7 +3896,7 @@
       </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318" datatype="html">
         <source>Get more information</source>
-        <target/>
+        <target>Merrni më tepër informacion</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">266</context>
@@ -3904,7 +3904,7 @@
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f" datatype="html">
         <source>OK</source>
-        <target/>
+        <target>OK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">269</context>
@@ -3992,7 +3992,7 @@
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828" datatype="html">
         <source>Comments are disabled.</source>
-        <target/>
+        <target>Komentet janë të çaktivizuara.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">95</context>
@@ -4112,7 +4112,7 @@
       </trans-unit>
       <trans-unit id="25925fc5826bc5b3eeae7c45b08b0ed74b9e2954" datatype="html">
         <source>Filter...</source>
-        <target/>
+        <target>Filtroni…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -4144,7 +4144,7 @@
       </trans-unit>
       <trans-unit id="1e5e23363e949f7dcbaf034bdb141a561132a10e" datatype="html">
         <source>Clear filters</source>
-        <target/>
+        <target>Spastroji filtrat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -4280,7 +4280,7 @@
       </trans-unit>
       <trans-unit id="4a5613f6b472c1ed863dff1be932913a251f27a2" datatype="html">
         <source>Refuse</source>
-        <target/>
+        <target>Hidhe tej</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">48</context>
@@ -4332,7 +4332,7 @@
       </trans-unit>
       <trans-unit id="3a23875897fb8099f85410700fcca415626621a3" datatype="html">
         <source>Follow domain</source>
-        <target/>
+        <target>Ndiqe përkatësinë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">19</context>
@@ -4340,7 +4340,7 @@
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767" datatype="html">
         <source>Host</source>
-        <target/>
+        <target>Strehë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">26</context>
@@ -4424,7 +4424,7 @@
       </trans-unit>
       <trans-unit id="05f5612d42b02be4d6d9e0a99585ae7e30a91780" datatype="html">
         <source>Strategy</source>
-        <target/>
+        <target>Strategji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -4444,7 +4444,7 @@
       </trans-unit>
       <trans-unit id="b7237eade678ae47485fbd27ec7f8c1079a8c6b7" datatype="html">
         <source>Total size</source>
-        <target/>
+        <target>Madhësi gjithsej</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">24</context>
@@ -4460,7 +4460,7 @@
       </trans-unit>
       <trans-unit id="c1074e8c49b3cdfaeb7fcaf8cb27e44139389e29" datatype="html">
         <source>Open video in a new tab</source>
-        <target/>
+        <target>Hape videon në një skedë të re</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">41</context>
@@ -4484,7 +4484,7 @@
       </trans-unit>
       <trans-unit id="afc5c2bbf66996ab213f6eca65b24ca423d36e31" datatype="html">
         <source>Your instance has no mirrored videos.</source>
-        <target/>
+        <target>Instanca juaj s’ka video të pasqyrura.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">78</context>
@@ -4508,7 +4508,7 @@
       </trans-unit>
       <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be" datatype="html">
         <source>Users</source>
-        <target/>
+        <target>Përdorues</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">4</context>
@@ -4592,7 +4592,7 @@
       </trans-unit>
       <trans-unit id="53ddc7cf814d93205e987d607dbcfcf9cd74b59a" datatype="html">
         <source>NEW USER</source>
-        <target/>
+        <target>PËRDORUES I RI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">73</context>
@@ -4632,7 +4632,7 @@
       </trans-unit>
       <trans-unit id="bb3542ff8e5defa6d0c773799e5c8fe399605d05" datatype="html">
         <source>mail@example.com</source>
-        <target/>
+        <target>mail@example.com</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">96</context>
@@ -4656,7 +4656,7 @@
       </trans-unit>
       <trans-unit id="c36a66f2107e8da5371ebc9d15c2008dff567f46" datatype="html">
         <source>Role</source>
-        <target/>
+        <target>Rol</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">124</context>
@@ -4772,7 +4772,7 @@
       </trans-unit>
       <trans-unit id="1eede69e18c5ac9c0b0295b72cabb7e64e029e74" datatype="html">
         <source>Hide</source>
-        <target/>
+        <target>Fshihe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.html</context>
           <context context-type="linenumber">11</context>
@@ -4788,7 +4788,7 @@
       </trans-unit>
       <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015" datatype="html">
         <source>Create user</source>
-        <target/>
+        <target>Krijoni përdorues</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">6</context>
@@ -4820,7 +4820,7 @@
       </trans-unit>
       <trans-unit id="c38a6a10b47b82463eda45f856348b51daa96b97" datatype="html">
         <source>Auth plugin</source>
-        <target/>
+        <target>Shtojcë mirëfilltësimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">49</context>
@@ -4828,7 +4828,7 @@
       </trans-unit>
       <trans-unit id="adba7c8b43e42581460fbe5d08b5cb5ab60eba4b" datatype="html">
         <source>(banned)</source>
-        <target/>
+        <target>(dëbuar)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">82</context>
@@ -4852,7 +4852,7 @@
       </trans-unit>
       <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5" datatype="html">
         <source>User's email must be verified to login</source>
-        <target/>
+        <target>Për hyrje, duhet verifikuar email-i i përdoruesit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">89</context>
@@ -4892,7 +4892,7 @@
       </trans-unit>
       <trans-unit id="23a793ed0df2e10823dd469c5cea9b5c36be8f7e" datatype="html">
         <source>Video abuses</source>
-        <target/>
+        <target>Abuzime me videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4916,7 +4916,7 @@
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c" datatype="html">
         <source>Muted accounts</source>
-        <target/>
+        <target>Llogari të heshtuara</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.component.html</context>
           <context context-type="linenumber">11</context>
@@ -4972,7 +4972,7 @@
       </trans-unit>
       <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c" datatype="html">
         <source>Actions</source>
-        <target/>
+        <target>Veprime</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">72</context>
@@ -5016,7 +5016,7 @@
       </trans-unit>
       <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f" datatype="html">
         <source>Moderation comment</source>
-        <target/>
+        <target>Koment moderimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5032,7 +5032,7 @@
       </trans-unit>
       <trans-unit id="0562e455c88234829f3c27a38f3039f027bfd5d2" datatype="html">
         <source>Update this comment</source>
-        <target/>
+        <target>Përditësoje këtë koment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">31</context>
@@ -5048,7 +5048,7 @@
       </trans-unit>
       <trans-unit id="006dd388f1d14f58c33fb4ed4bb05a1dfbc42ffa" datatype="html">
         <source>Unsolved reports</source>
-        <target/>
+        <target>Raporte të pazgjidhur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">19</context>
@@ -5080,7 +5080,7 @@
       </trans-unit>
       <trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
         <source>Reports with deleted videos</source>
-        <target/>
+        <target>Raporte me video të fshira</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">23</context>
@@ -5100,7 +5100,7 @@
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4" datatype="html">
         <source>Video</source>
-        <target/>
+        <target>Video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">41</context>
@@ -5136,7 +5136,7 @@
       </trans-unit>
       <trans-unit id="b0a337363ec610cf41744167b12f020e141a4617" datatype="html">
         <source>Video was deleted</source>
-        <target/>
+        <target>Videoja u fshi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">98</context>
@@ -5152,7 +5152,7 @@
       </trans-unit>
       <trans-unit id="b2134df91de00d33d8440610b13abb2595df00f4" datatype="html">
         <source>No video abuses found.</source>
-        <target/>
+        <target>S’u gjetën abuzime me videot.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">142</context>
@@ -5216,7 +5216,7 @@
       </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a" datatype="html">
         <source>Report</source>
-        <target/>
+        <target>Raport</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">54</context>
@@ -5240,7 +5240,7 @@
       </trans-unit>
       <trans-unit id="076960cf44b4a0e89cc5024a75963844b068b284" datatype="html">
         <source>The video was blacklisted</source>
-        <target/>
+        <target>Videoja është kaluar në listë bllokimesh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">72</context>
@@ -5304,7 +5304,7 @@
       </trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8" datatype="html">
         <source>Unmute</source>
-        <target/>
+        <target>Ktheji zërin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">42</context>
@@ -5424,7 +5424,7 @@
       </trans-unit>
       <trans-unit id="1dfba504a0d0bf41da961d89d402dedecde5e30d" datatype="html">
         <source>Uninstall</source>
-        <target/>
+        <target>Çinstaloje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context>
           <context context-type="linenumber">32</context>
@@ -5464,7 +5464,7 @@
       </trans-unit>
       <trans-unit id="b1363973a9482c7b0a7c4a1d066fd64625d40207" datatype="html">
         <source>No results.</source>
-        <target/>
+        <target>S’ka përfundime.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">28</context>
@@ -5472,7 +5472,7 @@
       </trans-unit>
       <trans-unit id="1e395fc65f656ebaf9384ca5452f0cc4e9512811" datatype="html">
         <source>Go to the plugin npm package</source>
-        <target/>
+        <target>Shko te paketa npm e shtojcës</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">44</context>
@@ -5496,7 +5496,7 @@
       </trans-unit>
       <trans-unit id="43f1cc191ebc0b8ce89f6916aa634f5a57158798" datatype="html">
         <source>Jobs</source>
-        <target/>
+        <target>Vende pune</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5536,7 +5536,7 @@
       </trans-unit>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c" datatype="html">
         <source>ID</source>
-        <target/>
+        <target>ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">29</context>
@@ -5572,7 +5572,7 @@
       </trans-unit>
       <trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
         <source>Will start soon...</source>
-        <target/>
+        <target>Do të fillojë së shpejti…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">48</context>
@@ -5580,7 +5580,7 @@
       </trans-unit>
       <trans-unit id="0198c6af8421c8f69a90c3e9a4a12cf923cbb84b" datatype="html">
         <source>Running...</source>
-        <target/>
+        <target>Po xhiron…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">49</context>
@@ -5628,7 +5628,7 @@
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
         <source>Instance information</source>
-        <target/>
+        <target>Të dhëna instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">6</context>
@@ -5636,7 +5636,7 @@
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
-        <target/>
+        <target>INSTANCË</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">14</context>
@@ -5660,7 +5660,7 @@
       </trans-unit>
       <trans-unit id="512b045163a7187b2fc5d554e5f59fb3e49e174b" datatype="html">
         <source>Short description</source>
-        <target/>
+        <target>Përshkrim i shkurtër</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">29</context>
@@ -5764,7 +5764,7 @@
       </trans-unit>
       <trans-unit id="06119c0230042048f8a3fd6aa9260934b6fa5878" datatype="html">
         <source>Moderation information</source>
-        <target/>
+        <target>Informacion moderimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">139</context>
@@ -5788,7 +5788,7 @@
       </trans-unit>
       <trans-unit id="b222d95cb22ff8c295920ca10c188c5d94cb0aa9" datatype="html">
         <source>YOU AND YOUR INSTANCE</source>
-        <target/>
+        <target>JU DHE INSTANCA JUAJ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">154</context>
@@ -5796,7 +5796,7 @@
       </trans-unit>
       <trans-unit id="fdbabe6f967747b657518384b54bcc58d3913063" datatype="html">
         <source>Who is behind the instance?</source>
-        <target/>
+        <target>Kush gjendet pas instancës?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">160</context>
@@ -5812,7 +5812,7 @@
       </trans-unit>
       <trans-unit id="fef7c7a74c5646fe219d94db60e0652d6b878af5" datatype="html">
         <source>Why did you create this instance?</source>
-        <target/>
+        <target>Pse e krijuat këtë instancë?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">172</context>
@@ -5884,7 +5884,7 @@
       </trans-unit>
       <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5" datatype="html">
         <source>Basic configuration</source>
-        <target/>
+        <target>Formësim bazë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">234</context>
@@ -5940,7 +5940,7 @@
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
         <source>Most liked videos</source>
-        <target/>
+        <target>Videot më të pëlqyera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">268</context>
@@ -5956,7 +5956,7 @@
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f" datatype="html">
         <source>Local videos</source>
-        <target/>
+        <target>Video vendore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">270</context>
@@ -6140,7 +6140,7 @@
       </trans-unit>
       <trans-unit id="5805ff22d19f43016e2b1a0f7eff12185c78e89d" datatype="html">
         <source>ADMINISTRATORS</source>
-        <target/>
+        <target>PËRGJEGJËS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">477</context>
@@ -6148,7 +6148,7 @@
       </trans-unit>
       <trans-unit id="55a0f51e38679d3141841e8333da5779d349c587" datatype="html">
         <source>Admin email</source>
-        <target/>
+        <target>Email përgjegjësi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">483</context>
@@ -6164,7 +6164,7 @@
       </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5" datatype="html">
         <source>Services</source>
-        <target/>
+        <target>Shërbime</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">505</context>
@@ -6172,7 +6172,7 @@
       </trans-unit>
       <trans-unit id="51d86d65a52d00976c7cce4bdf8e144f956ef888" datatype="html">
         <source>TWITTER</source>
-        <target/>
+        <target>TWITTER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">511</context>
@@ -6260,7 +6260,7 @@
       </trans-unit>
       <trans-unit id="0050a55afb9c565df1f9b3f750c2d4adb697698f" datatype="html">
         <source>Allow additional extensions</source>
-        <target/>
+        <target>Lejo zgjerime shtesë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">591</context>
@@ -6324,7 +6324,7 @@
       </trans-unit>
       <trans-unit id="4f9162543288be617b88ad6fcae84325f11e31b6" datatype="html">
         <source>Resolutions to generate</source>
-        <target/>
+        <target>Qartësi për t’u prodhuar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">673</context>
@@ -6436,7 +6436,7 @@
       </trans-unit>
       <trans-unit id="f70dbe547767b3a0f0006d44688beee60c884417" datatype="html">
         <source>NOTIFICATIONS</source>
-        <target/>
+        <target>NJOFTIME</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">43</context>
@@ -6536,7 +6536,7 @@
       </trans-unit>
       <trans-unit id="5b5b91438db5731debea388908f788bab8d3d404" datatype="html">
         <source>Your password</source>
-        <target/>
+        <target>Fjalëkalimi juaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">27</context>
@@ -6552,7 +6552,7 @@
       </trans-unit>
       <trans-unit id="2dc22fcebf6aaa76196d2def33a827a34bf910bf" datatype="html">
         <source>Change ownership</source>
-        <target/>
+        <target>Ndryshoji pronësinë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/video-change-ownership/video-change-ownership.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6564,7 +6564,7 @@
       </trans-unit>
       <trans-unit id="046c4fa30411e6b1aa46dc51bf82d07b1adf14d4" datatype="html">
         <source>Select the next owner</source>
-        <target/>
+        <target>Përzgjidhni të zotin pasues</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/video-change-ownership/video-change-ownership.component.html</context>
           <context context-type="linenumber">10</context>
@@ -6580,7 +6580,7 @@
       </trans-unit>
       <trans-unit id="addd26e1d0d8a38fcfceeb76642c6f838f9525e3" datatype="html">
         <source>Search your videos</source>
-        <target/>
+        <target>Kërkoni te videot tuaja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6596,7 +6596,7 @@
       </trans-unit>
       <trans-unit id="4570c754149df06f31096510abfc925968c35562" datatype="html">
         <source>Select the target channel</source>
-        <target/>
+        <target>Përzgjidhni një kanal të synuar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-accept-ownership/my-account-accept-ownership.component.html</context>
           <context context-type="linenumber">10</context>
@@ -6660,7 +6660,7 @@
       </trans-unit>
       <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191" datatype="html">
         <source>Target</source>
-        <target/>
+        <target>Objektiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6708,7 +6708,7 @@
       </trans-unit>
       <trans-unit id="30fcac6c20aac1f24e000efc4a889cbb93d4baf2" datatype="html">
         <source>Go to the channel</source>
-        <target/>
+        <target>Shkoni te kanali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context>
           <context context-type="linenumber">10</context>
@@ -6772,7 +6772,7 @@
       </trans-unit>
       <trans-unit id="355c9f9d50ed1c6f12729332a44c1fd0f7576638" datatype="html">
         <source>You don't have any video history yet.</source>
-        <target/>
+        <target>S’keni ende ndonjë historik videoje.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.html</context>
           <context context-type="linenumber">14</context>
@@ -6788,7 +6788,7 @@
       </trans-unit>
       <trans-unit id="58479ebfcc980e1ee37a8102bc4f9a35eca2f680" datatype="html">
         <source>All read</source>
-        <target/>
+        <target>Krejt të lexuara</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context>
           <context context-type="linenumber">17</context>
@@ -6824,7 +6824,7 @@
       </trans-unit>
       <trans-unit id="b91219836ab865fd8aa041a8d6c3d84dd78115a4" datatype="html">
         <source>NEW PLAYLIST</source>
-        <target/>
+        <target>LUAJLISTË E RE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context>
           <context context-type="linenumber">25</context>
@@ -6836,7 +6836,7 @@
       </trans-unit>
       <trans-unit id="33ce1814b1079cb3a0c0605fc5b4e6f439d2b035" datatype="html">
         <source>PLAYLIST</source>
-        <target/>
+        <target>LUAJLISTË</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context>
           <context context-type="linenumber">26</context>
@@ -6892,7 +6892,7 @@
       </trans-unit>
       <trans-unit id="574cce019fb31925d11095591d4321847ff1c7a5" datatype="html">
         <source>Create video channel</source>
-        <target/>
+        <target>Krijo kanal videosh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6988,7 +6988,7 @@
       </trans-unit>
       <trans-unit id="3346d8a0bf3dd8c25ddc561ccd5fafb6ee9fadc8" datatype="html">
         <source>Welcome to PeerTube!</source>
-        <target/>
+        <target>Mirë se vini te te PeerTube!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">8</context>
@@ -7020,7 +7020,7 @@
       </trans-unit>
       <trans-unit id="b734a13448d714b0f68f49353607364ac3571c12" datatype="html">
         <source>Email updated.</source>
-        <target/>
+        <target>Email-i u përditësua.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7124,7 +7124,7 @@
       </trans-unit>
       <trans-unit id="5c2b42818f05eafa2690d5eac6bcde295c713097" datatype="html">
         <source>SHOW THIS CHANNEL</source>
-        <target/>
+        <target>SHFAQ KËTË KANAL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">27</context>
@@ -7132,7 +7132,7 @@
       </trans-unit>
       <trans-unit id="4af6287e70a4a87329affe109839f14ae598f0ca" datatype="html">
         <source>DESCRIPTION</source>
-        <target/>
+        <target>PËRSHKRIM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7144,7 +7144,7 @@
       </trans-unit>
       <trans-unit id="bfc87613409a6cfae59b79ead5d910d8d3c216f5" datatype="html">
         <source>STATS</source>
-        <target/>
+        <target>STATISTIKA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">8</context>
@@ -7180,7 +7180,7 @@
       </trans-unit>
       <trans-unit id="b8bf6036a9fb05c08cdb190cdf4e3becc6e6fa0a" datatype="html">
         <source>SUPPORT THIS CHANNEL</source>
-        <target/>
+        <target>PËRKRAHNI KËTË KANAL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-about/video-channel-about.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7236,7 +7236,7 @@
       </trans-unit>
       <trans-unit id="533b2b9a76ee1335cb44c01f0bfd50d43e9400b0" datatype="html">
         <source>Your name</source>
-        <target/>
+        <target>Emri juaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">11</context>
@@ -7252,7 +7252,7 @@
       </trans-unit>
       <trans-unit id="4b0ca852bafa5037c4e64c7b18f9cd1e14b799de" datatype="html">
         <source>Subject</source>
-        <target/>
+        <target>Subjekt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -7300,7 +7300,7 @@
       </trans-unit>
       <trans-unit id="f6a8cb2287c0c738d3d02ca36e145830c9734db5" datatype="html">
         <source>Who we are</source>
-        <target/>
+        <target>Cilët jemi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">27</context>
@@ -7332,7 +7332,7 @@
       </trans-unit>
       <trans-unit id="4b08f867a83bf0fef0d15bffc0b4cf277de2d376" datatype="html">
         <source>INFORMATION</source>
-        <target/>
+        <target>INFORMACION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">50</context>
@@ -7348,7 +7348,7 @@
       </trans-unit>
       <trans-unit id="5270b8fd3d35ab0a0475354a84d1265caf4790bd" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target/>
+        <target>INFORMACION TJETËR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">82</context>
@@ -7356,7 +7356,7 @@
       </trans-unit>
       <trans-unit id="3624f527ba5d5ed005a4ff2540d1a210233aa320" datatype="html">
         <source>Hardware information</source>
-        <target/>
+        <target>Të dhëna hardware-i</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">87</context>
@@ -7680,7 +7680,7 @@
       </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d" datatype="html">
         <source>Create an account</source>
-        <target/>
+        <target>Krijoni një llogari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7688,7 +7688,7 @@
       </trans-unit>
       <trans-unit id="f732c304c7433e5a83ffcd862c3dce709a0f4982" datatype="html">
         <source>Next</source>
-        <target/>
+        <target>Pasuesja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">20</context>
@@ -7736,7 +7736,7 @@
       </trans-unit>
       <trans-unit id="b7ad73ca1e5e4a530ca4eaa5285e4fd0c376c089" datatype="html">
         <source>How will we finance this instance?</source>
-        <target/>
+        <target>Si do ta financojmë këtë instancë?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">70</context>
@@ -7776,7 +7776,7 @@
       </trans-unit>
       <trans-unit id="306a2ab7f93c214af3f5579f54bd8b3ad0d5560e" datatype="html">
         <source>Channel name</source>
-        <target/>
+        <target>Emër kanali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">30</context>
@@ -7832,7 +7832,7 @@
       </trans-unit>
       <trans-unit id="b925172fc8e9b9a7fc6b9f5d742993b77ffdda2c" datatype="html">
         <source>Sorry, we couldn't find the page you were looking for.</source>
-        <target/>
+        <target>Na ndjeni, nuk e gjetëm dot faqen që po kërkonit.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
@@ -7856,7 +7856,7 @@
       </trans-unit>
       <trans-unit id="37b56526e384f843a15323dc730b484a97b4c968" datatype="html">
         <source>No description</source>
-        <target/>
+        <target>S’ka përshkrim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7884,7 +7884,7 @@
       </trans-unit>
       <trans-unit id="55d67844f534a75a89f86bb19d51c0703280a6ad" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target/>
+        <target>KANALE VIDEO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7904,7 +7904,7 @@
       </trans-unit>
       <trans-unit id="056a9a97eb47882159d3cf5bd8a9fc2cfe9371bf" datatype="html">
         <source>Username copied</source>
-        <target/>
+        <target>Emri i përdoruesi u kopjua</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7924,7 +7924,7 @@
       </trans-unit>
       <trans-unit id="4a41f824a35ba01d5bd7be61aa06b3e8145209d0" datatype="html">
         <source>Configuration</source>
-        <target/>
+        <target>Formësim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7932,7 +7932,7 @@
       </trans-unit>
       <trans-unit id="00437b281d12d04c60a57bd329cff5e3c5febd93" datatype="html">
         <source>Audio-only</source>
-        <target/>
+        <target>Audio-only</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7964,7 +7964,7 @@
       </trans-unit>
       <trans-unit id="48f0af5a0d0bea4e84b27eaf41b19c85a531c2a5" datatype="html">
         <source>480p</source>
-        <target/>
+        <target>480p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8004,7 +8004,7 @@
       </trans-unit>
       <trans-unit id="b9e64712e3e5c342ce9cd32eec6cd7d6c00f4048" datatype="html">
         <source>Configuration updated.</source>
-        <target/>
+        <target>Formësimi u përditësua.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8012,7 +8012,7 @@
       </trans-unit>
       <trans-unit id="baa5048f978a6fed563ab1d30a6bb965ea687ba8" datatype="html">
         <source>{{'{0} languages selected</source>
-        <target/>
+        <target>{{'{0} gjuhë të përzgjedhura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8060,7 +8060,7 @@
       </trans-unit>
       <trans-unit id="2f9439e4f986c94ed2ab6fec2b3dd82de1c6176f" datatype="html">
         <source>Domain is required.</source>
-        <target/>
+        <target>Përkatësia është e domosdoshme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/batch-domains-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8128,7 +8128,7 @@
       </trans-unit>
       <trans-unit id="54adc67482fdaa0d361a2992bc91e064dc61cc9a" datatype="html">
         <source>100MB</source>
-        <target/>
+        <target>100MB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8188,7 +8188,7 @@
       </trans-unit>
       <trans-unit id="31dcc0c63f6234ace8caa84ae1abc33d4022122d" datatype="html">
         <source>10MB</source>
-        <target/>
+        <target>10MB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8204,7 +8204,7 @@
       </trans-unit>
       <trans-unit id="c31575424fe1b2a57064413f3eda7ce657c46c8a" datatype="html">
         <source>2GB</source>
-        <target/>
+        <target>2GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8228,7 +8228,7 @@
       </trans-unit>
       <trans-unit id="20c3d69c0b67a74df0aa3920485016b2080578f6" datatype="html">
         <source>Reject</source>
-        <target/>
+        <target>Hidheni tej</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8324,7 +8324,7 @@
       </trans-unit>
       <trans-unit id="b7da3e3505cc80f9bf3cffc8444c53e8a9ec70a5" datatype="html">
         <source>Available</source>
-        <target/>
+        <target>Të passhme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8388,7 +8388,7 @@
       </trans-unit>
       <trans-unit id="37682f69f05be054bd72b44947af150734e302c3" datatype="html">
         <source>Internal actions</source>
-        <target/>
+        <target>Veprime të brendshme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8404,7 +8404,7 @@
       </trans-unit>
       <trans-unit id="513acd6a54ffb7c9c494cfcac42a161aa12e69fe" datatype="html">
         <source>Add note</source>
-        <target/>
+        <target>Shtoni shënim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8576,7 +8576,7 @@
       </trans-unit>
       <trans-unit id="0594812d4c50c2adbd1a892a3497c4e5c19e4b32" datatype="html">
         <source>yes</source>
-        <target/>
+        <target>po</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8624,7 +8624,7 @@
       </trans-unit>
       <trans-unit id="c52fe59dee78663d109bfa6727e172033ff8e61f" datatype="html">
         <source>You don't have themes installed yet.</source>
-        <target/>
+        <target>Ende s’keni faqe tema të instaluara.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8696,7 +8696,7 @@
       </trans-unit>
       <trans-unit id="3554590f772dd4b9b4cc7d282ba00cdac8ad0d12" datatype="html">
         <source>Settings updated.</source>
-        <target/>
+        <target>Rregullimet u përditësuan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8760,7 +8760,7 @@
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
         <source>Info</source>
-        <target/>
+        <target>Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8800,7 +8800,7 @@
       </trans-unit>
       <trans-unit id="36c42d3ca8973e91a59cbfda455d5a2e60ee460d" datatype="html">
         <source>Standard logs</source>
-        <target/>
+        <target>Regjistra standardë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8888,7 +8888,7 @@
       </trans-unit>
       <trans-unit id="50dc7afa2305131cdbdb384cfc1f2a5f0f4647d8" datatype="html">
         <source>Unban</source>
-        <target/>
+        <target>Hiqja dëbimin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9012,7 +9012,7 @@
       </trans-unit>
       <trans-unit id="05f6dda1754741495451b8658bd2248856765d95" datatype="html">
         <source>Videos history is enabled</source>
-        <target/>
+        <target>Historiku i videos është i aktivizuar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9076,7 +9076,7 @@
       </trans-unit>
       <trans-unit id="466fc8cf56fd4e4e90fec4b900ef083d52bec38c" datatype="html">
         <source>You current password is invalid.</source>
-        <target/>
+        <target>Fjalëkalimi juaj i tanishëm është i pavlefshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9148,7 +9148,7 @@
       </trans-unit>
       <trans-unit id="ba897defa2e6c34d5ee3d10edf8d797a35e7e3e5" datatype="html">
         <source>New comment on your video</source>
-        <target/>
+        <target>Koment i ri në videon tuaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9196,7 +9196,7 @@
       </trans-unit>
       <trans-unit id="c327bbac87cca61f5c52f5825d564878e98b9034" datatype="html">
         <source>A new user registered on your instance</source>
-        <target/>
+        <target>Te instanca juaj u regjistrua një përdorues i ri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9252,7 +9252,7 @@
       </trans-unit>
       <trans-unit id="1e003ad599ef836949b9f4dad3037a58ef3ff8d1" datatype="html">
         <source>Avatar changed.</source>
-        <target/>
+        <target>Avatari ndryshoi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9432,7 +9432,7 @@
       </trans-unit>
       <trans-unit id="4ef4f031c147fb9ee0168bc6eacb78de180d7432" datatype="html">
         <source>My library</source>
-        <target/>
+        <target>Libraria ime</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9448,7 +9448,7 @@
       </trans-unit>
       <trans-unit id="1d3408919f4d08414721cc22c4be39d93d6691d2" datatype="html">
         <source>My playlists</source>
-        <target/>
+        <target>Luajlistat e mia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9464,7 +9464,7 @@
       </trans-unit>
       <trans-unit id="4f953496ca94b4f83af049ff715172df2729fb79" datatype="html">
         <source>My history</source>
-        <target/>
+        <target>Historiku im</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9472,7 +9472,7 @@
       </trans-unit>
       <trans-unit id="46aa32e581922d6d2c3d7bc4c87209ad5808b029" datatype="html">
         <source>Misc</source>
-        <target/>
+        <target>Të ndryshme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9552,7 +9552,7 @@
       </trans-unit>
       <trans-unit id="2f03e577e8f81a9f8be0095f93e1f9376c6eedc9" datatype="html">
         <source>Published videos</source>
-        <target/>
+        <target>Video të publikuara</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9568,7 +9568,7 @@
       </trans-unit>
       <trans-unit id="ff6becacbce7fc0943b0af0df4dd67e5e11bf598" datatype="html">
         <source>Subscribe to the account</source>
-        <target/>
+        <target>Pajtohuni te llogaria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9580,7 +9580,7 @@
       </trans-unit>
       <trans-unit id="33e9ca3aab38821eeaf966493df042d4202414df" datatype="html">
         <source>VIDEO PLAYLISTS</source>
-        <target/>
+        <target>LUAJLISTA VIDEOSH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9596,7 +9596,7 @@
       </trans-unit>
       <trans-unit id="b19ee83cbd2b735fd081b9aa483a890578019099" datatype="html">
         <source>Toggle the left menu</source>
-        <target/>
+        <target>Shfaq/fshih menunë majtas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9612,7 +9612,7 @@
       </trans-unit>
       <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0" datatype="html">
         <source>Go to the trending videos page</source>
-        <target/>
+        <target>Shko te faqja e videove popullore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9644,7 +9644,7 @@
       </trans-unit>
       <trans-unit id="badd4b24618ccc8a34620acb9053fc654b9612b2" datatype="html">
         <source>Go to my subscriptions</source>
-        <target/>
+        <target>Kalo te pajtimet e mia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9652,7 +9652,7 @@
       </trans-unit>
       <trans-unit id="b7184b5a236618e8edd747529869c392ab6dace1" datatype="html">
         <source>Go to my videos</source>
-        <target/>
+        <target>Shko tek videot e mia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9660,7 +9660,7 @@
       </trans-unit>
       <trans-unit id="acf985bd42886b9b3030b5f68f0e8417c39b40a7" datatype="html">
         <source>Go to my imports</source>
-        <target/>
+        <target>Kalo te importimet e mia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9700,7 +9700,7 @@
       </trans-unit>
       <trans-unit id="5c0c574151dc8671d9199980ee04bf65aec3b452" datatype="html">
         <source>Keyboard Shortcuts:</source>
-        <target/>
+        <target>Shkurtore Tastiere:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9708,7 +9708,7 @@
       </trans-unit>
       <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba" datatype="html">
         <source>Success</source>
-        <target/>
+        <target>Sukses</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/notification/notifier.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9724,7 +9724,7 @@
       </trans-unit>
       <trans-unit id="247071f6c9233b7e5bc1d8f46795ab6b032f1fbe" datatype="html">
         <source>Incorrect username or password.</source>
-        <target/>
+        <target>Emër përdoruesi ose fjalëkalim i pasaktë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9732,7 +9732,7 @@
       </trans-unit>
       <trans-unit id="39980cc1cf8df621d43f5480d001bdf5d4139338" datatype="html">
         <source>You account is blocked.</source>
-        <target/>
+        <target>Llogaria juaj është bllokuar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9748,7 +9748,7 @@
       </trans-unit>
       <trans-unit id="1214427202da5b7fb88968172a3b309f8da35d76" datatype="html">
         <source>blur</source>
-        <target/>
+        <target>turbulloje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9780,7 +9780,7 @@
       </trans-unit>
       <trans-unit id="b0f24b7136e551a0deba831f1525711245b31a26" datatype="html">
         <source>Your password has been successfully reset!</source>
-        <target/>
+        <target>Fjalëkalimi juaj u ricaktua me sukses!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9812,7 +9812,7 @@
       </trans-unit>
       <trans-unit id="02e0243b60007368f87dc01e083f232dd025096d" datatype="html">
         <source>Last 7 days</source>
-        <target/>
+        <target>7 ditët e fundit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9876,7 +9876,7 @@
       </trans-unit>
       <trans-unit id="b7641aed03492978b4ec6843b1e53f30464294d9" datatype="html">
         <source>Views</source>
-        <target/>
+        <target>Parje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10012,7 +10012,7 @@
       </trans-unit>
       <trans-unit id="b67c8e57904c67c4566610363b7f82c748d04323" datatype="html">
         <source>Instance name is required.</source>
-        <target/>
+        <target>Emri i instancës është i domosdoshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10028,7 +10028,7 @@
       </trans-unit>
       <trans-unit id="356e63270712273da168072ec0fc78a969919bf1" datatype="html">
         <source>Twitter username is required.</source>
-        <target/>
+        <target>Emri i përdoruesit në Twitter është i domosdoshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10060,7 +10060,7 @@
       </trans-unit>
       <trans-unit id="545f5dea553b2d7c4a65920ccdcb1e9dbdc7f4d8" datatype="html">
         <source>Captions cache size is required.</source>
-        <target/>
+        <target>Madhësi fshehtine titrash është e domosdoshme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10100,7 +10100,7 @@
       </trans-unit>
       <trans-unit id="58c2f66ba74f1400914031ef4ed635938e9e8ced" datatype="html">
         <source>Signup limit must be a number.</source>
-        <target/>
+        <target>Kufiri i regjistrimeve duhet të jetë një numër.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10108,7 +10108,7 @@
       </trans-unit>
       <trans-unit id="1245841647f9b42d3e7554903c1c50bdd80ab021" datatype="html">
         <source>Admin email is required.</source>
-        <target/>
+        <target>Email-i i përgjegjësit është i domosdoshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10156,7 +10156,7 @@
       </trans-unit>
       <trans-unit id="b6f52e19f074f77866fa03fabe1ddd5cdae346f0" datatype="html">
         <source>Email is required.</source>
-        <target/>
+        <target>Email-i është i domosdoshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10168,7 +10168,7 @@
       </trans-unit>
       <trans-unit id="bef8a36c3dffff15fb5faf3d20bdbbbc1af824c1" datatype="html">
         <source>Email must be valid.</source>
-        <target/>
+        <target>Email-i duhet të jetë i vlefshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10188,7 +10188,7 @@
       </trans-unit>
       <trans-unit id="1fc4633008a2431fdec891d58efcc8b865d7de1a" datatype="html">
         <source>Your name must be at least 1 character long.</source>
-        <target/>
+        <target>Emri juaj duhet të jetë 1 shenjë i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10212,7 +10212,7 @@
       </trans-unit>
       <trans-unit id="4f049fd004313524afeaf0ae25f98583a0ffd29b" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target/>
+        <target>Subjekti duhet të jetë të paktën 1 shenjë i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10264,7 +10264,7 @@
       </trans-unit>
       <trans-unit id="4eb39d69b74d7a56652ec84fa6826994ee26c0e5" datatype="html">
         <source>Password is required.</source>
-        <target/>
+        <target>Fjalëkalimi është i domosdoshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/login-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10308,7 +10308,7 @@
       </trans-unit>
       <trans-unit id="1fe26e49476ac701885abc59127e96a3760847f0" datatype="html">
         <source>Password must be at least 6 characters long.</source>
-        <target/>
+        <target>Fjalëkalimi duhet të jetë e pakta 6 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10372,7 +10372,7 @@
       </trans-unit>
       <trans-unit id="545e77fd5d9526228a2133109447c23225ed9c85" datatype="html">
         <source>User role is required.</source>
-        <target/>
+        <target>Roli i përdoruesit është i domosdoshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10436,7 +10436,7 @@
       </trans-unit>
       <trans-unit id="1c417b7aef730d6ef5d62fa8a0a7e25e3a2393e4" datatype="html">
         <source>Display name is required.</source>
-        <target/>
+        <target>Emri në ekran është i domosdoshëm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10452,7 +10452,7 @@
       </trans-unit>
       <trans-unit id="085b2d6f79819a72a2b56cada4ef5085ba51d90c" datatype="html">
         <source>Display name must be at least 1 character long.</source>
-        <target/>
+        <target>Emri në ekran duhet të jetë të paktën 1 shenjë i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10480,7 +10480,7 @@
       </trans-unit>
       <trans-unit id="b3cf1889d2fdd6b15e697c270c9b80772fe2cae6" datatype="html">
         <source>Report reason is required.</source>
-        <target/>
+        <target>Arsyeja e raportimit është e domosdoshme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10504,7 +10504,7 @@
       </trans-unit>
       <trans-unit id="2fa41debd17a206d4a2a5e8d14bcd7055f6e5118" datatype="html">
         <source>Moderation comment is required.</source>
-        <target/>
+        <target>Lypset moderim komenti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10568,7 +10568,7 @@
       </trans-unit>
       <trans-unit id="bd7fc070c728dc6dbf3959d49fe5bb27ce15d294" datatype="html">
         <source>The username is required.</source>
-        <target/>
+        <target>Emri i përdoruesit është i domosdoshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-change-ownership-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10584,7 +10584,7 @@
       </trans-unit>
       <trans-unit id="541087322c34e8b26954fd67ff4fc80d1a6c1b33" datatype="html">
         <source>Name is required.</source>
-        <target/>
+        <target>Emri është i domosdoshëm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10592,7 +10592,7 @@
       </trans-unit>
       <trans-unit id="b8b59b6284a14fc71268cf722ed98c62c5af4a76" datatype="html">
         <source>Name must be at least 1 character long.</source>
-        <target/>
+        <target>Emri duhet të jetë të paktën 1 shenjë i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10688,7 +10688,7 @@
       </trans-unit>
       <trans-unit id="c27cc734f76efd221663921dd0898ea7c8bcbb5c" datatype="html">
         <source>Video name must be at least 3 characters long.</source>
-        <target/>
+        <target>Emri i videos duhet të jetë e pakta 3 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10696,7 +10696,7 @@
       </trans-unit>
       <trans-unit id="0320d0f7f8eec2341e27ca53d7875217a3d99695" datatype="html">
         <source>Video name cannot be more than 120 characters long.</source>
-        <target/>
+        <target>Emri i videos s’mund të jetë më shumë se 120 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10720,7 +10720,7 @@
       </trans-unit>
       <trans-unit id="af5e2d5f3ac817c735fb7ff9ca16322789f66fef" datatype="html">
         <source>Video description must be at least 3 characters long.</source>
-        <target/>
+        <target>Përshkrimi i videos duhet të jetë e pakta 3 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10828,7 +10828,7 @@
       </trans-unit>
       <trans-unit id="48a2a35957ce394eb2c59ae35c99642360af70ee" datatype="html">
         <source>Tuesday</source>
-        <target/>
+        <target>E martë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10836,7 +10836,7 @@
       </trans-unit>
       <trans-unit id="b0af441f9ba8b82952b9ec10fb8c62e8fec67df9" datatype="html">
         <source>Wednesday</source>
-        <target/>
+        <target>E mërkurë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10844,7 +10844,7 @@
       </trans-unit>
       <trans-unit id="55c583b99c809818ec27df065ccf05357a6ac10b" datatype="html">
         <source>Thursday</source>
-        <target/>
+        <target>E enjte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10860,7 +10860,7 @@
       </trans-unit>
       <trans-unit id="c0d2dd391a3eca8e841a5d0e035cd268280eb68e" datatype="html">
         <source>Saturday</source>
-        <target/>
+        <target>E shtunë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10877,7 +10877,7 @@
       </trans-unit>
       <trans-unit id="3382aa5d7f520e197fb59a4995fe1beffca2d0ff" datatype="html">
         <source>Mon</source>
-        <target/>
+        <target>Hën</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10895,7 +10895,7 @@
       </trans-unit>
       <trans-unit id="242b4f4b5651e24f9a9007ef153a57981e4b989d" datatype="html">
         <source>Wed</source>
-        <target/>
+        <target>Mër</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10904,7 +10904,7 @@
       </trans-unit>
       <trans-unit id="5a2c39d56b8f00a6a4670a63b53caacbda953be6" datatype="html">
         <source>Thu</source>
-        <target/>
+        <target>Enj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10913,7 +10913,7 @@
       </trans-unit>
       <trans-unit id="4cdf23d523a0e52e0dec9cd650ffd9bd6952792c" datatype="html">
         <source>Fri</source>
-        <target/>
+        <target>Pre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10922,7 +10922,7 @@
       </trans-unit>
       <trans-unit id="1283d165a942d7f4c469ba34f99dbb9e927d0261" datatype="html">
         <source>Sat</source>
-        <target/>
+        <target>Sht</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10931,7 +10931,7 @@
       </trans-unit>
       <trans-unit id="2fba8448ff13105c57665a9a6ffcfe9615d855dd" datatype="html">
         <source>Su</source>
-        <target/>
+        <target>Di</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10940,7 +10940,7 @@
       </trans-unit>
       <trans-unit id="388144af7ac7651d2615b9be0e84f43ae71d9fb3" datatype="html">
         <source>Mo</source>
-        <target/>
+        <target>Hë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -10958,7 +10958,7 @@
       </trans-unit>
       <trans-unit id="06cc3d39f78c0615b707cef39cd4875599611fef" datatype="html">
         <source>We</source>
-        <target/>
+        <target>Ne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11002,7 +11002,7 @@
       </trans-unit>
       <trans-unit id="0393a96b58df82af39a2ec83deec624749e42036" datatype="html">
         <source>February</source>
-        <target/>
+        <target>Shkurt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11018,7 +11018,7 @@
       </trans-unit>
       <trans-unit id="b87ee784d9e93b5557aca9bdc9464dbd4328920a" datatype="html">
         <source>April</source>
-        <target/>
+        <target>Prill</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11038,7 +11038,7 @@
       </trans-unit>
       <trans-unit id="2f234249d4c3c39e27c0f05d4a6b73a7959caeb2" datatype="html">
         <source>June</source>
-        <target/>
+        <target>Qershor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11046,7 +11046,7 @@
       </trans-unit>
       <trans-unit id="11447f95e83c8de675ab6c492150f88e4d9bd15e" datatype="html">
         <source>July</source>
-        <target/>
+        <target>Korrik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11086,7 +11086,7 @@
       </trans-unit>
       <trans-unit id="2006e2aabb31714ebc684dc382539649f690ed5c" datatype="html">
         <source>December</source>
-        <target/>
+        <target>Dhjetor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11103,7 +11103,7 @@
       </trans-unit>
       <trans-unit id="23544170afbb981dd52750b641576841cf5dcf60" datatype="html">
         <source>Feb</source>
-        <target/>
+        <target>Shk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11112,7 +11112,7 @@
       </trans-unit>
       <trans-unit id="1f14355742459b7d6a0126a1564e1c18f39f86e7" datatype="html">
         <source>Mar</source>
-        <target/>
+        <target>Mar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11148,7 +11148,7 @@
       </trans-unit>
       <trans-unit id="be1335ffd1c606321e2c020b638dd3c84b434212" datatype="html">
         <source>Aug</source>
-        <target/>
+        <target>Gus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11157,7 +11157,7 @@
       </trans-unit>
       <trans-unit id="4f739d03be1c936c58978739c317d91566348204" datatype="html">
         <source>Sep</source>
-        <target/>
+        <target>Sht</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11184,7 +11184,7 @@
       </trans-unit>
       <trans-unit id="adf2dfa2a9cb490d6a4a74510b7b0846b62d429e" datatype="html">
         <source>Dec</source>
-        <target/>
+        <target>Dhj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11210,7 +11210,7 @@
       </trans-unit>
       <trans-unit id="c09a68321f26f058b547021e6e2c167ae22c6e24" datatype="html">
         <source>Hidden</source>
-        <target/>
+        <target>E fshehur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11226,7 +11226,7 @@
       </trans-unit>
       <trans-unit id="1e89bd0d46ef7d90b5f98b24f83afc312c6ef105" datatype="html">
         <source>Displayed</source>
-        <target/>
+        <target>E shfaqur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11306,7 +11306,7 @@
       </trans-unit>
       <trans-unit id="b15e7bec5c7833d2d9634946ccbed68967b1bee1" datatype="html">
         <source>Lists</source>
-        <target/>
+        <target>Lista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/help.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11314,7 +11314,7 @@
       </trans-unit>
       <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866" datatype="html">
         <source>Images</source>
-        <target/>
+        <target>Figura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/help.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11522,7 +11522,7 @@
       </trans-unit>
       <trans-unit id="4e4107055b44eee44b6954c41120de1cb4d46432" datatype="html">
         <source>Mute this account by your instance</source>
-        <target/>
+        <target>Heshtojeni këtë lloagri në instancën tuaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11674,7 +11674,7 @@
       </trans-unit>
       <trans-unit id="38c877fb0a5fdcadc379256953ad2d1eb8233fdf" datatype="html">
         <source>Moderator</source>
-        <target/>
+        <target>Moderator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -11730,7 +11730,7 @@
       </trans-unit>
       <trans-unit id="1e40e4317900075588705bc4084fda4b2ddb3372" datatype="html">
         <source>Stops at</source>
-        <target/>
+        <target>Ndalet në</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11754,7 +11754,7 @@
       </trans-unit>
       <trans-unit id="c01d52b4f10668adeded397b0b1a9a4bfefd4f37" datatype="html">
         <source>Format name</source>
-        <target/>
+        <target>Emër formati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11782,7 +11782,7 @@
       </trans-unit>
       <trans-unit id="205c33d626f4654f36d9d7dcea6f9d9e9b2a7ec7" datatype="html">
         <source>Codec</source>
-        <target/>
+        <target>Kodek</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11798,7 +11798,7 @@
       </trans-unit>
       <trans-unit id="b284ee2481274869dfb81764f597da8a13a6813d" datatype="html">
         <source>Resolution</source>
-        <target/>
+        <target>Qartësi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11854,7 +11854,7 @@
       </trans-unit>
       <trans-unit id="c3ca1344a9cd638109e09c125e5185c1da3ca39c" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target/>
+        <target>Kjo video do të përsëdytet nga instanca juaj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11874,7 +11874,7 @@
       </trans-unit>
       <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61" datatype="html">
         <source>Blacklist</source>
-        <target/>
+        <target>Listë bllokimesh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11914,7 +11914,7 @@
       </trans-unit>
       <trans-unit id="21f1c9d5c67346c830aced4f670045fcf0aeb83a" datatype="html">
         <source>To transcode</source>
-        <target/>
+        <target>Për ndërkodim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11930,7 +11930,7 @@
       </trans-unit>
       <trans-unit id="b41da527dd2f804519e13b78b5dae42897213545" datatype="html">
         <source>Add to watch later</source>
-        <target/>
+        <target>Shtojeni për ta parë më vonë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11978,7 +11978,7 @@
       </trans-unit>
       <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb" datatype="html">
         <source>Video to import updated.</source>
-        <target/>
+        <target>U përditësua video për t’u importuar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-torrent.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12054,7 +12054,7 @@
       </trans-unit>
       <trans-unit id="bfdf9de4bd9140f77feb6a5fe2b51f3f0565eaa4" datatype="html">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
-        <target/>
+        <target>Keni ndryshime të paruajtura! Nëse ikni, ndryshimet tuaja do të humbin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12094,7 +12094,7 @@
       </trans-unit>
       <trans-unit id="0663c85b5bc0806356ab768f411299c29cf39360" datatype="html">
         <source>Autoplay next video</source>
-        <target/>
+        <target>Vetëluaj videon pasuese</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12166,7 +12166,7 @@
       </trans-unit>
       <trans-unit id="5ba3d522e4146eefcbd5c222247c1e2423d27cd8" datatype="html">
         <source>Mature or explicit content</source>
-        <target/>
+        <target>Lëndë për të rritur ose eksplicite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12222,7 +12222,7 @@
       </trans-unit>
       <trans-unit id="567024b923c37475ef4b2632ec95d07c3f7263f5" datatype="html">
         <source>Increase the volume (requires player focus)</source>
-        <target/>
+        <target>Ngrije volumin (lyp fokusin e lojtësit)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12230,7 +12230,7 @@
       </trans-unit>
       <trans-unit id="bb7e8567023b189bba28de767769192f5fe28430" datatype="html">
         <source>Decrease the volume (requires player focus)</source>
-        <target/>
+        <target>Ule volumin (lyp që fokusi të jetë te lojtësi)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -12310,7 +12310,7 @@
       </trans-unit>
       <trans-unit id="5b94148c16fa19e3db89972d11e93f790a73a054" datatype="html">
         <source>Trending for the last 24 hours</source>
-        <target/>
+        <target>Në modë 24 orët e fundit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
