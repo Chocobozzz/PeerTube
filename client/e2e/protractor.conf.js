@@ -34,7 +34,7 @@ exports.config = {
     },
     {
       browserName: 'Firefox',
-      version: '60', // ESR,
+      version: '68', // ESR
       name: 'Firefox ESR Desktop',
       resolution: '1280x1024'
     },
