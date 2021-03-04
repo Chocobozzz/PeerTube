@@ -1228,7 +1228,7 @@
       </trans-unit>
       <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737" datatype="html">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target/>
+        <target>Avec <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Ne pas lister<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ou <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Vignettes floues<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, une confirmation sera demandée pour regarder la vidéo. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">8,9</context>
@@ -1340,7 +1340,7 @@
       </trans-unit>
       <trans-unit id="6360987759186261451" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>}.</source>
-        <target/>
+        <target>PeerTube ne peut pas traiter ce genre de fichier. Les extensions acceptées sont <x id="PH" equiv-text="this.allowedExtensionsMessage"/>}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -1613,7 +1613,7 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="turn this._max;"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="turn this._max;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">31,38</context>
@@ -1717,7 +1717,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="sible.    */   "/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="sible.    */   "/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">131,136</context>
@@ -1725,7 +1725,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="nts ControlValu"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="nts ControlValu"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">154,118</context>
@@ -1825,7 +1825,7 @@
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH" equiv-text="this.video.account.name"/> (channel page)</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.video.account.name"/> (page des chaînes)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -1837,7 +1837,7 @@
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH" equiv-text="this.video.byAccount"/> (account page)</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.video.byAccount"/> (page du compte)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -1913,7 +1913,7 @@
       </trans-unit>
       <trans-unit id="968295009933361070" datatype="html">
         <source>Too many attempts, please try again after <x id="PH" equiv-text="minutesLeft"/> minutes.</source>
-        <target/>
+        <target>Trop de tentatives, merci de réessayer dans <x id="PH" equiv-text="minutesLeft"/> minutes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">67</context>
@@ -1953,7 +1953,7 @@
       </trans-unit>
       <trans-unit id="5891040073345002614" datatype="html">
         <source><x id="PH" equiv-text="interval"/> years ago</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="interval"/> années auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">12</context>
@@ -1961,7 +1961,7 @@
       </trans-unit>
       <trans-unit id="6852474139781331706" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year ago</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="interval"/> année auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">13</context>
@@ -1969,7 +1969,7 @@
       </trans-unit>
       <trans-unit id="9022576335789205254" datatype="html">
         <source><x id="PH" equiv-text="interval"/> months ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> mois auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">16</context>
@@ -1977,7 +1977,7 @@
       </trans-unit>
       <trans-unit id="9139359498077914820" datatype="html">
         <source><x id="PH" equiv-text="interval"/> month ago</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="interval"/> mois auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">17</context>
@@ -1985,7 +1985,7 @@
       </trans-unit>
       <trans-unit id="6473426250245763193" datatype="html">
         <source><x id="PH" equiv-text="interval"/> weeks ago</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="interval"/> semaines auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">20</context>
@@ -1993,7 +1993,7 @@
       </trans-unit>
       <trans-unit id="3334373857036457679" datatype="html">
         <source><x id="PH" equiv-text="interval"/> week ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> semaine auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">21</context>
@@ -2001,7 +2001,7 @@
       </trans-unit>
       <trans-unit id="5186107770140555014" datatype="html">
         <source><x id="PH" equiv-text="interval"/> days ago</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="interval"/> jours auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">24</context>
@@ -2009,7 +2009,7 @@
       </trans-unit>
       <trans-unit id="5968335347732866388" datatype="html">
         <source><x id="PH" equiv-text="interval"/> day ago</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="interval"/> jour auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">25</context>
@@ -2017,7 +2017,7 @@
       </trans-unit>
       <trans-unit id="6522428509564266583" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hours ago</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="interval"/> heures auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">28</context>
@@ -2025,7 +2025,7 @@
       </trans-unit>
       <trans-unit id="1791228261125511283" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hour ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> heure auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">29</context>
@@ -2033,7 +2033,7 @@
       </trans-unit>
       <trans-unit id="8256466313580256940" datatype="html">
         <source><x id="PH" equiv-text="interval"/> min ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> minutes auparavant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">32</context>
@@ -2049,7 +2049,7 @@
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
         <source><x id="PH" equiv-text="hours"/>h</source>
-        <target/>
+        <target><x id="PH" equiv-text="hours"/>h</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">14</context>
@@ -2057,7 +2057,7 @@
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH" equiv-text="minutes"/>min</source>
-        <target/>
+        <target><x id="PH" equiv-text="minutes"/>min</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">16</context>
@@ -2069,7 +2069,7 @@
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH" equiv-text="seconds"/>sec</source>
-        <target/>
+        <target><x id="PH" equiv-text="seconds"/>sec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">17</context>
@@ -2077,7 +2077,7 @@
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH" equiv-text="seconds"/> sec</source>
-        <target/>
+        <target><x id="PH" equiv-text="seconds"/> sec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">30</context>
@@ -2085,7 +2085,7 @@
       </trans-unit>
       <trans-unit id="c078d4901a5fac169665947cc7a6108b94dd80c7" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ menuEntry.label }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ menuEntry.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/top-menu-dropdown.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2193,7 +2193,7 @@
       </trans-unit>
       <trans-unit id="1cff8e38c81055fa0ae7dbc80a7a0c5c39bbc263" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="            {{ notification.video.channel.di"/> published a new video: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="            {{ notification.video.channel.di"/> a publié une nouvelle vidéo : <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">15,16</context>
@@ -2209,7 +2209,7 @@
       </trans-unit>
       <trans-unit id="03ccba66e74e25303828fc37062dda862ec272dc" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> has been unblocked </source>
-        <target/>
+        <target>Votre vidéo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> a été débloquée </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -2217,7 +2217,7 @@
       </trans-unit>
       <trans-unit id="b1393385d75d42dfb7e893e3e99290bcc697e791" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> has been blocked </source>
-        <target/>
+        <target>Votre vidéo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> a été bloquée </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">41,42</context>
@@ -2225,7 +2225,7 @@
       </trans-unit>
       <trans-unit id="552e90b955a7121d58f6e5a38b68c7e90f5ed90c" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new video abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Un nouveau signalement sur une vidéo <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été crée sur cette vidéo <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">49</context>
@@ -2233,7 +2233,7 @@
       </trans-unit>
       <trans-unit id="c039b9ff89810152d8c0006979d3542a122cd286" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new comment abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Un nouveau signalement sur un commentaire <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été crée sur cette vidéo <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">53</context>
@@ -2241,7 +2241,7 @@
       </trans-unit>
       <trans-unit id="bfe60e77cfae17a8719a5fb422fb7e4b2bcc83c2" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new account abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on account <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Un nouveau signalement sur un compte <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été crée sur ce compte <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">57</context>
@@ -2249,7 +2249,7 @@
       </trans-unit>
       <trans-unit id="285ef550cb17086e949266777312a1884bd7d739" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> has been created </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Un nouveau signalement <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> a été crée </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">62,63</context>
@@ -2257,7 +2257,7 @@
       </trans-unit>
       <trans-unit id="680ba11d9548df295024d7f8ab7b816580725d5d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Your abuse <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> has been <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccepted(notification)&quot;&gt;"/>accepted<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;!isAccepted(notification)&quot;&gt;"/>rejected<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Votre signalement <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> a été <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccepted(notification)&quot;&gt;"/>accepté<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;!isAccepted(notification)&quot;&gt;"/>rejeté<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">70,72</context>
@@ -2265,7 +2265,7 @@
       </trans-unit>
       <trans-unit id="3f8e1a007a869471c5ab6e9b6149165ecc26e4ad" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Abuse <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> has a new message </source>
-        <target/>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Le signalement <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> a reçu un nouveau message </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">80,81</context>
@@ -2273,7 +2273,7 @@
       </trans-unit>
       <trans-unit id="9daaf09c3048f62f102989d1c6f3fe2f3770062f" datatype="html">
         <source>The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoAutoBlacklistUrl&quot;&gt;"/>automatically blocked<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target>La vidéo récemment ajoutée <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoAutoBlacklistUrl&quot;&gt;"/>automatiquement bloquée<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">88</context>
@@ -2281,7 +2281,7 @@
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> commented your video <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a commenté votre vidéo <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">101</context>
@@ -2297,7 +2297,7 @@
       </trans-unit>
       <trans-unit id="b187dd5f406f4195b326ab01fa81f823025821b9" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> has been published </source>
-        <target/>
+        <target>Votre vidéo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> a été publiée </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">118,119</context>
@@ -2305,7 +2305,7 @@
       </trans-unit>
       <trans-unit id="78dea99c581be394bf509426e114c9cda9f5825d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> succeeded </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>L'import de votre vidéo<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> a réussi </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">126,127</context>
@@ -2313,7 +2313,7 @@
       </trans-unit>
       <trans-unit id="dc586a7c70baa9217d98f58f4701fc3a29cd9d4d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoImportUrl&quot;&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> failed </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoImportUrl&quot;&gt;"/>L'import de votre vidéo<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> a échoué </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">134,135</context>
@@ -2321,7 +2321,7 @@
       </trans-unit>
       <trans-unit id="55c81d14a4e11004f0bcda5a47575f316e85e43e" datatype="html">
         <source>User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> registered on your instance </source>
-        <target/>
+        <target>L'utilisateur <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> enregistré sur votre instance </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">142,143</context>
@@ -2329,7 +2329,7 @@
       </trans-unit>
       <trans-unit id="0f146c0a4152eb93ec2ad119e1dec613864d64c6" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> is following <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;notification.actorFollow.following.type === 'channel'&quot;&gt;"/>your channel <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;notification.actorFollow.following.type === 'account'&quot;&gt;"/>your account<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> suit <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;notification.actorFollow.following.type === 'channel'&quot;&gt;"/>votre chaîne de vidéos <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;notification.actorFollow.following.type === 'account'&quot;&gt;"/>votre compte<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">152,155</context>
@@ -2337,7 +2337,7 @@
       </trans-unit>
       <trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mentioned you on <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> vous a mentionné sur <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/>vidéo <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">165</context>
@@ -2345,7 +2345,7 @@
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.instanceFollowUrl&quot;&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;notification.actorFollow?.state === 'pending'&quot;&gt; "/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target/>
+        <target>Votre instance a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.instanceFollowUrl&quot;&gt;"/>un nouvel abonné<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;notification.actorFollow?.state === 'pending'&quot;&gt; "/> en attente de votre approbation<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">173,174</context>
@@ -2353,7 +2353,7 @@
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.instanceFollowUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target>Votre instance a automatiquement suivi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.instanceFollowUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">182</context>
@@ -2393,7 +2393,7 @@
       </trans-unit>
       <trans-unit id="4b50f2ef2e8b9a24e674d12012ee310f378a5503" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers</source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> abonnés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">28</context>
@@ -2549,7 +2549,7 @@
       </trans-unit>
       <trans-unit id="189524047518780716" datatype="html">
         <source>~ <x id="PH" equiv-text="minutes"/> minutes</source>
-        <target/>
+        <target state="translated">~ <x id="PH" equiv-text="minutes"/> minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -2557,7 +2557,7 @@
       </trans-unit>
       <trans-unit id="6028521920505655348" datatype="html">
         <source><x id="PH" equiv-text="this.getApproximateTime(fullHdSeconds)"/> of full HD videos</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.getApproximateTime(fullHdSeconds)"/> de vidéos en Full HD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -2565,7 +2565,7 @@
       </trans-unit>
       <trans-unit id="117588083391484998" datatype="html">
         <source><x id="PH" equiv-text="this.getApproximateTime(hdSeconds)"/> of HD videos</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.getApproximateTime(hdSeconds)"/> de vidéos en HD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -2573,7 +2573,7 @@
       </trans-unit>
       <trans-unit id="6636555695556123073" datatype="html">
         <source><x id="PH" equiv-text="this.getApproximateTime(normalSeconds)"/> of average quality videos</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.getApproximateTime(normalSeconds)"/> de vidéos de qualité moyenne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -2605,7 +2605,7 @@
       </trans-unit>
       <trans-unit id="083e95bdf6f64257d2ddd399ecf9f48ab88e279f" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_DIV_1" ctype="x-div_1" equiv-text="&lt;div class=&quot;more-info&quot;&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target/>
+        <target><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>La politique par défaut des vidéos NSFW / sensibles<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_DIV_1" ctype="x-div_1" equiv-text="&lt;div class=&quot;more-info&quot;&gt;"/>peut être redéfinie par les utilisateurs<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -2693,7 +2693,7 @@
       </trans-unit>
       <trans-unit id="1be38e8cd37e921dd4af3b6f6251168cc5536f24" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="        {{ maxUser"/> per user / <x id="INTERPOLATION_1" equiv-text=" user / {{ maxInstance"/> per instance </source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="        {{ maxUser"/> par utilisateur / <x id="INTERPOLATION_1" equiv-text=" user / {{ maxInstance"/> par instance </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">86,88</context>
@@ -2773,7 +2773,7 @@
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85" datatype="html">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;dailyUserVideoQuota !== -1&quot;&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target/>
+        <target>Illimité <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;dailyUserVideoQuota !== -1&quot;&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> par jour)<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">61</context>
@@ -3100,7 +3100,7 @@
       </trans-unit>
       <trans-unit id="4c3960fb1d9b07d1db3b5bda3ee40019211830dc" datatype="html">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target/>
+        <target>pour <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3108,7 +3108,7 @@
       </trans-unit>
       <trans-unit id="7c603b9ed878097782e2b8908f662e2344b46061" datatype="html">
         <source>Filters <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;numberOfFilters() &gt; 0&quot; class=&quot;badge badge-secondary&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target/>
+        <target>Filtres <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;numberOfFilters() &gt; 0&quot; class=&quot;badge badge-secondary&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -3124,7 +3124,7 @@
       </trans-unit>
       <trans-unit id="10341623e991a4185990a0c3c76ac2bc3543cc4a" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers</source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> abonnés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">60</context>
@@ -3524,7 +3524,7 @@
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea" datatype="html">
         <source>Login</source>
-        <target/>
+        <target>Nom d'utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -3532,7 +3532,7 @@
       </trans-unit>
       <trans-unit id="6b6240483bee515c1e20c0c21fc6096e8cdd08e9" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about&quot;&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target>Désolé mais il y a eu un problème avec le processus de connexion externe. Merci <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about&quot;&gt;"/>de contacter un administrateur<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -3753,7 +3753,7 @@
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa" datatype="html">
         <source>Reset my password</source>
-        <target/>
+        <target>Réinitialiser mon mot de passe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -3820,7 +3820,7 @@
       </trans-unit>
       <trans-unit id="2847376451647729886" datatype="html">
         <source>You are now logged in as <x id="PH" equiv-text="body.username"/>!</source>
-        <target/>
+        <target>Vous êtes maintenant connecté en tant que <x id="PH" equiv-text="body.username"/>!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -3986,7 +3986,7 @@
       </trans-unit>
       <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b" datatype="html">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;       "/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target/>
+        <target>Une chaîne est une entité dans laquelle vous téléchargez vos vidéos. En créer plusieurs vous permet d'organiser et de séparer vos contenus.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;       "/> Par exemple, vous pourriez décider d'avoir une chaîne pour publier vos concerts de piano, et une autre chaîne dans laquelle vous publiez vos vidéos parlant d'écologie. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -4078,7 +4078,7 @@
       </trans-unit>
       <trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source>
-        <target/>
+        <target>VIDÉOS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -4202,7 +4202,7 @@
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH" equiv-text="count"/> subscribers</source>
-        <target/>
+        <target><x id="PH" equiv-text="count"/> abonnés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -4402,7 +4402,7 @@
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e" datatype="html">
         <source>No results.</source>
-        <target/>
+        <target>Aucun résultat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.html</context>
           <context context-type="linenumber">47</context>
