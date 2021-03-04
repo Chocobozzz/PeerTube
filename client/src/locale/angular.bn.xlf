@@ -1253,7 +1253,7 @@
       </trans-unit>
       <trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source>
-        <target/>
+        <target>ভিডিও</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -1265,7 +1265,7 @@
       </trans-unit>
       <trans-unit id="1341921152640000230" datatype="html">
         <source>ABOUT</source>
-        <target/>
+        <target>সম্বন্ধে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -1321,7 +1321,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target/>
+        <target>ফেডারেশন</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -1365,7 +1365,7 @@
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
-        <target/>
+        <target>প্রতিবেদন</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -1433,7 +1433,7 @@
       </trans-unit>
       <trans-unit id="4555457172864212828" datatype="html">
         <source>Users</source>
-        <target/>
+        <target>ব্যবহারকারী</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -1441,7 +1441,7 @@
       </trans-unit>
       <trans-unit id="3008420115644088420" datatype="html">
         <source>Configuration</source>
-        <target/>
+        <target>পছন্দ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -1449,7 +1449,7 @@
       </trans-unit>
       <trans-unit id="8259696070728377358" datatype="html">
         <source>Plugins/Themes</source>
-        <target/>
+        <target>প্লাগিন/থিম</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -1457,7 +1457,7 @@
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
         <source>System</source>
-        <target/>
+        <target>ব্যবস্থা</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -1473,7 +1473,7 @@
       </trans-unit>
       <trans-unit id="f05f4a8b97269a2da6d7fcc6e86fbfafd16e30bd" datatype="html">
         <source>CACHE</source>
-        <target/>
+        <target>ক্যাশ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1537,7 +1537,7 @@
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
         <source>CUSTOMIZATIONS</source>
-        <target/>
+        <target>পছন্দসমূহ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">63</context>
@@ -1553,7 +1553,7 @@
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c" datatype="html">
         <source>JavaScript</source>
-        <target/>
+        <target>জাভাস্ক্রিপ্ট</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">74</context>
@@ -1577,7 +1577,7 @@
       </trans-unit>
       <trans-unit id="e18e5566ca6266c849208665c731805571333a8b" datatype="html">
         <source>APPEARANCE</source>
-        <target/>
+        <target>আবির্ভাব</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1593,7 +1593,7 @@
       </trans-unit>
       <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
         <source>Theme</source>
-        <target/>
+        <target>থিম</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1605,7 +1605,7 @@
       </trans-unit>
       <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb" datatype="html">
         <source>default</source>
-        <target/>
+        <target>মূল</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1757,7 +1757,7 @@
       </trans-unit>
       <trans-unit id="ccac601bf473fa28c9ac46794f1cd40542f74347" datatype="html">
         <source>Message</source>
-        <target/>
+        <target>বার্তা</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">112</context>
@@ -1845,7 +1845,7 @@
       </trans-unit>
       <trans-unit id="d1ec787ddabed4188c1a5c365dc65e7022a4db35" datatype="html">
         <source>bytes</source>
-        <target/>
+        <target>বাইট</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">183</context>
@@ -1881,7 +1881,7 @@
       </trans-unit>
       <trans-unit id="165035acb08983753bcecc3e8b6b18c7caf26d35" datatype="html">
         <source>VIDEOS</source>
-        <target/>
+        <target>ভিডিও</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">210</context>
