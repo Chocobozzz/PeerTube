@@ -190,7 +190,7 @@
       </trans-unit>
       <trans-unit id="5779f601099ecd7ae8626722ef1d86f5c1a783dc" datatype="html">
         <source>Remove avatar</source>
-        <target state="new">Remove avatar</target>
+        <target state="translated">حذف الصورة الرمزية</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">41</context>
@@ -205,7 +205,7 @@
       </trans-unit>
       <trans-unit id="82cc4fc020efd482bb931ebd71db5868fc904629" datatype="html">
         <source>Upload a new avatar</source>
-        <target state="new">Upload a new avatar</target>
+        <target state="translated">تحميل صورة رمزية جديدة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">10</context>
