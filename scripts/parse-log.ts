@@ -15,6 +15,8 @@ import { format as sqlFormat } from 'sql-formatter'
 program
   .option('-l, --level [level]', 'Level log (debug/info/warn/error)')
   .option('-f, --files [file...]', 'Files to parse. If not provided, the script will parse the latest log file from config)')
+  .option('-t, --tags [tags...]', 'Display only lines with these tags')
+  .option('-nt, --not-tags [tags...]', 'Donrt display lines containing these tags')
   .parse(process.argv)
 
 const options = program.opts()
@@ -24,6 +26,7 @@ const excludedKeys = {
   message: true,
   splat: true,
   timestamp: true,
+  tags: true,
   label: true,
   sql: true
 }
@@ -93,6 +96,14 @@ function run () {
       rl.on('line', line => {
         try {
           const log = JSON.parse(line)
+          if (options.tags && !containsTags(log.tags, options.tags)) {
+            return
+          }
+
+          if (options.notTags && containsTags(log.tags, options.notTags)) {
+            return
+          }
+
           // Don't know why but loggerFormat does not remove splat key
           Object.assign(log, { splat: undefined })
 
@@ -130,4 +141,16 @@ function toTimeFormat (time: string) {
   if (isNaN(timestamp) === true) return 'Unknown date'
 
   return new Date(timestamp).toISOString()
+}
+
+function containsTags (loggerTags: string[], optionsTags: string[]) {
+  if (!loggerTags) return false
+
+  for (const lt of loggerTags) {
+    for (const ot of optionsTags) {
+      if (lt === ot) return true
+    }
+  }
+
+  return false
 }

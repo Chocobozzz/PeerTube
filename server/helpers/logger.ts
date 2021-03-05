@@ -48,7 +48,7 @@ function getLoggerReplacer () {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql' ]
+  const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql', 'tags' ]
 
   const obj = omit(info, ...toOmit)
 
@@ -150,6 +150,13 @@ const bunyanLogger = {
   error: bunyanLogFactory('error'),
   fatal: bunyanLogFactory('error')
 }
+
+function loggerTagsFactory (...defaultTags: string[]) {
+  return (...tags: string[]) => {
+    return { tags: defaultTags.concat(tags) }
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -159,5 +166,6 @@ export {
   consoleLoggerFormat,
   jsonLoggerFormat,
   logger,
+  loggerTagsFactory,
   bunyanLogger
 }

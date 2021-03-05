@@ -76,7 +76,7 @@ const sequelizeTypescript = new SequelizeTypescript({
       newMessage += ' in ' + benchmark + 'ms'
     }
 
-    logger.debug(newMessage, { sql: message })
+    logger.debug(newMessage, { sql: message, tags: [ 'sql' ] })
   }
 })
 

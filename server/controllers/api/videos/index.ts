@@ -17,7 +17,7 @@ import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers/database-utils'
 import { buildNSFWFilter, createReqFiles, getCountVideos } from '../../../helpers/express-utils'
 import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
-import { logger } from '../../../helpers/logger'
+import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import {
@@ -67,6 +67,7 @@ import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
 
+const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
 
@@ -257,14 +258,14 @@ async function addVideo (req: express.Request, res: express.Response) {
     })
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
-    logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
+    logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid, lTags(videoCreated.uuid))
 
     return { videoCreated }
   })
 
   // Create the torrent file in async way because it could be long
   createTorrentAndSetInfoHashAsync(video, videoFile)
-    .catch(err => logger.error('Cannot create torrent file for video %s', video.url, { err }))
+    .catch(err => logger.error('Cannot create torrent file for video %s', video.url, { err, ...lTags(video.uuid) }))
     .then(() => VideoModel.loadAndPopulateAccountAndServerAndTags(video.id))
     .then(refreshedVideo => {
       if (!refreshedVideo) return
@@ -276,7 +277,7 @@ async function addVideo (req: express.Request, res: express.Response) {
         return sequelizeTypescript.transaction(t => federateVideoIfNeeded(refreshedVideo, true, t))
       })
     })
-    .catch(err => logger.error('Cannot federate or notify video creation %s', video.url, { err }))
+    .catch(err => logger.error('Cannot federate or notify video creation %s', video.url, { err, ...lTags(video.uuid) }))
 
   if (video.state === VideoState.TO_TRANSCODE) {
     await addOptimizeOrMergeAudioJob(videoCreated, videoFile, res.locals.oauth.token.User)
@@ -389,7 +390,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
         new VideoAuditView(videoInstanceUpdated.toFormattedDetailsJSON()),
         oldVideoAuditView
       )
-      logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)
+      logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid, lTags(videoInstance.uuid))
 
       return videoInstanceUpdated
     })

@@ -1,15 +1,17 @@
+import * as Bluebird from 'bluebird'
 import { Transaction } from 'sequelize'
+import { getServerActor } from '@server/models/application/application'
+import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
+import { logger, loggerTagsFactory } from '../../helpers/logger'
+import { doRequest } from '../../helpers/requests'
+import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoShareModel } from '../../models/video/video-share'
+import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
+import { getOrCreateActorAndServerAndModel } from './actor'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
 import { getLocalVideoAnnounceActivityPubUrl } from './url'
-import * as Bluebird from 'bluebird'
-import { doRequest } from '../../helpers/requests'
-import { getOrCreateActorAndServerAndModel } from './actor'
-import { logger } from '../../helpers/logger'
-import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
-import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
-import { getServerActor } from '@server/models/application/application'
+
+const lTags = loggerTagsFactory('share')
 
 async function shareVideoByServerAndChannel (video: MVideoAccountLight, t: Transaction) {
   if (!video.hasPrivacyForFederation()) return undefined
@@ -25,7 +27,10 @@ async function changeVideoChannelShare (
   oldVideoChannel: MChannelActorLight,
   t: Transaction
 ) {
-  logger.info('Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name)
+  logger.info(
+    'Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name,
+    lTags(video.uuid)
+  )
 
   await undoShareByVideoChannel(video, oldVideoChannel, t)
 
