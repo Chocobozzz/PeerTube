@@ -9,6 +9,8 @@ export class AppPage {
 
     await element(by.css('.configure-instance-button')).click()
 
+    await browser.sleep(5000)
+
     await browser.switchTo().window(firstHandle)
   }
 }

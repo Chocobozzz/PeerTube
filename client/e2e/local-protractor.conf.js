@@ -38,7 +38,7 @@ exports.config = {
     }
   ],
 
-  // maxSessions: 1,
+  maxSessions: 1,
   baseUrl: 'http://localhost:3000/',
   framework: 'jasmine',
   jasmineNodeOpts: {

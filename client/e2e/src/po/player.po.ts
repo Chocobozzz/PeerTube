@@ -3,11 +3,10 @@ import { browserSleep, isIOS, isMobileDevice, isSafari } from '../utils'
 
 export class PlayerPage {
 
-  getWatchVideoPlayerCurrentTime () {
-    return element(by.css('.video-js .vjs-current-time-display'))
-      .getText()
-      .then((t: string) => t.split(':')[1])
-      .then(seconds => parseInt(seconds, 10))
+  async getWatchVideoPlayerCurrentTime () {
+    const elem = element(by.css('video'))
+
+    return elem.getAttribute('currentTime')
   }
 
   waitUntilPlaylistInfo (text: string) {

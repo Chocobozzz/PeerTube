@@ -158,6 +158,7 @@ describe('Videos workflow', () => {
     await videoWatchPage.createPlaylist(playlistName)
 
     await videoWatchPage.saveToPlaylist(playlistName)
+    await browser.sleep(5000)
 
     await videoUploadPage.navigateTo()
 
