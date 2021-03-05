@@ -1,8 +1,11 @@
 import * as Bluebird from 'bluebird'
 import * as Bull from 'bull'
 import { checkUrlsSameHost } from '@server/helpers/activitypub'
-import { isDislikeActivityValid, isLikeActivityValid } from '@server/helpers/custom-validators/activitypub/rate'
-import { isShareActivityValid } from '@server/helpers/custom-validators/activitypub/share'
+import {
+  isAnnounceActivityValid,
+  isDislikeActivityValid,
+  isLikeActivityValid
+} from '@server/helpers/custom-validators/activitypub/activity'
 import { sanitizeAndCheckVideoCommentObject } from '@server/helpers/custom-validators/activitypub/video-comments'
 import { doRequest } from '@server/helpers/requests'
 import { AP_CLEANER_CONCURRENCY } from '@server/initializers/constants'
@@ -149,7 +152,7 @@ function rateOptionsFactory () {
 
 function shareOptionsFactory () {
   return {
-    bodyValidator: (body: any) => isShareActivityValid(body),
+    bodyValidator: (body: any) => isAnnounceActivityValid(body),
 
     updater: async (url: string, newUrl: string) => {
       const share = await VideoShareModel.loadByUrl(url, undefined)
