@@ -43,10 +43,6 @@ body {
     }
   }
 
-  .vjs-button > .vjs-icon-placeholder::before {
-    line-height: $control-bar-height;
-  }
-
   .vjs-volume-level::before {
     content: ''; /* Remove Circle From Progress Bar */
   }
@@ -242,8 +238,19 @@ body {
       @include disable-outline;
 
       cursor: pointer;
-      font-size: $play-control-font-size;
       width: 2em;
+
+      .vjs-icon-placeholder {
+        line-height: $control-bar-height;
+        position: relative;
+        top: -1px;
+
+        &::before {
+          font-size: 28px;
+          line-height: unset;
+          position: relative;
+        }
+      }
     }
 
     .vjs-time-control {
@@ -375,7 +382,6 @@ body {
     .vjs-mute-control {
       @include disable-outline;
 
-      line-height: $control-bar-height;
       padding: 0;
       width: 30px;
 
