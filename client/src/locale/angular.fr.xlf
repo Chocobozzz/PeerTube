@@ -4562,7 +4562,7 @@
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
         <source>My playlists</source>
-        <target/>
+        <target>Mes listes de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context>
           <context context-type="linenumber">40</context>
@@ -4598,7 +4598,7 @@
       </trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
         <source>My videos</source>
-        <target/>
+        <target>Mes vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context>
           <context context-type="linenumber">77</context>
@@ -4618,7 +4618,7 @@
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
         <source>My subscriptions</source>
-        <target/>
+        <target>Mes abonnements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context>
           <context context-type="linenumber">99</context>
@@ -4626,7 +4626,7 @@
       </trans-unit>
       <trans-unit id="5752861278140673787" datatype="html">
         <source>Ownership changes</source>
-        <target/>
+        <target>Changements de propriétaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context>
           <context context-type="linenumber">108</context>
@@ -4718,7 +4718,7 @@
       </trans-unit>
       <trans-unit id="fb8ccb136ab0ad1ff1dfbce739198be16a814f87" datatype="html">
         <source>Sensitive</source>
-        <target/>
+        <target>Sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
           <context context-type="linenumber">57,58</context>
@@ -4934,7 +4934,7 @@
       </trans-unit>
       <trans-unit id="b734a13448d714b0f68f49353607364ac3571c12" datatype="html">
         <source>Email updated.</source>
-        <target/>
+        <target>Courriel mis à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -4950,7 +4950,7 @@
       </trans-unit>
       <trans-unit id="2687679787442328897" datatype="html">
         <source>An email with verification link will be sent to <x id="PH" equiv-text="email"/>.</source>
-        <target/>
+        <target>Un courriel avec un lien de vérification sera envoyé à <x id="PH" equiv-text="email"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -4982,7 +4982,7 @@
       </trans-unit>
       <trans-unit id="8197117721861453263" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="toDeleteVideosIds.length"/> videos?</source>
-        <target/>
+        <target>Souhaitez-vous réellement supprimer <x id="PH" equiv-text="toDeleteVideosIds.length"/> vidéos?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -4990,7 +4990,7 @@
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
         <source>Delete</source>
-        <target/>
+        <target>Supprimer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -5082,7 +5082,7 @@
       </trans-unit>
       <trans-unit id="2728855911908920537" datatype="html">
         <source><x id="PH" equiv-text="toDeleteVideosIds.length"/> videos deleted.</source>
-        <target/>
+        <target><x id="PH" equiv-text="toDeleteVideosIds.length"/> vidéos supprimées.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -5090,7 +5090,7 @@
       </trans-unit>
       <trans-unit id="2027805873922338635" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="video.name"/>?</source>
-        <target/>
+        <target>Souhaitez-vous réellement supprimer <x id="PH" equiv-text="video.name"/> ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">130</context>
@@ -5106,7 +5106,7 @@
       </trans-unit>
       <trans-unit id="2767660806989176400" datatype="html">
         <source>Video <x id="PH" equiv-text="video.name"/> deleted.</source>
-        <target/>
+        <target>Vidéo <x id="PH" equiv-text="video.name"/> supprimée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">138</context>
@@ -5130,7 +5130,7 @@
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
         <source>Change ownership</source>
-        <target/>
+        <target>Changement de propriétaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">167</context>
@@ -5302,7 +5302,7 @@
       </trans-unit>
       <trans-unit id="8828123061564507501" datatype="html">
         <source>Playlist <x id="PH" equiv-text="videoPlaylist.displayName"/>} deleted.</source>
-        <target/>
+        <target>Liste de lecture <x id="PH" equiv-text="videoPlaylist.displayName"/>} supprimée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -5334,7 +5334,7 @@
       </trans-unit>
       <trans-unit id="1431617394009162547" datatype="html">
         <source>Playlist <x id="PH" equiv-text="videoPlaylistUpdate.displayName"/> updated.</source>
-        <target/>
+        <target>Liste de lecture <x id="PH" equiv-text="videoPlaylistUpdate.displayName"/> mise à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -5342,7 +5342,7 @@
       </trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
         <source>Update</source>
-        <target/>
+        <target>Mise à jour</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context>
           <context context-type="linenumber">110</context>
@@ -5414,7 +5414,7 @@
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427" datatype="html">
         <source>Privacy</source>
-        <target/>
+        <target>Confidentialité</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">57</context>
@@ -5506,7 +5506,7 @@
       </trans-unit>
       <trans-unit id="70a67e04629f6d412db0a12d51820b480788d795" datatype="html">
         <source>Create</source>
-        <target/>
+        <target>Création</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">8</context>
@@ -5570,7 +5570,7 @@
       </trans-unit>
       <trans-unit id="3380608219513805292" datatype="html">
         <source>Playlist <x id="PH" equiv-text="videoPlaylist.displayName"/> deleted.</source>
-        <target/>
+        <target>Liste de lecture <x id="PH" equiv-text="videoPlaylist.displayName"/> supprimée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -5606,7 +5606,7 @@
       </trans-unit>
       <trans-unit id="28c9f2a23ea8f12710a011a965939a5af6980dd1" datatype="html">
         <source>See the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; href=&quot;https://docs.joinpeertube.org/#/use-library?id=playlist&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information. </source>
-        <target/>
+        <target>Voir la <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; href=&quot;https://docs.joinpeertube.org/#/use-library?id=playlist&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> pour de plus amples informations. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -5614,7 +5614,7 @@
       </trans-unit>
       <trans-unit id="5032453707232754344" datatype="html">
         <source>Playlist <x id="PH" equiv-text="videoPlaylistCreate.displayName"/> created.</source>
-        <target/>
+        <target>Liste de lecture <x id="PH" equiv-text="videoPlaylistCreate.displayName"/> créée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-create.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -5758,7 +5758,7 @@
       </trans-unit>
       <trans-unit id="8fef247fd0c5bf790151f7661cafc4b7fd0397f3" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> subscribers</source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> abonnés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context>
           <context context-type="linenumber">32</context>
@@ -5774,7 +5774,7 @@
       </trans-unit>
       <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add" datatype="html">
         <source>Created by <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></source>
-        <target/>
+        <target>Créée par <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context>
           <context context-type="linenumber">35</context>
@@ -5818,7 +5818,7 @@
       </trans-unit>
       <trans-unit id="b08d67fe4e192ea8352bebdc6aabbd1bb7abed02" datatype="html">
         <source>Created <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target/>
+        <target>Crée <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context>
           <context context-type="linenumber">22,23</context>
@@ -5934,7 +5934,7 @@
       </trans-unit>
       <trans-unit id="1486537403020619891" datatype="html">
         <source>My watch history</source>
-        <target/>
+        <target>Mon historique de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -6006,7 +6006,7 @@
       </trans-unit>
       <trans-unit id="29c45bf49891748f930ef78b2e09857498b15131" datatype="html">
         <source><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;delete&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;     "/> Delete history </source>
-        <target/>
+        <target><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;delete&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;     "/> Supprimer l'historique </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">24,26</context>
@@ -6030,7 +6030,7 @@
       </trans-unit>
       <trans-unit id="19886846ed573d0a74c61c4e8df073eb4f64acd0" datatype="html">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target>Si vous souhaitez de l'aide pour utiliser PeerTube, allez voir du côté de la <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -6038,7 +6038,7 @@
       </trans-unit>
       <trans-unit id="1909009883731319373" datatype="html">
         <source>Report <x id="PH" equiv-text="this.account.displayName"/></source>
-        <target/>
+        <target>Signalement <x id="PH" equiv-text="this.account.displayName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/account-report.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -6110,7 +6110,7 @@
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html">
         <source>Do you really want to unban <x id="PH" equiv-text="user.username"/>?</source>
-        <target/>
+        <target>Souhaitez-vous réellement lever le bannissement de <x id="PH" equiv-text="user.username"/> ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -6134,7 +6134,7 @@
       </trans-unit>
       <trans-unit id="1794219875546376069" datatype="html">
         <source>User <x id="PH" equiv-text="user.username"/> unbanned.</source>
-        <target/>
+        <target>Utilisateur <x id="PH" equiv-text="user.username"/> autorisé à utiliser PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -6162,7 +6162,7 @@
       </trans-unit>
       <trans-unit id="6301381219225831298" datatype="html">
         <source>User <x id="PH" equiv-text="user.username"/> deleted.</source>
-        <target/>
+        <target>Utilisateur <x id="PH" equiv-text="user.username"/> supprimé.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -6170,7 +6170,7 @@
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
         <source>User <x id="PH" equiv-text="user.username"/> email set as verified</source>
-        <target/>
+        <target>Le courriel de l'utilisateur <x id="PH" equiv-text="user.username"/> a été vérifié</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -6178,7 +6178,7 @@
       </trans-unit>
       <trans-unit id="8150022485860412528" datatype="html">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted.</source>
-        <target/>
+        <target>Compte <x id="PH" equiv-text="account.nameWithHost"/> silencieux.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">119</context>
@@ -6190,7 +6190,7 @@
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> unmuted.</source>
-        <target/>
+        <target>Compte <x id="PH" equiv-text="account.nameWithHost"/> à présent non muet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -6202,7 +6202,7 @@
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH" equiv-text="host"/> muted.</source>
-        <target/>
+        <target>Instance <x id="PH" equiv-text="host"/> silencieuse.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">147</context>
@@ -15766,7 +15766,7 @@
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH" equiv-text="users.length"/> users email set as verified.</source>
-        <target/>
+        <target><x id="PH" equiv-text="users.length"/> e-mails des utilisateurs définis comme vérifiés.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">210</context>
