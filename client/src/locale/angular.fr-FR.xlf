@@ -6339,7 +6339,7 @@
       </trans-unit>
       <trans-unit id="f15db977c871ea5765c464c26b04c1976cd2e5df" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="new"> Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully. </target>
+        <target state="translated">Traiter les vidéos téléchargées de manière à ce qu'elles soient sous une forme diffusable en continu que n'importe quel appareil peut lire. Bien que coûteux en ressources, c'est un élément essentiel de PeerTube, alors soyez prudent.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">28,30</context>
