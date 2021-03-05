@@ -12039,7 +12039,7 @@
       </trans-unit>
       <trans-unit id="74059c5dce671d464259e3ce37a5d408c3fd7720" datatype="html">
         <source>SUPPORT</source>
-        <target state="translated">SUPPORT</target>
+        <target state="translated">SOUTENIR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">104</context>
