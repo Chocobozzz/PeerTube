@@ -1268,7 +1268,7 @@
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85" datatype="html">
         <source>Unlimited <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target>E pakufizuar <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>({{ dailyUserVideoQuota | bajte: 0 }} në ditë)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
+        <target>E pakufizuar <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> në ditë)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1896,7 +1896,7 @@
       </trans-unit>
       <trans-unit id="3c2c6b17d0326ab344e194b17abbee201d58dbea" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></source>
-        <target><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> {pagination.totalItems, plural, =1 {...} {...} të tjera}</target>
+        <target><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3764,7 +3764,7 @@
       </trans-unit>
       <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a" datatype="html">
         <source>This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </source>
-        <target>Kjo video do të publikohet në {{ video.scheduledUpdate.updateAt | më datë: 'full' }}.</target>
+        <target>Kjo video do të publikohet në <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">27</context>
@@ -3976,7 +3976,7 @@
       </trans-unit>
       <trans-unit id="8487d97def3c5336b1cde21c7da14e61a9633061" datatype="html">
         <source>View <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target/>
+        <target>Shikoji <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> pergjigjet nga <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">81</context>
@@ -4056,7 +4056,7 @@
       </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285" datatype="html">
         <source>Highlighted comment</source>
-        <target/>
+        <target>Ndricoje komentin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment.component.html</context>
           <context context-type="linenumber">20</context>
@@ -4208,7 +4208,7 @@
       </trans-unit>
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b" datatype="html">
         <source>Created <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target/>
+        <target>U krijua <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">25</context>
@@ -4400,7 +4400,7 @@
       </trans-unit>
       <trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
         <source>Follow domains</source>
-        <target/>
+        <target>Percjelli domenet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">70</context>
@@ -4804,7 +4804,7 @@
       </trans-unit>
       <trans-unit id="08ea8692dc2a7050026df26fc39b22960bde9de5" datatype="html">
         <source>Username <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target>Emër përdoruesi-sortIcon&gt;<x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target>Emër përdoruesi <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">45</context>
@@ -4900,7 +4900,7 @@
       </trans-unit>
       <trans-unit id="6053443ad364f974301570cfadfa86ee0b43f1a9" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ autoBlacklistVideosEnabled ? 'Manually blacklisted videos' : 'Blacklisted videos' }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ autoBlacklistVideosEnabled ? 'Videot e bllokuara me dore' : 'Videot e bllokuara' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.component.html</context>
           <context context-type="linenumber">7</context>
@@ -5168,7 +5168,7 @@
       </trans-unit>
       <trans-unit id="f0045181fddf6e1642314ee5464667098ac18d9d" datatype="html">
         <source><x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target/>
+        <target><x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} tjerat {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">20</context>
@@ -5192,7 +5192,7 @@
       </trans-unit>
       <trans-unit id="28b2bd6301b8655f46a26faf4db7f11e06be1747" datatype="html">
         <source><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target/>
+        <target><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} tjerat {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">40</context>
@@ -5456,7 +5456,7 @@
       </trans-unit>
       <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} tjerat {...}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">22</context>
@@ -5520,7 +5520,7 @@
       </trans-unit>
       <trans-unit id="555ae4dbd23d5056aeafc8f3f31ebbab170bb917" datatype="html">
         <source>Job type</source>
-        <target/>
+        <target>Lloji i punës</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5528,7 +5528,7 @@
       </trans-unit>
       <trans-unit id="723c95b5d673a557fa120aa65814a9f05c03e610" datatype="html">
         <source>Job state</source>
-        <target/>
+        <target>Gjendja e punës</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">12</context>
@@ -6604,7 +6604,7 @@
       </trans-unit>
       <trans-unit id="e98239d8a6be1100119ff4b5630c822b82786740" datatype="html">
         <source>Initiator</source>
-        <target/>
+        <target>Iniciatori</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6612,7 +6612,7 @@
       </trans-unit>
       <trans-unit id="b08d67fe4e192ea8352bebdc6aabbd1bb7abed02" datatype="html">
         <source>Created <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/> </source>
-        <target/>
+        <target>U krijua <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context>
           <context context-type="linenumber">15</context>
@@ -8560,7 +8560,7 @@
       </trans-unit>
       <trans-unit id="36e4cdb23056253e5ef0c62b7d4bbeb3f759f611" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from blacklist.</source>
-        <target>Videoja <x id="INTERPOLATION" equiv-text="{{name}}"/> u hoq prej prej liste bllokimesh.</target>
+        <target>Videoja <x id="INTERPOLATION" equiv-text="{{name}}"/> u hoq prej liste bllokimesh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-auto-blacklist-list/video-auto-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8824,7 +8824,7 @@
       </trans-unit>
       <trans-unit id="924084727dc179dd5dc1a63dc3452ad41e4a8842" datatype="html">
         <source>Password changed for user <x id="INTERPOLATION" equiv-text="{{username}}"/>.</source>
-        <target>U ndryshua fjalëkalimi për përdoruesin {username}.</target>
+        <target>U ndryshua fjalëkalimi për përdoruesin <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11594,7 +11594,7 @@
       </trans-unit>
       <trans-unit id="58546fd4d14b2d9635ce3d28c216ac68587bb25b" datatype="html">
         <source>Too many attempts, please try again after <x id="INTERPOLATION" equiv-text="{{minutesLeft}}"/> minutes.</source>
-        <target>Shumë përpjekje, ju lutemi, riprovoni pas {minutesLeft}} minutash.</target>
+        <target>Shumë përpjekje, ju lutemi, riprovoni pas <x id="INTERPOLATION" equiv-text="{{minutesLeft}}"/> minutash.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -11642,7 +11642,7 @@
       </trans-unit>
       <trans-unit id="3bd3791d3b0ab933981a0b884396af74b0c95e2a" datatype="html">
         <source>Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target>U shpajtuat nga krejt kanalet e <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
+        <target>U shpajtuat nga krejt kanalet e <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11650,7 +11650,7 @@
       </trans-unit>
       <trans-unit id="3e7735fa326fcdc9e1188b6d9ff4b4329312fc26" datatype="html">
         <source>Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target>U shpajtuat nga <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
+        <target>U shpajtuat nga <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
