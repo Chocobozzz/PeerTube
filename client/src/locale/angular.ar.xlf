@@ -40,7 +40,7 @@
       </trans-unit>
       <trans-unit id="1486537403020619891" datatype="html">
         <source>My watch history</source>
-        <target state="translated">تأريخ مشاهداتي</target>
+        <target state="translated">سجل مشاهداتي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7" datatype="html">
@@ -547,7 +547,7 @@
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">حجم ملف <x id="PH" equiv-text="name"/> كبير ( حد الحجم: <x id="PH_1" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils.ts</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="2392488717875840729" datatype="html">
@@ -602,7 +602,7 @@
       </trans-unit>
       <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6" datatype="html">
         <source>My settings</source>
-        <target state="new">My settings</target>
+        <target state="translated">إعداداتي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
@@ -632,7 +632,7 @@
       </trans-unit>
       <trans-unit id="5d3bc02dfb6c9b6fdd716f77c487a779ba6d6cc2" datatype="html">
         <source>Update live settings</source>
-        <target state="new">Update live settings</target>
+        <target state="translated">حدّث إعدادات البث المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="c2fe7580753ac7c1442df31eb97f8acc6fa250e6" datatype="html">
@@ -702,7 +702,7 @@
       </trans-unit>
       <trans-unit id="2a94cfa351109b958a00ee927cd87ada8da44c1e" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="new"> If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </target>
+        <target state="translated">إذا أردت فتح التسجيل، رجاء حدد <x id="START_TAG_STRONG"/>قواعد الاشراف<x id="CLOSE_TAG_STRONG"/>، واكتب <x id="START_TAG_STRONG"/>شروط استخدام مثيل الخادم<x id="START_TAG_STRONG"/> ،وحدد الفئات واللغات التي تستخدم. بهذا ستسمح للمتسخدمين بتحديد مثيل الخادم <x id="START_TAG_STRONG"/>الذي يناسبهم<x id="CLOSE_TAG_STRONG"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
@@ -786,7 +786,7 @@
       </trans-unit>
       <trans-unit id="5ef7ce1bada0c3d3b4e5e299dad0d336f7897a34" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2021</target>
+        <target state="translated">يعمل ببيرتيوب - جميع الحقوق متروكة 2015-2021</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="3fdc751b264ca9998e1542fcf5794e274cd56344" datatype="html">
@@ -796,12 +796,12 @@
       </trans-unit>
       <trans-unit id="e4825b5d86d89ae0f4c797ba256f66fd8abd4ee6" datatype="html">
         <source>My account</source>
-        <target state="new">My account</target>
+        <target state="translated">حسابي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="4ef4f031c147fb9ee0168bc6eacb78de180d7432" datatype="html">
         <source>My library</source>
-        <target state="new">My library</target>
+        <target state="translated">مكتبتي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9" datatype="html">
@@ -818,7 +818,7 @@
       </trans-unit>
       <trans-unit id="618ca563e3091faf22978665282787c282a867b8" datatype="html">
         <source>IN MY LIBRARY</source>
-        <target state="new">IN MY LIBRARY</target>
+        <target state="translated">في مكتبتي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238" datatype="html">
@@ -828,7 +828,7 @@
       </trans-unit>
       <trans-unit id="2a95ee9e381f834e55527edcbb3cb882ff0aef79" datatype="html">
         <source>Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></source>
-        <target state="new">Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
+        <target state="translated">الواجهة: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">164</context></context-group>
       </trans-unit>
       <trans-unit id="47546e45bbb476baaaad38244db444c427ddc502" datatype="html">
@@ -843,7 +843,7 @@
       </trans-unit>
       <trans-unit id="efac3af0b32e953279c25b6519cae256811e0fe8" datatype="html">
         <source>History</source>
-        <target>التاريخ</target>
+        <target>السجل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="165035acb08983753bcecc3e8b6b18c7caf26d35" datatype="html">
@@ -861,7 +861,7 @@
       </trans-unit>
       <trans-unit id="468798540b556490783816495f2ca43ce57359b7" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
-        <target state="new">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</target>
+        <target state="translated">السماح باستيراد متوازٍ لعدة فيديوهات. يحتاج الى إعادة تشغيل بيرتيوب ⚠️.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">221</context>
@@ -4122,7 +4122,7 @@ color: red;
       </trans-unit>
       <trans-unit id="29c45bf49891748f930ef78b2e09857498b15131" datatype="html">
         <source><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> Delete history </source>
-        <target state="translated"><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> Delete history </target>
+        <target state="translated"><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> احذف السجل </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="945ab39294575b7271dde42240c0806dc4ff5076" datatype="html">
