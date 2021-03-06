@@ -188,7 +188,7 @@
       </trans-unit>
       <trans-unit id="565e31173ab0ea2c00c311c9051c15d8896a0b80" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Without them, your instance may not be referenced on the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>JoinPeerTube website<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target>Veuillez ne pas oublier de configurer ces champs pour aider des gens à choisir <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>l'instance appropriée <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Sans eux, votre instance pourrait ne pas être référencée sur le <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/> site web de JoinPeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target>Veuillez ne pas oublier de configurer ces champs pour aider des gens à choisir <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>l'instance appropriée<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Sans eux, votre instance pourrait ne pas être référencée sur le <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>site web de JoinPeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">25,27</context>
@@ -388,7 +388,7 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot;                                                                            rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target>Site web officiel de PeerTube (infos, aide, contribuer...) ; &lt;x id="START_LINK" ctype="x-a" equiv-text="&amp;lt ;a href=&amp;quot ;https ://joinpeertube.org&amp;quot ; target=&amp;quot ;_blank&amp;quot ; rel=&amp;quot ;noopener noreferrer&amp;quot ;&amp;gt ;"/&gt; https ://joinpeertube.org&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&amp;lt ;/a&amp;gt ;"/&gt;</target>
+        <target state="translated">Site web officiel de PeerTube (infos, aide, contribuer...) ; &lt;x id="START_LINK" ctype="x-a" equiv-text="&amp;lt ;a href=&amp;quot ;https ://joinpeertube.org&amp;quot ; target=&amp;quot ;_blank&amp;quot ; rel=&amp;quot ;noopener noreferrer&amp;quot ;&amp;gt ;"/&gt; https ://joinpeertube.org&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&amp;lt ;/a&amp;gt ;"/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -420,7 +420,7 @@
       </trans-unit>
       <trans-unit id="2a94cfa351109b958a00ee927cd87ada8da44c1e" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance terms of service<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> PeerTube instance. </source>
-        <target>Si vous souhaitez ouvrir les inscriptions, veuillez décider quelles sont <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>vos règles de modération<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> et <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> conditions d'utilisation<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/>, ainsi q </target>
+        <target>Si vous souhaitez ouvrir les inscriptions, veuillez décider quelles sont <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>vos règles de modération<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> et <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> conditions d'utilisation<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/>, ainsi que les spécificités des catégories et langues que parlent vos modérateurs. Ainsi, vous aiderez vos utilisateurs à s'inscrire sur <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>l'instance PeerTube <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> appropriée. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">64,67</context>
@@ -1040,7 +1040,7 @@
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target>seulement les instances suivis</target>
+        <target>seulement les instances suivies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1260,7 +1260,7 @@
       </trans-unit>
       <trans-unit id="3334825601859787496" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</source>
-        <target>Votre <x id="PH" equiv-text="name"/> n'a pas pu être transféré avant le délai fixé (généralement 10min)</target>
+        <target>Votre <x id="PH" equiv-text="name"/> fichier n'a pas pu être transféré avant le délai fixé (généralement 10min)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">192</context>
@@ -1476,7 +1476,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target>Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> de <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> de <x id="INTERPOLATION_1" equiv-text="ect(false); p"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
@@ -2249,7 +2249,7 @@
       </trans-unit>
       <trans-unit id="285ef550cb17086e949266777312a1884bd7d739" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> has been created </source>
-        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Un nouveau signalement <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> a été crée </target>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Un nouveau signalement <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> a été créé </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">62,63</context>
@@ -2517,7 +2517,7 @@
       </trans-unit>
       <trans-unit id="996392855508119363" datatype="html">
         <source>Hidden</source>
-        <target>Cacher</target>
+        <target>Caché</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -2525,7 +2525,7 @@
       </trans-unit>
       <trans-unit id="2173989454916398137" datatype="html">
         <source>Blurred with confirmation request</source>
-        <target>Flouter avec demande de confirmation</target>
+        <target>Flouté avec demande de confirmation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -2533,7 +2533,7 @@
       </trans-unit>
       <trans-unit id="8929218224642530466" datatype="html">
         <source>Displayed</source>
-        <target>Afficher</target>
+        <target>Affiché</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -2773,7 +2773,7 @@
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85" datatype="html">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;dailyUserVideoQuota !== -1&quot;&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target>Illimité <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;dailyUserVideoQuota !== -1&quot;&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> par jour)<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;dailyUserVideoQuota !== -1&quot;&gt;"/> illimité (<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> par jour)<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">61</context>
@@ -3064,7 +3064,7 @@
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {result} other {results}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {result} other {results}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3820,7 +3820,7 @@
       </trans-unit>
       <trans-unit id="2847376451647729886" datatype="html">
         <source>You are now logged in as <x id="PH" equiv-text="body.username"/>!</source>
-        <target>Vous êtes maintenant connecté en tant que <x id="PH" equiv-text="body.username"/>!</target>
+        <target>Vous êtes maintenant connecté⸱e en tant que <x id="PH" equiv-text="body.username"/> !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -4498,7 +4498,7 @@
       </trans-unit>
       <trans-unit id="5523952d0300c96cfba2ec5a693c95f923e90c40" datatype="html">
         <source>Created <x id="INTERPOLATION" equiv-text="{{ videoChannel.createdAt | date }}"/></source>
-        <target/>
+        <target>Créée <x id="INTERPOLATION" equiv-text="{{ videoChannel.createdAt | date }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-about/video-channel-about.component.html</context>
           <context context-type="linenumber">18</context>
@@ -4846,7 +4846,7 @@
       </trans-unit>
       <trans-unit id="e01bfa3629e2133dbf307975446bde047eb8bd1f" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</source>
-        <target/>
+        <target state="translated">{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">34</context>
@@ -4982,7 +4982,7 @@
       </trans-unit>
       <trans-unit id="8197117721861453263" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="toDeleteVideosIds.length"/> videos?</source>
-        <target>Souhaitez-vous réellement supprimer <x id="PH" equiv-text="toDeleteVideosIds.length"/> vidéos?</target>
+        <target>Souhaitez-vous réellement supprimer <x id="PH" equiv-text="toDeleteVideosIds.length"/> vidéos ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -5678,7 +5678,7 @@
       </trans-unit>
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b" datatype="html">
         <source>Created <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target/>
+        <target>Créée <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6086,7 +6086,7 @@
       </trans-unit>
       <trans-unit id="b56702ff10875710f111634cc315cd3ef01b206f" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="rators of {{ curr"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isRemote()&quot;&gt;"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>. </source>
-        <target/>
+        <target state="translated">Votre rapport sera envoyé aux modérateur⸱ice⸱s de <x id="INTERPOLATION" equiv-text="rators of {{ curr"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isRemote()&quot;&gt;"/> et sera transféré au commentaire originel (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) également <x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context>
           <context context-type="linenumber">36,38</context>
@@ -6214,7 +6214,7 @@
       </trans-unit>
       <trans-unit id="7246356397085094208" datatype="html">
         <source>Instance <x id="PH" equiv-text="host"/> unmuted.</source>
-        <target/>
+        <target state="translated">Son de l'instance <x id="PH" equiv-text="host"/> rétabli.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">161</context>
@@ -6226,7 +6226,7 @@
       </trans-unit>
       <trans-unit id="2558977494773636050" datatype="html">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted by the instance.</source>
-        <target/>
+        <target state="translated">Le compte <x id="PH" equiv-text="account.nameWithHost"/> a été mis en sourdine par l'instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -6238,7 +6238,7 @@
       </trans-unit>
       <trans-unit id="3085641638748358969" datatype="html">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> unmuted by the instance.</source>
-        <target/>
+        <target state="translated">Le son du compte <x id="PH" equiv-text="account.nameWithHost"/> a été rétabli par l'instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">189</context>
@@ -6246,7 +6246,7 @@
       </trans-unit>
       <trans-unit id="4991892477258601737" datatype="html">
         <source>Instance <x id="PH" equiv-text="host"/> muted by the instance.</source>
-        <target/>
+        <target state="translated">L'instance <x id="PH" equiv-text="host"/> a été mise en sourdine par l'instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">203</context>
@@ -6254,7 +6254,7 @@
       </trans-unit>
       <trans-unit id="4379430340167561220" datatype="html">
         <source>Instance <x id="PH" equiv-text="host"/> unmuted by the instance.</source>
-        <target/>
+        <target state="translated">Le son de l'instance <x id="PH" equiv-text="host"/> a été rétabli par l'instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">217</context>
@@ -6322,7 +6322,7 @@
       </trans-unit>
       <trans-unit id="4209525355702493436" datatype="html">
         <source>Ban</source>
-        <target/>
+        <target state="translated">Bannissement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">273</context>
@@ -6542,7 +6542,7 @@
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">22</context>
@@ -6562,7 +6562,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7394,7 +7394,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887" datatype="html">
         <source>Muted accounts</source>
-        <target/>
+        <target state="translated">Comptes mis en sourdine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -7414,7 +7414,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853" datatype="html">
         <source>Muted servers</source>
-        <target/>
+        <target state="translated">Serveurs mis en sourdine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -8738,7 +8738,7 @@
       </trans-unit>
       <trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="ageReportTemp"/> to <x id="INTERPOLATION_1" equiv-text="=&quot;Showing {{"/> of <x id="INTERPOLATION_2" equiv-text="rst}'}} to {{'{last}"/> muted instances</source>
-        <target/>
+        <target state="translated">Afficher <x id="INTERPOLATION" equiv-text="ageReportTemp"/> à <x id="INTERPOLATION_1" equiv-text="=&quot;Showing {{"/> des <x id="INTERPOLATION_2" equiv-text="rst}'}} to {{'{last}"/> instances mis en sourdine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">10</context>
@@ -8818,7 +8818,7 @@
       </trans-unit>
       <trans-unit id="079e99cce11c87b142e80fdd14dae98a61012fc4" datatype="html">
         <source>Muted at <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target/>
+        <target state="translated">Mis en sourdine à <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">36</context>
@@ -8910,7 +8910,7 @@
       </trans-unit>
       <trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="ageReportTemp"/> to <x id="INTERPOLATION_1" equiv-text="=&quot;Showing {{"/> of <x id="INTERPOLATION_2" equiv-text="rst}'}} to {{'{last}"/> muted accounts</source>
-        <target/>
+        <target state="translated">Afficher <x id="INTERPOLATION" equiv-text="ageReportTemp"/> à <x id="INTERPOLATION_1" equiv-text="=&quot;Showing {{"/> des <x id="INTERPOLATION_2" equiv-text="rst}'}} to {{'{last}"/> comptes mis en sourdine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">10</context>
@@ -9286,7 +9286,7 @@
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
-        <target/>
+        <target state="translated">Vidéos tendances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">33</context>
@@ -9918,7 +9918,7 @@
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH" equiv-text="host"/> muted by the instance.</source>
-        <target/>
+        <target state="translated">Serveur <x id="PH" equiv-text="host"/> mis en sourdine par l'instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">441</context>
@@ -10579,7 +10579,7 @@
       </trans-unit>
       <trans-unit id="107f0fef40ba00a1a183a03eba85054ed8413f92" datatype="html">
         <source>Redundancy allowed <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;redundancyAllowed&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target/>
+        <target state="translated">Redondance permise <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;redundancyAllowed&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">38</context>
@@ -10643,7 +10643,7 @@
       </trans-unit>
       <trans-unit id="3371601176452094961" datatype="html">
         <source>Instance <x id="PH" equiv-text="host"/> unmuted by your instance.</source>
-        <target/>
+        <target state="translated">Le son de l'instance <x id="PH" equiv-text="host"/> a été rétabli par l'instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -10651,7 +10651,7 @@
       </trans-unit>
       <trans-unit id="3096398988891996621" datatype="html">
         <source>Instance <x id="PH" equiv-text="domain"/> muted by your instance.</source>
-        <target/>
+        <target state="translated">L'instance <x id="PH" equiv-text="domain"/> a été mise en sourdine par votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -10659,7 +10659,7 @@
       </trans-unit>
       <trans-unit id="8639315630141911544" datatype="html">
         <source>Account <x id="PH" equiv-text="blockedAccount.nameWithHost"/> unmuted by your instance.</source>
-        <target/>
+        <target state="translated">Le son du compte <x id="PH" equiv-text="blockedAccount.nameWithHost"/> a été rétabli par votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -10747,7 +10747,7 @@
       </trans-unit>
       <trans-unit id="fe8634bd713368d7971877c0e09d1869f09c924d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">27</context>
@@ -11067,7 +11067,7 @@
       </trans-unit>
       <trans-unit id="f360bcf79135ae541bdb1bbd419ccc4cb2fb6ab3" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target state="translated">Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </target>
+        <target state="translated">Les pairs du Web ne sont pas accessibles publiquement : parce que nous utilisons le transport websocket, ce protocole est différent d'un tracker BitTorrent classique. Quand vous êtes dans un navigateur, vous envoyez un signal contenant votre adresse IP au tracker qui va choisir aléatoirement d'autres pairs à qui transmettre l'information. Voir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>ce document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> pour plus d'information </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">118,122</context>
@@ -11631,7 +11631,7 @@
       </trans-unit>
       <trans-unit id="a7f42da3bb4eea0b71b0a20a2aff6612a82cab99" datatype="html">
         <source>Date <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target/>
+        <target state="translated">Date <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">62</context>
@@ -12007,7 +12007,7 @@
       </trans-unit>
       <trans-unit id="1ade7342907e567e3c91d505719fac63d95324e0" datatype="html">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE" ctype="x-my_date_toggle" equiv-text="&lt;my-date-toggle [date]=&quot;video.publishedAt&quot;&gt;"/><x id="CLOSE_TAG_MY_DATE_TOGGLE" ctype="x-my_date_toggle" equiv-text="&lt;/my-date-toggle&gt;"/></source>
-        <target/>
+        <target state="translated">Publiée <x id="START_TAG_MY_DATE_TOGGLE" ctype="x-my_date_toggle" equiv-text="&lt;my-date-toggle [date]=&quot;video.publishedAt&quot;&gt;"/><x id="CLOSE_TAG_MY_DATE_TOGGLE" ctype="x-my_date_toggle" equiv-text="&lt;/my-date-toggle&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">55</context>
@@ -14702,7 +14702,7 @@
       </trans-unit>
       <trans-unit id="24abd406ad31ca317072b179321ff7a7b2d56f86" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target/>
+        <target state="translated">Autoriser <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>vos utilisateur⸱ice⸱s<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> à regarder des vidéos / acteur⸱ice⸱s distant⸱e⸱s qui peuvent ne pas être fédéré⸱e⸱s avec votre instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">474</context>
@@ -14718,7 +14718,7 @@
       </trans-unit>
       <trans-unit id="0a82b1f5636ff3c47cddf9e4bffa86b5d696fe06" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target/>
+        <target state="translated">Autoriser <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>des utilisateur⸱ice⸱s anonymes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> à regarder des vidéos / acteur⸱ice⸱s distant⸱e⸱s qui peuvent ne pas être fédéré⸱e⸱s avec votre instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">485</context>
@@ -14742,7 +14742,7 @@
       </trans-unit>
       <trans-unit id="0c43b766533e99e88f65a9f1c8d63fb1926ab5cc" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target state="translated">En production, vous devez seulement utiliser des index de recherche modérés, ou <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>héberger le/s vôtre/s<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">502,503</context>
@@ -14790,7 +14790,7 @@
       </trans-unit>
       <trans-unit id="2cc42a6b77d06f99a195ef8f3324d49267eedf87" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> with other instances. </source>
-        <target/>
+        <target state="translated">Gérer <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>les relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> avec d'autres instances. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">549,550</context>
@@ -14830,7 +14830,7 @@
       </trans-unit>
       <trans-unit id="f183764323fcffd1b3ba4d13cdc21ec8971472cc" datatype="html">
         <source>You should only follow moderated indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow&quot;&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target state="translated">En production, vous devez seulement suivre les index modérés, ou <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow&quot;&gt;"/>héberger le/s vôtre/s<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">600,601</context>
@@ -14902,7 +14902,7 @@
       </trans-unit>
       <trans-unit id="00d2522709d908c52395fc1865152ad37fe7eeae" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                         "/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                         "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                         "/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;                         "/> to see if you instance is allowed. </source>
-        <target/>
+        <target state="translated">Si votre instance est explicitement autorisée par Twitter, un lecteur vidéo sera intégré au fil Twitter sur votre partage de vidéo PeerTube.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                         "/> Si l'instance ne l'est pas, nous utilisons une fiche lien image qui redirige vers votre instance PeerTube.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                         "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                         "/> Cochez cette case, enregistrez la configuration et testez avec l'URL d'une vidéo de votre instance (https://exemple.com/videos/regarder/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;                         "/> pour voir si votre instance est autorisée. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">682,687</context>
@@ -15150,7 +15150,7 @@
       </trans-unit>
       <trans-unit id="0ba5a92f3fcf3c32561c73cd7e100776967d920b" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">919</context>
@@ -15262,7 +15262,7 @@
       </trans-unit>
       <trans-unit id="85d060be6823b8207e82fbc75429753f1beb06ce" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1038</context>
@@ -15310,7 +15310,7 @@
       </trans-unit>
       <trans-unit id="782afa7c58d912592d73fce888ffce8542a4acf3" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target/>
+        <target state="translated">Écrivez votre code JavaScript directement.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Exemple : <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('mon instance est formidable');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1077</context>
@@ -15318,7 +15318,7 @@
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">Ecrivez directement le code CSS. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> couleur : rouge ; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Précisez avec <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> pour passer outre les styles. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color : red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">Écrivez directement le code CSS. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> couleur : rouge ; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Précisez avec <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> pour passer outre les styles. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color : red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1096,1107</context>
@@ -15342,7 +15342,7 @@
       </trans-unit>
       <trans-unit id="2520968456492632777" datatype="html">
         <source><x id="PH" equiv-text="handle"/> accepted in instance followers</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="handle"/> accepté dans les abonné⸱e⸱s de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -15366,7 +15366,7 @@
       </trans-unit>
       <trans-unit id="2040902819815401278" datatype="html">
         <source><x id="PH" equiv-text="handle"/> rejected from instance followers</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="handle"/> rejeté des abonné⸱e⸱s de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -15382,7 +15382,7 @@
       </trans-unit>
       <trans-unit id="2452034338905853167" datatype="html">
         <source><x id="PH" equiv-text="handle"/> removed from instance followers</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="handle"/> supprimé des abonné⸱e⸱s de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -15398,7 +15398,7 @@
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="ageReportTemp"/> to <x id="INTERPOLATION_1" equiv-text="=&quot;Showing {{"/> of <x id="INTERPOLATION_2" equiv-text="rst}'}} to {{'{last}"/> followers</source>
-        <target/>
+        <target state="translated">Afficher <x id="INTERPOLATION" equiv-text="ageReportTemp"/> à <x id="INTERPOLATION_1" equiv-text="=&quot;Showing {{"/> des <x id="INTERPOLATION_2" equiv-text="rst}'}} to {{'{last}"/> abonné⸱e⸱s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">10</context>
@@ -15414,7 +15414,7 @@
       </trans-unit>
       <trans-unit id="9a7b523cbbebabeb9b10482291b58c52825a4b05" datatype="html">
         <source>Score <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;score&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target/>
+        <target state="translated">Score <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;score&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">30</context>
@@ -15446,7 +15446,7 @@
       </trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
         <source>User <x id="PH" equiv-text="userCreate.username"/> created.</source>
-        <target/>
+        <target state="translated">Utilisateur⸱ice <x id="PH" equiv-text="userCreate.username"/> créé⸱e.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-create.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -15454,7 +15454,7 @@
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
         <source>Create user</source>
-        <target/>
+        <target state="translated">Créer utilisateur⸱ice</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-create.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -15510,7 +15510,7 @@
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Video} other {Videos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -15522,7 +15522,7 @@
       </trans-unit>
       <trans-unit id="bcf8ce898a641416913d16b5dc39385e83ca069c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Channel} other {Channels}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -15534,7 +15534,7 @@
       </trans-unit>
       <trans-unit id="8b3b364967f953009a4b83c53ed5cf0b5ff3902a" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -15570,7 +15570,7 @@
       </trans-unit>
       <trans-unit id="8e29da1e7e8def288e5cf788c6f5ac6e5824259c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Comment} other {Comments}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -15630,7 +15630,7 @@
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> At most, this user could upload ~ <x id="INTERPOLATION" equiv-text=" upload ~ {{ computeQuotaWithTranscoding() | b"/>. </source>
-        <target/>
+        <target state="translated">Le transcodage est activé. Le quota de la vidéo ne prend en charge que <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>la taille de la vidéo <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/>originale. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Cet⸱te utilisateur⸱ice peut téléverser au mieux ~ <x id="INTERPOLATION" equiv-text=" upload ~ {{ computeQuotaWithTranscoding() | b"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">161,163</context>
@@ -15678,7 +15678,7 @@
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
         <source>User <x id="PH" equiv-text="this.user.username"/> updated.</source>
-        <target/>
+        <target state="translated">Utilisateur⸱ice <x id="PH" equiv-text="this.user.username"/> mis⸱e à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -15694,7 +15694,7 @@
       </trans-unit>
       <trans-unit id="8819563010322372715" datatype="html">
         <source>An email asking for password reset has been sent to <x id="PH" equiv-text="this.user.username"/>.</source>
-        <target/>
+        <target state="translated">Un courriel avec une demande de remise à zéro du mot de passe a été envoyé à <x id="PH" equiv-text="this.user.username"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -15702,7 +15702,7 @@
       </trans-unit>
       <trans-unit id="5974506725502681113" datatype="html">
         <source>Password changed for user <x id="PH" equiv-text="this.username"/>.</source>
-        <target/>
+        <target state="translated">Le mot de passe pour l'utilisateur⸱ice <x id="PH" equiv-text="this.username"/> a été modifié.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -15734,7 +15734,7 @@
       </trans-unit>
       <trans-unit id="4884272193574287483" datatype="html">
         <source>Do you really want to unban <x id="PH" equiv-text="users.length"/> users?</source>
-        <target/>
+        <target state="translated">Voulez-vous vraiment réintégrer <x id="PH" equiv-text="users.length"/> utilisateur⸱ice⸱s ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -15742,7 +15742,7 @@
       </trans-unit>
       <trans-unit id="8712248120167780385" datatype="html">
         <source><x id="PH" equiv-text="users.length"/> users unbanned.</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="users.length"/> utilisateur⸱ice⸱s réintégré⸱e⸱s.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -15758,7 +15758,7 @@
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
         <source><x id="PH" equiv-text="users.length"/> users deleted.</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="users.length"/> utilisateur⸱ice⸱s supprimé⸱e⸱s.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">199</context>
@@ -15774,7 +15774,7 @@
       </trans-unit>
       <trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="ageReportTemp"/> to <x id="INTERPOLATION_1" equiv-text="=&quot;Showing {{"/> of <x id="INTERPOLATION_2" equiv-text="rst}'}} to {{'{last}"/> users</source>
-        <target/>
+        <target state="translated">Afficher <x id="INTERPOLATION" equiv-text="ageReportTemp"/> à <x id="INTERPOLATION_1" equiv-text="=&quot;Showing {{"/> de <x id="INTERPOLATION_2" equiv-text="rst}'}} to {{'{last}"/> utilisateur⸱ice⸱s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">6</context>
