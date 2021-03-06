@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="private _pauseO"/> of <x id="INTERPOLATION_1" equiv-text="Subject(false);"/> </source>
-        <target/>
+        <target><x id="INTERPOLATION_1" equiv-text="Subject(false);"/> এর<x id="INTERPOLATION" equiv-text="private _pauseO"/> স্লাইড </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
@@ -149,7 +149,7 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="turn this._max;"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="turn this._max;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">31,38</context>
@@ -173,7 +173,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target>মম</target>
+        <target>মিমি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">52,53</context>
@@ -221,7 +221,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target>সস</target>
+        <target>সেসে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">85,87</context>
@@ -253,7 +253,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="Step: number;  "/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="Step: number;  "/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">116,123</context>
@@ -261,7 +261,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="sible.    */   "/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="sible.    */   "/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">125,130</context>
@@ -285,7 +285,7 @@
       </trans-unit>
       <trans-unit id="33a9a4343ee46c354d8b716167990efeea654382" datatype="html">
         <source>Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source>
-        <target/>
+        <target>অনুসরনকারীর ইন্সট্যান্দ(<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">4</context>
@@ -337,7 +337,7 @@
       </trans-unit>
       <trans-unit id="3c1aff50472b313c70a72ee02c081b8eeb1c616c" datatype="html">
         <source>Contact administrator</source>
-        <target/>
+        <target>প্রশাসকের সাথে যোগাযোগ করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">7</context>
@@ -437,7 +437,7 @@
       </trans-unit>
       <trans-unit id="c47227276184c2145c8ca1161ce08075df573568" datatype="html">
         <source>MODERATION</source>
-        <target/>
+        <target state="translated">সংযতকরণ(মডারেশন)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">128,129</context>
@@ -1353,7 +1353,7 @@
       </trans-unit>
       <trans-unit id="2049290282534091182" datatype="html">
         <source>Moderation</source>
-        <target/>
+        <target state="translated">সংযতকরণ(মডারেশন)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -1949,7 +1949,7 @@
       </trans-unit>
       <trans-unit id="7b6494fa44035831e1215cd4a0284aec00f8cbbd" datatype="html">
         <source>SEARCH</source>
-        <target/>
+        <target>খুজো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">272</context>
@@ -2109,7 +2109,7 @@
       </trans-unit>
       <trans-unit id="5805ff22d19f43016e2b1a0f7eff12185c78e89d" datatype="html">
         <source>ADMINISTRATORS</source>
-        <target/>
+        <target>প্রশাসকগণ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">440</context>
@@ -2133,7 +2133,7 @@
       </trans-unit>
       <trans-unit id="51d86d65a52d00976c7cce4bdf8e144f956ef888" datatype="html">
         <source>TWITTER</source>
-        <target/>
+        <target>টুইটার</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">468</context>
@@ -2181,7 +2181,7 @@
       </trans-unit>
       <trans-unit id="1035838766454786107" datatype="html">
         <source>Audio-only</source>
-        <target/>
+        <target>শুধু শব্দ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">17</context>
@@ -2197,7 +2197,7 @@
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
         <source>240p</source>
-        <target/>
+        <target>২৪০পি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -2205,7 +2205,7 @@
       </trans-unit>
       <trans-unit id="6824490596490222280" datatype="html">
         <source>360p</source>
-        <target/>
+        <target>৩৬০পি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -2213,7 +2213,7 @@
       </trans-unit>
       <trans-unit id="4039682741786530029" datatype="html">
         <source>480p</source>
-        <target/>
+        <target>৪৮০পি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -2221,7 +2221,7 @@
       </trans-unit>
       <trans-unit id="5165245100010036661" datatype="html">
         <source>720p</source>
-        <target/>
+        <target>৭২০পি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -2229,7 +2229,7 @@
       </trans-unit>
       <trans-unit id="7709767791012306261" datatype="html">
         <source>1080p</source>
-        <target/>
+        <target>১০৮০পি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">38</context>
@@ -2237,7 +2237,7 @@
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
         <source>1440p</source>
-        <target/>
+        <target>১৪৪০পি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">42</context>
@@ -2245,7 +2245,7 @@
       </trans-unit>
       <trans-unit id="597839553814574067" datatype="html">
         <source>2160p</source>
-        <target/>
+        <target>২১৬০পি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">46</context>
@@ -9140,7 +9140,7 @@
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed" datatype="html">
         <source>See the subtitle file</source>
-        <target/>
+        <target>উপাখ্যান ফাইল দেখো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">172</context>
@@ -15412,7 +15412,7 @@
       </trans-unit>
       <trans-unit id="9adb13e2ba5160c8b0b100dc3f4cbe6051b5af9b" datatype="html">
         <source>Auto select subtitle</source>
-        <target/>
+        <target>উপাখ্যান স্বয়ং-নির্বাচন করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">128</context>
@@ -16036,7 +16036,7 @@
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
         <source>subtitles</source>
-        <target/>
+        <target>উপাখ্যান</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">11</context>
@@ -16108,7 +16108,7 @@
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
-        <target/>
+        <target>উপাখ্যান</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">50</context>
