@@ -148,7 +148,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target>Rritni orët</target>
+        <target>Shtoji orët</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">9</context>
@@ -172,7 +172,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target>Zvogëloni orët</target>
+        <target>Pakësoji orët</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">23</context>
@@ -180,7 +180,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target>Rritni minutat</target>
+        <target>Shtoji minutat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">32</context>
@@ -204,7 +204,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target>Zvogëloni minutat</target>
+        <target>Pakësoji minutat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">45</context>
@@ -212,7 +212,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target>Rritni sekondat</target>
+        <target>Shtoji sekondat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">54</context>
@@ -236,7 +236,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target>Zvogëloni sekondat</target>
+        <target>Pakësoji sekondat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">67</context>
@@ -1268,7 +1268,7 @@
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85" datatype="html">
         <source>Unlimited <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target>E pakufizuar <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> në ditë)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
+        <target>E pakufizuar <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>({{ dailyUserVideoQuota | bajte: 0 }} në ditë)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1896,6 +1896,7 @@
       </trans-unit>
       <trans-unit id="3c2c6b17d0326ab344e194b17abbee201d58dbea" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> {pagination.totalItems, plural, =1 {...} {...} të tjera}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3763,7 +3764,7 @@
       </trans-unit>
       <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a" datatype="html">
         <source>This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </source>
-        <target>Kjo video do të publikohet më <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </target>
+        <target>Kjo video do të publikohet në {{ video.scheduledUpdate.updateAt | më datë: 'full' }}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">27</context>
@@ -4803,7 +4804,7 @@
       </trans-unit>
       <trans-unit id="08ea8692dc2a7050026df26fc39b22960bde9de5" datatype="html">
         <source>Username <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target>Emër përdoruesi <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target>Emër përdoruesi-sortIcon&gt;<x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">45</context>
@@ -5175,7 +5176,7 @@
       </trans-unit>
       <trans-unit id="730ae657d91e79c45d0685a7060cfea40ea8ea85" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> reports} }</source>
-        <target/>
+        <target>{VAR_PLURAL, plural, =1 {1 raportim} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> raportime} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">21</context>
@@ -8559,7 +8560,7 @@
       </trans-unit>
       <trans-unit id="36e4cdb23056253e5ef0c62b7d4bbeb3f759f611" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from blacklist.</source>
-        <target>Videoja <x id="INTERPOLATION" equiv-text="{{name}}"/> u hoq prej liste bllokimesh.</target>
+        <target>Videoja <x id="INTERPOLATION" equiv-text="{{name}}"/> u hoq prej prej liste bllokimesh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-auto-blacklist-list/video-auto-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8823,7 +8824,7 @@
       </trans-unit>
       <trans-unit id="924084727dc179dd5dc1a63dc3452ad41e4a8842" datatype="html">
         <source>Password changed for user <x id="INTERPOLATION" equiv-text="{{username}}"/>.</source>
-        <target>U ndryshua fjalëkalimi për përdoruesin <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
+        <target>U ndryshua fjalëkalimi për përdoruesin {username}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11593,7 +11594,7 @@
       </trans-unit>
       <trans-unit id="58546fd4d14b2d9635ce3d28c216ac68587bb25b" datatype="html">
         <source>Too many attempts, please try again after <x id="INTERPOLATION" equiv-text="{{minutesLeft}}"/> minutes.</source>
-        <target>Shumë përpjekje, ju lutemi, riprovoni pas <x id="INTERPOLATION" equiv-text="{{minutesLeft}}"/> minutash.</target>
+        <target>Shumë përpjekje, ju lutemi, riprovoni pas {minutesLeft}} minutash.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -11641,7 +11642,7 @@
       </trans-unit>
       <trans-unit id="3bd3791d3b0ab933981a0b884396af74b0c95e2a" datatype="html">
         <source>Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target>U shpajtuat nga krejt kanalet e <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <target>U shpajtuat nga krejt kanalet e <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11649,7 +11650,7 @@
       </trans-unit>
       <trans-unit id="3e7735fa326fcdc9e1188b6d9ff4b4329312fc26" datatype="html">
         <source>Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target>U shpajtuat nga <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <target>U shpajtuat nga <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
