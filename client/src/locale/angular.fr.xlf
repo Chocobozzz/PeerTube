@@ -388,7 +388,7 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot;                                                                            rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Site web officiel de PeerTube (infos, aide, contribuer...) ; &lt;x id="START_LINK" ctype="x-a" equiv-text="&amp;lt ;a href=&amp;quot ;https ://joinpeertube.org&amp;quot ; target=&amp;quot ;_blank&amp;quot ; rel=&amp;quot ;noopener noreferrer&amp;quot ;&amp;gt ;"/&gt; https ://joinpeertube.org&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&amp;lt ;/a&amp;gt ;"/&gt;</target>
+        <target state="translated">Site web officiel de PeerTube (infos, aide, contribuer...) : <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot;                                                                            rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -640,7 +640,7 @@
       </trans-unit>
       <trans-unit id="5ef7ce1bada0c3d3b4e5e299dad0d336f7897a34" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target>powered by PeerTube - CopyLeft 2015-2021</target>
+        <target>propulsé par PeerTube - CopyLeft 2015-2021</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">183</context>
@@ -1476,7 +1476,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> de <x id="INTERPOLATION_1" equiv-text="ect(false); p"/> </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> sur <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
@@ -3024,7 +3024,7 @@
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="translated">URL parameter is missing in URL parameters</target>
+        <target state="translated">Le paramètre URL est manquant dans les paramètres URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -3032,7 +3032,7 @@
       </trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
-        <target state="translated">Cannot access to the remote resource</target>
+        <target state="translated">Impossible d'accéder à la ressource distante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -3040,7 +3040,7 @@
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
-        <target state="translated">Remote interaction</target>
+        <target state="translated">Interaction à distance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -4226,7 +4226,7 @@
       </trans-unit>
       <trans-unit id="230b7aa1bc012b2e5bafc1f24b6aa734a978183c" datatype="html">
         <source>Search videos</source>
-        <target>Search videos</target>
+        <target>Rechercher des vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">48</context>
@@ -4310,7 +4310,7 @@
       </trans-unit>
       <trans-unit id="2131232107132374967" datatype="html">
         <source>Search videos within account</source>
-        <target>Search videos within account</target>
+        <target>Rechercher des vidéos du compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">61</context>
@@ -4774,7 +4774,7 @@
       </trans-unit>
       <trans-unit id="0713f058de1d239f503a974e384eda384d35ad2b" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target>Multiple ways to subscribe to the current channel</target>
+        <target>Plusieurs façons de s'abonner à la chaîne actuelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">44</context>
@@ -4870,7 +4870,7 @@
       </trans-unit>
       <trans-unit id="1096694538966074574" datatype="html">
         <source>Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</source>
-        <target>Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</target>
+        <target state="translated">Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -5734,7 +5734,7 @@
       </trans-unit>
       <trans-unit id="61cb418b053c4b1099a9c7e5a34a9cf52c87f8dd" datatype="html">
         <source>You don't have any subscription yet.</source>
-        <target state="translated">You don't have any subscription yet.</target>
+        <target state="translated">Vous n'avez pas encore d'abonnement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context>
           <context context-type="linenumber">18</context>
@@ -5982,7 +5982,7 @@
       </trans-unit>
       <trans-unit id="192815f43d0d7337dbf99f84281f5a4c3155af8f" datatype="html">
         <source>My watch history</source>
-        <target state="translated">My watch history</target>
+        <target state="translated">Mon historique de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5990,7 +5990,7 @@
       </trans-unit>
       <trans-unit id="f2540f4ffc5bbb12e034a4c9e118bbc680c62e61" datatype="html">
         <source>Search your history</source>
-        <target state="translated">Search your history</target>
+        <target state="translated">Chercher dans votre historique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">10</context>
@@ -5998,7 +5998,7 @@
       </trans-unit>
       <trans-unit id="777ef31e4dfcb08a00e23b586a50f0ffe94f0c72" datatype="html">
         <source>Track watch history</source>
-        <target state="translated">Track watch history</target>
+        <target state="translated">Historique de la surveillance des pistes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6014,7 +6014,7 @@
       </trans-unit>
       <trans-unit id="945ab39294575b7271dde42240c0806dc4ff5076" datatype="html">
         <source>You don't have any video in your watch history yet.</source>
-        <target state="translated">You don't have any video in your watch history yet.</target>
+        <target state="translated">Vous n'avez pas encore de vidéo dans votre historique de lecture.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">30</context>
@@ -6550,7 +6550,7 @@
       </trans-unit>
       <trans-unit id="4cd6feecd3cc5b969cdff7e217f0582c49118ead" datatype="html">
         <source>Open syndication dropdown</source>
-        <target state="translated">Open syndication dropdown</target>
+        <target state="translated">Ouvrir le menu déroulant des abonnements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6562,7 +6562,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> vidéos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6786,7 +6786,7 @@
       </trans-unit>
       <trans-unit id="d27c1d2f9703f3afcfb9186fc57fe169d851cb06" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</target>
+        <target state="translated">Vous pouvez interagir via n'importe quelle instance fediverse compatible avec ActivityPub (PeerTube, Mastodon ou Pleroma par exemple).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">26,27</context>
@@ -7686,7 +7686,7 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="translated">Handle is required.</target>
+        <target state="translated">Un pseudo est requis.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -7694,7 +7694,7 @@
       </trans-unit>
       <trans-unit id="4415706443503032539" datatype="html">
         <source>Handle must be valid (chocobozzz@example.com).</source>
-        <target state="translated">Handle must be valid (chocobozzz@example.com).</target>
+        <target state="translated">Le pseudo doit être valide (chocobozzz@example.com).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -8214,7 +8214,7 @@
       </trans-unit>
       <trans-unit id="2775050991871557896" datatype="html">
         <source>Avatar deleted.</source>
-        <target state="translated">Avatar deleted.</target>
+        <target state="translated">Avatar supprimé.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">61</context>
