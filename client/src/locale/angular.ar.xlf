@@ -881,7 +881,7 @@
       </trans-unit>
       <trans-unit id="58c5c598fe5cdb9aeb4425ed9609a3eafa671158" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
-        <target state="new">Allow import with HTTP URL (e.g. YouTube)</target>
+        <target state="translated">اسمح بالاستيراد عبر الروابط (مثل يوتيوب)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">234</context></context-group>
       </trans-unit>
       <trans-unit id="411ca58f59b00246e15b161e07409df55b5eb6db" datatype="html">
@@ -993,7 +993,7 @@
       </trans-unit>
       <trans-unit id="75183663cb423cbc64e9443f38b091e65cf71ceb" datatype="html">
         <source>That's an error.</source>
-        <target state="new">That's an error.</target>
+        <target state="translated">هذا خطأ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1009,7 +1009,7 @@
       </trans-unit>
       <trans-unit id="c2c0aec88a83dd3aabac669264c432058f9e197e" datatype="html">
         <source>Possible reasons:</source>
-        <target state="new">Possible reasons:</target>
+        <target state="translated">الأسباب المحتملة:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1018,12 +1018,12 @@
       </trans-unit>
       <trans-unit id="ed052af4856de46aa0482d05b23b393619689cd2" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="new">You may have used an outdated or broken link</target>
+        <target state="translated">استخدمت رابط خاطئ أو منتهي الصلاحية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="22729b8fc19b701735ef98d5ad6636257dea7164" datatype="html">
         <source>The <x id="INTERPOLATION" equiv-text="{{ getRessourceName() }}"/> may have been moved or deleted</source>
-        <target state="new">The <x id="INTERPOLATION" equiv-text="{{ getRessourceName() }}"/> may have been moved or deleted</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getRessourceName() }}"/> حُذف أو نُقل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1031,7 +1031,7 @@
       </trans-unit>
       <trans-unit id="b274f3be0260cd15f51c8d2de3387ec128a85083" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="new">You may have typed the address or URL incorrectly</target>
+        <target state="translated">أخطأت في كتابة الرابط</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1067,7 +1067,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="new">Media is too large for the server. Please contact you administrator if you want to increase the limit size.</target>
+        <target state="translated">هذا الملف كبير. اتصل بالمدير حتى يزيد حد الحجم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="39ec2a3e2da523763f4db4b2227b7dbae5d70eba" datatype="html">
