@@ -115,6 +115,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   .modal-content {
     background-color: pvar(--mainBackgroundColor);
+    word-break: break-all;
   }
 
   .modal-header {
