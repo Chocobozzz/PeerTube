@@ -29,7 +29,7 @@ const LAST_MIGRATION_VERSION = 610
 // ---------------------------------------------------------------------------
 
 const API_VERSION = 'v1'
-const PEERTUBE_VERSION = require(join(root(), 'package.json')).version
+const PEERTUBE_VERSION: string = require(join(root(), 'package.json')).version
 
 const PAGINATION = {
   GLOBAL: {

@@ -5,14 +5,13 @@ import { activityPubContextify } from '../../../server/helpers/activitypub'
 
 function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers: any) {
   const options = {
-    method: 'POST',
-    uri: url,
+    method: 'POST' as 'POST',
     json: body,
     httpSignature,
     headers
   }
 
-  return doRequest(options)
+  return doRequest(url, options)
 }
 
 async function makeFollowRequest (to: { url: string }, by: { url: string, privateKey }) {

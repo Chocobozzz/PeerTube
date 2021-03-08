@@ -135,7 +135,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
         const destPath = join(tmpDirectory, basename(fileUrl))
 
         const bodyKBLimit = 10 * 1000 * 1000 // 10GB
-        await doRequestAndSaveToFile({ uri: fileUrl }, destPath, bodyKBLimit)
+        await doRequestAndSaveToFile(fileUrl, destPath, { bodyKBLimit })
       }
 
       clearTimeout(timer)
@@ -156,7 +156,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
   }
 
   async function fetchUniqUrls (playlistUrl: string) {
-    const { body } = await doRequest<string>({ uri: playlistUrl })
+    const { body } = await doRequest(playlistUrl)
 
     if (!body) return []
 

@@ -84,7 +84,7 @@ async function isJsonLDRSA2017Verified (fromActor: MActor, signedDocument: any) 
   return verify.verify(fromActor.publicKey, signedDocument.signature.signatureValue, 'base64')
 }
 
-async function signJsonLDObject (byActor: MActor, data: any) {
+async function signJsonLDObject <T> (byActor: MActor, data: T) {
   const signature = {
     type: 'RsaSignature2017',
     creator: byActor.url,

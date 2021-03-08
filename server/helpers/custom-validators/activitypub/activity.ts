@@ -41,7 +41,7 @@ const activityCheckers: { [ P in ActivityType ]: (activity: Activity) => boolean
 }
 
 function isActivityValid (activity: any) {
-  const checker = activityCheckers[activity.tswype]
+  const checker = activityCheckers[activity.type]
   // Unknown activity type
   if (!checker) return false
 

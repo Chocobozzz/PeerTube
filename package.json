@@ -83,8 +83,7 @@
     "sass-lint": "sass-lint"
   },
   "resolutions": {
-    "oauth2-server": "3.1.0-beta.1",
-    "http-signature": "1.3.5"
+    "oauth2-server": "3.1.0-beta.1"
   },
   "dependencies": {
     "apicache": "1.6.2",
@@ -111,6 +110,7 @@
     "flat": "^5.0.0",
     "fluent-ffmpeg": "^2.1.0",
     "fs-extra": "^9.0.0",
+    "got": "^11.8.2",
     "helmet": "^4.1.0",
     "http-signature": "1.3.5",
     "ip-anonymize": "^0.1.0",
@@ -140,7 +140,6 @@
     "pug": "^3.0.0",
     "redis": "^3.0.2",
     "reflect-metadata": "^0.1.12",
-    "request": "^2.81.0",
     "sanitize-html": "2.x",
     "scripty": "^2.0.0",
     "sequelize": "6.5.0",

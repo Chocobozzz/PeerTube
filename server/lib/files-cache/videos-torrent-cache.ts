@@ -41,7 +41,7 @@ class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
     const remoteUrl = file.getRemoteTorrentUrl(video)
     const destPath = join(FILES_CACHE.TORRENTS.DIRECTORY, file.torrentFilename)
 
-    await doRequestAndSaveToFile({ uri: remoteUrl }, destPath)
+    await doRequestAndSaveToFile(remoteUrl, destPath)
 
     const downloadName = `${video.name}-${file.resolution}p.torrent`
 

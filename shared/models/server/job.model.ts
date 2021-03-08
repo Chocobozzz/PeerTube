@@ -59,7 +59,7 @@ export type ActivitypubHttpFetcherPayload = {
 export type ActivitypubHttpUnicastPayload = {
   uri: string
   signatureActorId?: number
-  body: any
+  body: object
   contextType?: ContextType
 }
 

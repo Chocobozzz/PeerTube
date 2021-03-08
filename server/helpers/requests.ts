@@ -1,58 +1,124 @@
-import * as Bluebird from 'bluebird'
 import { createWriteStream, remove } from 'fs-extra'
-import * as request from 'request'
-import { ACTIVITY_PUB, PEERTUBE_VERSION, WEBSERVER } from '../initializers/constants'
-import { processImage } from './image-utils'
+import got, { CancelableRequest, Options as GotOptions } from 'got'
 import { join } from 'path'
-import { logger } from './logger'
 import { CONFIG } from '../initializers/config'
+import { ACTIVITY_PUB, PEERTUBE_VERSION, WEBSERVER } from '../initializers/constants'
+import { pipelinePromise } from './core-utils'
+import { processImage } from './image-utils'
+import { logger } from './logger'
 
-function doRequest <T> (
-  requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean },
-  bodyKBLimit = 1000 // 1MB
-): Bluebird<{ response: request.RequestResponse, body: T }> {
-  if (!(requestOptions.headers)) requestOptions.headers = {}
-  requestOptions.headers['User-Agent'] = getUserAgent()
+const httpSignature = require('http-signature')
 
-  if (requestOptions.activityPub === true) {
-    requestOptions.headers['accept'] = ACTIVITY_PUB.ACCEPT_HEADER
+type PeerTubeRequestOptions = {
+  activityPub?: boolean
+  bodyKBLimit?: number // 1MB
+  httpSignature?: {
+    algorithm: string
+    authorizationHeaderName: string
+    keyId: string
+    key: string
+    headers: string[]
   }
+  jsonResponse?: boolean
+} & Pick<GotOptions, 'headers' | 'json' | 'method' | 'searchParams'>
 
-  return new Bluebird<{ response: request.RequestResponse, body: T }>((res, rej) => {
-    request(requestOptions, (err, response, body) => err ? rej(err) : res({ response, body }))
-      .on('data', onRequestDataLengthCheck(bodyKBLimit))
-  })
+const peertubeGot = got.extend({
+  headers: {
+    'user-agent': getUserAgent()
+  },
+
+  handlers: [
+    (options, next) => {
+      const promiseOrStream = next(options) as CancelableRequest<any>
+      const bodyKBLimit = options.context?.bodyKBLimit
+      if (!bodyKBLimit) throw new Error('No KB limit for this request')
+
+      /* eslint-disable @typescript-eslint/no-floating-promises */
+      promiseOrStream.on('downloadProgress', progress => {
+        if (progress.transferred * 1000 > bodyKBLimit && progress.percent !== 1) {
+          promiseOrStream.cancel(`Exceeded the download limit of ${bodyKBLimit} bytes`)
+        }
+      })
+
+      return promiseOrStream
+    }
+  ],
+
+  hooks: {
+    beforeRequest: [
+      options => {
+        const headers = options.headers || {}
+        headers['host'] = options.url.host
+      },
+
+      options => {
+        const httpSignatureOptions = options.context?.httpSignature
+
+        if (httpSignatureOptions) {
+          const method = options.method ?? 'GET'
+          const path = options.path ?? options.url.pathname
+
+          if (!method || !path) {
+            throw new Error(`Cannot sign request without method (${method}) or path (${path}) ${options}`)
+          }
+
+          httpSignature.signRequest({
+            getHeader: function (header) {
+              return options.headers[header]
+            },
+
+            setHeader: function (header, value) {
+              options.headers[header] = value
+            },
+
+            method,
+            path
+          }, httpSignatureOptions)
+        }
+      }
+    ]
+  }
+})
+
+function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
+  const gotOptions = buildGotOptions(options)
+
+  return peertubeGot(url, gotOptions)
+    .catch(err => { throw buildRequestError(err) })
 }
 
-function doRequestAndSaveToFile (
-  requestOptions: request.CoreOptions & request.UriOptions,
+function doJSONRequest <T> (url: string, options: PeerTubeRequestOptions = {}) {
+  const gotOptions = buildGotOptions(options)
+
+  return peertubeGot<T>(url, { ...gotOptions, responseType: 'json' })
+    .catch(err => { throw buildRequestError(err) })
+}
+
+async function doRequestAndSaveToFile (
+  url: string,
   destPath: string,
-  bodyKBLimit = 10000 // 10MB
+  options: PeerTubeRequestOptions = {}
 ) {
-  if (!requestOptions.headers) requestOptions.headers = {}
-  requestOptions.headers['User-Agent'] = getUserAgent()
+  const gotOptions = buildGotOptions(options)
 
-  return new Bluebird<void>((res, rej) => {
-    const file = createWriteStream(destPath)
-    file.on('finish', () => res())
+  const outFile = createWriteStream(destPath)
 
-    request(requestOptions)
-      .on('data', onRequestDataLengthCheck(bodyKBLimit))
-      .on('error', err => {
-        file.close()
+  try {
+    await pipelinePromise(
+      peertubeGot.stream(url, gotOptions),
+      outFile
+    )
+  } catch (err) {
+    remove(destPath)
+      .catch(err => logger.error('Cannot remove %s after request failure.', destPath, { err }))
 
-        remove(destPath)
-          .catch(err => logger.error('Cannot remove %s after request failure.', destPath, { err }))
-
-        return rej(err)
-      })
-      .pipe(file)
-  })
+    throw buildRequestError(err)
+  }
 }
 
 async function downloadImage (url: string, destDir: string, destName: string, size: { width: number, height: number }) {
   const tmpPath = join(CONFIG.STORAGE.TMP_DIR, 'pending-' + destName)
-  await doRequestAndSaveToFile({ method: 'GET', uri: url }, tmpPath)
+  await doRequestAndSaveToFile(url, tmpPath)
 
   const destPath = join(destDir, destName)
 
@@ -73,24 +139,43 @@ function getUserAgent () {
 
 export {
   doRequest,
+  doJSONRequest,
   doRequestAndSaveToFile,
   downloadImage
 }
 
 // ---------------------------------------------------------------------------
 
-// Thanks to https://github.com/request/request/issues/2470#issuecomment-268929907 <3
-function onRequestDataLengthCheck (bodyKBLimit: number) {
-  let bufferLength = 0
-  const bytesLimit = bodyKBLimit * 1000
+function buildGotOptions (options: PeerTubeRequestOptions) {
+  const { activityPub, bodyKBLimit = 1000 } = options
 
-  return function (chunk) {
-    bufferLength += chunk.length
-    if (bufferLength > bytesLimit) {
-      this.abort()
+  const context = { bodyKBLimit, httpSignature: options.httpSignature }
 
-      const error = new Error(`Response was too large - aborted after ${bytesLimit} bytes.`)
-      this.emit('error', error)
-    }
+  let headers = options.headers || {}
+
+  headers = { ...headers, date: new Date().toUTCString() }
+
+  if (activityPub) {
+    headers = { ...headers, accept: ACTIVITY_PUB.ACCEPT_HEADER }
   }
+
+  return {
+    method: options.method,
+    json: options.json,
+    searchParams: options.searchParams,
+    headers,
+    context
+  }
+}
+
+function buildRequestError (error: any) {
+  const newError = new Error(error.message)
+  newError.name = error.name
+  newError.stack = error.stack
+
+  if (error.response?.body) {
+    error.responseBody = error.response.body
+  }
+
+  return newError
 }

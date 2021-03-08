@@ -1,26 +1,28 @@
 import * as Bluebird from 'bluebird'
+import { extname } from 'path'
 import { Op, Transaction } from 'sequelize'
 import { URL } from 'url'
 import { v4 as uuidv4 } from 'uuid'
+import { getServerActor } from '@server/models/application/application'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { ActivityPubActor, ActivityPubActorType, ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
+import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
 import { sanitizeAndCheckActorObject } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { doRequest } from '../../helpers/requests'
+import { doJSONRequest } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
 import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
+import { sequelizeTypescript } from '../../initializers/database'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { JobQueue } from '../job-queue'
-import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
-import { sequelizeTypescript } from '../../initializers/database'
 import {
   MAccount,
   MAccountDefault,
@@ -34,9 +36,7 @@ import {
   MActorId,
   MChannel
 } from '../../types/models'
-import { extname } from 'path'
-import { getServerActor } from '@server/models/application/application'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { JobQueue } from '../job-queue'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 async function generateAndSaveActorKeys <T extends MActor> (actor: T) {
@@ -209,16 +209,10 @@ async function deleteActorAvatarInstance (actor: MActorDefault, t: Transaction) 
 }
 
 async function fetchActorTotalItems (url: string) {
-  const options = {
-    uri: url,
-    method: 'GET',
-    json: true,
-    activityPub: true
-  }
-
   try {
-    const { body } = await doRequest<ActivityPubOrderedCollection<unknown>>(options)
-    return body.totalItems ? body.totalItems : 0
+    const { body } = await doJSONRequest<ActivityPubOrderedCollection<unknown>>(url, { activityPub: true })
+
+    return body.totalItems || 0
   } catch (err) {
     logger.warn('Cannot fetch remote actor count %s.', url, { err })
     return 0
@@ -449,26 +443,19 @@ type FetchRemoteActorResult = {
   attributedTo: ActivityPubAttributedTo[]
 }
 async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: number, result: FetchRemoteActorResult }> {
-  const options = {
-    uri: actorUrl,
-    method: 'GET',
-    json: true,
-    activityPub: true
-  }
-
   logger.info('Fetching remote actor %s.', actorUrl)
 
-  const requestResult = await doRequest<ActivityPubActor>(options)
+  const requestResult = await doJSONRequest<ActivityPubActor>(actorUrl, { activityPub: true })
   const actorJSON = requestResult.body
 
   if (sanitizeAndCheckActorObject(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON })
-    return { result: undefined, statusCode: requestResult.response.statusCode }
+    return { result: undefined, statusCode: requestResult.statusCode }
   }
 
   if (checkUrlsSameHost(actorJSON.id, actorUrl) !== true) {
     logger.warn('Actor url %s has not the same host than its AP id %s', actorUrl, actorJSON.id)
-    return { result: undefined, statusCode: requestResult.response.statusCode }
+    return { result: undefined, statusCode: requestResult.statusCode }
   }
 
   const followersCount = await fetchActorTotalItems(actorJSON.followers)
@@ -496,7 +483,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
 
   const name = actorJSON.name || actorJSON.preferredUsername
   return {
-    statusCode: requestResult.response.statusCode,
+    statusCode: requestResult.statusCode,
     result: {
       actor,
       name,

@@ -3,7 +3,7 @@ import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { logger, loggerTagsFactory } from '../../helpers/logger'
-import { doRequest } from '../../helpers/requests'
+import { doJSONRequest } from '../../helpers/requests'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoShareModel } from '../../models/video/video-share'
 import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
@@ -40,12 +40,7 @@ async function changeVideoChannelShare (
 async function addVideoShares (shareUrls: string[], video: MVideoId) {
   await Bluebird.map(shareUrls, async shareUrl => {
     try {
-      // Fetch url
-      const { body } = await doRequest<any>({
-        uri: shareUrl,
-        json: true,
-        activityPub: true
-      })
+      const { body } = await doJSONRequest<any>(shareUrl, { activityPub: true })
       if (!body || !body.actor) throw new Error('Body or body actor is invalid')
 
       const actorUrl = getAPId(body.actor)

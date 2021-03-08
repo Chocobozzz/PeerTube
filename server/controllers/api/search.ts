@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
-import { doRequest } from '@server/helpers/requests'
+import { doJSONRequest } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { getOrCreateVideoAndAccountAndChannel } from '@server/lib/activitypub/videos'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
@@ -94,9 +94,9 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: e
   try {
     logger.debug('Doing video channels search index request on %s.', url, { body })
 
-    const searchIndexResult = await doRequest<ResultList<VideoChannel>>({ uri: url, body, json: true })
+    const searchIndexResult = await doJSONRequest<ResultList<VideoChannel>>(url, { json: body })
 
-    return res.json(searchIndexResult.body)
+    return res.json(searchIndexResult)
   } catch (err) {
     logger.warn('Cannot use search index to make video channels search.', { err })
 
@@ -186,9 +186,9 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
   try {
     logger.debug('Doing videos search index request on %s.', url, { body })
 
-    const searchIndexResult = await doRequest<ResultList<Video>>({ uri: url, body, json: true })
+    const searchIndexResult = await doJSONRequest<ResultList<Video>>(url, { json: body })
 
-    return res.json(searchIndexResult.body)
+    return res.json(searchIndexResult)
   } catch (err) {
     logger.warn('Cannot use search index to make video search.', { err })
 

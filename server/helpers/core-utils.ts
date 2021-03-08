@@ -10,7 +10,9 @@ import { BinaryToTextEncoding, createHash, randomBytes } from 'crypto'
 import { truncate } from 'lodash'
 import { basename, isAbsolute, join, resolve } from 'path'
 import * as pem from 'pem'
+import { pipeline } from 'stream'
 import { URL } from 'url'
+import { promisify } from 'util'
 
 const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
   if (!oldObject || typeof oldObject !== 'object') {
@@ -254,6 +256,7 @@ const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKe
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
 const execPromise2 = promisify2<string, any, string>(exec)
 const execPromise = promisify1<string, string>(exec)
+const pipelinePromise = promisify(pipeline)
 
 // ---------------------------------------------------------------------------
 
@@ -284,5 +287,6 @@ export {
   createPrivateKey,
   getPublicKey,
   execPromise2,
-  execPromise
+  execPromise,
+  pipelinePromise
 }

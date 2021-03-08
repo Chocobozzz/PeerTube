@@ -16,8 +16,7 @@ async function processActivityPubHttpUnicast (job: Bull.Job) {
   const httpSignatureOptions = await buildSignedRequestOptions(payload)
 
   const options = {
-    method: 'POST',
-    uri,
+    method: 'POST' as 'POST',
     json: body,
     httpSignature: httpSignatureOptions,
     timeout: REQUEST_TIMEOUT,
@@ -25,7 +24,7 @@ async function processActivityPubHttpUnicast (job: Bull.Job) {
   }
 
   try {
-    await doRequest(options)
+    await doRequest(uri, options)
     ActorFollowScoreCache.Instance.updateActorFollowsScore([ uri ], [])
   } catch (err) {
     ActorFollowScoreCache.Instance.updateActorFollowsScore([], [ uri ])

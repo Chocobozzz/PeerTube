@@ -2,7 +2,6 @@ import * as Bluebird from 'bluebird'
 import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import { basename, join } from 'path'
-import * as request from 'request'
 import { Transaction } from 'sequelize/types'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -31,7 +30,7 @@ import { isArray } from '../../helpers/custom-validators/misc'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { doRequest } from '../../helpers/requests'
+import { doJSONRequest } from '../../helpers/requests'
 import { fetchVideoByUrl, getExtFromMimetype, VideoFetchByUrlType } from '../../helpers/video'
 import {
   ACTIVITY_PUB,
@@ -115,36 +114,26 @@ async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVid
   }
 }
 
-async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.RequestResponse, videoObject: VideoObject }> {
-  const options = {
-    uri: videoUrl,
-    method: 'GET',
-    json: true,
-    activityPub: true
-  }
-
+async function fetchRemoteVideo (videoUrl: string): Promise<{ statusCode: number, videoObject: VideoObject }> {
   logger.info('Fetching remote video %s.', videoUrl)
 
-  const { response, body } = await doRequest<any>(options)
+  const { statusCode, body } = await doJSONRequest<any>(videoUrl, { activityPub: true })
 
   if (sanitizeAndCheckVideoTorrentObject(body) === false || checkUrlsSameHost(body.id, videoUrl) !== true) {
     logger.debug('Remote video JSON is not valid.', { body })
-    return { response, videoObject: undefined }
+    return { statusCode, videoObject: undefined }
   }
 
-  return { response, videoObject: body }
+  return { statusCode, videoObject: body }
 }
 
 async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
   const host = video.VideoChannel.Account.Actor.Server.host
   const path = video.getDescriptionAPIPath()
-  const options = {
-    uri: REMOTE_SCHEME.HTTP + '://' + host + path,
-    json: true
-  }
+  const url = REMOTE_SCHEME.HTTP + '://' + host + path
 
-  const { body } = await doRequest<any>(options)
-  return body.description ? body.description : ''
+  const { body } = await doJSONRequest<any>(url)
+  return body.description || ''
 }
 
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoObject) {
@@ -534,8 +523,8 @@ async function refreshVideoIfNeeded (options: {
     : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
 
   try {
-    const { response, videoObject } = await fetchRemoteVideo(video.url)
-    if (response.statusCode === HttpStatusCode.NOT_FOUND_404) {
+    const { statusCode, videoObject } = await fetchRemoteVideo(video.url)
+    if (statusCode === HttpStatusCode.NOT_FOUND_404) {
       logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
 
       // Video does not exist anymore

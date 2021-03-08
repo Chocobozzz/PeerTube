@@ -7,7 +7,7 @@ import {
   isLikeActivityValid
 } from '@server/helpers/custom-validators/activitypub/activity'
 import { sanitizeAndCheckVideoCommentObject } from '@server/helpers/custom-validators/activitypub/video-comments'
-import { doRequest } from '@server/helpers/requests'
+import { doJSONRequest } from '@server/helpers/requests'
 import { AP_CLEANER_CONCURRENCY } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
@@ -81,15 +81,10 @@ async function updateObjectIfNeeded <T> (
   updater: (url: string, newUrl: string) => Promise<T>,
   deleter: (url: string) => Promise<T>
 ): Promise<{ data: T, status: 'deleted' | 'updated' } | null> {
-  // Fetch url
-  const { response, body } = await doRequest<any>({
-    uri: url,
-    json: true,
-    activityPub: true
-  })
+  const { statusCode, body } = await doJSONRequest<any>(url, { activityPub: true })
 
   // Does not exist anymore, remove entry
-  if (response.statusCode === HttpStatusCode.NOT_FOUND_404) {
+  if (statusCode === HttpStatusCode.NOT_FOUND_404) {
     logger.info('Removing remote AP object %s.', url)
     const data = await deleter(url)
 

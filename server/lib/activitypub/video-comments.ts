@@ -1,13 +1,13 @@
-import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
-import { logger } from '../../helpers/logger'
-import { doRequest } from '../../helpers/requests'
-import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
-import { VideoCommentModel } from '../../models/video/video-comment'
-import { getOrCreateActorAndServerAndModel } from './actor'
-import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import * as Bluebird from 'bluebird'
 import { checkUrlsSameHost } from '../../helpers/activitypub'
+import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
+import { logger } from '../../helpers/logger'
+import { doJSONRequest } from '../../helpers/requests'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
+import { VideoCommentModel } from '../../models/video/video-comment'
 import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
+import { getOrCreateActorAndServerAndModel } from './actor'
+import { getOrCreateVideoAndAccountAndChannel } from './videos'
 
 type ResolveThreadParams = {
   url: string
@@ -126,11 +126,7 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
     throw new Error('Recursion limit reached when resolving a thread')
   }
 
-  const { body } = await doRequest<any>({
-    uri: url,
-    json: true,
-    activityPub: true
-  })
+  const { body } = await doJSONRequest<any>(url, { activityPub: true })
 
   if (sanitizeAndCheckVideoCommentObject(body) === false) {
     throw new Error(`Remote video comment JSON ${url} is not valid:` + JSON.stringify(body))
