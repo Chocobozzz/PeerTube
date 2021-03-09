@@ -27,7 +27,7 @@
 
   <my-peertube-checkbox
     *ngIf="setting.type === 'input-checkbox'"
-    [id]="setting.name"
+    [inputName]="setting.name"
     [formControlName]="setting.name"
     [labelInnerHTML]="setting.label"
   ></my-peertube-checkbox>
