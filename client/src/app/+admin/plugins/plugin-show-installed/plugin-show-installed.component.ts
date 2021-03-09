@@ -97,7 +97,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   private getSetting (name: string) {
     const settings = this.plugin.settings
 
-    if (settings && settings[name]) return settings[name]
+    if (settings && settings[name] !== undefined) return settings[name]
 
     const registered = this.registeredSettings.find(r => r.name === name)
 
