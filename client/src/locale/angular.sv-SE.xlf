@@ -8236,15 +8236,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="4415706443503032539" datatype="html">
-        <source>Handle must be valid (chocobozzz@example.com).</source>
-        <target state="translated">Söknamnet måste vara giltigt (chocobozzz@example.com).</target>
+      </trans-unit><trans-unit id="2805037637775107078" datatype="html">
+        <source>Handle must be valid (eg. chocobozzz@example.com).</source><target state="new">Handle must be valid (eg. chocobozzz@example.com).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
+      
       <trans-unit id="4968369344159400023">
         <source>Your name is required.</source>
         <target>Du måste uppge ditt namn.</target>
