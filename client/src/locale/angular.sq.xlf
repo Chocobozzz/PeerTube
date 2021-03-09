@@ -1904,7 +1904,7 @@
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target>{VAR_PLURAL, plural, =1 {result} {results} të tjera }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {result} other {results} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4520,7 +4520,7 @@
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target>{VAR_PLURAL, plural, =1 {Video} {Videos} të tjera }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -4532,7 +4532,7 @@
       </trans-unit>
       <trans-unit id="bcf8ce898a641416913d16b5dc39385e83ca069c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target>{VAR_PLURAL, plural, =1 {Channel} {Channels} të tjerë }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -4544,7 +4544,7 @@
       </trans-unit>
       <trans-unit id="8b3b364967f953009a4b83c53ed5cf0b5ff3902a" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target>{VAR_PLURAL, plural, =1 {Subscriber} {Subscribers} të tjerë }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -4580,7 +4580,7 @@
       </trans-unit>
       <trans-unit id="8e29da1e7e8def288e5cf788c6f5ac6e5824259c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target>{VAR_PLURAL, plural, =1 {Comment} {Comments} të tjerë }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
