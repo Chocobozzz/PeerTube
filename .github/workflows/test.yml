@@ -6,6 +6,7 @@ on:
       - develop
       - master
       - ci
+      - next
   pull_request:
     types: [synchronize, opened]
   schedule:
