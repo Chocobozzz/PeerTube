@@ -783,21 +783,20 @@ export class VideoModel extends Model {
 
   @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options) {
-    if (instance.isOwned()) {
-      if (!instance.VideoChannel) {
-        instance.VideoChannel = await instance.$get('VideoChannel', {
-          include: [
-            ActorModel,
-            AccountModel
-          ],
-          transaction: options.transaction
-        }) as MChannelAccountDefault
-      }
+    if (!instance.isOwned()) return undefined
 
-      return sendDeleteVideo(instance, options.transaction)
+    // Lazy load channels
+    if (!instance.VideoChannel) {
+      instance.VideoChannel = await instance.$get('VideoChannel', {
+        include: [
+          ActorModel,
+          AccountModel
+        ],
+        transaction: options.transaction
+      }) as MChannelAccountDefault
     }
 
-    return undefined
+    return sendDeleteVideo(instance, options.transaction)
   }
 
   @BeforeDestroy
@@ -862,6 +861,7 @@ export class VideoModel extends Model {
 
     logger.info('Saving video abuses details of video %s.', instance.url)
 
+    if (!instance.Trackers) instance.Trackers = await instance.$get('Trackers', { transaction: options.transaction })
     const details = instance.toFormattedDetailsJSON()
 
     for (const abuse of instance.VideoAbuses) {

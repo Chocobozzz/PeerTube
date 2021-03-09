@@ -32,7 +32,7 @@ type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 export type MVideo =
   Omit<VideoModel, 'VideoChannel' | 'Tags' | 'Thumbnails' | 'VideoPlaylistElements' | 'VideoAbuses' |
   'VideoFiles' | 'VideoStreamingPlaylists' | 'VideoShares' | 'AccountVideoRates' | 'VideoComments' | 'VideoViews' | 'UserVideoHistories' |
-  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions' | 'VideoLive'>
+  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions' | 'VideoLive' | 'Trackers'>
 
 // ############################################################################
 
@@ -186,7 +186,8 @@ export type MVideoDetails =
   Use<'Thumbnails', MThumbnail[]> &
   Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]> &
-  Use<'VideoFiles', MVideoFileRedundanciesOpt[]>
+  Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
+  Use<'Trackers', MTrackerUrl[]>
 
 export type MVideoForUser =
   MVideo &
@@ -217,4 +218,4 @@ export type MVideoFormattableDetails =
   Use<'Tags', MTag[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
-  Use<'Trackers', MTrackerUrl[]>
+  PickWithOpt<VideoModel, 'Trackers', MTrackerUrl[]>
