@@ -69,6 +69,10 @@
             "translation": "src/locale/angular.ru-RU.xlf",
             "baseHref": "/client/ru-RU/"
           },
+          "sq": {
+            "translation": "src/locale/angular.sq.xlf",
+            "baseHref": "/client/sq/"
+          },
           "zh-Hans": {
             "translation": "src/locale/angular.zh-Hans-CN.xlf",
             "baseHref": "/client/zh-Hans-CN/"

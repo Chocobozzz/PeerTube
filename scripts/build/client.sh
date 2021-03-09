@@ -34,6 +34,7 @@ languages=(
     ["eo"]="eo"
     ["de"]="de-DE"
     ["it"]="it-IT"
+    ["sq"]="sq"
     ["kab"]="kab"
 )
 
