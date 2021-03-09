@@ -1,8 +1,9 @@
 import * as express from 'express'
 import * as Feed from 'pfeed'
+import { VideoFilter } from '../../shared/models/videos/video-query.type'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
-import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
+import { FEEDS, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
@@ -17,7 +18,6 @@ import {
 import { cacheRoute } from '../middlewares/cache'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoFilter } from '../../shared/models/videos/video-query.type'
 
 const feedsRouter = express.Router()
 
@@ -318,9 +318,9 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
       },
       thumbnail: [
         {
-          url: WEBSERVER.URL + video.getMiniatureStaticPath(),
-          height: THUMBNAILS_SIZE.height,
-          width: THUMBNAILS_SIZE.width
+          url: WEBSERVER.URL + video.getPreviewStaticPath(),
+          height: PREVIEWS_SIZE.height,
+          width: PREVIEWS_SIZE.width
         }
       ]
     })
