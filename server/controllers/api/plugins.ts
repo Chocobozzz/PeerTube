@@ -205,7 +205,6 @@ async function listAvailablePlugins (req: express.Request, res: express.Response
   if (!resultList) {
     return res.status(HttpStatusCode.SERVICE_UNAVAILABLE_503)
       .json({ error: 'Plugin index unavailable. Please retry later' })
-      .end()
   }
 
   return res.json(resultList)

@@ -30,13 +30,25 @@ const peertubeGot = got.extend({
   handlers: [
     (options, next) => {
       const promiseOrStream = next(options) as CancelableRequest<any>
-      const bodyKBLimit = options.context?.bodyKBLimit
+      const bodyKBLimit = options.context?.bodyKBLimit as number
       if (!bodyKBLimit) throw new Error('No KB limit for this request')
+
+      const bodyLimit = bodyKBLimit * 1000
 
       /* eslint-disable @typescript-eslint/no-floating-promises */
       promiseOrStream.on('downloadProgress', progress => {
-        if (progress.transferred * 1000 > bodyKBLimit && progress.percent !== 1) {
-          promiseOrStream.cancel(`Exceeded the download limit of ${bodyKBLimit} bytes`)
+        if (progress.transferred > bodyLimit && progress.percent !== 1) {
+          const message = `Exceeded the download limit of ${bodyLimit} B`
+          logger.warn(message)
+
+          // CancelableRequest
+          if (promiseOrStream.cancel) {
+            promiseOrStream.cancel()
+            return
+          }
+
+          // Stream
+          (promiseOrStream as any).destroy()
         }
       })
 
@@ -177,5 +189,5 @@ function buildRequestError (error: any) {
     error.responseBody = error.response.body
   }
 
-  return newError
+  return error
 }
