@@ -7,7 +7,7 @@ import {
   isLikeActivityValid
 } from '@server/helpers/custom-validators/activitypub/activity'
 import { sanitizeAndCheckVideoCommentObject } from '@server/helpers/custom-validators/activitypub/video-comments'
-import { doJSONRequest } from '@server/helpers/requests'
+import { doJSONRequest, PeerTubeRequestError } from '@server/helpers/requests'
 import { AP_CLEANER_CONCURRENCY } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
@@ -81,39 +81,44 @@ async function updateObjectIfNeeded <T> (
   updater: (url: string, newUrl: string) => Promise<T>,
   deleter: (url: string) => Promise<T>
 ): Promise<{ data: T, status: 'deleted' | 'updated' } | null> {
-  const { statusCode, body } = await doJSONRequest<any>(url, { activityPub: true })
-
-  // Does not exist anymore, remove entry
-  if (statusCode === HttpStatusCode.NOT_FOUND_404) {
+  const on404OrTombstone = async () => {
     logger.info('Removing remote AP object %s.', url)
     const data = await deleter(url)
 
-    return { status: 'deleted', data }
+    return { status: 'deleted' as 'deleted', data }
   }
 
-  // If not same id, check same host and update
-  if (!body || !body.id || !bodyValidator(body)) throw new Error(`Body or body id of ${url} is invalid`)
+  try {
+    const { body } = await doJSONRequest<any>(url, { activityPub: true })
 
-  if (body.type === 'Tombstone') {
-    logger.info('Removing remote AP object %s.', url)
-    const data = await deleter(url)
+    // If not same id, check same host and update
+    if (!body || !body.id || !bodyValidator(body)) throw new Error(`Body or body id of ${url} is invalid`)
 
-    return { status: 'deleted', data }
-  }
-
-  const newUrl = body.id
-  if (newUrl !== url) {
-    if (checkUrlsSameHost(newUrl, url) !== true) {
-      throw new Error(`New url ${newUrl} has not the same host than old url ${url}`)
+    if (body.type === 'Tombstone') {
+      return on404OrTombstone()
     }
 
-    logger.info('Updating remote AP object %s.', url)
-    const data = await updater(url, newUrl)
+    const newUrl = body.id
+    if (newUrl !== url) {
+      if (checkUrlsSameHost(newUrl, url) !== true) {
+        throw new Error(`New url ${newUrl} has not the same host than old url ${url}`)
+      }
 
-    return { status: 'updated', data }
+      logger.info('Updating remote AP object %s.', url)
+      const data = await updater(url, newUrl)
+
+      return { status: 'updated', data }
+    }
+
+    return null
+  } catch (err) {
+    // Does not exist anymore, remove entry
+    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
+      return on404OrTombstone()
+    }
+
+    throw err
   }
-
-  return null
 }
 
 function rateOptionsFactory () {

@@ -30,7 +30,7 @@ import { isArray } from '../../helpers/custom-validators/misc'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { doJSONRequest } from '../../helpers/requests'
+import { doJSONRequest, PeerTubeRequestError } from '../../helpers/requests'
 import { fetchVideoByUrl, getExtFromMimetype, VideoFetchByUrlType } from '../../helpers/video'
 import {
   ACTIVITY_PUB,
@@ -523,14 +523,7 @@ async function refreshVideoIfNeeded (options: {
     : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
 
   try {
-    const { statusCode, videoObject } = await fetchRemoteVideo(video.url)
-    if (statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
-
-      // Video does not exist anymore
-      await video.destroy()
-      return undefined
-    }
+    const { videoObject } = await fetchRemoteVideo(video.url)
 
     if (videoObject === undefined) {
       logger.warn('Cannot refresh remote video %s: invalid body.', video.url)
@@ -554,6 +547,14 @@ async function refreshVideoIfNeeded (options: {
 
     return video
   } catch (err) {
+    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
+      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
+
+      // Video does not exist anymore
+      await video.destroy()
+      return undefined
+    }
+
     logger.warn('Cannot refresh video %s.', options.video.url, { err })
 
     ActorFollowScoreCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)

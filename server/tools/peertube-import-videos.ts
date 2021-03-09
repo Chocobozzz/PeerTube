@@ -202,10 +202,7 @@ async function uploadVideoOnPeerTube (parameters: {
   if (videoInfo.thumbnail) {
     thumbnailfile = join(cwd, sha256(videoInfo.thumbnail) + '.jpg')
 
-    await doRequestAndSaveToFile({
-      method: 'GET',
-      uri: videoInfo.thumbnail
-    }, thumbnailfile)
+    await doRequestAndSaveToFile(videoInfo.thumbnail, thumbnailfile)
   }
 
   const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)

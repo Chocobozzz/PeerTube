@@ -14,7 +14,7 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { doJSONRequest } from '../../helpers/requests'
+import { doJSONRequest, PeerTubeRequestError } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
 import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
@@ -279,16 +279,7 @@ async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannel
       actorUrl = actor.url
     }
 
-    const { result, statusCode } = await fetchRemoteActor(actorUrl)
-
-    if (statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
-      actor.Account
-        ? await actor.Account.destroy()
-        : await actor.VideoChannel.destroy()
-
-      return { actor: undefined, refreshed: false }
-    }
+    const { result } = await fetchRemoteActor(actorUrl)
 
     if (result === undefined) {
       logger.warn('Cannot fetch remote actor in refresh actor.')
@@ -328,6 +319,15 @@ async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannel
       return { refreshed: true, actor }
     })
   } catch (err) {
+    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
+      logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
+      actor.Account
+        ? await actor.Account.destroy()
+        : await actor.VideoChannel.destroy()
+
+      return { actor: undefined, refreshed: false }
+    }
+
     logger.warn('Cannot refresh actor %s.', actor.url, { err })
     return { actor, refreshed: false }
   }

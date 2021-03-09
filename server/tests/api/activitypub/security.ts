@@ -79,9 +79,12 @@ describe('Test ActivityPub security', function () {
         Digest: buildDigest({ hello: 'coucou' })
       }
 
-      const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
-
-      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      try {
+        await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
+        expect(true, 'Did not throw').to.be.false
+      } catch (err) {
+        expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      }
     })
 
     it('Should fail with an invalid date', async function () {
@@ -89,9 +92,12 @@ describe('Test ActivityPub security', function () {
       const headers = buildGlobalHeaders(body)
       headers['date'] = 'Wed, 21 Oct 2015 07:28:00 GMT'
 
-      const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
-
-      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      try {
+        await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
+        expect(true, 'Did not throw').to.be.false
+      } catch (err) {
+        expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      }
     })
 
     it('Should fail with bad keys', async function () {
@@ -101,9 +107,12 @@ describe('Test ActivityPub security', function () {
       const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
       const headers = buildGlobalHeaders(body)
 
-      const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
-
-      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      try {
+        await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
+        expect(true, 'Did not throw').to.be.false
+      } catch (err) {
+        expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      }
     })
 
     it('Should reject requests without appropriate signed headers', async function () {
@@ -123,8 +132,12 @@ describe('Test ActivityPub security', function () {
       for (const badHeaders of badHeadersMatrix) {
         signatureOptions.headers = badHeaders
 
-        const { statusCode } = await makePOSTAPRequest(url, body, signatureOptions, headers)
-        expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+        try {
+          await makePOSTAPRequest(url, body, signatureOptions, headers)
+          expect(true, 'Did not throw').to.be.false
+        } catch (err) {
+          expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+        }
       }
     })
 
@@ -133,7 +146,6 @@ describe('Test ActivityPub security', function () {
       const headers = buildGlobalHeaders(body)
 
       const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
-
       expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
     })
 
@@ -150,9 +162,12 @@ describe('Test ActivityPub security', function () {
       const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
       const headers = buildGlobalHeaders(body)
 
-      const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
-
-      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      try {
+        await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
+        expect(true, 'Did not throw').to.be.false
+      } catch (err) {
+        expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      }
     })
   })
 
@@ -183,9 +198,12 @@ describe('Test ActivityPub security', function () {
 
       const headers = buildGlobalHeaders(signedBody)
 
-      const { statusCode } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
-
-      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      try {
+        await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
+        expect(true, 'Did not throw').to.be.false
+      } catch (err) {
+        expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      }
     })
 
     it('Should fail with an altered body', async function () {
@@ -204,9 +222,12 @@ describe('Test ActivityPub security', function () {
 
       const headers = buildGlobalHeaders(signedBody)
 
-      const { statusCode } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
-
-      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      try {
+        await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
+        expect(true, 'Did not throw').to.be.false
+      } catch (err) {
+        expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      }
     })
 
     it('Should succeed with a valid signature', async function () {
@@ -221,7 +242,6 @@ describe('Test ActivityPub security', function () {
       const headers = buildGlobalHeaders(signedBody)
 
       const { statusCode } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
-
       expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
     })
 
@@ -243,9 +263,12 @@ describe('Test ActivityPub security', function () {
 
       const headers = buildGlobalHeaders(signedBody)
 
-      const { statusCode } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
-
-      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      try {
+        await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
+        expect(true, 'Did not throw').to.be.false
+      } catch (err) {
+        expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      }
     })
   })
 

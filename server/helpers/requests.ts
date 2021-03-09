@@ -1,11 +1,16 @@
 import { createWriteStream, remove } from 'fs-extra'
-import got, { CancelableRequest, Options as GotOptions } from 'got'
+import got, { CancelableRequest, Options as GotOptions, RequestError } from 'got'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
 import { ACTIVITY_PUB, PEERTUBE_VERSION, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
+
+export interface PeerTubeRequestError extends Error {
+  statusCode?: number
+  responseBody?: any
+}
 
 const httpSignature = require('http-signature')
 
@@ -180,14 +185,15 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
   }
 }
 
-function buildRequestError (error: any) {
-  const newError = new Error(error.message)
+function buildRequestError (error: RequestError) {
+  const newError: PeerTubeRequestError = new Error(error.message)
   newError.name = error.name
   newError.stack = error.stack
 
-  if (error.response?.body) {
-    error.responseBody = error.response.body
+  if (error.response) {
+    newError.responseBody = error.response.body
+    newError.statusCode = error.response.statusCode
   }
 
-  return error
+  return newError
 }

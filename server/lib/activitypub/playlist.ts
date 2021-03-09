@@ -7,7 +7,7 @@ import { checkUrlsSameHost } from '../../helpers/activitypub'
 import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '../../helpers/custom-validators/activitypub/playlist'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
-import { doJSONRequest } from '../../helpers/requests'
+import { doJSONRequest, PeerTubeRequestError } from '../../helpers/requests'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
@@ -116,13 +116,7 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
   if (!videoPlaylist.isOutdated()) return videoPlaylist
 
   try {
-    const { statusCode, playlistObject } = await fetchRemoteVideoPlaylist(videoPlaylist.url)
-    if (statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Cannot refresh remote video playlist %s: it does not exist anymore. Deleting it.', videoPlaylist.url)
-
-      await videoPlaylist.destroy()
-      return undefined
-    }
+    const { playlistObject } = await fetchRemoteVideoPlaylist(videoPlaylist.url)
 
     if (playlistObject === undefined) {
       logger.warn('Cannot refresh remote playlist %s: invalid body.', videoPlaylist.url)
@@ -136,6 +130,13 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
 
     return videoPlaylist
   } catch (err) {
+    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
+      logger.info('Cannot refresh remote video playlist %s: it does not exist anymore. Deleting it.', videoPlaylist.url)
+
+      await videoPlaylist.destroy()
+      return undefined
+    }
+
     logger.warn('Cannot refresh video playlist %s.', videoPlaylist.url, { err })
 
     await videoPlaylist.setAsRefreshed()
