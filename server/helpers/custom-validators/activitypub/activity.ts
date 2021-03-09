@@ -49,7 +49,7 @@ function isActivityValid (activity: any) {
 }
 
 function isFlagActivityValid (activity: any) {
-  return isBaseActivityValid(activity.type, 'Flag') &&
+  return isBaseActivityValid(activity, 'Flag') &&
     isAbuseReasonValid(activity.content) &&
     isActivityPubUrlValid(activity.object)
 }
