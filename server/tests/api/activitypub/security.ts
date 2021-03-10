@@ -8,6 +8,8 @@ import {
   cleanupTests,
   closeAllSequelize,
   flushAndRunMultipleServers,
+  killallServers,
+  reRunServer,
   ServerInfo,
   setActorField,
   wait
@@ -20,21 +22,32 @@ import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activi
 const expect = chai.expect
 
 function setKeysOfServer (onServer: ServerInfo, ofServer: ServerInfo, publicKey: string, privateKey: string) {
+  const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
+
   return Promise.all([
-    setActorField(onServer.internalServerNumber, 'http://localhost:' + ofServer.port + '/accounts/peertube', 'publicKey', publicKey),
-    setActorField(onServer.internalServerNumber, 'http://localhost:' + ofServer.port + '/accounts/peertube', 'privateKey', privateKey)
+    setActorField(onServer.internalServerNumber, url, 'publicKey', publicKey),
+    setActorField(onServer.internalServerNumber, url, 'privateKey', privateKey)
   ])
 }
 
-function getAnnounceWithoutContext (server2: ServerInfo) {
+function setUpdatedAtOfServer (onServer: ServerInfo, ofServer: ServerInfo, updatedAt: string) {
+  const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
+
+  return Promise.all([
+    setActorField(onServer.internalServerNumber, url, 'createdAt', updatedAt),
+    setActorField(onServer.internalServerNumber, url, 'updatedAt', updatedAt)
+  ])
+}
+
+function getAnnounceWithoutContext (server: ServerInfo) {
   const json = require('./json/peertube/announce-without-context.json')
   const result: typeof json = {}
 
   for (const key of Object.keys(json)) {
     if (Array.isArray(json[key])) {
-      result[key] = json[key].map(v => v.replace(':9002', `:${server2.port}`))
+      result[key] = json[key].map(v => v.replace(':9002', `:${server.port}`))
     } else {
-      result[key] = json[key].replace(':9002', `:${server2.port}`)
+      result[key] = json[key].replace(':9002', `:${server.port}`)
     }
   }
 
@@ -64,7 +77,8 @@ describe('Test ActivityPub security', function () {
 
     url = servers[0].url + '/inbox'
 
-    await setKeysOfServer(servers[0], servers[1], keys.publicKey, keys.privateKey)
+    await setKeysOfServer(servers[0], servers[1], keys.publicKey, null)
+    await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
 
     const to = { url: 'http://localhost:' + servers[0].port + '/accounts/peertube' }
     const by = { url: 'http://localhost:' + servers[1].port + '/accounts/peertube', privateKey: keys.privateKey }
@@ -152,12 +166,14 @@ describe('Test ActivityPub security', function () {
     it('Should refresh the actor keys', async function () {
       this.timeout(20000)
 
-      // Wait refresh invalidation
-      await wait(10000)
-
       // Update keys of server 2 to invalid keys
       // Server 1 should refresh the actor and fail
       await setKeysOfServer(servers[1], servers[1], invalidKeys.publicKey, invalidKeys.privateKey)
+      await setUpdatedAtOfServer(servers[0], servers[1], '2015-07-17 22:00:00+00')
+
+      // Invalid peertube actor cache
+      killallServers([ servers[1] ])
+      await reRunServer(servers[1])
 
       const body = activityPubContextify(getAnnounceWithoutContext(servers[1]))
       const headers = buildGlobalHeaders(body)
@@ -166,6 +182,7 @@ describe('Test ActivityPub security', function () {
         await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
         expect(true, 'Did not throw').to.be.false
       } catch (err) {
+        console.error(err)
         expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
       }
     })

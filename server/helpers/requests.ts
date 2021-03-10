@@ -170,9 +170,11 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
 
   let headers = options.headers || {}
 
-  headers = { ...headers, date: new Date().toUTCString() }
+  if (!headers.date) {
+    headers = { ...headers, date: new Date().toUTCString() }
+  }
 
-  if (activityPub) {
+  if (activityPub && !headers.accept) {
     headers = { ...headers, accept: ACTIVITY_PUB.ACCEPT_HEADER }
   }
 

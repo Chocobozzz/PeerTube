@@ -46,9 +46,9 @@ async function buildSignedRequestOptions (payload: Payload<any>) {
 
 function buildGlobalHeaders (body: any) {
   return {
-    'Digest': buildDigest(body),
-    'Content-Type': 'application/activity+json',
-    'Accept': ACTIVITY_PUB.ACCEPT_HEADER
+    'digest': buildDigest(body),
+    'content-type': 'application/activity+json',
+    'accept': ACTIVITY_PUB.ACCEPT_HEADER
   }
 }
 
