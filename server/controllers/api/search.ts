@@ -94,7 +94,7 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: e
   try {
     logger.debug('Doing video channels search index request on %s.', url, { body })
 
-    const searchIndexResult = await doJSONRequest<ResultList<VideoChannel>>(url, { json: body })
+    const { body: searchIndexResult } = await doJSONRequest<ResultList<VideoChannel>>(url, { method: 'POST', json: body })
 
     return res.json(searchIndexResult)
   } catch (err) {
@@ -186,7 +186,7 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
   try {
     logger.debug('Doing videos search index request on %s.', url, { body })
 
-    const searchIndexResult = await doJSONRequest<ResultList<Video>>(url, { json: body })
+    const { body: searchIndexResult } = await doJSONRequest<ResultList<Video>>(url, { method: 'POST', json: body })
 
     return res.json(searchIndexResult)
   } catch (err) {
