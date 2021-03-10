@@ -18,8 +18,12 @@ type ResolveThreadParams = {
 type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
 
 async function addVideoComments (commentUrls: string[]) {
-  return Bluebird.map(commentUrls, commentUrl => {
-    return resolveThread({ url: commentUrl, isVideo: false })
+  return Bluebird.map(commentUrls, async commentUrl => {
+    try {
+      await resolveThread({ url: commentUrl, isVideo: false })
+    } catch (err) {
+      logger.warn('Cannot resolve thread %s.', commentUrl, { err })
+    }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
