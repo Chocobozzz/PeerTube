@@ -58,12 +58,11 @@ export class PeerTubeSocket {
       this.notificationSocket = this.io(environment.apiUrl + '/user-notifications', {
         query: { accessToken: this.auth.getAccessToken() }
       })
-
-      this.notificationSocket.on('new-notification', (n: UserNotificationServer) => {
-        this.ngZone.run(() => this.dispatchNotificationEvent('new', n))
-      })
     })
 
+    this.notificationSocket.on('new-notification', (n: UserNotificationServer) => {
+      this.ngZone.run(() => this.dispatchNotificationEvent('new', n))
+    })
   }
 
   private async initLiveVideosSocket () {
