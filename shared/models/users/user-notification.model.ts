@@ -1,7 +1,7 @@
 import { FollowState } from '../actors'
 import { AbuseState } from '../moderation'
 
-export enum UserNotificationType {
+export const enum UserNotificationType {
   NEW_VIDEO_FROM_SUBSCRIPTION = 1,
   NEW_COMMENT_ON_MY_VIDEO = 2,
   NEW_ABUSE_FOR_MODERATORS = 3,

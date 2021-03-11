@@ -21,9 +21,6 @@ export class UserNotificationsComponent implements OnInit {
   notifications: UserNotification[] = []
   sortField = 'createdAt'
 
-  // So we can access it in the template
-  UserNotificationType = UserNotificationType
-
   componentPagination: ComponentPagination
 
   onDataSubject = new Subject<any[]>()
