@@ -5,7 +5,7 @@ import { dirname, join } from 'path'
 import { FFMPEG_NICE, VIDEO_LIVE } from '@server/initializers/constants'
 import { AvailableEncoders, EncoderOptionsBuilder, EncoderProfile, VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
-import { promisify0 } from './core-utils'
+import { execPromise, promisify0 } from './core-utils'
 import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -649,6 +649,24 @@ function getFFmpeg (input: string, type: 'live' | 'vod') {
   return command
 }
 
+function getFFmpegVersion () {
+  return new Promise<string>((res, rej) => {
+    (ffmpeg() as any)._getFfmpegPath((err, ffmpegPath) => {
+      if (err) return rej(err)
+      if (!ffmpegPath) return rej(new Error('Could not find ffmpeg path'))
+
+      return execPromise(`${ffmpegPath} -version`)
+        .then(stdout => {
+          const parsed = stdout.match(/ffmpeg version .(\d+\.\d+\.\d+)/)
+          if (!parsed || !parsed[1]) return rej(new Error(`Could not find ffmpeg version in ${stdout}`))
+
+          return res(parsed[1])
+        })
+        .catch(err => rej(err))
+    })
+  })
+}
+
 async function runCommand (options: {
   command: ffmpeg.FfmpegCommand
   silent?: boolean // false
@@ -695,6 +713,7 @@ export {
   TranscodeOptionsType,
   transcode,
   runCommand,
+  getFFmpegVersion,
 
   resetSupportedEncoders,
 

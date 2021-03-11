@@ -251,6 +251,16 @@ function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A)
   }
 }
 
+function parseSemVersion (s: string) {
+  const parsed = s.match(/^v?(\d+)\.(\d+)\.(\d+)$/i)
+
+  return {
+    major: parseInt(parsed[1]),
+    minor: parseInt(parsed[2]),
+    patch: parseInt(parsed[3])
+  }
+}
+
 const randomBytesPromise = promisify1<number, Buffer>(randomBytes)
 const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
@@ -288,5 +298,7 @@ export {
   getPublicKey,
   execPromise2,
   execPromise,
-  pipelinePromise
+  pipelinePromise,
+
+  parseSemVersion
 }

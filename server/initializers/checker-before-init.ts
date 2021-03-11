@@ -1,5 +1,5 @@
 import * as config from 'config'
-import { promisify0 } from '../helpers/core-utils'
+import { parseSemVersion, promisify0 } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 
 // ONLY USE CORE MODULES IN THIS FILE!
@@ -102,8 +102,7 @@ async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
 
 function checkNodeVersion () {
   const v = process.version
-  const majorString = v.split('.')[0].replace('v', '')
-  const major = parseInt(majorString, 10)
+  const { major } = parseSemVersion(v)
 
   logger.debug('Checking NodeJS version %s.', v)
 

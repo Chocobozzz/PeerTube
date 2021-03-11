@@ -44,7 +44,7 @@ checkFFmpeg(CONFIG)
 
 checkNodeVersion()
 
-import { checkConfig, checkActivityPubUrls } from './server/initializers/checker-after-init'
+import { checkConfig, checkActivityPubUrls, checkFFmpegVersion } from './server/initializers/checker-after-init'
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
@@ -251,6 +251,9 @@ async function startApplication () {
       logger.error('Error in ActivityPub URLs checker.', { err })
       process.exit(-1)
     })
+
+  checkFFmpegVersion()
+    .catch(err => logger.error('Cannot check ffmpeg version', { err }))
 
   // Email initialization
   Emailer.Instance.init()
