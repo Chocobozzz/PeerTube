@@ -196,6 +196,12 @@ federation:
     # We still suggest you to enable this setting even if your users will loose most of their video's likes/dislikes
     cleanup_remote_interactions: false
 
+peertube:
+  check_latest_version:
+    # Check and notify admins of new PeerTube versions
+    enabled: true
+    # You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json
+    url: 'https://joinpeertube.org/api/v1/versions.json'
 
 ###############################################################################
 #

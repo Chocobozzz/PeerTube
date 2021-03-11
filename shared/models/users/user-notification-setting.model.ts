@@ -24,4 +24,7 @@ export interface UserNotificationSetting {
 
   abuseStateChange: UserNotificationSettingValue
   abuseNewMessage: UserNotificationSettingValue
+
+  newPeerTubeVersion: UserNotificationSettingValue
+  newPluginVersion: UserNotificationSettingValue
 }

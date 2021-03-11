@@ -191,6 +191,22 @@
         </div>
       </ng-container>
 
+      <ng-container *ngSwitchCase="17"> <!-- UserNotificationType.NEW_PLUGIN_VERSION -->
+        <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+
+        <div class="message" i18n>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.pluginUrl" [queryParams]="notification.pluginQueryParams">A new version of the plugin/theme {{ notification.plugin.name }}</a> is available: {{ notification.plugin.latestVersion }}
+        </div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="18"> <!-- UserNotificationType.NEW_PEERTUBE_VERSION -->
+        <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+
+        <div class="message" i18n>
+            <a (click)="markAsRead(notification)" [href]="notification.peertubeVersionLink" target="_blank" rel="noopener noreferer">A new version of PeerTube</a> is available: {{ notification.peertube.latestVersion }}
+        </div>
+      </ng-container>
+
       <ng-container *ngSwitchDefault>
         <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 

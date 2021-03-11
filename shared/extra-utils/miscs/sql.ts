@@ -106,12 +106,20 @@ async function closeAllSequelize (servers: ServerInfo[]) {
   }
 }
 
-function setPluginVersion (internalServerNumber: number, pluginName: string, newVersion: string) {
+function setPluginField (internalServerNumber: number, pluginName: string, field: string, value: string) {
   const seq = getSequelize(internalServerNumber)
 
   const options = { type: QueryTypes.UPDATE }
 
-  return seq.query(`UPDATE "plugin" SET "version" = '${newVersion}' WHERE "name" = '${pluginName}'`, options)
+  return seq.query(`UPDATE "plugin" SET "${field}" = '${value}' WHERE "name" = '${pluginName}'`, options)
+}
+
+function setPluginVersion (internalServerNumber: number, pluginName: string, newVersion: string) {
+  return setPluginField(internalServerNumber, pluginName, 'version', newVersion)
+}
+
+function setPluginLatestVersion (internalServerNumber: number, pluginName: string, newVersion: string) {
+  return setPluginField(internalServerNumber, pluginName, 'latestVersion', newVersion)
 }
 
 function setActorFollowScores (internalServerNumber: number, newScore: number) {
@@ -128,6 +136,7 @@ export {
   setActorField,
   countVideoViewsOf,
   setPluginVersion,
+  setPluginLatestVersion,
   selectQuery,
   deleteAll,
   updateQuery,

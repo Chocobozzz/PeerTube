@@ -251,6 +251,7 @@ function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A)
   }
 }
 
+type SemVersion = { major: number, minor: number, patch: number }
 function parseSemVersion (s: string) {
   const parsed = s.match(/^v?(\d+)\.(\d+)\.(\d+)$/i)
 
@@ -258,7 +259,7 @@ function parseSemVersion (s: string) {
     major: parseInt(parsed[1]),
     minor: parseInt(parsed[2]),
     patch: parseInt(parsed[3])
-  }
+  } as SemVersion
 }
 
 const randomBytesPromise = promisify1<number, Buffer>(randomBytes)

@@ -12,7 +12,7 @@ import { isTestInstance, root } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { WEBSERVER } from '../initializers/constants'
-import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
+import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorFollowFull, MPlugin, MUser } from '../types/models'
 import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
 import { JobQueue } from './job-queue'
 
@@ -403,7 +403,7 @@ class Emailer {
   }
 
   async addVideoAutoBlacklistModeratorsNotification (to: string[], videoBlacklist: MVideoBlacklistLightVideo) {
-    const VIDEO_AUTO_BLACKLIST_URL = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
+    const videoAutoBlacklistUrl = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
     const channel = (await VideoChannelModel.loadByIdAndPopulateAccount(videoBlacklist.Video.channelId)).toFormattedSummaryJSON()
 
@@ -417,7 +417,7 @@ class Emailer {
         videoName: videoBlacklist.Video.name,
         action: {
           text: 'Review autoblacklist',
-          url: VIDEO_AUTO_BLACKLIST_URL
+          url: videoAutoBlacklistUrl
         }
       }
     }
@@ -466,6 +466,42 @@ class Emailer {
       text: `Your video "${video.name}" (${videoUrl}) on ${CONFIG.INSTANCE.NAME} has been unblacklisted.`,
       locals: {
         title: 'Your video was unblacklisted'
+      }
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addNewPeerTubeVersionNotification (to: string[], latestVersion: string) {
+    const subject = `A new PeerTube version is available: ${latestVersion}`
+
+    const emailPayload: EmailPayload = {
+      to,
+      template: 'peertube-version-new',
+      subject,
+      text: subject,
+      locals: {
+        latestVersion
+      }
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addNewPlugionVersionNotification (to: string[], plugin: MPlugin) {
+    const pluginUrl = WEBSERVER.URL + '/admin/plugins/list-installed?pluginType=' + plugin.type
+
+    const subject = `A new plugin/theme version is available: ${plugin.name}@${plugin.latestVersion}`
+
+    const emailPayload: EmailPayload = {
+      to,
+      template: 'plugin-version-new',
+      subject,
+      text: subject,
+      locals: {
+        pluginName: plugin.name,
+        latestVersion: plugin.latestVersion,
+        pluginUrl
       }
     }
 

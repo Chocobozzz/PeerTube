@@ -163,6 +163,12 @@ const CONFIG = {
       CLEANUP_REMOTE_INTERACTIONS: config.get<boolean>('federation.videos.cleanup_remote_interactions')
     }
   },
+  PEERTUBE: {
+    CHECK_LATEST_VERSION: {
+      ENABLED: config.get<boolean>('peertube.check_latest_version.enabled'),
+      URL: config.get<string>('peertube.check_latest_version.url')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },

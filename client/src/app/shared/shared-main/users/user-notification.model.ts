@@ -6,6 +6,7 @@ import {
   AbuseState,
   ActorInfo,
   FollowState,
+  PluginType,
   UserNotification as UserNotificationServer,
   UserNotificationType,
   UserRight,
@@ -74,19 +75,39 @@ export class UserNotification implements UserNotificationServer {
     }
   }
 
+  plugin?: {
+    name: string
+    type: PluginType
+    latestVersion: string
+  }
+
+  peertube?: {
+    latestVersion: string
+  }
+
   createdAt: string
   updatedAt: string
 
   // Additional fields
   videoUrl?: string
   commentUrl?: any[]
+
   abuseUrl?: string
   abuseQueryParams?: { [id: string]: string } = {}
+
   videoAutoBlacklistUrl?: string
+
   accountUrl?: string
+
   videoImportIdentifier?: string
   videoImportUrl?: string
+
   instanceFollowUrl?: string
+
+  peertubeVersionLink?: string
+
+  pluginUrl?: string
+  pluginQueryParams?: { [id: string]: string } = {}
 
   constructor (hash: UserNotificationServer, user: AuthUser) {
     this.id = hash.id
@@ -113,6 +134,9 @@ export class UserNotification implements UserNotificationServer {
 
       this.actorFollow = hash.actorFollow
       if (this.actorFollow) this.setAccountAvatarUrl(this.actorFollow.follower)
+
+      this.plugin = hash.plugin
+      this.peertube = hash.peertube
 
       this.createdAt = hash.createdAt
       this.updatedAt = hash.updatedAt
@@ -196,6 +220,15 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.AUTO_INSTANCE_FOLLOWING:
           this.instanceFollowUrl = '/admin/follows/following-list'
+          break
+
+        case UserNotificationType.NEW_PEERTUBE_VERSION:
+          this.peertubeVersionLink = 'https://joinpeertube.org/news'
+          break
+
+        case UserNotificationType.NEW_PLUGIN_VERSION:
+          this.pluginUrl = `/admin/plugins/list-installed`
+          this.pluginQueryParams.pluginType = this.plugin.type + ''
           break
       }
     } catch (err) {

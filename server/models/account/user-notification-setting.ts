@@ -156,6 +156,24 @@ export class UserNotificationSettingModel extends Model {
   @Column
   abuseNewMessage: UserNotificationSettingValue
 
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingNewPeerTubeVersion',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'newPeerTubeVersion')
+  )
+  @Column
+  newPeerTubeVersion: UserNotificationSettingValue
+
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingNewPeerPluginVersion',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'newPluginVersion')
+  )
+  @Column
+  newPluginVersion: UserNotificationSettingValue
+
   @ForeignKey(() => UserModel)
   @Column
   userId: number
@@ -195,7 +213,9 @@ export class UserNotificationSettingModel extends Model {
       newInstanceFollower: this.newInstanceFollower,
       autoInstanceFollowing: this.autoInstanceFollowing,
       abuseNewMessage: this.abuseNewMessage,
-      abuseStateChange: this.abuseStateChange
+      abuseStateChange: this.abuseStateChange,
+      newPeerTubeVersion: this.newPeerTubeVersion,
+      newPluginVersion: this.newPluginVersion
     }
   }
 }

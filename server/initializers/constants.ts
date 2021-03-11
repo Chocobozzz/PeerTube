@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 610
+const LAST_MIGRATION_VERSION = 625
 
 // ---------------------------------------------------------------------------
 
@@ -207,6 +207,7 @@ const SCHEDULER_INTERVALS_MS = {
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
   checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
+  checkPeerTubeVersion: 60000 * 60 * 24, // 1 day
   autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
@@ -763,6 +764,7 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
   SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
   SCHEDULER_INTERVALS_MS.updateInboxStats = 5000
+  SCHEDULER_INTERVALS_MS.checkPeerTubeVersion = 2000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
 

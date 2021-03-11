@@ -1,5 +1,6 @@
 import { FollowState } from '../actors'
 import { AbuseState } from '../moderation'
+import { PluginType } from '../plugins'
 
 export const enum UserNotificationType {
   NEW_VIDEO_FROM_SUBSCRIPTION = 1,
@@ -26,7 +27,10 @@ export const enum UserNotificationType {
 
   ABUSE_STATE_CHANGE = 15,
 
-  ABUSE_NEW_MESSAGE = 16
+  ABUSE_NEW_MESSAGE = 16,
+
+  NEW_PLUGIN_VERSION = 17,
+  NEW_PEERTUBE_VERSION = 18
 }
 
 export interface VideoInfo {
@@ -106,6 +110,16 @@ export interface UserNotification {
       displayName: string
       host: string
     }
+  }
+
+  plugin?: {
+    name: string
+    type: PluginType
+    latestVersion: string
+  }
+
+  peertube?: {
+    latestVersion: string
   }
 
   createdAt: string

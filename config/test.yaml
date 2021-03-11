@@ -38,6 +38,10 @@ log:
 contact_form:
   enabled: true
 
+peertube:
+  check_latest_version:
+    enabled: false
+
 redundancy:
   videos:
     check_interval: '1 minute'

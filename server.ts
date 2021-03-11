@@ -120,6 +120,7 @@ import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
 import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-scheduler'
+import { PeerTubeVersionCheckScheduler } from './server/lib/schedulers/peertube-version-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
 import { LiveManager } from './server/lib/live-manager'
@@ -277,6 +278,7 @@ async function startApplication () {
   RemoveOldHistoryScheduler.Instance.enable()
   RemoveOldViewsScheduler.Instance.enable()
   PluginsCheckScheduler.Instance.enable()
+  PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
 
   // Redis initialization

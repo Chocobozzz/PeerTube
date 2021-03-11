@@ -1,0 +1,9 @@
+extends ../common/greetings
+
+block title
+  | New plugin version available
+
+block content
+  p
+    | A new version of the plugin/theme #{pluginName} is available: #{latestVersion}.
+    | You might want to upgrade it on #[a(href=pluginUrl) the PeerTube admin interface].
