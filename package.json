@@ -53,6 +53,7 @@
     "start:server": "node dist/server --no-client",
     "update-host": "node ./dist/scripts/update-host.js",
     "create-transcoding-job": "node ./dist/scripts/create-transcoding-job.js",
+    "regenerate-thumbnails": "node ./dist/scripts/regenerate-thumbnails.js",
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
     "print-transcode-command": "node ./dist/scripts/print-transcode-command.js",
     "test": "scripty",

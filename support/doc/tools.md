@@ -15,6 +15,7 @@
     - [peertube-redundancy.js](#peertube-redundancyjs)
 - [Server tools](#server-tools)
   - [parse-log](#parse-log)
+  - [regenerate-thumbnails.js](#regenerate-thumbnailsjs)
   - [create-transcoding-job.js](#create-transcoding-jobjs)
   - [create-import-video-file-job.js](#create-import-video-file-jobjs)
   - [prune-storage.js](#prune-storagejs)
@@ -249,6 +250,15 @@ You can also remove SQL or HTTP logs using `--not-tags`:
 ```
 $ cd /var/www/peertube/peertube-latest
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level debug --not-tags http sql
+```
+
+### regenerate-thumbnails.js
+
+Regenerating local video thumbnails could be useful because new PeerTube releases may increase thumbnail sizes:
+
+```
+$ cd /var/www/peertube/peertube-latest
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run regenerate-thumbnails
 ```
 
 ### create-transcoding-job.js
