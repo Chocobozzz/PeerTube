@@ -126,7 +126,7 @@
     "multer": "^1.1.0",
     "node-media-server": "^2.1.4",
     "nodemailer": "^6.0.0",
-    "oauth2-server": "3.1.0-beta.1",
+    "oauth2-server": "3.1.1",
     "parse-torrent": "^9.1.0",
     "password-generator": "^2.0.2",
     "pem": "^1.12.3",
