@@ -130,6 +130,14 @@ function setActorFollowScores (internalServerNumber: number, newScore: number) {
   return seq.query(`UPDATE "actorFollow" SET "score" = ${newScore}`, options)
 }
 
+function setTokenField (internalServerNumber: number, accessToken: string, field: string, value: string) {
+  const seq = getSequelize(internalServerNumber)
+
+  const options = { type: QueryTypes.UPDATE }
+
+  return seq.query(`UPDATE "oAuthToken" SET "${field}" = '${value}' WHERE "accessToken" = '${accessToken}'`, options)
+}
+
 export {
   setVideoField,
   setPlaylistField,
@@ -139,6 +147,7 @@ export {
   setPluginLatestVersion,
   selectQuery,
   deleteAll,
+  setTokenField,
   updateQuery,
   setActorFollowScores,
   closeAllSequelize,

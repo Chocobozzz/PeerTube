@@ -29,7 +29,7 @@ import { doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoP
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { MVideoPlaylist } from '../../../types/models/video/video-playlist'
-import { authenticatePromiseIfNeeded } from '../../oauth'
+import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([

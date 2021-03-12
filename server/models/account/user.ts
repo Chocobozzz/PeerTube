@@ -21,6 +21,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { TokensCache } from '@server/lib/auth/tokens-cache'
 import {
   MMyUserFormattable,
   MUser,
@@ -58,7 +59,6 @@ import {
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
-import { clearCacheByUserId } from '../../lib/oauth-model'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
@@ -411,7 +411,7 @@ export class UserModel extends Model {
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (instance: UserModel) {
-    return clearCacheByUserId(instance.id)
+    return TokensCache.Instance.clearCacheByUserId(instance.id)
   }
 
   static countTotal () {

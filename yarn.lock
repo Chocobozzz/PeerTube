@@ -1657,7 +1657,7 @@ bluebird@^2.10.0:
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
   integrity sha1-U0uQM8AiyVecVro7Plpcqvu2UOE=
 
-bluebird@^3.0.5, bluebird@^3.5.0, bluebird@^3.5.1, bluebird@^3.7.2:
+bluebird@^3.5.0, bluebird@^3.5.1, bluebird@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
@@ -3401,15 +3401,6 @@ exif-parser@^0.1.12:
   resolved "https://registry.yarnpkg.com/exif-parser/-/exif-parser-0.1.12.tgz#58a9d2d72c02c1f6f02a0ef4a9166272b7760922"
   integrity sha1-WKnS1ywCwfbwKg70qRZicrd2CSI=
 
-express-oauth-server@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/express-oauth-server/-/express-oauth-server-2.0.0.tgz#57b08665c1201532f52c4c02f19709238b99a48d"
-  integrity sha1-V7CGZcEgFTL1LEwC8ZcJI4uZpI0=
-  dependencies:
-    bluebird "^3.0.5"
-    express "^4.13.3"
-    oauth2-server "3.0.0"
-
 express-rate-limit@^5.0.0:
   version "5.2.6"
   resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-5.2.6.tgz#b454e1be8a252081bda58460e0a25bf43ee0f7b0"
@@ -3423,7 +3414,7 @@ express-validator@^6.4.0:
     lodash "^4.17.20"
     validator "^13.5.2"
 
-express@^4.12.4, express@^4.13.3, express@^4.16.4, express@^4.17.1:
+express@^4.12.4, express@^4.16.4, express@^4.17.1:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
   integrity sha512-mHJ9O79RqluphRrcw2X/GTh3k9tVv8YcoyY4Kkh4WDMUYKRZUq0h1o0w2rrrxBqM7VoeUVqgb27xlEMXTnYt4g==
@@ -5892,7 +5883,7 @@ oauth-sign@~0.9.0:
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.9.0.tgz#47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
   integrity sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
 
-oauth2-server@3.0.0, oauth2-server@3.1.0-beta.1:
+oauth2-server@3.1.0-beta.1:
   version "3.1.0-beta.1"
   resolved "https://registry.yarnpkg.com/oauth2-server/-/oauth2-server-3.1.0-beta.1.tgz#159ee4d32d148c2dc7a39f7b1ce872e039b91a41"
   integrity sha512-FWLl/YC5NGvGzAtclhmlY9fG0nKwDP7xPiPOi5fZ4APO34BmF/vxsEp22spJNuSOrGEsp9W7jKtFCI3UBSvx5w==

@@ -1,15 +1,19 @@
 import * as express from 'express'
 import { Socket } from 'socket.io'
-import { oAuthServer } from '@server/lib/auth'
-import { logger } from '../helpers/logger'
-import { getAccessToken } from '../lib/oauth-model'
+import { getAccessToken } from '@server/lib/auth/oauth-model'
 import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { logger } from '../helpers/logger'
+import { handleOAuthAuthenticate } from '../lib/auth/oauth'
 
 function authenticate (req: express.Request, res: express.Response, next: express.NextFunction, authenticateInQuery = false) {
-  const options = authenticateInQuery ? { allowBearerTokensInQueryString: true } : {}
+  handleOAuthAuthenticate(req, res, authenticateInQuery)
+    .then((token: any) => {
+      res.locals.oauth = { token }
+      res.locals.authenticated = true
 
-  oAuthServer.authenticate(options)(req, res, err => {
-    if (err) {
+      return next()
+    })
+    .catch(err => {
       logger.warn('Cannot authenticate.', { err })
 
       return res.status(err.status)
@@ -17,13 +21,7 @@ function authenticate (req: express.Request, res: express.Response, next: expres
           error: 'Token is invalid.',
           code: err.name
         })
-        .end()
-    }
-
-    res.locals.authenticated = true
-
-    return next()
-  })
+    })
 }
 
 function authenticateSocket (socket: Socket, next: (err?: any) => void) {

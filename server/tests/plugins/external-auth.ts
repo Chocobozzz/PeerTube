@@ -137,7 +137,7 @@ describe('Test external auth plugins', function () {
 
     await loginUsingExternalToken(server, 'cyan', externalAuthToken, HttpStatusCode.BAD_REQUEST_400)
 
-    await waitUntilLog(server, 'expired external auth token')
+    await waitUntilLog(server, 'expired external auth token', 2)
   })
 
   it('Should auto login Cyan, create the user and use the token', async function () {

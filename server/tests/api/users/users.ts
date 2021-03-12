@@ -4,10 +4,12 @@ import 'mocha'
 import * as chai from 'chai'
 import { AbuseState, AbuseUpdate, MyUser, User, UserRole, Video, VideoPlaylistType } from '@shared/models'
 import { CustomConfig } from '@shared/models/server'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoCommentThread,
   blockUser,
   cleanupTests,
+  closeAllSequelize,
   createUser,
   deleteMe,
   flushAndRunServer,
@@ -24,6 +26,7 @@ import {
   getVideoChannel,
   getVideosList,
   installPlugin,
+  killallServers,
   login,
   makePutBodyRequest,
   rateVideo,
@@ -31,7 +34,9 @@ import {
   removeUser,
   removeVideo,
   reportAbuse,
+  reRunServer,
   ServerInfo,
+  setTokenField,
   testImage,
   unblockUser,
   updateAbuse,
@@ -44,10 +49,9 @@ import {
   waitJobs
 } from '../../../../shared/extra-utils'
 import { follow } from '../../../../shared/extra-utils/server/follows'
-import { logout, serverLogin, setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
+import { logout, refreshToken, setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
 import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -89,6 +93,7 @@ describe('Test users', function () {
       const client = { id: 'client', secret: server.client.secret }
       const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
 
+      expect(res.body.code).to.equal('invalid_client')
       expect(res.body.error).to.contain('client is invalid')
     })
 
@@ -96,6 +101,7 @@ describe('Test users', function () {
       const client = { id: server.client.id, secret: 'coucou' }
       const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
 
+      expect(res.body.code).to.equal('invalid_client')
       expect(res.body.error).to.contain('client is invalid')
     })
   })
@@ -106,6 +112,7 @@ describe('Test users', function () {
       const user = { username: 'captain crochet', password: server.user.password }
       const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
 
+      expect(res.body.code).to.equal('invalid_grant')
       expect(res.body.error).to.contain('credentials are invalid')
     })
 
@@ -113,6 +120,7 @@ describe('Test users', function () {
       const user = { username: server.user.username, password: 'mew_three' }
       const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
 
+      expect(res.body.code).to.equal('invalid_grant')
       expect(res.body.error).to.contain('credentials are invalid')
     })
 
@@ -245,12 +253,44 @@ describe('Test users', function () {
     })
 
     it('Should be able to login again', async function () {
-      server.accessToken = await serverLogin(server)
+      const res = await login(server.url, server.client, server.user)
+      server.accessToken = res.body.access_token
+      server.refreshToken = res.body.refresh_token
     })
 
-    it('Should have an expired access token')
+    it('Should be able to get my user information again', async function () {
+      await getMyUserInformation(server.url, server.accessToken)
+    })
 
-    it('Should refresh the token')
+    it('Should have an expired access token', async function () {
+      this.timeout(15000)
+
+      await setTokenField(server.internalServerNumber, server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
+      await setTokenField(server.internalServerNumber, server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
+
+      killallServers([ server ])
+      await reRunServer(server)
+
+      await getMyUserInformation(server.url, server.accessToken, 401)
+    })
+
+    it('Should not be able to refresh an access token with an expired refresh token', async function () {
+      await refreshToken(server, server.refreshToken, 400)
+    })
+
+    it('Should refresh the token', async function () {
+      this.timeout(15000)
+
+      const futureDate = new Date(new Date().getTime() + 1000 * 60).toISOString()
+      await setTokenField(server.internalServerNumber, server.accessToken, 'refreshTokenExpiresAt', futureDate)
+
+      killallServers([ server ])
+      await reRunServer(server)
+
+      const res = await refreshToken(server, server.refreshToken)
+      server.accessToken = res.body.access_token
+      server.refreshToken = res.body.refresh_token
+    })
 
     it('Should be able to get my user information again', async function () {
       await getMyUserInformation(server.url, server.accessToken)
@@ -976,6 +1016,7 @@ describe('Test users', function () {
   })
 
   after(async function () {
+    await closeAllSequelize([ server ])
     await cleanupTests([ server ])
   })
 })

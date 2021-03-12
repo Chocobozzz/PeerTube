@@ -37,6 +37,7 @@ interface ServerInfo {
   customConfigFile?: string
 
   accessToken?: string
+  refreshToken?: string
   videoChannel?: VideoChannel
 
   video?: {

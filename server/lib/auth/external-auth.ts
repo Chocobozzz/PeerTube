@@ -1,28 +1,16 @@
+
 import { isUserDisplayNameValid, isUserRoleValid, isUserUsernameValid } from '@server/helpers/custom-validators/users'
 import { logger } from '@server/helpers/logger'
 import { generateRandomString } from '@server/helpers/utils'
-import { OAUTH_LIFETIME, PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants'
-import { revokeToken } from '@server/lib/oauth-model'
+import { PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
-import { UserRole } from '@shared/models'
 import {
   RegisterServerAuthenticatedResult,
   RegisterServerAuthPassOptions,
   RegisterServerExternalAuthenticatedResult
 } from '@server/types/plugins/register-server-auth.model'
-import * as express from 'express'
-import * as OAuthServer from 'express-oauth-server'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-
-const oAuthServer = new OAuthServer({
-  useErrorHandler: true,
-  accessTokenLifetime: OAUTH_LIFETIME.ACCESS_TOKEN,
-  refreshTokenLifetime: OAUTH_LIFETIME.REFRESH_TOKEN,
-  allowExtendedTokenAttributes: true,
-  continueMiddleware: true,
-  model: require('./oauth-model')
-})
+import { UserRole } from '@shared/models'
 
 // Token is the key, expiration date is the value
 const authBypassTokens = new Map<string, {
@@ -36,42 +24,6 @@ const authBypassTokens = new Map<string, {
   authName: string
   npmName: string
 }>()
-
-async function handleLogin (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const grantType = req.body.grant_type
-
-  if (grantType === 'password') {
-    if (req.body.externalAuthToken) proxifyExternalAuthBypass(req, res)
-    else await proxifyPasswordGrant(req, res)
-  } else if (grantType === 'refresh_token') {
-    await proxifyRefreshGrant(req, res)
-  }
-
-  return forwardTokenReq(req, res, next)
-}
-
-async function handleTokenRevocation (req: express.Request, res: express.Response) {
-  const token = res.locals.oauth.token
-
-  res.locals.explicitLogout = true
-  const result = await revokeToken(token)
-
-  // FIXME: uncomment when https://github.com/oauthjs/node-oauth2-server/pull/289 is released
-  // oAuthServer.revoke(req, res, err => {
-  //   if (err) {
-  //     logger.warn('Error in revoke token handler.', { err })
-  //
-  //     return res.status(err.status)
-  //               .json({
-  //                 error: err.message,
-  //                 code: err.name
-  //               })
-  //               .end()
-  //   }
-  // })
-
-  return res.json(result)
-}
 
 async function onExternalUserAuthenticated (options: {
   npmName: string
@@ -107,7 +59,7 @@ async function onExternalUserAuthenticated (options: {
     authName
   })
 
-  // Cleanup
+  // Cleanup expired tokens
   const now = new Date()
   for (const [ key, value ] of authBypassTokens) {
     if (value.expires.getTime() < now.getTime()) {
@@ -118,37 +70,15 @@ async function onExternalUserAuthenticated (options: {
   res.redirect(`/login?externalAuthToken=${bypassToken}&username=${user.username}`)
 }
 
-// ---------------------------------------------------------------------------
-
-export { oAuthServer, handleLogin, onExternalUserAuthenticated, handleTokenRevocation }
-
-// ---------------------------------------------------------------------------
-
-function forwardTokenReq (req: express.Request, res: express.Response, next?: express.NextFunction) {
-  return oAuthServer.token()(req, res, err => {
-    if (err) {
-      logger.warn('Login error.', { err })
-
-      return res.status(err.status)
-        .json({
-          error: err.message,
-          code: err.name
-        })
-    }
-
-    if (next) return next()
-  })
-}
-
-async function proxifyRefreshGrant (req: express.Request, res: express.Response) {
-  const refreshToken = req.body.refresh_token
-  if (!refreshToken) return
+async function getAuthNameFromRefreshGrant (refreshToken?: string) {
+  if (!refreshToken) return undefined
 
   const tokenModel = await OAuthTokenModel.loadByRefreshToken(refreshToken)
-  if (tokenModel?.authName) res.locals.refreshTokenAuthName = tokenModel.authName
+
+  return tokenModel?.authName
 }
 
-async function proxifyPasswordGrant (req: express.Request, res: express.Response) {
+async function getBypassFromPasswordGrant (username: string, password: string) {
   const plugins = PluginManager.Instance.getIdAndPassAuths()
   const pluginAuths: { npmName?: string, registerAuthOptions: RegisterServerAuthPassOptions }[] = []
 
@@ -174,8 +104,8 @@ async function proxifyPasswordGrant (req: express.Request, res: express.Response
   })
 
   const loginOptions = {
-    id: req.body.username,
-    password: req.body.password
+    id: username,
+    password
   }
 
   for (const pluginAuth of pluginAuths) {
@@ -199,49 +129,41 @@ async function proxifyPasswordGrant (req: express.Request, res: express.Response
         authName, npmName, loginOptions.id
       )
 
-      res.locals.bypassLogin = {
+      return {
         bypass: true,
         pluginName: pluginAuth.npmName,
         authName: authOptions.authName,
         user: buildUserResult(loginResult)
       }
-
-      return
     } catch (err) {
       logger.error('Error in auth method %s of plugin %s', authOptions.authName, pluginAuth.npmName, { err })
     }
   }
+
+  return undefined
 }
 
-function proxifyExternalAuthBypass (req: express.Request, res: express.Response) {
-  const obj = authBypassTokens.get(req.body.externalAuthToken)
-  if (!obj) {
-    logger.error('Cannot authenticate user with unknown bypass token')
-    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
-  }
+function getBypassFromExternalAuth (username: string, externalAuthToken: string) {
+  const obj = authBypassTokens.get(externalAuthToken)
+  if (!obj) throw new Error('Cannot authenticate user with unknown bypass token')
 
   const { expires, user, authName, npmName } = obj
 
   const now = new Date()
   if (now.getTime() > expires.getTime()) {
-    logger.error('Cannot authenticate user with an expired external auth token')
-    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
+    throw new Error('Cannot authenticate user with an expired external auth token')
   }
 
-  if (user.username !== req.body.username) {
-    logger.error('Cannot authenticate user %s with invalid username %s.', req.body.username)
-    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
+  if (user.username !== username) {
+    throw new Error(`Cannot authenticate user ${user.username} with invalid username ${username}`)
   }
-
-  // Bypass oauth library validation
-  req.body.password = 'fake'
 
   logger.info(
     'Auth success with external auth method %s of plugin %s for %s.',
     authName, npmName, user.email
   )
 
-  res.locals.bypassLogin = {
+  return {
     bypass: true,
     pluginName: npmName,
     authName: authName,
@@ -285,4 +207,13 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
     role: pluginResult.role ?? UserRole.USER,
     displayName: pluginResult.displayName || pluginResult.username
   }
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  onExternalUserAuthenticated,
+  getBypassFromExternalAuth,
+  getAuthNameFromRefreshGrant,
+  getBypassFromPasswordGrant
 }

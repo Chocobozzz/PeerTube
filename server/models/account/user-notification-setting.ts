@@ -12,10 +12,10 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { TokensCache } from '@server/lib/auth/tokens-cache'
 import { MNotificationSettingFormattable } from '@server/types/models'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
-import { clearCacheByUserId } from '../../lib/oauth-model'
 import { throwIfNotValid } from '../utils'
 import { UserModel } from './user'
 
@@ -195,7 +195,7 @@ export class UserNotificationSettingModel extends Model {
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (instance: UserNotificationSettingModel) {
-    return clearCacheByUserId(instance.userId)
+    return TokensCache.Instance.clearCacheByUserId(instance.userId)
   }
 
   toFormattedJSON (this: MNotificationSettingFormattable): UserNotificationSetting {

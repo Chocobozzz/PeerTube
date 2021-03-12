@@ -54,7 +54,7 @@ import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
-import { authenticatePromiseIfNeeded } from '../../oauth'
+import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([

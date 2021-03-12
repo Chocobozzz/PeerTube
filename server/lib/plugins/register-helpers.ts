@@ -7,7 +7,7 @@ import {
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PRIVACIES
 } from '@server/initializers/constants'
-import { onExternalUserAuthenticated } from '@server/lib/auth'
+import { onExternalUserAuthenticated } from '@server/lib/auth/external-auth'
 import { PluginModel } from '@server/models/server/plugin'
 import {
   RegisterServerAuthExternalOptions,

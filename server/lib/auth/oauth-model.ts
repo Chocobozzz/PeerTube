@@ -1,49 +1,35 @@
-import * as express from 'express'
-import * as LRUCache from 'lru-cache'
 import { AccessDeniedError } from 'oauth2-server'
-import { Transaction } from 'sequelize'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import { ActorModel } from '@server/models/activitypub/actor'
+import { MOAuthClient } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { MUser } from '@server/types/models/user/user'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 import { UserRole } from '@shared/models/users/user-role'
-import { logger } from '../helpers/logger'
-import { CONFIG } from '../initializers/config'
-import { LRU_CACHE } from '../initializers/constants'
-import { UserModel } from '../models/account/user'
-import { OAuthClientModel } from '../models/oauth/oauth-client'
-import { OAuthTokenModel } from '../models/oauth/oauth-token'
-import { createUserAccountAndChannelAndPlaylist } from './user'
+import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers/config'
+import { UserModel } from '../../models/account/user'
+import { OAuthClientModel } from '../../models/oauth/oauth-client'
+import { OAuthTokenModel } from '../../models/oauth/oauth-token'
+import { createUserAccountAndChannelAndPlaylist } from '../user'
+import { TokensCache } from './tokens-cache'
 
-type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
-
-const accessTokenCache = new LRUCache<string, MOAuthTokenUser>({ max: LRU_CACHE.USER_TOKENS.MAX_SIZE })
-const userHavingToken = new LRUCache<number, string>({ max: LRU_CACHE.USER_TOKENS.MAX_SIZE })
-
-// ---------------------------------------------------------------------------
-
-function deleteUserToken (userId: number, t?: Transaction) {
-  clearCacheByUserId(userId)
-
-  return OAuthTokenModel.deleteUserToken(userId, t)
+type TokenInfo = {
+  accessToken: string
+  refreshToken: string
+  accessTokenExpiresAt: Date
+  refreshTokenExpiresAt: Date
 }
 
-function clearCacheByUserId (userId: number) {
-  const token = userHavingToken.get(userId)
-
-  if (token !== undefined) {
-    accessTokenCache.del(token)
-    userHavingToken.del(userId)
-  }
-}
-
-function clearCacheByToken (token: string) {
-  const tokenModel = accessTokenCache.get(token)
-
-  if (tokenModel !== undefined) {
-    userHavingToken.del(tokenModel.userId)
-    accessTokenCache.del(token)
+export type BypassLogin = {
+  bypass: boolean
+  pluginName: string
+  authName?: string
+  user: {
+    username: string
+    email: string
+    displayName: string
+    role: UserRole
   }
 }
 
@@ -54,15 +40,12 @@ async function getAccessToken (bearerToken: string) {
 
   let tokenModel: MOAuthTokenUser
 
-  if (accessTokenCache.has(bearerToken)) {
-    tokenModel = accessTokenCache.get(bearerToken)
+  if (TokensCache.Instance.hasToken(bearerToken)) {
+    tokenModel = TokensCache.Instance.getByToken(bearerToken)
   } else {
     tokenModel = await OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
 
-    if (tokenModel) {
-      accessTokenCache.set(bearerToken, tokenModel)
-      userHavingToken.set(tokenModel.userId, tokenModel.accessToken)
-    }
+    if (tokenModel) TokensCache.Instance.setToken(tokenModel)
   }
 
   if (!tokenModel) return undefined
@@ -99,16 +82,13 @@ async function getRefreshToken (refreshToken: string) {
   return tokenInfo
 }
 
-async function getUser (usernameOrEmail?: string, password?: string) {
-  const res: express.Response = this.request.res
-
+async function getUser (usernameOrEmail?: string, password?: string, bypassLogin?: BypassLogin) {
   // Special treatment coming from a plugin
-  if (res.locals.bypassLogin && res.locals.bypassLogin.bypass === true) {
-    const obj = res.locals.bypassLogin
-    logger.info('Bypassing oauth login by plugin %s.', obj.pluginName)
+  if (bypassLogin && bypassLogin.bypass === true) {
+    logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
-    let user = await UserModel.loadByEmail(obj.user.email)
-    if (!user) user = await createUserFromExternal(obj.pluginName, obj.user)
+    let user = await UserModel.loadByEmail(bypassLogin.user.email)
+    if (!user) user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
 
     // Cannot create a user
     if (!user) throw new AccessDeniedError('Cannot create such user: an actor with that name already exists.')
@@ -117,7 +97,7 @@ async function getUser (usernameOrEmail?: string, password?: string) {
     // Then we just go through a regular login process
     if (user.pluginAuth !== null) {
       // This user does not belong to this plugin, skip it
-      if (user.pluginAuth !== obj.pluginName) return null
+      if (user.pluginAuth !== bypassLogin.pluginName) return null
 
       checkUserValidityOrThrow(user)
 
@@ -143,18 +123,20 @@ async function getUser (usernameOrEmail?: string, password?: string) {
   return user
 }
 
-async function revokeToken (tokenInfo: { refreshToken: string }): Promise<{ success: boolean, redirectUrl?: string }> {
-  const res: express.Response = this.request.res
+async function revokeToken (
+  tokenInfo: { refreshToken: string },
+  explicitLogout?: boolean
+): Promise<{ success: boolean, redirectUrl?: string }> {
   const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
 
   if (token) {
     let redirectUrl: string
 
-    if (res.locals.explicitLogout === true && token.User.pluginAuth && token.authName) {
+    if (explicitLogout === true && token.User.pluginAuth && token.authName) {
       redirectUrl = await PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName, token.User, this.request)
     }
 
-    clearCacheByToken(token.accessToken)
+    TokensCache.Instance.clearCacheByToken(token.accessToken)
 
     token.destroy()
          .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
@@ -165,14 +147,22 @@ async function revokeToken (tokenInfo: { refreshToken: string }): Promise<{ succ
   return { success: false }
 }
 
-async function saveToken (token: TokenInfo, client: OAuthClientModel, user: UserModel) {
-  const res: express.Response = this.request.res
-
+async function saveToken (
+  token: TokenInfo,
+  client: MOAuthClient,
+  user: MUser,
+  options: {
+    refreshTokenAuthName?: string
+    bypassLogin?: BypassLogin
+  } = {}
+) {
+  const { refreshTokenAuthName, bypassLogin } = options
   let authName: string = null
-  if (res.locals.bypassLogin?.bypass === true) {
-    authName = res.locals.bypassLogin.authName
-  } else if (res.locals.refreshTokenAuthName) {
-    authName = res.locals.refreshTokenAuthName
+
+  if (bypassLogin?.bypass === true) {
+    authName = bypassLogin.authName
+  } else if (refreshTokenAuthName) {
+    authName = refreshTokenAuthName
   }
 
   logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
@@ -199,17 +189,12 @@ async function saveToken (token: TokenInfo, client: OAuthClientModel, user: User
     refreshTokenExpiresAt: tokenCreated.refreshTokenExpiresAt,
     client,
     user,
-    refresh_token_expires_in: Math.floor((tokenCreated.refreshTokenExpiresAt.getTime() - new Date().getTime()) / 1000)
+    accessTokenExpiresIn: buildExpiresIn(tokenCreated.accessTokenExpiresAt),
+    refreshTokenExpiresIn: buildExpiresIn(tokenCreated.refreshTokenExpiresAt)
   }
 }
 
-// ---------------------------------------------------------------------------
-
-// See https://github.com/oauthjs/node-oauth2-server/wiki/Model-specification for the model specifications
 export {
-  deleteUserToken,
-  clearCacheByUserId,
-  clearCacheByToken,
   getAccessToken,
   getClient,
   getRefreshToken,
@@ -217,6 +202,8 @@ export {
   revokeToken,
   saveToken
 }
+
+// ---------------------------------------------------------------------------
 
 async function createUserFromExternal (pluginAuth: string, options: {
   username: string
@@ -251,4 +238,8 @@ async function createUserFromExternal (pluginAuth: string, options: {
 
 function checkUserValidityOrThrow (user: MUser) {
   if (user.blocked) throw new AccessDeniedError('User is blocked.')
+}
+
+function buildExpiresIn (expiresAt: Date) {
+  return Math.floor((expiresAt.getTime() - new Date().getTime()) / 1000)
 }

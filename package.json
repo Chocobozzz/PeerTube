@@ -82,9 +82,6 @@
     "swagger-cli": "swagger-cli",
     "sass-lint": "sass-lint"
   },
-  "resolutions": {
-    "oauth2-server": "3.1.0-beta.1"
-  },
   "dependencies": {
     "apicache": "1.6.2",
     "async": "^3.0.1",
@@ -104,7 +101,6 @@
     "deep-object-diff": "^1.1.0",
     "email-templates": "^8.0.3",
     "express": "^4.12.4",
-    "express-oauth-server": "^2.0.0",
     "express-rate-limit": "^5.0.0",
     "express-validator": "^6.4.0",
     "flat": "^5.0.0",
