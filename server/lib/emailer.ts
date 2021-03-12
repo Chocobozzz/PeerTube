@@ -7,7 +7,7 @@ import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/m
 import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
 import { SANITIZE_OPTIONS, TEXT_WITH_HTML_RULES } from '@shared/core-utils'
 import { AbuseState, EmailPayload, UserAbuse } from '@shared/models'
-import { SendEmailOptions } from '../../shared/models/server/emailer.model'
+import { SendEmailDefaultOptions } from '../../shared/models/server/emailer.model'
 import { isTestInstance, root } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
@@ -473,13 +473,10 @@ class Emailer {
   }
 
   addNewPeerTubeVersionNotification (to: string[], latestVersion: string) {
-    const subject = `A new PeerTube version is available: ${latestVersion}`
-
     const emailPayload: EmailPayload = {
       to,
       template: 'peertube-version-new',
-      subject,
-      text: subject,
+      subject: `A new PeerTube version is available: ${latestVersion}`,
       locals: {
         latestVersion
       }
@@ -491,13 +488,10 @@ class Emailer {
   addNewPlugionVersionNotification (to: string[], plugin: MPlugin) {
     const pluginUrl = WEBSERVER.URL + '/admin/plugins/list-installed?pluginType=' + plugin.type
 
-    const subject = `A new plugin/theme version is available: ${plugin.name}@${plugin.latestVersion}`
-
     const emailPayload: EmailPayload = {
       to,
       template: 'plugin-version-new',
-      subject,
-      text: subject,
+      subject: `A new plugin/theme version is available: ${plugin.name}@${plugin.latestVersion}`,
       locals: {
         pluginName: plugin.name,
         latestVersion: plugin.latestVersion,
@@ -605,26 +599,27 @@ class Emailer {
     })
 
     for (const to of options.to) {
-      await email
-        .send(merge(
-          {
-            template: 'common',
-            message: {
-              to,
-              from: options.from,
-              subject: options.subject,
-              replyTo: options.replyTo
-            },
-            locals: { // default variables available in all templates
-              WEBSERVER,
-              EMAIL: CONFIG.EMAIL,
-              instanceName: CONFIG.INSTANCE.NAME,
-              text: options.text,
-              subject: options.subject
-            }
-          },
-          options // overriden/new variables given for a specific template in the payload
-        ) as SendEmailOptions)
+      const baseOptions: SendEmailDefaultOptions = {
+        template: 'common',
+        message: {
+          to,
+          from: options.from,
+          subject: options.subject,
+          replyTo: options.replyTo
+        },
+        locals: { // default variables available in all templates
+          WEBSERVER,
+          EMAIL: CONFIG.EMAIL,
+          instanceName: CONFIG.INSTANCE.NAME,
+          text: options.text,
+          subject: options.subject
+        }
+      }
+
+      // overriden/new variables given for a specific template in the payload
+      const sendOptions = merge(baseOptions, options)
+
+      await email.send(sendOptions)
         .then(res => logger.debug('Sent email.', { res }))
         .catch(err => logger.error('Error in email sender.', { err }))
     }
