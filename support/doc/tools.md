@@ -244,6 +244,13 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 
 `--level` is optional and could be `info`/`warn`/`error`
 
+You can also remove SQL or HTTP logs using `--not-tags`:
+
+```
+$ cd /var/www/peertube/peertube-latest
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level debug --not-tags http sql
+```
+
 ### create-transcoding-job.js
 
 You can use this script to force transcoding of an existing video. PeerTube needs to be running.
