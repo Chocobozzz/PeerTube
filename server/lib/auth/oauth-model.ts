@@ -1,3 +1,4 @@
+import * as express from 'express'
 import { AccessDeniedError } from 'oauth2-server'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import { ActorModel } from '@server/models/activitypub/actor'
@@ -125,15 +126,20 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
 
 async function revokeToken (
   tokenInfo: { refreshToken: string },
-  explicitLogout?: boolean
+  options: {
+    req?: express.Request
+    explicitLogout?: boolean
+  } = {}
 ): Promise<{ success: boolean, redirectUrl?: string }> {
+  const { req, explicitLogout } = options
+
   const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
 
   if (token) {
     let redirectUrl: string
 
     if (explicitLogout === true && token.User.pluginAuth && token.authName) {
-      redirectUrl = await PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName, token.User, this.request)
+      redirectUrl = await PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName, token.User, req)
     }
 
     TokensCache.Instance.clearCacheByToken(token.accessToken)

@@ -88,7 +88,7 @@ async function handleToken (req: express.Request, res: express.Response, next: e
 async function handleTokenRevocation (req: express.Request, res: express.Response) {
   const token = res.locals.oauth.token
 
-  const result = await revokeToken(token, true)
+  const result = await revokeToken(token, { req, explicitLogout: true })
 
   return res.json(result)
 }
