@@ -1,0 +1,19 @@
+Hello, here I give you some commands which were. useful for the installation on mac
+
+**** On mac try to execute the installation command with replacing postgres with _postgres before entering on the postgresql server. ****
+
+Check that you've enabled the postgresql and redis servers, with those commands $ brew services run postgresql, $ brew services run redis.
+
+If this command $ sudo -u postgres createuser -P peertube gave you an error you can try this $ sudo -u _postgres createuser -U peertube it's work for me. ( if the second command doesn't work for you, try to open postgresql and do that if you only want an simple user $ CREATE ROLE your_username or this if you want add some rights $ CREATE ROLE your_username SUPERUSER CREATEDB CREATEROLE;
+
+SUPERUSER: allow you to be super user.
+CREATEDB : allow you to create database.
+CREATEROLE: allow you to create new role.
+
+Use them according to your needs.
+
+If you already create your user and you want to allow it to create a database, do that $ ALTER USER your_username CREATEDB;
+
+After that if this command doesn't work $ sudo -u postgres createdb -O peertube peertube_dev for you, restart the postgresql server and do $ CREATE DATABASE peertube_dev; and do that if you need $ GRANT ALL PRIVILEGES ON DATABASE peertube_dev to peertube;this command allow your user named peertube to have all rights to this database
+
+Once the user and database are created you can follow the rest of the peertube installation step, hopefully that will help some of you.
