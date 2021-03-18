@@ -397,7 +397,7 @@
       </trans-unit>
       <trans-unit id="855e1ff3acad516b927095d3990aeff917f75fa3" datatype="html">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="translated">تحويل ترميز الفيديو المباشر لإنشاء عدة دِقات</target>
+        <target state="translated">تحويل ترميز فيديو البث المباشر لإنشاء عدة دِقات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="bc3387a5ccd470d163e6459ff017b9f2edca92f4" datatype="html">
@@ -441,7 +441,7 @@
       </trans-unit>
       <trans-unit id="a4378d599f760c6d1de2667d4535b48db092cb6e" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">يمكنك استيراد أي ملف تورنت يشير لملف وسائط ، تأكد من أنك تمتلك حقوق توزيع هذا الملف وإلا ستسبب لتفيك ولمثيل الخادم مشاكل قانونية.</target>
+        <target state="translated">يمكنك استيراد أي ملف تورنت يشير لملف وسائط ، تأكد من أنك تمتلك حقوق توزيع هذا الملف وإلا ستسبب لنفسك ولمثيل الخادم مشاكل قانونية.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="590fc27fcbd7dd680da2bb2da644a183338f6bd1" datatype="html">
