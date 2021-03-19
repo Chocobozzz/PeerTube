@@ -20,13 +20,13 @@
       </trans-unit>
       <trans-unit id="f50983ee112befc1afddea5c570283db67e20fed" datatype="html">
         <source>Channel avatar</source>
-        <target state="new">Channel avatar</target>
+        <target state="translated">Άβαταρ καναλιού</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="879fef27271d8247d791381cf1f9bb0eb8974166" datatype="html">
         <source>Account avatar</source>
-        <target state="new">Account avatar</target>
+        <target state="translated">Άβαταρ λογαριασμού</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">7</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context><context context-type="linenumber">23</context></context-group>
@@ -991,18 +991,18 @@
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
         <source><x id="PH"/>h</source>
-        <target state="new"><x id="PH"/>h</target>
+        <target state="translated"><x id="PH"/>ωρ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH"/>min</source>
-        <target state="new"><x id="PH"/>min</target>
+        <target state="translated"><x id="PH"/>λεπ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">16</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH"/>sec</source>
-        <target state="new"><x id="PH"/>sec</target>
+        <target state="translated"><x id="PH"/>δευτ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
