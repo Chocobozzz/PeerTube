@@ -1016,7 +1016,7 @@
       </trans-unit>
       <trans-unit id="ed052af4856de46aa0482d05b23b393619689cd2" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="translated">استخدمت رابط خاطئ أو منتهي الصلاحية</target>
+        <target state="translated">استخدمت رابط معطل أو منتهي الصلاحية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="22729b8fc19b701735ef98d5ad6636257dea7164" datatype="html">
@@ -1059,7 +1059,7 @@
       </trans-unit>
       <trans-unit id="68ffb388e7bfe4b0a6f9f6faef194f536a195c09" datatype="html">
         <source>Sepia seems to like it.</source>
-        <target state="new">Sepia seems to like it.</target>
+        <target state="translated">يبدو أنّه يعجب سبيا.</target>
         <note priority="1" from="description">This is about Sepia's tea</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
@@ -1131,12 +1131,12 @@
       </trans-unit>
       <trans-unit id="25d438ce4c6d14835921c34bda6cc88f4fe5b1b4" datatype="html">
         <source>Any other input will return matching video or channel names.</source>
-        <target>أي إدخال آخر سيعيد أسماء الفيديو أو القناة المطابقة.</target>
+        <target>أي إدخال آخر سيعيد أسماء الفيديوهات أو القنوات المطابقة.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
         <source>Cancel</source>
-        <target>الغاء</target>
+        <target>ألغِ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.html</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context><context context-type="linenumber">22</context></context-group>
@@ -1208,7 +1208,7 @@
       </trans-unit>
       <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd" datatype="html">
         <source>Submit</source>
-        <target>ارسل</target>
+        <target>أرسل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">43</context></context-group>
@@ -1276,7 +1276,7 @@
       </trans-unit>
       <trans-unit id="658727060940996385" datatype="html">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="new">Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</target>
+        <target state="translated">تجديد الرمز سيمنع العملاء الذين يستخدمون الرمز القديم من جلب الخلاصات، لذا عليك تكوينهم لاستخدام الرمز الجديد. تُتابع؟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -1284,7 +1284,7 @@
       </trans-unit>
       <trans-unit id="270726559962362501" datatype="html">
         <source>Renew token</source>
-        <target state="new">Renew token</target>
+        <target state="translated">جدد الرمز</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">42</context>
