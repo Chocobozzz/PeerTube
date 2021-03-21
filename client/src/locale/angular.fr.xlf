@@ -8554,7 +8554,7 @@
       </trans-unit>
       <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd" datatype="html">
         <source>Overwrite support field of all videos of this channel</source>
-        <target state="translated">Remplacer le champ de support de toutes les vidéos de cette chaîne</target>
+        <target state="translated">Remplacer le champ de soutien de toutes les vidéos de cette chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context>
           <context context-type="linenumber">92</context>
@@ -8630,7 +8630,7 @@
       </trans-unit>
       <trans-unit id="6461548560008228165" datatype="html">
         <source>Support text cannot be more than 1000 characters long</source>
-        <target state="translated">Le texte d'assistance ne peut pas contenir plus de 1000 caractères</target>
+        <target state="translated">Le texte de soutien ne peut pas contenir plus de 1000 caractères</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">50</context>
