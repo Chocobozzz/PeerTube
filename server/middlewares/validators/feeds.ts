@@ -15,8 +15,8 @@ import { areValidationErrors } from './utils'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const feedsFormatValidator = [
-  param('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
-  query('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)')
+  param('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json, podcast)'),
+  query('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json, podcast)')
 ]
 
 function setFeedFormatContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -27,7 +27,7 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
     acceptableContentTypes = [ 'application/atom+xml', 'application/xml', 'text/xml' ]
   } else if (format === 'json' || format === 'json1') {
     acceptableContentTypes = [ 'application/json' ]
-  } else if (format === 'rss' || format === 'rss2') {
+  } else if (format === 'rss' || format === 'rss2' || format === 'podcast') {
     acceptableContentTypes = [ 'application/rss+xml', 'application/xml', 'text/xml' ]
   } else {
     acceptableContentTypes = [ 'application/xml', 'text/xml' ]
