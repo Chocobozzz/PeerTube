@@ -246,6 +246,12 @@ export class VideoService implements VideosProvider {
     const feeds = [
       {
         format: FeedFormat.RSS,
+        label: 'podcast rss 2.0',
+        url: base + FeedFormat.RSS.toLowerCase(),
+        params: new HttpParams({fromObject: {format: 'podcast'}})
+      },
+      {
+        format: FeedFormat.RSS,
         label: 'media rss 2.0',
         url: base + FeedFormat.RSS.toLowerCase()
       },
@@ -264,6 +270,9 @@ export class VideoService implements VideosProvider {
     if (params && params.keys().length !== 0) {
       for (const feed of feeds) {
         feed.url += '?' + params.toString()
+        if (feed.params) {
+          feed.url += '&' + feed.params.toString()
+        }
       }
     }
 

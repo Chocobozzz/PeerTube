@@ -6381,10 +6381,10 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-pfeed@1.1.11:
-  version "1.1.11"
-  resolved "https://registry.yarnpkg.com/pfeed/-/pfeed-1.1.11.tgz#a52f6b18aa01dfd3c8ff3c7189c456dc1b66d28f"
-  integrity sha512-EheEV1A3xCQ61irXBvqy+V2vAEpeKjw7bTqH2Ck64LFMcGh9yOwncESreaWfUftRf6djRa0sXP6kkOnGWX/P7g==
+pfeed-podcast@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/pfeed-podcast/-/pfeed-podcast-1.2.0.tgz#589a1fa6ba131056f02e83715f17d2447d0d1e1b"
+  integrity sha512-A5ZaxkpJgTWvGQYYGs4W5Z3vIn9Hqw61wj8X+1T2Fsf7Gne1vEe8Z8icEXOyi2mmIA4FVZWV22zAj79piFzkRg==
   dependencies:
     lodash "^4.17.15"
     xml "^1.0.1"
