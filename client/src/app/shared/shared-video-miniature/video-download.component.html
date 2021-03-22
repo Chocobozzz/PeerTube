@@ -36,7 +36,7 @@
         <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
         <div class="input-group-append" *ngIf="!isConfidentialVideo()">
           <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-            <span class="glyphicon glyphicon-copy"></span>
+            <span class="glyphicon glyphicon-duplicate"></span>
           </button>
         </div>
       </div>

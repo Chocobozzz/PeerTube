@@ -12,7 +12,7 @@
             <button [cdkCopyToClipboard]="account.nameWithHostForced" (click)="activateCopiedMessage()"
                     class="btn btn-outline-secondary btn-sm copy-button"
             >
-              <span class="glyphicon glyphicon-copy"></span>
+              <span class="glyphicon glyphicon-duplicate"></span>
             </button>
           </div>
           <span *ngIf="accountUser?.blocked" [ngbTooltip]="accountUser.blockedReason" class="badge badge-danger" i18n>Banned</span>
