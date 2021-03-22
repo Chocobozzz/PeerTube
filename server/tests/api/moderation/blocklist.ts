@@ -107,7 +107,7 @@ describe('Test blocklist', function () {
   let userToken2: string
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await flushAndRunMultipleServers(3)
     await setAccessTokensToServers(servers)

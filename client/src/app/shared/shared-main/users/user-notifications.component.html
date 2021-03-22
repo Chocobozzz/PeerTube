@@ -90,9 +90,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.NEW_COMMENT_ON_MY_VIDEO">
-        <ng-container *ngIf="notification.comment; then hasComment; else noComment"></ng-container>
-
-        <ng-template #hasComment>
+        <ng-container *ngIf="notification.comment">
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
             <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
           </a>
@@ -100,15 +98,15 @@
           <div class="message" i18n>
             <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> commented your video <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">{{ notification.comment.video.name }}</a>
           </div>
-        </ng-template>
+        </ng-container>
 
-        <ng-template #noComment>
+        <ng-container *ngIf="!notification.comment">
           <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 
           <div class="message" i18n>
             The notification concerns a comment now unavailable
           </div>
-        </ng-template>
+        </ng-container>
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.MY_VIDEO_PUBLISHED">
@@ -157,13 +155,23 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.COMMENT_MENTION">
-        <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
-          <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
-        </a>
+        <ng-container *ngIf="notification.comment">
+          <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
+            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
+          </a>
 
-        <div class="message" i18n>
-          <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> mentioned you on <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">video {{ notification.comment.video.name }}</a>
-        </div>
+          <div class="message" i18n>
+            <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> mentioned you on <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">video {{ notification.comment.video.name }}</a>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!notification.comment">
+          <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
+
+          <div class="message" i18n>
+            The notification concerns a comment now unavailable
+          </div>
+        </ng-container>
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.NEW_INSTANCE_FOLLOWER">
