@@ -20,12 +20,14 @@ import {
   getVideoThreadComments,
   getVideoWithToken,
   installPlugin,
+  makeRawRequest,
   registerUser,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   updateCustomSubConfig,
   updateVideo,
   uploadVideo,
+  uploadVideoAndGetId,
   waitJobs
 } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunMultipleServers, ServerInfo } from '../../../shared/extra-utils/server/servers'
@@ -352,6 +354,67 @@ describe('Test plugin filter hooks', function () {
       const res = await registerUser(servers[0].url, 'jma', 'password', HttpStatusCode.FORBIDDEN_403)
 
       expect(res.body.error).to.equal('No jma')
+    })
+  })
+
+  describe('Download hooks', function () {
+    const downloadVideos: VideoDetails[] = []
+
+    before(async function () {
+      this.timeout(60000)
+
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        transcoding: {
+          webtorrent: {
+            enabled: true
+          },
+          hls: {
+            enabled: true
+          }
+        }
+      })
+
+      const uuids: string[] = []
+
+      for (const name of [ 'bad torrent', 'bad file', 'bad playlist file' ]) {
+        const uuid = (await uploadVideoAndGetId({ server: servers[0], videoName: name })).uuid
+        uuids.push(uuid)
+      }
+
+      await waitJobs(servers)
+
+      for (const uuid of uuids) {
+        const res = await getVideo(servers[0].url, uuid)
+        downloadVideos.push(res.body)
+      }
+    })
+
+    it('Should run filter:api.download.torrent.allowed.result', async function () {
+      const res = await makeRawRequest(downloadVideos[0].files[0].torrentDownloadUrl, 403)
+      expect(res.body.error).to.equal('Liu Bei')
+
+      await makeRawRequest(downloadVideos[1].files[0].torrentDownloadUrl, 200)
+      await makeRawRequest(downloadVideos[2].files[0].torrentDownloadUrl, 200)
+    })
+
+    it('Should run filter:api.download.video.allowed.result', async function () {
+      {
+        const res = await makeRawRequest(downloadVideos[1].files[0].fileDownloadUrl, 403)
+        expect(res.body.error).to.equal('Cao Cao')
+
+        await makeRawRequest(downloadVideos[0].files[0].fileDownloadUrl, 200)
+        await makeRawRequest(downloadVideos[2].files[0].fileDownloadUrl, 200)
+      }
+
+      {
+        const res = await makeRawRequest(downloadVideos[2].streamingPlaylists[0].files[0].fileDownloadUrl, 403)
+        expect(res.body.error).to.equal('Sun Jian')
+
+        await makeRawRequest(downloadVideos[2].files[0].fileDownloadUrl, 200)
+
+        await makeRawRequest(downloadVideos[0].streamingPlaylists[0].files[0].fileDownloadUrl, 200)
+        await makeRawRequest(downloadVideos[1].streamingPlaylists[0].files[0].fileDownloadUrl, 200)
+      }
     })
   })
 

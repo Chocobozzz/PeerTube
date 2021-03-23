@@ -50,7 +50,11 @@ export const serverFilterHookObject = {
   'filter:video.auto-blacklist.result': true,
 
   // Filter result used to check if a user can register on the instance
-  'filter:api.user.signup.allowed.result': true
+  'filter:api.user.signup.allowed.result': true,
+
+  // Filter result used to check if video/torrent download is allowed
+  'filter:api.download.video.allowed.result': true,
+  'filter:api.download.torrent.allowed.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

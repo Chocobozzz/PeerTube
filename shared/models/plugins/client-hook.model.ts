@@ -85,8 +85,12 @@ export const clientActionHookObject = {
   // Fired when the registration page is being initialized
   'action:signup.register.init': true,
 
+  // Fired when the modal to download a video/caption is shown
+  'action:modal.video-download.shown': true,
+
   // ####### Embed hooks #######
-  // In embed scope, peertube helpers are not available
+  // /!\ In embed scope, peertube helpers are not available
+  // ###########################
 
   // Fired when the embed loaded the player
   'action:embed.player.loaded': true

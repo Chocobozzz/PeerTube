@@ -184,6 +184,32 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       return result
     }
   })
+
+  registerHook({
+    target: 'filter:api.download.torrent.allowed.result',
+    handler: (result, params) => {
+      if (params && params.downloadName.includes('bad torrent')) {
+        return { allowed: false, errorMessage: 'Liu Bei' }
+      }
+
+      return result
+    }
+  })
+
+  registerHook({
+    target: 'filter:api.download.video.allowed.result',
+    handler: (result, params) => {
+      if (params && !params.streamingPlaylist && params.video.name.includes('bad file')) {
+        return { allowed: false, errorMessage: 'Cao Cao' }
+      }
+
+      if (params && params.streamingPlaylist && params.video.name.includes('bad playlist file')) {
+        return { allowed: false, errorMessage: 'Sun Jian' }
+      }
+
+      return result
+    }
+  })
 }
 
 async function unregister () {
