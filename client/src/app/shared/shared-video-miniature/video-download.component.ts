@@ -16,7 +16,7 @@ type FileMetadata = { [key: string]: { label: string, value: string }}
 export class VideoDownloadComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
-  downloadType: 'direct' | 'torrent' = 'torrent'
+  downloadType: 'direct' | 'torrent' = 'direct'
   resolutionId: number | string = -1
   subtitleLanguageId: string
 
