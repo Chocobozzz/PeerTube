@@ -132,7 +132,7 @@ function checkAllowResult (res: express.Response, allowParameters: any, result?:
   if (!result || result.allowed !== true) {
     logger.info('Download is not allowed.', { result, allowParameters })
     res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: result.errorMessage || 'Refused download' })
+       .json({ error: result?.errorMessage || 'Refused download' })
 
     return false
   }

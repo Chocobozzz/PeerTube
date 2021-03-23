@@ -210,6 +210,26 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       return result
     }
   })
+
+  registerHook({
+    target: 'filter:html.embed.video.allowed.result',
+    handler: (result, params) => {
+      return {
+        allowed: false,
+        html: 'Lu Bu'
+      }
+    }
+  })
+
+  registerHook({
+    target: 'filter:html.embed.video-playlist.allowed.result',
+    handler: (result, params) => {
+      return {
+        allowed: false,
+        html: 'Diao Chan'
+      }
+    }
+  })
 }
 
 async function unregister () {

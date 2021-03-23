@@ -3,10 +3,12 @@
 import 'mocha'
 import * as chai from 'chai'
 import { ServerConfig } from '@shared/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   createLive,
+  createVideoPlaylist,
   doubleFollow,
   getAccountVideos,
   getConfig,
@@ -15,6 +17,7 @@ import {
   getVideo,
   getVideoChannelVideos,
   getVideoCommentThreads,
+  getVideoPlaylist,
   getVideosList,
   getVideosListPagination,
   getVideoThreadComments,
@@ -32,9 +35,15 @@ import {
 } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunMultipleServers, ServerInfo } from '../../../shared/extra-utils/server/servers'
 import { getGoodVideoUrl, getMyVideoImports, importVideo } from '../../../shared/extra-utils/videos/video-imports'
-import { VideoDetails, VideoImport, VideoImportState, VideoPrivacy } from '../../../shared/models/videos'
+import {
+  VideoDetails,
+  VideoImport,
+  VideoImportState,
+  VideoPlaylist,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
+} from '../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -415,6 +424,47 @@ describe('Test plugin filter hooks', function () {
         await makeRawRequest(downloadVideos[0].streamingPlaylists[0].files[0].fileDownloadUrl, 200)
         await makeRawRequest(downloadVideos[1].streamingPlaylists[0].files[0].fileDownloadUrl, 200)
       }
+    })
+  })
+
+  describe('Embed filters', function () {
+    const embedVideos: VideoDetails[] = []
+    const embedPlaylists: VideoPlaylist[] = []
+
+    before(async function () {
+      this.timeout(60000)
+
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        transcoding: {
+          enabled: false
+        }
+      })
+
+      for (const name of [ 'bad embed', 'good embed' ]) {
+        {
+          const uuid = (await uploadVideoAndGetId({ server: servers[0], videoName: name })).uuid
+          const res = await getVideo(servers[0].url, uuid)
+          embedVideos.push(res.body)
+        }
+
+        {
+          const playlistAttrs = { displayName: name, videoChannelId: servers[0].videoChannel.id, privacy: VideoPlaylistPrivacy.PUBLIC }
+          const res = await createVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistAttrs })
+
+          const resPlaylist = await getVideoPlaylist(servers[0].url, res.body.videoPlaylist.id)
+          embedPlaylists.push(resPlaylist.body)
+        }
+      }
+    })
+
+    it('Should run filter:html.embed.video.allowed.result', async function () {
+      const res = await makeRawRequest(servers[0].url + embedVideos[0].embedPath, 200)
+      expect(res.text).to.equal('Lu Bu')
+    })
+
+    it('Should run filter:html.embed.video-playlist.allowed.result', async function () {
+      const res = await makeRawRequest(servers[0].url + embedPlaylists[0].embedPath, 200)
+      expect(res.text).to.equal('Diao Chan')
     })
   })
 
