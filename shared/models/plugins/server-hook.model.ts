@@ -18,6 +18,16 @@ export const serverFilterHookObject = {
   'filter:api.user.me.videos.list.params': true,
   'filter:api.user.me.videos.list.result': true,
 
+  // Filter params/results to search videos/channels in the DB or on the remote index
+  'filter:api.search.videos.local.list.params': true,
+  'filter:api.search.videos.local.list.result': true,
+  'filter:api.search.videos.index.list.params': true,
+  'filter:api.search.videos.index.list.result': true,
+  'filter:api.search.video-channels.local.list.params': true,
+  'filter:api.search.video-channels.local.list.result': true,
+  'filter:api.search.video-channels.index.list.params': true,
+  'filter:api.search.video-channels.index.list.result': true,
+
   // Filter the result of the get function
   // Used to get detailed video information (video watch page for example)
   'filter:api.video.get.result': true,

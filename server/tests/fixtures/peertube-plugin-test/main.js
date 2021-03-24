@@ -230,6 +230,30 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       }
     }
   })
+
+  {
+    const searchHooks = [
+      'filter:api.search.videos.local.list.params',
+      'filter:api.search.videos.local.list.result',
+      'filter:api.search.videos.index.list.params',
+      'filter:api.search.videos.index.list.result',
+      'filter:api.search.video-channels.local.list.params',
+      'filter:api.search.video-channels.local.list.result',
+      'filter:api.search.video-channels.index.list.params',
+      'filter:api.search.video-channels.index.list.result',
+    ]
+
+    for (const h of searchHooks) {
+      registerHook({
+        target: h,
+        handler: (obj) => {
+          peertubeHelpers.logger.debug('Run hook %s.', h)
+
+          return obj
+        }
+      })
+    }
+  }
 }
 
 async function unregister () {

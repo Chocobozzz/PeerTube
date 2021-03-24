@@ -7,6 +7,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 import {
   addVideoCommentReply,
   addVideoCommentThread,
+  advancedVideosSearch,
   createLive,
   createVideoPlaylist,
   doubleFollow,
@@ -25,6 +26,7 @@ import {
   installPlugin,
   makeRawRequest,
   registerUser,
+  searchVideo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   updateCustomSubConfig,
@@ -33,7 +35,7 @@ import {
   uploadVideoAndGetId,
   waitJobs
 } from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunMultipleServers, ServerInfo } from '../../../shared/extra-utils/server/servers'
+import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 import { getGoodVideoUrl, getMyVideoImports, importVideo } from '../../../shared/extra-utils/videos/video-imports'
 import {
   VideoDetails,
@@ -44,6 +46,7 @@ import {
   VideoPrivacy
 } from '../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
+import { advancedVideoChannelSearch } from '@shared/extra-utils/search/video-channels'
 
 const expect = chai.expect
 
@@ -465,6 +468,63 @@ describe('Test plugin filter hooks', function () {
     it('Should run filter:html.embed.video-playlist.allowed.result', async function () {
       const res = await makeRawRequest(servers[0].url + embedPlaylists[0].embedPath, 200)
       expect(res.text).to.equal('Diao Chan')
+    })
+  })
+
+  describe('Search filters', function () {
+
+    before(async function () {
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        search: {
+          searchIndex: {
+            enabled: true,
+            isDefaultSearch: false,
+            disableLocalSearch: false
+          }
+        }
+      })
+    })
+
+    it('Should run filter:api.search.videos.local.list.{params,result}', async function () {
+      await advancedVideosSearch(servers[0].url, {
+        search: 'Sun Quan'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.result', 1)
+    })
+
+    it('Should run filter:api.search.videos.index.list.{params,result}', async function () {
+      await advancedVideosSearch(servers[0].url, {
+        search: 'Sun Quan',
+        searchTarget: 'search-index'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.result', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.index.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.index.list.result', 1)
+    })
+
+    it('Should run filter:api.search.video-channels.local.list.{params,result}', async function () {
+      await advancedVideoChannelSearch(servers[0].url, {
+        search: 'Sun Ce'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.result', 1)
+    })
+
+    it('Should run filter:api.search.video-channels.index.list.{params,result}', async function () {
+      await advancedVideoChannelSearch(servers[0].url, {
+        search: 'Sun Ce',
+        searchTarget: 'search-index'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.result', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.result', 1)
     })
   })
 
