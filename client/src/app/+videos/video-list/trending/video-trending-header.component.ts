@@ -4,7 +4,7 @@ import { VideoListHeaderComponent } from '@app/shared/shared-video-miniature'
 import { GlobalIconName } from '@app/shared/shared-icons'
 import { ServerService } from '@app/core/server/server.service'
 import { Subscription } from 'rxjs'
-import { RedirectService } from '@app/core'
+import { AuthService, RedirectService } from '@app/core'
 
 interface VideoTrendingHeaderItem {
   label: string
@@ -30,6 +30,7 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
     @Inject('data') public data: any,
     private route: ActivatedRoute,
     private router: Router,
+    private auth: AuthService,
     private serverService: ServerService
   ) {
     super(data)
@@ -67,8 +68,16 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
   ngOnInit () {
     this.serverService.getConfig()
         .subscribe(config => {
+          const algEnabled = config.trending.videos.algorithms.enabled
+
           this.buttons = this.buttons.map(b => {
-            b.hidden = !config.trending.videos.algorithms.enabled.includes(b.value)
+            b.hidden = !algEnabled.includes(b.value)
+
+            // Best is adapted by the user history so
+            if (b.value === 'best' && !this.auth.isLoggedIn()) {
+              b.hidden = true
+            }
+
             return b
           })
         })
