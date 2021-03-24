@@ -101,7 +101,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.document.documentElement.lang = getShortLocale(this.localeId)
 
-    setTimeout(cleanupVideoWatch, 5)
+    setTimeout(cleanupVideoWatch, 1500) // Run in timeout to ensure we're not blocking the UI
   }
 
   ngAfterViewInit () {
