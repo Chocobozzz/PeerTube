@@ -783,6 +783,8 @@ export class PeerTubeEmbed {
 
       showModal: unimplemented,
 
+      getServerConfig: unimplemented,
+
       markdownRenderer: {
         textMarkdownToHTML: unimplemented,
         enhancedMarkdownToHTML: unimplemented
