@@ -116,7 +116,7 @@ export class VideoDownloadComponent {
     const file = this.videoFile
     if (!file) return
 
-    const suffix = this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
+    const suffix = this.isConfidentialVideo()
       ? '?access_token=' + this.auth.getAccessToken()
       : ''
 
@@ -127,6 +127,10 @@ export class VideoDownloadComponent {
       case 'torrent':
         return file.torrentDownloadUrl + suffix
     }
+  }
+
+  isConfidentialVideo () {
+    return this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
   }
 
   getSubtitlesLink () {
