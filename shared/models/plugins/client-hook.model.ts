@@ -85,6 +85,15 @@ export const clientActionHookObject = {
   // Fired when the registration page is being initialized
   'action:signup.register.init': true,
 
+  // Fired when the video upload page is being initalized
+  'action:video-upload.init': true,
+  // Fired when the video import by URL page is being initalized
+  'action:video-url-import.init': true,
+  // Fired when the video import by torrent/magnet URI page is being initalized
+  'action:video-torrent-import.init': true,
+  // Fired when the "Go Live" page is being initalized
+  'action:go-live.init': true,
+
   // Fired when the modal to download a video/caption is shown
   'action:modal.video-download.shown': true,
 

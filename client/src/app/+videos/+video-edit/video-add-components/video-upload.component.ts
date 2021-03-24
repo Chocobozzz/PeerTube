@@ -1,15 +1,15 @@
 import { Subscription } from 'rxjs'
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http'
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, Notifier, ServerService, UserService } from '@app/core'
+import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService, UserService } from '@app/core'
 import { scrollToTop, uploadErrorHandler } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { BytesPipe, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 @Component({
   selector: 'my-video-upload',
@@ -20,7 +20,7 @@ import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
     './video-send.scss'
   ]
 })
-export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
+export class VideoUploadComponent extends VideoSend implements OnInit, AfterViewInit, OnDestroy, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
   @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
@@ -60,7 +60,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private hooks: HooksService
     ) {
     super()
   }
@@ -77,6 +78,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           this.userVideoQuotaUsed = data.videoQuotaUsed
           this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
         })
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:video-upload.init', 'video-edit')
   }
 
   ngOnDestroy () {

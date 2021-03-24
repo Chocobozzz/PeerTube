@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { advancedVideoChannelSearch } from '@shared/extra-utils/search/video-channels'
 import { ServerConfig } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import {
@@ -26,7 +27,6 @@ import {
   installPlugin,
   makeRawRequest,
   registerUser,
-  searchVideo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   updateCustomSubConfig,
@@ -46,7 +46,6 @@ import {
   VideoPrivacy
 } from '../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
-import { advancedVideoChannelSearch } from '@shared/extra-utils/search/video-channels'
 
 const expect = chai.expect
 
