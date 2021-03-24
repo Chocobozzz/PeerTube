@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.",
-  "version": "3.1.0-rc.1",
+  "version": "3.1.0",
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
@@ -227,9 +227,6 @@
     "silent": true
   },
   "sasslintConfig": "client/.sass-lint.yml",
-  "_moduleAliases": {
-    "@server": "dist/server"
-  },
   "bundlewatch": {
     "files": [
       {
