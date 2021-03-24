@@ -2,14 +2,12 @@
   <div class="results-header">
     <div class="first-line">
       <div class="results-counter" *ngIf="pagination.totalItems">
-        <span i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}} </span>
+        <span class="mr-1" i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}}</span>
 
-        <span i18n *ngIf="advancedSearch.searchTarget === 'local'">on this instance</span>
-        <span i18n *ngIf="advancedSearch.searchTarget === 'search-index'">on the vidiverse</span>
+        <span class="mr-1" i18n *ngIf="advancedSearch.searchTarget === 'local'">on this instance</span>
+        <span class="mr-1" i18n *ngIf="advancedSearch.searchTarget === 'search-index'">on the vidiverse</span>
 
-        <span *ngIf="currentSearch" i18n>
-          for <span class="search-value">{{ currentSearch }}</span>
-        </span>
+        <span *ngIf="currentSearch" i18n>for <span class="search-value">{{ currentSearch }}</span></span>
       </div>
 
       <div
