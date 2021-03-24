@@ -19,6 +19,7 @@ import { BroadcastMessageLevel, ServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
 import { InstanceService } from './shared/shared-instance'
+import { cleanupVideoWatch } from 'src/assets/player/peertube-player-local-storage'
 
 @Component({
   selector: 'my-app',
@@ -99,6 +100,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.openModalsIfNeeded()
 
     this.document.documentElement.lang = getShortLocale(this.localeId)
+
+    setTimeout(cleanupVideoWatch, 5)
   }
 
   ngAfterViewInit () {

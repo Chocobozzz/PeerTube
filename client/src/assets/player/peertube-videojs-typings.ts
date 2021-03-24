@@ -108,6 +108,8 @@ type PeerTubePluginOptions = {
   stopTime: number | string
 
   isLive: boolean
+
+  videoUUID: string
 }
 
 type PlaylistPluginOptions = {

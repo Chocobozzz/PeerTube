@@ -68,6 +68,54 @@ function getStoredLastSubtitle () {
   return getLocalStorage('last-subtitle')
 }
 
+function saveVideoWatch(videoUUID: string, duration: number) {
+  const data = getVideoWatch()
+  const now = new Date()
+
+  return setLocalStorage(`video-watch`, JSON.stringify({
+    ...data,
+    [videoUUID]: {
+      duration,
+      date: `${now.getFullYear()}-${now.getUTCMonth() + 1}-${now.getUTCDate()}`
+    }
+  }))
+}
+
+function getVideoWatch(videoUUID?: string) {
+  let data
+
+  try {
+    data = JSON.parse(getLocalStorage('video-watch'))
+  } catch (error) {
+    console.error(error)
+  }
+
+  data = data || {}
+
+  if (videoUUID) return data[videoUUID]
+
+  return data
+}
+
+function cleanupVideoWatch() {
+  const data = getVideoWatch()
+
+  const newData = Object.keys(data).reduce((acc, videoUUID) => {
+    const date = Date.parse(data[videoUUID].date)
+
+    const diff = Math.ceil(((new Date()).getTime() - date) / (1000 * 3600 * 24))
+
+    if (diff > 30) return acc
+
+    return {
+      ...acc,
+      [videoUUID]: data[videoUUID]
+    }
+  }, {})
+
+  setLocalStorage('video-watch', JSON.stringify(newData))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -81,7 +129,10 @@ export {
   saveAverageBandwidth,
   getAverageBandwidthInStore,
   saveLastSubtitle,
-  getStoredLastSubtitle
+  getStoredLastSubtitle,
+  saveVideoWatch,
+  getVideoWatch,
+  cleanupVideoWatch
 }
 
 // ---------------------------------------------------------------------------

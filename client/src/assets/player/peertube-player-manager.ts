@@ -105,6 +105,8 @@ export interface CommonOptions extends CustomizationOptions {
 
   videoCaptions: VideoJSCaption[]
 
+  videoUUID: string
+
   userWatching?: UserWatching
 
   serverUrl: string
@@ -230,7 +232,8 @@ export class PeertubePlayerManager {
         subtitle: commonOptions.subtitle,
         videoCaptions: commonOptions.videoCaptions,
         stopTime: commonOptions.stopTime,
-        isLive: commonOptions.isLive
+        isLive: commonOptions.isLive,
+        videoUUID: commonOptions.videoUUID
       }
     }
 

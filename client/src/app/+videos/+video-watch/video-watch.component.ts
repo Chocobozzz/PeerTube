@@ -28,7 +28,7 @@ import { MetaService } from '@ngx-meta/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
-import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
+import { getStoredP2PEnabled, getStoredTheater, getVideoWatch } from '../../../assets/player/peertube-player-local-storage'
 import {
   CustomizationOptions,
   P2PMediaLoaderOptions,
@@ -768,9 +768,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
       const byHistory = video.userHistory && (!this.playlist || urlOptions.resume !== undefined)
+      const byLocalStorage = getVideoWatch(video.uuid)
 
       if (byUrl) return timeToInt(urlOptions.startTime)
       if (byHistory) return video.userHistory.currentTime
+      if (byLocalStorage) return byLocalStorage.duration
 
       return 0
     }
@@ -827,7 +829,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         serverUrl: environment.apiUrl,
 
-        videoCaptions: playerCaptions
+        videoCaptions: playerCaptions,
+
+        videoUUID: video.uuid
       },
 
       webtorrent: {
