@@ -19,6 +19,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, ActorAvatarInfoComponent, VideoAvatarChannelComponent } from './account'
 import {
+  AutofocusDirective,
   BytesPipe,
   DurationFormatterPipe,
   FromNowPipe,
@@ -71,6 +72,7 @@ import { VideoChannelService } from './video-channel'
     NumberFormatterPipe,
     BytesPipe,
     DurationFormatterPipe,
+    AutofocusDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
@@ -125,6 +127,7 @@ import { VideoChannelService } from './video-channel'
     BytesPipe,
     NumberFormatterPipe,
     DurationFormatterPipe,
+    AutofocusDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
