@@ -94,6 +94,12 @@ export const clientActionHookObject = {
   // Fired when the "Go Live" page is being initalized
   'action:go-live.init': true,
 
+  // Fired when the user explicitely logged in/logged out
+  'action:auth-user.logged-in': true,
+  'action:auth-user.logged-out': true,
+  // Fired when the application loaded user information (using tokens from the local storage or after a successful login)
+  'action:auth-user.information-loaded': true,
+
   // Fired when the modal to download a video/caption is shown
   'action:modal.video-download.shown': true,
 

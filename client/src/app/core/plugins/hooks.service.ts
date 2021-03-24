@@ -3,13 +3,29 @@ import { mergeMap, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { ClientActionHookName, ClientFilterHookName, PluginClientScope } from '@shared/models'
+import { AuthService, AuthStatus } from '../auth'
 
 type RawFunction<U, T> = (params: U) => T
 type ObservableFunction<U, T> = RawFunction<U, Observable<T>>
 
 @Injectable()
 export class HooksService {
-  constructor (private pluginService: PluginService) { }
+  constructor (
+    private authService: AuthService,
+    private pluginService: PluginService
+  ) {
+    // Run auth hooks
+    this.authService.userInformationLoaded
+      .subscribe(() => this.runAction('action:auth-user.information-loaded', 'common', { user: this.authService.getUser() }))
+
+    this.authService.loginChangedSource.subscribe(obj => {
+      if (obj === AuthStatus.LoggedIn) {
+        this.runAction('action:auth-user.logged-in', 'common')
+      } else if (obj === AuthStatus.LoggedOut) {
+        this.runAction('action:auth-user.logged-out', 'common')
+      }
+    })
+  }
 
   wrapObsFun
     <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>

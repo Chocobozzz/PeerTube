@@ -235,6 +235,12 @@ export class PluginService implements ClientHook {
                    .toPromise()
       },
 
+      getServerConfig: () => {
+        return this.server.getConfig()
+          .pipe(catchError(res => this.restExtractor.handleError(res)))
+          .toPromise()
+      },
+
       isLoggedIn: () => {
         return this.authService.isLoggedIn()
       },
