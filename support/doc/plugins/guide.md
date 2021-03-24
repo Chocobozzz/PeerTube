@@ -22,6 +22,7 @@
     - [Custom Modal](#custom-modal)
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
+    - [Get server config](#get-server-config)
     - [Add custom fields to video form](#add-custom-fields-to-video-form)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
@@ -467,6 +468,15 @@ peertubeHelpers.getSettings()
     }
 
     // ...
+  })
+```
+
+#### Get server config
+
+```js
+peertubeHelpers.getServerConfig()
+  .then(config => {
+    console.log('Fetched server config.', config)
   })
 ```
 
