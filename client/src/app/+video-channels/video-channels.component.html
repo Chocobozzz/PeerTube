@@ -1,50 +1,114 @@
-<div *ngIf="videoChannel" class="row">
-  <div class="sub-menu">
+<div class="root" *ngIf="videoChannel">
+  <div class="channel-info">
 
-    <div class="actor">
-      <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+    <ng-template #buttonsTemplate>
+        <a *ngIf="isManageable() && !isInSmallView()" [routerLink]="[ '/my-library/video-channels/update', videoChannel.nameWithHost ]" class="peertube-button-link orange-button" i18n>
+          Manage channel
+        </a>
 
-      <div class="actor-info">
-        <div class="actor-names">
-          <div class="actor-display-name">{{ videoChannel.displayName }}</div>
-          <div class="actor-name">
-            <span>{{ videoChannel.nameWithHost }}</span>
-            <button [cdkCopyToClipboard]="videoChannel.nameWithHostForced" (click)="activateCopiedMessage()"
-                    class="btn btn-outline-secondary btn-sm copy-button"
-            >
-              <span class="glyphicon glyphicon-duplicate"></span>
-            </button>
+        <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+    </ng-template>
+
+    <ng-template #ownerTemplate>
+      <div class="owner-block">
+        <div class="avatar-row">
+          <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
+
+          <div class="actor-info">
+            <h4>{{ videoChannel.ownerAccount.displayName }}</h4>
+
+            <div class="actor-handle">@{{ videoChannel.ownerBy }}</div>
           </div>
         </div>
 
-        <div class="right-buttons">
-          <a *ngIf="isChannelManageable && !isInSmallView" [routerLink]="[ '/my-library/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-tertiary mr-2" i18n>
-            Manage channel
-          </a>
-          <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+        <div class="owner-description">
+          <div class="description-html" [innerHTML]="ownerDescriptionHTML"></div>
         </div>
 
-        <div class="actor-lower">
-          <div class="actor-followers" i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
+        <a class="view-account short" [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n>
+          View account
+        </a>
 
-          <a [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n-title title="Go the owner account page" class="actor-owner">
-            <span class="d-inline-flex"><span i18n class="d-none d-sm-block mr-1">Created by</span>{{ videoChannel.ownerBy }}</span>
-            <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
-          </a>
+        <a class="view-account complete" [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n>
+          View owner account
+        </a>
+      </div>
+    </ng-template>
+
+    <div class="channel-avatar-row">
+      <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+
+      <div>
+        <div class="section-label" i18n>VIDEO CHANNEL</div>
+
+        <div class="actor-info">
+          <div>
+            <div class="actor-display-name">
+              <h1>{{ videoChannel.displayName }}</h1>
+            </div>
+
+            <div class="actor-handle">
+              <span>@{{ videoChannel.nameWithHost }}</span>
+              <button [cdkCopyToClipboard]="videoChannel.nameWithHostForced" (click)="activateCopiedMessage()"
+                      class="btn btn-outline-secondary btn-sm copy-button" title="Copy channel handle" i18n-title
+              >
+                <span class="glyphicon glyphicon-duplicate"></span>
+              </button>
+            </div>
+
+            <div class="actor-counters">
+              <span i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</span>
+
+              <span class="videos-count" *ngIf="channelVideosCount !== undefined" i18n>
+                {channelVideosCount, plural, =1 {1 videos} other {{{ channelVideosCount }} videos}}
+              </span>
+            </div>
+          </div>
+
+          <div class="channel-buttons right">
+            <ng-template *ngTemplateOutlet="buttonsTemplate"></ng-template>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="links w-100">
-      <ng-template #linkTemplate let-item="item">
-        <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
-      </ng-template>
+    <div class="channel-description" [ngClass]="{ expanded: channelDescriptionExpanded }">
+      <div class="description-html" [innerHTML]="channelDescriptionHTML"></div>
 
-      <list-overflow [items]="links" [itemTemplate]="linkTemplate"></list-overflow>
+      <div class="created-at" i18n>Channel created on {{ videoChannel.createdAt | date }}</div>
+    </div>
+
+    <div *ngIf="!channelDescriptionExpanded" class="show-more" role="button"
+      (click)="channelDescriptionExpanded = !channelDescriptionExpanded"
+      title="Show the complete description" i18n-title i18n
+    >
+      Show more...
+    </div>
+
+    <div class="channel-buttons bottom">
+      <ng-template *ngTemplateOutlet="buttonsTemplate"></ng-template>
+    </div>
+
+    <div class="owner-card">
+      <div class="section-label" i18n>OWNER ACCOUNT</div>
+
+      <ng-template *ngTemplateOutlet="ownerTemplate"></ng-template>
     </div>
   </div>
 
-  <div class="margin-content">
-    <router-outlet></router-outlet>
+  <div class="bottom-owner">
+    <div class="section-label" i18n>OWNER ACCOUNT</div>
+
+    <ng-template *ngTemplateOutlet="ownerTemplate"></ng-template>
   </div>
+
+  <div class="links">
+    <ng-template #linkTemplate let-item="item">
+      <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
+    </ng-template>
+
+    <list-overflow [items]="links" [itemTemplate]="linkTemplate"></list-overflow>
+  </div>
+
+  <router-outlet></router-outlet>
 </div>

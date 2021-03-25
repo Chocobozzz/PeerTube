@@ -1,89 +1,345 @@
-// Bootstrap grid utilities require functions, variables and mixins
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/variables';
-@import 'node_modules/bootstrap/scss/mixins';
-@import 'node_modules/bootstrap/scss/grid';
-
 @import '_variables';
 @import '_mixins';
+@import '_miniature';
 
-.sub-menu {
-  @include sub-menu-with-actor;
+.root {
+  --myGlobalPadding: 60px;
+  --myChannelImgMargin: 30px;
+  --myFontSize: 16px;
+  --myGreyChannelFontSize: 16px;
+  --myGreyOwnerFontSize: 14px;
+}
 
-  .actor, .actor-info {
-    width: 100%;
+.section-label {
+  color: pvar(--mainColor);
+  font-size: 12px;
+  margin-bottom: 15px;
+  font-weight: $font-bold;
+  letter-spacing: 2.5px;
+}
+
+.links {
+  @include fluid-videos-miniature-layout;
+}
+
+.channel-info {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+
+  background-color: pvar(--channelBackgroundColor);
+  margin-bottom: 45px;
+  padding: var(--myGlobalPadding) var(--myGlobalPadding) 0 var(--myGlobalPadding);
+  font-size: var(--myFontSize);
+}
+
+.channel-avatar-row {
+  display: flex;
+  grid-column: 1;
+  margin-bottom: 30px;
+
+  img {
+    @include channel-avatar(120px);
+  }
+
+  > div {
+    margin-left: var(--myChannelImgMargin);
   }
 
   .actor-info {
-    display: grid !important;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: 1fr auto / 1fr auto;
-    grid-template-areas: "name buttons" "lower buttons";
+    display: flex;
 
-    @include media-breakpoint-down(lg) {
-      grid-template-areas: "name name" "lower buttons";
+    > div:first-child {
+      flex-grow: 1;
     }
   }
 
-  .actor-names {
-    grid-area: name;
+  .actor-display-name {
+    display: flex;
+    flex-wrap: wrap;
   }
 
-  .actor-name {
-    flex-grow: 1;
+  h1 {
+    font-size: 28px;
+    font-weight: $font-bold;
+    margin: 0;
+  }
 
-    .copy-button {
-      border: none;
-      padding: 5px;
-      margin-top: -2px;
-    }
+  .actor-handle,
+  .actor-counters {
+    color: pvar(--greyForegroundColor);
+    font-size: var(--myGreyChannelFontSize);
+  }
+
+  .actor-counters > *:not(:last-child)::after {
+    content: '•';
+    margin: 0 10px;
+    color: pvar(--mainColor);
   }
 }
 
-.margin-content {
-  // margin-content is required, but child views have their own margins
-  // that match views outside the scope of accounts, so we only align
-  // them with the margins of .sub-menu when required.
-  margin: 0;
+.channel-description {
+  grid-column: 1;
 }
 
-.right-buttons {
+.show-more {
+  display: none;
+  color: pvar(--mainColor);
+  cursor: pointer;
+  margin: 10px auto 45px auto;
+}
+
+
+.channel-buttons {
   display: flex;
-  height: max-content;
-  margin-left: auto;
-  margin-top: 10px;
+  flex-wrap: wrap;
 
-  grid-row: buttons-start / span buttons-end;
-  grid-column: buttons-start;
+  > *:not(:last-child) {
+    margin-right: 15px;
+  }
+}
 
-  @include media-breakpoint-down(lg) {
-    flex-flow: column-reverse;
+.channel-buttons.right {
+  margin-left: 45px;
+}
 
-    a {
-      margin-top: 0.25rem;
-      margin-right: 0 !important;
+// Only used by mobile
+.channel-buttons.bottom {
+  display: none;
+}
+
+.created-at {
+  margin-top: 15px;
+  color: pvar(--greyForegroundColor);
+  padding-bottom: 60px;
+}
+
+.owner-card {
+  margin-left: 105px;
+  grid-column: 2;
+  // Takes all the column
+  grid-row: 1 / 3;
+  place-self: end;
+}
+
+// Only used on mobile
+.bottom-owner {
+  display: none;
+}
+
+.owner-block {
+  background-color: pvar(--mainBackgroundColor);
+  padding: 30px;
+  width: 300px;
+  font-size: var(--myFontSize);
+
+  .avatar-row {
+    display: flex;
+    margin-bottom: 15px;
+
+    img {
+      @include avatar(48px);
+    }
+
+    .actor-info {
+      margin-left: 15px;
+    }
+
+    h4 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .actor-handle {
+      font-size: var(--myGreyOwnerFontSize);
+      color: pvar(--greyForegroundColor);
     }
   }
 
-  a {
-    @include peertube-button-outline;
-    line-height: 1.8;
+  .owner-description {
+    height: 140px;
+
+    @include fade-text(120px, pvar(--mainBackgroundColor));
+  }
+}
+
+.view-account.short {
+  @include peertube-button-link;
+  @include orange-button-inverted;
+
+  margin-top: 30px;
+}
+
+.view-account.complete {
+  display: none;
+}
+
+.copy-button {
+  border: none;
+}
+
+@media screen and (max-width: 1400px) {
+  // Takes all the row width
+  .channel-avatar-row {
+    grid-column: 1 / 3;
   }
 
-  my-subscribe-button {
-    height: min-content;
+  .owner-card {
+    grid-row: 2;
+    margin-left: 60px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .root {
+    --myGlobalPadding: 45px;
+    --myChannelImgMargin: 15px;
+  }
+
+  .channel-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+
+  .channel-description:not(.expanded) {
+    max-height: 70px;
+
+    @include fade-text(30px, pvar(--channelBackgroundColor));
+  }
+
+  .show-more {
+    display: inline-block;
+  }
+
+  .channel-buttons.bottom {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  .channel-buttons.right {
+    display: none;
+  }
+
+  .owner-card {
+    display: none;
+  }
+
+  .bottom-owner {
+    display: block;
+    width: 100%;
+    border-bottom: 2px solid $separator-border-color;
+    padding: var(--myGlobalPadding) 45px;
+    margin-bottom: 60px;
+  }
+
+  .owner-block {
+    display: grid;
+    width: 100%;
+    padding: 0;
+
+    .avatar-row {
+      grid-column: 1;
+      margin-right: 30px;
+    }
+
+    .owner-description {
+      grid-column: 2;
+      max-height: 70px;
+
+      @include fade-text(30px, pvar(--mainBackgroundColor));
+    }
+
+    .view-account {
+      grid-column: 2;
+    }
+  }
+
+  .view-account.complete {
+    display: inline-block;
+    margin-top: 10px;
+    color: pvar(--mainColor);
+  }
+
+  .view-account.short {
+    display: none;
   }
 }
 
 @media screen and (max-width: $mobile-view) {
-  .sub-menu {
-    .actor {
-      flex-direction: column;
+  .root {
+    --myGlobalPadding: 15px;
+    --myFontSize: 14px;
+    --myGreyChannelFontSize: 13px;
+    --myGreyOwnerFontSize: 13px;
+  }
 
-      .actor-info .actor-names {
-        flex-direction: column;
-        align-items: normal;
+  .links {
+    margin: auto !important;
+    width: min-content;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 2.1px;
+    margin-bottom: 5px;
+  }
+
+  .channel-avatar-row {
+    margin-bottom: 15px;
+
+    h1 {
+      font-size: 22px;
+    }
+
+    img {
+      @include channel-avatar(80px);
+    }
+  }
+
+  .show-more {
+    margin-bottom: 30px;
+  }
+
+  .bottom-owner {
+    padding: 15px;
+    margin-bottom: 30px;
+
+    .section-label {
+      display: none;
+    }
+  }
+
+  .owner-block {
+    display: block;
+
+    .avatar-row {
+      display: flex;
+      flex-direction: row-reverse;
+      margin: 0;
+
+      h4 {
+        font-size: 16px;
       }
+
+      .actor-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-end;
+        margin-top: -5px;
+      }
+
+      img {
+        @include channel-avatar(64px);
+
+        margin: -30px 0 0 15px;
+      }
+    }
+
+    .owner-description {
+      display: none;
     }
   }
 }
