@@ -4,6 +4,7 @@
 
 ### IMPORTANT NOTES
 
+ * **Important:** Drop PostgreSQL 9.6 support
  * **Important:** Deprecate NodeJS 10
  * Support NodeJS 14 and 15
  * Remove ES5 module support (breaks compatibility with web browsers we didn't support)
