@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { MetaGuard } from '@ngx-meta/core'
-import { VideoChannelAboutComponent } from './video-channel-about/video-channel-about.component'
 import { VideoChannelPlaylistsComponent } from './video-channel-playlists/video-channel-playlists.component'
 import { VideoChannelVideosComponent } from './video-channel-videos/video-channel-videos.component'
 import { VideoChannelsComponent } from './video-channels.component'
@@ -36,15 +35,6 @@ const videoChannelsRoutes: Routes = [
         data: {
           meta: {
             title: $localize`Video channel playlists`
-          }
-        }
-      },
-      {
-        path: 'about',
-        component: VideoChannelAboutComponent,
-        data: {
-          meta: {
-            title: $localize`About video channel`
           }
         }
       }

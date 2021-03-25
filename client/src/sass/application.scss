@@ -36,7 +36,9 @@ body {
 
   --menuBackgroundColor: #{$menu-background};
   --menuForegroundColor: #{$menu-color};
+
   --submenuColor: #{$sub-menu-color};
+  --channelBackgroundColor: #{$channel-background-color};
 
   --inputForegroundColor: #{$input-foreground-color};
   --inputBackgroundColor: #{$input-background-color};
@@ -277,11 +279,6 @@ my-input-toggle-hidden ::ng-deep input {
   font-weight: bold;
 }
 
-@keyframes spin {
-  from { transform: scale(1) rotate(0deg);}
-  to { transform: scale(1) rotate(360deg);}
-}
-
 // In tables, don't have a hover different background
 table {
   .action-button-edit, .action-button-delete {
@@ -467,4 +464,22 @@ ngx-loading-bar {
       }
     }
   }
+}
+
+// Utils
+
+.peertube-button {
+  @include peertube-button;
+}
+
+.peertube-button-link {
+  @include peertube-button-link;
+}
+
+.orange-button {
+  @include orange-button;
+}
+
+.orange-button-inverted {
+  @include orange-button-inverted;
 }

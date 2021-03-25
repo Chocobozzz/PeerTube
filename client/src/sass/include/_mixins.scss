@@ -31,9 +31,19 @@
   text-overflow: ellipsis;
 }
 
-@mixin prefix($property, $parameters...) {
-  @each $prefix in -webkit-, -moz-, -ms-, -o-, "" {
-    #{$prefix}#{$property}: $parameters;
+@mixin fade-text ($fade-after, $background-color) {
+  position: relative;
+  overflow: hidden;
+
+  &:after {
+    content: '';
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(transparent $fade-after, $background-color);
   }
 }
 
@@ -135,6 +145,33 @@
 
   my-global-icon {
     @include apply-svg-color(#fff)
+  }
+}
+
+@mixin orange-button-inverted {
+  @include button-focus(pvar(--mainColorLightest));
+
+  border: 2px solid pvar(--mainColor);
+  font-weight: $font-regular;
+
+  &, &:active, &:focus {
+    color: pvar(--mainColor);
+    background-color: pvar(--mainBackgroundColor);
+  }
+
+  &:hover {
+    color: pvar(--mainColor);
+    background-color: pvar(--mainColorLightest);
+  }
+
+  &[disabled], &.disabled {
+    cursor: default;
+    color: pvar(--mainColor);
+    background-color: #C6C6C6;
+  }
+
+  my-global-icon {
+    @include apply-svg-color(pvar(--mainColor))
   }
 }
 
@@ -503,6 +540,13 @@
 @mixin avatar ($size) {
   object-fit: cover;
   border-radius: 50%;
+  width: $size;
+  height: $size;
+  min-width: $size;
+  min-height: $size;
+}
+
+@mixin channel-avatar ($size) {
   width: $size;
   height: $size;
   min-width: $size;
