@@ -143,6 +143,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.hideMenu = this.isInSmallView() && displayed
   }
 
+  hasVideoChannels () {
+    return this.videoChannels.length !== 0
+  }
+
   private async onAccount (account: Account) {
     this.accountFollowerTitle = $localize`${account.followersCount} direct account followers`
 
