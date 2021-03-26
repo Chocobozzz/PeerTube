@@ -96,10 +96,11 @@ export class VideoDownloadComponent {
     this.resolutionId = resolutionId
     this.videoFile = this.getVideoFile()
 
-    if (this.videoFile.metadata || !this.videoFile.metadataUrl) return
+    if (!this.videoFile.metadata) {
+      if (!this.videoFile.metadataUrl) return
 
-    await this.hydrateMetadataFromMetadataUrl(this.videoFile)
-    if (!this.videoFile.metadata) return
+      await this.hydrateMetadataFromMetadataUrl(this.videoFile)
+    }
 
     this.videoFileMetadataFormat = this.videoFile
       ? this.getMetadataFormat(this.videoFile.metadata.format)
