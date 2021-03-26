@@ -1,14 +1,15 @@
-<span>
-  <my-global-icon iconName="search" aria-label="Search" role="button" (click)="showInput()"></my-global-icon>
-
+<div class="root">
   <input
     #ref
     type="text"
     [(ngModel)]="value"
-    (focusout)="focusLost()"
     (keyup.enter)="searchChange()"
-    [hidden]="!shown"
+    [hidden]="!inputShown"
     [name]="name"
     [placeholder]="placeholder"
   >
-</span>
+
+  <my-global-icon iconName="search" aria-label="Search" role="button" (click)="onIconClick()" [title]="iconTitle"></my-global-icon>
+
+  <my-global-icon *ngIf="!alwaysShow && inputShown" i18n-title title="Close search" iconName="cross" (click)="hideInput()"></my-global-icon>
+</div>

@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { MetaGuard } from '@ngx-meta/core'
-import { AccountsComponent } from './accounts.component'
-import { AccountVideosComponent } from './account-videos/account-videos.component'
-import { AccountAboutComponent } from './account-about/account-about.component'
-import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
 import { AccountSearchComponent } from './account-search/account-search.component'
+import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
+import { AccountVideosComponent } from './account-videos/account-videos.component'
+import { AccountsComponent } from './accounts.component'
 
 const accountsRoutes: Routes = [
   {
@@ -28,15 +27,6 @@ const accountsRoutes: Routes = [
         data: {
           meta: {
             title: $localize`Account video channels`
-          }
-        }
-      },
-      {
-        path: 'about',
-        component: AccountAboutComponent,
-        data: {
-          meta: {
-            title: $localize`About account`
           }
         }
       },

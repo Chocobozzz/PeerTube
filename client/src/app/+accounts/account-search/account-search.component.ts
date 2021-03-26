@@ -64,9 +64,14 @@ export class AccountSearchComponent extends AbstractVideoList implements OnInit,
   }
 
   updateSearch (value: string) {
-    if (value === '') this.router.navigate(['../videos'], { relativeTo: this.route })
     this.search = value
 
+    if (!this.search) {
+      this.router.navigate([ '../videos' ], { relativeTo: this.route })
+      return
+    }
+
+    this.videos = []
     this.reloadVideos()
   }
 

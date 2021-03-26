@@ -5,10 +5,9 @@ import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscription'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
-import { AccountAboutComponent } from './account-about/account-about.component'
+import { AccountSearchComponent } from './account-search/account-search.component'
 import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
 import { AccountVideosComponent } from './account-videos/account-videos.component'
-import { AccountSearchComponent } from './account-search/account-search.component'
 import { AccountsRoutingModule } from './accounts-routing.module'
 import { AccountsComponent } from './accounts.component'
 
@@ -28,7 +27,6 @@ import { AccountsComponent } from './accounts.component'
     AccountsComponent,
     AccountVideosComponent,
     AccountVideoChannelsComponent,
-    AccountAboutComponent,
     AccountSearchComponent
   ],
 
