@@ -117,6 +117,10 @@ transcoding:
     2160p:
       __name: "PEERTUBE_TRANSCODING_2160P"
       __format: "json"
+  webtorrent:
+    enabled:
+      __name: "PEERTUBE_TRANSCODING_WEBTORRENT_ENABLED"
+      __format: "json"
   hls:
     enabled:
       __name: "PEERTUBE_TRANSCODING_HLS_ENABLED"
