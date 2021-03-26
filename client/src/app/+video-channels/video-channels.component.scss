@@ -1,5 +1,6 @@
 @import '_variables';
 @import '_mixins';
+@import '_actor';
 @import '_miniature';
 
 .root {
@@ -11,11 +12,7 @@
 }
 
 .section-label {
-  color: pvar(--mainColor);
-  font-size: 12px;
-  margin-bottom: 15px;
-  font-weight: $font-bold;
-  letter-spacing: 2.5px;
+  @include section-label-responsive;
 }
 
 .links {
@@ -34,48 +31,7 @@
 }
 
 .channel-avatar-row {
-  display: flex;
-  grid-column: 1;
-  margin-bottom: 30px;
-
-  img {
-    @include channel-avatar(120px);
-  }
-
-  > div {
-    margin-left: var(--myChannelImgMargin);
-  }
-
-  .actor-info {
-    display: flex;
-
-    > div:first-child {
-      flex-grow: 1;
-    }
-  }
-
-  .actor-display-name {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  h1 {
-    font-size: 28px;
-    font-weight: $font-bold;
-    margin: 0;
-  }
-
-  .actor-handle,
-  .actor-counters {
-    color: pvar(--greyForegroundColor);
-    font-size: var(--myGreyChannelFontSize);
-  }
-
-  .actor-counters > *:not(:last-child)::after {
-    content: '•';
-    margin: 0 10px;
-    color: pvar(--mainColor);
-  }
+  @include avatar-row-responsive(var(--myChannelImgMargin), var(--myGreyChannelFontSize));
 }
 
 .channel-description {
@@ -83,12 +39,10 @@
 }
 
 .show-more {
-  display: none;
-  color: pvar(--mainColor);
-  cursor: pointer;
-  margin: 10px auto 45px auto;
-}
+  @include show-more-description;
 
+  display: none;
+}
 
 .channel-buttons {
   display: flex;
@@ -278,24 +232,6 @@
   .links {
     margin: auto !important;
     width: min-content;
-  }
-
-  .section-label {
-    font-size: 10px;
-    letter-spacing: 2.1px;
-    margin-bottom: 5px;
-  }
-
-  .channel-avatar-row {
-    margin-bottom: 15px;
-
-    h1 {
-      font-size: 22px;
-    }
-
-    img {
-      @include channel-avatar(80px);
-    }
   }
 
   .show-more {
