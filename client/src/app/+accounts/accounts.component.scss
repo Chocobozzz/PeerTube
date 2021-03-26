@@ -4,7 +4,7 @@
 @import '_miniature';
 
 .root {
-  --myGlobalPadding: 60px;
+  --myGlobalTopPadding: 60px;
   --myImgMargin: 30px;
   --myFontSize: 16px;
   --myGreyFontSize: 16px;
@@ -15,12 +15,16 @@
 }
 
 .links {
-  @include fluid-videos-miniature-layout;
+  @include fluid-videos-miniature-margins;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 800px;
+  max-width: $max-channels-width;
+
+  simple-search-input {
+    margin-left: auto;
+  }
 }
 
 my-user-moderation-dropdown,
@@ -40,13 +44,15 @@ my-user-moderation-dropdown,
 }
 
 .account-info {
+  @include fluid-videos-miniature-margins(false, 15px);
+
   display: grid;
   grid-template-columns: 1fr min-content;
   grid-template-rows: auto auto;
 
   background-color: pvar(--submenuColor);
   margin-bottom: 45px;
-  padding: var(--myGlobalPadding) var(--myGlobalPadding) 0 var(--myGlobalPadding);
+  padding-top: var(--myGlobalTopPadding);
   font-size: var(--myFontSize);
 }
 
@@ -83,11 +89,15 @@ my-user-moderation-dropdown,
   > *:not(:last-child) {
     margin-bottom: 15px;
   }
+
+  > a {
+    white-space: nowrap;
+  }
 }
 
 @media screen and (max-width: $small-view) {
   .root {
-    --myGlobalPadding: 45px;
+    --myGlobalTopPadding: 45px;
     --myChannelImgMargin: 15px;
   }
 
@@ -113,7 +123,7 @@ my-user-moderation-dropdown,
 
 @media screen and (max-width: $mobile-view) {
   .root {
-    --myGlobalPadding: 15px;
+    --myGlobalTopPadding: 15px;
     --myFontSize: 14px;
     --myGreyFontSize: 13px;
   }

@@ -176,14 +176,41 @@ $play-overlay-width: 18px;
   }
 }
 
-@mixin fluid-videos-miniature-layout {
-  margin-left: $not-expanded-horizontal-margins !important;
-  margin-right: $not-expanded-horizontal-margins !important;
+// Use margin by default, or padding if $margin is false
+@mixin fluid-videos-miniature-margins ($margin: true, $min-margin: 0) {
+  @if $margin {
+    margin-left: $not-expanded-horizontal-margins !important;
+    margin-right: $not-expanded-horizontal-margins !important;
+  } @else {
+    padding-left: $not-expanded-horizontal-margins !important;
+    padding-right: $not-expanded-horizontal-margins !important;
+  }
 
   @media screen and (max-width: $mobile-view) {
     width: auto;
-    margin: 0 !important;
 
+    @if $margin {
+      margin: $min-margin !important;
+    } @else {
+      padding: $min-margin !important;
+    }
+  }
+
+  @media screen and (min-width: #{breakpoint(fhd)}) {
+    @if $margin {
+      margin-left: 6vw !important;
+      margin-right: 6vw !important;
+    } @else {
+      padding-left: 6vw !important;
+      padding-right: 6vw !important;
+    }
+  }
+}
+
+@mixin fluid-videos-miniature-layout {
+  @include fluid-videos-miniature-margins;
+
+  @media screen and (max-width: $mobile-view) {
     .videos {
       text-align: center;
 
@@ -209,13 +236,7 @@ $play-overlay-width: 18px;
     }
   }
 
-  @media screen and (min-width: #{breakpoint(fhd)}) {
-    margin-left: 6vw !important;
-    margin-right: 6vw !important;
-  }
-
   @media screen and (min-width: $mobile-view) {
-
     .videos {
       --miniature-min-width: #{$video-thumbnail-width - 15px};
       --miniature-max-width: #{$video-thumbnail-width};

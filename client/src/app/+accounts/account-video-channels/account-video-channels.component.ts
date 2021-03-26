@@ -1,9 +1,10 @@
 import { from, Subject, Subscription } from 'rxjs'
 import { concatMap, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ComponentPagination, hasMoreItems, ScreenService, User, UserService } from '@app/core'
+import { ComponentPagination, hasMoreItems, MarkdownService, ScreenService, User, UserService } from '@app/core'
 import { Account, AccountService, Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { NSFWPolicyType, VideoSortField } from '@shared/models'
+import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -13,7 +14,10 @@ import { NSFWPolicyType, VideoSortField } from '@shared/models'
 export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   account: Account
   videoChannels: VideoChannel[] = []
-  videos: { [id: number]: Video[] } = {}
+
+  videos: { [id: number]: { total: number, videos: Video[] } } = {}
+
+  channelsDescriptionHTML: { [ id: number ]: string } = {}
 
   channelPagination: ComponentPagination = {
     currentPage: 1,
@@ -23,7 +27,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
 
   videosPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 12,
+    itemsPerPage: 5,
     totalItems: null
   }
   videosSort: VideoSortField = '-publishedAt'
@@ -32,6 +36,16 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
 
   userMiniature: User
   nsfwPolicy: NSFWPolicyType
+  miniatureDisplayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: false,
+    avatar: false,
+    privacyLabel: false,
+    privacyText: false,
+    state: false,
+    blacklistInfo: false
+  }
 
   private accountSub: Subscription
 
@@ -39,7 +53,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private videoChannelService: VideoChannelService,
     private videoService: VideoService,
-    private screenService: ScreenService,
+    private markdown: MarkdownService,
     private userService: UserService
   ) { }
 
@@ -78,23 +92,36 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
           }
 
           return this.videoService.getVideoChannelVideos(options)
-            .pipe(map(data => ({ videoChannel, videos: data.data })))
+            .pipe(map(data => ({ videoChannel, videos: data.data, total: data.total })))
         })
       )
-      .subscribe(({ videoChannel, videos }) => {
+      .subscribe(async ({ videoChannel, videos, total }) => {
+        this.channelsDescriptionHTML[videoChannel.id] = await this.markdown.textMarkdownToHTML(videoChannel.description)
+
         this.videoChannels.push(videoChannel)
 
-        this.videos[videoChannel.id] = videos
+        this.videos[videoChannel.id] = { videos, total }
 
         this.onChannelDataSubject.next([ videoChannel ])
       })
   }
 
   getVideosOf (videoChannel: VideoChannel) {
-    const numberOfVideos = this.screenService.getNumberOfAvailableMiniatures()
+    const obj = this.videos[ videoChannel.id ]
+    if (!obj) return []
 
-    // 2 rows
-    return this.videos[ videoChannel.id ].slice(0, numberOfVideos * 2)
+    return obj.videos
+  }
+
+  getTotalVideosOf (videoChannel: VideoChannel) {
+    const obj = this.videos[ videoChannel.id ]
+    if (!obj) return undefined
+
+    return obj.total
+  }
+
+  getChannelDescription (videoChannel: VideoChannel) {
+    return this.channelsDescriptionHTML[videoChannel.id]
   }
 
   onNearOfBottom () {

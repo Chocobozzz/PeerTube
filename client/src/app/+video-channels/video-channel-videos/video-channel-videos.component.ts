@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
 import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { AbstractVideoList } from '@app/shared/shared-video-miniature'
+import { AbstractVideoList, MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { VideoFilter } from '@shared/models'
 
 @Component({
@@ -21,6 +21,17 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
   loadUserVideoPreferences = true
 
   filter: VideoFilter = null
+
+  displayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: false,
+    avatar: false,
+    privacyLabel: true,
+    privacyText: false,
+    state: false,
+    blacklistInfo: false
+  }
 
   private videoChannel: VideoChannel
   private videoChannelSub: Subscription

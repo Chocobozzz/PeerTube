@@ -4,7 +4,7 @@
 @import '_miniature';
 
 .root {
-  --myGlobalPadding: 60px;
+  --myGlobalTopPadding: 60px;
   --myChannelImgMargin: 30px;
   --myFontSize: 16px;
   --myGreyChannelFontSize: 16px;
@@ -16,17 +16,19 @@
 }
 
 .links {
-  @include fluid-videos-miniature-layout;
+  @include fluid-videos-miniature-margins;
 }
 
 .channel-info {
+  @include fluid-videos-miniature-margins(false, 15px);
+
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
 
   background-color: pvar(--channelBackgroundColor);
   margin-bottom: 45px;
-  padding: var(--myGlobalPadding) var(--myGlobalPadding) 0 var(--myGlobalPadding);
+  padding-top: var(--myGlobalTopPadding);
   font-size: var(--myFontSize);
 }
 
@@ -146,7 +148,7 @@
 
 @media screen and (max-width: 1100px) {
   .root {
-    --myGlobalPadding: 45px;
+    --myGlobalTopPadding: 45px;
     --myChannelImgMargin: 15px;
   }
 
@@ -184,7 +186,7 @@
     display: block;
     width: 100%;
     border-bottom: 2px solid $separator-border-color;
-    padding: var(--myGlobalPadding) 45px;
+    padding: var(--myGlobalTopPadding) 45px;
     margin-bottom: 60px;
   }
 
@@ -223,7 +225,7 @@
 
 @media screen and (max-width: $mobile-view) {
   .root {
-    --myGlobalPadding: 15px;
+    --myGlobalTopPadding: 15px;
     --myFontSize: 14px;
     --myGreyChannelFontSize: 13px;
     --myGreyOwnerFontSize: 13px;
