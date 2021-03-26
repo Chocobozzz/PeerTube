@@ -30,8 +30,10 @@ export interface CustomConfig {
     categories: number[]
 
     isNSFW: boolean
-    defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType
+
+    defaultClientRoute: string
+
     customizations: {
       javascript?: string
       css?: string
@@ -55,6 +57,10 @@ export interface CustomConfig {
     }
 
     captions: {
+      size: number
+    }
+
+    torrents: {
       size: number
     }
   }
@@ -85,6 +91,10 @@ export interface CustomConfig {
     allowAudioFiles: boolean
 
     threads: number
+    concurrency: number
+
+    profile: string
+
     resolutions: ConfigResolutions & { '0p': boolean }
 
     webtorrent: {
@@ -108,17 +118,29 @@ export interface CustomConfig {
     transcoding: {
       enabled: boolean
       threads: number
+      profile: string
       resolutions: ConfigResolutions
     }
   }
 
   import: {
     videos: {
+      concurrency: number
+
       http: {
         enabled: boolean
       }
       torrent: {
         enabled: boolean
+      }
+    }
+  }
+
+  trending: {
+    videos: {
+      algorithms: {
+        enabled: string[]
+        default: string
       }
     }
   }

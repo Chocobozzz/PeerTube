@@ -11,7 +11,7 @@ import {
 } from '@server/types/models'
 import { UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../shared/models'
 import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
-import { logger } from '../helpers/logger'
+import { logger, loggerTagsFactory } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { sendDeleteVideo } from './activitypub/send'
@@ -19,6 +19,8 @@ import { federateVideoIfNeeded } from './activitypub/videos'
 import { LiveManager } from './live-manager'
 import { Notifier } from './notifier'
 import { Hooks } from './plugins/hooks'
+
+const lTags = loggerTagsFactory('blacklist')
 
 async function autoBlacklistVideoIfNeeded (parameters: {
   video: MVideoWithBlacklistLight
@@ -60,7 +62,7 @@ async function autoBlacklistVideoIfNeeded (parameters: {
     })
   }
 
-  logger.info('Video %s auto-blacklisted.', video.uuid)
+  logger.info('Video %s auto-blacklisted.', video.uuid, lTags(video.uuid))
 
   return true
 }

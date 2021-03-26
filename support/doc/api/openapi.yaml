@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: PeerTube
-  version: 3.0.1
+  version: 3.1.0
   contact:
     name: PeerTube Community
     url: 'https://joinpeertube.org'
@@ -23,7 +23,7 @@ info:
     - [Go](https://framagit.org/framasoft/peertube/clients/go)
     - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
 
-    See the [Quick Start guide](https://docs.joinpeertube.org/#/api-rest-getting-started) so you can play with the PeerTube API.
+    See the [Quick Start guide](https://docs.joinpeertube.org/api-rest-getting-started) so you can play with the PeerTube API.
 
     # Authentication
 
@@ -34,7 +34,7 @@ info:
     ## Roles
 
     Accounts are given permissions based on their role. There are three roles on
-    PeerTube: Administrator, Moderator, and User. See the [roles guide](https://docs.joinpeertube.org/#/admin-managing-users?id=roles) for a detail of their permissions.
+    PeerTube: Administrator, Moderator, and User. See the [roles guide](https://docs.joinpeertube.org/admin-managing-users?id=roles) for a detail of their permissions.
 
     # Errors
 
@@ -95,7 +95,7 @@ tags:
       information across its social graph by posting activities to actors' inbox
       endpoints.
     externalDocs:
-      url: https://docs.joinpeertube.org/#/admin-following-instances?id=instances-follows
+      url: https://docs.joinpeertube.org/admin-following-instances?id=instances-follows
   - name: Instance Redundancy
     description: >
       Redundancy is part of the inter-server solidarity that PeerTube fosters.
@@ -103,12 +103,12 @@ tags:
       to the policy of video selection of your choice. Note that you have a similar functionality
       to mirror individual videos, see `Video Mirroring`.
     externalDocs:
-      url: https://docs.joinpeertube.org/#/admin-following-instances?id=instances-redundancy
+      url: https://docs.joinpeertube.org/admin-following-instances?id=instances-redundancy
   - name: Plugins
     description: >
       Managing plugins installed from a local path or from NPM, or search for new ones.
     externalDocs:
-      url: https://docs.joinpeertube.org/#/api-plugins
+      url: https://docs.joinpeertube.org/api-plugins
   - name: Abuses
     description: |
       Abuses deal with reports of local or remote videos/comments/accounts alike.
@@ -1362,11 +1362,11 @@ paths:
                   example: 4
                 licence:
                   description: Video licence
-                  type: string
-                language:
-                  description: Video language
                   type: integer
                   example: 2
+                language:
+                  description: Video language
+                  type: string
                 description:
                   description: Video description
                   type: string
@@ -1484,10 +1484,12 @@ paths:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
                   description: Video category
-                  type: string
+                  type: integer
+                  example: 4
                 licence:
                   description: Video licence
-                  type: string
+                  type: integer
+                  example: 2
                 language:
                   description: Video language
                   type: string
@@ -3491,6 +3493,7 @@ components:
         - -views
         - -likes
         - -trending
+        - -hot
     videosSearchSort:
       name: sort
       in: query
@@ -3814,7 +3817,7 @@ components:
 
         - Have an account with sufficient authorization levels
 
-        - [Generate](https://docs.joinpeertube.org/#/api-rest-getting-started) a
+        - [Generate](https://docs.joinpeertube.org/api-rest-getting-started) a
         Bearer Token
 
         - Make Authenticated Requests
@@ -3897,6 +3900,13 @@ components:
         - 2
       description: 'The user role (Admin = `0`, Moderator = `1`, User = `2`)'
       example: 2
+    UserAdminFlags:
+      type: integer
+      enum:
+        - 0
+        - 1
+      description: 'Admin flags for the user (None = `0`, Bypass video blacklist = `1`)'
+      example: 1
 
     VideoStateConstant:
       properties:
@@ -5021,6 +5031,9 @@ components:
           type: string
           format: email
           description: The user email
+        pluginAuth:
+          type: string
+          description: Auth plugin to use to authenticate the user
         theme:
           type: string
           description: Theme enabled by this user
@@ -5098,8 +5111,13 @@ components:
         videoQuotaDaily:
           type: integer
           description: The user daily video quota
+        channelName:
+          type: string
+          description: The user default channel username
         role:
           $ref: '#/components/schemas/UserRole'
+        adminFlags:
+          $ref: '#/components/schemas/UserAdminFlags'
       required:
         - username
         - password
@@ -5116,20 +5134,26 @@ components:
           type: string
           format: email
           description: The updated email of the user
+        emailVerified:
+          type: boolean
+          description: Set the email as verified
         videoQuota:
           type: integer
           description: The updated video quota of the user
         videoQuotaDaily:
           type: integer
           description: The updated daily video quota of the user
+        pluginAuth:
+          type: string
+          nullable: true
+          description: The auth plugin to use to authenticate the user
+          example: 'peertube-plugin-auth-saml2'
         role:
           $ref: '#/components/schemas/UserRole'
+        adminFlags:
+          $ref: '#/components/schemas/UserAdminFlags'
       required:
         - id
-        - email
-        - videoQuota
-        - videoQuotaDaily
-        - role
     UpdateMe:
       properties:
         password:

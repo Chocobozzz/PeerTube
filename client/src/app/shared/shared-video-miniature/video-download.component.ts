@@ -1,7 +1,9 @@
 import { mapValues, pick } from 'lodash-es'
-import { Component, ElementRef, ViewChild } from '@angular/core'
-import { AuthService, Notifier } from '@app/core'
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { pipe } from 'rxjs'
+import { tap } from 'rxjs/operators'
+import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
+import { AuthService, HooksService, Notifier } from '@app/core'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
 import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoService } from '../shared-main'
 
@@ -16,7 +18,7 @@ type FileMetadata = { [key: string]: { label: string, value: string }}
 export class VideoDownloadComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
-  downloadType: 'direct' | 'torrent' = 'torrent'
+  downloadType: 'direct' | 'torrent' = 'direct'
   resolutionId: number | string = -1
   subtitleLanguageId: string
 
@@ -26,7 +28,7 @@ export class VideoDownloadComponent {
   videoFileMetadataVideoStream: FileMetadata | undefined
   videoFileMetadataAudioStream: FileMetadata | undefined
   videoCaptions: VideoCaption[]
-  activeModal: NgbActiveModal
+  activeModal: NgbModalRef
 
   type: DownloadType = 'video'
 
@@ -34,13 +36,15 @@ export class VideoDownloadComponent {
   private numbersPipe: NumberFormatterPipe
 
   constructor (
+    @Inject(LOCALE_ID) private localeId: string,
     private notifier: Notifier,
     private modalService: NgbModal,
     private videoService: VideoService,
-    private auth: AuthService
+    private auth: AuthService,
+    private hooks: HooksService
   ) {
     this.bytesPipe = new BytesPipe()
-    this.numbersPipe = new NumberFormatterPipe()
+    this.numbersPipe = new NumberFormatterPipe(this.localeId)
   }
 
   get typeText () {
@@ -63,7 +67,12 @@ export class VideoDownloadComponent {
 
     this.resolutionId = this.getVideoFiles()[0].resolution.id
     this.onResolutionIdChange()
+
     if (this.videoCaptions) this.subtitleLanguageId = this.videoCaptions[0].language.id
+
+    this.activeModal.shown.subscribe(() => {
+      this.hooks.runAction('action:modal.video-download.shown', 'common')
+    })
   }
 
   onClose () {
@@ -87,6 +96,7 @@ export class VideoDownloadComponent {
     if (this.videoFile.metadata || !this.videoFile.metadataUrl) return
 
     await this.hydrateMetadataFromMetadataUrl(this.videoFile)
+    if (!this.videoFile.metadata) return
 
     this.videoFileMetadataFormat = this.videoFile
       ? this.getMetadataFormat(this.videoFile.metadata.format)
@@ -115,7 +125,7 @@ export class VideoDownloadComponent {
     const file = this.videoFile
     if (!file) return
 
-    const suffix = this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
+    const suffix = this.isConfidentialVideo()
       ? '?access_token=' + this.auth.getAccessToken()
       : ''
 
@@ -126,6 +136,10 @@ export class VideoDownloadComponent {
       case 'torrent':
         return file.torrentDownloadUrl + suffix
     }
+  }
+
+  isConfidentialVideo () {
+    return this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
   }
 
   getSubtitlesLink () {
@@ -196,7 +210,7 @@ export class VideoDownloadComponent {
 
   private hydrateMetadataFromMetadataUrl (file: VideoFile) {
     const observable = this.videoService.getVideoFileMetadata(file.metadataUrl)
-    observable.subscribe(res => file.metadata = res)
+      .pipe(tap(res => file.metadata = res))
 
     return observable.toPromise()
   }

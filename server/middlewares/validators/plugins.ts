@@ -50,9 +50,9 @@ const getExternalAuthValidator = [
     if (areValidationErrors(req, res)) return
 
     const plugin = res.locals.registeredPlugin
-    if (!plugin.registerHelpersStore) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    if (!plugin.registerHelpers) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-    const externalAuth = plugin.registerHelpersStore.getExternalAuths().find(a => a.authName === req.params.authName)
+    const externalAuth = plugin.registerHelpers.getExternalAuths().find(a => a.authName === req.params.authName)
     if (!externalAuth) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
     res.locals.externalAuth = externalAuth

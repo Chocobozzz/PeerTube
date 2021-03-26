@@ -1,4 +1,4 @@
-<div *ngIf="isNotDeletedOrDeletedWithReplies()" class="root-comment">
+<div *ngIf="isCommentDisplayed()" class="root-comment">
   <div class="left">
     <a *ngIf="!comment.isDeleted" [href]="comment.account.url" target="_blank" rel="noopener noreferrer">
       <img

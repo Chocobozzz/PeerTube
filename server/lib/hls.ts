@@ -12,7 +12,7 @@ import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from 
 import { sequelizeTypescript } from '../initializers/database'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
-import { getVideoFilename, getVideoFilePath } from './video-paths'
+import { getVideoFilePath } from './video-paths'
 
 async function updateStreamingPlaylistsInfohashesIfNeeded () {
   const playlistsToUpdate = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
@@ -93,7 +93,7 @@ async function updateSha256VODSegments (video: MVideoWithFile) {
     }
     await close(fd)
 
-    const videoFilename = getVideoFilename(hlsPlaylist, file)
+    const videoFilename = file.filename
     json[videoFilename] = rangeHashes
   }
 
@@ -111,7 +111,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
   logger.info('Importing HLS playlist %s', playlistUrl)
 
-  return new Promise<string>(async (res, rej) => {
+  return new Promise<void>(async (res, rej) => {
     const tmpDirectory = join(CONFIG.STORAGE.TMP_DIR, await generateRandomString(10))
 
     await ensureDir(tmpDirectory)
@@ -135,7 +135,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
         const destPath = join(tmpDirectory, basename(fileUrl))
 
         const bodyKBLimit = 10 * 1000 * 1000 // 10GB
-        await doRequestAndSaveToFile({ uri: fileUrl }, destPath, bodyKBLimit)
+        await doRequestAndSaveToFile(fileUrl, destPath, { bodyKBLimit })
       }
 
       clearTimeout(timer)
@@ -156,7 +156,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
   }
 
   async function fetchUniqUrls (playlistUrl: string) {
-    const { body } = await doRequest<string>({ uri: playlistUrl })
+    const { body } = await doRequest(playlistUrl)
 
     if (!body) return []
 

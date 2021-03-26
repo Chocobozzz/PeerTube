@@ -1,7 +1,17 @@
-import { fromEvent, Observable, Subject, Subscription } from 'rxjs'
+import { fromEvent, Observable, ReplaySubject, Subject, Subscription } from 'rxjs'
 import { debounceTime, switchMap, tap } from 'rxjs/operators'
-import { Directive, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import {
+  AfterContentInit,
+  ComponentFactoryResolver,
+  Directive,
+  Injector,
+  OnDestroy,
+  OnInit,
+  Type,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import {
   AuthService,
   ComponentPaginationLight,
@@ -19,6 +29,7 @@ import { ServerConfig, UserRight, VideoFilter, VideoSortField } from '@shared/mo
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 import { Syndication, Video } from '../shared-main'
 import { MiniatureDisplayOptions, OwnerDisplayType } from './video-miniature.component'
+import { GenericHeaderComponent, VideoListHeaderComponent } from './video-list-header.component'
 
 enum GroupDate {
   UNKNOWN = 0,
@@ -32,7 +43,12 @@ enum GroupDate {
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
-export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableForReuseHook {
+export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterContentInit, DisableForReuseHook {
+  @ViewChild('videoListHeader', { static: true, read: ViewContainerRef }) videoListHeader: ViewContainerRef
+
+  HeaderComponent: Type<GenericHeaderComponent> = VideoListHeaderComponent
+  headerComponentInjector: Injector
+
   pagination: ComponentPaginationLight = {
     currentPage: 1,
     itemsPerPage: 25
@@ -47,7 +63,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   syndicationItems: Syndication[] = []
 
   loadOnInit = true
-  useUserVideoPreferences = false
+  loadUserVideoPreferences = false
+
   ownerDisplayType: OwnerDisplayType = 'account'
   displayModerationBlock = false
   titleTooltip: string
@@ -82,6 +99,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   userMiniature: User
 
+  protected onUserLoadedSubject = new ReplaySubject<void>(1)
+
   protected serverConfig: ServerConfig
 
   protected abstract notifier: Notifier
@@ -92,6 +111,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   protected abstract screenService: ScreenService
   protected abstract storageService: LocalStorageService
   protected abstract router: Router
+  protected abstract cfr: ComponentFactoryResolver
   abstract titlePage: string
 
   private resizeSubscription: Subscription
@@ -132,10 +152,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     this.calcPageSizes()
 
     const loadUserObservable = this.loadUserAndSettings()
+    loadUserObservable.subscribe(() => {
+      this.onUserLoadedSubject.next()
 
-    if (this.loadOnInit === true) {
-      loadUserObservable.subscribe(() => this.loadMoreVideos())
-    }
+      if (this.loadOnInit === true) this.loadMoreVideos()
+    })
 
     this.userService.listenAnonymousUpdate()
       .pipe(switchMap(() => this.loadUserAndSettings()))
@@ -151,6 +172,13 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   ngOnDestroy () {
     if (this.resizeSubscription) this.resizeSubscription.unsubscribe()
+  }
+
+  ngAfterContentInit () {
+    if (this.videoListHeader) {
+      // some components don't use the header: they use their own template, like my-history.component.html
+      this.setHeader.apply(this, [ this.HeaderComponent, this.headerComponentInjector ])
+    }
   }
 
   disableForReuse () {
@@ -171,6 +199,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     // No more results
     if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
 
+    console.log('near of bottom')
     this.pagination.currentPage += 1
 
     this.setScrollRouteParams()
@@ -268,16 +297,43 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   }
 
   toggleModerationDisplay () {
-    throw new Error('toggleModerationDisplay is not implemented')
+    throw new Error('toggleModerationDisplay ' + $localize`function is not implemented`)
+  }
+
+  setHeader (
+    t: Type<any> = this.HeaderComponent,
+    i: Injector = this.headerComponentInjector
+  ) {
+    const injector = i || Injector.create({
+      providers: [{
+        provide: 'data',
+        useValue: {
+          titlePage: this.titlePage,
+          titleTooltip: this.titleTooltip
+        }
+      }]
+    })
+    const viewContainerRef = this.videoListHeader
+    viewContainerRef.clear()
+
+    const componentFactory = this.cfr.resolveComponentFactory(t)
+    viewContainerRef.createComponent(componentFactory, 0, injector)
   }
 
   // On videos hook for children that want to do something
   protected onMoreVideos () { /* empty */ }
 
-  protected loadRouteParams (routeParams: { [ key: string ]: any }) {
-    this.sort = routeParams[ 'sort' ] as VideoSortField || this.defaultSort
-    this.categoryOneOf = routeParams[ 'categoryOneOf' ]
-    this.angularState = routeParams[ 'a-state' ]
+  protected load () { /* empty */ }
+
+  // Hook if the page has custom route params
+  protected loadPageRouteParams (_queryParams: Params) { /* empty */ }
+
+  protected loadRouteParams (queryParams: Params) {
+    this.sort = queryParams[ 'sort' ] as VideoSortField || this.defaultSort
+    this.categoryOneOf = queryParams[ 'categoryOneOf' ]
+    this.angularState = queryParams[ 'a-state' ]
+
+    this.loadPageRouteParams(queryParams)
   }
 
   protected buildLocalFilter (existing: VideoFilter, base: VideoFilter) {
@@ -319,7 +375,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       categoryOneOf: this.categoryOneOf
     }
 
-    let path = this.router.url
+    let path = this.getUrlWithoutParams()
     if (!path || path === '/') path = this.serverConfig.instance.defaultClientRoute
 
     this.router.navigate([ path ], { queryParams, replaceUrl: true, queryParamsHandling: 'merge' })
@@ -330,10 +386,17 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       .pipe(tap(user => {
         this.userMiniature = user
 
-        if (!this.useUserVideoPreferences) return
+        if (!this.loadUserVideoPreferences) return
 
         this.languageOneOf = user.videoLanguages
         this.nsfwPolicy = user.nsfwPolicy
       }))
+  }
+
+  private getUrlWithoutParams () {
+    const urlTree = this.router.parseUrl(this.router.url)
+    urlTree.queryParams = {}
+
+    return urlTree.toString()
   }
 }

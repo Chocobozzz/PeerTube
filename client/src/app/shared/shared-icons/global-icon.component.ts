@@ -16,6 +16,7 @@ const icons = {
   'playlist-add': require('!!raw-loader?!../../../assets/images/misc/playlist-add.svg').default, // material ui
   'follower': require('!!raw-loader?!../../../assets/images/misc/account-arrow-left.svg').default, // material ui
   'following': require('!!raw-loader?!../../../assets/images/misc/account-arrow-right.svg').default, // material ui
+  'flame': require('!!raw-loader?!../../../assets/images/misc/flame.svg').default,
 
   // feather icons
   'flag': require('!!raw-loader?!../../../assets/images/feather/flag.svg').default,
@@ -70,7 +71,8 @@ const icons = {
   'live': require('!!raw-loader?!../../../assets/images/feather/live.svg').default,
   'repeat': require('!!raw-loader?!../../../assets/images/feather/repeat.svg').default,
   'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default,
-  'codesandbox': require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default
+  'codesandbox': require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default,
+  'award': require('!!raw-loader?!../../../assets/images/feather/award.svg').default
 }
 
 export type GlobalIconName = keyof typeof icons

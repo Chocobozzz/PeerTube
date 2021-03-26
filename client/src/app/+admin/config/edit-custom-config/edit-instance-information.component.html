@@ -1,0 +1,243 @@
+<ng-container [formGroup]="form">
+
+  <ng-container formGroupName="instance">
+
+    <div class="form-row mt-5"> <!-- instance grid -->
+      <div class="form-group col-12 col-lg-4 col-xl-3">
+        <div i18n class="inner-form-title">INSTANCE</div>
+      </div>
+
+      <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+        <div class="form-group">
+          <label i18n for="instanceName">Name</label>
+
+          <input
+            type="text" id="instanceName" class="form-control"
+            formControlName="name" [ngClass]="{ 'input-error': formErrors.instance.name }"
+          >
+
+          <div *ngIf="formErrors.instance.name" class="form-error">{{ formErrors.instance.name }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceShortDescription">Short description</label>
+
+          <textarea
+            id="instanceShortDescription" formControlName="shortDescription" class="form-control small"
+            [ngClass]="{ 'input-error': formErrors['instance.shortDescription'] }"
+          ></textarea>
+
+          <div *ngIf="formErrors.instance.shortDescription" class="form-error">{{ formErrors.instance.shortDescription }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
+
+          <my-markdown-textarea
+            name="instanceDescription" formControlName="description" textareaMaxWidth="500px"
+            [classes]="{ 'input-error': formErrors['instance.description'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.description" class="form-error">{{ formErrors.instance.description }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceCategories">Main instance categories</label>
+
+          <div>
+            <my-select-checkbox
+              id="instanceCategories"
+              formControlName="categories" [availableItems]="categoryItems"
+              [selectableGroup]="false"
+              i18n-placeholder placeholder="Add a new category"
+            >
+            </my-select-checkbox>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceLanguages">Main languages you/your moderators speak</label>
+
+          <div>
+            <my-select-checkbox
+              id="instanceLanguages"
+              formControlName="languages" [availableItems]="languageItems"
+              [selectableGroup]="false"
+              i18n-placeholder placeholder="Add a new language"
+            >
+            </my-select-checkbox>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-row mt-4"> <!-- moderation & nsfw grid -->
+      <div class="form-group col-12 col-lg-4 col-xl-3">
+        <div i18n class="inner-form-title">MODERATION & NSFW</div>
+        <div i18n class="inner-for-description">
+          Manage <a routerLink="/admin/users">users</a> to build a moderation team.
+        </div>
+      </div>
+
+      <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+        <div class="form-group">
+          <my-peertube-checkbox inputName="instanceIsNSFW" formControlName="isNSFW">
+            <ng-template ptTemplate="label">
+              <ng-container i18n>This instance is dedicated to sensitive or NSFW content</ng-container>
+            </ng-template>
+
+            <ng-template ptTemplate="help">
+              <ng-container i18n>
+                Enabling it will allow other administrators to know that you are mainly federating sensitive content.<br /><br />
+                Moreover, the NSFW checkbox on video upload will be automatically checked by default.
+              </ng-container>
+            </ng-template>
+          </my-peertube-checkbox>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceDefaultNSFWPolicy">Policy on videos containing sensitive content</label>
+
+          <my-help>
+            <ng-template ptTemplate="customHtml">
+              <ng-container i18n>
+                With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video.
+              </ng-container>
+            </ng-template>
+          </my-help>
+
+          <div class="peertube-select-container">
+            <select id="instanceDefaultNSFWPolicy" formControlName="defaultNSFWPolicy" class="form-control">
+              <option i18n value="undefined" disabled>Policy for sensitive videos</option>
+              <option i18n value="do_not_list">Do not list</option>
+              <option i18n value="blur">Blur thumbnails</option>
+              <option i18n value="display">Display</option>
+            </select>
+          </div>
+
+          <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error">{{ formErrors.instance.defaultNSFWPolicy }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
+
+          <my-markdown-textarea
+            name="instanceTerms" formControlName="terms" textareaMaxWidth="500px"
+            [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
+
+          <my-markdown-textarea
+            name="instanceCodeOfConduct" formControlName="codeOfConduct" textareaMaxWidth="500px"
+            [ngClass]="{ 'input-error': formErrors['instance.codeOfConduct'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.codeOfConduct" class="form-error">{{ formErrors.instance.codeOfConduct }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceModerationInformation">Moderation information</label><my-help helpType="markdownText"></my-help>
+          <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
+
+          <my-markdown-textarea
+            name="instanceModerationInformation" formControlName="moderationInformation" textareaMaxWidth="500px"
+            [ngClass]="{ 'input-error': formErrors['instance.moderationInformation'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-row mt-4"> <!-- you and your instance grid -->
+      <div class="form-group col-12 col-lg-4 col-xl-3">
+        <div i18n class="inner-form-title">YOU AND YOUR INSTANCE</div>
+      </div>
+
+      <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+        <div class="form-group">
+          <label i18n for="instanceAdministrator">Who is behind the instance?</label><my-help helpType="markdownText"></my-help>
+          <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
+
+          <my-markdown-textarea
+            name="instanceAdministrator" formControlName="administrator" textareaMaxWidth="500px"
+            [classes]="{ 'input-error': formErrors['instance.administrator'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.administrator" class="form-error">{{ formErrors.instance.administrator }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceCreationReason">Why did you create this instance?</label><my-help helpType="markdownText"></my-help>
+          <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
+
+          <my-markdown-textarea
+            name="instanceCreationReason" formControlName="creationReason" textareaMaxWidth="500px"
+            [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceMaintenanceLifetime">How long do you plan to maintain this instance?</label><my-help helpType="markdownText"></my-help>
+          <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
+
+          <my-markdown-textarea
+            name="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" textareaMaxWidth="500px"
+            [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label><my-help helpType="markdownText"></my-help>
+          <div i18n class="label-small-info">With your own funds? With user donations? Advertising?</div>
+
+          <my-markdown-textarea
+            name="instanceBusinessModel" formControlName="businessModel" textareaMaxWidth="500px"
+            [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-row mt-4"> <!-- other information grid -->
+      <div class="form-group col-12 col-lg-4 col-xl-3">
+        <div i18n class="inner-form-title">OTHER INFORMATION</div>
+      </div>
+
+      <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+        <div class="form-group">
+          <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>
+          <div i18n class="label-small-info">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</div>
+
+          <my-markdown-textarea
+            name="instanceHardwareInformation" formControlName="hardwareInformation" textareaMaxWidth="500px"
+            [classes]="{ 'input-error': formErrors['instance.hardwareInformation'] }"
+          ></my-markdown-textarea>
+
+          <div *ngIf="formErrors.instance.hardwareInformation" class="form-error">{{ formErrors.instance.hardwareInformation }}</div>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</ng-container>

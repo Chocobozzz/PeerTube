@@ -8,7 +8,7 @@
     <div class="top-left-block">
       <span class="icon icon-menu" role="button" [title]="getToggleTitle()" (click)="menu.toggleMenu()"></span>
 
-      <a class="peertube-title" [routerLink]="defaultRoute">
+      <a class="peertube-title c-hand" (click)="goToDefaultRoute()">
         <span class="icon icon-logo"></span>
         <span class="instance-name">{{ instanceName }}</span>
       </a>

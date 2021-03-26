@@ -1,12 +1,13 @@
 import * as cors from 'cors'
 import * as express from 'express'
+import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { logger } from '../helpers/logger'
 import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
+import { avatarPathUnsafeCache, pushAvatarProcessInQueue } from '../lib/avatar'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { asyncMiddleware } from '../middlewares'
 import { AvatarModel } from '../models/avatar/avatar'
-import { logger } from '../helpers/logger'
-import { avatarPathUnsafeCache, pushAvatarProcessInQueue } from '../lib/avatar'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 
 const lazyStaticRouter = express.Router()
 
@@ -18,13 +19,18 @@ lazyStaticRouter.use(
 )
 
 lazyStaticRouter.use(
-  LAZY_STATIC_PATHS.PREVIEWS + ':uuid.jpg',
+  LAZY_STATIC_PATHS.PREVIEWS + ':filename',
   asyncMiddleware(getPreview)
 )
 
 lazyStaticRouter.use(
-  LAZY_STATIC_PATHS.VIDEO_CAPTIONS + ':videoId-:captionLanguage([a-z]+).vtt',
+  LAZY_STATIC_PATHS.VIDEO_CAPTIONS + ':filename',
   asyncMiddleware(getVideoCaption)
+)
+
+lazyStaticRouter.use(
+  LAZY_STATIC_PATHS.TORRENTS + ':filename',
+  asyncMiddleware(getTorrent)
 )
 
 // ---------------------------------------------------------------------------
@@ -67,22 +73,27 @@ async function getAvatar (req: express.Request, res: express.Response) {
   const path = avatar.getPath()
 
   avatarPathUnsafeCache.set(filename, path)
-  return res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
+  return res.sendFile(path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
 }
 
 async function getPreview (req: express.Request, res: express.Response) {
-  const result = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
+  const result = await VideosPreviewCache.Instance.getFilePath(req.params.filename)
   if (!result) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.SERVER })
+  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
 }
 
 async function getVideoCaption (req: express.Request, res: express.Response) {
-  const result = await VideosCaptionCache.Instance.getFilePath({
-    videoId: req.params.videoId,
-    language: req.params.captionLanguage
-  })
+  const result = await VideosCaptionCache.Instance.getFilePath(req.params.filename)
   if (!result) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
+  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
+}
+
+async function getTorrent (req: express.Request, res: express.Response) {
+  const result = await VideosTorrentCache.Instance.getFilePath(req.params.filename)
+  if (!result) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+
+  // Torrents still use the old naming convention (video uuid + .torrent)
   return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.SERVER })
 }

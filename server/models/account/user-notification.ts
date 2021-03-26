@@ -9,7 +9,9 @@ import { VideoAbuseModel } from '../abuse/video-abuse'
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
+import { ApplicationModel } from '../application/application'
 import { AvatarModel } from '../avatar/avatar'
+import { PluginModel } from '../server/plugin'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
@@ -96,7 +98,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
             attributes: [ 'id' ],
             model: VideoAbuseModel.unscoped(),
             required: false,
-            include: [ buildVideoInclude(true) ]
+            include: [ buildVideoInclude(false) ]
           },
           {
             attributes: [ 'id' ],
@@ -106,12 +108,12 @@ function buildAccountInclude (required: boolean, withActor = false) {
               {
                 attributes: [ 'id', 'originCommentId' ],
                 model: VideoCommentModel.unscoped(),
-                required: true,
+                required: false,
                 include: [
                   {
                     attributes: [ 'id', 'name', 'uuid' ],
                     model: VideoModel.unscoped(),
-                    required: true
+                    required: false
                   }
                 ]
               }
@@ -120,7 +122,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
           {
             model: AccountModel,
             as: 'FlaggedAccount',
-            required: true,
+            required: false,
             include: [ buildActorWithAvatarInclude() ]
           }
         ]
@@ -138,6 +140,18 @@ function buildAccountInclude (required: boolean, withActor = false) {
         model: VideoImportModel.unscoped(),
         required: false,
         include: [ buildVideoInclude(false) ]
+      },
+
+      {
+        attributes: [ 'id', 'name', 'type', 'latestVersion' ],
+        model: PluginModel.unscoped(),
+        required: false
+      },
+
+      {
+        attributes: [ 'id', 'latestPeerTubeVersion' ],
+        model: ApplicationModel.unscoped(),
+        required: false
       },
 
       {
@@ -248,6 +262,22 @@ function buildAccountInclude (required: boolean, withActor = false) {
       fields: [ 'actorFollowId' ],
       where: {
         actorFollowId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'pluginId' ],
+      where: {
+        pluginId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'applicationId' ],
+      where: {
+        applicationId: {
           [Op.ne]: null
         }
       }
@@ -370,6 +400,30 @@ export class UserNotificationModel extends Model {
   })
   ActorFollow: ActorFollowModel
 
+  @ForeignKey(() => PluginModel)
+  @Column
+  pluginId: number
+
+  @BelongsTo(() => PluginModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  Plugin: PluginModel
+
+  @ForeignKey(() => ApplicationModel)
+  @Column
+  applicationId: number
+
+  @BelongsTo(() => ApplicationModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  Application: ApplicationModel
+
   static listForApi (userId: number, start: number, count: number, sort: string, unread?: boolean) {
     const where = { userId }
 
@@ -469,27 +523,33 @@ export class UserNotificationModel extends Model {
       ? Object.assign(this.formatVideo(this.Video), { channel: this.formatActor(this.Video.VideoChannel) })
       : undefined
 
-    const videoImport = this.VideoImport ? {
-      id: this.VideoImport.id,
-      video: this.VideoImport.Video ? this.formatVideo(this.VideoImport.Video) : undefined,
-      torrentName: this.VideoImport.torrentName,
-      magnetUri: this.VideoImport.magnetUri,
-      targetUrl: this.VideoImport.targetUrl
-    } : undefined
+    const videoImport = this.VideoImport
+      ? {
+        id: this.VideoImport.id,
+        video: this.VideoImport.Video ? this.formatVideo(this.VideoImport.Video) : undefined,
+        torrentName: this.VideoImport.torrentName,
+        magnetUri: this.VideoImport.magnetUri,
+        targetUrl: this.VideoImport.targetUrl
+      }
+      : undefined
 
-    const comment = this.Comment ? {
-      id: this.Comment.id,
-      threadId: this.Comment.getThreadId(),
-      account: this.formatActor(this.Comment.Account),
-      video: this.formatVideo(this.Comment.Video)
-    } : undefined
+    const comment = this.Comment
+      ? {
+        id: this.Comment.id,
+        threadId: this.Comment.getThreadId(),
+        account: this.formatActor(this.Comment.Account),
+        video: this.formatVideo(this.Comment.Video)
+      }
+      : undefined
 
     const abuse = this.Abuse ? this.formatAbuse(this.Abuse) : undefined
 
-    const videoBlacklist = this.VideoBlacklist ? {
-      id: this.VideoBlacklist.id,
-      video: this.formatVideo(this.VideoBlacklist.Video)
-    } : undefined
+    const videoBlacklist = this.VideoBlacklist
+      ? {
+        id: this.VideoBlacklist.id,
+        video: this.formatVideo(this.VideoBlacklist.Video)
+      }
+      : undefined
 
     const account = this.Account ? this.formatActor(this.Account) : undefined
 
@@ -498,23 +558,37 @@ export class UserNotificationModel extends Model {
       Group: 'channel' as 'channel',
       Person: 'account' as 'account'
     }
-    const actorFollow = this.ActorFollow ? {
-      id: this.ActorFollow.id,
-      state: this.ActorFollow.state,
-      follower: {
-        id: this.ActorFollow.ActorFollower.Account.id,
-        displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
-        name: this.ActorFollow.ActorFollower.preferredUsername,
-        avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getStaticPath() } : undefined,
-        host: this.ActorFollow.ActorFollower.getHost()
-      },
-      following: {
-        type: actorFollowingType[this.ActorFollow.ActorFollowing.type],
-        displayName: (this.ActorFollow.ActorFollowing.VideoChannel || this.ActorFollow.ActorFollowing.Account).getDisplayName(),
-        name: this.ActorFollow.ActorFollowing.preferredUsername,
-        host: this.ActorFollow.ActorFollowing.getHost()
+    const actorFollow = this.ActorFollow
+      ? {
+        id: this.ActorFollow.id,
+        state: this.ActorFollow.state,
+        follower: {
+          id: this.ActorFollow.ActorFollower.Account.id,
+          displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
+          name: this.ActorFollow.ActorFollower.preferredUsername,
+          avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getStaticPath() } : undefined,
+          host: this.ActorFollow.ActorFollower.getHost()
+        },
+        following: {
+          type: actorFollowingType[this.ActorFollow.ActorFollowing.type],
+          displayName: (this.ActorFollow.ActorFollowing.VideoChannel || this.ActorFollow.ActorFollowing.Account).getDisplayName(),
+          name: this.ActorFollow.ActorFollowing.preferredUsername,
+          host: this.ActorFollow.ActorFollowing.getHost()
+        }
       }
-    } : undefined
+      : undefined
+
+    const plugin = this.Plugin
+      ? {
+        name: this.Plugin.name,
+        type: this.Plugin.type,
+        latestVersion: this.Plugin.latestVersion
+      }
+      : undefined
+
+    const peertube = this.Application
+      ? { latestVersion: this.Application.latestPeerTubeVersion }
+      : undefined
 
     return {
       id: this.id,
@@ -527,6 +601,8 @@ export class UserNotificationModel extends Model {
       videoBlacklist,
       account,
       actorFollow,
+      plugin,
+      peertube,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString()
     }
@@ -541,19 +617,23 @@ export class UserNotificationModel extends Model {
   }
 
   formatAbuse (this: UserNotificationModelForApi, abuse: UserNotificationIncludes.AbuseInclude) {
-    const commentAbuse = abuse.VideoCommentAbuse?.VideoComment ? {
-      threadId: abuse.VideoCommentAbuse.VideoComment.getThreadId(),
+    const commentAbuse = abuse.VideoCommentAbuse?.VideoComment
+      ? {
+        threadId: abuse.VideoCommentAbuse.VideoComment.getThreadId(),
 
-      video: {
-        id: abuse.VideoCommentAbuse.VideoComment.Video.id,
-        name: abuse.VideoCommentAbuse.VideoComment.Video.name,
-        uuid: abuse.VideoCommentAbuse.VideoComment.Video.uuid
+        video: abuse.VideoCommentAbuse.VideoComment.Video
+          ? {
+            id: abuse.VideoCommentAbuse.VideoComment.Video.id,
+            name: abuse.VideoCommentAbuse.VideoComment.Video.name,
+            uuid: abuse.VideoCommentAbuse.VideoComment.Video.uuid
+          }
+          : undefined
       }
-    } : undefined
+      : undefined
 
     const videoAbuse = abuse.VideoAbuse?.Video ? this.formatVideo(abuse.VideoAbuse.Video) : undefined
 
-    const accountAbuse = (!commentAbuse && !videoAbuse) ? this.formatActor(abuse.FlaggedAccount) : undefined
+    const accountAbuse = (!commentAbuse && !videoAbuse && abuse.FlaggedAccount) ? this.formatActor(abuse.FlaggedAccount) : undefined
 
     return {
       id: abuse.id,

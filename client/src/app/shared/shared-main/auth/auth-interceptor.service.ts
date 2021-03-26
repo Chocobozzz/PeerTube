@@ -27,7 +27,9 @@ export class AuthInterceptor implements HttpInterceptor {
                  catchError((err: HttpErrorResponse) => {
                    if (err.status === HttpStatusCode.UNAUTHORIZED_401 && err.error && err.error.code === 'invalid_token') {
                      return this.handleTokenExpired(req, next)
-                   } else if (err.status === HttpStatusCode.UNAUTHORIZED_401) {
+                   }
+
+                   if (err.status === HttpStatusCode.UNAUTHORIZED_401) {
                      return this.handleNotAuthenticated(err)
                    }
 

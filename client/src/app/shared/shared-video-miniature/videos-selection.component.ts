@@ -2,6 +2,7 @@ import { Observable } from 'rxjs'
 import {
   AfterContentInit,
   Component,
+  ComponentFactoryResolver,
   ContentChildren,
   EventEmitter,
   Input,
@@ -12,7 +13,7 @@ import {
   TemplateRef
 } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ComponentPagination, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
+import { AuthService, ComponentPagination, LocalStorageService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
 import { ResultList, VideoSortField } from '@shared/models'
 import { PeerTubeTemplateDirective, Video } from '../shared-main'
 import { AbstractVideoList } from './abstract-video-list'
@@ -26,6 +27,7 @@ export type SelectionType = { [ id: number ]: boolean }
   styleUrls: [ './videos-selection.component.scss' ]
 })
 export class VideosSelectionComponent extends AbstractVideoList implements OnInit, OnDestroy, AfterContentInit {
+  @Input() user: User
   @Input() pagination: ComponentPagination
   @Input() titlePage: string
   @Input() miniatureDisplayOptions: MiniatureDisplayOptions
@@ -51,7 +53,8 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
     protected userService: UserService,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
-    protected serverService: ServerService
+    protected serverService: ServerService,
+    protected cfr: ComponentFactoryResolver
   ) {
     super()
   }

@@ -1,4 +1,4 @@
-import { literal, Op, Transaction } from 'sequelize'
+import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
@@ -183,6 +183,17 @@ export class VideoShareModel extends Model {
     }
 
     return VideoShareModel.findAndCountAll(query)
+  }
+
+  static listRemoteShareUrlsOfLocalVideos () {
+    const query = `SELECT "videoShare".url FROM "videoShare" ` +
+      `INNER JOIN actor ON actor.id = "videoShare"."actorId" AND actor."serverId" IS NOT NULL ` +
+      `INNER JOIN video ON video.id = "videoShare"."videoId" AND video.remote IS FALSE`
+
+    return VideoShareModel.sequelize.query<{ url: string }>(query, {
+      type: QueryTypes.SELECT,
+      raw: true
+    }).then(rows => rows.map(r => r.url))
   }
 
   static cleanOldSharesOf (videoId: number, beforeUpdatedAt: Date) {

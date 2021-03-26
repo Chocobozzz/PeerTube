@@ -39,6 +39,12 @@ Create the production database and a peertube user inside PostgreSQL:
 
 ```
 $ sudo -u postgres createuser -P peertube
+```
+
+Here you should enter a password for PostgreSQL `peertube` user, that should be copied in `production.yaml` file.
+Don't just hit enter else it will be empty.
+
+```
 $ sudo -u postgres createdb -O peertube -E UTF8 -T template0 peertube_prod
 ```
 
@@ -66,7 +72,7 @@ Download the latest version of the Peertube client, unzip it and remove the zip
 ```
 $ cd /var/www/peertube/versions
 $ sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip"
-$ sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
+$ sudo -u peertube unzip -q peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
 ```
 
 Install Peertube:
@@ -134,7 +140,7 @@ To generate the certificate for your domain as required to make https work you c
 
 ```
 $ sudo systemctl stop nginx
-$ sudo certbot certonly --standalone --post-hook "systemctl start nginx"
+$ sudo certbot certonly --standalone --post-hook "systemctl restart nginx"
 $ sudo systemctl reload nginx
 ```
 
@@ -149,6 +155,7 @@ Since our nginx template supports webroot renewal, we suggest you to update the 
 
 ```
 $ # Replace authenticator = standalone by authenticator = webroot
+$ # Add webroot_path = /var/www/certbot
 $ sudo vim /etc/letsencrypt/renewal/your-domain.com.conf
 ```
 
@@ -160,8 +167,6 @@ $ sudo pkg install dehydrated
 ```
 
 ### TCP/IP Tuning
-
-A lot of your instance's raw performance is dependent on a properly tuned machine and more specifically, reverse-proxy. We provide support for Nginx and spent a lot of time putting sane defaults in it, but we strongly advise you to follow up with instructions in https://github.com/denji/nginx-tuning as needed.
 
 **On Linux**
 

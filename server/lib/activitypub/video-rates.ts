@@ -1,26 +1,22 @@
-import { Transaction } from 'sequelize'
-import { sendLike, sendUndoDislike, sendUndoLike } from './send'
-import { VideoRateType } from '../../../shared/models/videos'
 import * as Bluebird from 'bluebird'
-import { getOrCreateActorAndServerAndModel } from './actor'
-import { AccountVideoRateModel } from '../../models/account/account-video-rate'
+import { Transaction } from 'sequelize'
+import { doJSONRequest } from '@server/helpers/requests'
+import { VideoRateType } from '../../../shared/models/videos'
+import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
-import { doRequest } from '../../helpers/requests'
-import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from './url'
-import { sendDislike } from './send/send-dislike'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { MAccountActor, MActorUrl, MVideo, MVideoAccountLight, MVideoId } from '../../types/models'
+import { getOrCreateActorAndServerAndModel } from './actor'
+import { sendLike, sendUndoDislike, sendUndoLike } from './send'
+import { sendDislike } from './send/send-dislike'
+import { getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from './url'
 
 async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateType) {
   await Bluebird.map(ratesUrl, async rateUrl => {
     try {
       // Fetch url
-      const { body } = await doRequest<any>({
-        uri: rateUrl,
-        json: true,
-        activityPub: true
-      })
+      const { body } = await doJSONRequest<any>(rateUrl, { activityPub: true })
       if (!body || !body.actor) throw new Error('Body or body actor is invalid')
 
       const actorUrl = getAPId(body.actor)

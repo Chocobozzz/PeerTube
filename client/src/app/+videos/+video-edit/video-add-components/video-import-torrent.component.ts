@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
+import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
@@ -18,7 +18,7 @@ import { VideoSend } from './video-send'
     './video-send.scss'
   ]
 })
-export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {
+export class VideoImportTorrentComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
   @ViewChild('torrentfileInput') torrentfileInput: ElementRef<HTMLInputElement>
@@ -43,13 +43,18 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
     private router: Router,
-    private videoImportService: VideoImportService
+    private videoImportService: VideoImportService,
+    private hooks: HooksService
     ) {
     super()
   }
 
   ngOnInit () {
     super.ngOnInit()
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:video-torrent-import.init', 'video-edit')
   }
 
   canDeactivate () {

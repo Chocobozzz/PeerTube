@@ -9,4 +9,5 @@ export interface UserUpdate {
   videoQuotaDaily?: number
   role?: UserRole
   adminFlags?: UserAdminFlag
+  pluginAuth?: string
 }

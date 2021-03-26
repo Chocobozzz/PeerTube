@@ -1,17 +1,12 @@
 <div>
   <div class="title-block">
     <h2 class="title-page title-page-single">
-      <ng-container *ngIf="componentPagination.totalItems > 0; then hasComments; else noComments"></ng-container>
-      <ng-template #hasComments>
-        <ng-container i18n *ngIf="componentPagination.totalItems === 1; else manyComments">1 Comment</ng-container>
-        <ng-template i18n #manyComments>{{ componentPagination.totalItems }} Comments</ng-template>
-      </ng-template>
-      <ng-template i18n #noComments>Comments</ng-template>
+      {totalNotDeletedComments, plural, =0 {Comments} =1 {1 Comment} other {{{totalNotDeletedComments}} Comments}}
     </h2>
 
     <my-feed [syndicationItems]="syndicationItems"></my-feed>
 
-    <div ngbDropdown class="d-inline-block ml-4">
+    <div ngbDropdown class="d-inline-block ml-4 dropdown-root">
       <button class="btn btn-sm btn-outline-secondary" id="dropdown-sort-comments" ngbDropdownToggle i18n>
         SORT BY
       </button>
@@ -30,7 +25,7 @@
       [textValue]="commentThreadRedraftValue"
     ></my-video-comment-add>
 
-    <div *ngIf="componentPagination.totalItems === 0 && comments.length === 0" i18n>No comments.</div>
+    <div *ngIf="totalNotDeletedComments === 0 && comments.length === 0" i18n>No comments.</div>
 
     <div
       class="comment-threads"
@@ -79,15 +74,17 @@
             <span class="glyphicon glyphicon-menu-down"></span>
 
             <ng-container *ngIf="comment.totalRepliesFromVideoAuthor > 0; then hasAuthorComments; else noAuthorComments"></ng-container>
+
             <ng-template #hasAuthorComments>
               <ng-container *ngIf="comment.totalReplies !== comment.totalRepliesFromVideoAuthor; else onlyAuthorComments" i18n>
-                View {{ comment.totalReplies }} replies from {{ video?.account?.displayName || 'the author' }} and others
+                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video?.account?.displayName || 'the author' }} and others
               </ng-container>
               <ng-template i18n #onlyAuthorComments>
-                View {{ comment.totalReplies }} replies from {{ video?.account?.displayName || 'the author' }}
+                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video?.account?.displayName || 'the author' }}
               </ng-template>
             </ng-template>
-            <ng-template i18n #noAuthorComments>View {{ comment.totalReplies }} replies</ng-template>
+
+            <ng-template i18n #noAuthorComments>View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}</ng-template>
 
             <my-small-loader class="comment-thread-loading ml-1" [loading]="threadLoading[comment.id]"></my-small-loader>
           </div>

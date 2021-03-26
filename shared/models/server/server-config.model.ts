@@ -36,9 +36,9 @@ export interface ServerConfig {
   instance: {
     name: string
     shortDescription: string
-    defaultClientRoute: string
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
+    defaultClientRoute: string
     customizations: {
       javascript: string
       css: string
@@ -96,6 +96,9 @@ export interface ServerConfig {
     }
 
     enabledResolutions: number[]
+
+    profile: string
+    availableProfiles: string[]
   }
 
   live: {
@@ -110,6 +113,9 @@ export interface ServerConfig {
       enabled: boolean
 
       enabledResolutions: number[]
+
+      profile: string
+      availableProfiles: string[]
     }
 
     rtmp: {
@@ -174,6 +180,10 @@ export interface ServerConfig {
   trending: {
     videos: {
       intervalDays: number
+      algorithms: {
+        enabled: string[]
+        default: string
+      }
     }
   }
 

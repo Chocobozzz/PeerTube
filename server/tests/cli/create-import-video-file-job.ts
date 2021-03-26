@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoDetails } from '../../../shared/models/videos'
+import { VideoFile } from '@shared/models/videos/video-file.model'
 import {
   cleanupTests,
   doubleFollow,
@@ -16,15 +16,15 @@ import {
   uploadVideo
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
-import { VideoFile } from '@shared/models/videos/video-file.model'
+import { VideoDetails } from '../../../shared/models/videos'
 
 const expect = chai.expect
 
 function assertVideoProperties (video: VideoFile, resolution: number, extname: string, size?: number) {
   expect(video).to.have.nested.property('resolution.id', resolution)
-  expect(video).to.have.property('magnetUri').that.includes(`.${extname}`)
   expect(video).to.have.property('torrentUrl').that.includes(`-${resolution}.torrent`)
   expect(video).to.have.property('fileUrl').that.includes(`.${extname}`)
+  expect(video).to.have.property('magnetUri').that.includes(`.${extname}`)
   expect(video).to.have.property('size').that.is.above(0)
 
   if (size) expect(video.size).to.equal(size)
@@ -62,7 +62,6 @@ describe('Test create import video jobs', function () {
 
     await waitJobs(servers)
 
-    let magnetUri: string
     for (const server of servers) {
       const { data: videos } = (await getVideosList(server.url)).body
       expect(videos).to.have.lengthOf(2)
@@ -74,9 +73,6 @@ describe('Test create import video jobs', function () {
       const [ originalVideo, transcodedVideo ] = videoDetail.files
       assertVideoProperties(originalVideo, 720, 'webm', 218910)
       assertVideoProperties(transcodedVideo, 480, 'webm', 69217)
-
-      if (!magnetUri) magnetUri = transcodedVideo.magnetUri
-      else expect(transcodedVideo.magnetUri).to.equal(magnetUri)
     }
   })
 
@@ -86,7 +82,6 @@ describe('Test create import video jobs', function () {
 
     await waitJobs(servers)
 
-    let magnetUri: string
     for (const server of servers) {
       const { data: videos } = (await getVideosList(server.url)).body
       expect(videos).to.have.lengthOf(2)
@@ -100,9 +95,6 @@ describe('Test create import video jobs', function () {
       assertVideoProperties(transcodedVideo420, 480, 'mp4')
       assertVideoProperties(transcodedVideo320, 360, 'mp4')
       assertVideoProperties(transcodedVideo240, 240, 'mp4')
-
-      if (!magnetUri) magnetUri = originalVideo.magnetUri
-      else expect(originalVideo.magnetUri).to.equal(magnetUri)
     }
   })
 
@@ -112,7 +104,6 @@ describe('Test create import video jobs', function () {
 
     await waitJobs(servers)
 
-    let magnetUri: string
     for (const server of servers) {
       const { data: videos } = (await getVideosList(server.url)).body
       expect(videos).to.have.lengthOf(2)
@@ -124,9 +115,6 @@ describe('Test create import video jobs', function () {
       const [ video720, video480 ] = videoDetail.files
       assertVideoProperties(video720, 720, 'webm', 942961)
       assertVideoProperties(video480, 480, 'webm', 69217)
-
-      if (!magnetUri) magnetUri = video720.magnetUri
-      else expect(video720.magnetUri).to.equal(magnetUri)
     }
   })
 

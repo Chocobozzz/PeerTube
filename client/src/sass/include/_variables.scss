@@ -19,7 +19,7 @@ $main-color: hsl(24, 90%, 50%);
 $main-hover-color: lighten($main-color, 5%);
 $main-color-lighter: lighten($main-color, 10%);
 $main-color-lightest: lighten($main-color, 40%);
-$secondary-color: hsl(187, 77, 34);
+$secondary-color: hsl(187, 77%, 34%);
 
 $support-button: inherit;
 $support-button-heart: #e83e8c;

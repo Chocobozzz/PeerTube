@@ -1,8 +1,8 @@
 
 import { forkJoin } from 'rxjs'
-import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { AfterViewChecked, AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
+import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
@@ -19,7 +19,7 @@ import { VideoSend } from './video-send'
     './video-send.scss'
   ]
 })
-export class VideoGoLiveComponent extends VideoSend implements OnInit, CanComponentDeactivate {
+export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
 
@@ -41,13 +41,18 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, CanCompon
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
     private liveVideoService: LiveVideoService,
-    private router: Router
+    private router: Router,
+    private hooks: HooksService
     ) {
     super()
   }
 
   ngOnInit () {
     super.ngOnInit()
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:go-live.init', 'video-edit')
   }
 
   canDeactivate () {

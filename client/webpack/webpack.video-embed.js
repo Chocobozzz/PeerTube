@@ -22,7 +22,7 @@ module.exports = function () {
        */
       extensions: [ '.ts', '.js', '.json', '.scss' ],
 
-      modules: [ helpers.root('src'), helpers.root('node_modules') ],
+      modules: [ helpers.root('src'), 'node_modules' ],
 
       alias: {
         'video.js$': path.resolve('node_modules/video.js/core.js'),
@@ -40,7 +40,11 @@ module.exports = function () {
         : '[name].[hash].bundle.js',
 
       sourceMapFilename: '[file].map',
-      chunkFilename: '[id].[hash].chunk.js',
+
+      chunkFilename: process.env.ANALYZE_BUNDLE === 'true'
+        ? '[name].chunk.js'
+        : '[id].[hash].chunk.js',
+
       publicPath: '/client/standalone/videos/'
     },
 

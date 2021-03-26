@@ -1,8 +1,9 @@
 import { catchError, switchMap, tap } from 'rxjs/operators'
+import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Directive, EventEmitter, OnInit } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
-import { populateAsyncUserVideoChannels } from '@app/helpers'
-import { FormReactive, SelectChannelItem } from '@app/shared/shared-forms'
+import { listUserChannels } from '@app/helpers'
+import { FormReactive } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
@@ -34,8 +35,11 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({})
 
-    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
-      .then(() => this.firstStepChannelId = this.userVideoChannels[ 0 ].id)
+    listUserChannels(this.authService)
+      .subscribe(channels => {
+        this.userVideoChannels = channels
+        this.firstStepChannelId = this.userVideoChannels[0].id
+      })
 
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()

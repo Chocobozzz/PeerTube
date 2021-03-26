@@ -1,13 +1,13 @@
-import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
-import { logger } from '../../helpers/logger'
-import { doRequest } from '../../helpers/requests'
-import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
-import { VideoCommentModel } from '../../models/video/video-comment'
-import { getOrCreateActorAndServerAndModel } from './actor'
-import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import * as Bluebird from 'bluebird'
 import { checkUrlsSameHost } from '../../helpers/activitypub'
+import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
+import { logger } from '../../helpers/logger'
+import { doJSONRequest } from '../../helpers/requests'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
+import { VideoCommentModel } from '../../models/video/video-comment'
 import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
+import { getOrCreateActorAndServerAndModel } from './actor'
+import { getOrCreateVideoAndAccountAndChannel } from './videos'
 
 type ResolveThreadParams = {
   url: string
@@ -18,8 +18,12 @@ type ResolveThreadParams = {
 type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
 
 async function addVideoComments (commentUrls: string[]) {
-  return Bluebird.map(commentUrls, commentUrl => {
-    return resolveThread({ url: commentUrl, isVideo: false })
+  return Bluebird.map(commentUrls, async commentUrl => {
+    try {
+      await resolveThread({ url: commentUrl, isVideo: false })
+    } catch (err) {
+      logger.warn('Cannot resolve thread %s.', commentUrl, { err })
+    }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
@@ -41,10 +45,10 @@ async function resolveThread (params: ResolveThreadParams): ResolveThreadResult 
       return await tryResolveThreadFromVideo(params)
     }
   } catch (err) {
-    logger.debug('Cannot get or create account and video and channel for reply %s, fetch comment', url, { err })
+    logger.debug('Cannot resolve thread from video %s, maybe because it was not a video', url, { err })
   }
 
-  return resolveParentComment(params)
+  return resolveRemoteParentComment(params)
 }
 
 export {
@@ -119,21 +123,17 @@ async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
   return { video, comment: resultComment, commentCreated }
 }
 
-async function resolveParentComment (params: ResolveThreadParams) {
+async function resolveRemoteParentComment (params: ResolveThreadParams) {
   const { url, comments } = params
 
   if (comments.length > ACTIVITY_PUB.MAX_RECURSION_COMMENTS) {
     throw new Error('Recursion limit reached when resolving a thread')
   }
 
-  const { body } = await doRequest<any>({
-    uri: url,
-    json: true,
-    activityPub: true
-  })
+  const { body } = await doJSONRequest<any>(url, { activityPub: true })
 
   if (sanitizeAndCheckVideoCommentObject(body) === false) {
-    throw new Error('Remote video comment JSON is not valid:' + JSON.stringify(body))
+    throw new Error(`Remote video comment JSON ${url} is not valid:` + JSON.stringify(body))
   }
 
   const actorUrl = body.attributedTo

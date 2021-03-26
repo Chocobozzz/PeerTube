@@ -28,7 +28,7 @@ const SORTABLE_VIDEO_REDUNDANCIES_COLUMNS = createSortableColumns(SORTABLE_COLUM
 
 const usersSortValidator = checkSort(SORTABLE_USERS_COLUMNS)
 const accountsSortValidator = checkSort(SORTABLE_ACCOUNTS_COLUMNS)
-const jobsSortValidator = checkSort(SORTABLE_JOBS_COLUMNS)
+const jobsSortValidator = checkSort(SORTABLE_JOBS_COLUMNS, [ 'jobs' ])
 const abusesSortValidator = checkSort(SORTABLE_ABUSES_COLUMNS)
 const videosSortValidator = checkSort(SORTABLE_VIDEOS_COLUMNS)
 const videoImportsSortValidator = checkSort(SORTABLE_VIDEO_IMPORTS_COLUMNS)

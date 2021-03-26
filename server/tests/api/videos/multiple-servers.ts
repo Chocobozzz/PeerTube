@@ -1059,19 +1059,19 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
-              size: 72000
+              size: 59000
             },
             {
               resolution: 480,
-              size: 45000
+              size: 34000
             },
             {
               resolution: 360,
-              size: 34600
+              size: 31000
             },
             {
               resolution: 240,
-              size: 24770
+              size: 23000
             }
           ]
         }

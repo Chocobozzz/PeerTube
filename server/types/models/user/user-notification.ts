@@ -1,5 +1,7 @@
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
 import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
+import { ApplicationModel } from '@server/models/application/application'
+import { PluginModel } from '@server/models/server/plugin'
 import { PickWith, PickWithOpt } from '@shared/core-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
 import { AccountModel } from '../../../models/account/account'
@@ -85,13 +87,19 @@ export module UserNotificationIncludes {
     Pick<ActorFollowModel, 'id' | 'state'> &
     PickWith<ActorFollowModel, 'ActorFollower', ActorFollower> &
     PickWith<ActorFollowModel, 'ActorFollowing', ActorFollowing>
+
+  export type PluginInclude =
+    Pick<PluginModel, 'id' | 'name' | 'type' | 'latestVersion'>
+
+  export type ApplicationInclude =
+    Pick<ApplicationModel, 'latestPeerTubeVersion'>
 }
 
 // ############################################################################
 
 export type MUserNotification =
   Omit<UserNotificationModel, 'User' | 'Video' | 'Comment' | 'Abuse' | 'VideoBlacklist' |
-  'VideoImport' | 'Account' | 'ActorFollow'>
+  'VideoImport' | 'Account' | 'ActorFollow' | 'Plugin' | 'Application'>
 
 // ############################################################################
 
@@ -103,4 +111,6 @@ export type UserNotificationModelForApi =
   Use<'VideoBlacklist', UserNotificationIncludes.VideoBlacklistInclude> &
   Use<'VideoImport', UserNotificationIncludes.VideoImportInclude> &
   Use<'ActorFollow', UserNotificationIncludes.ActorFollowInclude> &
+  Use<'Plugin', UserNotificationIncludes.PluginInclude> &
+  Use<'Application', UserNotificationIncludes.ApplicationInclude> &
   Use<'Account', UserNotificationIncludes.AccountIncludeActor>

@@ -1,6 +1,6 @@
 <div class="margin-content">
   <div i18n class="title-page title-page-single">
-    Created {{ pagination.totalItems }} playlists
+    Created {pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}
   </div>
 
   <div i18n class="no-results" *ngIf="pagination.totalItems === 0">This channel does not have playlists.</div>

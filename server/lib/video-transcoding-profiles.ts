@@ -1,6 +1,6 @@
 import { logger } from '@server/helpers/logger'
-import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
-import { AvailableEncoders, buildStreamSuffix, EncoderOptionsBuilder } from '../helpers/ffmpeg-utils'
+import { AvailableEncoders, EncoderOptionsBuilder, getTargetBitrate, VideoResolution } from '../../shared/models/videos'
+import { buildStreamSuffix, resetSupportedEncoders } from '../helpers/ffmpeg-utils'
 import {
   canDoQuickAudioTranscode,
   ffprobePromise,
@@ -28,6 +28,7 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, reso
 
   return {
     outputOptions: [
+      `-preset veryfast`,
       `-r ${fps}`,
       `-maxrate ${targetBitrate}`,
       `-bufsize ${targetBitrate * 2}`
@@ -40,6 +41,7 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution
 
   return {
     outputOptions: [
+      `-preset veryfast`,
       `${buildStreamSuffix('-r:v', streamNum)} ${fps}`,
       `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`,
       `-maxrate ${targetBitrate}`,
@@ -78,32 +80,160 @@ const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum })
   return { outputOptions: [ buildStreamSuffix('-q:a', streamNum), '5' ] }
 }
 
-const availableEncoders: AvailableEncoders = {
-  vod: {
-    libx264: {
-      default: defaultX264VODOptionsBuilder
+// Used to get and update available encoders
+class VideoTranscodingProfilesManager {
+  private static instance: VideoTranscodingProfilesManager
+
+  // 1 === less priority
+  private readonly encodersPriorities = {
+    vod: this.buildDefaultEncodersPriorities(),
+    live: this.buildDefaultEncodersPriorities()
+  }
+
+  private readonly availableEncoders = {
+    vod: {
+      libx264: {
+        default: defaultX264VODOptionsBuilder
+      },
+      aac: {
+        default: defaultAACOptionsBuilder
+      },
+      libfdk_aac: {
+        default: defaultLibFDKAACVODOptionsBuilder
+      }
     },
-    aac: {
-      default: defaultAACOptionsBuilder
-    },
-    libfdk_aac: {
-      default: defaultLibFDKAACVODOptionsBuilder
+    live: {
+      libx264: {
+        default: defaultX264LiveOptionsBuilder
+      },
+      aac: {
+        default: defaultAACOptionsBuilder
+      }
     }
-  },
-  live: {
-    libx264: {
-      default: defaultX264LiveOptionsBuilder
-    },
-    aac: {
-      default: defaultAACOptionsBuilder
+  }
+
+  private availableProfiles = {
+    vod: [] as string[],
+    live: [] as string[]
+  }
+
+  private constructor () {
+    this.buildAvailableProfiles()
+  }
+
+  getAvailableEncoders (): AvailableEncoders {
+    return {
+      available: this.availableEncoders,
+      encodersToTry: {
+        vod: {
+          video: this.getEncodersByPriority('vod', 'video'),
+          audio: this.getEncodersByPriority('vod', 'audio')
+        },
+        live: {
+          video: this.getEncodersByPriority('live', 'video'),
+          audio: this.getEncodersByPriority('live', 'audio')
+        }
+      }
     }
+  }
+
+  getAvailableProfiles (type: 'vod' | 'live') {
+    return this.availableProfiles[type]
+  }
+
+  addProfile (options: {
+    type: 'vod' | 'live'
+    encoder: string
+    profile: string
+    builder: EncoderOptionsBuilder
+  }) {
+    const { type, encoder, profile, builder } = options
+
+    const encoders = this.availableEncoders[type]
+
+    if (!encoders[encoder]) encoders[encoder] = {}
+    encoders[encoder][profile] = builder
+
+    this.buildAvailableProfiles()
+  }
+
+  removeProfile (options: {
+    type: 'vod' | 'live'
+    encoder: string
+    profile: string
+  }) {
+    const { type, encoder, profile } = options
+
+    delete this.availableEncoders[type][encoder][profile]
+    this.buildAvailableProfiles()
+  }
+
+  addEncoderPriority (type: 'vod' | 'live', streamType: 'audio' | 'video', encoder: string, priority: number) {
+    this.encodersPriorities[type][streamType].push({ name: encoder, priority })
+
+    resetSupportedEncoders()
+  }
+
+  removeEncoderPriority (type: 'vod' | 'live', streamType: 'audio' | 'video', encoder: string, priority: number) {
+    this.encodersPriorities[type][streamType] = this.encodersPriorities[type][streamType]
+                                                    .filter(o => o.name !== encoder && o.priority !== priority)
+
+    resetSupportedEncoders()
+  }
+
+  private getEncodersByPriority (type: 'vod' | 'live', streamType: 'audio' | 'video') {
+    return this.encodersPriorities[type][streamType]
+      .sort((e1, e2) => {
+        if (e1.priority > e2.priority) return -1
+        else if (e1.priority === e2.priority) return 0
+
+        return 1
+      })
+      .map(e => e.name)
+  }
+
+  private buildAvailableProfiles () {
+    for (const type of [ 'vod', 'live' ]) {
+      const result = new Set()
+
+      const encoders = this.availableEncoders[type]
+
+      for (const encoderName of Object.keys(encoders)) {
+        for (const profile of Object.keys(encoders[encoderName])) {
+          result.add(profile)
+        }
+      }
+
+      this.availableProfiles[type] = Array.from(result)
+    }
+
+    logger.debug('Available transcoding profiles built.', { availableProfiles: this.availableProfiles })
+  }
+
+  private buildDefaultEncodersPriorities () {
+    return {
+      video: [
+        { name: 'libx264', priority: 100 }
+      ],
+
+      // Try the first one, if not available try the second one etc
+      audio: [
+        // we favor VBR, if a good AAC encoder is available
+        { name: 'libfdk_aac', priority: 200 },
+        { name: 'aac', priority: 100 }
+      ]
+    }
+  }
+
+  static get Instance () {
+    return this.instance || (this.instance = new this())
   }
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  availableEncoders
+  VideoTranscodingProfilesManager
 }
 
 // ---------------------------------------------------------------------------

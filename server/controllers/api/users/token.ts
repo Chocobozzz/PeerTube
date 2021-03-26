@@ -1,11 +1,14 @@
-import { handleLogin, handleTokenRevocation } from '@server/lib/auth'
-import * as RateLimit from 'express-rate-limit'
-import { CONFIG } from '@server/initializers/config'
 import * as express from 'express'
+import * as RateLimit from 'express-rate-limit'
+import { v4 as uuidv4 } from 'uuid'
+import { logger } from '@server/helpers/logger'
+import { CONFIG } from '@server/initializers/config'
+import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth'
+import { handleOAuthToken } from '@server/lib/auth/oauth'
+import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { asyncMiddleware, authenticate } from '@server/middlewares'
 import { ScopedToken } from '@shared/models/users/user-scoped-token'
-import { v4 as uuidv4 } from 'uuid'
 
 const tokensRouter = express.Router()
 
@@ -16,8 +19,7 @@ const loginRateLimiter = RateLimit({
 
 tokensRouter.post('/token',
   loginRateLimiter,
-  handleLogin,
-  tokenSuccess
+  asyncMiddleware(handleToken)
 )
 
 tokensRouter.post('/revoke-token',
@@ -42,10 +44,53 @@ export {
 }
 // ---------------------------------------------------------------------------
 
-function tokenSuccess (req: express.Request) {
-  const username = req.body.username
+async function handleToken (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const grantType = req.body.grant_type
 
-  Hooks.runAction('action:api.user.oauth2-got-token', { username, ip: req.ip })
+  try {
+    const bypassLogin = await buildByPassLogin(req, grantType)
+
+    const refreshTokenAuthName = grantType === 'refresh_token'
+      ? await getAuthNameFromRefreshGrant(req.body.refresh_token)
+      : undefined
+
+    const options = {
+      refreshTokenAuthName,
+      bypassLogin
+    }
+
+    const token = await handleOAuthToken(req, options)
+
+    res.set('Cache-Control', 'no-store')
+    res.set('Pragma', 'no-cache')
+
+    Hooks.runAction('action:api.user.oauth2-got-token', { username: token.user.username, ip: req.ip })
+
+    return res.json({
+      token_type: 'Bearer',
+
+      access_token: token.accessToken,
+      refresh_token: token.refreshToken,
+
+      expires_in: token.accessTokenExpiresIn,
+      refresh_token_expires_in: token.refreshTokenExpiresIn
+    })
+  } catch (err) {
+    logger.warn('Login error', { err })
+
+    return res.status(err.code || 400).json({
+      code: err.name,
+      error: err.message
+    })
+  }
+}
+
+async function handleTokenRevocation (req: express.Request, res: express.Response) {
+  const token = res.locals.oauth.token
+
+  const result = await revokeToken(token, { req, explicitLogout: true })
+
+  return res.json(result)
 }
 
 function getScopedTokens (req: express.Request, res: express.Response) {
@@ -65,4 +110,15 @@ async function renewScopedTokens (req: express.Request, res: express.Response) {
   return res.json({
     feedToken: user.feedToken
   } as ScopedToken)
+}
+
+async function buildByPassLogin (req: express.Request, grantType: string): Promise<BypassLogin> {
+  if (grantType !== 'password') return undefined
+
+  if (req.body.externalAuthToken) {
+    // Consistency with the getBypassFromPasswordGrant promise
+    return getBypassFromExternalAuth(req.body.username, req.body.externalAuthToken)
+  }
+
+  return getBypassFromPasswordGrant(req.body.username, req.body.password)
 }

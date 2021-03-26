@@ -17,12 +17,12 @@ function areValidationErrors (req: express.Request, res: express.Response) {
   return false
 }
 
-function checkSort (sortableColumns: string[]) {
+function checkSort (sortableColumns: string[], tags: string[] = []) {
   return [
     query('sort').optional().isIn(sortableColumns).withMessage('Should have correct sortable column'),
 
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking sort parameters', { parameters: req.query })
+      logger.debug('Checking sort parameters', { parameters: req.query, tags })
 
       if (areValidationErrors(req, res)) return
 

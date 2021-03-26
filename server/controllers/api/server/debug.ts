@@ -1,3 +1,4 @@
+import { InboxManager } from '@server/lib/activitypub/inbox-manager'
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
 import { authenticate, ensureUserHasRight } from '../../../middlewares'
@@ -20,6 +21,7 @@ export {
 
 function getDebug (req: express.Request, res: express.Response) {
   return res.json({
-    ip: req.ip
-  }).end()
+    ip: req.ip,
+    activityPubMessagesWaiting: InboxManager.Instance.getActivityPubMessagesWaiting()
+  })
 }

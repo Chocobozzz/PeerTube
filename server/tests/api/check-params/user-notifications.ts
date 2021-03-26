@@ -176,7 +176,9 @@ describe('Test user notifications API validators', function () {
       newInstanceFollower: UserNotificationSettingValue.WEB,
       autoInstanceFollowing: UserNotificationSettingValue.WEB,
       abuseNewMessage: UserNotificationSettingValue.WEB,
-      abuseStateChange: UserNotificationSettingValue.WEB
+      abuseStateChange: UserNotificationSettingValue.WEB,
+      newPeerTubeVersion: UserNotificationSettingValue.WEB,
+      newPluginVersion: UserNotificationSettingValue.WEB
     }
 
     it('Should fail with missing fields', async function () {

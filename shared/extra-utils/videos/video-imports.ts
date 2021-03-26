@@ -25,7 +25,7 @@ function getYoutubeHDRVideoUrl () {
    * - 337 (2160p webm vp9.2 HDR)
    * - 401 (2160p mp4 av01 HDR)
    */
-  return 'https://www.youtube.com/watch?v=MSJ25EqI19c'
+  return 'https://www.youtube.com/watch?v=qR5vOXbZsI4'
 }
 
 function getMagnetURI () {

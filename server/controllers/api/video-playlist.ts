@@ -173,7 +173,11 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylist, false)
+    ? await createPlaylistMiniatureFromExisting({
+      inputPath: thumbnailField[0].path,
+      playlist: videoPlaylist,
+      automaticallyGenerated: false
+    })
     : undefined
 
   const videoPlaylistCreated = await sequelizeTypescript.transaction(async t => {
@@ -211,7 +215,11 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylistInstance, false)
+    ? await createPlaylistMiniatureFromExisting({
+      inputPath: thumbnailField[0].path,
+      playlist: videoPlaylistInstance,
+      automaticallyGenerated: false
+    })
     : undefined
 
   try {
@@ -474,7 +482,12 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
   }
 
   const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoMiniature.filename)
-  const thumbnailModel = await createPlaylistMiniatureFromExisting(inputPath, videoPlaylist, true, true)
+  const thumbnailModel = await createPlaylistMiniatureFromExisting({
+    inputPath,
+    playlist: videoPlaylist,
+    automaticallyGenerated: true,
+    keepOriginal: true
+  })
 
   thumbnailModel.videoPlaylistId = videoPlaylist.id
 

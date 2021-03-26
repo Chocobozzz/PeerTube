@@ -348,8 +348,8 @@ describe('Test handle downs', function () {
 
     for (let i = 0; i < 3; i++) {
       await getVideo(servers[1].url, videoIdsServer1[i])
-      await wait(1000)
       await waitJobs([ servers[1] ])
+      await wait(1500)
     }
 
     for (const id of videoIdsServer1) {

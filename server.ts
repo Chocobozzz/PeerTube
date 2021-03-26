@@ -44,7 +44,7 @@ checkFFmpeg(CONFIG)
 
 checkNodeVersion()
 
-import { checkConfig, checkActivityPubUrls } from './server/initializers/checker-after-init'
+import { checkConfig, checkActivityPubUrls, checkFFmpegVersion } from './server/initializers/checker-after-init'
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
@@ -103,7 +103,8 @@ import {
   webfingerRouter,
   trackerRouter,
   createWebsocketTrackerServer,
-  botsRouter
+  botsRouter,
+  downloadRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
@@ -119,10 +120,12 @@ import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
 import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-scheduler'
+import { PeerTubeVersionCheckScheduler } from './server/lib/schedulers/peertube-version-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
 import { LiveManager } from './server/lib/live-manager'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
+import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 
 // ----------- Command line -----------
 
@@ -158,7 +161,9 @@ morgan.token('user-agent', (req: express.Request) => {
   return req.get('user-agent')
 })
 app.use(morgan('combined', {
-  stream: { write: logger.info.bind(logger) },
+  stream: {
+    write: (str: string) => logger.info(str, { tags: [ 'http' ] })
+  },
   skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
 }))
 
@@ -202,10 +207,12 @@ app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
+app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
 
 // Client files, last valid routes!
-if (cli.client) app.use('/', clientsRouter)
+const cliOptions = cli.opts()
+if (cliOptions.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 
@@ -246,6 +253,9 @@ async function startApplication () {
       process.exit(-1)
     })
 
+  checkFFmpegVersion()
+    .catch(err => logger.error('Cannot check ffmpeg version', { err }))
+
   // Email initialization
   Emailer.Instance.init()
 
@@ -257,6 +267,7 @@ async function startApplication () {
   // Caches initializations
   VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, FILES_CACHE.PREVIEWS.MAX_AGE)
   VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE)
+  VideosTorrentCache.Instance.init(CONFIG.CACHE.TORRENTS.SIZE, FILES_CACHE.TORRENTS.MAX_AGE)
 
   // Enable Schedulers
   ActorFollowScheduler.Instance.enable()
@@ -267,6 +278,7 @@ async function startApplication () {
   RemoveOldHistoryScheduler.Instance.enable()
   RemoveOldViewsScheduler.Instance.enable()
   PluginsCheckScheduler.Instance.enable()
+  PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
 
   // Redis initialization
@@ -277,7 +289,7 @@ async function startApplication () {
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
-  if (cli.plugins) await PluginManager.Instance.registerPluginsAndThemes()
+  if (cliOptions.plugins) await PluginManager.Instance.registerPluginsAndThemes()
 
   LiveManager.Instance.init()
   if (CONFIG.LIVE.ENABLED) LiveManager.Instance.run()

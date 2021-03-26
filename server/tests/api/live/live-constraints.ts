@@ -20,7 +20,8 @@ import {
   updateUser,
   userLogin,
   wait,
-  waitJobs
+  waitJobs,
+  waitUntilLivePublished
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -53,6 +54,12 @@ describe('Test live constraints', function () {
     }
 
     await checkLiveCleanup(servers[0], videoId, resolutions)
+  }
+
+  async function waitUntilLivePublishedOnAllServers (videoId: string) {
+    for (const server of servers) {
+      await waitUntilLivePublished(server.url, server.accessToken, videoId)
+    }
   }
 
   before(async function () {
@@ -118,6 +125,7 @@ describe('Test live constraints', function () {
     const userVideoLiveoId = await createLiveWrapper(true)
     await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
 
+    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId)
@@ -140,6 +148,7 @@ describe('Test live constraints', function () {
     const userVideoLiveoId = await createLiveWrapper(true)
     await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
 
+    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId)
@@ -189,6 +198,7 @@ describe('Test live constraints', function () {
     const userVideoLiveoId = await createLiveWrapper(true)
     await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
 
+    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId, [ 720, 480, 360, 240 ])

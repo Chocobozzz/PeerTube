@@ -2,7 +2,7 @@ import { concat, Observable, Subject } from 'rxjs'
 import { debounceTime, tap, toArray } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
+import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign } from '@app/helpers'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
@@ -45,6 +45,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   videosSearchChanged = new Subject<string>()
   getVideosObservableFunction = this.getVideosObservable.bind(this)
 
+  user: User
+
   constructor (
     protected router: Router,
     protected serverService: ServerService,
@@ -60,6 +62,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   ngOnInit () {
     this.buildActions()
+
+    this.user = this.authService.getUser()
 
     this.videosSearchChanged
       .pipe(debounceTime(500))

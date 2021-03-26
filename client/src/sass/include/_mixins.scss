@@ -41,9 +41,6 @@
   word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
   hyphens: auto;
 }
 
@@ -51,28 +48,6 @@
   ::ng-deep .feather,
   ::ng-deep .material {
     color: $color;
-  }
-
-  ::ng-deep svg {
-    path[fill="#000"],
-    g[fill="#000"],
-    rect[fill="#000"],
-    circle[fill="#000"],
-    polygon[fill="#000"] {
-      fill: $color;
-    }
-
-    path[stroke="#000"],
-    g[stroke="#000"],
-    rect[stroke="#000"],
-    circle[stroke="#000"],
-    polygon[stroke="#000"] {
-      stroke: $color;
-    }
-
-    stop[stop-color="#000"] {
-      stop-color: $color;
-    }
   }
 }
 

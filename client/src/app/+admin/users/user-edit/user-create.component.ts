@@ -45,8 +45,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
     const defaultValues = {
       role: UserRole.USER.toString(),
-      videoQuota: '-1',
-      videoQuotaDaily: '-1'
+      videoQuota: -1,
+      videoQuotaDaily: -1
     }
 
     this.buildForm({

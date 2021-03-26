@@ -37,6 +37,9 @@ async function rateVideo (req: express.Request, res: express.Response) {
     const accountInstance = await AccountModel.load(userAccount.id, t)
     const previousRate = await AccountVideoRateModel.load(accountInstance.id, videoInstance.id, t)
 
+    // Same rate, nothing do to
+    if (rateType === 'none' && !previousRate || previousRate?.type === rateType) return
+
     let likesToIncrement = 0
     let dislikesToIncrement = 0
 

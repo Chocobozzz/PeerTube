@@ -1,4 +1,4 @@
-FROM node:10-buster-slim
+FROM node:12-buster-slim
 
 # Allow to pass extra options to the npm run build
 # eg: --light --light-fr to not build all client languages
@@ -7,7 +7,7 @@ ARG NPM_RUN_BUILD_OPTS
 
 # Install dependencies
 RUN apt update \
- && apt install -y --no-install-recommends openssl ffmpeg python ca-certificates gnupg gosu \
+ && apt install -y --no-install-recommends openssl ffmpeg python ca-certificates gnupg gosu build-essential \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
 

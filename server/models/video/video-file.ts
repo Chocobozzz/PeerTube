@@ -1,3 +1,7 @@
+import { remove } from 'fs-extra'
+import * as memoizee from 'memoizee'
+import { join } from 'path'
+import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -5,15 +9,22 @@ import {
   CreatedAt,
   DataType,
   Default,
+  DefaultScope,
   ForeignKey,
   HasMany,
   Is,
   Model,
-  Table,
-  UpdatedAt,
   Scopes,
-  DefaultScope
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
+import { Where } from 'sequelize/types/lib/utils'
+import validator from 'validator'
+import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
+import { logger } from '@server/helpers/logger'
+import { extractVideo } from '@server/helpers/video'
+import { getTorrentFilePath } from '@server/lib/video-paths'
+import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
 import {
   isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
@@ -21,20 +32,25 @@ import {
   isVideoFileSizeValid,
   isVideoFPSResolutionValid
 } from '../../helpers/custom-validators/videos'
+import {
+  LAZY_STATIC_PATHS,
+  MEMOIZE_LENGTH,
+  MEMOIZE_TTL,
+  MIMETYPES,
+  STATIC_DOWNLOAD_PATHS,
+  STATIC_PATHS,
+  WEBSERVER
+} from '../../initializers/constants'
+import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file'
+import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
-import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
-import { MIMETYPES, MEMOIZE_LENGTH, MEMOIZE_TTL } from '../../initializers/constants'
-import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file'
-import { MStreamingPlaylistVideo, MVideo } from '@server/types/models'
-import * as memoizee from 'memoizee'
-import validator from 'validator'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
-  WITH_METADATA = 'WITH_METADATA'
+  WITH_METADATA = 'WITH_METADATA',
+  WITH_VIDEO_OR_PLAYLIST = 'WITH_VIDEO_OR_PLAYLIST'
 }
 
 @DefaultScope(() => ({
@@ -50,6 +66,28 @@ export enum ScopeNames {
         required: true
       }
     ]
+  },
+  [ScopeNames.WITH_VIDEO_OR_PLAYLIST]: (options: { whereVideo?: Where } = {}) => {
+    return {
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: false,
+          where: options.whereVideo
+        },
+        {
+          model: VideoStreamingPlaylistModel.unscoped(),
+          required: false,
+          include: [
+            {
+              model: VideoModel.unscoped(),
+              required: true,
+              where: options.whereVideo
+            }
+          ]
+        }
+      ]
+    }
   },
   [ScopeNames.WITH_METADATA]: {
     attributes: {
@@ -79,6 +117,16 @@ export enum ScopeNames {
 
     {
       fields: [ 'infoHash' ]
+    },
+
+    {
+      fields: [ 'torrentFilename' ],
+      unique: true
+    },
+
+    {
+      fields: [ 'filename' ],
+      unique: true
     },
 
     {
@@ -142,6 +190,24 @@ export class VideoFileModel extends Model {
   @Column
   metadataUrl: string
 
+  @AllowNull(true)
+  @Column
+  fileUrl: string
+
+  // Could be null for live files
+  @AllowNull(true)
+  @Column
+  filename: string
+
+  @AllowNull(true)
+  @Column
+  torrentUrl: string
+
+  // Could be null for live files
+  @AllowNull(true)
+  @Column
+  torrentFilename: string
+
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
@@ -199,6 +265,16 @@ export class VideoFileModel extends Model {
     return !!videoFile
   }
 
+  static loadWithVideoOrPlaylistByTorrentFilename (filename: string) {
+    const query = {
+      where: {
+        torrentFilename: filename
+      }
+    }
+
+    return VideoFileModel.scope(ScopeNames.WITH_VIDEO_OR_PLAYLIST).findOne(query)
+  }
+
   static loadWithMetadata (id: number) {
     return VideoFileModel.scope(ScopeNames.WITH_METADATA).findByPk(id)
   }
@@ -215,28 +291,11 @@ export class VideoFileModel extends Model {
     const options = {
       where: {
         id
-      },
-      include: [
-        {
-          model: VideoModel.unscoped(),
-          required: false,
-          where: whereVideo
-        },
-        {
-          model: VideoStreamingPlaylistModel.unscoped(),
-          required: false,
-          include: [
-            {
-              model: VideoModel.unscoped(),
-              required: true,
-              where: whereVideo
-            }
-          ]
-        }
-      ]
+      }
     }
 
-    return VideoFileModel.findOne(options)
+    return VideoFileModel.scope({ method: [ ScopeNames.WITH_VIDEO_OR_PLAYLIST, whereVideo ] })
+      .findOne(options)
       .then(file => {
         // We used `required: false` so check we have at least a video or a streaming playlist
         if (!file.Video && !file.VideoStreamingPlaylist) return null
@@ -348,6 +407,10 @@ export class VideoFileModel extends Model {
     return (this as MVideoFileStreamingPlaylistVideo).VideoStreamingPlaylist
   }
 
+  getVideo (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo {
+    return extractVideo(this.getVideoOrStreamingPlaylist())
+  }
+
   isAudio () {
     return !!MIMETYPES.AUDIO.EXT_MIMETYPE[this.extname]
   }
@@ -358,6 +421,65 @@ export class VideoFileModel extends Model {
 
   isHLS () {
     return !!this.videoStreamingPlaylistId
+  }
+
+  getFileUrl (video: MVideo) {
+    if (!this.Video) this.Video = video as VideoModel
+
+    if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
+
+    return this.fileUrl
+  }
+
+  getFileStaticPath (video: MVideo) {
+    if (this.isHLS()) return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.filename)
+
+    return join(STATIC_PATHS.WEBSEED, this.filename)
+  }
+
+  getFileDownloadUrl (video: MVideoWithHost) {
+    const basePath = this.isHLS()
+      ? STATIC_DOWNLOAD_PATHS.HLS_VIDEOS
+      : STATIC_DOWNLOAD_PATHS.VIDEOS
+    const path = join(basePath, this.filename)
+
+    if (video.isOwned()) return WEBSERVER.URL + path
+
+    // FIXME: don't guess remote URL
+    return buildRemoteVideoBaseUrl(video, path)
+  }
+
+  getRemoteTorrentUrl (video: MVideo) {
+    if (video.isOwned()) throw new Error(`Video ${video.url} is not a remote video`)
+
+    return this.torrentUrl
+  }
+
+  // We proxify torrent requests so use a local URL
+  getTorrentUrl () {
+    if (!this.torrentFilename) return null
+
+    return WEBSERVER.URL + this.getTorrentStaticPath()
+  }
+
+  getTorrentStaticPath () {
+    if (!this.torrentFilename) return null
+
+    return join(LAZY_STATIC_PATHS.TORRENTS, this.torrentFilename)
+  }
+
+  getTorrentDownloadUrl () {
+    if (!this.torrentFilename) return null
+
+    return WEBSERVER.URL + join(STATIC_DOWNLOAD_PATHS.TORRENTS, this.torrentFilename)
+  }
+
+  removeTorrent () {
+    if (!this.torrentFilename) return null
+
+    const torrentPath = getTorrentFilePath(this)
+    return remove(torrentPath)
+      .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 
   hasSameUniqueKeysThan (other: MVideoFile) {

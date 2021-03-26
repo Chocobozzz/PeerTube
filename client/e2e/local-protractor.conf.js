@@ -9,18 +9,36 @@ exports.config = {
 
   directConnect: true,
 
-  capabilities: {
-    'browserName': 'firefox',
-    'moz:firefoxOptions': {
-      binary: '/usr/bin/firefox-developer-edition',
-      // args: ["-headless"],
-      log: {
-        "level": "info" // default is "info"
+  multiCapabilities: [
+    {
+      'browserName': 'firefox',
+      'name': 'Firefox',
+      'moz:firefoxOptions': {
+        binary: '/usr/bin/firefox-developer-edition',
+        // args: ["-headless"],
+        log: {
+          "level": "info" // default is "info"
+        }
       }
+    },
+    {
+      'browserName': 'firefox',
+      'name': 'Firefox ESR',
+      'moz:firefoxOptions': {
+        binary: '/usr/bin/firefox-esr',
+        // args: ["-headless"],
+        log: {
+          "level": "info" // default is "info"
+        }
+      }
+    },
+    {
+      'browserName': 'chrome',
+      'name': 'Chromium'
     }
-  },
+  ],
 
-  // maxSessions: 1,
+  maxSessions: 1,
   baseUrl: 'http://localhost:3000/',
   framework: 'jasmine',
   jasmineNodeOpts: {

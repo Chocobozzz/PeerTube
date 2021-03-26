@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <defs/>
-  <g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-width="2">
+  <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-width="2">
     <path stroke-linejoin="round" d="M8 17H5h0a4 4 0 111-7.9v-.6a5.5 5.5 0 0110.8-1.4A5 5 0 0123 12a5 5 0 01-5 5h-2"/>
     <path d="M12 13v8"/>
     <path stroke-linejoin="round" d="M15 20l-3 3-3-3"/>

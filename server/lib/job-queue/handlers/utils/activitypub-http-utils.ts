@@ -6,21 +6,24 @@ import { getServerActor } from '@server/models/application/application'
 import { buildDigest } from '@server/helpers/peertube-crypto'
 import { ContextType } from '@shared/models/activitypub/context'
 
-type Payload = { body: any, contextType?: ContextType, signatureActorId?: number }
+type Payload <T> = { body: T, contextType?: ContextType, signatureActorId?: number }
 
-async function computeBody (payload: Payload) {
+async function computeBody <T> (
+  payload: Payload<T>
+): Promise<T | T & { type: 'RsaSignature2017', creator: string, created: string }> {
   let body = payload.body
 
   if (payload.signatureActorId) {
     const actorSignature = await ActorModel.load(payload.signatureActorId)
     if (!actorSignature) throw new Error('Unknown signature actor id.')
+
     body = await buildSignedActivity(actorSignature, payload.body, payload.contextType)
   }
 
   return body
 }
 
-async function buildSignedRequestOptions (payload: Payload) {
+async function buildSignedRequestOptions (payload: Payload<any>) {
   let actor: MActor | null
 
   if (payload.signatureActorId) {
@@ -43,9 +46,9 @@ async function buildSignedRequestOptions (payload: Payload) {
 
 function buildGlobalHeaders (body: any) {
   return {
-    'Digest': buildDigest(body),
-    'Content-Type': 'application/activity+json',
-    'Accept': ACTIVITY_PUB.ACCEPT_HEADER
+    'digest': buildDigest(body),
+    'content-type': 'application/activity+json',
+    'accept': ACTIVITY_PUB.ACCEPT_HEADER
   }
 }
 

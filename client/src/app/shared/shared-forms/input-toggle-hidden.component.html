@@ -12,9 +12,10 @@
 
     <button
       *ngIf="withCopy" [cdkCopyToClipboard]="input.value" (click)="activateCopiedMessage()" type="button"
-      class="btn btn-outline-secondary" i18n-title title="Copy"
+      class="btn btn-outline-secondary text-uppercase" i18n-title title="Copy"
     >
-      <span class="glyphicon glyphicon-copy"></span>
+      <span class="glyphicon glyphicon-duplicate"></span>
+      Copy
     </button>
   </div>
 </div>

@@ -201,6 +201,7 @@ const usersUpdateValidator = [
   body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
+  body('pluginAuth').optional(),
   body('role')
     .optional()
     .customSanitizer(toIntOrNull)

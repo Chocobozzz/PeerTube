@@ -34,7 +34,8 @@
 
     <!-- search instructions, when search input is empty -->
     <div *ngIf="areInstructionsDisplayed()" id="typeahead-instructions" class="overflow-hidden">
-      <div class="d-flex justify-content-between">
+      <span class="text-muted" i18n>Your query will be matched against video names or descriptions, channel names.</span>
+      <div class="d-flex justify-content-between mt-3">
         <label class="small-title" i18n>ADVANCED SEARCH</label>
         <div class="advanced-search-status c-help">
           <span [ngClass]="canSearchAnyURI ? 'text-success' : 'text-muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
@@ -55,7 +56,6 @@
           <em>UUID</em> <span class="text-muted" i18n>will list the matching video</span>
         </li>
       </ul>
-      <span class="text-muted" i18n>Any other input will return matching video or channel names.</span>
     </div>
   </div>
 

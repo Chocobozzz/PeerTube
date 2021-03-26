@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { HttpStatusCode } from '@shared/core-utils'
 import { expect } from 'chai'
 import { pathExists, readdir, readFile } from 'fs-extra'
 import * as parseTorrent from 'parse-torrent'
@@ -8,10 +7,19 @@ import { extname, join } from 'path'
 import * as request from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 import validator from 'validator'
+import { HttpStatusCode } from '@shared/core-utils'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
-import { buildAbsoluteFixturePath, buildServerDirectory, dateIsValid, immutableAssign, testImage, webtorrentAdd } from '../miscs/miscs'
-import { makeGetRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
+import {
+  buildAbsoluteFixturePath,
+  buildServerDirectory,
+  dateIsValid,
+  immutableAssign,
+  testImage,
+  wait,
+  webtorrentAdd
+} from '../miscs/miscs'
+import { makeGetRequest, makePutBodyRequest, makeRawRequest, makeUploadRequest } from '../requests/requests'
 import { waitJobs } from '../server/jobs'
 import { ServerInfo } from '../server/servers'
 import { getMyUserInformation } from '../users/users'
@@ -338,7 +346,7 @@ async function checkVideoFilesWereRemoved (
 
     const files = await readdir(directoryPath)
     for (const file of files) {
-      expect(file).to.not.contain(videoUUID)
+      expect(file, `File ${file} should not exist in ${directoryPath}`).to.not.contain(videoUUID)
     }
   }
 }
@@ -423,8 +431,21 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     req.field('originallyPublishedAt', attributes.originallyPublishedAt)
   }
 
-  return req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
+  const res = await req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
             .expect(specialStatus)
+
+  // Wait torrent generation
+  if (specialStatus === HttpStatusCode.OK_200) {
+    let video: VideoDetails
+    do {
+      const resVideo = await getVideoWithToken(url, accessToken, res.body.video.uuid)
+      video = resVideo.body
+
+      await wait(50)
+    } while (!video.files[0].torrentUrl)
+  }
+
+  return res
 }
 
 function updateVideo (
@@ -477,7 +498,7 @@ function updateVideo (
   })
 }
 
-function rateVideo (url: string, accessToken: string, id: number, rating: string, specialStatus = HttpStatusCode.NO_CONTENT_204) {
+function rateVideo (url: string, accessToken: string, id: number | string, rating: string, specialStatus = HttpStatusCode.NO_CONTENT_204) {
   const path = '/api/v1/videos/' + id + '/rate'
 
   return request(url)
@@ -544,6 +565,9 @@ async function completeVideoCheck (
   if (!attributes.likes) attributes.likes = 0
   if (!attributes.dislikes) attributes.dislikes = 0
 
+  const host = new URL(url).host
+  const originHost = attributes.account.host
+
   expect(video.name).to.equal(attributes.name)
   expect(video.category.id).to.equal(attributes.category)
   expect(video.category.label).to.equal(attributes.category !== null ? VIDEO_CATEGORIES[attributes.category] : 'Misc')
@@ -603,8 +627,21 @@ async function completeVideoCheck (
     if (attributes.files.length > 1) extension = '.mp4'
 
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`http://${attributes.account.host}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
-    expect(file.fileUrl).to.equal(`http://${attributes.account.host}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
+
+    expect(file.torrentDownloadUrl).to.equal(`http://${host}/download/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
+    expect(file.torrentUrl).to.equal(`http://${host}/lazy-static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
+
+    expect(file.fileUrl).to.equal(`http://${originHost}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
+    expect(file.fileDownloadUrl).to.equal(`http://${originHost}/download/videos/${videoDetails.uuid}-${file.resolution.id}${extension}`)
+
+    await Promise.all([
+      makeRawRequest(file.torrentUrl, 200),
+      makeRawRequest(file.torrentDownloadUrl, 200),
+      makeRawRequest(file.metadataUrl, 200),
+      // Backward compatibility
+      makeRawRequest(`http://${originHost}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`, 200)
+    ])
+
     expect(file.resolution.id).to.equal(attributeFile.resolution)
     expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
 
@@ -641,10 +678,12 @@ async function uploadVideoAndGetId (options: {
   nsfw?: boolean
   privacy?: VideoPrivacy
   token?: string
+  fixture?: string
 }) {
   const videoAttrs: any = { name: options.videoName }
   if (options.nsfw) videoAttrs.nsfw = options.nsfw
   if (options.privacy) videoAttrs.privacy = options.privacy
+  if (options.fixture) videoAttrs.fixture = options.fixture
 
   const res = await uploadVideo(options.server.url, options.token || options.server.accessToken, videoAttrs)
 

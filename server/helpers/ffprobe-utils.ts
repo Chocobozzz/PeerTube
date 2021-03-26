@@ -91,18 +91,35 @@ async function getVideoStreamCodec (path: string) {
 
   const videoCodec = videoStream.codec_tag_string
 
+  if (videoCodec === 'vp09') return 'vp09.00.50.08'
+
   const baseProfileMatrix = {
-    High: '6400',
-    Main: '4D40',
-    Baseline: '42E0'
+    avc1: {
+      High: '6400',
+      Main: '4D40',
+      Baseline: '42E0'
+    },
+    av01: {
+      High: '1',
+      Main: '0',
+      Professional: '2'
+    }
   }
 
-  let baseProfile = baseProfileMatrix[videoStream.profile]
+  let baseProfile = baseProfileMatrix[videoCodec][videoStream.profile]
   if (!baseProfile) {
     logger.warn('Cannot get video profile codec of %s.', path, { videoStream })
-    baseProfile = baseProfileMatrix['High'] // Fallback
+    baseProfile = baseProfileMatrix[videoCodec]['High'] // Fallback
   }
 
+  if (videoCodec === 'av01') {
+    const level = videoStream.level
+
+    // Guess the tier indicator and bit depth
+    return `${videoCodec}.${baseProfile}.${level}M.08`
+  }
+
+  // Default, h264 codec
   let level = videoStream.level.toString(16)
   if (level.length === 1) level = `0${level}`
 
@@ -114,8 +131,11 @@ async function getAudioStreamCodec (path: string, existingProbe?: ffmpeg.Ffprobe
 
   if (!audioStream) return ''
 
-  const audioCodec = audioStream.codec_name
-  if (audioCodec === 'aac') return 'mp4a.40.2'
+  const audioCodecName = audioStream.codec_name
+
+  if (audioCodecName === 'opus') return 'opus'
+  if (audioCodecName === 'vorbis') return 'vorbis'
+  if (audioCodecName === 'aac') return 'mp4a.40.2'
 
   logger.warn('Cannot get audio codec of %s.', path, { audioStream })
 
@@ -202,6 +222,8 @@ function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod'
 }
 
 async function canDoQuickTranscode (path: string): Promise<boolean> {
+  if (CONFIG.TRANSCODING.PROFILE !== 'default') return false
+
   const probe = await ffprobePromise(path)
 
   return await canDoQuickVideoTranscode(path, probe) &&
@@ -239,6 +261,10 @@ async function canDoQuickAudioTranscode (path: string, probe?: ffmpeg.FfprobeDat
 
   const maxAudioBitrate = getMaxAudioBitrate('aac', audioBitrate)
   if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
+
+  const channelLayout = parsedAudio.audioStream['channel_layout']
+  // Causes playback issues with Chrome
+  if (!channelLayout || channelLayout === 'unknown') return false
 
   return true
 }

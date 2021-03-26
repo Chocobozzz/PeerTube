@@ -2,11 +2,15 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { advancedVideoChannelSearch } from '@shared/extra-utils/search/video-channels'
 import { ServerConfig } from '@shared/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
+  advancedVideosSearch,
   createLive,
+  createVideoPlaylist,
   doubleFollow,
   getAccountVideos,
   getConfig,
@@ -15,24 +19,33 @@ import {
   getVideo,
   getVideoChannelVideos,
   getVideoCommentThreads,
+  getVideoPlaylist,
   getVideosList,
   getVideosListPagination,
   getVideoThreadComments,
   getVideoWithToken,
   installPlugin,
+  makeRawRequest,
   registerUser,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   updateCustomSubConfig,
   updateVideo,
   uploadVideo,
+  uploadVideoAndGetId,
   waitJobs
 } from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunMultipleServers, ServerInfo } from '../../../shared/extra-utils/server/servers'
+import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 import { getGoodVideoUrl, getMyVideoImports, importVideo } from '../../../shared/extra-utils/videos/video-imports'
-import { VideoDetails, VideoImport, VideoImportState, VideoPrivacy } from '../../../shared/models/videos'
+import {
+  VideoDetails,
+  VideoImport,
+  VideoImportState,
+  VideoPlaylist,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
+} from '../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -352,6 +365,165 @@ describe('Test plugin filter hooks', function () {
       const res = await registerUser(servers[0].url, 'jma', 'password', HttpStatusCode.FORBIDDEN_403)
 
       expect(res.body.error).to.equal('No jma')
+    })
+  })
+
+  describe('Download hooks', function () {
+    const downloadVideos: VideoDetails[] = []
+
+    before(async function () {
+      this.timeout(60000)
+
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        transcoding: {
+          webtorrent: {
+            enabled: true
+          },
+          hls: {
+            enabled: true
+          }
+        }
+      })
+
+      const uuids: string[] = []
+
+      for (const name of [ 'bad torrent', 'bad file', 'bad playlist file' ]) {
+        const uuid = (await uploadVideoAndGetId({ server: servers[0], videoName: name })).uuid
+        uuids.push(uuid)
+      }
+
+      await waitJobs(servers)
+
+      for (const uuid of uuids) {
+        const res = await getVideo(servers[0].url, uuid)
+        downloadVideos.push(res.body)
+      }
+    })
+
+    it('Should run filter:api.download.torrent.allowed.result', async function () {
+      const res = await makeRawRequest(downloadVideos[0].files[0].torrentDownloadUrl, 403)
+      expect(res.body.error).to.equal('Liu Bei')
+
+      await makeRawRequest(downloadVideos[1].files[0].torrentDownloadUrl, 200)
+      await makeRawRequest(downloadVideos[2].files[0].torrentDownloadUrl, 200)
+    })
+
+    it('Should run filter:api.download.video.allowed.result', async function () {
+      {
+        const res = await makeRawRequest(downloadVideos[1].files[0].fileDownloadUrl, 403)
+        expect(res.body.error).to.equal('Cao Cao')
+
+        await makeRawRequest(downloadVideos[0].files[0].fileDownloadUrl, 200)
+        await makeRawRequest(downloadVideos[2].files[0].fileDownloadUrl, 200)
+      }
+
+      {
+        const res = await makeRawRequest(downloadVideos[2].streamingPlaylists[0].files[0].fileDownloadUrl, 403)
+        expect(res.body.error).to.equal('Sun Jian')
+
+        await makeRawRequest(downloadVideos[2].files[0].fileDownloadUrl, 200)
+
+        await makeRawRequest(downloadVideos[0].streamingPlaylists[0].files[0].fileDownloadUrl, 200)
+        await makeRawRequest(downloadVideos[1].streamingPlaylists[0].files[0].fileDownloadUrl, 200)
+      }
+    })
+  })
+
+  describe('Embed filters', function () {
+    const embedVideos: VideoDetails[] = []
+    const embedPlaylists: VideoPlaylist[] = []
+
+    before(async function () {
+      this.timeout(60000)
+
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        transcoding: {
+          enabled: false
+        }
+      })
+
+      for (const name of [ 'bad embed', 'good embed' ]) {
+        {
+          const uuid = (await uploadVideoAndGetId({ server: servers[0], videoName: name })).uuid
+          const res = await getVideo(servers[0].url, uuid)
+          embedVideos.push(res.body)
+        }
+
+        {
+          const playlistAttrs = { displayName: name, videoChannelId: servers[0].videoChannel.id, privacy: VideoPlaylistPrivacy.PUBLIC }
+          const res = await createVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistAttrs })
+
+          const resPlaylist = await getVideoPlaylist(servers[0].url, res.body.videoPlaylist.id)
+          embedPlaylists.push(resPlaylist.body)
+        }
+      }
+    })
+
+    it('Should run filter:html.embed.video.allowed.result', async function () {
+      const res = await makeRawRequest(servers[0].url + embedVideos[0].embedPath, 200)
+      expect(res.text).to.equal('Lu Bu')
+    })
+
+    it('Should run filter:html.embed.video-playlist.allowed.result', async function () {
+      const res = await makeRawRequest(servers[0].url + embedPlaylists[0].embedPath, 200)
+      expect(res.text).to.equal('Diao Chan')
+    })
+  })
+
+  describe('Search filters', function () {
+
+    before(async function () {
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
+        search: {
+          searchIndex: {
+            enabled: true,
+            isDefaultSearch: false,
+            disableLocalSearch: false
+          }
+        }
+      })
+    })
+
+    it('Should run filter:api.search.videos.local.list.{params,result}', async function () {
+      await advancedVideosSearch(servers[0].url, {
+        search: 'Sun Quan'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.result', 1)
+    })
+
+    it('Should run filter:api.search.videos.index.list.{params,result}', async function () {
+      await advancedVideosSearch(servers[0].url, {
+        search: 'Sun Quan',
+        searchTarget: 'search-index'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.local.list.result', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.index.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.videos.index.list.result', 1)
+    })
+
+    it('Should run filter:api.search.video-channels.local.list.{params,result}', async function () {
+      await advancedVideoChannelSearch(servers[0].url, {
+        search: 'Sun Ce'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.result', 1)
+    })
+
+    it('Should run filter:api.search.video-channels.index.list.{params,result}', async function () {
+      await advancedVideoChannelSearch(servers[0].url, {
+        search: 'Sun Ce',
+        searchTarget: 'search-index'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.result', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.result', 1)
     })
   })
 

@@ -34,7 +34,9 @@ async function run () {
 
   const localVideos = await VideoModel.listLocal()
 
-  for (const video of localVideos) {
+  for (const localVideo of localVideos) {
+    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(localVideo.id)
+
     currentVideoId = video.id
 
     for (const file of video.VideoFiles) {

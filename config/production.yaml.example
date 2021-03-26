@@ -106,6 +106,13 @@ log:
 trending:
   videos:
     interval_days: 7 # Compute trending videos for the last x days
+    algorithms:
+      enabled:
+        - 'best' # adaptation of Reddit's 'Best' algorithm (Hot minus History)
+        - 'hot' # adaptation of Reddit's 'Hot' algorithm
+        - 'most-viewed' # default, used initially by PeerTube as the trending page
+        - 'most-liked'
+      default: 'most-viewed'
 
 # Cache remote videos on your server, to help other instances to broadcast the video
 # You can define multiple caches using different sizes/strategies
@@ -186,6 +193,18 @@ federation:
   videos:
     federate_unlisted: false
 
+    # Add a weekly job that cleans up remote AP interactions on local videos (shares, rates and comments)
+    # It removes objects that do not exist anymore, and potentially fix their URLs
+    # This setting is opt-in because due to an old bug in PeerTube, remote rates sent by instance before PeerTube 3.0 will be deleted
+    # We still suggest you to enable this setting even if your users will loose most of their video's likes/dislikes
+    cleanup_remote_interactions: false
+
+peertube:
+  check_latest_version:
+    # Check and notify admins of new PeerTube versions
+    enabled: true
+    # You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json
+    url: 'https://joinpeertube.org/api/v1/versions.json'
 
 ###############################################################################
 #
@@ -204,6 +223,8 @@ cache:
     size: 500 # Max number of previews you want to cache
   captions:
     size: 500 # Max number of video captions/subtitles you want to cache
+  torrents:
+    size: 500 # Max number of video torrents you want to cache
 
 admin:
   # Used to generate the root user at first startup
@@ -233,11 +254,23 @@ user:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+
   # Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
   allow_additional_extensions: true
+
   # If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
   allow_audio_files: true
+
+  # Amount of threads used by ffmpeg for 1 transcoding job
   threads: 1
+  # Amount of transcoding jobs to execute in parallel
+  concurrency: 1
+
+  # Choose the transcoding profile
+  # New profiles can be added by plugins
+  # Available in core PeerTube: 'default'
+  profile: 'default'
+
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     0p: false # audio-only (creates mp4 without video stream, always created when enabled)
     240p: false
@@ -267,7 +300,7 @@ live:
   enabled: false
 
   # Limit lives duration
-  # Set null to disable duration limit
+  # -1 == unlimited
   max_duration: -1 # For example: '5 hours'
 
   # Limit max number of live videos created on your instance
@@ -293,6 +326,11 @@ live:
     enabled: true
     threads: 2
 
+    # Choose the transcoding profile
+    # New profiles can be added by plugins
+    # Available in core PeerTube: 'default'
+    profile: 'default'
+
     resolutions:
       240p: false
       360p: false
@@ -305,6 +343,9 @@ live:
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
   videos:
+    # Amount of import jobs to execute in parallel
+    concurrency: 1
+
     http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
       enabled: false
 

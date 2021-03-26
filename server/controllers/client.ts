@@ -2,7 +2,9 @@ import * as express from 'express'
 import { constants, promises as fs } from 'fs'
 import { readFile } from 'fs-extra'
 import { join } from 'path'
+import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { HttpStatusCode } from '@shared/core-utils'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@shared/core-utils/i18n'
 import { root } from '../helpers/core-utils'
@@ -27,6 +29,7 @@ const embedMiddlewares = [
     ? embedCSP
     : (req: express.Request, res: express.Response, next: express.NextFunction) => next(),
 
+  // Set headers
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.removeHeader('X-Frame-Options')
 
@@ -105,6 +108,24 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
 }
 
 async function generateEmbedHtmlPage (req: express.Request, res: express.Response) {
+  const hookName = req.originalUrl.startsWith('/video-playlists/')
+    ? 'filter:html.embed.video-playlist.allowed.result'
+    : 'filter:html.embed.video.allowed.result'
+
+  const allowParameters = { req }
+
+  const allowedResult = await Hooks.wrapFun(
+    isEmbedAllowed,
+    allowParameters,
+    hookName
+  )
+
+  if (!allowedResult || allowedResult.allowed !== true) {
+    logger.info('Embed is not allowed.', { allowedResult })
+
+    return sendHTML(allowedResult?.html || '', res)
+  }
+
   const html = await ClientHtml.getEmbedHTML()
 
   return sendHTML(html, res)
@@ -157,4 +178,11 @@ function serveClientOverride (path: string) {
       next()
     }
   }
+}
+
+type AllowedResult = { allowed: boolean, html?: string }
+function isEmbedAllowed (_object: {
+  req: express.Request
+}): AllowedResult {
+  return { allowed: true }
 }

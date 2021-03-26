@@ -12,6 +12,7 @@ import { VideoActionsDropdownComponent } from './video-actions-dropdown.componen
 import { VideoDownloadComponent } from './video-download.component'
 import { VideoMiniatureComponent } from './video-miniature.component'
 import { VideosSelectionComponent } from './videos-selection.component'
+import { VideoListHeaderComponent } from './video-list-header.component'
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { VideosSelectionComponent } from './videos-selection.component'
     VideoActionsDropdownComponent,
     VideoDownloadComponent,
     VideoMiniatureComponent,
-    VideosSelectionComponent
+    VideosSelectionComponent,
+    VideoListHeaderComponent
   ],
 
   exports: [

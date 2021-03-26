@@ -21,6 +21,7 @@ import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/cons
 import { UserModel } from '../account/user'
 import { getSort, throwIfNotValid } from '../utils'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 
 @DefaultScope(() => ({
   include: [
@@ -113,7 +114,7 @@ export class VideoImportModel extends Model {
   @AfterUpdate
   static deleteVideoIfFailed (instance: VideoImportModel, options) {
     if (instance.state === VideoImportState.FAILED) {
-      return instance.Video.destroy({ transaction: options.transaction })
+      return afterCommitIfTransaction(options.transaction, () => instance.Video.destroy())
     }
 
     return undefined

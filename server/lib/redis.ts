@@ -263,7 +263,7 @@ class Redis {
   }
 
   private addToSet (key: string, value: string) {
-    return new Promise<string[]>((res, rej) => {
+    return new Promise<void>((res, rej) => {
       this.client.sadd(this.prefix + key, value, err => err ? rej(err) : res())
     })
   }

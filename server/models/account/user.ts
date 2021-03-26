@@ -21,6 +21,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { TokensCache } from '@server/lib/auth/tokens-cache'
 import {
   MMyUserFormattable,
   MUser,
@@ -28,7 +29,7 @@ import {
   MUserFormattable,
   MUserNotifSettingChannelDefault,
   MUserWithNotificationSetting,
-  MVideoFullLight
+  MVideoWithRights
 } from '@server/types/models'
 import { hasUserRight, USER_ROLE_LABELS } from '../../../shared/core-utils/users'
 import { AbuseState, MyUser, UserRight, VideoPlaylistType, VideoPrivacy } from '../../../shared/models'
@@ -58,7 +59,6 @@ import {
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
-import { clearCacheByUserId } from '../../lib/oauth-model'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
@@ -411,7 +411,7 @@ export class UserModel extends Model {
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (instance: UserModel) {
-    return clearCacheByUserId(instance.id)
+    return TokensCache.Instance.clearCacheByUserId(instance.id)
   }
 
   static countTotal () {
@@ -819,7 +819,7 @@ export class UserModel extends Model {
                     .then(u => u.map(u => u.username))
   }
 
-  canGetVideo (video: MVideoFullLight) {
+  canGetVideo (video: MVideoWithRights) {
     const videoUserId = video.VideoChannel.Account.userId
 
     if (video.isBlacklisted()) {

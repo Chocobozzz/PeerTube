@@ -28,6 +28,7 @@ import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { sendAbuse } from './activitypub/send/send-flag'
 import { Notifier } from './notifier'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 
 export type AcceptResult = {
   accepted: boolean
@@ -225,10 +226,12 @@ async function createAbuse (options: {
   const abuseJSON = abuseInstance.toFormattedAdminJSON()
   auditLogger.create(reporterAccount.Actor.getIdentifier(), new AbuseAuditView(abuseJSON))
 
-  Notifier.Instance.notifyOnNewAbuse({
-    abuse: abuseJSON,
-    abuseInstance,
-    reporter: reporterAccount.Actor.getIdentifier()
+  afterCommitIfTransaction(transaction, () => {
+    Notifier.Instance.notifyOnNewAbuse({
+      abuse: abuseJSON,
+      abuseInstance,
+      reporter: reporterAccount.Actor.getIdentifier()
+    })
   })
 
   logger.info('Abuse report %d created.', abuseInstance.id)

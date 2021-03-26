@@ -98,7 +98,7 @@ function sendRTMPStream (rtmpBaseUrl: string, streamKey: string, fixtureName = '
 }
 
 function waitFfmpegUntilError (command: ffmpeg.FfmpegCommand, successAfterMS = 10000) {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     command.on('error', err => {
       return rej(err)
     })
@@ -164,6 +164,17 @@ async function waitUntilLiveState (url: string, token: string, videoId: number |
   } while (video.state.id !== state)
 }
 
+async function waitUntilLiveSaved (url: string, token: string, videoId: number | string) {
+  let video: VideoDetails
+
+  do {
+    const res = await getVideoWithToken(url, token, videoId)
+    video = res.body
+
+    await wait(500)
+  } while (video.isLive === true && video.state.id !== VideoState.PUBLISHED)
+}
+
 async function checkLiveCleanup (server: ServerInfo, videoUUID: string, resolutions: number[] = []) {
   const basePath = buildServerDirectory(server, 'streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
@@ -203,6 +214,7 @@ async function getPlaylistsCount (server: ServerInfo, videoUUID: string) {
 export {
   getLive,
   getPlaylistsCount,
+  waitUntilLiveSaved,
   waitUntilLivePublished,
   updateLive,
   createLive,

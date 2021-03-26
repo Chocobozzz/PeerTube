@@ -8,6 +8,7 @@ export type JobType =
   | 'activitypub-http-unicast'
   | 'activitypub-http-broadcast'
   | 'activitypub-http-fetcher'
+  | 'activitypub-cleaner'
   | 'activitypub-follow'
   | 'video-file-import'
   | 'video-transcoding'
@@ -17,6 +18,7 @@ export type JobType =
   | 'activitypub-refresher'
   | 'video-redundancy'
   | 'video-live-ending'
+  | 'actor-keys'
 
 export interface Job {
   id: number
@@ -57,7 +59,7 @@ export type ActivitypubHttpFetcherPayload = {
 export type ActivitypubHttpUnicastPayload = {
   uri: string
   signatureActorId?: number
-  body: any
+  body: object
   contextType?: ContextType
 }
 
@@ -80,8 +82,6 @@ export type VideoImportYoutubeDLPayload = {
   type: VideoImportYoutubeDLPayloadType
   videoImportId: number
 
-  generateThumbnail: boolean
-  generatePreview: boolean
   fileExt?: string
 }
 export type VideoImportTorrentPayload = {
@@ -106,6 +106,7 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   isPortraitMode?: boolean
   resolution: VideoResolution
   copyCodecs: boolean
+  isMaxQuality: boolean
 }
 
 export interface NewResolutionTranscodingPayload extends BaseTranscodingPayload {
@@ -131,4 +132,8 @@ export type VideoTranscodingPayload =
 
 export interface VideoLiveEndingPayload {
   videoId: number
+}
+
+export interface ActorKeysPayload {
+  actorId: number
 }

@@ -1,7 +1,7 @@
 import * as request from 'supertest'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import { makeGetRequest } from '../../../shared/extra-utils'
-import { Job, JobState, JobType } from '../../models'
+import { getDebug, makeGetRequest } from '../../../shared/extra-utils'
+import { Job, JobState, JobType, ServerDebug } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
 
@@ -53,13 +53,17 @@ function getJobsListPaginationAndSort (options: {
 }
 
 async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
-  const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10) : 2000
+  const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
+    ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
+    : 500
+
   let servers: ServerInfo[]
 
   if (Array.isArray(serversArg) === false) servers = [ serversArg as ServerInfo ]
   else servers = serversArg as ServerInfo[]
 
   const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
+  const repeatableJobs = [ 'videos-views', 'activitypub-cleaner' ]
   let pendingRequests: boolean
 
   function tasksBuilder () {
@@ -75,16 +79,26 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
           start: 0,
           count: 10,
           sort: '-createdAt'
-        })
-          .then(res => res.body.data)
-          .then((jobs: Job[]) => jobs.filter(j => j.type !== 'videos-views'))
+        }).then(res => res.body.data)
+          .then((jobs: Job[]) => jobs.filter(j => !repeatableJobs.includes(j.type)))
           .then(jobs => {
             if (jobs.length !== 0) {
               pendingRequests = true
             }
           })
+
         tasks.push(p)
       }
+
+      const p = getDebug(server.url, server.accessToken)
+        .then(res => res.body)
+        .then((obj: ServerDebug) => {
+          if (obj.activityPubMessagesWaiting !== 0) {
+            pendingRequests = true
+          }
+        })
+
+      tasks.push(p)
     }
 
     return tasks

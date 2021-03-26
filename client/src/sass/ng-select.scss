@@ -20,6 +20,11 @@ $ng-select-height: 30px;
   font-size: .9em;
 }
 
+.ng-input,
+.ng-select .ng-select-container .ng-value-container {
+  padding-left: 15px !important;
+}
+
 .ng-select {
   &.ng-select-focused {
     &:not(.ng-select-opened) > .ng-select-container {
@@ -29,6 +34,11 @@ $ng-select-height: 30px;
 
   .ng-select-container {
     background-color: pvar(--inputBackgroundColor);
+
+  }
+
+  .ng-arrow-wrapper {
+    padding-right: 12px
   }
 
   &.ng-select-single .ng-value-container .ng-value {

@@ -10,5 +10,5 @@ export type BuildFormArgument = {
 }
 
 export type BuildFormDefaultValues = {
-  [ name: string ]: string | string[] | BuildFormDefaultValues
+  [ name: string ]: number | string | string[] | BuildFormDefaultValues
 }

@@ -308,8 +308,8 @@ describe('Test a client controllers', function () {
           shortDescription: 'my short description',
           description: 'my super description',
           terms: 'my super terms',
-          defaultClientRoute: '/videos/recently-added',
           defaultNSFWPolicy: 'blur',
+          defaultClientRoute: '/videos/recently-added',
           customizations: {
             javascript: 'alert("coucou")',
             css: 'body { background-color: red; }'

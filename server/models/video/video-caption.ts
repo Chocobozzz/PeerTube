@@ -15,8 +15,8 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
-import { MVideoAccountLight, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
+import { v4 as uuidv4 } from 'uuid'
+import { MVideo, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { logger } from '../../helpers/logger'
@@ -45,6 +45,10 @@ export enum ScopeNames {
   tableName: 'videoCaption',
   indexes: [
     {
+      fields: [ 'filename' ],
+      unique: true
+    },
+    {
       fields: [ 'videoId' ]
     },
     {
@@ -64,6 +68,10 @@ export class VideoCaptionModel extends Model {
   @Is('VideoCaptionLanguage', value => throwIfNotValid(value, isVideoCaptionLanguageValid, 'language'))
   @Column
   language: string
+
+  @AllowNull(false)
+  @Column
+  filename: string
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
@@ -88,12 +96,12 @@ export class VideoCaptionModel extends Model {
     }
 
     if (instance.isOwned()) {
-      logger.info('Removing captions %s of video %s.', instance.Video.uuid, instance.language)
+      logger.info('Removing caption %s.', instance.filename)
 
       try {
         await instance.removeCaptionFile()
       } catch (err) {
-        logger.error('Cannot remove caption file of video %s.', instance.Video.uuid)
+        logger.error('Cannot remove caption file %s.', instance.filename)
       }
     }
 
@@ -119,15 +127,28 @@ export class VideoCaptionModel extends Model {
     return VideoCaptionModel.findOne(query)
   }
 
-  static insertOrReplaceLanguage (videoId: number, language: string, fileUrl: string, transaction: Transaction) {
-    const values = {
-      videoId,
-      language,
-      fileUrl
+  static loadWithVideoByFilename (filename: string): Promise<MVideoCaptionVideo> {
+    const query = {
+      where: {
+        filename
+      },
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          attributes: [ 'id', 'remote', 'uuid' ]
+        }
+      ]
     }
 
-    return VideoCaptionModel.upsert(values, { transaction, returning: true })
-      .then(([ caption ]) => caption)
+    return VideoCaptionModel.findOne(query)
+  }
+
+  static async insertOrReplaceLanguage (caption: MVideoCaption, transaction: Transaction) {
+    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(caption.videoId, caption.language)
+    // Delete existing file
+    if (existing) await existing.destroy({ transaction })
+
+    return caption.save({ transaction })
   }
 
   static listVideoCaptions (videoId: number): Promise<MVideoCaptionVideo[]> {
@@ -156,6 +177,10 @@ export class VideoCaptionModel extends Model {
     return VideoCaptionModel.destroy(query)
   }
 
+  static generateCaptionName (language: string) {
+    return `${uuidv4()}-${language}.vtt`
+  }
+
   isOwned () {
     return this.Video.remote === false
   }
@@ -170,25 +195,19 @@ export class VideoCaptionModel extends Model {
     }
   }
 
-  getCaptionStaticPath (this: MVideoCaptionFormattable) {
-    return join(LAZY_STATIC_PATHS.VIDEO_CAPTIONS, this.getCaptionName())
+  getCaptionStaticPath (this: MVideoCaption) {
+    return join(LAZY_STATIC_PATHS.VIDEO_CAPTIONS, this.filename)
   }
 
-  getCaptionName (this: MVideoCaptionFormattable) {
-    return `${this.Video.uuid}-${this.language}.vtt`
+  removeCaptionFile (this: MVideoCaption) {
+    return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.filename)
   }
 
-  removeCaptionFile (this: MVideoCaptionFormattable) {
-    return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.getCaptionName())
-  }
-
-  getFileUrl (video: MVideoAccountLight) {
+  getFileUrl (video: MVideo) {
     if (!this.Video) this.Video = video as VideoModel
 
     if (video.isOwned()) return WEBSERVER.URL + this.getCaptionStaticPath()
-    if (this.fileUrl) return this.fileUrl
 
-    // Fallback if we don't have a file URL
-    return buildRemoteVideoBaseUrl(video, this.getCaptionStaticPath())
+    return this.fileUrl
   }
 }

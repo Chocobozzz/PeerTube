@@ -1,5 +1,6 @@
 import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
 import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
+import { ServerConfig } from '@shared/models/server'
 
 export type RegisterClientOptions = {
   registerHook: (options: RegisterClientHookOptions) => void
@@ -15,6 +16,8 @@ export type RegisterClientHelpers = {
   isLoggedIn: () => boolean
 
   getSettings: () => Promise<{ [ name: string ]: string }>
+
+  getServerConfig: () => Promise<ServerConfig>
 
   notifier: {
     info: (text: string, title?: string, timeout?: number) => void,

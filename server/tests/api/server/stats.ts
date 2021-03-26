@@ -21,6 +21,7 @@ import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { getStats } from '../../../../shared/extra-utils/server/stats'
 import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
+import { ActivityType } from '@shared/models'
 
 const expect = chai.expect
 
@@ -195,12 +196,30 @@ describe('Test stats (excluding redundancy)', function () {
 
     await waitJobs(servers)
 
+    await wait(6000)
+
     const res2 = await getStats(servers[1].url)
     const second: ServerStats = res2.body
 
     expect(second.totalActivityPubMessagesProcessed).to.be.greaterThan(first.totalActivityPubMessagesProcessed)
+    const apTypes: ActivityType[] = [
+      'Create', 'Update', 'Delete', 'Follow', 'Accept', 'Announce', 'Undo', 'Like', 'Reject', 'View', 'Dislike', 'Flag'
+    ]
 
-    await wait(5000)
+    const processed = apTypes.reduce(
+      (previous, type) => previous + second['totalActivityPub' + type + 'MessagesSuccesses'],
+      0
+    )
+    expect(second.totalActivityPubMessagesProcessed).to.equal(processed)
+    expect(second.totalActivityPubMessagesSuccesses).to.equal(processed)
+
+    expect(second.totalActivityPubMessagesErrors).to.equal(0)
+
+    for (const apType of apTypes) {
+      expect(second['totalActivityPub' + apType + 'MessagesErrors']).to.equal(0)
+    }
+
+    await wait(6000)
 
     const res3 = await getStats(servers[1].url)
     const third: ServerStats = res3.body

@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
-        <target>বন্ধ করুন</target>
+        <target>বন্ধ করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/alert/alert.d.ts</context>
           <context context-type="linenumber">3</context>
@@ -148,7 +148,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target>ঘন্টা বৃদ্ধি করুন</target>
+        <target>ঘন্টা বৃদ্ধি করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">9</context>
@@ -172,7 +172,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target>ঘন্টা হ্রাস করুন</target>
+        <target>ঘন্টা হ্রাস করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">23</context>
@@ -180,7 +180,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target>মিনিট বৃদ্ধি করুন</target>
+        <target>মিনিট বৃদ্ধি করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">32</context>
@@ -204,7 +204,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target>মিনিট হ্রাস করুন</target>
+        <target>মিনিট হ্রাস করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">45</context>
@@ -212,7 +212,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target>সেকেন্ড বৃদ্ধি করুন</target>
+        <target>সেকেন্ড বৃদ্ধি করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">54</context>
@@ -220,7 +220,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target>সস</target>
+        <target>সেসে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">57</context>
@@ -236,7 +236,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target>সেকেন্ড হ্রাস করুন</target>
+        <target>সেকেন্ড হ্রাস করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">67</context>
@@ -268,7 +268,7 @@
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c" datatype="html">
         <source>You don't have notifications.</source>
-        <target>আপনার কোনো নোটিফিকেশন নেই।</target>
+        <target>আপনার কোনো বিজ্ঞপ্তি নেই।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">1</context>
@@ -276,7 +276,7 @@
       </trans-unit>
       <trans-unit id="1cff8e38c81055fa0ae7dbc80a7a0c5c39bbc263" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a new video: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> নতুন ভিডিও প্রকাশ করেছেনঃ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
+        <target><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> নতুন ভিডিও প্রকাশ করেছে: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">15</context>
@@ -284,7 +284,7 @@
       </trans-unit>
       <trans-unit id="5f61f85f3c9e196f7044fec4dfe165b081e14a3f" datatype="html">
         <source>The notification concerns a video now unavailable</source>
-        <target/>
+        <target>এই বিজ্ঞপ্তির ভিডিওটা আর নেই</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">23</context>
@@ -292,7 +292,7 @@
       </trans-unit>
       <trans-unit id="cd1df1f67905a0fc5c598a95f450ab6cfd6ca3c6" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblacklisted </source>
-        <target/>
+        <target>তোমার ভিডিও<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> এর অবরোধ ছেড়ে দেয়া হয়েছে </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">32</context>
@@ -300,7 +300,7 @@
       </trans-unit>
       <trans-unit id="066903c4bc7d397c799979d64ce8c450792eb664" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blacklisted </source>
-        <target/>
+        <target>তোমার ভিডিও <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> অবরোধ করা হয়েছে </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">40</context>
@@ -308,7 +308,7 @@
       </trans-unit>
       <trans-unit id="b5e2152dd5b4222093fcec9c8289f12308a598e7" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new video abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoAbuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>একটস নতুন ভিডিও অপব্যবহার <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> বানানো হয়েছে <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoAbuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">48</context>
@@ -428,7 +428,7 @@
       </trans-unit>
       <trans-unit id="24813b8a3e45f0b57136c18d003027262cfe2d1f" datatype="html">
         <source>Options</source>
-        <target/>
+        <target>অপশন</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">9</context>

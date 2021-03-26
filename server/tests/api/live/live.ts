@@ -50,6 +50,12 @@ const expect = chai.expect
 describe('Test live', function () {
   let servers: ServerInfo[] = []
 
+  async function waitUntilLivePublishedOnAllServers (videoId: string) {
+    for (const server of servers) {
+      await waitUntilLivePublished(server.url, server.accessToken, videoId)
+    }
+  }
+
   before(async function () {
     this.timeout(120000)
 
@@ -385,12 +391,12 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding without additional resolutions', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       liveVideoId = await createLiveWrapper(false)
 
       const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
-      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLivePublishedOnAllServers(liveVideoId)
       await waitJobs(servers)
 
       await testVideoResolutions(liveVideoId, [ 720 ])
@@ -399,14 +405,14 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       const resolutions = [ 240, 480 ]
       await updateConf(resolutions)
       liveVideoId = await createLiveWrapper(false)
 
       const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
-      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLivePublishedOnAllServers(liveVideoId)
       await waitJobs(servers)
 
       await testVideoResolutions(liveVideoId, resolutions)
@@ -423,7 +429,7 @@ describe('Test live', function () {
       liveVideoId = await createLiveWrapper(true)
 
       const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId, 'video_short2.webm')
-      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLivePublishedOnAllServers(liveVideoId)
       await waitJobs(servers)
 
       await testVideoResolutions(liveVideoId, resolutions)
@@ -433,7 +439,7 @@ describe('Test live', function () {
 
       await waitJobs(servers)
 
-      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLivePublishedOnAllServers(liveVideoId)
 
       const bitrateLimits = {
         720: 5000 * 1000, // 60FPS
@@ -514,7 +520,7 @@ describe('Test live', function () {
       liveVideoId = res.body.video.uuid
 
       command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
-      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLivePublishedOnAllServers(liveVideoId)
       await waitJobs(servers)
     })
 
@@ -602,10 +608,7 @@ describe('Test live', function () {
 
       const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
 
-      for (const server of servers) {
-        await waitUntilLivePublished(server.url, server.accessToken, liveVideoUUID)
-      }
-
+      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
       await waitJobs(servers)
 
       for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {
@@ -618,7 +621,6 @@ describe('Test live', function () {
       for (const server of servers) {
         await waitUntilLiveEnded(server.url, server.accessToken, liveVideoUUID)
       }
-
       await waitJobs(servers)
 
       for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {
@@ -654,10 +656,7 @@ describe('Test live', function () {
 
       const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
 
-      for (const server of servers) {
-        await waitUntilLivePublished(server.url, server.accessToken, liveVideoUUID)
-      }
-
+      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
       await waitJobs(servers)
 
       expect(localLastVideoViews).to.equal(0)
@@ -691,7 +690,8 @@ describe('Test live', function () {
       socket.emit('subscribe', { videoId })
 
       const command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoUUID)
-      await waitUntilLivePublished(servers[0].url, servers[0].accessToken, liveVideoUUID)
+
+      await waitUntilLivePublishedOnAllServers(liveVideoUUID)
       await waitJobs(servers)
 
       expect(stateChanges).to.have.lengthOf(1)

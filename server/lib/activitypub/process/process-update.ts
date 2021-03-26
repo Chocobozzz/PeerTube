@@ -62,7 +62,15 @@ async function processUpdateVideo (actor: MActorSignature, activity: ActivityUpd
     return undefined
   }
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoObject.id, allowRefresh: false, fetchType: 'all' })
+  const { video, created } = await getOrCreateVideoAndAccountAndChannel({
+    videoObject: videoObject.id,
+    allowRefresh: false,
+    fetchType: 'all'
+  })
+  // We did not have this video, it has been created so no need to update
+  if (created) return
+
+  // Load new channel
   const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
 
   const account = actor.Account as MAccountIdActor

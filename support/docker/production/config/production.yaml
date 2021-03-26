@@ -66,7 +66,7 @@ log:
 
 tracker:
   enabled: true
-  reject_too_many_announces: false # false because we have issues with traefik and ws ip/port forwarding
+  reject_too_many_announces: false # false because we have issues with docker ws ip/port forwarding
 
 admin:
   email: null

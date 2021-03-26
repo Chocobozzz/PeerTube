@@ -8,40 +8,30 @@ import { execSync } from 'child_process'
 program
   .name('watch')
   .arguments('<url>')
-  .option('-g, --gui <player>', 'player type', /^(airplay|stdout|chromecast|mpv|vlc|mplayer|xbmc)$/i, 'vlc')
+  .addOption(
+    new program.Option('-g, --gui <player>', 'player type')
+      .default('vlc')
+      .choices([ 'airplay', 'stdout', 'chromecast', 'mpv', 'vlc', 'mplayer', 'xbmc' ])
+  )
   .option('-r, --resolution <res>', 'video resolution', '480')
-  .on('--help', function () {
-    console.log('  Available Players:')
-    console.log()
-    console.log('    - mpv')
-    console.log('    - mplayer')
-    console.log('    - vlc')
-    console.log('    - stdout')
-    console.log('    - xbmc')
-    console.log('    - airplay')
-    console.log('    - chromecast')
-    console.log()
-    console.log()
-    console.log('  Examples:')
-    console.log()
-    console.log('    $ peertube watch -g mpv https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10')
-    console.log('    $ peertube watch --gui stdout https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10')
-    console.log('    $ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10')
-    console.log()
-  })
-  .action((url, cmd) => run(url, cmd))
+  .addHelpText('after', '\n\n  Examples:\n\n' +
+    '    $ peertube watch -g mpv https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10\n' +
+    '    $ peertube watch --gui stdout https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10\n' +
+    '    $ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10\n'
+  )
+  .action((url, options) => run(url, options))
   .parse(process.argv)
 
-function run (url: string, program: any) {
+function run (url: string, options: program.OptionValues) {
   if (!url) {
     console.error('<url> positional argument is required.')
     process.exit(-1)
   }
 
   const cmd = 'node ' + join(__dirname, 'node_modules', 'webtorrent-hybrid', 'bin', 'cmd.js')
-  const args = ` --${program.gui} ` +
+  const args = ` --${options.gui} ` +
     url.replace('videos/watch', 'download/torrents') +
-    `-${program.resolution}.torrent`
+    `-${options.resolution}.torrent`
 
   try {
     execSync(cmd + args)

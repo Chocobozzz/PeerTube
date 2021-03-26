@@ -355,6 +355,22 @@ describe('Test a single server', function () {
     expect(videos.length).to.equal(2)
   })
 
+  it('Should list and sort by hotness in descending order', async function () {
+    const res = await getVideosListPagination(server.url, 0, 2, '-hot')
+
+    const videos = res.body.data
+    expect(res.body.total).to.equal(6)
+    expect(videos.length).to.equal(2)
+  })
+
+  it('Should list and sort by best in descending order', async function () {
+    const res = await getVideosListPagination(server.url, 0, 2, '-best')
+
+    const videos = res.body.data
+    expect(res.body.total).to.equal(6)
+    expect(videos.length).to.equal(2)
+  })
+
   it('Should update a video', async function () {
     const attributes = {
       name: 'my super video updated',

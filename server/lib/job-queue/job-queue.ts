@@ -1,11 +1,13 @@
 import * as Bull from 'bull'
 import { jobStates } from '@server/helpers/custom-validators/jobs'
+import { CONFIG } from '@server/initializers/config'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy'
 import {
   ActivitypubFollowPayload,
   ActivitypubHttpBroadcastPayload,
   ActivitypubHttpFetcherPayload,
   ActivitypubHttpUnicastPayload,
+  ActorKeysPayload,
   EmailPayload,
   JobState,
   JobType,
@@ -19,11 +21,13 @@ import {
 import { logger } from '../../helpers/logger'
 import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants'
 import { Redis } from '../redis'
+import { processActivityPubCleaner } from './handlers/activitypub-cleaner'
 import { processActivityPubFollow } from './handlers/activitypub-follow'
 import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { refreshAPObject } from './handlers/activitypub-refresher'
+import { processActorKeys } from './handlers/actor-keys'
 import { processEmail } from './handlers/email'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
@@ -35,6 +39,7 @@ type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
   { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload } |
   { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
+  { type: 'activitypub-http-cleaner', payload: {} } |
   { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
   { type: 'video-file-import', payload: VideoFileImportPayload } |
   { type: 'video-transcoding', payload: VideoTranscodingPayload } |
@@ -43,6 +48,7 @@ type CreateJobArgument =
   { type: 'activitypub-refresher', payload: RefreshPayload } |
   { type: 'videos-views', payload: {} } |
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
+  { type: 'actor-keys', payload: ActorKeysPayload } |
   { type: 'video-redundancy', payload: VideoRedundancyPayload }
 
 type CreateJobOptions = {
@@ -54,6 +60,7 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
+  'activitypub-cleaner': processActivityPubCleaner,
   'activitypub-follow': processActivityPubFollow,
   'video-file-import': processVideoFileImport,
   'video-transcoding': processVideoTranscoding,
@@ -62,6 +69,7 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'videos-views': processVideosViews,
   'activitypub-refresher': refreshAPObject,
   'video-live-ending': processVideoLiveEnding,
+  'actor-keys': processActorKeys,
   'video-redundancy': processVideoRedundancy
 }
 
@@ -70,6 +78,7 @@ const jobTypes: JobType[] = [
   'activitypub-http-broadcast',
   'activitypub-http-fetcher',
   'activitypub-http-unicast',
+  'activitypub-cleaner',
   'email',
   'video-transcoding',
   'video-file-import',
@@ -77,6 +86,7 @@ const jobTypes: JobType[] = [
   'videos-views',
   'activitypub-refresher',
   'video-redundancy',
+  'actor-keys',
   'video-live-ending'
 ]
 
@@ -105,11 +115,11 @@ class JobQueue {
       }
     }
 
-    for (const handlerName of Object.keys(handlers)) {
+    for (const handlerName of (Object.keys(handlers) as JobType[])) {
       const queue = new Bull(handlerName, queueOptions)
       const handler = handlers[handlerName]
 
-      queue.process(JOB_CONCURRENCY[handlerName], handler)
+      queue.process(this.getJobConcurrency(handlerName), handler)
            .catch(err => logger.error('Error in job queue processor %s.', handlerName, { err }))
 
       queue.on('failed', (job, err) => {
@@ -227,12 +237,25 @@ class JobQueue {
     this.queues['videos-views'].add({}, {
       repeat: REPEAT_JOBS['videos-views']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
+
+    if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {
+      this.queues['activitypub-cleaner'].add({}, {
+        repeat: REPEAT_JOBS['activitypub-cleaner']
+      }).catch(err => logger.error('Cannot add repeatable job.', { err }))
+    }
   }
 
   private filterJobTypes (jobType?: JobType) {
     if (!jobType) return jobTypes
 
     return jobTypes.filter(t => t === jobType)
+  }
+
+  private getJobConcurrency (jobType: JobType) {
+    if (jobType === 'video-transcoding') return CONFIG.TRANSCODING.CONCURRENCY
+    if (jobType === 'video-import') return CONFIG.IMPORT.VIDEOS.CONCURRENCY
+
+    return JOB_CONCURRENCY[jobType]
   }
 
   static get Instance () {

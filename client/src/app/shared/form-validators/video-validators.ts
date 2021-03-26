@@ -1,12 +1,21 @@
-import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
+import { AbstractControl, ValidationErrors, ValidatorFn, Validators, FormControl } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.model'
+
+export const trimValidator: ValidatorFn = (control: FormControl) => {
+  if (control.value.startsWith(' ') || control.value.endsWith(' ')) {
+    return { spaces: true }
+  }
+
+  return null
+}
 
 export const VIDEO_NAME_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(120) ],
   MESSAGES: {
     'required': $localize`Video name is required.`,
     'minlength': $localize`Video name must be at least 3 characters long.`,
-    'maxlength': $localize`Video name cannot be more than 120 characters long.`
+    'maxlength': $localize`Video name cannot be more than 120 characters long.`,
+    'spaces': $localize`Video name has leading or trailing whitespace.`
   }
 }
 

@@ -62,6 +62,10 @@ const routes: Routes = [
     loadChildren: () => import('./+remote-interaction/remote-interaction.module').then(m => m.RemoteInteractionModule)
   },
   {
+    path: 'video-playlists/watch',
+    redirectTo: 'videos/watch/playlist'
+  },
+  {
     path: '',
     component: EmptyComponent // Avoid 404, app component will redirect dynamically
   }

@@ -69,6 +69,13 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
     // Or if the instance automatically accepts followers
     if (actorFollow.state !== 'accepted' && (isFollowingInstance === false || CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false)) {
       actorFollow.state = 'accepted'
+
+      await actorFollow.save({ transaction: t })
+    }
+
+    // Before PeerTube V3 we did not save the follow ID. Try to fix these old follows
+    if (!actorFollow.url) {
+      actorFollow.url = activityId
       await actorFollow.save({ transaction: t })
     }
 

@@ -3,6 +3,7 @@ import * as Bluebird from 'bluebird'
 import * as chokidar from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { appendFile, ensureDir, readFile, stat } from 'fs-extra'
+import { createServer, Server } from 'net'
 import { basename, join } from 'path'
 import { isTestInstance } from '@server/helpers/core-utils'
 import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers/ffmpeg-utils'
@@ -15,7 +16,7 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MUserId, MVideoLive, MVideoLiveVideo } from '@server/types/models'
+import { MStreamingPlaylist, MStreamingPlaylistVideo, MUserId, MVideoLive, MVideoLiveVideo } from '@server/types/models'
 import { VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { buildSha256Segment } from './hls'
@@ -24,11 +25,10 @@ import { cleanupLive } from './job-queue/handlers/video-live-ending'
 import { PeerTubeSocket } from './peertube-socket'
 import { isAbleToUploadVideo } from './user'
 import { getHLSDirectory } from './video-paths'
-import { availableEncoders } from './video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
 
 import memoizee = require('memoizee')
-
-const NodeRtmpServer = require('node-media-server/node_rtmp_server')
+const NodeRtmpSession = require('node-media-server/node_rtmp_session')
 const context = require('node-media-server/node_core_ctx')
 const nodeMediaServerLogger = require('node-media-server/node_core_logger')
 
@@ -63,7 +63,11 @@ class LiveManager {
     return isAbleToUploadVideo(userId, 1000)
   }, { maxAge: MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD })
 
-  private rtmpServer: any
+  private readonly hasClientSocketsInBadHealthWithCache = memoizee((sessionId: string) => {
+    return this.hasClientSocketsInBadHealth(sessionId)
+  }, { maxAge: MEMOIZE_TTL.LIVE_CHECK_SOCKET_HEALTH })
+
+  private rtmpServer: Server
 
   private constructor () {
   }
@@ -108,19 +112,31 @@ class LiveManager {
   run () {
     logger.info('Running RTMP server on port %d', config.rtmp.port)
 
-    this.rtmpServer = new NodeRtmpServer(config)
-    this.rtmpServer.tcpServer.on('error', err => {
+    this.rtmpServer = createServer(socket => {
+      const session = new NodeRtmpSession(config, socket)
+
+      session.run()
+    })
+
+    this.rtmpServer.on('error', err => {
       logger.error('Cannot run RTMP server.', { err })
     })
 
-    this.rtmpServer.run()
+    this.rtmpServer.listen(CONFIG.LIVE.RTMP.PORT)
   }
 
   stop () {
     logger.info('Stopping RTMP server.')
 
-    this.rtmpServer.stop()
+    this.rtmpServer.close()
     this.rtmpServer = undefined
+
+    // Sessions is an object
+    this.getContext().sessions.forEach((session: any) => {
+      if (session instanceof NodeRtmpSession) {
+        session.stop()
+      }
+    })
   }
 
   isRunning () {
@@ -261,7 +277,7 @@ class LiveManager {
     return this.runMuxing({
       sessionId,
       videoLive,
-      playlist: videoStreamingPlaylist,
+      playlist: Object.assign(videoStreamingPlaylist, { Video: video }),
       rtmpUrl,
       fps,
       allResolutions
@@ -271,7 +287,7 @@ class LiveManager {
   private async runMuxing (options: {
     sessionId: string
     videoLive: MVideoLiveVideo
-    playlist: MStreamingPlaylist
+    playlist: MStreamingPlaylistVideo
     rtmpUrl: string
     fps: number
     allResolutions: number[]
@@ -321,8 +337,8 @@ class LiveManager {
         outPath,
         resolutions: allResolutions,
         fps,
-        availableEncoders,
-        profile: 'default'
+        availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
+        profile: CONFIG.LIVE.TRANSCODING.PROFILE
       })
       : getLiveMuxingCommand(rtmpUrl, outPath)
 
@@ -344,11 +360,21 @@ class LiveManager {
 
       segmentsToProcessPerPlaylist[playlistId] = [ segmentPath ]
 
+      if (this.hasClientSocketsInBadHealthWithCache(sessionId)) {
+        logger.error(
+          'Too much data in client socket stream (ffmpeg is too slow to transcode the video).' +
+          ' Stopping session of video %s.', videoUUID)
+
+        this.stopSessionOf(videoLive.videoId)
+        return
+      }
+
       // Duration constraint check
       if (this.isDurationConstraintValid(startStreamDateTime) !== true) {
         logger.info('Stopping session of %s: max duration exceeded.', videoUUID)
 
         this.stopSessionOf(videoLive.videoId)
+        return
       }
 
       // Check user quota if the user enabled replay saving
@@ -469,7 +495,7 @@ class LiveManager {
 
       await federateVideoIfNeeded(fullVideo, false)
     } catch (err) {
-      logger.error('Cannot save/federate new video state of live streaming.', { err })
+      logger.error('Cannot save/federate new video state of live streaming of video id %d.', videoId, { err })
     }
   }
 
@@ -515,6 +541,30 @@ class LiveManager {
     const max = streamingStartTime + maxDuration
 
     return now <= max
+  }
+
+  private hasClientSocketsInBadHealth (sessionId: string) {
+    const rtmpSession = this.getContext().sessions.get(sessionId)
+
+    if (!rtmpSession) {
+      logger.warn('Cannot get session %s to check players socket health.', sessionId)
+      return
+    }
+
+    for (const playerSessionId of rtmpSession.players) {
+      const playerSession = this.getContext().sessions.get(playerSessionId)
+
+      if (!playerSession) {
+        logger.error('Cannot get player session %s to check socket health.', playerSession)
+        continue
+      }
+
+      if (playerSession.socket.writableLength > VIDEO_LIVE.MAX_SOCKET_WAITING_DATA) {
+        return true
+      }
+    }
+
+    return false
   }
 
   private async isQuotaConstraintValid (user: MUserId, live: MVideoLive) {

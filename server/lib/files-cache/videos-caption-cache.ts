@@ -1,17 +1,13 @@
 import { join } from 'path'
+import { doRequestAndSaveToFile } from '@server/helpers/requests'
+import { CONFIG } from '../../initializers/config'
 import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
-import { CONFIG } from '../../initializers/config'
-import { logger } from '../../helpers/logger'
-import { doRequestAndSaveToFile } from '@server/helpers/requests'
 
-type GetPathParam = { videoId: string, language: string }
+class VideosCaptionCache extends AbstractVideoStaticFileCache <string> {
 
-class VideosCaptionCache extends AbstractVideoStaticFileCache <GetPathParam> {
-
-  private static readonly KEY_DELIMITER = '%'
   private static instance: VideosCaptionCache
 
   private constructor () {
@@ -22,34 +18,30 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <GetPathParam> {
     return this.instance || (this.instance = new this())
   }
 
-  async getFilePathImpl (params: GetPathParam) {
-    const videoCaption = await VideoCaptionModel.loadByVideoIdAndLanguage(params.videoId, params.language)
+  async getFilePathImpl (filename: string) {
+    const videoCaption = await VideoCaptionModel.loadWithVideoByFilename(filename)
     if (!videoCaption) return undefined
 
-    if (videoCaption.isOwned()) return { isOwned: true, path: join(CONFIG.STORAGE.CAPTIONS_DIR, videoCaption.getCaptionName()) }
+    if (videoCaption.isOwned()) return { isOwned: true, path: join(CONFIG.STORAGE.CAPTIONS_DIR, videoCaption.filename) }
 
-    const key = params.videoId + VideosCaptionCache.KEY_DELIMITER + params.language
-    return this.loadRemoteFile(key)
+    return this.loadRemoteFile(filename)
   }
 
+  // Key is the caption filename
   protected async loadRemoteFile (key: string) {
-    logger.debug('Loading remote caption file %s.', key)
-
-    const [ videoId, language ] = key.split(VideosCaptionCache.KEY_DELIMITER)
-
-    const videoCaption = await VideoCaptionModel.loadByVideoIdAndLanguage(videoId, language)
+    const videoCaption = await VideoCaptionModel.loadWithVideoByFilename(key)
     if (!videoCaption) return undefined
 
     if (videoCaption.isOwned()) throw new Error('Cannot load remote caption of owned video.')
 
     // Used to fetch the path
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoCaption.videoId)
     if (!video) return undefined
 
     const remoteUrl = videoCaption.getFileUrl(video)
-    const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.getCaptionName())
+    const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.filename)
 
-    await doRequestAndSaveToFile({ uri: remoteUrl }, destPath)
+    await doRequestAndSaveToFile(remoteUrl, destPath)
 
     return { isOwned: false, path: destPath }
   }

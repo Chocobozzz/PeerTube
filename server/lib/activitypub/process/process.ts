@@ -16,6 +16,7 @@ import { processFlagActivity } from './process-flag'
 import { processViewActivity } from './process-view'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorDefault, MActorSignature } from '../../../types/models'
+import { StatsManager } from '@server/lib/stat-manager'
 
 const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,
@@ -75,8 +76,12 @@ async function processActivities (
 
     try {
       await activityProcessor({ activity, byActor, inboxActor, fromFetch })
+
+      StatsManager.Instance.addInboxProcessedSuccess(activity.type)
     } catch (err) {
       logger.warn('Cannot process activity %s.', activity.type, { err })
+
+      StatsManager.Instance.addInboxProcessedError(activity.type)
     }
   }
 }

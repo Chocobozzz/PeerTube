@@ -5,15 +5,15 @@
 
 $iconSize: 16px;
 
+::ng-deep my-video-list-header {
+  display: flex;
+  flex-grow: 1;
+}
+
 .videos-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  .title-page.title-page-single {
-    display: flex;
-    flex-grow: 1;
-  }
 
   .action-block {
     ::ng-deep my-feed {

@@ -7,6 +7,8 @@ export class RedirectService {
   // Default route could change according to the instance configuration
   static INIT_DEFAULT_ROUTE = '/videos/trending'
   static DEFAULT_ROUTE = RedirectService.INIT_DEFAULT_ROUTE
+  static INIT_DEFAULT_TRENDING_ALGORITHM = 'most-viewed'
+  static DEFAULT_TRENDING_ALGORITHM = RedirectService.INIT_DEFAULT_TRENDING_ALGORITHM
 
   private previousUrl: string
   private currentUrl: string
@@ -19,17 +21,25 @@ export class RedirectService {
   ) {
     // The config is first loaded from the cache so try to get the default route
     const tmpConfig = this.serverService.getTmpConfig()
-    if (tmpConfig && tmpConfig.instance && tmpConfig.instance.defaultClientRoute) {
+    if (tmpConfig?.instance?.defaultClientRoute) {
       RedirectService.DEFAULT_ROUTE = tmpConfig.instance.defaultClientRoute
+    }
+    if (tmpConfig?.trending?.videos?.algorithms?.default) {
+      RedirectService.DEFAULT_TRENDING_ALGORITHM = tmpConfig.trending.videos.algorithms.default
     }
 
     // Load default route
     this.serverService.getConfig()
         .subscribe(config => {
           const defaultRouteConfig = config.instance.defaultClientRoute
+          const defaultTrendingConfig = config.trending.videos.algorithms.default
 
           if (defaultRouteConfig) {
             RedirectService.DEFAULT_ROUTE = defaultRouteConfig
+          }
+
+          if (defaultTrendingConfig) {
+            RedirectService.DEFAULT_TRENDING_ALGORITHM = defaultTrendingConfig
           }
         })
 
@@ -64,7 +74,7 @@ export class RedirectService {
 
     console.log('Redirecting to %s...', RedirectService.DEFAULT_ROUTE)
 
-    this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { skipLocationChange })
+    this.router.navigateByUrl(RedirectService.DEFAULT_ROUTE, { skipLocationChange })
         .then(() => this.redirectingToHomepage = false)
         .catch(() => {
           this.redirectingToHomepage = false
@@ -76,7 +86,7 @@ export class RedirectService {
           )
 
           RedirectService.DEFAULT_ROUTE = RedirectService.INIT_DEFAULT_ROUTE
-          return this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { skipLocationChange })
+          return this.router.navigateByUrl(RedirectService.DEFAULT_ROUTE, { skipLocationChange })
         })
 
   }

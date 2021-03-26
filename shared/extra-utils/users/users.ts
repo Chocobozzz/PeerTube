@@ -288,6 +288,7 @@ function updateUser (options: {
   videoQuotaDaily?: number
   password?: string
   adminFlags?: UserAdminFlag
+  pluginAuth?: string
   role?: UserRole
 }) {
   const path = '/api/v1/users/' + options.userId
@@ -300,6 +301,7 @@ function updateUser (options: {
   if (options.videoQuotaDaily !== undefined && options.videoQuotaDaily !== null) toSend['videoQuotaDaily'] = options.videoQuotaDaily
   if (options.role !== undefined && options.role !== null) toSend['role'] = options.role
   if (options.adminFlags !== undefined && options.adminFlags !== null) toSend['adminFlags'] = options.adminFlags
+  if (options.pluginAuth !== undefined) toSend['pluginAuth'] = options.pluginAuth
 
   return makePutBodyRequest({
     url: options.url,

@@ -129,8 +129,10 @@ describe('Test video imports', function () {
       const attributes = immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() })
       const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
       expect(res.body.video.name).to.equal('small video - youtube')
-      expect(res.body.video.thumbnailPath).to.equal(`/static/thumbnails/${res.body.video.uuid}.jpg`)
-      expect(res.body.video.previewPath).to.equal(`/lazy-static/previews/${res.body.video.uuid}.jpg`)
+
+      expect(res.body.video.thumbnailPath).to.match(new RegExp(`^/static/thumbnails/.+.jpg$`))
+      expect(res.body.video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.jpg$`))
+
       await testImage(servers[0].url, 'video_import_thumbnail', res.body.video.thumbnailPath)
       await testImage(servers[0].url, 'video_import_preview', res.body.video.previewPath)
 
@@ -141,7 +143,7 @@ describe('Test video imports', function () {
       const enCaption = videoCaptions.find(caption => caption.language.id === 'en')
       expect(enCaption).to.exist
       expect(enCaption.language.label).to.equal('English')
-      expect(enCaption.captionPath).to.equal(`/lazy-static/video-captions/${res.body.video.uuid}-en.vtt`)
+      expect(enCaption.captionPath).to.match(new RegExp(`^/lazy-static/video-captions/.+-en.vtt$`))
       await testCaptionFile(servers[0].url, enCaption.captionPath, `WEBVTT
 Kind: captions
 Language: en
@@ -158,7 +160,7 @@ Adding subtitles is very easy to do`)
       const frCaption = videoCaptions.find(caption => caption.language.id === 'fr')
       expect(frCaption).to.exist
       expect(frCaption.language.label).to.equal('French')
-      expect(frCaption.captionPath).to.equal(`/lazy-static/video-captions/${res.body.video.uuid}-fr.vtt`)
+      expect(frCaption.captionPath).to.match(new RegExp(`^/lazy-static/video-captions/.+-fr.vtt`))
       await testCaptionFile(servers[0].url, frCaption.captionPath, `WEBVTT
 Kind: captions
 Language: fr

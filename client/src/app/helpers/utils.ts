@@ -1,10 +1,11 @@
+import { map } from 'rxjs/operators'
+import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { DatePipe } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Notifier } from '@app/core'
-import { SelectChannelItem } from '@app/shared/shared-forms'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { environment } from '../../environments/environment'
 import { AuthService } from '../core/auth'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 // Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 function getParameterByName (name: string, url: string) {
@@ -20,31 +21,22 @@ function getParameterByName (name: string, url: string) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-function populateAsyncUserVideoChannels (
-  authService: AuthService,
-  channel: SelectChannelItem[]
-) {
-  return new Promise(res => {
-    authService.userInformationLoaded
-      .subscribe(
-        () => {
-          const user = authService.getUser()
-          if (!user) return
+function listUserChannels (authService: AuthService) {
+  return authService.userInformationLoaded
+    .pipe(map(() => {
+      const user = authService.getUser()
+      if (!user) return undefined
 
-          const videoChannels = user.videoChannels
-          if (Array.isArray(videoChannels) === false) return
+      const videoChannels = user.videoChannels
+      if (Array.isArray(videoChannels) === false) return undefined
 
-          videoChannels.forEach(c => channel.push({
-            id: c.id,
-            label: c.displayName,
-            support: c.support,
-            avatarPath: c.avatar?.path
-          }))
-
-          return res()
-        }
-      )
-  })
+      return videoChannels.map(c => ({
+        id: c.id,
+        label: c.displayName,
+        support: c.support,
+        avatarPath: c.avatar?.path
+      }) as SelectChannelItem)
+    }))
 }
 
 function getAbsoluteAPIUrl () {
@@ -207,7 +199,6 @@ export {
   durationToString,
   lineFeedToHtml,
   getParameterByName,
-  populateAsyncUserVideoChannels,
   getAbsoluteAPIUrl,
   dateToHuman,
   immutableAssign,
@@ -218,5 +209,6 @@ export {
   scrollToTop,
   isInViewport,
   isXPercentInViewport,
+  listUserChannels,
   uploadErrorHandler
 }

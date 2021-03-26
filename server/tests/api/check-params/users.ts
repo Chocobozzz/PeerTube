@@ -241,7 +241,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should succeed with no password on a server with smtp enabled', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       killallServers([ server ])
 

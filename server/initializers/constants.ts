@@ -2,6 +2,7 @@ import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
+import { randomInt } from '../../shared/core-utils/miscs/miscs'
 import {
   AbuseState,
   JobType,
@@ -23,12 +24,12 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 570
+const LAST_MIGRATION_VERSION = 625
 
 // ---------------------------------------------------------------------------
 
 const API_VERSION = 'v1'
-const PEERTUBE_VERSION = require(join(root(), 'package.json')).version
+const PEERTUBE_VERSION: string = require(join(root(), 'package.json')).version
 
 const PAGINATION = {
   GLOBAL: {
@@ -71,7 +72,7 @@ const SORTABLE_COLUMNS = {
   FOLLOWERS: [ 'createdAt', 'state', 'score' ],
   FOLLOWING: [ 'createdAt', 'redundancyAllowed', 'state' ],
 
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending' ],
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
 
   // Don't forget to update peertube-search-index with the same values
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],
@@ -136,24 +137,27 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 5,
   'activitypub-follow': 5,
+  'activitypub-cleaner': 1,
   'video-file-import': 1,
   'video-transcoding': 1,
   'video-import': 1,
   'email': 5,
+  'actor-keys': 3,
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 1
 }
-const JOB_CONCURRENCY: { [id in JobType]: number } = {
+// Excluded keys are jobs that can be configured by admins
+const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 1,
+  'activitypub-cleaner': 1,
   'activitypub-follow': 1,
   'video-file-import': 1,
-  'video-transcoding': 1,
-  'video-import': 1,
   'email': 5,
+  'actor-keys': 1,
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
@@ -164,10 +168,12 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-unicast': 60000 * 10, // 10 minutes
   'activitypub-http-fetcher': 1000 * 3600 * 10, // 10 hours
   'activitypub-follow': 60000 * 10, // 10 minutes
+  'activitypub-cleaner': 1000 * 3600, // 1 hour
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, // 2 hours
   'email': 60000 * 10, // 10 minutes
+  'actor-keys': 60000 * 20, // 20 minutes
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
@@ -176,6 +182,9 @@ const JOB_TTL: { [id in JobType]: number } = {
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
     cron: CONFIG.VIEWS.VIDEOS.UPDATE_INTERVAL
+  },
+  'activitypub-cleaner': {
+    cron: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
   }
 }
 const JOB_PRIORITY = {
@@ -185,9 +194,10 @@ const JOB_PRIORITY = {
   }
 }
 
-const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
+const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
+const AP_CLEANER_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-cleaner job
 const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
-const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
+const REQUEST_TIMEOUT = 7000 // 7 seconds
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
 
@@ -197,6 +207,7 @@ const SCHEDULER_INTERVALS_MS = {
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
   checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
+  checkPeerTubeVersion: 60000 * 60 * 24, // 1 day
   autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
@@ -340,17 +351,6 @@ const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   KEEP_ORIGIN_FPS_RESOLUTION_MIN: 720 // We keep the original FPS on high resolutions (720 minimum)
 }
 
-const VIDEO_TRANSCODING_ENCODERS = {
-  VIDEO: [ 'libx264' ],
-
-  // Try the first one, if not available try the second one etc
-  AUDIO: [
-    // we favor VBR, if a good AAC encoder is available
-    'libfdk_aac',
-    'aac'
-  ]
-}
-
 const DEFAULT_AUDIO_RESOLUTION = VideoResolution.H_480P
 
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
@@ -361,8 +361,8 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
 const FFMPEG_NICE: { [ id: string ]: number } = {
   // parent process defaults to niceness = 0
   // reminder: lower = higher priority, max value is 19, lowest is -20
-  THUMBNAIL: 2, // low value in order to avoid blocking server
-  LIVE: 9, // prioritize over VOD
+  LIVE: 5, // prioritize over VOD and THUMBNAIL
+  THUMBNAIL: 10,
   VOD: 15
 }
 
@@ -451,6 +451,9 @@ const MIMETYPES = {
       'audio/x-flac': '.flac',
       'audio/flac': '.flac',
       '‎audio/aac': '.aac',
+      'audio/m4a': '.m4a',
+      'audio/mp4': '.m4a',
+      'audio/x-m4a': '.m4a',
       'audio/ac3': '.ac3'
     },
     EXT_MIMETYPE: null as { [ id: string ]: string }
@@ -563,16 +566,13 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 
 // Express static paths (router)
 const STATIC_PATHS = {
-  PREVIEWS: '/static/previews/',
   THUMBNAILS: '/static/thumbnails/',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
   REDUNDANCY: '/static/redundancy/',
   STREAMING_PLAYLISTS: {
     HLS: '/static/streaming-playlists/hls'
-  },
-  AVATARS: '/static/avatars/',
-  VIDEO_CAPTIONS: '/static/video-captions/'
+  }
 }
 const STATIC_DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
@@ -582,12 +582,14 @@ const STATIC_DOWNLOAD_PATHS = {
 const LAZY_STATIC_PATHS = {
   AVATARS: '/lazy-static/avatars/',
   PREVIEWS: '/lazy-static/previews/',
-  VIDEO_CAPTIONS: '/lazy-static/video-captions/'
+  VIDEO_CAPTIONS: '/lazy-static/video-captions/',
+  TORRENTS: '/lazy-static/torrents/'
 }
 
 // Cache control
 const STATIC_MAX_AGE = {
   SERVER: '2h',
+  LAZY_SERVER: '2d',
   CLIENT: '30d'
 }
 
@@ -621,6 +623,10 @@ const FILES_CACHE = {
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
+  },
+  TORRENTS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'torrents'),
+    MAX_AGE: 1000 * 3600 * 3 // 3 hours
   }
 }
 
@@ -643,6 +649,7 @@ const VIDEO_LIVE = {
   SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
   REPLAY_DIRECTORY: 'replay',
   EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION: 4,
+  MAX_SOCKET_WAITING_DATA: 1024 * 1000 * 100, // 100MB
   RTMP: {
     CHUNK_SIZE: 60000,
     GOP_CACHE: true,
@@ -655,7 +662,8 @@ const VIDEO_LIVE = {
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4, // 4 hours
   INFO_HASH_EXISTS: 1000 * 3600 * 12, // 12 hours
-  LIVE_ABLE_TO_UPLOAD: 1000 * 60 // 1 minute
+  LIVE_ABLE_TO_UPLOAD: 1000 * 60, // 1 minute
+  LIVE_CHECK_SOCKET_HEALTH: 1000 * 60 // 1 minute
 }
 
 const MEMOIZE_LENGTH = {
@@ -756,7 +764,9 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
   SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
   SCHEDULER_INTERVALS_MS.updateInboxStats = 5000
+  SCHEDULER_INTERVALS_MS.checkPeerTubeVersion = 2000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
+  REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
@@ -816,6 +826,7 @@ export {
   REDUNDANCY,
   JOB_CONCURRENCY,
   JOB_ATTEMPTS,
+  AP_CLEANER_CONCURRENCY,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
@@ -825,7 +836,6 @@ export {
   ACTOR_FOLLOW_SCORE,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
-  VIDEO_TRANSCODING_ENCODERS,
   FOLLOW_STATES,
   DEFAULT_USER_THEME_NAME,
   SERVER_ACTOR_NAME,
@@ -861,7 +871,7 @@ export {
   ABUSE_STATES,
   VIDEO_CHANNELS,
   LRU_CACHE,
-  JOB_REQUEST_TIMEOUT,
+  REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   MEMOIZE_TTL,

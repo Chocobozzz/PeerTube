@@ -10,11 +10,8 @@ fi
 killall -q peertube || true
 
 retries=3
-jobs=2
 
 runTest () {
-    retries=3
-
     jobname=$1
     shift
 
@@ -80,11 +77,11 @@ elif [ "$1" = "api-3" ]; then
 elif [ "$1" = "api-4" ]; then
     npm run build:server
 
-    activitypubFiles=$(findTestFiles server/tests/api/moderation)
+    moderationFiles=$(findTestFiles server/tests/api/moderation)
     redundancyFiles=$(findTestFiles server/tests/api/redundancy)
     activitypubFiles=$(findTestFiles server/tests/api/activitypub)
 
-    MOCHA_PARALLEL=true TS_NODE_FILES=true runTest "$1" 2 $activitypubFiles $redundancyFiles $activitypubFiles
+    MOCHA_PARALLEL=true TS_NODE_FILES=true runTest "$1" 2 $moderationFiles $redundancyFiles $activitypubFiles
 elif [ "$1" = "external-plugins" ]; then
     npm run build:server
 

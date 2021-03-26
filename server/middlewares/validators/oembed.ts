@@ -14,7 +14,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 const startVideoPlaylistsURL = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch', 'playlist') + '/'
 const startVideosURL = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch') + '/'
 
-const watchRegex = new RegExp('([^/]+)$')
+const watchRegex = /([^/]+)$/
 const isURLOptions = {
   require_host: true,
   require_tld: true

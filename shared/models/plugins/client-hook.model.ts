@@ -85,8 +85,27 @@ export const clientActionHookObject = {
   // Fired when the registration page is being initialized
   'action:signup.register.init': true,
 
+  // Fired when the video upload page is being initalized
+  'action:video-upload.init': true,
+  // Fired when the video import by URL page is being initalized
+  'action:video-url-import.init': true,
+  // Fired when the video import by torrent/magnet URI page is being initalized
+  'action:video-torrent-import.init': true,
+  // Fired when the "Go Live" page is being initalized
+  'action:go-live.init': true,
+
+  // Fired when the user explicitely logged in/logged out
+  'action:auth-user.logged-in': true,
+  'action:auth-user.logged-out': true,
+  // Fired when the application loaded user information (using tokens from the local storage or after a successful login)
+  'action:auth-user.information-loaded': true,
+
+  // Fired when the modal to download a video/caption is shown
+  'action:modal.video-download.shown': true,
+
   // ####### Embed hooks #######
-  // In embed scope, peertube helpers are not available
+  // /!\ In embed scope, peertube helpers are not available
+  // ###########################
 
   // Fired when the embed loaded the player
   'action:embed.player.loaded': true

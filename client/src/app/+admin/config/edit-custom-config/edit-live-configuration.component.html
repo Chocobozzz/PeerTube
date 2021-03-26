@@ -1,0 +1,169 @@
+<ng-container [formGroup]="form">
+
+  <div class="form-row mt-5">
+    <div class="form-group col-12 col-lg-4 col-xl-3">
+      <div i18n class="inner-form-title">LIVE</div>
+      <div i18n class="inner-form-description">
+        Enable users of your instance to stream live.
+      </div>
+    </div>
+
+    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+      <ng-container formGroupName="live">
+
+        <div class="form-group">
+          <my-peertube-checkbox inputName="liveEnabled" formControlName="enabled">
+            <ng-template ptTemplate="label">
+              <ng-container i18n>Allow live streaming</ng-container>
+            </ng-template>
+
+            <ng-container ngProjectAs="description">
+              <div i18n>⚠️ Enabling live streaming requires trust in your users and extra moderation work</div>
+              <div i18n>If enabled, your server needs to accept incoming TCP traffic on port {{ getLiveRTMPPort() }}</div>
+            </ng-container>
+
+            <ng-container ngProjectAs="extra">
+
+              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+                <my-peertube-checkbox
+                  inputName="liveAllowReplay" formControlName="allowReplay"
+                  i18n-labelText labelText="Allow your users to automatically publish a replay of their live"
+                >
+                  <ng-container ngProjectAs="description" i18n>
+                    If the user quota is reached, PeerTube will automatically terminate the live streaming
+                  </ng-container>
+                </my-peertube-checkbox>
+              </div>
+
+              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+                <label i18n for="liveMaxInstanceLives">
+                  Max simultaneous lives created on your instance <span class="text-muted">(-1 for "unlimited")</span>
+                </label>
+
+                <div class="number-with-unit">
+                  <input type="number" name="liveMaxInstanceLives" formControlName="maxInstanceLives" />
+                  <span i18n>{form.value['live']['maxInstanceLives'], plural, =1 {live} other {lives}}</span>
+                </div>
+
+                <div *ngIf="formErrors.live.maxInstanceLives" class="form-error">{{ formErrors.live.maxInstanceLives }}</div>
+              </div>
+
+              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+                <label i18n for="liveMaxUserLives">
+                  Max simultaneous lives created per user <span class="text-muted">(-1 for "unlimited")</span>
+                </label>
+
+                <div class="number-with-unit">
+                  <input type="number" name="liveMaxUserLives" formControlName="maxUserLives" />
+                  <span i18n>{form.value['live']['maxUserLives'], plural, =1 {live} other {lives}}</span>
+                </div>
+
+                <div *ngIf="formErrors.live.maxUserLives" class="form-error">{{ formErrors.live.maxUserLives }}</div>
+              </div>
+
+              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+                <label i18n for="liveMaxDuration">Max live duration</label>
+
+                <my-select-options
+                  labelForId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"
+                  bindLabel="label" bindValue="value" [clearable]="false" [searchable]="true"
+                ></my-select-options>
+
+                <div *ngIf="formErrors.live.maxDuration" class="form-error">{{ formErrors.live.maxDuration }}</div>
+              </div>
+
+            </ng-container>
+          </my-peertube-checkbox>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="form-row"> <!-- transcoding live streams grid -->
+    <div class="form-group col-12 col-lg-4 col-xl-3">
+      <div i18n class="inner-form-title">TRANSCODING</div>
+      <div i18n class="inner-form-description">
+        Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.
+      </div>
+    </div>
+
+    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+      <ng-container formGroupName="live">
+        <ng-container formGroupName="transcoding">
+
+          <div class="form-group" [ngClass]="getDisabledLiveClass()">
+            <my-peertube-checkbox
+              inputName="liveTranscodingEnabled" formControlName="enabled"
+            >
+              <ng-template ptTemplate="label">
+                <ng-container i18n>Transcoding enabled for live streams</ng-container>
+              </ng-template>
+            </my-peertube-checkbox>
+          </div>
+
+          <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
+            <label i18n for="liveTranscodingThreads">Live resolutions to generate</label>
+
+            <div class="ml-2 mt-2 d-flex flex-column">
+              <ng-container formGroupName="resolutions">
+
+                <div class="form-group" *ngFor="let resolution of liveResolutions">
+                  <my-peertube-checkbox
+                    [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                    labelText="{{resolution.label}}"
+                  >
+                    <ng-template *ngIf="resolution.description" ptTemplate="help">
+                      <div [innerHTML]="resolution.description"></div>
+                    </ng-template>
+                  </my-peertube-checkbox>
+                </div>
+
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
+            <label i18n for="liveTranscodingThreads">Live transcoding threads</label>
+
+            <span class="text-muted ml-1">
+              <ng-container *ngIf="getTotalTranscodingThreads().atMost" i18n>
+                will claim at most {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with VOD transcoding
+              </ng-container>
+
+              <ng-container *ngIf="!getTotalTranscodingThreads().atMost" i18n>
+                will claim at least {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with VOD transcoding
+              </ng-container>
+            </span>
+
+            <my-select-custom-value
+              id="liveTranscodingThreads"
+              [items]="transcodingThreadOptions"
+              formControlName="threads"
+              [clearable]="false"
+            ></my-select-custom-value>
+            <div *ngIf="formErrors.live.transcoding.threads" class="form-error">{{ formErrors.live.transcoding.threads }}</div>
+          </div>
+
+          <div class="form-group mt-4" [ngClass]="getDisabledLiveTranscodingClass()">
+            <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
+            <span class="text-muted ml-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
+
+            <my-select-options
+              id="liveTranscodingProfile"
+              formControlName="profile"
+              [items]="getAvailableTranscodingProfile()"
+              [clearable]="false"
+            >
+            </my-select-options>
+
+            <div *ngIf="formErrors.live.transcoding.profile" class="form-error">{{ formErrors.live.transcoding.profile }}</div>
+          </div>
+
+        </ng-container>
+      </ng-container>
+
+    </div>
+  </div>
+</ng-container>

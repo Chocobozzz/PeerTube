@@ -66,8 +66,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     return this.serverConfig.instance.name
   }
 
-  get defaultRoute () {
-    return RedirectService.DEFAULT_ROUTE
+  goToDefaultRoute () {
+    return this.router.navigateByUrl(RedirectService.DEFAULT_ROUTE)
   }
 
   ngOnInit () {

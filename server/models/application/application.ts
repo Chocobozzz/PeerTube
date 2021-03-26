@@ -32,6 +32,10 @@ export class ApplicationModel extends Model {
   @Column
   migrationVersion: number
 
+  @AllowNull(true)
+  @Column
+  latestPeerTubeVersion: string
+
   @HasOne(() => AccountModel, {
     foreignKey: {
       allowNull: true

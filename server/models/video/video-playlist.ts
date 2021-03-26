@@ -17,6 +17,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { v4 as uuidv4 } from 'uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
@@ -471,7 +472,7 @@ export class VideoPlaylistModel extends Model {
   generateThumbnailName () {
     const extension = '.jpg'
 
-    return 'playlist-' + this.uuid + extension
+    return 'playlist-' + uuidv4() + extension
   }
 
   getThumbnailUrl () {

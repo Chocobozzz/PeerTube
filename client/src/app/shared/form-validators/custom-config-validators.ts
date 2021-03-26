@@ -65,6 +65,38 @@ export const TRANSCODING_THREADS_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const MAX_LIVE_DURATION_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(-1)],
+  MESSAGES: {
+    'required': $localize`Max live duration is required.`,
+    'min': $localize`Max live duration should be greater or equal to -1.`
+  }
+}
+
+export const MAX_INSTANCE_LIVES_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(-1)],
+  MESSAGES: {
+    'required': $localize`Max instance lives is required.`,
+    'min': $localize`Max instance lives should be greater or equal to -1.`
+  }
+}
+
+export const MAX_USER_LIVES_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(-1)],
+  MESSAGES: {
+    'required': $localize`Max user lives is required.`,
+    'min': $localize`Max user lives should be greater or equal to -1.`
+  }
+}
+
+export const CONCURRENCY_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(1)],
+  MESSAGES: {
+    'required': $localize`Concurrency is required.`,
+    'min': $localize`Concurrency should be greater or equal to 1.`
+  }
+}
+
 export const INDEX_URL_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [Validators.pattern(/^https:\/\//)],
   MESSAGES: {

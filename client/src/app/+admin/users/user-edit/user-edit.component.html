@@ -149,27 +149,48 @@
 
       <div class="form-group">
         <label i18n for="videoQuota">Video quota</label>
-        <div class="peertube-select-container">
-          <select id="videoQuota" formControlName="videoQuota" class="form-control">
-            <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value" [disabled]="videoQuotaOption.disabled">
-              {{ videoQuotaOption.label }}
-            </option>
-          </select>
-        </div>
+
+        <my-select-custom-value
+          id="videoQuota"
+          [items]="videoQuotaOptions"
+          formControlName="videoQuota"
+          i18n-inputSuffix inputSuffix="bytes" inputType="number"
+          [clearable]="false"
+        ></my-select-custom-value>
 
         <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
           Transcoding is enabled. The video quota only takes into account <strong>original</strong> video size. <br />
           At most, this user could upload ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
         </div>
+
+        <div *ngIf="formErrors.videoQuota" class="form-error">
+          {{ formErrors.videoQuota }}
+        </div>
       </div>
 
       <div class="form-group">
         <label i18n for="videoQuotaDaily">Daily video quota</label>
+
+        <my-select-custom-value
+          id="videoQuotaDaily"
+          [items]="videoQuotaDailyOptions"
+          formControlName="videoQuotaDaily"
+          i18n-inputSuffix inputSuffix="bytes" inputType="number"
+          [clearable]="false"
+        ></my-select-custom-value>
+
+        <div *ngIf="formErrors.videoQuotaDaily" class="form-error">
+          {{ formErrors.videoQuotaDaily }}
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="!isCreation() && getAuthPlugins().length !== 0">
+        <label i18n for="pluginAuth">Auth plugin</label>
+
         <div class="peertube-select-container">
-          <select id="videoQuotaDaily" formControlName="videoQuotaDaily" class="form-control">
-            <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value" [disabled]="videoQuotaDailyOption.disabled">
-              {{ videoQuotaDailyOption.label }}
-            </option>
+          <select id="pluginAuth" formControlName="pluginAuth" class="form-control">
+            <option [value]="null" i18n>None (local authentication)</option>
+            <option *ngFor="let authPlugin of getAuthPlugins()" [value]="authPlugin">{{ authPlugin }}</option>
           </select>
         </div>
       </div>

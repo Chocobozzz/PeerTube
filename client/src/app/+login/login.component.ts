@@ -3,9 +3,9 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, Notifier, RedirectService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 
@@ -16,7 +16,6 @@ import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 })
 
 export class LoginComponent extends FormReactive implements OnInit, AfterViewInit {
-  @ViewChild('usernameInput', { static: false }) usernameInput: ElementRef
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
 
   accordion: NgbAccordion
@@ -91,10 +90,6 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   }
 
   ngAfterViewInit () {
-    if (this.usernameInput) {
-      this.usernameInput.nativeElement.focus()
-    }
-
     this.hooks.runAction('action:login.init', 'login')
   }
 

@@ -2,11 +2,10 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { LoginGuard } from '@app/core'
 import { MetaGuard } from '@ngx-meta/core'
+import { VideoTrendingComponent } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 import { VideoLocalComponent } from './video-list/video-local.component'
-import { VideoMostLikedComponent } from './video-list/video-most-liked.component'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
-import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
 import { VideosComponent } from './videos.component'
 
@@ -31,25 +30,12 @@ const videosRoutes: Routes = [
         data: {
           meta: {
             title: $localize`Trending videos`
-          },
-          reuse: {
-            enabled: true,
-            key: 'trending-videos-list'
           }
         }
       },
       {
         path: 'most-liked',
-        component: VideoMostLikedComponent,
-        data: {
-          meta: {
-            title: $localize`Most liked videos`
-          },
-          reuse: {
-            enabled: true,
-            key: 'most-liked-videos-list'
-          }
-        }
+        redirectTo: 'trending?alg=most-liked'
       },
       {
         path: 'recently-added',

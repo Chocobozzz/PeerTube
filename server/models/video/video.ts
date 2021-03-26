@@ -24,16 +24,17 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { v4 as uuidv4 } from 'uuid'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live-manager'
-import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
-import { Video, VideoDetails } from '../../../shared/models/videos'
+import { Video, VideoDetails, VideoRateType } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -59,8 +60,6 @@ import {
   API_VERSION,
   CONSTRAINTS_FIELDS,
   LAZY_STATIC_PATHS,
-  REMOTE_SCHEME,
-  STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
@@ -78,6 +77,7 @@ import {
   MStreamingPlaylistFilesVideo,
   MUserAccountId,
   MUserId,
+  MVideo,
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
   MVideoAP,
@@ -96,15 +96,18 @@ import {
   MVideoWithRights
 } from '../../types/models'
 import { MThumbnail } from '../../types/models/video/thumbnail'
-import { MVideoFile, MVideoFileRedundanciesOpt, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
+import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
 import { VideoAbuseModel } from '../abuse/video-abuse'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
+import { UserModel } from '../account/user'
 import { UserVideoHistoryModel } from '../account/user-video-history'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { ServerModel } from '../server/server'
+import { TrackerModel } from '../server/tracker'
+import { VideoTrackerModel } from '../server/video-tracker'
 import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { TagModel } from './tag'
@@ -129,13 +132,13 @@ import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
-import { UserModel } from '../account/user'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
   FOR_API = 'FOR_API',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
+  WITH_TRACKERS = 'WITH_TRACKERS',
   WITH_WEBTORRENT_FILES = 'WITH_WEBTORRENT_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
@@ -151,8 +154,6 @@ export type ForAPIOptions = {
   ids?: number[]
 
   videoPlaylistId?: number
-
-  withFiles?: boolean
 
   withAccountBlockerIds?: number[]
 }
@@ -218,13 +219,6 @@ export type AvailableForListIDsOptions = {
           [Op.in]: options.ids
         }
       }
-    }
-
-    if (options.withFiles === true) {
-      include.push({
-        model: VideoFileModel,
-        required: true
-      })
     }
 
     if (options.videoPlaylistId) {
@@ -328,6 +322,14 @@ export type AvailableForListIDsOptions = {
   [ScopeNames.WITH_TAGS]: {
     include: [ TagModel ]
   },
+  [ScopeNames.WITH_TRACKERS]: {
+    include: [
+      {
+        attributes: [ 'id', 'url' ],
+        model: TrackerModel
+      }
+    ]
+  },
   [ScopeNames.WITH_BLACKLISTED]: {
     include: [
       {
@@ -354,7 +356,7 @@ export type AvailableForListIDsOptions = {
       include: [
         {
           model: VideoFileModel,
-          separate: true, // We may have multiple files, having multiple redundancies so let's separate this join
+          separate: true,
           required: false,
           include: subInclude
         }
@@ -381,8 +383,8 @@ export type AvailableForListIDsOptions = {
       include: [
         {
           model: VideoStreamingPlaylistModel.unscoped(),
-          separate: true, // We may have multiple streaming playlists, having multiple redundancies so let's separate this join
           required: false,
+          separate: true,
           include: subInclude
         }
       ]
@@ -424,7 +426,12 @@ export type AvailableForListIDsOptions = {
       ]
     },
     { fields: [ 'duration' ] },
-    { fields: [ 'views' ] },
+    {
+      fields: [
+        { name: 'views', order: 'DESC' },
+        { name: 'id', order: 'ASC' }
+      ]
+    },
     { fields: [ 'channelId' ] },
     {
       fields: [ 'originallyPublishedAt' ],
@@ -626,6 +633,13 @@ export class VideoModel extends Model {
   })
   Tags: TagModel[]
 
+  @BelongsToMany(() => TrackerModel, {
+    foreignKey: 'videoId',
+    through: () => VideoTrackerModel,
+    onDelete: 'CASCADE'
+  })
+  Trackers: TrackerModel[]
+
   @HasMany(() => ThumbnailModel, {
     foreignKey: {
       name: 'videoId',
@@ -769,21 +783,20 @@ export class VideoModel extends Model {
 
   @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options) {
-    if (instance.isOwned()) {
-      if (!instance.VideoChannel) {
-        instance.VideoChannel = await instance.$get('VideoChannel', {
-          include: [
-            ActorModel,
-            AccountModel
-          ],
-          transaction: options.transaction
-        }) as MChannelAccountDefault
-      }
+    if (!instance.isOwned()) return undefined
 
-      return sendDeleteVideo(instance, options.transaction)
+    // Lazy load channels
+    if (!instance.VideoChannel) {
+      instance.VideoChannel = await instance.$get('VideoChannel', {
+        include: [
+          ActorModel,
+          AccountModel
+        ],
+        transaction: options.transaction
+      }) as MChannelAccountDefault
     }
 
-    return undefined
+    return sendDeleteVideo(instance, options.transaction)
   }
 
   @BeforeDestroy
@@ -800,7 +813,7 @@ export class VideoModel extends Model {
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
         tasks.push(instance.removeFile(file))
-        tasks.push(instance.removeTorrent(file))
+        tasks.push(file.removeTorrent())
       })
 
       // Remove playlists file
@@ -848,6 +861,7 @@ export class VideoModel extends Model {
 
     logger.info('Saving video abuses details of video %s.', instance.url)
 
+    if (!instance.Trackers) instance.Trackers = await instance.$get('Trackers', { transaction: options.transaction })
     const details = instance.toFormattedDetailsJSON()
 
     for (const abuse of instance.VideoAbuses) {
@@ -863,18 +877,14 @@ export class VideoModel extends Model {
     return undefined
   }
 
-  static listLocal (): Promise<MVideoWithAllFiles[]> {
+  static listLocal (): Promise<MVideo[]> {
     const query = {
       where: {
         remote: false
       }
     }
 
-    return VideoModel.scope([
-      ScopeNames.WITH_WEBTORRENT_FILES,
-      ScopeNames.WITH_STREAMING_PLAYLISTS,
-      ScopeNames.WITH_THUMBNAILS
-    ]).findAll(query)
+    return VideoModel.findAll(query)
   }
 
   static listAllAndSharedByActorForOutbox (actorId: number, start: number, count: number) {
@@ -1099,6 +1109,9 @@ export class VideoModel extends Model {
     const trendingDays = options.sort.endsWith('trending')
       ? CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
       : undefined
+    let trendingAlgorithm
+    if (options.sort.endsWith('hot')) trendingAlgorithm = 'hot'
+    if (options.sort.endsWith('best')) trendingAlgorithm = 'best'
 
     const serverActor = await getServerActor()
 
@@ -1128,6 +1141,7 @@ export class VideoModel extends Model {
       user: options.user,
       historyOfUser: options.historyOfUser,
       trendingDays,
+      trendingAlgorithm,
       search: options.search
     }
 
@@ -1305,8 +1319,7 @@ export class VideoModel extends Model {
 
     return VideoModel.scope([
       ScopeNames.WITH_BLACKLISTED,
-      ScopeNames.WITH_USER_ID,
-      ScopeNames.WITH_THUMBNAILS
+      ScopeNames.WITH_USER_ID
     ]).findOne(options)
   }
 
@@ -1446,6 +1459,7 @@ export class VideoModel extends Model {
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_THUMBNAILS,
       ScopeNames.WITH_LIVE,
+      ScopeNames.WITH_TRACKERS,
       { method: [ ScopeNames.WITH_WEBTORRENT_FILES, true ] },
       { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] }
     ]
@@ -1497,6 +1511,24 @@ export class VideoModel extends Model {
       where: {
         id
       }
+    })
+  }
+
+  static updateRatesOf (videoId: number, type: VideoRateType, t: Transaction) {
+    const field = type === 'like'
+      ? 'likes'
+      : 'dislikes'
+
+    const rawQuery = `UPDATE "video" SET "${field}" = ` +
+      '(' +
+      'SELECT COUNT(id) FROM "accountVideoRate" WHERE "accountVideoRate"."videoId" = "video"."id" AND type = :rateType' +
+      ') ' +
+      'WHERE "video"."id" = :videoId'
+
+    return AccountVideoRateModel.sequelize.query(rawQuery, {
+      transaction: t,
+      replacements: { videoId, rateType: type },
+      type: QueryTypes.UPDATE
     })
   }
 
@@ -1622,8 +1654,23 @@ export class VideoModel extends Model {
     const avatarKeys = [ 'id', 'filename', 'fileUrl', 'onDisk', 'createdAt', 'updatedAt' ]
     const actorKeys = [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ]
     const serverKeys = [ 'id', 'host' ]
-    const videoFileKeys = [ 'id', 'createdAt', 'updatedAt', 'resolution', 'size', 'extname', 'infoHash', 'fps', 'videoId' ]
-    const videoStreamingPlaylistKeys = [ 'id' ]
+    const videoFileKeys = [
+      'id',
+      'createdAt',
+      'updatedAt',
+      'resolution',
+      'size',
+      'extname',
+      'filename',
+      'fileUrl',
+      'torrentFilename',
+      'torrentUrl',
+      'infoHash',
+      'fps',
+      'videoId',
+      'videoStreamingPlaylistId'
+    ]
+    const videoStreamingPlaylistKeys = [ 'id', 'type', 'playlistUrl' ]
     const videoKeys = [
       'id',
       'uuid',
@@ -1652,17 +1699,18 @@ export class VideoModel extends Model {
       'createdAt',
       'updatedAt'
     ]
+    const buildOpts = { raw: true }
 
     function buildActor (rowActor: any) {
       const avatarModel = rowActor.Avatar.id !== null
-        ? new AvatarModel(pick(rowActor.Avatar, avatarKeys))
+        ? new AvatarModel(pick(rowActor.Avatar, avatarKeys), buildOpts)
         : null
 
       const serverModel = rowActor.Server.id !== null
-        ? new ServerModel(pick(rowActor.Server, serverKeys))
+        ? new ServerModel(pick(rowActor.Server, serverKeys), buildOpts)
         : null
 
-      const actorModel = new ActorModel(pick(rowActor, actorKeys))
+      const actorModel = new ActorModel(pick(rowActor, actorKeys), buildOpts)
       actorModel.Avatar = avatarModel
       actorModel.Server = serverModel
 
@@ -1673,16 +1721,16 @@ export class VideoModel extends Model {
       if (!videosMemo[row.id]) {
         // Build Channel
         const channel = row.VideoChannel
-        const channelModel = new VideoChannelModel(pick(channel, [ 'id', 'name', 'description', 'actorId' ]))
+        const channelModel = new VideoChannelModel(pick(channel, [ 'id', 'name', 'description', 'actorId' ]), buildOpts)
         channelModel.Actor = buildActor(channel.Actor)
 
         const account = row.VideoChannel.Account
-        const accountModel = new AccountModel(pick(account, [ 'id', 'name' ]))
+        const accountModel = new AccountModel(pick(account, [ 'id', 'name' ]), buildOpts)
         accountModel.Actor = buildActor(account.Actor)
 
         channelModel.Account = accountModel
 
-        const videoModel = new VideoModel(pick(row, videoKeys))
+        const videoModel = new VideoModel(pick(row, videoKeys), buildOpts)
         videoModel.VideoChannel = channelModel
 
         videoModel.UserVideoHistories = []
@@ -1698,28 +1746,28 @@ export class VideoModel extends Model {
       const videoModel = videosMemo[row.id]
 
       if (row.userVideoHistory?.id && !historyDone.has(row.userVideoHistory.id)) {
-        const historyModel = new UserVideoHistoryModel(pick(row.userVideoHistory, [ 'id', 'currentTime' ]))
+        const historyModel = new UserVideoHistoryModel(pick(row.userVideoHistory, [ 'id', 'currentTime' ]), buildOpts)
         videoModel.UserVideoHistories.push(historyModel)
 
         historyDone.add(row.userVideoHistory.id)
       }
 
       if (row.Thumbnails?.id && !thumbnailsDone.has(row.Thumbnails.id)) {
-        const thumbnailModel = new ThumbnailModel(pick(row.Thumbnails, [ 'id', 'type', 'filename' ]))
+        const thumbnailModel = new ThumbnailModel(pick(row.Thumbnails, [ 'id', 'type', 'filename' ]), buildOpts)
         videoModel.Thumbnails.push(thumbnailModel)
 
         thumbnailsDone.add(row.Thumbnails.id)
       }
 
       if (row.VideoFiles?.id && !videoFilesDone.has(row.VideoFiles.id)) {
-        const videoFileModel = new VideoFileModel(pick(row.VideoFiles, videoFileKeys))
+        const videoFileModel = new VideoFileModel(pick(row.VideoFiles, videoFileKeys), buildOpts)
         videoModel.VideoFiles.push(videoFileModel)
 
         videoFilesDone.add(row.VideoFiles.id)
       }
 
       if (row.VideoStreamingPlaylists?.id && !videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id]) {
-        const streamingPlaylist = new VideoStreamingPlaylistModel(pick(row.VideoStreamingPlaylists, videoStreamingPlaylistKeys))
+        const streamingPlaylist = new VideoStreamingPlaylistModel(pick(row.VideoStreamingPlaylists, videoStreamingPlaylistKeys), buildOpts)
         streamingPlaylist.VideoFiles = []
 
         videoModel.VideoStreamingPlaylists.push(streamingPlaylist)
@@ -1730,7 +1778,7 @@ export class VideoModel extends Model {
       if (row.VideoStreamingPlaylists?.VideoFiles?.id && !videoFilesDone.has(row.VideoStreamingPlaylists.VideoFiles.id)) {
         const streamingPlaylist = videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id]
 
-        const videoFileModel = new VideoFileModel(pick(row.VideoStreamingPlaylists.VideoFiles, videoFileKeys))
+        const videoFileModel = new VideoFileModel(pick(row.VideoStreamingPlaylists.VideoFiles, videoFileKeys), buildOpts)
         streamingPlaylist.VideoFiles.push(videoFileModel)
 
         videoFilesDone.add(row.VideoStreamingPlaylists.VideoFiles.id)
@@ -1822,7 +1870,7 @@ export class VideoModel extends Model {
   }
 
   generateThumbnailName () {
-    return this.uuid + '.jpg'
+    return uuidv4() + '.jpg'
   }
 
   getMiniature () {
@@ -1832,7 +1880,7 @@ export class VideoModel extends Model {
   }
 
   generatePreviewName () {
-    return this.uuid + '.jpg'
+    return uuidv4() + '.jpg'
   }
 
   hasPreview () {
@@ -1880,19 +1928,20 @@ export class VideoModel extends Model {
     return videoModelToFormattedDetailsJSON(this)
   }
 
-  getFormattedVideoFilesJSON (): VideoFile[] {
-    const { baseUrlHttp, baseUrlWs } = this.getBaseUrls()
-    let files: MVideoFileRedundanciesOpt[] = []
+  getFormattedVideoFilesJSON (includeMagnet = true): VideoFile[] {
+    let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      files = files.concat(this.VideoFiles)
+      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, includeMagnet)
+      files = files.concat(result)
     }
 
     for (const p of (this.VideoStreamingPlaylists || [])) {
-      files = files.concat(p.VideoFiles || [])
+      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, includeMagnet)
+      files = files.concat(result)
     }
 
-    return videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, files)
+    return files
   }
 
   toActivityPubObject (this: MVideoAP): VideoObject {
@@ -1946,12 +1995,6 @@ export class VideoModel extends Model {
       .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
 
-  removeTorrent (videoFile: MVideoFile) {
-    const torrentPath = getTorrentFilePath(this, videoFile)
-    return remove(torrentPath)
-      .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
-  }
-
   async removeStreamingPlaylistFiles (streamingPlaylist: MStreamingPlaylist, isRedundancy = false) {
     const directoryPath = getHLSDirectory(this, isRedundancy)
 
@@ -1967,7 +2010,7 @@ export class VideoModel extends Model {
 
       // Remove physical files and torrents
       await Promise.all(
-        streamingPlaylistWithFiles.VideoFiles.map(file => streamingPlaylistWithFiles.removeTorrent(file))
+        streamingPlaylistWithFiles.VideoFiles.map(file => file.removeTorrent())
       )
     }
   }
@@ -2026,53 +2069,18 @@ export class VideoModel extends Model {
     return false
   }
 
-  getBaseUrls () {
-    if (this.isOwned()) {
-      return {
-        baseUrlHttp: WEBSERVER.URL,
-        baseUrlWs: WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT
-      }
-    }
-
-    return {
-      baseUrlHttp: REMOTE_SCHEME.HTTP + '://' + this.VideoChannel.Account.Actor.Server.host,
-      baseUrlWs: REMOTE_SCHEME.WS + '://' + this.VideoChannel.Account.Actor.Server.host
-    }
-  }
-
-  getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
-    return [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
-  }
-
-  getTorrentUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.TORRENTS + getTorrentFileName(this, videoFile)
-  }
-
-  getTorrentDownloadUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + getTorrentFileName(this, videoFile)
-  }
-
-  getVideoFileUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.WEBSEED + getVideoFilename(this, videoFile)
-  }
-
-  getVideoFileMetadataUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    const path = '/api/v1/videos/'
-
-    return this.isOwned()
-      ? baseUrlHttp + path + this.uuid + '/metadata/' + videoFile.id
-      : videoFile.metadataUrl
-  }
-
-  getVideoRedundancyUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.REDUNDANCY + getVideoFilename(this, videoFile)
-  }
-
-  getVideoFileDownloadUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.VIDEOS + getVideoFilename(this, videoFile)
-  }
-
   getBandwidthBits (videoFile: MVideoFile) {
     return Math.ceil((videoFile.size * 8) / this.duration)
+  }
+
+  getTrackerUrls () {
+    if (this.isOwned()) {
+      return [
+        WEBSERVER.URL + '/tracker/announce',
+        WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket'
+      ]
+    }
+
+    return this.Trackers.map(t => t.url)
   }
 }

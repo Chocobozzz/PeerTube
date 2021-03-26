@@ -1,6 +1,6 @@
 
 import { switchMap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, ScopedTokensService, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -33,6 +33,7 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
     private userSubscription: UserSubscriptionService,
+    protected cfr: ComponentFactoryResolver,
     private hooks: HooksService,
     private videoService: VideoService,
     private scopedTokensService: ScopedTokensService
@@ -102,7 +103,8 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
   }
 
   generateSyndicationList () {
-    // not implemented yet
+    /* method disabled: the view provides its own */
+    throw new Error('Method not implemented.')
   }
 
   activateCopiedMessage () {

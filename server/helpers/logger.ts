@@ -27,6 +27,14 @@ function getLoggerReplacer () {
       seen.add(value)
     }
 
+    if (value instanceof Set) {
+      return Array.from(value)
+    }
+
+    if (value instanceof Map) {
+      return Array.from(value.entries())
+    }
+
     if (value instanceof Error) {
       const error = {}
 
@@ -40,7 +48,7 @@ function getLoggerReplacer () {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql' ]
+  const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql', 'tags' ]
 
   const obj = omit(info, ...toOmit)
 
@@ -53,7 +61,7 @@ const consoleLoggerFormat = winston.format.printf(info => {
     if (CONFIG.LOG.PRETTIFY_SQL) {
       additionalInfos += '\n' + sqlFormat(info.sql, {
         language: 'sql',
-        ident: '  '
+        indent: '  '
       })
     } else {
       additionalInfos += ' - ' + info.sql
@@ -142,6 +150,13 @@ const bunyanLogger = {
   error: bunyanLogFactory('error'),
   fatal: bunyanLogFactory('error')
 }
+
+function loggerTagsFactory (...defaultTags: string[]) {
+  return (...tags: string[]) => {
+    return { tags: defaultTags.concat(tags) }
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -151,5 +166,6 @@ export {
   consoleLoggerFormat,
   jsonLoggerFormat,
   logger,
+  loggerTagsFactory,
   bunyanLogger
 }

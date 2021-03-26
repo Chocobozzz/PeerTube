@@ -5,6 +5,7 @@ import {
   PluginPlaylistPrivacyManager,
   PluginSettingsManager,
   PluginStorageManager,
+  PluginTranscodingManager,
   PluginVideoCategoryManager,
   PluginVideoLanguageManager,
   PluginVideoLicenceManager,
@@ -29,6 +30,7 @@ export type PeerTubeHelpers = {
 
   videos: {
     loadByUrl: (url: string) => Promise<MVideoThumbnail>
+    loadByIdOrUUID: (id: number | string) => Promise<MVideoThumbnail>
 
     removeVideo: (videoId: number) => Promise<void>
   }
@@ -67,6 +69,8 @@ export type RegisterServerOptions = {
 
   videoPrivacyManager: PluginVideoPrivacyManager
   playlistPrivacyManager: PluginPlaylistPrivacyManager
+
+  transcodingManager: PluginTranscodingManager
 
   registerIdAndPassAuth: (options: RegisterServerAuthPassOptions) => void
   registerExternalAuth: (options: RegisterServerAuthExternalOptions) => RegisterServerAuthExternalResult

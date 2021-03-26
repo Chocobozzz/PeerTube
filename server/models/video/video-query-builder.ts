@@ -31,7 +31,9 @@ export type BuildVideosQueryOptions = {
 
   videoPlaylistId?: number
 
+  trendingAlgorithm?: string // best, hot, or any other algorithm implemented
   trendingDays?: number
+
   user?: MUserAccountId
   historyOfUser?: MUserId
 
@@ -239,20 +241,68 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
     }
   }
 
-  // We don't exclude results in this if so if we do a count we don't need to add this complex clauses
-  if (options.trendingDays && options.isCount !== true) {
-    const viewsGteDate = new Date(new Date().getTime() - (24 * 3600 * 1000) * options.trendingDays)
+  // We don't exclude results in this so if we do a count we don't need to add this complex clause
+  if (options.isCount !== true) {
+    if (options.trendingDays) {
+      const viewsGteDate = new Date(new Date().getTime() - (24 * 3600 * 1000) * options.trendingDays)
 
-    joins.push('LEFT JOIN "videoView" ON "video"."id" = "videoView"."videoId" AND "videoView"."startDate" >= :viewsGteDate')
-    replacements.viewsGteDate = viewsGteDate
+      joins.push('LEFT JOIN "videoView" ON "video"."id" = "videoView"."videoId" AND "videoView"."startDate" >= :viewsGteDate')
+      replacements.viewsGteDate = viewsGteDate
 
-    attributes.push('COALESCE(SUM("videoView"."views"), 0) AS "videoViewsSum"')
+      attributes.push('COALESCE(SUM("videoView"."views"), 0) AS "score"')
 
-    group = 'GROUP BY "video"."id"'
+      group = 'GROUP BY "video"."id"'
+    } else if ([ 'best', 'hot' ].includes(options.trendingAlgorithm)) {
+      /**
+       * "Hotness" is a measure based on absolute view/comment/like/dislike numbers,
+       * with fixed weights only applied to their log values.
+       *
+       * This algorithm gives little chance for an old video to have a good score,
+       * for which recent spikes in interactions could be a sign of "hotness" and
+       * justify a better score. However there are multiple ways to achieve that
+       * goal, which is left for later. Yes, this is a TODO :)
+       *
+       * notes:
+       *  - weights and base score are in number of half-days.
+       *  - all comments are counted, regardless of being written by the video author or not
+       * see https://github.com/reddit-archive/reddit/blob/master/r2/r2/lib/db/_sorts.pyx#L47-L58
+       *  - we have less interactions than on reddit, so multiply weights by an arbitrary factor
+       */
+      const weights = {
+        like: 3 * 50,
+        dislike: -3 * 50,
+        view: Math.floor((1 / 3) * 50),
+        comment: 2 * 50, // a comment takes more time than a like to do, but can be done multiple times
+        history: -2 * 50
+      }
+
+      joins.push('LEFT JOIN "videoComment" ON "video"."id" = "videoComment"."videoId"')
+
+      let attribute =
+        `LOG(GREATEST(1, "video"."likes" - 1)) * ${weights.like} ` + // likes (+)
+        `+ LOG(GREATEST(1, "video"."dislikes" - 1)) * ${weights.dislike} ` + // dislikes (-)
+        `+ LOG("video"."views" + 1) * ${weights.view} ` + // views (+)
+        `+ LOG(GREATEST(1, COUNT(DISTINCT "videoComment"."id"))) * ${weights.comment} ` + // comments (+)
+        '+ (SELECT (EXTRACT(epoch FROM "video"."publishedAt") - 1446156582) / 47000) ' // base score (in number of half-days)
+
+      if (options.trendingAlgorithm === 'best' && options.user) {
+        joins.push(
+          'LEFT JOIN "userVideoHistory" ON "video"."id" = "userVideoHistory"."videoId" AND "userVideoHistory"."userId" = :bestUser'
+        )
+        replacements.bestUser = options.user.id
+
+        attribute += `+ POWER(COUNT(DISTINCT "userVideoHistory"."id"), 2.0) * ${weights.history} `
+      }
+
+      attribute += 'AS "score"'
+      attributes.push(attribute)
+
+      group = 'GROUP BY "video"."id"'
+    }
   }
 
   if (options.historyOfUser) {
-    joins.push('INNER JOIN "userVideoHistory" on "video"."id" = "userVideoHistory"."videoId"')
+    joins.push('INNER JOIN "userVideoHistory" ON "video"."id" = "userVideoHistory"."videoId"')
 
     and.push('"userVideoHistory"."userId" = :historyOfUser')
     replacements.historyOfUser = options.historyOfUser.id
@@ -372,8 +422,8 @@ function buildOrder (value: string) {
 
   if (field.toLowerCase() === 'random') return 'ORDER BY RANDOM()'
 
-  if (field.toLowerCase() === 'trending') { // Sort by aggregation
-    return `ORDER BY "videoViewsSum" ${direction}, "video"."views" ${direction}`
+  if ([ 'trending', 'hot', 'best' ].includes(field.toLowerCase())) { // Sort by aggregation
+    return `ORDER BY "score" ${direction}, "video"."views" ${direction}`
   }
 
   let firstSort: string
@@ -467,19 +517,30 @@ function wrapForAPIResults (baseQuery: string, replacements: any, options: Build
       '"VideoFiles"."resolution"': '"VideoFiles.resolution"',
       '"VideoFiles"."size"': '"VideoFiles.size"',
       '"VideoFiles"."extname"': '"VideoFiles.extname"',
+      '"VideoFiles"."filename"': '"VideoFiles.filename"',
+      '"VideoFiles"."fileUrl"': '"VideoFiles.fileUrl"',
+      '"VideoFiles"."torrentFilename"': '"VideoFiles.torrentFilename"',
+      '"VideoFiles"."torrentUrl"': '"VideoFiles.torrentUrl"',
       '"VideoFiles"."infoHash"': '"VideoFiles.infoHash"',
       '"VideoFiles"."fps"': '"VideoFiles.fps"',
       '"VideoFiles"."videoId"': '"VideoFiles.videoId"',
 
       '"VideoStreamingPlaylists"."id"': '"VideoStreamingPlaylists.id"',
+      '"VideoStreamingPlaylists"."playlistUrl"': '"VideoStreamingPlaylists.playlistUrl"',
+      '"VideoStreamingPlaylists"."type"': '"VideoStreamingPlaylists.type"',
       '"VideoStreamingPlaylists->VideoFiles"."id"': '"VideoStreamingPlaylists.VideoFiles.id"',
       '"VideoStreamingPlaylists->VideoFiles"."createdAt"': '"VideoStreamingPlaylists.VideoFiles.createdAt"',
       '"VideoStreamingPlaylists->VideoFiles"."updatedAt"': '"VideoStreamingPlaylists.VideoFiles.updatedAt"',
       '"VideoStreamingPlaylists->VideoFiles"."resolution"': '"VideoStreamingPlaylists.VideoFiles.resolution"',
       '"VideoStreamingPlaylists->VideoFiles"."size"': '"VideoStreamingPlaylists.VideoFiles.size"',
       '"VideoStreamingPlaylists->VideoFiles"."extname"': '"VideoStreamingPlaylists.VideoFiles.extname"',
+      '"VideoStreamingPlaylists->VideoFiles"."filename"': '"VideoStreamingPlaylists.VideoFiles.filename"',
+      '"VideoStreamingPlaylists->VideoFiles"."fileUrl"': '"VideoStreamingPlaylists.VideoFiles.fileUrl"',
+      '"VideoStreamingPlaylists->VideoFiles"."torrentFilename"': '"VideoStreamingPlaylists.VideoFiles.torrentFilename"',
+      '"VideoStreamingPlaylists->VideoFiles"."torrentUrl"': '"VideoStreamingPlaylists.VideoFiles.torrentUrl"',
       '"VideoStreamingPlaylists->VideoFiles"."infoHash"': '"VideoStreamingPlaylists.VideoFiles.infoHash"',
       '"VideoStreamingPlaylists->VideoFiles"."fps"': '"VideoStreamingPlaylists.VideoFiles.fps"',
+      '"VideoStreamingPlaylists->VideoFiles"."videoStreamingPlaylistId"': '"VideoStreamingPlaylists.VideoFiles.videoStreamingPlaylistId"',
       '"VideoStreamingPlaylists->VideoFiles"."videoId"': '"VideoStreamingPlaylists.VideoFiles.videoId"'
     })
   }

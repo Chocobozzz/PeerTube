@@ -85,7 +85,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   await video.save()
 
   // Remove old HLS playlist video files
-  const videoWithFiles = await VideoModel.loadWithFiles(video.id)
+  const videoWithFiles = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
 
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
@@ -122,11 +122,19 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   // Regenerate the thumbnail & preview?
   if (videoWithFiles.getMiniature().automaticallyGenerated === true) {
-    await generateVideoMiniature(videoWithFiles, videoWithFiles.getMaxQualityFile(), ThumbnailType.MINIATURE)
+    await generateVideoMiniature({
+      video: videoWithFiles,
+      videoFile: videoWithFiles.getMaxQualityFile(),
+      type: ThumbnailType.MINIATURE
+    })
   }
 
   if (videoWithFiles.getPreview().automaticallyGenerated === true) {
-    await generateVideoMiniature(videoWithFiles, videoWithFiles.getMaxQualityFile(), ThumbnailType.PREVIEW)
+    await generateVideoMiniature({
+      video: videoWithFiles,
+      videoFile: videoWithFiles.getMaxQualityFile(),
+      type: ThumbnailType.PREVIEW
+    })
   }
 
   await publishAndFederateIfNeeded(videoWithFiles, true)

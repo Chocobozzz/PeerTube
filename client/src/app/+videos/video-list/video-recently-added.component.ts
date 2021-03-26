@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -17,7 +17,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   sort: VideoSortField = '-publishedAt'
   groupByDate = true
 
-  useUserVideoPreferences = true
+  loadUserVideoPreferences = true
 
   constructor (
     protected route: ActivatedRoute,
@@ -28,6 +28,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
     protected userService: UserService,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
+    protected cfr: ComponentFactoryResolver,
     private videoService: VideoService,
     private hooks: HooksService
   ) {

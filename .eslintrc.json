@@ -23,6 +23,7 @@
       "consistent-as-needed"
     ],
     "padded-blocks": "off",
+    "prefer-regex-literals": "off",
     "no-async-promise-executor": "off",
     "dot-notation": "off",
     "promise/param-names": "off",

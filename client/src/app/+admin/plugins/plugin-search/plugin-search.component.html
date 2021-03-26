@@ -3,7 +3,7 @@
 </div>
 
 <div class="search-bar">
-  <input type="text" (input)="onSearchChange($event)" i18n-placeholder placeholder="Search..."/>
+  <input type="text" (input)="onSearchChange($event)" i18n-placeholder placeholder="Search..." autofocus />
 </div>
 
 <div class="alert alert-info" i18n *ngIf="pluginInstalled">
@@ -20,8 +20,8 @@
     <my-global-icon iconName="search"></my-global-icon>
 
     <ng-container i18n>
-      {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for "{{ search }}"
-      </ng-container>
+      {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for {{ search }}"
+    </ng-container>
   </ng-container>
 </div>
 

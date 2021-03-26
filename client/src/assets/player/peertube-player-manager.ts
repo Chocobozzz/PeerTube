@@ -223,7 +223,7 @@ export class PeertubePlayerManager {
     const plugins: VideoJSPluginOptions = {
       peertube: {
         mode,
-        autoplay, // Use peertube plugin autoplay because we get the file by webtorrent
+        autoplay, // Use peertube plugin autoplay because we could get the file by webtorrent
         videoViewUrl: commonOptions.videoViewUrl,
         videoDuration: commonOptions.videoDuration,
         userWatching: commonOptions.userWatching,
@@ -271,7 +271,7 @@ export class PeertubePlayerManager {
 
       poster: commonOptions.poster,
       inactivityTimeout: commonOptions.inactivityTimeout,
-      playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 2 ],
+      playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],
 
       plugins,
 
@@ -527,6 +527,9 @@ export class PeertubePlayerManager {
   }
 
   private static addHotkeysOptions (plugins: VideoJSPluginOptions) {
+    const isNaked = (event: KeyboardEvent, key: string) =>
+      (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && event.key === key)
+
     Object.assign(plugins, {
       hotkeys: {
         skipInitialFocus: true,
@@ -540,28 +543,23 @@ export class PeertubePlayerManager {
         enableVolumeScroll: false,
         enableModifiersForNumbers: false,
 
-        fullscreenKey: function (event: KeyboardEvent) {
-          // fullscreen with the f key or Ctrl+Enter
-          return event.key === 'f' || (event.ctrlKey && event.key === 'Enter')
+        rewindKey: function (event: KeyboardEvent) {
+          return isNaked(event, 'ArrowLeft')
         },
 
-        seekStep: function (event: KeyboardEvent) {
-          // mimic VLC seek behavior, and default to 5 (original value is 5).
-          if (event.ctrlKey && event.altKey) {
-            return 5 * 60
-          } else if (event.ctrlKey) {
-            return 60
-          } else if (event.altKey) {
-            return 10
-          } else {
-            return 5
-          }
+        forwardKey: function (event: KeyboardEvent) {
+          return isNaked(event, 'ArrowRight')
+        },
+
+        fullscreenKey: function (event: KeyboardEvent) {
+          // fullscreen with the f key or Ctrl+Enter
+          return isNaked(event, 'f') || (!event.altKey && event.ctrlKey && event.key === 'Enter')
         },
 
         customKeys: {
           increasePlaybackRateKey: {
             key: function (event: KeyboardEvent) {
-              return event.key === '>'
+              return isNaked(event, '>')
             },
             handler: function (player: videojs.Player) {
               const newValue = Math.min(player.playbackRate() + 0.1, 5)
@@ -570,7 +568,7 @@ export class PeertubePlayerManager {
           },
           decreasePlaybackRateKey: {
             key: function (event: KeyboardEvent) {
-              return event.key === '<'
+              return isNaked(event, '<')
             },
             handler: function (player: videojs.Player) {
               const newValue = Math.max(player.playbackRate() - 0.1, 0.10)
@@ -579,7 +577,7 @@ export class PeertubePlayerManager {
           },
           frameByFrame: {
             key: function (event: KeyboardEvent) {
-              return event.key === '.'
+              return isNaked(event, '.')
             },
             handler: function (player: videojs.Player) {
               player.pause()

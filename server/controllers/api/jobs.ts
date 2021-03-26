@@ -9,10 +9,10 @@ import {
   authenticate,
   ensureUserHasRight,
   jobsSortValidator,
+  paginationValidatorBuilder,
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares'
-import { paginationValidator } from '../../middlewares/validators'
 import { listJobsValidator } from '../../middlewares/validators/jobs'
 
 const jobsRouter = express.Router()
@@ -20,7 +20,7 @@ const jobsRouter = express.Router()
 jobsRouter.get('/:state?',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
-  paginationValidator,
+  paginationValidatorBuilder([ 'jobs' ]),
   jobsSortValidator,
   setDefaultSort,
   setDefaultPagination,
