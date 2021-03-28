@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as Feed from 'pfeed-podcast'
-import { orderBy } from 'lodash'
+import { flatMap, groupBy, map, orderBy } from 'lodash'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
 import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
@@ -286,25 +286,41 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
   if (format === 'podcast') {
     // Generate feed specific to The Podcast Namespace
     for (const video of videos.filter(v => !v.isLive)) {
-      const videos = video.getFormattedVideoFilesJSON(false).map(videoFile => {
+      const videos: {
+        type: string,
+        length: number,
+        bitrate: number,
+        sources: { uri: string, contentType?: string }[],
+        height?: number,
+        language?: string
+      }[] = video.getFormattedVideoFilesJSON(false).map(videoFile => {
         const isAudio = videoFile.resolution.id === VideoResolution.H_NOVIDEO
         const result = {
           type: isAudio ? 'audio/mp4' : 'video/mp4',
           length: videoFile.size,
           bitrate: videoFile.size / video.duration * 8,
-          title: isAudio ? 'Audio' : `Video - ${videoFile.resolution.label}`,
           sources: [
             { uri: videoFile.fileUrl },
             { uri: videoFile.torrentUrl, contentType: 'application/x-bittorrent' }
           ]
         }
 
+        if (!isAudio) Object.assign(result, { height: videoFile.resolution.id })
         if (video.language) Object.assign(result, { language: video.language })
 
         return result
       })
 
-      const sortedVideos = orderBy(videos, ['bitrate'], ['desc'])
+      // If both webtorrent and HLS are enabled, prefer HLS
+      const groupedVideos = groupBy(videos, video => video.height || 0)
+      const preferredVideos = map(groupedVideos, videoGroup => {
+        if (videoGroup.length == 1) {
+          return videoGroup[0]
+        }
+        return videoGroup.find(v => v.sources.some(s => s.uri.includes("/hls/")))
+      })
+
+      const sortedVideos = orderBy(preferredVideos, ['bitrate'], ['desc'])
 
       const streamingPlaylists = video.VideoStreamingPlaylists
         .map(streamingPlaylist => {
@@ -316,7 +332,6 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           }
           const result = {
             type,
-            title: `Stream (${streamingPlaylist.type.toString()})`,
             sources: [
               { uri: streamingPlaylist.playlistUrl }
             ]
