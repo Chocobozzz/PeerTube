@@ -148,6 +148,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   let name: string
   let description: string
   let link: string
+  let image: string
   const author = {
     name: 'Instance admin of ' + CONFIG.INSTANCE.NAME,
     email: CONFIG.ADMIN.EMAIL,
@@ -158,11 +159,13 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
     link = videoChannel.getLocalUrl()
+    image = videoChannel.Actor.Avatar.getStaticPath()
     author.name = videoChannel.Account.getDisplayName()
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
     link = account.getLocalUrl()
+    image = account.Actor.Avatar.getStaticPath()
     author.name = name
   } else {
     name = CONFIG.INSTANCE.NAME
@@ -174,6 +177,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     name,
     description,
     link,
+    image,
     author,
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search
@@ -239,6 +243,7 @@ function initFeed (parameters: {
   name: string
   description: string
   link?: string,
+  image?: string,
   author?: {
     name: string,
     email: string,
@@ -248,7 +253,7 @@ function initFeed (parameters: {
   queryString?: string
 }) {
   const webserverUrl = WEBSERVER.URL
-  const { name, description, link, author, resourceType, queryString } = parameters
+  const { name, description, link, image, author, resourceType, queryString } = parameters
 
   return new Feed({
     title: name,
@@ -256,7 +261,7 @@ function initFeed (parameters: {
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
     id: webserverUrl,
     link: link || webserverUrl,
-    image: webserverUrl + '/client/assets/images/icons/icon-96x96.png',
+    image: image || webserverUrl + '/client/assets/images/icons/icon-96x96.png',
     favicon: webserverUrl + '/client/assets/images/favicon.png',
     copyright: `All rights reserved, unless otherwise specified in the terms specified at ${webserverUrl}/about` +
     ` and potential licenses granted by each content's rightholder.`,
