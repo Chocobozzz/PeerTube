@@ -159,13 +159,13 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
     link = videoChannel.getLocalUrl()
-    image = videoChannel.Actor.Avatar.getStaticPath()
+    image = WEBSERVER.URL + videoChannel.Actor.Avatar.getStaticPath()
     author.name = videoChannel.Account.getDisplayName()
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
     link = account.getLocalUrl()
-    image = account.Actor.Avatar.getStaticPath()
+    image = WEBSERVER.URL + account.Actor.Avatar.getStaticPath()
     author.name = name
   } else {
     name = CONFIG.INSTANCE.NAME
