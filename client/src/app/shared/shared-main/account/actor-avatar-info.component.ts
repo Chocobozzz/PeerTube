@@ -70,4 +70,8 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
   hasAvatar () {
     return !!this.avatarUrl
   }
+
+  isChannel () {
+    return !!(this.actor as VideoChannel).ownerAccount
+  }
 }

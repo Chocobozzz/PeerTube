@@ -48,7 +48,7 @@
         $image-size: 130px;
         $margin-size: ($video-thumbnail-width - $image-size) / 2; // So we have the same width than the video miniature
 
-        @include avatar($image-size);
+        @include channel-avatar($image-size);
 
         margin: 0 ($margin-size + 10) 0 $margin-size;
       }

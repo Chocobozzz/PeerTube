@@ -183,7 +183,7 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   getAvatarUrl () {
-    if (this.ownerDisplayTypeChosen === 'account') {
+    if (this.displayOwnerAccount()) {
       return this.video.accountAvatarUrl
     }
 
@@ -250,7 +250,8 @@ export class VideoMiniatureComponent implements OnInit {
       return
     }
 
-    // If the video channel name an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
+    // If the video channel name is an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
+    // Or is just a suffix of the account (default created channel)
     // -> Use the account name
     if (
       this.video.channel.name === `${this.video.account.name}_channel` ||

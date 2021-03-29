@@ -1,7 +1,7 @@
 <ng-container *ngIf="actor">
   <div class="actor">
     <div class="d-flex">
-      <img [src]="actor.avatarUrl" alt="Avatar" />
+      <img [ngClass]="{ channel: isChannel() }" [src]="actor.avatarUrl" alt="Avatar" />
 
       <div class="actor-img-edit-container">
 
@@ -18,7 +18,6 @@
 
       </div>
     </div>
-
 
     <div class="actor-info">
       <div class="actor-info-names">
