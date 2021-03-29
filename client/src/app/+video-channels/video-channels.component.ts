@@ -5,6 +5,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, MarkdownService, Notifier, RestExtractor, ScreenService } from '@app/core'
 import { ListOverflowItem, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
+import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
@@ -14,6 +15,7 @@ import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
+  @ViewChild('supportModal') supportModal: SupportModalComponent
 
   videoChannel: VideoChannel
   hotkeys: Hotkey[]
@@ -99,6 +101,10 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   activateCopiedMessage () {
     this.notifier.success($localize`Username copied`)
+  }
+
+  showSupportModal () {
+    this.supportModal.show()
   }
 
   private loadChannelVideosCount () {

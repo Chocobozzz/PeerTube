@@ -15,6 +15,8 @@ $assets-path: '../../assets/';
 @import './primeng-custom';
 @import './ng-select.scss';
 
+@import './classes.scss';
+
 [hidden] {
   display: none !important;
 }
@@ -464,22 +466,4 @@ ngx-loading-bar {
       }
     }
   }
-}
-
-// Utils
-
-.peertube-button {
-  @include peertube-button;
-}
-
-.peertube-button-link {
-  @include peertube-button-link;
-}
-
-.orange-button {
-  @include orange-button;
-}
-
-.orange-button-inverted {
-  @include orange-button-inverted;
 }
