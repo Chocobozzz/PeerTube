@@ -1086,6 +1086,7 @@ export class VideoModel extends Model {
     nsfw: boolean
     includeLocalVideos: boolean
     withFiles: boolean
+    withCaptions?: boolean
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
@@ -1134,6 +1135,7 @@ export class VideoModel extends Model {
       tagsAllOf: options.tagsAllOf,
       filter: options.filter,
       withFiles: options.withFiles,
+      withCaptions: options.withCaptions,
       accountId: options.accountId,
       videoChannelId: options.videoChannelId,
       videoPlaylistId: options.videoPlaylistId,
@@ -1648,6 +1650,7 @@ export class VideoModel extends Model {
     const thumbnailsDone = new Set<number>()
     const historyDone = new Set<number>()
     const videoFilesDone = new Set<number>()
+    const videoCaptionsDone = new Set<number>()
 
     const videos: VideoModel[] = []
 
@@ -1669,6 +1672,15 @@ export class VideoModel extends Model {
       'fps',
       'videoId',
       'videoStreamingPlaylistId'
+    ]
+    const videoCaptionKeys = [
+      'id',
+      'createdAt',
+      'updatedAt',
+      'language',
+      'filename',
+      'fileUrl',
+      'videoId'
     ]
     const videoStreamingPlaylistKeys = [ 'id', 'type', 'playlistUrl' ]
     const videoKeys = [
@@ -1736,6 +1748,7 @@ export class VideoModel extends Model {
         videoModel.UserVideoHistories = []
         videoModel.Thumbnails = []
         videoModel.VideoFiles = []
+        videoModel.VideoCaptions = []
         videoModel.VideoStreamingPlaylists = []
 
         videosMemo[row.id] = videoModel
@@ -1764,6 +1777,13 @@ export class VideoModel extends Model {
         videoModel.VideoFiles.push(videoFileModel)
 
         videoFilesDone.add(row.VideoFiles.id)
+      }
+
+      if (row.VideoCaptions?.id && !videoCaptionsDone.has(row.VideoCaptions.id)) {
+        const videoCaptionModel = new VideoCaptionModel(pick(row.VideoCaptions, videoCaptionKeys), buildOpts)
+        videoModel.VideoCaptions.push(videoCaptionModel)
+
+        videoCaptionsDone.add(row.VideoCaptions.id)
       }
 
       if (row.VideoStreamingPlaylists?.id && !videoStreamingPlaylistMemo[row.VideoStreamingPlaylists.id]) {
