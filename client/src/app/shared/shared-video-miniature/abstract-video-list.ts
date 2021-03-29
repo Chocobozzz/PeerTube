@@ -65,7 +65,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   loadOnInit = true
   loadUserVideoPreferences = false
 
-  ownerDisplayType: OwnerDisplayType = 'account'
+  ownerDisplayType: OwnerDisplayType = 'auto'
   displayModerationBlock = false
   titleTooltip: string
   displayVideoActions = true
