@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as Feed from 'pfeed-podcast'
-import { flatMap, groupBy, map, orderBy } from 'lodash'
+import { flatMap, groupBy, isNull, last, map, orderBy } from 'lodash'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
 import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
@@ -149,7 +149,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   let description: string
   let link: string
   let image: string
-  const author = {
+  const author: {name: string, email: string, link: string, img?: string} = {
     name: 'Instance admin of ' + CONFIG.INSTANCE.NAME,
     email: CONFIG.ADMIN.EMAIL,
     link: `${WEBSERVER.URL}/about`
@@ -159,14 +159,23 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
     link = videoChannel.getLocalUrl()
-    image = WEBSERVER.URL + videoChannel.Actor.Avatar.getStaticPath()
+    
     author.name = videoChannel.Account.getDisplayName()
+    if (!isNull(videoChannel.Actor.Avatar)) {
+      image = WEBSERVER.URL + videoChannel.Actor.Avatar.getStaticPath()
+    }
+    if (!isNull(videoChannel.Account.Actor.Avatar)) {
+      author.img = WEBSERVER.URL + videoChannel.Account.Actor.Avatar.getStaticPath()
+    }
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
     link = account.getLocalUrl()
-    image = WEBSERVER.URL + account.Actor.Avatar.getStaticPath()
     author.name = name
+    if (!isNull(account.Actor.Avatar)) {
+      image = WEBSERVER.URL + account.Actor.Avatar.getStaticPath()
+      author.img = image
+    }
   } else {
     name = CONFIG.INSTANCE.NAME
     description = CONFIG.INSTANCE.DESCRIPTION
@@ -196,6 +205,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     nsfw,
     filter: req.query.filter as VideoFilter,
     withFiles: true,
+    withCaptions: true,
     ...options
   })
 
@@ -228,6 +238,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     nsfw,
     filter: req.query.filter as VideoFilter,
     withFiles: true,
+    withCaptions: true,
 
     followerActorId: res.locals.user.Account.Actor.id,
     user: res.locals.user
@@ -357,7 +368,25 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         })
       }
 
-      feed.addItem({
+      const captions = video.VideoCaptions.map(caption => {
+        const fileExtension = last(caption.filename.split("."))
+        let type: string
+        if (fileExtension === "srt") {
+          type = "application/srt"
+        } else if (fileExtension === "vtt") {
+          type = "text/vtt"
+        }
+        if (!type) return {}
+        return {
+          url: WEBSERVER.URL + "/lazy-static/video-captions/" + caption.filename,
+          //"http://localhost:9000/lazy-static/video-captions/0abe184c-37a5-47bb-9751-50ca9a468606-en.vtt"
+          language: caption.language,
+          type,
+          rel: "captions"
+        }
+      })
+
+      const item = {
         title: video.name,
         // Live videos need unique GUIDs 
         id: video.url,
@@ -374,12 +403,21 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         explicit: video.nsfw,
         media,
         categories,
+        subTitle: captions,
         thumbnail: [
           {
             url: WEBSERVER.URL + video.getMiniatureStaticPath()
           }
         ]
-      })
+      }
+
+      if (!isNull(video.VideoChannel.Account.Actor.Avatar)) {
+        Object.assign(item.author[0], {
+          img: WEBSERVER.URL + video.VideoChannel.Account.Actor.Avatar.getStaticPath()
+        })
+      }
+
+      feed.addItem(item)
     }
   } else {
     for (const video of videos) {
