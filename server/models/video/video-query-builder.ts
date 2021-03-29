@@ -25,6 +25,7 @@ export type BuildVideosQueryOptions = {
   tagsAllOf?: string[]
 
   withFiles?: boolean
+  withCaptions?: boolean
 
   accountId?: number
   videoChannelId?: number
@@ -542,6 +543,20 @@ function wrapForAPIResults (baseQuery: string, replacements: any, options: Build
       '"VideoStreamingPlaylists->VideoFiles"."fps"': '"VideoStreamingPlaylists.VideoFiles.fps"',
       '"VideoStreamingPlaylists->VideoFiles"."videoStreamingPlaylistId"': '"VideoStreamingPlaylists.VideoFiles.videoStreamingPlaylistId"',
       '"VideoStreamingPlaylists->VideoFiles"."videoId"': '"VideoStreamingPlaylists.VideoFiles.videoId"'
+    })
+  }
+
+  if (options.withCaptions) {
+    joins.push('LEFT JOIN "videoCaption" AS "VideoCaptions" ON "VideoCaptions"."videoId" = "video"."id"')
+
+    Object.assign(attributes, {
+      '"VideoCaptions"."id"': '"VideoCaptions.id"',
+      '"VideoCaptions"."createdAt"': '"VideoCaptions.createdAt"',
+      '"VideoCaptions"."updatedAt"': '"VideoCaptions.updatedAt"',
+      '"VideoCaptions"."language"': '"VideoCaptions.language"',
+      '"VideoCaptions"."filename"': '"VideoCaptions.filename"',
+      '"VideoCaptions"."fileUrl"': '"VideoCaptions.fileUrl"',
+      '"VideoCaptions"."videoId"': '"VideoCaptions.videoId"',
     })
   }
 
