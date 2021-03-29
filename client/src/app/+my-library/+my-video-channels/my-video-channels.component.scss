@@ -17,10 +17,11 @@ input[type=text] {
 
 .video-channel {
   @include row-blocks;
+
   padding-bottom: 0;
 
   img {
-    @include avatar(80px);
+    @include channel-avatar(80px);
 
     margin-right: 10px;
   }

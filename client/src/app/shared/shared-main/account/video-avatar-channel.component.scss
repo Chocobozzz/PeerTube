@@ -25,8 +25,11 @@
     position: absolute;
     top:50%;
     left:50%;
-    border-radius: 50%;
-    transform: translate(-50%,-50%)
+    transform: translate(-50%,-50%);
+
+    &:not(.channel-avatar) {
+      border-radius: 50%;
+    }
   }
 
   a:nth-of-type(2) img {

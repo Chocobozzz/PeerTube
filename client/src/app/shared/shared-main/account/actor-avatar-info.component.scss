@@ -5,9 +5,15 @@
   display: flex;
 
   img {
-    @include avatar(100px);
-
     margin-right: 15px;
+
+    &:not(.channel) {
+      @include avatar(100px);
+    }
+
+    &.channel {
+      @include channel-avatar(100px);
+    }
   }
 
   .actor-img-edit-container {
@@ -18,7 +24,7 @@
       @include peertube-button-file(21px);
       @include button-with-icon(19px);
       @include orange-button;
-    
+
       margin-top: 10px;
       margin-bottom: 5px;
       border-radius: 50%;

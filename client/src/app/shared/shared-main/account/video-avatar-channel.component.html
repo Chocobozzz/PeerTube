@@ -1,8 +1,9 @@
 <div class="wrapper" [ngClass]="'avatar-' + size">
   <ng-container *ngIf="!isChannelAvatarNull() && !genericChannel">
     <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
-      <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" />
+      <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" class="channel-avatar" />
     </a>
+
     <a [routerLink]="[ '/accounts', video.byAccount ]" [title]="accountLinkTitle">
       <img [src]="video.accountAvatarUrl" i18n-alt alt="Account avatar" />
     </a>
@@ -14,7 +15,7 @@
     </a>
 
     <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
-      <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" />
+      <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" class="channel-avatar" />
     </a>
   </ng-container>
 

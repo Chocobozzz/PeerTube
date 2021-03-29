@@ -136,7 +136,7 @@ $play-overlay-width: 18px;
         align-items: center;
 
         img {
-          @include avatar(28px);
+          @include channel-avatar(28px);
 
           margin-right: 8px;
         }

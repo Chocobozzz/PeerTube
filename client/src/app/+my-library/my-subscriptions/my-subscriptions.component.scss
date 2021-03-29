@@ -9,7 +9,7 @@ input[type=text] {
   @include row-blocks;
 
   img {
-    @include avatar(80px);
+    @include channel-avatar(80px);
 
     margin-right: 10px;
   }

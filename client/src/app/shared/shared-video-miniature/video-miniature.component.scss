@@ -21,8 +21,12 @@ $more-margin-right: 15px;
       .avatar {
         margin: 10px 10px 0 0;
 
-        img {
+        img:not(.channel) {
           @include avatar(40px);
+        }
+
+        img.channel {
+          @include channel-avatar(40px);
         }
       }
 
