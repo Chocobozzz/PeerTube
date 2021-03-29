@@ -30,6 +30,8 @@ export class VideoDownloadComponent {
   videoCaptions: VideoCaption[]
   activeModal: NgbModalRef
 
+  isAdvancedCustomizationCollapsed = true
+
   type: DownloadType = 'video'
 
   private bytesPipe: BytesPipe
@@ -65,8 +67,7 @@ export class VideoDownloadComponent {
 
     this.activeModal = this.modalService.open(this.modal, { centered: true })
 
-    this.resolutionId = this.getVideoFiles()[0].resolution.id
-    this.onResolutionIdChange()
+    this.onResolutionIdChange(this.getVideoFiles()[0].resolution.id)
 
     if (this.videoCaptions) this.subtitleLanguageId = this.videoCaptions[0].language.id
 
@@ -91,12 +92,15 @@ export class VideoDownloadComponent {
       : this.getVideoFileLink()
   }
 
-  async onResolutionIdChange () {
+  async onResolutionIdChange (resolutionId: number) {
+    this.resolutionId = resolutionId
     this.videoFile = this.getVideoFile()
-    if (this.videoFile.metadata || !this.videoFile.metadataUrl) return
 
-    await this.hydrateMetadataFromMetadataUrl(this.videoFile)
-    if (!this.videoFile.metadata) return
+    if (!this.videoFile.metadata) {
+      if (!this.videoFile.metadataUrl) return
+
+      await this.hydrateMetadataFromMetadataUrl(this.videoFile)
+    }
 
     this.videoFileMetadataFormat = this.videoFile
       ? this.getMetadataFormat(this.videoFile.metadata.format)
@@ -110,9 +114,6 @@ export class VideoDownloadComponent {
   }
 
   getVideoFile () {
-    // HTML select send us a string, so convert it to a number
-    this.resolutionId = parseInt(this.resolutionId.toString(), 10)
-
     const file = this.getVideoFiles().find(f => f.resolution.id === this.resolutionId)
     if (!file) {
       console.error('Could not find file with resolution %d.', this.resolutionId)

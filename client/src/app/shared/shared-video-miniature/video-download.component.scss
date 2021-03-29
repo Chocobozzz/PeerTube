@@ -1,6 +1,28 @@
 @import 'variables';
 @import 'mixins';
 
+.nav-content {
+  margin-top: 30px;
+}
+
+.advanced-filters-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  .nav-tabs {
+    margin-top: 10x;
+  }
+  
+  .glyphicon {
+    margin-right: 5px;
+  }
+}
+
 .peertube-select-container {
   @include peertube-select-container(85px);
 
@@ -15,12 +37,21 @@
   }
 }
 
+.action-button-cancel {
+  @include peertube-button-link;
+}
+
+.action-button-submit {
+  @include peertube-button-link;
+  @include orange-button;
+}
+
 #dropdownDownloadType {
   cursor: pointer;
 }
 
 .download-type {
-  margin-top: 30px;
+  margin-top: 20px;
 
   .peertube-radio-container {
     @include peertube-radio-container;
@@ -28,6 +59,10 @@
     display: inline-block;
     margin-right: 30px;
   }
+}
+
+.nav-metadata {
+  margin-top: 20px;
 }
 
 .file-metadata {
