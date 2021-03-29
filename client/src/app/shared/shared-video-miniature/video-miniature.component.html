@@ -33,7 +33,7 @@
             </span>
           </span>
 
-          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
+          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
             {{ video.byAccount }}
           </a>
           <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
