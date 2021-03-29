@@ -117,7 +117,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
         warningTitle: false,
         startTime: abuse.video.startAt,
         stopTime: abuse.video.endAt
-      })
+      }),
+      abuse.video.name
     )
   }
 

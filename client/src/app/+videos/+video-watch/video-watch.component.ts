@@ -815,6 +815,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           ? this.videoService.getVideoViewUrl(video.uuid)
           : null,
         embedUrl: video.embedUrl,
+        embedTitle: video.name,
 
         isLive: video.isLive,
 

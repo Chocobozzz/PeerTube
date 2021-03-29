@@ -79,6 +79,7 @@ function buildOEmbed (options: {
   const embedUrl = webserverUrl + embedPath
   let embedWidth = EMBED_SIZE.width
   let embedHeight = EMBED_SIZE.height
+  let embedtitle = title
 
   let thumbnailUrl = previewPath
     ? webserverUrl + previewPath
@@ -96,7 +97,7 @@ function buildOEmbed (options: {
   }
 
   const html = `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts" ` +
-    `src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
+    `title="${embedtitle}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
 
   const json: any = {
     type: 'video',

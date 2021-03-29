@@ -170,9 +170,10 @@ function secondsToTime (seconds: number, full = false, symbol?: string) {
   return time
 }
 
-function buildVideoOrPlaylistEmbed (embedUrl: string) {
+function buildVideoOrPlaylistEmbed (embedUrl: string, embedTitle: string) {
   return '<iframe width="560" height="315" ' +
     'sandbox="allow-same-origin allow-scripts allow-popups" ' +
+    'title="' + embedTitle + '" ' +
     'src="' + embedUrl + '" ' +
     'frameborder="0" allowfullscreen>' +
     '</iframe>'
