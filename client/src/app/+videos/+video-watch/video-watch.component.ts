@@ -21,6 +21,7 @@ import { RedirectService } from '@app/core/routing/redirect.service'
 import { isXPercentInViewport, scrollToTop } from '@app/helpers'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { VideoShareComponent } from '@app/shared/shared-share-modal'
+import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
@@ -39,7 +40,6 @@ import {
 } from '../../../assets/player/peertube-player-manager'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
-import { VideoSupportComponent } from './modal/video-support.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
 
 type URLOptions = CustomizationOptions & { playerMode: PlayerMode }
@@ -54,7 +54,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
-  @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
+  @ViewChild('supportModal') supportModal: SupportModalComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
 
@@ -282,7 +282,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.pausePlayer()
 
-    const modalRef = this.videoSupportModal.show()
+    const modalRef = this.supportModal.show()
 
     modalRef.result.then(() => {
       if (isVideoPlaying) {

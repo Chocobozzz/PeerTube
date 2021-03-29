@@ -7,6 +7,11 @@
         </a>
 
         <my-subscribe-button *ngIf="!isManageable()" #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+
+        <button *ngIf="videoChannel.support" (click)="showSupportModal()" class="support-button peertube-button orange-button-inverted">
+          <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>
+          <span class="icon-text" i18n>Support</span>
+        </button>
     </ng-template>
 
     <ng-template #ownerTemplate>
@@ -112,3 +117,5 @@
 
   <router-outlet></router-outlet>
 </div>
+
+<my-support-modal #supportModal [videoChannel]="videoChannel"></my-support-modal>

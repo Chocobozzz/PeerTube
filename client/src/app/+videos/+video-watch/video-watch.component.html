@@ -313,6 +313,6 @@
 </div>
 
 <ng-container *ngIf="video !== null">
-  <my-video-support #videoSupportModal [video]="video"></my-video-support>
+  <my-support-modal #supportModal [video]="video"></my-support-modal>
   <my-video-share #videoShareModal [video]="video" [videoCaptions]="videoCaptions" [playlist]="playlist"></my-video-share>
 </ng-container>

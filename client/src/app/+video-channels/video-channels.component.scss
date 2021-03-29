@@ -36,6 +36,10 @@
   @include avatar-row-responsive(var(--myChannelImgMargin), var(--myGreyChannelFontSize));
 }
 
+.support-button {
+  @include button-with-icon(21px, 0, -1px);
+}
+
 .channel-description {
   grid-column: 1;
 }
