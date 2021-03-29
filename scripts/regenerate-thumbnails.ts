@@ -32,6 +32,8 @@ async function run () {
 async function processVideo (videoArg: MVideo) {
   const video = await VideoModel.loadWithFiles(videoArg.id)
 
+  console.log('Processing video %s.', video.name)
+
   const thumbnail = video.getMiniature()
   const preview = video.getPreview()
 
