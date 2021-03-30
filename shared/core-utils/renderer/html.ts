@@ -19,3 +19,21 @@ export const SANITIZE_OPTIONS = {
     }
   }
 }
+
+// Thanks: https://stackoverflow.com/a/12034334
+export function escapeHTML (stringParam: string) {
+  if (!stringParam) return ''
+
+  const entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    '\'': '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  }
+
+  return String(stringParam).replace(/[&<>"'`=/]/g, s => entityMap[s])
+}

@@ -1,4 +1,5 @@
 import { VideoFile } from '@shared/models'
+import { escapeHTML } from '@shared/core-utils/renderer'
 
 function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -171,9 +172,10 @@ function secondsToTime (seconds: number, full = false, symbol?: string) {
 }
 
 function buildVideoOrPlaylistEmbed (embedUrl: string, embedTitle: string) {
+  const title = escapeHTML(embedTitle)
   return '<iframe width="560" height="315" ' +
     'sandbox="allow-same-origin allow-scripts allow-popups" ' +
-    'title="' + embedTitle + '" ' +
+    'title="' + title + '" ' +
     'src="' + embedUrl + '" ' +
     'frameborder="0" allowfullscreen>' +
     '</iframe>'
