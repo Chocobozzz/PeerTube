@@ -3,6 +3,7 @@ import { EMBED_SIZE, PREVIEWS_SIZE, WEBSERVER, THUMBNAILS_SIZE } from '../initia
 import { asyncMiddleware, oembedValidator } from '../middlewares'
 import { accountNameWithHostGetValidator } from '../middlewares/validators'
 import { MChannelSummary } from '@server/types/models'
+import { escapeHTML } from '@shared/core-utils/renderer'
 
 const servicesRouter = express.Router()
 
@@ -79,7 +80,7 @@ function buildOEmbed (options: {
   const embedUrl = webserverUrl + embedPath
   let embedWidth = EMBED_SIZE.width
   let embedHeight = EMBED_SIZE.height
-  const embedTitle = title
+  const embedTitle = escapeHTML(title)
 
   let thumbnailUrl = previewPath
     ? webserverUrl + previewPath
