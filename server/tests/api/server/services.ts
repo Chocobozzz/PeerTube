@@ -53,7 +53,7 @@ describe('Test services', function () {
       })
 
       playlistUUID = res.body.videoPlaylist.uuid
-      playlistDisplayName = res.body.playlistAttrs.displayName
+      playlistDisplayName = res.body.videoPlaylist.displayName
 
       await addVideoInPlaylist({
         url: server.url,
