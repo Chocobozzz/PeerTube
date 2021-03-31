@@ -39,7 +39,7 @@ body {
   --menuBackgroundColor: #{$menu-background};
   --menuForegroundColor: #{$menu-color};
 
-  --submenuColor: #{$sub-menu-color};
+  --submenuBackgroundColor: #{$sub-menu-background-color};
   --channelBackgroundColor: #{$channel-background-color};
 
   --inputForegroundColor: #{$input-foreground-color};
@@ -156,7 +156,7 @@ my-input-toggle-hidden ::ng-deep input {
   }
 
   .sub-menu {
-    background-color: pvar(--submenuColor);
+    background-color: pvar(--submenuBackgroundColor);
     width: 100%;
     display: flex;
     align-items: center;
@@ -267,7 +267,7 @@ my-input-toggle-hidden ::ng-deep input {
     opacity: 0.6;
 
     &.active {
-      background-color: pvar(--submenuColor);
+      background-color: pvar(--submenuBackgroundColor);
     }
 
     &.active, &:hover, &:active, &:focus {

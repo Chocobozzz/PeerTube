@@ -3,7 +3,7 @@
 @import '_miniature';
 
 .playlist-info {
-  background-color: pvar(--submenuColor);
+  background-color: pvar(--submenuBackgroundColor);
   margin-left: -$not-expanded-horizontal-margins;
   margin-top: -$sub-menu-margin-bottom;
 
@@ -16,7 +16,7 @@
 
   /* fix ellipsis dots background color */
   ::ng-deep .miniature-name::after {
-    background-color: pvar(--submenuColor) !important;
+    background-color: pvar(--submenuBackgroundColor) !important;
   }
 }
 

@@ -31,7 +31,7 @@ ngb-accordion ::ng-deep {
       padding: 0;
 
       & + .collapse.show {
-        background-color: var(--submenuColor);
+        background-color: var(--submenuBackgroundColor);
       }
     }
   }

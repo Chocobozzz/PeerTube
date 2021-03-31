@@ -696,7 +696,7 @@
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: pvar(--submenuColor);
+  background-color: pvar(--submenuBackgroundColor);
   border-radius: 0.25rem;
 
   .breadcrumb-item {
@@ -751,7 +751,7 @@
     & > a,
     & > div {
       padding: 20px;
-      background: pvar(--submenuColor);
+      background: pvar(--submenuBackgroundColor);
       border-radius: 4px;
       box-sizing: border-box;
       height: 100%;
@@ -773,7 +773,7 @@
   }
 }
 
-@mixin divider($color: pvar(--submenuColor), $background: pvar(--mainBackgroundColor)) {
+@mixin divider($color: pvar(--submenuBackgroundColor), $background: pvar(--mainBackgroundColor)) {
   width: 95%;
   border-top: .05rem solid $color;
   height: .05rem;

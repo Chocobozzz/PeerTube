@@ -50,7 +50,7 @@ my-user-moderation-dropdown,
   grid-template-columns: 1fr min-content;
   grid-template-rows: auto auto;
 
-  background-color: pvar(--submenuColor);
+  background-color: pvar(--submenuBackgroundColor);
   margin-bottom: 45px;
   padding-top: var(--myGlobalTopPadding);
   font-size: var(--myFontSize);
@@ -111,7 +111,7 @@ my-user-moderation-dropdown,
   .description:not(.expanded) {
     max-height: 70px;
 
-    @include fade-text(30px, pvar(--submenuColor));
+    @include fade-text(30px, pvar(--submenuBackgroundColor));
   }
 
   .show-more {

@@ -547,7 +547,7 @@ p-table {
     height: 46px;
 
     &.p-highlight {
-      background-color: pvar(--submenuColor) !important;
+      background-color: pvar(--submenuBackgroundColor) !important;
 
       td, td > a {
         color: pvar(--mainForegroundColor) !important;
@@ -558,7 +558,7 @@ p-table {
   .p-datatable-tbody {
     tr {
       &:hover {
-        background-color: pvar(--submenuColor) !important;
+        background-color: pvar(--submenuBackgroundColor) !important;
       }
 
       td {
@@ -590,16 +590,16 @@ p-table {
   th {
     border: none !important;
     border-bottom: 1px solid !important;
-    border-color: pvar(--submenuColor) !important;
+    border-color: pvar(--submenuBackgroundColor) !important;
     text-align: left !important;
     padding: 5px 0 5px 15px !important;
     font-weight: $font-semibold !important;
     color: pvar(--mainForegroundColor) !important;
 
     &.p-sortable-column:hover {
-      background-color: pvar(--submenuColor) !important;
+      background-color: pvar(--submenuBackgroundColor) !important;
       border: 1px solid !important;
-      border-color: pvar(--submenuColor) !important;
+      border-color: pvar(--submenuBackgroundColor) !important;
       border-width: 0 1px !important;
 
       &:first-child {
@@ -608,7 +608,7 @@ p-table {
     }
 
     &.p-highlight {
-      background-color: pvar(--submenuColor) !important;
+      background-color: pvar(--submenuBackgroundColor) !important;
 
       .pi {
         @extend .glyphicon;
@@ -654,7 +654,7 @@ p-table {
       position: relative;
       border: none;
       border-top: 1px solid !important;
-      border-color: pvar(--submenuColor) !important;
+      border-color: pvar(--submenuBackgroundColor) !important;
       height: 40px;
       display: flex;
       justify-content: center;
