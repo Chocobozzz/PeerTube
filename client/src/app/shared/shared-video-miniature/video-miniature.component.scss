@@ -32,6 +32,8 @@ $more-margin-right: 15px;
 
       .video-miniature-name {
         @include miniature-name;
+
+        word-wrap: break-word;
         width: calc(100% - #{$more-button-width});
       }
 

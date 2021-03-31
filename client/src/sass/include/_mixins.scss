@@ -23,12 +23,13 @@
   display: block;
   /* Fallback for non-webkit */
   display: -webkit-box;
-  max-height: $font-size * $number-of-lines;
+  -webkit-line-clamp: $number-of-lines;
   /* Fallback for non-webkit */
   font-size: $font-size;
   line-height: $font-size;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-height: $font-size * $number-of-lines;
 }
 
 @mixin fade-text ($fade-after, $background-color) {
