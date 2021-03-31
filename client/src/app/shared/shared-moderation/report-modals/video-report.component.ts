@@ -61,7 +61,8 @@ export class VideoReportComponent extends FormReactive implements OnInit {
           baseUrl: this.video.embedUrl,
           title: false,
           warningTitle: false
-        })
+        }),
+        this.video.name
       )
     )
   }

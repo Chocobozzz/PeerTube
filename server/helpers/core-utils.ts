@@ -154,24 +154,6 @@ function root () {
   return rootPath
 }
 
-// Thanks: https://stackoverflow.com/a/12034334
-function escapeHTML (stringParam) {
-  if (!stringParam) return ''
-
-  const entityMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    '\'': '&#39;',
-    '/': '&#x2F;',
-    '`': '&#x60;',
-    '=': '&#x3D;'
-  }
-
-  return String(stringParam).replace(/[&<>"'`=/]/g, s => entityMap[s])
-}
-
 function pageToStartAndCount (page: number, itemsPerPage: number) {
   const start = (page - 1) * itemsPerPage
 
@@ -278,7 +260,6 @@ export {
 
   objectConverter,
   root,
-  escapeHTML,
   pageToStartAndCount,
   sanitizeUrl,
   sanitizeHost,

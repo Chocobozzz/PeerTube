@@ -164,7 +164,8 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
         baseUrl: `${environment.originServerUrl}/videos/embed/${entry.video.uuid}`,
         title: false,
         warningTitle: false
-      })
+      }),
+      entry.video.name
     )
   }
 

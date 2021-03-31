@@ -98,6 +98,7 @@ export interface CommonOptions extends CustomizationOptions {
 
   videoViewUrl: string
   embedUrl: string
+  embedTitle: string
 
   isLive: boolean
 
@@ -165,7 +166,7 @@ export class PeertubePlayerManager {
           PeertubePlayerManager.alreadyPlayed = true
         })
 
-        self.addContextMenu(mode, player, options.common.embedUrl)
+        self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
 
         player.bezels()
 
@@ -203,7 +204,7 @@ export class PeertubePlayerManager {
     videojs(newVideoElement, videojsOptions, function (this: videojs.Player) {
       const player = this
 
-      self.addContextMenu(mode, player, options.common.embedUrl)
+      self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
 
       PeertubePlayerManager.onPlayerChange(player)
     })
@@ -492,7 +493,7 @@ export class PeertubePlayerManager {
     return children
   }
 
-  private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string) {
+  private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string, videoEmbedTitle: string) {
     const content = [
       {
         label: player.localize('Copy the video URL'),
@@ -509,7 +510,7 @@ export class PeertubePlayerManager {
       {
         label: player.localize('Copy embed code'),
         listener: () => {
-          copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl))
+          copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl, videoEmbedTitle))
         }
       }
     ]

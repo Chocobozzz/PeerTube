@@ -20,6 +20,7 @@ const expect = chai.expect
 describe('Test services', function () {
   let server: ServerInfo = null
   let playlistUUID: string
+  let playlistDisplayName: string
   let video: Video
 
   before(async function () {
@@ -52,6 +53,7 @@ describe('Test services', function () {
       })
 
       playlistUUID = res.body.videoPlaylist.uuid
+      playlistDisplayName = 'The Life and Times of Scrooge McDuck'
 
       await addVideoInPlaylist({
         url: server.url,
@@ -69,7 +71,7 @@ describe('Test services', function () {
 
     const res = await getOEmbed(server.url, oembedUrl)
     const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
-      `src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
+      `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
       'frameborder="0" allowfullscreen></iframe>'
     const expectedThumbnailUrl = 'http://localhost:' + server.port + video.previewPath
 
@@ -88,7 +90,7 @@ describe('Test services', function () {
 
     const res = await getOEmbed(server.url, oembedUrl)
     const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
-      `src="http://localhost:${server.port}/video-playlists/embed/${playlistUUID}" ` +
+      `title="${playlistDisplayName}" src="http://localhost:${server.port}/video-playlists/embed/${playlistUUID}" ` +
       'frameborder="0" allowfullscreen></iframe>'
 
     expect(res.body.html).to.equal(expectedHtml)
@@ -109,7 +111,7 @@ describe('Test services', function () {
 
     const res = await getOEmbed(server.url, oembedUrl, format, maxHeight, maxWidth)
     const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts" ' +
-      `src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
+      `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
       'frameborder="0" allowfullscreen></iframe>'
 
     expect(res.body.html).to.equal(expectedHtml)
