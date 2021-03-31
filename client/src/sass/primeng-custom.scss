@@ -753,29 +753,32 @@ p-table {
 }
 
 // overflow data table
-@mixin overflow-datatable ($table-min-width, $horizontal-margins, $mobile-paginator: true) {
-  p-table {
-    .p-datatable-wrapper {
-      overflow-x: auto;
-      max-width: calc(100vw - #{$horizontal-margins * 2});
+p-table {
+  .p-datatable-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
 
-      table {
-        min-width: $table-min-width;
+    table {
+      min-width: breakpoint(lg);
+    }
+  }
+
+  @media screen and (max-width: #{breakpoint(lg)}) {
+    // Prevent overflow
+    p-paginator {
+      .p-paginator-current,
+      .p-dropdown {
+        top: 0;
+        margin-top: 30px;
       }
     }
+  }
 
-    @if $mobile-paginator {
-      p-paginator .p-paginator-bottom {
-        display: block;
-
-        .p-paginator-current {
-          position: relative;
-          display: block;
-        }
-
-        a, .p-paginator-pages {
-          vertical-align: middle;
-        }
+  @media screen and (max-width: $mobile-view) {
+    // Prevent overflow
+    p-paginator {
+      .p-paginator-pages > .p-paginator-page:not(.p-highlight) {
+        display: none;
       }
     }
   }

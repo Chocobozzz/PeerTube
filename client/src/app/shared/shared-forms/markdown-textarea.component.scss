@@ -131,7 +131,7 @@ $input-border-radius: 3px;
     border-right: none;
 
     :last-child {
-      margin-right: $not-expanded-horizontal-margins;
+      margin-right: pvar(--horizontalMarginContent);
     }
   }
 

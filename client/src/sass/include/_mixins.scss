@@ -856,7 +856,7 @@
   }
 }
 
-@mixin admin-sub-header-responsive ($horizontal-margins) {
+@mixin admin-sub-header-responsive {
   flex-direction: column;
 
   .form-sub-title {
@@ -871,7 +871,7 @@
     white-space: nowrap;
     height: 50px;
     padding: 10px 0;
-    width: calc(100vw - #{$horizontal-margins*2});
+    width: 100%;
 
     a {
       margin-left: 5px;

@@ -34,7 +34,7 @@ $green: #39CC0B;
 $grey-actor-name: #777272;
 
 $expanded-horizontal-margins: 150px;
-$not-expanded-horizontal-margins: 30px;
+$not-expanded-horizontal-margins: 60px;
 
 $button-height: 30px;
 
@@ -122,11 +122,19 @@ $variables: (
   --supportButtonHeartColor: var(--supportButtonHeartColor),
 
   --embedForegroundColor: var(--embedForegroundColor),
-  --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor)
+  --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor),
+
+  --horizontalMarginContent: var(--horizontalMarginContent),
+  --mainColWidth: var(--mainColWidth)
 );
 
+// SASS type check our CSS variables
 @function pvar($variable) {
-  @return map-get($variables, $variable);
+  @if map-has-key($variables, $variable) {
+    @return map-get($variables, $variable);
+  } @else {
+    @error "ERROR: Variable #{$variable} does not exist";
+  }
 }
 
 /*** z-index groups ***/

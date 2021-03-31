@@ -112,21 +112,6 @@ my-edit-button {
   }
 }
 
-// Adapt my-video-miniature on small screens with menu
-@media screen and (min-width: $small-view) and (max-width: #{breakpoint(lg) + ($not-expanded-horizontal-margins / 3) * 2}) {
-  :host-context(.main-col:not(.expanded)) {
-    ::ng-deep {
-      .video-miniature {
-        flex-direction: column;
-
-        .video-miniature-name {
-          max-width: $video-thumbnail-width;
-        }
-      }
-    }
-  }
-}
-
 @media screen and (max-width: $mobile-view) {
   .videos-header {
     flex-direction: column;

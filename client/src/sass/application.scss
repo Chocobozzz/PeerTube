@@ -57,7 +57,8 @@ body {
 
   --activatedActionButtonColor: #{$activated-action-button-color};
 
-  --expanded-horizontal-margin-content: #{$expanded-horizontal-margins};
+  --horizontalMarginContent: #{$not-expanded-horizontal-margins};
+  --mainColWidth: calc(100vw - #{$menu-width});
 
   font-family: $main-fonts;
   font-weight: $font-regular;
@@ -150,8 +151,8 @@ my-input-toggle-hidden ::ng-deep input {
   outline: none;
 
   .margin-content {
-    margin-left: $not-expanded-horizontal-margins;
-    margin-right: $not-expanded-horizontal-margins;
+    margin-left: pvar(--horizontalMarginContent);
+    margin-right: pvar(--horizontalMarginContent);
     flex-grow: 1;
   }
 
@@ -160,14 +161,16 @@ my-input-toggle-hidden ::ng-deep input {
     width: 100%;
     display: flex;
     align-items: center;
-    padding-left: $not-expanded-horizontal-margins;
-    padding-right: $not-expanded-horizontal-margins;
+    padding-left: pvar(--horizontalMarginContent);
+    padding-right: pvar(--horizontalMarginContent);
     height: $sub-menu-height;
     margin-bottom: $sub-menu-margin-bottom;
+    overflow-x: auto;
 
     &.sub-menu-fixed {
       position: fixed;
       z-index: #{z('sub-menu') - 1};
+      max-width: pvar(--mainColWidth);
     }
   }
 
@@ -178,18 +181,11 @@ my-input-toggle-hidden ::ng-deep input {
 
   // Override some properties if the main content is expanded (no menu on the left)
   &.expanded {
+    --horizontalMarginContent: #{$expanded-horizontal-margins};
+    --mainColWidth: 100vw;
+
     margin-left: 0;
     width: 100%;
-
-    .margin-content {
-      margin-left: var(--expanded-horizontal-margin-content);
-      margin-right: var(--expanded-horizontal-margin-content);
-    }
-
-    .sub-menu {
-      padding-left: var(--expanded-horizontal-margin-content);
-      padding-right: var(--expanded-horizontal-margin-content);
-    }
   }
 
   &.lock-scroll .main-row > router-outlet + * {
@@ -336,30 +332,23 @@ ngx-loading-bar {
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {
-  .main-col {
-    &.expanded {
-      .margin-content {
-        --expanded-horizontal-margin-content: #{$expanded-horizontal-margins/2};
-      }
-    }
+  .main-col.expanded {
+    --horizontalMarginContent: #{$expanded-horizontal-margins/2};
   }
 }
 
 @media screen and (max-width: #{breakpoint(lg)}) {
   /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
-  .main-col {
-    &, &.expanded {
-      .margin-content {
-        --expanded-horizontal-margin-content: #{$expanded-horizontal-margins/3};
-      }
+  .main-col,
+  .main-col.expanded {
+    --horizontalMarginContent: #{$expanded-horizontal-margins/3};
 
-      .sub-menu {
-        padding-left: 50px;
-        padding-right: 50px;
+    .sub-menu {
+      padding-left: 50px;
+      padding-right: 50px;
 
-        .title-page {
-          font-size: 17px;
-        }
+      .title-page {
+        font-size: 17px;
       }
     }
   }
@@ -372,98 +361,46 @@ ngx-loading-bar {
 }
 
 @media screen and (max-width: $small-view) {
-  .main-col {
+  .main-col,
+  .main-col.expanded {
+    --horizontalMarginContent: 15px;
+
     margin-left: 0;
 
-    &, &.expanded {
-      .margin-content {
-        --expanded-horizontal-margin-content: 15px;
-      }
-
-      .sub-menu {
-        width: 100vw;
-        padding-left: 15px;
-        padding-right: 15px;
-        margin-bottom: $sub-menu-margin-bottom-small-view;
-        overflow-x: auto;
-      }
-
-      // Use an appropriate offset top when sub-menu fixed
-      .margin-content.offset-content {
-        padding-top: $sub-menu-height + $sub-menu-margin-bottom-small-view;
-      }
-
-      .admin-sub-header {
-        @include admin-sub-header-responsive(15px*2);
-      }
-
-      my-markdown-textarea {
-        .root {
-          max-width: 100% !important;
-        }
-      }
-
-      input[type=text],
-      input[type=password],
-      input[type=email],
-      textarea,
-      .peertube-select-container {
-        flex-grow: 1;
-      }
-
-      .caption input[type=text] {
-        width: unset !important;
-        flex-grow: 1;
-      }
-    }
-  }
-}
-
-// overflow-databale responsive rules
-@media screen and (min-width: #{breakpoint(lg)}) {
-  .main-col {
-    &.expanded {
-      @include overflow-datatable(breakpoint(lg), $expanded-horizontal-margins/2, $mobile-paginator: false);
+    .sub-menu {
+      width: 100vw;
+      padding-left: 15px;
+      padding-right: 15px;
+      margin-bottom: $sub-menu-margin-bottom-small-view;
+      overflow-x: auto;
     }
 
-    &:not(.expanded) {
-      @include overflow-datatable(breakpoint(lg), $not-expanded-horizontal-margins + $menu-width/2, $mobile-paginator: false);
-    }
-  }
-}
-
-@media screen and (max-width: #{breakpoint(lg)}) {
-  .main-col {
-    &.expanded {
-      @include overflow-datatable(breakpoint(lg), $expanded-horizontal-margins/3);
+    // Use an appropriate offset top when sub-menu fixed
+    .margin-content.offset-content {
+      padding-top: $sub-menu-height + $sub-menu-margin-bottom-small-view;
     }
 
-    &:not(.expanded) {
-      @include overflow-datatable(breakpoint(lg), $expanded-horizontal-margins/3 + $menu-width/2);
+    .admin-sub-header {
+      @include admin-sub-header-responsive;
     }
-  }
-}
 
-@media screen and (max-width: $small-view) {
-  .main-col {
-    &:not(.expanded),
-    &.expanded {
-      @include overflow-datatable(breakpoint(lg), 15px);
-    }
-  }
-}
-
-@media screen and (min-width: $small-view) and (max-width: #{$small-view + $menu-width}) {
-  .main-col {
-    &:not(.expanded) {
-      .admin-sub-header {
-        @include admin-sub-header-responsive($expanded-horizontal-margins/3 + $menu-width/2);
+    my-markdown-textarea {
+      .root {
+        max-width: 100% !important;
       }
+    }
 
-      .sub-menu {
-        overflow-x: auto;
-        width: calc(100vw - #{$menu-width});
-      }
+    input[type=text],
+    input[type=password],
+    input[type=email],
+    textarea,
+    .peertube-select-container {
+      flex-grow: 1;
+    }
+
+    .caption input[type=text] {
+      width: unset !important;
+      flex-grow: 1;
     }
   }
 }

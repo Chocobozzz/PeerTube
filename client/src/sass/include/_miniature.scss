@@ -178,32 +178,20 @@ $play-overlay-width: 18px;
 
 // Use margin by default, or padding if $margin is false
 @mixin fluid-videos-miniature-margins ($margin: true, $min-margin: 0) {
+  --fluidVideosMiniatureMargins: #{pvar(--horizontalMarginContent)};
+
   @if $margin {
-    margin-left: $not-expanded-horizontal-margins !important;
-    margin-right: $not-expanded-horizontal-margins !important;
+    margin-left: var(--fluidVideosMiniatureMargins) !important;
+    margin-right: var(--fluidVideosMiniatureMargins) !important;
   } @else {
-    padding-left: $not-expanded-horizontal-margins !important;
-    padding-right: $not-expanded-horizontal-margins !important;
+    padding-left: var(--fluidVideosMiniatureMargins) !important;
+    padding-right: var(--fluidVideosMiniatureMargins) !important;
   }
 
   @media screen and (max-width: $mobile-view) {
+    --fluidVideosMiniatureMargins: $min-margin;
+
     width: auto;
-
-    @if $margin {
-      margin: $min-margin !important;
-    } @else {
-      padding: $min-margin !important;
-    }
-  }
-
-  @media screen and (min-width: #{breakpoint(fhd)}) {
-    @if $margin {
-      margin-left: 6vw !important;
-      margin-right: 6vw !important;
-    } @else {
-      padding-left: 6vw !important;
-      padding-right: 6vw !important;
-    }
   }
 }
 

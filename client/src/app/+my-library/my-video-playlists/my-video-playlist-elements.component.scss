@@ -4,7 +4,7 @@
 
 .playlist-info {
   background-color: pvar(--submenuBackgroundColor);
-  margin-left: -$not-expanded-horizontal-margins;
+  margin-left: calc(#{pvar(--horizontalMarginContent)} * -1);
   margin-top: -$sub-menu-margin-bottom;
 
   padding: 10px;
@@ -63,7 +63,7 @@
   .playlist-info {
     width: 100vw;
     padding-top: 20px;
-    margin-left: calc(#{var(--expanded-horizontal-margin-content)} * -1);
+    margin-bottom: 10px;
   }
 
   .playlist-elements {
