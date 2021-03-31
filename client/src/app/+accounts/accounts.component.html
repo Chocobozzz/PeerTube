@@ -52,7 +52,7 @@
       <div class="created-at" i18n>Account created on {{ account.createdAt | date }}</div>
     </div>
 
-    <div *ngIf="!accountDescriptionExpanded" class="show-more" role="button"
+    <div *ngIf="hasShowMoreDescription()" class="show-more" role="button"
       (click)="accountDescriptionExpanded = !accountDescriptionExpanded"
       title="Show the complete description" i18n-title i18n
     >

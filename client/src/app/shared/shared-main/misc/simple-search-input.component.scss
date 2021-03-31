@@ -16,7 +16,7 @@ my-global-icon {
   }
 
   &[iconName=search] {
-    color: pvar(--mainColor);
+    color: pvar(--mainForegroundColor);
   }
 
   &[iconName=cross] {

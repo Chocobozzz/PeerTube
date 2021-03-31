@@ -147,6 +147,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
     return this.videoChannels.length !== 0
   }
 
+  hasShowMoreDescription () {
+    return !this.accountDescriptionExpanded && this.accountDescriptionHTML.length > 100
+  }
+
   private async onAccount (account: Account) {
     this.accountFollowerTitle = $localize`${account.followersCount} direct account followers`
 

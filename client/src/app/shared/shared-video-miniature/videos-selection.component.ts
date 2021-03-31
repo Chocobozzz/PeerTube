@@ -17,7 +17,7 @@ import { AuthService, ComponentPagination, LocalStorageService, Notifier, Screen
 import { ResultList, VideoSortField } from '@shared/models'
 import { PeerTubeTemplateDirective, Video } from '../shared-main'
 import { AbstractVideoList } from './abstract-video-list'
-import { MiniatureDisplayOptions, OwnerDisplayType } from './video-miniature.component'
+import { MiniatureDisplayOptions } from './video-miniature.component'
 
 export type SelectionType = { [ id: number ]: boolean }
 
@@ -31,7 +31,6 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   @Input() pagination: ComponentPagination
   @Input() titlePage: string
   @Input() miniatureDisplayOptions: MiniatureDisplayOptions
-  @Input() ownerDisplayType: OwnerDisplayType
 
   @Input() getVideosObservableFunction: (page: number, sort?: VideoSortField) => Observable<ResultList<Video>>
 

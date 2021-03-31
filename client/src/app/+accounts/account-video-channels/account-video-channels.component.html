@@ -22,7 +22,7 @@
           <div class="followers" i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
 
           <span class="videos-count" *ngIf="getTotalVideosOf(videoChannel) !== undefined" i18n>
-            {getTotalVideosOf(videoChannel), splural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}
+            {getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}
           </span>
         </div>
 
