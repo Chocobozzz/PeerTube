@@ -13,7 +13,7 @@ import {
   getStoredVolume,
   saveLastSubtitle,
   saveMuteInStore,
-  saveVideoWatch,
+  saveVideoWatchHistory,
   saveVolumeInStore
 } from './peertube-player-local-storage'
 
@@ -190,9 +190,9 @@ class PeerTubePlugin extends Plugin {
 
         if (options) {
           this.notifyUserIsWatching(currentTime, options.url, options.authorizationHeader)
-          .catch(err => console.error('Cannot notify user is watching.', err))
+            .catch(err => console.error('Cannot notify user is watching.', err))
         } else {
-          saveVideoWatch(videoUUID, currentTime)
+          saveVideoWatchHistory(videoUUID, currentTime)
         }
       }
     }, this.CONSTANTS.USER_WATCHING_VIDEO_INTERVAL)
