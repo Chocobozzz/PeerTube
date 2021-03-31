@@ -42,6 +42,7 @@
 
 .channel-description {
   grid-column: 1;
+  word-break: break-word;
 }
 
 .show-more {
@@ -108,6 +109,10 @@
     h4 {
       font-size: 18px;
       margin: 0;
+
+      a {
+        color: pvar(--mainForegroundColor);
+      }
     }
 
     .actor-handle {
@@ -118,6 +123,7 @@
 
   .owner-description {
     height: 140px;
+    word-break: break-word;
 
     @include fade-text(120px, pvar(--mainBackgroundColor));
   }
@@ -217,7 +223,8 @@
   }
 
   .view-account.complete {
-    display: inline-block;
+    display: block;
+    text-align: right;
     margin-top: 10px;
     color: pvar(--mainColor);
   }

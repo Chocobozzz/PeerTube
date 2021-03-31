@@ -152,7 +152,7 @@
   @include button-focus(pvar(--mainColorLightest));
 
   border: 2px solid pvar(--mainColor);
-  font-weight: $font-regular;
+  font-weight: $font-semibold;
 
   &, &:active, &:focus {
     color: pvar(--mainColor);
@@ -551,6 +551,7 @@
   height: $size;
   min-width: $size;
   min-height: $size;
+  border-radius: 5px;
 }
 
 @mixin chevron ($size, $border-width) {

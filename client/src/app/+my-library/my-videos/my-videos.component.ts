@@ -2,12 +2,12 @@ import { concat, Observable, Subject } from 'rxjs'
 import { debounceTime, tap, toArray } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
+import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign } from '@app/helpers'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
-import { MiniatureDisplayOptions, OwnerDisplayType, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
+import { MiniatureDisplayOptions, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
 import { VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
@@ -36,7 +36,6 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     state: true,
     blacklistInfo: true
   }
-  ownerDisplayType: OwnerDisplayType = 'videoChannel'
 
   videoActions: DropdownAction<{ video: Video }>[] = []
 

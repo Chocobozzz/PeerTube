@@ -26,6 +26,7 @@
     top:50%;
     left:50%;
     transform: translate(-50%,-50%);
+    border-radius: 5px;
 
     &:not(.channel-avatar) {
       border-radius: 50%;

@@ -9,7 +9,7 @@
 .channel {
   max-width: $max-channels-width;
   background-color: pvar(--channelBackgroundColor);
-  padding: 15px;
+  padding: 30px;
 
   margin: 30px 0;
 
@@ -120,6 +120,10 @@ my-subscribe-button {
 }
 
 @media screen and (max-width: $mobile-view) {
+  .channel {
+    padding: 15px;
+  }
+
   .channel-avatar-row {
     grid-template-columns: auto auto auto 1fr;
 

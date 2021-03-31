@@ -1,4 +1,5 @@
-import { VideoChannel as ServerVideoChannel, ViewsPerDate, Account, Avatar } from '@shared/models'
+import { Account as ServerAccount, Avatar, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@shared/models'
+import { Account } from '../account/account.model'
 import { Actor } from '../account/actor.model'
 
 export class VideoChannel extends Actor implements ServerVideoChannel {
@@ -9,7 +10,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   nameWithHost: string
   nameWithHostForced: string
 
-  ownerAccount?: Account
+  ownerAccount?: ServerAccount
   ownerBy?: string
   ownerAvatarUrl?: string
 
@@ -46,7 +47,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     if (hash.ownerAccount) {
       this.ownerAccount = hash.ownerAccount
       this.ownerBy = Actor.CREATE_BY_STRING(hash.ownerAccount.name, hash.ownerAccount.host)
-      this.ownerAvatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this.ownerAccount)
+      this.ownerAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.ownerAccount)
     }
   }
 

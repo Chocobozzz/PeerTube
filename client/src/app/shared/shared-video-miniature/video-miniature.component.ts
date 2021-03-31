@@ -16,7 +16,7 @@ import { Video } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType } from './video-actions-dropdown.component'
 
-export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
+export type OwnerDisplayType = 'account' | 'videoChannel'
 export type MiniatureDisplayOptions = {
   date?: boolean
   views?: boolean
@@ -40,7 +40,6 @@ export class VideoMiniatureComponent implements OnInit {
   @Input() user: User
   @Input() video: Video
 
-  @Input() ownerDisplayType: OwnerDisplayType = 'account'
   @Input() displayOptions: MiniatureDisplayOptions = {
     date: true,
     views: true,
@@ -89,7 +88,7 @@ export class VideoMiniatureComponent implements OnInit {
   videoHref: string
   videoTarget: string
 
-  private ownerDisplayTypeChosen: 'account' | 'videoChannel'
+  private ownerDisplayType: 'account' | 'videoChannel'
 
   constructor (
     private screenService: ScreenService,
@@ -140,11 +139,11 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   displayOwnerAccount () {
-    return this.ownerDisplayTypeChosen === 'account'
+    return this.ownerDisplayType === 'account'
   }
 
   displayOwnerVideoChannel () {
-    return this.ownerDisplayTypeChosen === 'videoChannel'
+    return this.ownerDisplayType === 'videoChannel'
   }
 
   isUnlistedVideo () {
@@ -245,21 +244,19 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   private setUpBy () {
-    if (this.ownerDisplayType === 'account' || this.ownerDisplayType === 'videoChannel') {
-      this.ownerDisplayTypeChosen = this.ownerDisplayType
-      return
-    }
+    const accountName = this.video.account.name
 
     // If the video channel name is an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
-    // Or is just a suffix of the account (default created channel)
+    // Or has not been customized (default created channel display name)
     // -> Use the account name
     if (
-      this.video.channel.name === `${this.video.account.name}_channel` ||
+      this.video.channel.displayName === `Default ${accountName} channel` ||
+      this.video.channel.displayName === `Main ${accountName} channel` ||
       this.video.channel.name.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
     ) {
-      this.ownerDisplayTypeChosen = 'account'
+      this.ownerDisplayType = 'account'
     } else {
-      this.ownerDisplayTypeChosen = 'videoChannel'
+      this.ownerDisplayType = 'videoChannel'
     }
   }
 

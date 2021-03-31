@@ -17,10 +17,14 @@
     <ng-template #ownerTemplate>
       <div class="owner-block">
         <div class="avatar-row">
-          <img class="account-avatar" [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
+          <a [routerLink]="getAccountUrl()" title="View account" i18n-title>
+            <img class="account-avatar" [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
+          </a>
 
           <div class="actor-info">
-            <h4>{{ videoChannel.ownerAccount.displayName }}</h4>
+            <h4>
+              <a [routerLink]="getAccountUrl()" title="View account" i18n-title>{{ videoChannel.ownerAccount.displayName }}</a>
+            </h4>
 
             <div class="actor-handle">@{{ videoChannel.ownerBy }}</div>
           </div>
@@ -30,11 +34,11 @@
           <div class="description-html" [innerHTML]="ownerDescriptionHTML"></div>
         </div>
 
-        <a class="view-account short" [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n>
+        <a class="view-account short" [routerLink]="getAccountUrl()" i18n>
           View account
         </a>
 
-        <a class="view-account complete" [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n>
+        <a class="view-account complete" [routerLink]="getAccountUrl()" i18n>
           View owner account
         </a>
       </div>
@@ -83,7 +87,7 @@
       <div class="created-at" i18n>Channel created on {{ videoChannel.createdAt | date }}</div>
     </div>
 
-    <div *ngIf="!channelDescriptionExpanded" class="show-more" role="button"
+    <div *ngIf="hasShowMoreDescription()" class="show-more" role="button"
       (click)="channelDescriptionExpanded = !channelDescriptionExpanded"
       title="Show the complete description" i18n-title i18n
     >

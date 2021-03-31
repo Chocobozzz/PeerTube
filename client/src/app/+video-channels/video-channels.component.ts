@@ -103,8 +103,16 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     this.notifier.success($localize`Username copied`)
   }
 
+  hasShowMoreDescription () {
+    return !this.channelDescriptionExpanded && this.channelDescriptionHTML.length > 100
+  }
+
   showSupportModal () {
     this.supportModal.show()
+  }
+
+  getAccountUrl () {
+    return [ '/accounts', this.videoChannel.ownerBy ]
   }
 
   private loadChannelVideosCount () {

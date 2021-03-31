@@ -7,7 +7,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { immutableAssign } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
-import { AbstractVideoList, OwnerDisplayType } from '@app/shared/shared-video-miniature'
+import { AbstractVideoList } from '@app/shared/shared-video-miniature'
 import { FeedFormat, VideoSortField } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { copyToClipboard } from '../../../root-helpers/utils'
@@ -20,7 +20,6 @@ import { copyToClipboard } from '../../../root-helpers/utils'
 export class VideoUserSubscriptionsComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   sort = '-publishedAt' as VideoSortField
-  ownerDisplayType: OwnerDisplayType = 'auto'
   groupByDate = true
 
   constructor (
