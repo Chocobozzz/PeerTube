@@ -112,4 +112,8 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
 
     this.reloadVideos()
   }
+
+  displayAsRow () {
+    return this.screenService.isInMobileView()
+  }
 }

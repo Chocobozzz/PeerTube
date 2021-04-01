@@ -319,6 +319,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
     viewContainerRef.createComponent(componentFactory, 0, injector)
   }
 
+  // Can be redefined by child
+  displayAsRow () {
+    return false
+  }
+
   // On videos hook for children that want to do something
   protected onMoreVideos () { /* empty */ }
 

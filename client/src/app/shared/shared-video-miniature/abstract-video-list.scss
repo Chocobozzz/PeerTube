@@ -72,6 +72,15 @@ $iconSize: 16px;
   @include grid-videos-miniature-layout;
 }
 
+.display-as-row.videos {
+  margin-left: pvar(--horizontalMarginContent);
+  margin-right: pvar(--horizontalMarginContent);
+
+  .video-wrapper {
+    margin-bottom: 15px;
+  }
+}
+
 @media screen and (max-width: $mobile-view) {
   .videos-header {
     flex-direction: column;

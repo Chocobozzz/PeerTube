@@ -24,10 +24,9 @@
   }
 
   .playlists {
-    text-align: left !important;
-    justify-content: left !important;
+    justify-content: left;
 
     margin-left: pvar(--horizontalMarginContent) !important;
-    margin-right: var(--horizontalMarginContent) !important;
+    margin-right: pvar(--horizontalMarginContent) !important;
   }
 }

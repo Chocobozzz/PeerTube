@@ -93,4 +93,8 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
   generateSyndicationList () {
     this.syndicationItems = this.videoService.getAccountFeedUrls(this.account.id)
   }
+
+  displayAsRow () {
+    return this.screenService.isInMobileView()
+  }
 }
