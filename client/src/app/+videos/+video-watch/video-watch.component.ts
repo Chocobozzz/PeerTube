@@ -398,6 +398,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.loadVideo(videoId)
   }
 
+  displayOtherVideosAsRow () {
+    // Use the same value as in the SASS file
+    return this.screenService.getWindowInnerWidth() <= 1100
+  }
+
   private loadVideo (videoId: string) {
     // Video did not change
     if (this.video && this.video.uuid === videoId) return

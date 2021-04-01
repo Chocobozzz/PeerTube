@@ -289,6 +289,7 @@
     </div>
 
     <my-recommended-videos
+      [displayAsRow]="displayOtherVideosAsRow()"
       [inputRecommendation]="{ uuid: video.uuid, tags: video.tags }"
       [playlist]="playlist"
       (gotRecommendations)="onRecommendations($event)"

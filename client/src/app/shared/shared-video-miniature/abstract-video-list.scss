@@ -69,7 +69,7 @@ $iconSize: 16px;
 }
 
 .margin-content {
-  @include fluid-videos-miniature-layout;
+  @include grid-videos-miniature-layout;
 }
 
 @media screen and (max-width: $mobile-view) {

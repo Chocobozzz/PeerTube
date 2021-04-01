@@ -58,6 +58,7 @@ body {
   --activatedActionButtonColor: #{$activated-action-button-color};
 
   --horizontalMarginContent: #{$not-expanded-horizontal-margins};
+  --videosHorizontalMarginContent: 6vw;
   --mainColWidth: calc(100vw - #{$menu-width});
 
   font-family: $main-fonts;
@@ -332,8 +333,16 @@ ngx-loading-bar {
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {
-  .main-col.expanded {
-    --horizontalMarginContent: #{$expanded-horizontal-margins/2};
+  .main-col {
+    & {
+      --horizontalMarginContent: #{$not-expanded-horizontal-margins / 2};
+    }
+
+    &.expanded {
+      --horizontalMarginContent: #{$expanded-horizontal-margins / 2};
+    }
+
+    --videosHorizontalMarginContent: #{pvar(--horizontalMarginContent)};
   }
 }
 
@@ -341,7 +350,7 @@ ngx-loading-bar {
   /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
   .main-col,
   .main-col.expanded {
-    --horizontalMarginContent: #{$expanded-horizontal-margins/3};
+    --horizontalMarginContent: #{$expanded-horizontal-margins / 3};
 
     .sub-menu {
       padding-left: 50px;

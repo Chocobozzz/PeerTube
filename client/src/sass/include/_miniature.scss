@@ -5,11 +5,10 @@
   @include ellipsis-multiline(1.1em, 2);
 
   word-break: break-all;
+  word-wrap: break-word;
   transition: color 0.2s;
   font-weight: $font-semibold;
   color: pvar(--mainForegroundColor);
-  margin-top: 10px;
-  margin-bottom: 5px;
 
   &:hover {
     text-decoration: none;
@@ -21,20 +20,20 @@
   }
 }
 
-$play-overlay-transition: 0.2s ease;
-$play-overlay-height: 26px;
-$play-overlay-width: 18px;
-
 @mixin miniature-thumbnail {
   @include disable-outline;
+
+  $play-overlay-transition: 0.2s ease;
+  $play-overlay-height: 26px;
+  $play-overlay-width: 18px;
 
   display: flex;
   flex-direction: column;
   position: relative;
   border-radius: 3px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  width: $video-thumbnail-width;
-  height: $video-thumbnail-height;
   background-color: #ececec;
   transition: filter $play-overlay-transition;
 
@@ -98,140 +97,36 @@ $play-overlay-width: 18px;
   color: #fff;
 }
 
-@mixin miniature-rows {
-  &:first-child {
-    padding-top: 30px;
-
-    .section-title {
-      border-top: none !important;
-    }
-  }
-
-  .section-title {
-    font-size: 24px;
-    font-weight: $font-semibold;
-    padding-top: 15px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-
-    &:not(h2) {
-      border-top: 1px solid $separator-border-color;
-    }
-
-    a {
-      &:hover, &:focus:not(.focus-visible), &:active {
-        text-decoration: none;
-        outline: none;
-      }
-
-      color: pvar(--mainForegroundColor);
-    }
-  }
-
-  &.channel {
-    .section-title {
-      a {
-        display: flex;
-        width: fit-content;
-        align-items: center;
-
-        img {
-          @include channel-avatar(28px);
-
-          margin-right: 8px;
-        }
-      }
-
-      .followers {
-        color: pvar(--greyForegroundColor);
-        font-weight: normal;
-        font-size: 14px;
-        margin-left: 10px;
-        position: relative;
-        top: 2px;
-      }
-    }
-  }
-
-  .show-more {
-    position: relative;
-    top: -5px;
-    display: inline-block;
-    font-size: 16px;
-    text-transform: uppercase;
-    color: pvar(--greyForegroundColor);
-    margin-bottom: 10px;
-    font-weight: $font-semibold;
-    text-decoration: none;
-  }
-
-  @media screen and (max-width: $mobile-view) {
-    max-height: initial;
-    overflow: initial;
-
-    .section-title {
-      font-size: 17px;
-      margin-left: 10px;
-    }
-  }
-}
-
 // Use margin by default, or padding if $margin is false
-@mixin fluid-videos-miniature-margins ($margin: true, $min-margin: 0) {
-  --fluidVideosMiniatureMargins: #{pvar(--horizontalMarginContent)};
+@mixin grid-videos-miniature-margins ($margin: true, $min-margin: 0) {
+  --gridVideosMiniatureMargins: #{pvar(--videosHorizontalMarginContent)};
 
   @if $margin {
-    margin-left: var(--fluidVideosMiniatureMargins) !important;
-    margin-right: var(--fluidVideosMiniatureMargins) !important;
+    margin-left: var(--gridVideosMiniatureMargins) !important;
+    margin-right: var(--gridVideosMiniatureMargins) !important;
   } @else {
-    padding-left: var(--fluidVideosMiniatureMargins) !important;
-    padding-right: var(--fluidVideosMiniatureMargins) !important;
+    padding-left: var(--gridVideosMiniatureMargins) !important;
+    padding-right: var(--gridVideosMiniatureMargins) !important;
   }
 
   @media screen and (max-width: $mobile-view) {
-    --fluidVideosMiniatureMargins: $min-margin;
+    --gridVideosMiniatureMargins: #{$min-margin};
 
     width: auto;
   }
 }
 
-@mixin fluid-videos-miniature-layout {
-  @include fluid-videos-miniature-margins;
-
-  @media screen and (max-width: $mobile-view) {
-    .videos {
-      text-align: center;
-
-      ::ng-deep .video-miniature {
-        padding-right: 0;
-        height: auto;
-        width: 100%;
-        margin-bottom: 25px;
-
-        .video-miniature-information {
-          width: 100% !important;
-          text-align: left;
-
-          span {
-            width: 100%;
-          }
-        }
-
-        .video-thumbnail {
-          border-radius: 0;
-        }
-      }
-    }
-  }
+@mixin grid-videos-miniature-layout {
+  @include grid-videos-miniature-margins;
 
   @media screen and (min-width: $mobile-view) {
-    .videos {
-      --miniatureMinWidth: #{$video-thumbnail-width - 15px};
+    .videos,
+    .playlists {
+      --miniatureMinWidth: #{$video-thumbnail-width - 25px};
       --miniatureMaxWidth: #{$video-thumbnail-width};
 
       display: grid;
-      column-gap: 5px;
+      column-gap: 30px;
       grid-template-columns: repeat(
         auto-fill,
         minmax(
@@ -240,21 +135,33 @@ $play-overlay-width: 18px;
         )
       );
 
-      @media screen and (min-width: #{breakpoint(fhd)}) {
-        column-gap: 1%;
-        --miniatureMinWidth: #{$video-thumbnail-width};
-      }
-
-      .video-wrapper {
+      .video-wrapper,
+      .playlist-wrapper {
         margin: 0 auto;
         width: 100%;
 
-        my-video-miniature {
+        my-video-miniature,
+        my-video-playlist-miniature {
           display: block;
           min-width: var(--miniatureMinWidth);
           max-width: var(--miniatureMaxWidth);
         }
       }
+
+      @media screen and (min-width: #{breakpoint(xm)}) {
+        column-gap: 15px;
+      }
+
+      @media screen and (min-width: #{breakpoint(fhd)}) {
+        column-gap: 2%;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    .videos,
+    .playlists {
+      text-align: center;
     }
   }
 }

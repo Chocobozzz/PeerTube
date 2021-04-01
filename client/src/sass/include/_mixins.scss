@@ -620,17 +620,23 @@
   @include button-with-icon(20px, 5px, -1px);
 }
 
-@mixin row-blocks {
+@mixin row-blocks ($column-responsive: true) {
   display: flex;
   min-height: 130px;
   padding-bottom: 20px;
   margin-bottom: 20px;
   border-bottom: 1px solid #C6C6C6;
 
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-    height: auto;
-    align-items: center;
+  @media screen and (max-width: $small-view) {
+    @if $column-responsive {
+      flex-direction: column;
+      height: auto;
+      align-items: center;
+    } @else {
+      min-height: initial;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
   }
 }
 
@@ -931,4 +937,32 @@
   border-bottom: ($height / 2) solid transparent;
 
   border-left: $width solid rgba(255, 255, 255, 0.95);
+}
+
+@mixin on-small-main-col () {
+  :host-context(.main-col:not(.expanded)) {
+    @media screen and (max-width: $small-view + $menu-width) {
+      @content;
+    }
+  }
+
+  :host-context(.main-col.expanded) {
+    @media screen and (max-width: $small-view) {
+      @content;
+    }
+  }
+}
+
+@mixin on-mobile-main-col () {
+  :host-context(.main-col:not(.expanded)) {
+    @media screen and (max-width: $mobile-view + $menu-width) {
+      @content;
+    }
+  }
+
+  :host-context(.main-col.expanded) {
+    @media screen and (max-width: $mobile-view) {
+      @content;
+    }
+  }
 }

@@ -1,8 +1,6 @@
 <h1>
-  <span>
-    <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>My playlists</ng-container> <span class="badge badge-secondary">{{ pagination.totalItems }}</span>
-  </span>
+  <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>My playlists</ng-container> <span class="badge badge-secondary">{{ pagination.totalItems }}</span>
 </h1>
 
 <div class="video-playlists-header d-flex justify-content-between">
@@ -21,10 +19,10 @@
 
 <div class="video-playlists" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
-    <div class="miniature-wrapper">
-      <my-video-playlist-miniature [playlist]="playlist" [toManage]="true" [displayChannel]="true" [displayDescription]="true" [displayPrivacy]="true"
-      ></my-video-playlist-miniature>
-    </div>
+    <my-video-playlist-miniature
+      [playlist]="playlist" [toManage]="true" [displayChannel]="true"
+      [displayDescription]="true" [displayPrivacy]="true" [displayAsRow]="true"
+    ></my-video-playlist-miniature>
 
     <div *ngIf="isRegularPlaylist(playlist)" class="video-playlist-buttons">
       <my-delete-button label (click)="deleteVideoPlaylist(playlist)"></my-delete-button>

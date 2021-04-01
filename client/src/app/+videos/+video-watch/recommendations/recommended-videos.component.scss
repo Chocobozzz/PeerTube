@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 .title-page-container {
   display: flex;
   justify-content: space-between;
@@ -9,6 +12,10 @@
     margin-bottom: unset;
     margin-right: .5rem !important;
   }
+}
+
+.title-page {
+  margin-top: 0;
 }
 
 .title-page-autoplay {
@@ -29,3 +36,29 @@
 hr {
   margin-top: 0;
 }
+
+my-video-miniature {
+  display: block;
+}
+
+.other-videos:not(.display-as-row) my-video-miniature {
+  min-width: $video-thumbnail-medium-width;
+  max-width: $video-thumbnail-medium-width;
+}
+
+.display-as-row {
+  my-video-miniature {
+    margin-bottom: 20px;
+  }
+
+  hr {
+    display: none;
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    my-video-miniature {
+      margin-bottom: 10px;
+    }
+  }
+}
+

@@ -4,7 +4,7 @@
 </h1>
 
 <div class="top-buttons">
-  <div>
+  <div class="search-wrapper">
     <div class="input-group has-feedback has-clear">
       <input
         type="text" name="history-search" id="history-search" i18n-placeholder placeholder="Search your history"
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="history-switch ml-auto mr-3">
+  <div class="history-switch">
     <my-input-switch [(ngModel)]="videosHistoryEnabled" (ngModelChange)="onVideosHistoryChange()"></my-input-switch>
     <label i18n>Track watch history</label>
   </div>

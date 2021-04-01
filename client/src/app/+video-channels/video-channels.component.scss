@@ -16,11 +16,11 @@
 }
 
 .links {
-  @include fluid-videos-miniature-margins;
+  @include grid-videos-miniature-margins;
 }
 
 .channel-info {
-  @include fluid-videos-miniature-margins(false, 15px);
+  @include grid-videos-miniature-margins(false, 15px);
 
   display: grid;
   grid-template-columns: 1fr auto;

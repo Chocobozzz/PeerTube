@@ -1,6 +1,6 @@
 import { Subject, Subscription } from 'rxjs'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ComponentPagination, hasMoreItems } from '@app/core'
+import { ComponentPagination, hasMoreItems, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 
@@ -25,7 +25,8 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
 
   constructor (
     private videoPlaylistService: VideoPlaylistService,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private screenService: ScreenService
   ) {}
 
   ngOnInit () {
@@ -46,6 +47,10 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
 
     this.pagination.currentPage += 1
     this.loadVideoPlaylists()
+  }
+
+  displayAsRow () {
+    return this.screenService.isInMobileView()
   }
 
   private loadVideoPlaylists () {
