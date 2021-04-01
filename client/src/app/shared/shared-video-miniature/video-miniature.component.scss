@@ -105,7 +105,6 @@ $more-button-width: 40px;
     width: 100%;
   }
 
-
   .video-miniature-name {
     margin-top: 10px;
     margin-bottom: 5px;
@@ -169,13 +168,13 @@ $more-button-width: 40px;
   }
 
   .video-miniature-name {
-    @include ellipsis-multiline(1.3em, 2);
+    @include ellipsis-multiline($video-miniature-row-name-font-size, 2);
   }
 
   .video-miniature-created-at-views,
   .video-miniature-account,
   .video-miniature-channel {
-    font-size: 14px;
+    font-size: $video-miniature-row-info-font-size;
   }
 
   .video-actions {
@@ -196,13 +195,13 @@ $more-button-width: 40px;
     --rowThumbnailHeight: #{$video-thumbnail-small-height};
 
     .video-miniature-name {
-      font-size: 14px;
+      font-size: $video-miniature-row-info-font-size;
     }
 
     .video-miniature-created-at-views,
     .video-miniature-account,
     .video-miniature-channel {
-      font-size: 12px;
+      font-size: $video-miniature-row-mobile-info-font-size;
     }
   }
 }
