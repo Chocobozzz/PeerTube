@@ -342,11 +342,15 @@ ngx-loading-bar {
       --horizontalMarginContent: #{$expanded-horizontal-margins / 2};
     }
 
-    --videosHorizontalMarginContent: #{pvar(--horizontalMarginContent)};
+    --videosHorizontalMarginContent: 30px;
   }
 }
 
 @media screen and (max-width: #{breakpoint(lg)}) {
+  .main-col {
+    --videosHorizontalMarginContent: #{pvar(--horizontalMarginContent)};
+  }
+
   /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
   .main-col,
   .main-col.expanded {
