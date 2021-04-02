@@ -395,7 +395,7 @@
       </trans-unit>
       <trans-unit id="a5065c0f26fbd00b6f6ac0cf948535a44fffbd45" datatype="html">
         <source>Blocking this live will automatically terminate the live stream.</source>
-        <target state="new"> Blocking this live will automatically terminate the live stream. </target>
+        <target state="translated">Asewḥel n usuddem-a usrid-a ad t-yekfu s wudem awurman.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="0cd0f27936731dabfd8d89277b781d5dd664bc89" datatype="html">
@@ -418,9 +418,7 @@
       </trans-unit>
       <trans-unit id="f73a82bb90c6c856cc0d2e3b2f5c109460074912" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 n tmeẓrit} other {
-          <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> n tmeẓriyin} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 n tmeẓrit} other { <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> n tmeẓriyin} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="7ac18f5bb1a9b9f245acc8497c2f165a7e9f8510" datatype="html">
@@ -449,7 +447,7 @@
       </trans-unit>
       <trans-unit id="3267631941074558910" datatype="html">
         <source>Cannot fetch information of this remote account</source>
-        <target state="new">Cannot fetch information of this remote account</target>
+        <target state="translated">D awezɣi ad d-nawi talɣut ɣef umiḍan-a anmeggag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -467,7 +465,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other { <x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} } </target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ulac tividyutin} =1 {1 n tvidyut} other { <x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> tividyutin} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582" datatype="html">
@@ -529,7 +527,7 @@
       </trans-unit>
       <trans-unit id="1649035832083209812" datatype="html">
         <source>Best</source>
-        <target state="new">Best</target>
+        <target state="translated">Igerrez</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -538,7 +536,7 @@
       </trans-unit>
       <trans-unit id="3594371452042277118" datatype="html">
         <source>Videos with the most interactions for recent videos, minus user history</source>
-        <target state="new">Videos with the most interactions for recent videos, minus user history</target>
+        <target state="translated">Tividyutin s temyigawin izaden i tvidyutin n melmi kan, drus n uzray n useqdac</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/trending/video-trending-header.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -626,7 +624,7 @@
       </trans-unit>
       <trans-unit id="606af655e677f8b06f27f09777cbb8a25b4de665" datatype="html">
         <source>Subscribe with a remote account:</source>
-        <target state="new">Subscribe with a remote account:</target>
+        <target state="translated">Multeɣ s umiḍan anmeggag:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">62</context>
@@ -644,7 +642,7 @@
       </trans-unit>
       <trans-unit id="1096694538966074574" datatype="html">
         <source>Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</source>
-        <target state="new">Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</target>
+        <target state="translated">Isuffeɣ-d <x id="PH" equiv-text="total"/> tividyutin yemṣadan "<x id="PH_1" equiv-text="this.search"/>"</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="7639191791633609999" datatype="html">
@@ -669,20 +667,12 @@
       </trans-unit>
       <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3" datatype="html">
         <source><x id="START_TAG_SPAN"/>Remote subscribe<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Remote interact<x id="CLOSE_TAG_SPAN"/></source>
-        <target state="translated">
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Kkes ajerred
-          
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-          <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Kkes asihel
-          
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. 
-        
-        </target>
+        <target state="translated"><x id="START_TAG_SPAN"/>Amulteɣ anmeggag<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Amyigew anmeggag<x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="10fc5e7d31ac52e14a0ee249d718275d2f25771e" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="new"> You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example). </target>
+        <target state="translated">Tzemreḍ ad tmultɣeḍ ɣer ubadu s tummant i tebɣiḍ yemṣadan d ActivityPub (PeerTube, Mastodon neɣ Pleroma d amedya).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -698,12 +688,12 @@
       </trans-unit>
       <trans-unit id="6513f65441f986d9204122e01b4ab1df1d63d18e" datatype="html">
         <source>PeerTube version</source>
-        <target state="translated">PeerTube version</target>
+        <target state="translated">Lqem n PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="083e95bdf6f64257d2ddd399ecf9f48ab88e279f" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </target>
+        <target state="translated"><x id="START_TAG_DIV"/>Tasertit n tidyutin timḥulfa/NSFW tamezwert<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>zemrent ad ttwalsent asbadu sɣur yiseqdacen<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c" datatype="html">
@@ -4102,7 +4092,7 @@
       </trans-unit>
       <trans-unit id="e8d0453dbe7338287c348e1043da4620c218e9c4" datatype="html">
         <source>No jobs found.</source>
-        <target state="translated">Ulac axeddim yettwafen</target>
+        <target state="translated">Ulac imahilen yettwafen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="50140de8e198dcb486966365d1d4c01fd910cc46" datatype="html">
@@ -6537,7 +6527,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3935234189109112926" datatype="html">
         <source>You are not following <x id="PH"/> anymore.</source>
-        <target state="translated">You are not following <x id="PH"/> anymore. </target>
+        <target state="translated">Ur teṭṭafareḍ <x id="PH"/> yiwen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="2593763089859685916" datatype="html">
@@ -6582,23 +6572,23 @@ color: red;
       </trans-unit>
       <trans-unit id="8639315630141911544" datatype="html">
         <source>Account <x id="PH"/> unmuted by your instance.</source>
-        <target state="translated">Account <x id="PH"/> unmuted by your instance. </target>
+        <target state="translated">Amiḍan <x id="PH"/> yettwakkes-as usgugem s tummant-inek·inem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="3371601176452094961" datatype="html">
         <source>Instance <x id="PH"/> unmuted by your instance.</source>
-        <target state="translated">Instance <x id="PH"/> unmuted by your instance. </target>
+        <target state="translated">Tummant <x id="PH"/> yettwakkes-as usgugem s tummant-ik·im.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH"/> muted.</source>
-        <target state="translated">Instance <x id="PH"/> muted. </target>
+        <target state="translated">Tummant <x id="PH"/> tettwasgugem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">147</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="3096398988891996621" datatype="html">
         <source>Instance <x id="PH"/> muted by your instance.</source>
-        <target state="translated">Instance <x id="PH"/> muted by your instance. </target>
+        <target state="translated">Tummant <x id="PH"/> tettwasgugem s tummant-ik·im.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2393853062458645999" datatype="html">
@@ -6752,7 +6742,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2558977494773636050" datatype="html">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target state="translated">Account <x id="PH"/> muted by the instance. </target>
+        <target state="translated">Amiḍan <x id="PH"/> yettwasgugem s tummant-ik·im.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">175</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">429</context></context-group>
       </trans-unit>
@@ -6763,7 +6753,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH"/> muted by the instance.</source>
-        <target state="translated">Server <x id="PH"/> muted by the instance. </target>
+        <target state="translated">Aqeddac <x id="PH"/> yettwasgugem s tummant-a.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">441</context></context-group>
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
@@ -6813,7 +6803,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6906423861055262169" datatype="html">
         <source>Video <x id="PH"/> switched to manual block.</source>
-        <target state="translated">Video <x id="PH"/> switched to manual block. </target>
+        <target state="translated">Tavidyut <x id="PH"/> tuɣal ɣer usewḥel s ufus.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="7293356040886494773" datatype="html">
@@ -6832,7 +6822,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4922469417589203720" datatype="html">
         <source>Video <x id="PH"/> unblocked.</source>
-        <target state="translated">Video <x id="PH"/> unblocked. </target>
+        <target state="translated">Tavidyut <x id="PH"/> yekkes-as usewḥel.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">188</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
@@ -7006,7 +6996,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
         <source>User <x id="PH"/> created.</source>
-        <target state="translated">User <x id="PH"/> created. </target>
+        <target state="translated">Aseqdac <x id="PH"/> yettwarna.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
@@ -7026,7 +7016,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5974506725502681113" datatype="html">
         <source>Password changed for user <x id="PH"/>.</source>
-        <target state="translated">Password changed for user <x id="PH"/>. </target>
+        <target state="translated">Yettwabeddel wawal uffir i useqdac <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="149953821752893163" datatype="html">
@@ -7046,7 +7036,7 @@ color: red;
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
         <source>User <x id="PH"/> updated.</source>
-        <target state="translated">User <x id="PH"/> updated. </target>
+        <target state="translated">Aseqdac <x id="PH"/> yettwaleqqem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="1349763489797682899" datatype="html">
@@ -7056,7 +7046,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8819563010322372715" datatype="html">
         <source>An email asking for password reset has been sent to <x id="PH"/>.</source>
-        <target state="translated">An email asking for password reset has been sent to <x id="PH"/>. </target>
+        <target state="translated">Imayl n usuter n uwennez n wawal uffir yettwazen ɣer <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="7483807629538115183" datatype="html">
@@ -7159,13 +7149,13 @@ color: red;
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target state="translated">Account <x id="PH"/> unmuted. </target>
+        <target state="translated">Amiḍan <x id="PH"/> yekkes-as usgugem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">133</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="7246356397085094208" datatype="html">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target state="translated">Instance <x id="PH"/> unmuted. </target>
+        <target state="translated">Tummant <x id="PH"/> yettwakkes-as usgugem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">161</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
@@ -7423,7 +7413,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
         <source>Video channel <x id="PH"/> created.</source>
-        <target state="translated">Video channel <x id="PH"/> created. </target>
+        <target state="translated">Abadu n tvidyut <x id="PH"/> yettwarna.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-create.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="8723777130353305761" datatype="html">
@@ -7433,7 +7423,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7589345916094713536" datatype="html">
         <source>Video channel <x id="PH"/> updated.</source>
-        <target state="translated">Video channel <x id="PH"/> updated. </target>
+        <target state="translated">Abadu n tvidyut <x id="PH"/> yettwaleqqem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-update.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="2575302837003821736" datatype="html">
@@ -7443,7 +7433,7 @@ color: red;
       </trans-unit>
       <trans-unit id="624066830180032195" datatype="html">
         <source>Video channel <x id="PH"/> deleted.</source>
-        <target state="translated">Video channel <x id="PH"/> deleted. </target>
+        <target state="translated">Abadu n tvidyut <x id="PH"/> yettwakkes.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="6450826648284332649" datatype="html">
@@ -7487,7 +7477,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5032453707232754344" datatype="html">
         <source>Playlist <x id="PH"/> created.</source>
-        <target state="translated">Playlist <x id="PH"/> created. </target>
+        <target state="translated">Tabdart n tɣuri <x id="PH"/> tettwarna.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-create.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
@@ -7521,7 +7511,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1431617394009162547" datatype="html">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target state="translated">Playlist <x id="PH"/> updated. </target>
+        <target state="translated">Tabdart n tɣuri <x id="PH"/> tettwaleqqem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="2027805873922338635" datatype="html">
@@ -7538,7 +7528,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3380608219513805292" datatype="html">
         <source>Playlist <x id="PH"/> deleted.</source>
-        <target state="translated">Playlist <x id="PH"/> deleted. </target>
+        <target state="translated">Tabdart n tɣuri <x id="PH"/> tettwakkes.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894" datatype="html">
@@ -7571,7 +7561,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2767660806989176400" datatype="html">
         <source>Video <x id="PH"/> deleted.</source>
-        <target state="translated">Video <x id="PH"/> deleted. </target>
+        <target state="translated">Tavidyut <x id="PH"/> tettwakkes.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">142</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
@@ -7703,7 +7693,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2687679787442328897" datatype="html">
         <source>An email with verification link will be sent to <x id="PH"/>.</source>
-        <target state="translated">An email with verification link will be sent to <x id="PH"/>. </target>
+        <target state="translated">Imayl s useɣwen n usenqed ad yettwazen ɣer <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="4180693983967989981" datatype="html">
@@ -8717,7 +8707,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
         <source>Custom value...</source>
-        <target state="new">Custom value...</target>
+        <target state="translated">Azal udmawan...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-custom-value.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -9079,7 +9069,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2448281151916042849" datatype="html">
         <source>User <x id="PH"/> banned.</source>
-        <target state="translated">User <x id="PH"/> banned. </target>
+        <target state="translated">Aseqdac <x id="PH"/> yettwagdel.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html">
@@ -9089,7 +9079,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1794219875546376069" datatype="html">
         <source>User <x id="PH"/> unbanned.</source>
-        <target state="translated">User <x id="PH"/> unbanned. </target>
+        <target state="translated">Aseqdac <x id="PH"/> yettwakkes-as ugdal.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4885683604826993045" datatype="html">
@@ -9099,7 +9089,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6301381219225831298" datatype="html">
         <source>User <x id="PH"/> deleted.</source>
-        <target state="translated">User <x id="PH"/> deleted. </target>
+        <target state="translated">Aseqdac <x id="PH"/> yettwakkes.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
@@ -9109,7 +9099,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8150022485860412528" datatype="html">
         <source>Account <x id="PH"/> muted.</source>
-        <target state="translated">Account <x id="PH"/> muted. </target>
+        <target state="translated">Amiḍan <x id="PH"/> yettwasgugem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">240</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">119</context></context-group>
       </trans-unit>
@@ -9349,7 +9339,7 @@ color: red;
       </trans-unit>
       <trans-unit id="968295009933361070" datatype="html">
         <source>Too many attempts, please try again after <x id="PH"/> minutes.</source>
-        <target state="translated">Too many attempts, please try again after <x id="PH"/> minutes. </target>
+        <target state="translated">Aṭas n tikkal i tεerḍeḍ, ttxil-k·m εreḍ tikkelt-nniḍen seld <x id="PH"/> tesdatin.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="4965472196059235310" datatype="html">
@@ -9638,7 +9628,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8498940878158860248" datatype="html">
         <source>Remove from watch later</source>
-        <target state="translated">Remove from watch later</target>
+        <target state="translated">Kkes-it seg uwali tmeẓriwt-nniḍen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="a2adc8b3bb63e13ff7adf65469f356b692bd294b" datatype="html">
@@ -9648,22 +9638,22 @@ color: red;
       </trans-unit>
       <trans-unit id="2439066254855913806" datatype="html">
         <source>Only I can see this video</source>
-        <target state="translated">Only I can see this video</target>
+        <target state="translated">Ala nekk i izemren ad iwali tavidyut-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">375</context></context-group>
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
-        <target state="translated">Only shareable via a private link</target>
+        <target state="translated">Beṭṭu-ines ad yili kan s useɣwen uslig</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">379</context></context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528" datatype="html">
         <source>Anyone can see this video</source>
-        <target state="translated">Anyone can see this video</target>
+        <target state="translated">Medden akk zemren ad walin tavidyut-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">383</context></context-group>
       </trans-unit>
       <trans-unit id="1425933035739773115" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="translated">Only users of this instance can see this video</target>
+        <target state="translated">Ala iseqdacen n tummant-a i izemren ad walin tavidyut-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">387</context></context-group>
       </trans-unit>
       <trans-unit id="8312101634344200207" datatype="html">
@@ -9717,7 +9707,7 @@ color: red;
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source>
-        <target state="translated">Select month</target>
+        <target state="translated">Fren ayyur</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
@@ -9749,7 +9739,7 @@ color: red;
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
-        <target state="translated">Premier</target>
+        <target state="translated">Amezwaru</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
@@ -9794,22 +9784,22 @@ color: red;
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target state="translated">Increment hours</target>
+        <target state="translated">Snerni isragen</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target state="translated">Decrement hours</target>
+        <target state="translated">Senqes isragen</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target state="translated">Increment minutes</target>
+        <target state="translated">Rnu tisdatin</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target state="translated">Decrement minutes</target>
+        <target state="translated">Senqes tisdatin</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
@@ -9824,12 +9814,12 @@ color: red;
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target state="translated">Increment seconds</target>
+        <target state="translated">Rnu tisinin</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target state="translated">Decrement seconds</target>
+        <target state="translated">Senqes tisinin</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
@@ -9849,13 +9839,13 @@ color: red;
       </trans-unit>
       <trans-unit id="5210096066382592800" datatype="html">
         <source>Video to import updated.</source>
-        <target state="translated">Video to import updated.</target>
+        <target state="translated">Tavidyut ara d-yettwaketren tettuleqqem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">130</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="3284171506518522275" datatype="html">
         <source>Your video was uploaded to your account and is private.</source>
-        <target state="translated">Your video was uploaded to your account and is private.</target>
+        <target state="translated">Tavidyut-ik·im tettwasuli ɣer umiḍan-ik·im yerna d tusligt.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="5699822024600815733" datatype="html">
@@ -9870,22 +9860,22 @@ color: red;
       </trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
         <source>Upload</source>
-        <target state="translated">Sili</target>
+        <target state="translated">Sali</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="8278735427925094503" datatype="html">
         <source>Upload <x id="PH"/> </source>
-        <target state="translated">Upload <x id="PH"/> </target>
+        <target state="translated">Sali-d <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="1964265829892160232" datatype="html">
         <source>Upload cancelled</source>
-        <target state="translated">Upload cancelled</target>
+        <target state="translated">Asali yettwasefsex</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="5981816353437801748" datatype="html">
         <source>Video published.</source>
-        <target state="translated">Video published.</target>
+        <target state="translated">Tavidyut yettwasuffɣen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">261</context></context-group>
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
@@ -9905,22 +9895,22 @@ color: red;
       </trans-unit>
       <trans-unit id="8306050839443016954" datatype="html">
         <source>Video updated.</source>
-        <target state="translated">Video updated.</target>
+        <target state="translated">Tavidyut tettwaleqqem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="5512208811126492983" datatype="html">
         <source>Report comment</source>
-        <target state="translated">Report comment</target>
+        <target state="translated">Awennit n uneqqis</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="6775540171466219199" datatype="html">
         <source>Stop autoplaying next video</source>
-        <target state="translated">Stop autoplaying next video</target>
+        <target state="translated">Seḥbes taɣuri tawurmant n tvidyut i d-iteddun</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch-playlist.component.ts</context><context context-type="linenumber">203</context></context-group>
       </trans-unit>
       <trans-unit id="5149234672404299151" datatype="html">
         <source>Autoplay next video</source>
-        <target state="translated">Autoplay next video</target>
+        <target state="translated">Taɣuri tawurmant n tvidyut i d-iteddun</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch-playlist.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
@@ -9930,7 +9920,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="translated">Loop playlist videos</target>
+        <target state="translated">Ttales-d tividyutin n tebdart n tɣuri</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch-playlist.component.ts</context><context context-type="linenumber">210</context></context-group>
       </trans-unit>
       <trans-unit id="6419540b7a054d22e153781f2b6fa994151ab897" datatype="html">
@@ -10073,7 +10063,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4361762785337785037" datatype="html">
         <source>Copy feed URL</source>
-        <target state="new">Copy feed URL</target>
+        <target state="translated">Nɣel URL n usuddem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="3392372077636861449" datatype="html">
