@@ -9,7 +9,7 @@
 
   <div class="video-bottom">
     <div class="video-miniature-information">
-      <div class="d-inline-flex video-miniature-meta">
+      <div class="d-flex video-miniature-meta">
         <a *ngIf="displayOptions.avatar" class="avatar" [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
           <img [src]="getAvatarUrl()" alt="" [ngClass]="{ channel: displayOwnerVideoChannel() }" />
         </a>
