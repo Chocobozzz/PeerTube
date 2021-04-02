@@ -74,7 +74,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
     this.links = [
       { label: $localize`VIDEOS`, routerLink: 'videos' },
-      { label: $localize`VIDEO PLAYLISTS`, routerLink: 'video-playlists' }
+      { label: $localize`PLAYLISTS`, routerLink: 'video-playlists' }
     ]
   }
 
