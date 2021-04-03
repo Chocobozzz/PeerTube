@@ -12,6 +12,7 @@ export type EncoderOptionsBuilder = (params: {
 export interface EncoderOptions {
   copy?: boolean // Copy stream? Default to false
 
+  inputOptions: string[]
   outputOptions: string[]
 }
 
