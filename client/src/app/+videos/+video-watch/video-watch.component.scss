@@ -3,7 +3,7 @@
 @import '_bootstrap-variables';
 @import '_miniature';
 
-$player-factor: 1.7; // 16/9
+$player-factor: #{16/9};
 $video-info-margin-left: 44px;
 
 @function getPlayerHeight($width){
