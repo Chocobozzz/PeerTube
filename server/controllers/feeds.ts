@@ -322,13 +322,14 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         return result
       })
 
-      // If both webtorrent and HLS are enabled, prefer HLS
+      // If both webtorrent and HLS are enabled, prefer webtorrent files
+      // standard files for webtorrent are regular MP4s
       const groupedVideos = groupBy(videos, video => video.height || 0)
       const preferredVideos = map(groupedVideos, videoGroup => {
         if (videoGroup.length == 1) {
           return videoGroup[0]
         }
-        return videoGroup.find(v => v.sources.some(s => s.uri.includes("/hls/")))
+        return videoGroup.find(v => v.sources.some(s => s.uri.includes("/webseed/")))
       })
 
       const sortedVideos = orderBy(preferredVideos, ['bitrate'], ['desc'])
