@@ -342,6 +342,7 @@ async function register ({
 
       // You can also return a promise
       return {
+        inputOptions: [],
         outputOptions: [
         // Use a custom bitrate
           '-b' + streamString + ' 10K'
@@ -392,6 +393,7 @@ async function register ({
   {
     const builder = () => {
       return {
+        inputOptions: [],
         outputOptions: []
       }
     }
