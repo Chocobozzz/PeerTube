@@ -3,7 +3,7 @@ import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { FFMPEG_NICE, VIDEO_LIVE } from '@server/initializers/constants'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderProfile, VideoResolution } from '../../shared/models/videos'
+import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptions, EncoderProfile, VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
 import { execPromise, promisify0 } from './core-utils'
 import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
@@ -277,8 +277,7 @@ async function getLiveTranscodingCommand (options: {
       logger.debug('Apply ffmpeg live video params from %s using %s profile.', builderResult.encoder, profile, builderResult)
 
       command.outputOption(`${buildStreamSuffix('-c:v', i)} ${builderResult.encoder}`)
-      command.addInputOptions(builderResult.result.inputOptions)
-      command.addOutputOptions(builderResult.result.outputOptions)
+      applyEncoderOptions(command, builderResult.result)
     }
 
     {
@@ -295,8 +294,7 @@ async function getLiveTranscodingCommand (options: {
       logger.debug('Apply ffmpeg live audio params from %s using %s profile.', builderResult.encoder, profile, builderResult)
 
       command.outputOption(`${buildStreamSuffix('-c:a', i)} ${builderResult.encoder}`)
-      command.addInputOptions(builderResult.result.inputOptions)
-      command.addOutputOptions(builderResult.result.outputOptions)
+      applyEncoderOptions(command, builderResult.result)
     }
 
     varStreamMap.push(`v:${i},a:${i}`)
@@ -606,9 +604,7 @@ async function presetVideo (
     } else if (streamType === 'audio') {
       localCommand.audioCodec(builderResult.encoder)
     }
-
-    command.addInputOptions(builderResult.result.inputOptions)
-    command.addOutputOptions(builderResult.result.outputOptions)
+    applyEncoderOptions(localCommand, builderResult.result)
     addDefaultEncoderParams({ command: localCommand, encoder: builderResult.encoder, fps })
   }
 
@@ -627,6 +623,13 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
     .format('mp4')
     .audioCodec('copy')
     .noVideo()
+}
+
+function applyEncoderOptions (command: ffmpeg.FfmpegCommand, options: EncoderOptions): ffmpeg.FfmpegCommand {
+  return command
+    .inputOptions(options.inputOptions ?? [])
+    .videoFilters(options.videoFilters ?? [])
+    .outputOptions(options.outputOptions ?? [])
 }
 
 // ---------------------------------------------------------------------------
