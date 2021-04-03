@@ -12,8 +12,9 @@ export type EncoderOptionsBuilder = (params: {
 export interface EncoderOptions {
   copy?: boolean // Copy stream? Default to false
 
-  inputOptions: string[]
-  outputOptions: string[]
+  inputOptions?: string[]
+  videoFilters?: string[]
+  outputOptions?: string[]
 }
 
 // All our encoders
