@@ -5003,7 +5003,7 @@
       </trans-unit>
       <trans-unit id="c309dbd2f97cc76a685eaba5692b877676812982" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"> Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">Aru tangalt n JavaScript srid.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Amedya: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('tummant-iw tzad');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="3a3172c4d8c5a080a0603423e175c1e4457951b6" datatype="html">
@@ -5235,7 +5235,7 @@ color: red;
       </trans-unit>
       <trans-unit id="945ab39294575b7271dde42240c0806dc4ff5076" datatype="html">
         <source>You don't have any video in your watch history yet.</source>
-        <target state="new">You don't have any video in your watch history yet.</target>
+        <target state="translated">Ur tesεiḍ ara ula d yiwet n tvidyut deg uzray n tmeẓriwt-ik·im ar tura.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">30</context>
@@ -5319,12 +5319,12 @@ color: red;
       </trans-unit>
       <trans-unit id="7040375308762081154" datatype="html">
         <source>My video channels</source>
-        <target state="new">My video channels</target>
+        <target state="translated">Ibuda-inu n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="7418836785553125957" datatype="html">
         <source>Create a new video channel</source>
-        <target state="new">Create a new video channel</target>
+        <target state="translated">Rnu abadu amaynut n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="8828123061564507501" datatype="html">
@@ -5467,7 +5467,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9197112111252826229" datatype="html">
         <source>Ask to send an email to verify you account</source>
-        <target state="new">Ask to send an email to verify you account</target>
+        <target state="translated">Suter ad ak·am-d-aznen imayl i usenqed n umiḍan-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="bd2edf99dd6562385ccec19a7ab2d1898e626605" datatype="html">
@@ -5579,7 +5579,7 @@ color: red;
       </trans-unit>
       <trans-unit id="33a9a4343ee46c354d8b716167990efeea654382" datatype="html">
         <source>Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source>
-        <target state="new">Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
+        <target state="translated">Tummanin yettwaḍfaren (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5587,7 +5587,7 @@ color: red;
       </trans-unit>
       <trans-unit id="aed1bb4393932c974d4347ff743a2253cc64ef02" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target state="new">Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <target state="translated">Tummanin yettwaḍfaren (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5880,7 +5880,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9a9dcdc62c7e0048f4f4702b0327dda350341abc" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="new">This instance is not following any other.</target>
+        <target state="translated">Tummant-a ulac win i tt-yeṭṭafaren.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
@@ -6048,7 +6048,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2131232107132374967" datatype="html">
         <source>Search videos within account</source>
-        <target state="new">Search videos within account</target>
+        <target state="translated">Nadi tividyutin s war amiḍan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">61</context>
@@ -6094,7 +6094,7 @@ color: red;
       </trans-unit>
       <trans-unit id="230b7aa1bc012b2e5bafc1f24b6aa734a978183c" datatype="html">
         <source>Search videos</source>
-        <target state="new">Search videos</target>
+        <target state="translated">Nadi tividyutin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">48</context>
