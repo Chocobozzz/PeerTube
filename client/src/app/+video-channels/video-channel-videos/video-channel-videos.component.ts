@@ -16,6 +16,7 @@ import { VideoFilter } from '@shared/models'
   ]
 })
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
+  // No value because we don't want a page title
   titlePage: string
   loadOnInit = false
   loadUserVideoPreferences = true
@@ -94,13 +95,6 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
 
     return this.videoService
                .getVideoChannelVideos(options)
-               .pipe(
-                 tap(({ total }) => {
-                   this.titlePage = total === 1
-                    ? $localize`Published 1 video`
-                    : $localize`Published ${total} videos`
-                 })
-               )
   }
 
   generateSyndicationList () {

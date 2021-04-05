@@ -595,8 +595,8 @@ const STATIC_MAX_AGE = {
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
-  width: 223,
-  height: 122,
+  width: 280,
+  height: 157,
   minWidth: 150
 }
 const PREVIEWS_SIZE = {
