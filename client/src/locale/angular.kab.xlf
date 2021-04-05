@@ -2219,7 +2219,7 @@
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2" datatype="html">
         <source>Congratulations, the video behind <x id="INTERPOLATION"/> will be imported! You can already add information about this video. </source>
-        <target state="translated">Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video. </target>
+        <target state="translated">Gedha, tavidyut deffir <x id="INTERPOLATION"/> ad d-tettwakter! Tzemreḍ yakan ad ternuḍ talɣut ɣef tvidyut-a. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb" datatype="html">
@@ -2348,8 +2348,7 @@
       </trans-unit>
       <trans-unit id="975c4cdb9e07ef4c43e2c7aa3f787feabc9a47d2" datatype="html">
         <source>Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="new"> Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated.
-</target>
+        <target state="translated">Tanzagt tafellayt n usrid d <x id="INTERPOLATION"/>. Ma yella asrid-inek·inem iεedda talast-a, ad yekfu s wudem awurman. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="ebe5234338205e30a59cf703e2a2b6ef49fb75f8" datatype="html">
@@ -2788,7 +2787,7 @@
       </trans-unit>
       <trans-unit id="6670e588ad98a777c18f30096aeff7687d53c1c4" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example). </target>
+        <target state="translated">Tzemreḍ ad twennteḍ s useqdec n umiḍan ɣef yal tummant yemṣadan d ActivityPub (Amiḍan n PeerTube/Mastodon/Pleroma d amedya).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">60,61</context>
@@ -2879,7 +2878,7 @@
       </trans-unit>
       <trans-unit id="7e7ad19f1bcc2c33cdba4c1ad25e2b398ad453d9" datatype="html">
         <source>State <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Addad n <x id="START_TAG_P_SORTICON"/></target>
+        <target state="translated">Addad n <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">29</context></context-group>
@@ -2896,7 +2895,7 @@
       </trans-unit>
       <trans-unit id="9a7b523cbbebabeb9b10482291b58c52825a4b05" datatype="html">
         <source>Score <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Agmuḍ n <x id="START_TAG_P_SORTICON"/></target>
+        <target state="translated">Agmuḍ n <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b" datatype="html">
@@ -2965,7 +2964,7 @@
       </trans-unit>
       <trans-unit id="b56702ff10875710f111634cc315cd3ef01b206f" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/> <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the comment origin ( <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
+        <target state="translated">Aneqqis-ik·m ad yettwazen i yimḍebbren n <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> syen ad yettuwelleh ɣer uwennit aneẓli (<x id="INTERPOLATION_1"/>) daɣen<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
@@ -3253,7 +3252,7 @@
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG"/>original<x id="CLOSE_TAG_STRONG"/> video size. <x id="LINE_BREAK"/> At most, this user could upload ~ <x id="INTERPOLATION"/>. </source>
-        <target state="translated">Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
+        <target state="translated">Anigtengel yermed. Ableɣ n tvidyut yettaṭṭaf akan teɣzi <x id="START_TAG_STRONG"/>taneẓlit<x id="CLOSE_TAG_STRONG"/> n tvidyut. <x id="LINE_BREAK"/> Deg tuget, aseqdac-a yezmer ad d-isali ~ <x id="INTERPOLATION"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">162</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
@@ -5366,7 +5365,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>? It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">Do you really want to delete <x id="PH"/>? It will delete <x id="PH_1"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2"/>)!</target>
+        <target state="translated">Tebɣiḍ s tidet ad tekkseḍ <x id="PH" equiv-text="videoChannel.displayName"/>? Ad yekkes <x id="PH_1" equiv-text="videoChannel.videosCount"/> tividyutin i d-yettwasulin deg ubadu-a, syen ur tettizmired ara ad ternuḍ abadu-nniḍen s yisem-nni kan (<x id="PH_2" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="d5f0913d08d01648d7e6165c168a99ccd06d1f4c" datatype="html">
@@ -5412,7 +5411,7 @@ color: red;
       </trans-unit>
       <trans-unit id="19886846ed573d0a74c61c4e8df073eb4f64acd0" datatype="html">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">If you need help to use PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentation <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Ma yella tesriḍ tallalt i useqdec n PeerTube, tzemreḍ ad tesneqdeḍ <x id="START_LINK"/>tasemlit<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="09a69cde5889927629e2ac9dc63a71b88252b530" datatype="html">
@@ -5961,7 +5960,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b" datatype="html">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target state="translated">A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </target>
+        <target state="translated">Abadu d tayunt anida i d-tsalayeḍ tividyutin-ik·im. Timerna n waṭas n yibuda ad ak·akem-iεawen ad tqeεdeḍ rnu ad tebḍuḍ agbur-inek·inem. <x id="LINE_BREAK"/> D amedya, tzemred ad tesεuḍ abadu i usuffeɣ n uẓawan-ik·im, abadu-nniḍen anida ara d-tsuffɣeḍ tividyutin-ik·im i umeslay ɣef twennaḍt. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="df3021e29cbce57c12151ae6e1e0bf8c640e87da" datatype="html">
@@ -6017,7 +6016,7 @@ color: red;
       </trans-unit>
       <trans-unit id="d315d635144b1104f1c1e9ef80ff3d07fcfa571c" datatype="html">
         <source>I am at least 16 years old and agree to the <x id="START_LINK"/>Terms<x id="CLOSE_LINK"/><x id="START_TAG_NG_CONTAINER"/> and to the <x id="START_LINK_1"/>Code of Conduct<x id="CLOSE_LINK"/><x id="CLOSE_TAG_NG_CONTAINER"/> of this instance </source>
-        <target state="translated">I am at least 16 years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Terms <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and to the <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Code of Conduct <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> of this instance </target>
+        <target state="translated">Γur-i ma drus 16 n yiseggasen deg tudert-iw, qebleɣ <x id="START_LINK"/>tiwtilin-a<x id="CLOSE_LINK"/><x id="START_TAG_NG_CONTAINER"/> akked <x id="START_LINK_1"/>usaḍuf n tikli<x id="CLOSE_LINK"/><x id="CLOSE_TAG_NG_CONTAINER"/> n tummant </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="3301086086650990787" datatype="html">
@@ -6245,7 +6244,7 @@ color: red;
       </trans-unit>
       <trans-unit id="0e6c8311c537859bea4cfb037a5c10b58c9d4ade" datatype="html">
         <source>However, you may want to read our guidelines before tweaking the following values.</source>
-        <target state="new"> However, you may want to read our guidelines before tweaking the following values. </target>
+        <target state="translated">Akken yebɣu yili, tzemreḍ ad teɣreḍ iwellihen-nneɣ send ad tbeddleḍ azalen-a.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -6253,7 +6252,7 @@ color: red;
       </trans-unit>
       <trans-unit id="a8c8c6816d427a39f9be727d83b3c377f2f08cf6" datatype="html">
         <source>Read guidelines</source>
-        <target state="new"> Read guidelines </target>
+        <target state="translated">Γer iwellihen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">17,18</context>
@@ -6261,7 +6260,7 @@ color: red;
       </trans-unit>
       <trans-unit id="f15db977c871ea5765c464c26b04c1976cd2e5df" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="new"> Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully. </target>
+        <target state="translated">Sesfer tividyutin i d-yettwasulin akken ara yilint am yisuddimen ara yizmiren akk ibenkan ad d-ɣren. Γas akken yesɣamay-d ɣlay deg yiɣbula, ma ca aya yettuneḥsab d aḥric yesεan aṭas azal deg Peertube, ihi ddu kan s leεqel.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -6284,7 +6283,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="new">You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</target>
+        <target state="translated">Tremdeḍ aerred: nermed s wudem awurman "Sewḥel tividyutin timaynutin s wudem awurman" ṛcem tabewwaḍt n tgezmi "Tividyutin" ddaw-a kan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
@@ -6385,7 +6384,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5514849824631859021" datatype="html">
         <source>100GB</source>
-        <target state="new">100GB</target>
+        <target state="translated">100GAṬ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -6393,7 +6392,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8245180845645676506" datatype="html">
         <source>200GB</source>
-        <target state="new">200GB</target>
+        <target state="translated">200GAṬ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -6401,7 +6400,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5468089754278798237" datatype="html">
         <source>500GB</source>
-        <target state="new">500GB</target>
+        <target state="translated">500GAṬ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -6424,7 +6423,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7641416475804061087" datatype="html">
         <source>10GB</source>
-        <target state="new">10GB</target>
+        <target state="translated">10GAṬ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">44</context>
@@ -7162,7 +7161,7 @@ color: red;
       </trans-unit>
       <trans-unit id="192815f43d0d7337dbf99f84281f5a4c3155af8f" datatype="html">
         <source>My watch history</source>
-        <target state="new">My watch history</target>
+        <target state="translated">Azray-inu n tmeẓriwt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7170,7 +7169,7 @@ color: red;
       </trans-unit>
       <trans-unit id="f2540f4ffc5bbb12e034a4c9e118bbc680c62e61" datatype="html">
         <source>Search your history</source>
-        <target state="new">Search your history</target>
+        <target state="translated">Nadi deg uzray-inek·inem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">10</context>
@@ -7178,7 +7177,7 @@ color: red;
       </trans-unit>
       <trans-unit id="777ef31e4dfcb08a00e23b586a50f0ffe94f0c72" datatype="html">
         <source>Track watch history</source>
-        <target state="new">Track watch history</target>
+        <target state="translated">Azray n tɣuri n tvidyut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">20</context>
@@ -7201,8 +7200,7 @@ color: red;
       </trans-unit>
       <trans-unit id="73fc884417b68de6671fbab6e72e054c38a1990a" datatype="html">
         <source>Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public. </source>
-        <target state="new"> Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public.
-</target>
+        <target state="translated">Imayl-inek·inem amiran d <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. Urǧin ad d-iban i uzayaz. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -7332,7 +7330,7 @@ color: red;
       </trans-unit>
       <trans-unit id="d2ade8ba2e32c6fe467932b6b156025fe50da7c3" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="new"> People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
+        <target state="translated">Imdanen zemren ad ak·akem-id-afen s useqdec n @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -7352,7 +7350,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2775050991871557896" datatype="html">
         <source>Avatar deleted.</source>
-        <target state="new">Avatar deleted.</target>
+        <target state="translated">Yettwakkes avaṭar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -7429,7 +7427,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="new">URL parameter is missing in URL parameters</target>
+        <target state="translated">Aɣewwar n URL ixuṣṣ deg yiɣewwaren n URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -7437,7 +7435,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
-        <target state="new">Cannot access to the remote resource</target>
+        <target state="translated">Anekcum ɣer uɣbalu anmeggag d awezɣi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -7445,7 +7443,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
-        <target state="new">Remote interaction</target>
+        <target state="translated">Amyigew anmeggag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -7599,7 +7597,7 @@ color: red;
       </trans-unit>
       <trans-unit id="61cb418b053c4b1099a9c7e5a34a9cf52c87f8dd" datatype="html">
         <source>You don't have any subscription yet.</source>
-        <target state="new">You don't have any subscription yet.</target>
+        <target state="translated">Ulac ɣur-k·m ula d yiwen umulteɣ ar tura.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context>
           <context context-type="linenumber">18</context>
@@ -7756,7 +7754,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="error.text"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="translated">Cannot retrieve OAuth Client credentials: <x id="PH"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="translated">D awezɣi ad d-nerr inekcam n umsaɣ OAuth: <x id="PH" equiv-text="error.text"/>. Ḍmen belli tsewleḍ PeerTube akken iwata (akaram n uswel/), aṭas tigezmi n "aqeddac web".</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
@@ -7864,7 +7862,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7460399579150761114" datatype="html">
         <source>function is not implemented</source>
-        <target state="new">function is not implemented</target>
+        <target state="translated">tawuri ur tebdi ara</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.ts</context><context context-type="linenumber">300</context></context-group>
       </trans-unit>
       <trans-unit id="4873149362496451858" datatype="html">
@@ -8100,7 +8098,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
-        <target state="new">Max live duration is required.</target>
+        <target state="translated">Tanzagt tafellayt n usrid tettusra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">71</context>
@@ -8108,7 +8106,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
-        <target state="new">Max live duration should be greater or equal to -1.</target>
+        <target state="translated">Tanzagt tafellayt n usrid ilaq ad tili ugar neɣ swaswa akked -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -8116,7 +8114,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
-        <target state="new">Max instance lives is required.</target>
+        <target state="translated">Ugar n yisriden n tummant ttusran.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">79</context>
@@ -8124,7 +8122,7 @@ color: red;
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
-        <target state="new">Max instance lives should be greater or equal to -1.</target>
+        <target state="translated">Ugar n yisriden n tummant ilaq ad εeddin neɣ swaswa akked -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -8132,7 +8130,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="new">Max user lives is required.</target>
+        <target state="translated">Ugar n yisriden n useqdac ttusran.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
@@ -8140,7 +8138,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
-        <target state="new">Max user lives should be greater or equal to -1.</target>
+        <target state="translated">Ugar n yisriden n useqdac ttusran ad εeddin neɣ swaswa akked -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -8148,7 +8146,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
-        <target state="new">Concurrency is required.</target>
+        <target state="translated">Anbebber yettusra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">95</context>
@@ -8156,7 +8154,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
-        <target state="new">Concurrency should be greater or equal to 1.</target>
+        <target state="translated">Anbebber ilaq ad iεeddi neɣ swaswa akked 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">96</context>
@@ -8186,7 +8184,7 @@ color: red;
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="new">Handle is required.</target>
+        <target state="translated">Mefferisem yettusra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -8194,7 +8192,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="new">Handle must be valid (eg. chocobozzz@example.com).</target>
+        <target state="translated">Mefferisem ilaq ad yili d ameɣtu (am. chocobozzz@example.com).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -8562,7 +8560,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5b5759ae8d3274fdc904e1ef5bb4a52c2251de66" datatype="html">
         <source>Permanent live</source>
-        <target state="new">Permanent live</target>
+        <target state="translated">Usrid n lebda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">10</context>
@@ -8593,7 +8591,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1074634769552897790" datatype="html">
         <source>Video name has leading or trailing whitespace.</source>
-        <target state="new">Video name has leading or trailing whitespace.</target>
+        <target state="translated">Isem n tvidyut deg-s tallunin deg uqerru neɣ deg uḍar n usebter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -8636,7 +8634,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2389667090302909529" datatype="html">
         <source>A tag should be more than 1 and less than 30 characters long.</source>
-        <target state="new">A tag should be more than 1 and less than 30 characters long.</target>
+        <target state="translated">Tabzimt ilaq ad tesεu ugar n 1 akked ddaw n 30 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4806300480558315727" datatype="html">
@@ -9856,12 +9854,12 @@ color: red;
       </trans-unit>
       <trans-unit id="5297709903228580202" datatype="html">
         <source>Your video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">Your video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
+        <target state="translated">Ableɣ-ik·im n tvidyut iεedda s tvidyut-a (teɣzi n tvidyut: <x id="PH" equiv-text="videoSizeBytes"/>, yettuseqdacen: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, amur: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
         <source>Your daily video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="translated">Your daily video quota is exceeded with this video ( video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
+        <target state="translated">Ableɣ-ik·im n tvidyut i wass iεedda s tvidyut-a (teɣzi n tvidyut: <x id="PH" equiv-text="videoSizeBytes"/>, yettuseqdacen: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, amur: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">303</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119" datatype="html">
@@ -9901,7 +9899,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6419540b7a054d22e153781f2b6fa994151ab897" datatype="html">
         <source>Placeholder image</source>
-        <target state="new">Placeholder image</target>
+        <target state="translated">Tugna n umesnifel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">11</context>
@@ -10009,22 +10007,22 @@ color: red;
       </trans-unit>
       <trans-unit id="3178343147230721210" datatype="html">
         <source>Navigate in the video frame by frame (requires player focus)</source>
-        <target state="translated">Navigate in the video frame by frame (requires player focus)</target>
+        <target state="translated">Inig deg tvidyut tugna s tugna (yesra afukus ɣef yimeɣri)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">954</context></context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184" datatype="html">
         <source>Like the video</source>
-        <target state="translated">Like the video</target>
+        <target state="translated">Teεǧeb-iyi tavidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">962</context></context-group>
       </trans-unit>
       <trans-unit id="7692127636377222448" datatype="html">
         <source>Dislike the video</source>
-        <target state="translated">Dislike the video</target>
+        <target state="translated">Ur iyi-teεǧib ara tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">967</context></context-group>
       </trans-unit>
       <trans-unit id="1729036051846673606" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="translated">When active, the next video is automatically played after the current one.</target>
+        <target state="translated">Ma yili yettwarmed, tavidyut i d-iteddun ad d-tεeddi s wudem awurman seld tavidyut tamirant.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/recommendations/recommended-videos.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
@@ -10034,7 +10032,7 @@ color: red;
       </trans-unit>
       <trans-unit id="12646164819555880" datatype="html">
         <source>Videos from your subscriptions</source>
-        <target state="translated">Videos from your subscriptions</target>
+        <target state="translated">Tividyutin seg yimultaɣ-inek·inem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="4361762785337785037" datatype="html">
@@ -10069,23 +10067,23 @@ color: red;
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
-        <target state="translated">Local videos</target>
+        <target state="translated">Tividyutin tidiganin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">72</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-local.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
         <source>Discover videos</source>
-        <target state="translated">Discover videos</target>
+        <target state="translated">Snirem tividyutin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
-        <target state="translated">Trending videos</target>
+        <target state="translated">Tivvidyutin i d-yettuɣalen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
         <source>Recently added videos</source>
-        <target state="translated">Recently added videos</target>
+        <target state="translated">Tividyutin yettwarnan melmi kan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
@@ -10095,7 +10093,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
-        <target state="translated">Edit a video</target>
+        <target state="translated">Ẓreg tavidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
     </body>
