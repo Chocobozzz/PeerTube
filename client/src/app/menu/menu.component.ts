@@ -134,7 +134,7 @@ export class MenuComponent implements OnInit {
       })
 
     this.modalService.openQuickSettingsSubject
-      .subscribe((msg) => this.openQuickSettings())
+      .subscribe(() => this.openQuickSettings())
   }
 
   isRegistrationAllowed () {

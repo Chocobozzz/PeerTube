@@ -3,5 +3,5 @@ import { Subject } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class PeertubeModalService {
-  openQuickSettingsSubject = new Subject<any[]>()
+  openQuickSettingsSubject = new Subject<void>()
 }

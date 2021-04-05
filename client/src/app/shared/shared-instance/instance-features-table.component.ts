@@ -15,7 +15,7 @@ export class InstanceFeaturesTableComponent implements OnInit {
   constructor (
     private serverService: ServerService,
     private modalService: PeertubeModalService
-    ) { }
+  ) { }
 
   get initialUserVideoQuota () {
     return this.serverConfig.user.videoQuota
