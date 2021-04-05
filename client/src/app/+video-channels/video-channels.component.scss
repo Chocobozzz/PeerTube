@@ -132,7 +132,7 @@
   }
 
   .owner-description {
-    height: 140px;
+    max-height: 140px;
     word-break: break-word;
 
     @include fade-text(120px, pvar(--mainBackgroundColor));
