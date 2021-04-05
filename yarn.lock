@@ -763,13 +763,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/libxmljs@^0.18.0":
-  version "0.18.6"
-  resolved "https://registry.yarnpkg.com/@types/libxmljs/-/libxmljs-0.18.6.tgz#06cb685b791568c56224486338a50c00dbfbf629"
-  integrity sha512-xVUs71CwL5wYYfx5oH344DYWdoE2hVWlnRxlXFYyA8BcueN+Ey/h4FyhzEikbIJSXBKyPpJKhGu5c3NOx15nww==
-  dependencies:
-    "@types/node" "*"
-
 "@types/lodash@^4.14.64":
   version "4.14.168"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.168.tgz#fe24632e79b7ade3f132891afff86caa5e5ce008"
@@ -4916,14 +4909,14 @@ libqp@1.1.0:
   resolved "https://registry.yarnpkg.com/libqp/-/libqp-1.1.0.tgz#f5e6e06ad74b794fb5b5b66988bf728ef1dedbe8"
   integrity sha1-9ebgatdLeU+1tbZpiL9yjvHe2+g=
 
-libxmljs@0.19.7:
-  version "0.19.7"
-  resolved "https://registry.yarnpkg.com/libxmljs/-/libxmljs-0.19.7.tgz#96c2151b0b73f33dd29917edec82902587004e5a"
-  integrity sha512-lFJyG9T1mVwTzNTw6ZkvIt0O+NsIR+FTE+RcC2QDFGU8YMnQrnyEOGrj6HWSe1AdwQK7s37BOp4NL+pcAqfK2g==
+libxmljs2@0.26.7:
+  version "0.26.7"
+  resolved "https://registry.yarnpkg.com/libxmljs2/-/libxmljs2-0.26.7.tgz#30e8f3ba0f149f24cdb07554194c97581666dca0"
+  integrity sha512-7Yk/gpICDJypKpWgNsZNIHOLeuBUsAnYrA0fVy92PgtQZVO4Tu2SMLiZ50X9u7DEhvjzx1MF8P1iQM+6qky1Bg==
   dependencies:
-    bindings "~1.3.0"
+    "@mapbox/node-pre-gyp" "^1.0.1"
+    bindings "~1.5.0"
     nan "~2.14.0"
-    node-pre-gyp "~0.11.0"
 
 lines-and-columns@^1.1.6:
   version "1.1.6"
