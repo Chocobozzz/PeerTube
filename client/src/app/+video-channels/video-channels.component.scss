@@ -19,6 +19,16 @@
   @include grid-videos-miniature-margins;
 }
 
+.actor-info {
+  min-width: 1px;
+  width: 100%;
+
+  > h4,
+  > .actor-handle {
+    @include ellipsis;
+  }
+}
+
 .channel-info {
   @include grid-videos-miniature-margins(false, 15px);
 
