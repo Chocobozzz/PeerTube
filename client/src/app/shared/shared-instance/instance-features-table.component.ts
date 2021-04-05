@@ -60,6 +60,10 @@ export class InstanceFeaturesTableComponent implements OnInit {
     return this.serverService.getServerVersionAndCommit()
   }
 
+  openQuickSettingsHighlight () {
+    this.modalService.openQuickSettingsSubject.next()
+  }
+
   private getApproximateTime (seconds: number) {
     const hours = Math.floor(seconds / 3600)
     let pluralSuffix = ''
@@ -92,9 +96,5 @@ export class InstanceFeaturesTableComponent implements OnInit {
     ]
 
     this.quotaHelpIndication = lines.join('<br />')
-  }
-
-  openQuickSettingsHighlight() {
-    this.modalService.openQuickSettingsSubject.next();
   }
 }
