@@ -93,7 +93,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     this.videosSelection.enabledForReuse()
   }
 
-  getVideosObservable (page: number, sort: VideoSortField) {
+  getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
     return this.videoService.getMyVideos(newPagination, this.sort, this.videosSearch)
