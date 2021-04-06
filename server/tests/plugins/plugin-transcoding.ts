@@ -119,8 +119,8 @@ describe('Test transcoding plugins', function () {
       const res = await getConfig(server.url)
       const config = res.body as ServerConfig
 
-      expect(config.transcoding.availableProfiles).to.have.members([ 'default', 'low-vod' ])
-      expect(config.live.transcoding.availableProfiles).to.have.members([ 'default', 'low-live' ])
+      expect(config.transcoding.availableProfiles).to.have.members([ 'default', 'low-vod', 'video-filters-vod', 'input-options-vod' ])
+      expect(config.live.transcoding.availableProfiles).to.have.members([ 'default', 'low-live', 'input-options-live' ])
     })
 
     it('Should not use the plugin profile if not chosen by the admin', async function () {
@@ -141,6 +141,28 @@ describe('Test transcoding plugins', function () {
       await waitJobs([ server ])
 
       await checkVideoFPS(videoUUID, 'below', 12)
+    })
+
+    it('Should apply video filters in vod profile', async function () {
+      this.timeout(120000)
+
+      await updateConf(server, 'video-filters-vod', 'default')
+
+      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      await waitJobs([ server ])
+
+      await checkVideoFPS(videoUUID, 'below', 12)
+    })
+
+    it('Should apply input options in vod profile', async function () {
+      this.timeout(120000)
+
+      await updateConf(server, 'input-options-vod', 'default')
+
+      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      await waitJobs([ server ])
+
+      await checkVideoFPS(videoUUID, 'below', 6)
     })
 
     it('Should not use the plugin profile if not chosen by the admin', async function () {
@@ -167,6 +189,20 @@ describe('Test transcoding plugins', function () {
       await waitJobs([ server ])
 
       await checkLiveFPS(liveVideoId, 'below', 12)
+    })
+
+    it('Should apply the input options on live profile', async function () {
+      this.timeout(120000)
+
+      await updateConf(server, 'low-vod', 'input-options-live')
+
+      const liveVideoId = await createLiveWrapper(server)
+
+      await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId, 'video_short2.webm')
+      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+      await waitJobs([ server ])
+
+      await checkLiveFPS(liveVideoId, 'below', 6)
     })
 
     it('Should default to the default profile if the specified profile does not exist', async function () {
