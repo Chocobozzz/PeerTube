@@ -328,6 +328,8 @@ function register (...) {
 Adding transcoding profiles allow admins to change ffmpeg encoding parameters and/or encoders.
 A transcoding profile has to be chosen by the admin of the instance using the admin configuration.
 
+Transcoding profiles used for live transcoding must not provide any `videoFilters`.
+
 ```js
 async function register ({
   transcodingManager
@@ -341,8 +343,12 @@ async function register ({
       const streamString = streamNum ? ':' + streamNum : ''
 
       // You can also return a promise
+      // All these options are optional and defaults to []
       return {
         inputOptions: [],
+        videoFilters: [
+          'vflip' // flip the video vertically
+        ],
         outputOptions: [
         // Use a custom bitrate
           '-b' + streamString + ' 10K'
@@ -358,6 +364,7 @@ async function register ({
 
     // And/Or support this profile for live transcoding
     transcodingManager.addLiveProfile(encoder, profileName, builder)
+    // Note: this profile will fail for live transcode because it specifies videoFilters
   }
 
   {
@@ -394,6 +401,7 @@ async function register ({
     const builder = () => {
       return {
         inputOptions: [],
+        videoFilters: [],
         outputOptions: []
       }
     }
@@ -412,6 +420,9 @@ async function register ({
     transcodingManager.addLiveEncoderPriority('audio', 'libopus', 1000)
   }
 ```
+
+During live transcode input options are applied once for each target resolution.
+Plugins are responsible for detecting such situation and applying input options only once if necessary.
 
 ### Helpers
 
