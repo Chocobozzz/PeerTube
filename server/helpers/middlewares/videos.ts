@@ -66,25 +66,24 @@ async function doesVideoFileOfVideoExist (id: number, videoIdOrUUID: number | st
 }
 
 async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAccountId, res: Response) {
+  const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
+
+  if (videoChannel === null) {
+    res.status(HttpStatusCode.BAD_REQUEST_400)
+       .json({ error: 'Unknown video "video channel" for this instance.' })
+
+    return false
+  }
+
+  // Don't check account id if the user can update any video
   if (user.hasRight(UserRight.UPDATE_ANY_VIDEO) === true) {
-    const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
-    if (videoChannel === null) {
-      res.status(HttpStatusCode.BAD_REQUEST_400)
-         .json({ error: 'Unknown video `video channel` on this instance.' })
-         .end()
-
-      return false
-    }
-
     res.locals.videoChannel = videoChannel
     return true
   }
 
-  const videoChannel = await VideoChannelModel.loadByIdAndAccount(channelId, user.Account.id)
-  if (videoChannel === null) {
+  if (videoChannel.Account.id !== user.Account.id) {
     res.status(HttpStatusCode.BAD_REQUEST_400)
-       .json({ error: 'Unknown video `video channel` for this account.' })
-       .end()
+      .json({ error: 'Unknown video "video channel" for this account.' })
 
     return false
   }

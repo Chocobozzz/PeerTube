@@ -107,7 +107,7 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
     // We need more attributes for federation
     const targetVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoChangeOwnership.Video.id)
 
-    const oldVideoChannel = await VideoChannelModel.loadByIdAndPopulateAccount(targetVideo.channelId)
+    const oldVideoChannel = await VideoChannelModel.loadAndPopulateAccount(targetVideo.channelId)
 
     targetVideo.channelId = channel.id
 

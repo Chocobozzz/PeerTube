@@ -29,11 +29,19 @@ import {
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
+import {
+  ACTIVITY_PUB,
+  ACTIVITY_PUB_ACTOR_TYPES,
+  CONSTRAINTS_FIELDS,
+  MIMETYPES,
+  SERVER_ACTOR_NAME,
+  WEBSERVER
+} from '../../initializers/constants'
 import {
   MActor,
   MActorAccountChannelId,
-  MActorAP,
+  MActorAPAccount,
+  MActorAPChannel,
   MActorFormattable,
   MActorFull,
   MActorHost,
@@ -103,6 +111,11 @@ export const unusedActorAttributesForAPI = [
       {
         model: ActorImageModel,
         as: 'Avatar',
+        required: false
+      },
+      {
+        model: ActorImageModel,
+        as: 'Banner',
         required: false
       }
     ]
@@ -531,26 +544,43 @@ export class ActorModel extends Model {
   toFormattedJSON (this: MActorFormattable) {
     const base = this.toFormattedSummaryJSON()
 
+    let banner: ActorImage = null
+    if (this.bannerId) {
+      banner = this.Banner.toFormattedJSON()
+    }
+
     return Object.assign(base, {
       id: this.id,
       hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
+      banner,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     })
   }
 
-  toActivityPubObject (this: MActorAP, name: string) {
+  toActivityPubObject (this: MActorAPChannel | MActorAPAccount, name: string) {
     let icon: ActivityIconObject
+    let image: ActivityIconObject
 
     if (this.avatarId) {
       const extension = extname(this.Avatar.filename)
 
       icon = {
         type: 'Image',
-        mediaType: extension === '.png' ? 'image/png' : 'image/jpeg',
+        mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
         url: this.getAvatarUrl()
+      }
+    }
+
+    if (this.bannerId) {
+      const extension = extname((this as MActorAPChannel).Banner.filename)
+
+      image = {
+        type: 'Image',
+        mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
+        url: this.getBannerUrl()
       }
     }
 
@@ -573,7 +603,8 @@ export class ActorModel extends Model {
         owner: this.url,
         publicKeyPem: this.publicKey
       },
-      icon
+      icon,
+      image
     }
 
     return activityPubContextify(json)
@@ -641,6 +672,12 @@ export class ActorModel extends Model {
     if (!this.avatarId) return undefined
 
     return WEBSERVER.URL + this.Avatar.getStaticPath()
+  }
+
+  getBannerUrl () {
+    if (!this.bannerId) return undefined
+
+    return WEBSERVER.URL + this.Banner.getStaticPath()
   }
 
   isOutdated () {

@@ -9,7 +9,7 @@ export interface ActivityIdentifierObject {
 export interface ActivityIconObject {
   type: 'Image'
   url: string
-  mediaType: 'image/jpeg' | 'image/png'
+  mediaType: string
   width?: number
   height?: number
 }

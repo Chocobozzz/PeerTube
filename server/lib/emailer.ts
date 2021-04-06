@@ -405,7 +405,7 @@ class Emailer {
   async addVideoAutoBlacklistModeratorsNotification (to: string[], videoBlacklist: MVideoBlacklistLightVideo) {
     const videoAutoBlacklistUrl = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
-    const channel = (await VideoChannelModel.loadByIdAndPopulateAccount(videoBlacklist.Video.channelId)).toFormattedSummaryJSON()
+    const channel = (await VideoChannelModel.loadAndPopulateAccount(videoBlacklist.Video.channelId)).toFormattedSummaryJSON()
 
     const emailPayload: EmailPayload = {
       template: 'video-auto-blacklist-new',

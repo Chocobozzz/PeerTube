@@ -6,21 +6,25 @@ import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { cleanUpReqFiles } from '../../helpers/express-utils'
 
-const updateAvatarValidator = [
-  body('avatarfile').custom((value, { req }) => isAvatarFile(req.files)).withMessage(
+const updateActorImageValidatorFactory = (fieldname: string) => ([
+  body(fieldname).custom((value, { req }) => isAvatarFile(req.files)).withMessage(
     'This file is not supported or too large. Please, make sure it is of the following type : ' +
-    CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME.join(', ')
+    CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME.join(', ')
   ),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking updateAvatarValidator parameters', { files: req.files })
+    logger.debug('Checking updateActorImageValidator parameters', { files: req.files })
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     return next()
   }
-]
+])
+
+const updateAvatarValidator = updateActorImageValidatorFactory('avatarfile')
+const updateBannerValidator = updateActorImageValidatorFactory('bannerfile')
 
 export {
-  updateAvatarValidator
+  updateAvatarValidator,
+  updateBannerValidator
 }

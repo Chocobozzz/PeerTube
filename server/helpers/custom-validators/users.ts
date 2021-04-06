@@ -1,9 +1,9 @@
+import { values } from 'lodash'
 import validator from 'validator'
 import { UserRole } from '../../../shared'
+import { isEmailEnabled } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { exists, isArray, isBooleanValid, isFileValid } from './misc'
-import { values } from 'lodash'
-import { isEmailEnabled } from '../../initializers/config'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
 
@@ -97,12 +97,12 @@ function isUserRoleValid (value: any) {
   return exists(value) && validator.isInt('' + value) && UserRole[value] !== undefined
 }
 
-const avatarMimeTypes = CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME
+const avatarMimeTypes = CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
   .map(v => v.replace('.', ''))
   .join('|')
 const avatarMimeTypesRegex = `image/(${avatarMimeTypes})`
 function isAvatarFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  return isFileValid(files, avatarMimeTypesRegex, 'avatarfile', CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max)
+  return isFileValid(files, avatarMimeTypesRegex, 'avatarfile', CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max)
 }
 
 // ---------------------------------------------------------------------------

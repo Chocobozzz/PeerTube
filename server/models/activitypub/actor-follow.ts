@@ -248,13 +248,6 @@ export class ActorFollowModel extends Model {
     }
 
     return ActorFollowModel.findOne(query)
-      .then(result => {
-        if (result?.ActorFollowing.VideoChannel) {
-          result.ActorFollowing.VideoChannel.Actor = result.ActorFollowing
-        }
-
-        return result
-      })
   }
 
   static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]): Promise<MActorFollowFollowingHost[]> {

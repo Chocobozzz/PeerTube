@@ -252,9 +252,9 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
           avatar: {
             file: {
               size: {
-                max: CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max
+                max: CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max
               },
-              extensions: CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME
+              extensions: CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
             }
           },
           video: {
