@@ -432,6 +432,14 @@ describe('Test config', function () {
           disableLocalSearch: true,
           isDefaultSearch: true
         }
+      },
+      podcast: {
+        instanceFee: 1,
+        lightning: {
+          nodeAddress: "fake address",
+          customKey: "custom key",
+          customValue: "custom value"
+        }
       }
     }
     await updateCustomConfig(server.url, server.accessToken, newCustomConfig)

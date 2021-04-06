@@ -192,6 +192,14 @@ describe('Test config API validators', function () {
         disableLocalSearch: true,
         isDefaultSearch: true
       }
+    },
+    podcast: {
+      instanceFee: 1,
+      lightning: {
+        nodeAddress: "fake address",
+        customKey: "custom key",
+        customValue: "custom value"
+      }
     }
   }
 
