@@ -193,4 +193,13 @@ export interface CustomConfig {
       isDefaultSearch: boolean
     }
   }
+
+  podcast: {
+    instanceFee: number,
+    lightning: {
+      nodeAddress: string,
+      customKey: string
+      customValue: string
+    }
+  }
 }

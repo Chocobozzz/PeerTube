@@ -521,6 +521,14 @@ function customConfig (): CustomConfig {
         disableLocalSearch: CONFIG.SEARCH.SEARCH_INDEX.DISABLE_LOCAL_SEARCH,
         isDefaultSearch: CONFIG.SEARCH.SEARCH_INDEX.IS_DEFAULT_SEARCH
       }
+    },
+    podcast: {
+      instanceFee: CONFIG.PODCAST.INSTANCE_FEE,
+      lightning: {
+        nodeAddress: CONFIG.PODCAST.LIGHTNING.NODE_ADDRESS,
+        customKey: CONFIG.PODCAST.LIGHTNING.CUSTOM_KEY,
+        customValue: CONFIG.PODCAST.LIGHTNING.CUSTOM_VALUE
+      }
     }
   }
 }

@@ -215,6 +215,14 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
         disableLocalSearch: true,
         isDefaultSearch: true
       }
+    },
+    podcast: {
+      instanceFee: 0,
+      lightning: {
+        nodeAddress: "",
+        customKey: "",
+        customValue: ""
+      }
     }
   }
 

@@ -215,6 +215,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           disableLocalSearch: null,
           isDefaultSearch: null
         }
+      },
+      podcast: {
+        instanceFee: null,
+        lightning: {
+          nodeAddress: null,
+          customKey: null,
+          customValue: null
+        }
       }
     }
 

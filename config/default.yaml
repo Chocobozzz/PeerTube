@@ -489,3 +489,17 @@ search:
     disable_local_search: false
     # If you did not disable local search, you can decide to use the search index by default
     is_default_search: false
+
+podcast:
+  # Optional instance-level values for Podcast RSS for settings not configured at a user/channel level
+  # https://github.com/Podcastindex-org/podcast-namespace/
+  
+  # Fee percentage the instance will use in Podcast RSS feeds as a host
+  instance_fee: 5
+  lightning:
+    # Lightning node address to receive streaming satoshis (bitcoin)
+    node_address: ''
+    # A custom key for a client to send along with keysend payments, for lnpay etc
+    custom_key: ''
+    # Custom value to go with the custom_key
+    custom_value: ''
