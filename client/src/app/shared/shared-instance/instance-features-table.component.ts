@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { ServerConfig } from '@shared/models'
+import { PeertubeModalService } from '../shared-main/peertube-modal/peertube-modal.service'
 
 @Component({
   selector: 'my-instance-features-table',
@@ -11,7 +12,10 @@ export class InstanceFeaturesTableComponent implements OnInit {
   quotaHelpIndication = ''
   serverConfig: ServerConfig
 
-  constructor (private serverService: ServerService) { }
+  constructor (
+    private serverService: ServerService,
+    private modalService: PeertubeModalService
+  ) { }
 
   get initialUserVideoQuota () {
     return this.serverConfig.user.videoQuota
@@ -54,6 +58,10 @@ export class InstanceFeaturesTableComponent implements OnInit {
 
   getServerVersionAndCommit () {
     return this.serverService.getServerVersionAndCommit()
+  }
+
+  openQuickSettingsHighlight () {
+    this.modalService.openQuickSettingsSubject.next()
   }
 
   private getApproximateTime (seconds: number) {
