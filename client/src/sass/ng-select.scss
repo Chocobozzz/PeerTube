@@ -22,7 +22,7 @@ $ng-select-height: 30px;
 
 .ng-input,
 .ng-select .ng-select-container .ng-value-container {
-  padding-left: 15px !important;
+  padding-left: 15px;
 }
 
 .ng-select {
@@ -43,5 +43,16 @@ $ng-select-height: 30px;
 
   &.ng-select-single .ng-value-container .ng-value {
     color: pvar(--inputForegroundColor);
+  }
+
+  &.ng-select-multiple {
+    .ng-select-container {
+      .ng-value-container {
+        padding-left: 12px;
+        .ng-value {
+          margin-left: 3px;
+        }
+      }
+    }
   }
 }
