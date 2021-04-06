@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body } from 'express-validator'
-import { isIntOrNull } from '@server/helpers/custom-validators/misc'
+import { isIntOrNull, isIntPercentage } from '@server/helpers/custom-validators/misc'
 import { isEmailEnabled } from '@server/initializers/config'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
@@ -91,6 +91,11 @@ const customConfigUpdateValidator = [
   body('search.searchIndex.url').exists().withMessage('Should have a valid search index URL'),
   body('search.searchIndex.disableLocalSearch').isBoolean().withMessage('Should have a valid search index disable local search boolean'),
   body('search.searchIndex.isDefaultSearch').isBoolean().withMessage('Should have a valid search index default enabled boolean'),
+
+  body('podcast.instanceFee').custom(isIntPercentage).withMessage('Should have a valid podcast instance fee percentage'),
+  body('podcast.lightning.nodeAddress').exists().withMessage('Should have a valid podcast lightning node address'),
+  body('podcast.lightning.customKey').exists().withMessage('Should have a valid podcast lightning custom key'),
+  body('podcast.lightning.customValue').exists().withMessage('Should have a valid podcast lightning custom value'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking customConfigUpdateValidator parameters', { parameters: req.body })
