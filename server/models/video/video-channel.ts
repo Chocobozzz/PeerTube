@@ -28,10 +28,9 @@ import {
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import {
-  MChannelAccountDefault,
   MChannelActor,
-  MChannelActorAccountDefaultVideos,
   MChannelAP,
+  MChannelBannerAccountDefault,
   MChannelFormattable,
   MChannelSummaryFormattable
 } from '../../types/models/video'
@@ -49,6 +48,7 @@ export enum ScopeNames {
   SUMMARY = 'SUMMARY',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACTOR = 'WITH_ACTOR',
+  WITH_ACTOR_BANNER = 'WITH_ACTOR_BANNER',
   WITH_VIDEOS = 'WITH_VIDEOS',
   WITH_STATS = 'WITH_STATS'
 }
@@ -166,6 +166,20 @@ export type SummaryOptions = {
   [ScopeNames.WITH_ACTOR]: {
     include: [
       ActorModel
+    ]
+  },
+  [ScopeNames.WITH_ACTOR_BANNER]: {
+    include: [
+      {
+        model: ActorModel,
+        include: [
+          {
+            model: ActorImageModel,
+            required: false,
+            as: 'Banner'
+          }
+        ]
+      }
     ]
   },
   [ScopeNames.WITH_VIDEOS]: {
@@ -442,7 +456,7 @@ export class VideoChannelModel extends Model {
       where
     }
 
-    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR ]
+    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR_BANNER ]
 
     if (options.withStats === true) {
       scopes.push({
@@ -458,32 +472,13 @@ export class VideoChannelModel extends Model {
       })
   }
 
-  static loadByIdAndPopulateAccount (id: number): Promise<MChannelAccountDefault> {
+  static loadAndPopulateAccount (id: number): Promise<MChannelBannerAccountDefault> {
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACTOR_BANNER, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
   }
 
-  static loadByIdAndAccount (id: number, accountId: number): Promise<MChannelAccountDefault> {
-    const query = {
-      where: {
-        id,
-        accountId
-      }
-    }
-
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findOne(query)
-  }
-
-  static loadAndPopulateAccount (id: number): Promise<MChannelAccountDefault> {
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findByPk(id)
-  }
-
-  static loadByUrlAndPopulateAccount (url: string): Promise<MChannelAccountDefault> {
+  static loadByUrlAndPopulateAccount (url: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -491,7 +486,14 @@ export class VideoChannelModel extends Model {
           required: true,
           where: {
             url
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
+            }
+          ]
         }
       ]
     }
@@ -509,7 +511,7 @@ export class VideoChannelModel extends Model {
     return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
-  static loadLocalByNameAndPopulateAccount (name: string): Promise<MChannelAccountDefault> {
+  static loadLocalByNameAndPopulateAccount (name: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -518,17 +520,24 @@ export class VideoChannelModel extends Model {
           where: {
             preferredUsername: name,
             serverId: null
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
+            }
+          ]
         }
       ]
     }
 
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
   }
 
-  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Promise<MChannelAccountDefault> {
+  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -542,6 +551,11 @@ export class VideoChannelModel extends Model {
               model: ServerModel,
               required: true,
               where: { host }
+            },
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
             }
           ]
         }
@@ -549,20 +563,8 @@ export class VideoChannelModel extends Model {
     }
 
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
-  }
-
-  static loadAndPopulateAccountAndVideos (id: number): Promise<MChannelActorAccountDefaultVideos> {
-    const options = {
-      include: [
-        VideoModel
-      ]
-    }
-
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
-      .findByPk(id, options)
   }
 
   toFormattedSummaryJSON (this: MChannelSummaryFormattable): VideoChannelSummary {

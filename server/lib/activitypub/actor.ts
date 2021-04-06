@@ -4,6 +4,7 @@ import { Op, Transaction } from 'sequelize'
 import { URL } from 'url'
 import { v4 as uuidv4 } from 'uuid'
 import { getServerActor } from '@server/models/application/application'
+import { ActorImageType } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { ActivityPubActor, ActivityPubActorType, ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
@@ -30,10 +31,10 @@ import {
   MActorAccountChannelId,
   MActorAccountChannelIdActor,
   MActorAccountId,
-  MActorDefault,
   MActorFull,
   MActorFullActor,
   MActorId,
+  MActorImages,
   MChannel
 } from '../../types/models'
 import { JobQueue } from '../job-queue'
@@ -168,42 +169,59 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   }
 }
 
-type AvatarInfo = { name: string, onDisk: boolean, fileUrl: string }
-async function updateActorAvatarInstance (actor: MActorDefault, info: AvatarInfo, t: Transaction) {
+type AvatarInfo = { name: string, onDisk: boolean, fileUrl: string, type: ActorImageType }
+async function updateActorImageInstance (actor: MActorImages, info: AvatarInfo, t: Transaction) {
   if (!info.name) return actor
 
-  if (actor.Avatar) {
+  const oldImageModel = info.type === ActorImageType.AVATAR
+    ? actor.Avatar
+    : actor.Banner
+
+  if (oldImageModel) {
     // Don't update the avatar if the file URL did not change
-    if (info.fileUrl && actor.Avatar.fileUrl === info.fileUrl) return actor
+    if (info.fileUrl && oldImageModel.fileUrl === info.fileUrl) return actor
 
     try {
-      await actor.Avatar.destroy({ transaction: t })
+      await oldImageModel.destroy({ transaction: t })
     } catch (err) {
-      logger.error('Cannot remove old avatar of actor %s.', actor.url, { err })
+      logger.error('Cannot remove old actor image of actor %s.', actor.url, { err })
     }
   }
 
-  const avatar = await ActorImageModel.create({
+  const imageModel = await ActorImageModel.create({
     filename: info.name,
     onDisk: info.onDisk,
-    fileUrl: info.fileUrl
+    fileUrl: info.fileUrl,
+    type: info.type
   }, { transaction: t })
 
-  actor.avatarId = avatar.id
-  actor.Avatar = avatar
+  if (info.type === ActorImageType.AVATAR) {
+    actor.avatarId = imageModel.id
+    actor.Avatar = imageModel
+  } else {
+    actor.bannerId = imageModel.id
+    actor.Banner = imageModel
+  }
 
   return actor
 }
 
-async function deleteActorAvatarInstance (actor: MActorDefault, t: Transaction) {
+async function deleteActorImageInstance (actor: MActorImages, type: ActorImageType, t: Transaction) {
   try {
-    await actor.Avatar.destroy({ transaction: t })
-  } catch (err) {
-    logger.error('Cannot remove old avatar of actor %s.', actor.url, { err })
-  }
+    if (type === ActorImageType.AVATAR) {
+      await actor.Avatar.destroy({ transaction: t })
 
-  actor.avatarId = null
-  actor.Avatar = null
+      actor.avatarId = null
+      actor.Avatar = null
+    } else {
+      await actor.Banner.destroy({ transaction: t })
+
+      actor.bannerId = null
+      actor.Banner = null
+    }
+  } catch (err) {
+    logger.error('Cannot remove old image of actor %s.', actor.url, { err })
+  }
 
   return actor
 }
@@ -219,9 +237,11 @@ async function fetchActorTotalItems (url: string) {
   }
 }
 
-function getAvatarInfoIfExists (actorJSON: ActivityPubActor) {
+function getImageInfoIfExists (actorJSON: ActivityPubActor, type: ActorImageType) {
   const mimetypes = MIMETYPES.IMAGE
-  const icon = actorJSON.icon
+  const icon = type === ActorImageType.AVATAR
+    ? actorJSON.icon
+    : actorJSON.image
 
   if (!icon || icon.type !== 'Image' || !isActivityPubUrlValid(icon.url)) return undefined
 
@@ -239,7 +259,8 @@ function getAvatarInfoIfExists (actorJSON: ActivityPubActor) {
 
   return {
     name: uuidv4() + extension,
-    fileUrl: icon.url
+    fileUrl: icon.url,
+    type
   }
 }
 
@@ -293,10 +314,22 @@ async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannel
         const avatarInfo = {
           name: result.avatar.name,
           fileUrl: result.avatar.fileUrl,
-          onDisk: false
+          onDisk: false,
+          type: ActorImageType.AVATAR
         }
 
-        await updateActorAvatarInstance(actor, avatarInfo, t)
+        await updateActorImageInstance(actor, avatarInfo, t)
+      }
+
+      if (result.banner !== undefined) {
+        const bannerInfo = {
+          name: result.banner.name,
+          fileUrl: result.banner.fileUrl,
+          onDisk: false,
+          type: ActorImageType.BANNER
+        }
+
+        await updateActorImageInstance(actor, bannerInfo, t)
       }
 
       // Force update
@@ -338,11 +371,11 @@ export {
   buildActorInstance,
   generateAndSaveActorKeys,
   fetchActorTotalItems,
-  getAvatarInfoIfExists,
+  getImageInfoIfExists,
   updateActorInstance,
-  deleteActorAvatarInstance,
+  deleteActorImageInstance,
   refreshActorIfNeeded,
-  updateActorAvatarInstance,
+  updateActorImageInstance,
   addFetchOutboxJob
 }
 
@@ -381,10 +414,23 @@ function saveActorAndServerAndModelIfNotExist (
       const avatar = await ActorImageModel.create({
         filename: result.avatar.name,
         fileUrl: result.avatar.fileUrl,
-        onDisk: false
+        onDisk: false,
+        type: ActorImageType.AVATAR
       }, { transaction: t })
 
       actor.avatarId = avatar.id
+    }
+
+    // Banner?
+    if (result.banner) {
+      const banner = await ActorImageModel.create({
+        filename: result.banner.name,
+        fileUrl: result.banner.fileUrl,
+        onDisk: false,
+        type: ActorImageType.BANNER
+      }, { transaction: t })
+
+      actor.bannerId = banner.id
     }
 
     // Force the actor creation, sometimes Sequelize skips the save() when it thinks the instance already exists
@@ -440,6 +486,10 @@ type FetchRemoteActorResult = {
     name: string
     fileUrl: string
   }
+  banner?: {
+    name: string
+    fileUrl: string
+  }
   attributedTo: ActivityPubAttributedTo[]
 }
 async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: number, result: FetchRemoteActorResult }> {
@@ -479,7 +529,8 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
       : null
   })
 
-  const avatarInfo = await getAvatarInfoIfExists(actorJSON)
+  const avatarInfo = getImageInfoIfExists(actorJSON, ActorImageType.AVATAR)
+  const bannerInfo = getImageInfoIfExists(actorJSON, ActorImageType.BANNER)
 
   const name = actorJSON.name || actorJSON.preferredUsername
   return {
@@ -488,6 +539,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
       actor,
       name,
       avatar: avatarInfo,
+      banner: bannerInfo,
       summary: actorJSON.summary,
       support: actorJSON.support,
       playlists: actorJSON.playlists,

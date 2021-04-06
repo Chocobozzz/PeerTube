@@ -64,7 +64,7 @@ async function getActorImage (req: express.Request, res: express.Response) {
     logger.info('Lazy serve remote actor image %s.', image.fileUrl)
 
     try {
-      await pushActorImageProcessInQueue({ filename: image.filename, fileUrl: image.fileUrl })
+      await pushActorImageProcessInQueue({ filename: image.filename, fileUrl: image.fileUrl, type: image.type })
     } catch (err) {
       logger.warn('Cannot process remote actor image %s.', image.fileUrl, { err })
       return res.sendStatus(HttpStatusCode.NOT_FOUND_404)

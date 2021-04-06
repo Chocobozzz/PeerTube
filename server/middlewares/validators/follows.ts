@@ -68,7 +68,6 @@ const removeFollowingValidator = [
         .json({
           error: `Following ${req.params.host} not found.`
         })
-        .end()
     }
 
     res.locals.follow = follow

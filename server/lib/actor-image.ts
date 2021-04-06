@@ -3,50 +3,57 @@ import { queue } from 'async'
 import * as LRUCache from 'lru-cache'
 import { extname, join } from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { ActorImageType } from '@shared/models'
 import { retryTransactionWrapper } from '../helpers/database-utils'
 import { processImage } from '../helpers/image-utils'
 import { downloadImage } from '../helpers/requests'
 import { CONFIG } from '../initializers/config'
-import { AVATARS_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
+import { ACTOR_IMAGES_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
 import { MAccountDefault, MChannelDefault } from '../types/models'
-import { deleteActorAvatarInstance, updateActorAvatarInstance } from './activitypub/actor'
+import { deleteActorImageInstance, updateActorImageInstance } from './activitypub/actor'
 import { sendUpdateActor } from './activitypub/send'
 
-async function updateLocalActorAvatarFile (
+async function updateLocalActorImageFile (
   accountOrChannel: MAccountDefault | MChannelDefault,
-  avatarPhysicalFile: Express.Multer.File
+  imagePhysicalFile: Express.Multer.File,
+  type: ActorImageType
 ) {
-  const extension = extname(avatarPhysicalFile.filename)
+  const imageSize = type === ActorImageType.AVATAR
+    ? ACTOR_IMAGES_SIZE.AVATARS
+    : ACTOR_IMAGES_SIZE.BANNERS
 
-  const avatarName = uuidv4() + extension
-  const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, avatarName)
-  await processImage(avatarPhysicalFile.path, destination, AVATARS_SIZE)
+  const extension = extname(imagePhysicalFile.filename)
+
+  const imageName = uuidv4() + extension
+  const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, imageName)
+  await processImage(imagePhysicalFile.path, destination, imageSize)
 
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async t => {
-      const avatarInfo = {
-        name: avatarName,
+      const actorImageInfo = {
+        name: imageName,
         fileUrl: null,
+        type,
         onDisk: true
       }
 
-      const updatedActor = await updateActorAvatarInstance(accountOrChannel.Actor, avatarInfo, t)
+      const updatedActor = await updateActorImageInstance(accountOrChannel.Actor, actorImageInfo, t)
       await updatedActor.save({ transaction: t })
 
       await sendUpdateActor(accountOrChannel, t)
 
-      return updatedActor.Avatar
+      return type === ActorImageType.AVATAR
+        ? updatedActor.Avatar
+        : updatedActor.Banner
     })
   })
 }
 
-async function deleteLocalActorAvatarFile (
-  accountOrChannel: MAccountDefault | MChannelDefault
-) {
+async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType) {
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async t => {
-      const updatedActor = await deleteActorAvatarInstance(accountOrChannel.Actor, t)
+      const updatedActor = await deleteActorImageInstance(accountOrChannel.Actor, type, t)
       await updatedActor.save({ transaction: t })
 
       await sendUpdateActor(accountOrChannel, t)
@@ -56,10 +63,14 @@ async function deleteLocalActorAvatarFile (
   })
 }
 
-type DownloadImageQueueTask = { fileUrl: string, filename: string }
+type DownloadImageQueueTask = { fileUrl: string, filename: string, type: ActorImageType }
 
 const downloadImageQueue = queue<DownloadImageQueueTask, Error>((task, cb) => {
-  downloadImage(task.fileUrl, CONFIG.STORAGE.ACTOR_IMAGES, task.filename, AVATARS_SIZE)
+  const size = task.type === ActorImageType.AVATAR
+    ? ACTOR_IMAGES_SIZE.AVATARS
+    : ACTOR_IMAGES_SIZE.BANNERS
+
+  downloadImage(task.fileUrl, CONFIG.STORAGE.ACTOR_IMAGES, task.filename, size)
     .then(() => cb())
     .catch(err => cb(err))
 }, QUEUE_CONCURRENCY.ACTOR_PROCESS_IMAGE)
@@ -79,7 +90,7 @@ const actorImagePathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.
 
 export {
   actorImagePathUnsafeCache,
-  updateLocalActorAvatarFile,
-  deleteLocalActorAvatarFile,
+  updateLocalActorImageFile,
+  deleteLocalActorImageFile,
   pushActorImageProcessInQueue
 }

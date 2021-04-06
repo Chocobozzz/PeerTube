@@ -11,7 +11,7 @@ import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
 import {
   ACCEPT_HEADERS,
-  AVATARS_SIZE,
+  ACTOR_IMAGES_SIZE,
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
   FILES_CONTENT_HASH,
@@ -246,8 +246,8 @@ class ClientHtml {
 
     const image = {
       url: entity.Actor.getAvatarUrl(),
-      width: AVATARS_SIZE.width,
-      height: AVATARS_SIZE.height
+      width: ACTOR_IMAGES_SIZE.AVATARS.width,
+      height: ACTOR_IMAGES_SIZE.AVATARS.height
     }
 
     const ogType = 'website'

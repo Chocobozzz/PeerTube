@@ -1,5 +1,7 @@
-import { UserModel } from '../../../models/account/user'
+import { AccountModel } from '@server/models/account/account'
+import { MVideoPlaylist } from '@server/types/models'
 import { PickWith, PickWithOpt } from '@shared/core-utils'
+import { UserModel } from '../../../models/account/user'
 import {
   MAccount,
   MAccountDefault,
@@ -9,10 +11,8 @@ import {
   MAccountIdActorId,
   MAccountUrl
 } from '../account'
-import { MNotificationSetting, MNotificationSettingFormattable } from './user-notification-setting'
-import { AccountModel } from '@server/models/account/account'
 import { MChannelFormattable } from '../video/video-channels'
-import { MVideoPlaylist } from '@server/types/models'
+import { MNotificationSetting, MNotificationSettingFormattable } from './user-notification-setting'
 
 type Use<K extends keyof UserModel, M> = PickWith<UserModel, K, M>
 

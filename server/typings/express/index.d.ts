@@ -3,7 +3,10 @@ import {
   MAbuseMessage,
   MAbuseReporter,
   MAccountBlocklist,
+  MActorFollowActors,
+  MActorFollowActorsDefault,
   MActorUrl,
+  MChannelBannerAccountDefault,
   MStreamingPlaylist,
   MVideoChangeOwnershipFull,
   MVideoFile,
@@ -21,10 +24,8 @@ import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
   MAccountDefault,
   MActorAccountChannelId,
-  MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
   MActorFull,
-  MChannelAccountDefault,
   MComment,
   MCommentOwnerVideoReply,
   MUserDefault,
@@ -71,7 +72,7 @@ interface PeerTubeLocals {
 
   videoStreamingPlaylist?: MStreamingPlaylist
 
-  videoChannel?: MChannelAccountDefault
+  videoChannel?: MChannelBannerAccountDefault
 
   videoPlaylistFull?: MVideoPlaylistFull
   videoPlaylistSummary?: MVideoPlaylistFullSummary
