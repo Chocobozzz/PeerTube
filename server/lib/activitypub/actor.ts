@@ -19,8 +19,8 @@ import { getUrlFromWebfinger } from '../../helpers/webfinger'
 import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { AccountModel } from '../../models/account/account'
+import { ActorImageModel } from '../../models/account/actor-image'
 import { ActorModel } from '../../models/activitypub/actor'
-import { AvatarModel } from '../../models/avatar/avatar'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import {
@@ -183,7 +183,7 @@ async function updateActorAvatarInstance (actor: MActorDefault, info: AvatarInfo
     }
   }
 
-  const avatar = await AvatarModel.create({
+  const avatar = await ActorImageModel.create({
     filename: info.name,
     onDisk: info.onDisk,
     fileUrl: info.fileUrl
@@ -378,7 +378,7 @@ function saveActorAndServerAndModelIfNotExist (
 
     // Avatar?
     if (result.avatar) {
-      const avatar = await AvatarModel.create({
+      const avatar = await ActorImageModel.create({
         filename: result.avatar.name,
         fileUrl: result.avatar.fileUrl,
         onDisk: false

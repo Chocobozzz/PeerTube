@@ -1,4 +1,4 @@
-import { Account as ServerAccount, Avatar } from '@shared/models'
+import { Account as ServerAccount, ActorImage } from '@shared/models'
 import { Actor } from './actor.model'
 
 export class Account extends Actor implements ServerAccount {
@@ -38,7 +38,7 @@ export class Account extends Actor implements ServerAccount {
     this.mutedServerByInstance = false
   }
 
-  updateAvatar (newAvatar: Avatar) {
+  updateAvatar (newAvatar: ActorImage) {
     this.avatar = newAvatar
 
     this.updateComputedAttributes()

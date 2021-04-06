@@ -1,4 +1,4 @@
-import { Avatar } from '../avatars/avatar.model'
+import { ActorImage } from './actor-image.model'
 
 export interface Actor {
   id: number
@@ -9,5 +9,5 @@ export interface Actor {
   followersCount: number
   createdAt: Date | string
   updatedAt: Date | string
-  avatar?: Avatar
+  avatar?: ActorImage
 }

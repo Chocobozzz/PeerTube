@@ -1,7 +1,7 @@
-import { TrackerModel } from '@server/models/server/tracker'
-import { VideoTrackerModel } from '@server/models/server/video-tracker'
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
+import { TrackerModel } from '@server/models/server/tracker'
+import { VideoTrackerModel } from '@server/models/server/video-tracker'
 import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 import { AbuseModel } from '../models/abuse/abuse'
@@ -11,6 +11,7 @@ import { VideoCommentAbuseModel } from '../models/abuse/video-comment-abuse'
 import { AccountModel } from '../models/account/account'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { AccountVideoRateModel } from '../models/account/account-video-rate'
+import { ActorImageModel } from '../models/account/actor-image'
 import { UserModel } from '../models/account/user'
 import { UserNotificationModel } from '../models/account/user-notification'
 import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
@@ -18,7 +19,6 @@ import { UserVideoHistoryModel } from '../models/account/user-video-history'
 import { ActorModel } from '../models/activitypub/actor'
 import { ActorFollowModel } from '../models/activitypub/actor-follow'
 import { ApplicationModel } from '../models/application/application'
-import { AvatarModel } from '../models/avatar/avatar'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
 import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
@@ -95,7 +95,7 @@ async function initDatabaseModels (silent: boolean) {
     ApplicationModel,
     ActorModel,
     ActorFollowModel,
-    AvatarModel,
+    ActorImageModel,
     AccountModel,
     OAuthClientModel,
     OAuthTokenModel,

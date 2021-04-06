@@ -1,4 +1,4 @@
-export interface Avatar {
+export interface ActorImage {
   path: string
 
   url?: string

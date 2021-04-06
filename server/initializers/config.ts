@@ -59,7 +59,7 @@ const CONFIG = {
   },
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
-    AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
+    ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
     STREAMING_PLAYLISTS_DIR: buildPath(config.get<string>('storage.streaming_playlists')),

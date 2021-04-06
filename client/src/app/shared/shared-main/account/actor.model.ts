@@ -1,4 +1,4 @@
-import { Actor as ActorServer, Avatar } from '@shared/models'
+import { Actor as ActorServer, ActorImage } from '@shared/models'
 import { getAbsoluteAPIUrl } from '@app/helpers'
 
 export abstract class Actor implements ActorServer {
@@ -10,7 +10,7 @@ export abstract class Actor implements ActorServer {
   followersCount: number
   createdAt: Date | string
   updatedAt: Date | string
-  avatar: Avatar
+  avatar: ActorImage
 
   avatarUrl: string
 

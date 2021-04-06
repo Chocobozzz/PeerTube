@@ -580,6 +580,7 @@ const STATIC_DOWNLOAD_PATHS = {
   HLS_VIDEOS: '/download/streaming-playlists/hls/videos/'
 }
 const LAZY_STATIC_PATHS = {
+  BANNERS: '/lazy-static/banners/',
   AVATARS: '/lazy-static/avatars/',
   PREVIEWS: '/lazy-static/previews/',
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
@@ -634,7 +635,7 @@ const LRU_CACHE = {
   USER_TOKENS: {
     MAX_SIZE: 1000
   },
-  AVATAR_STATIC: {
+  ACTOR_IMAGE_STATIC: {
     MAX_SIZE: 500
   }
 }
@@ -671,7 +672,7 @@ const MEMOIZE_LENGTH = {
 }
 
 const QUEUE_CONCURRENCY = {
-  AVATAR_PROCESS_IMAGE: 3
+  ACTOR_PROCESS_IMAGE: 3
 }
 
 const REDUNDANCY = {

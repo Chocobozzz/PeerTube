@@ -1,6 +1,5 @@
 export * from './activitypub'
 export * from './actors'
-export * from './avatars'
 export * from './moderation'
 export * from './bulk'
 export * from './redundancy'

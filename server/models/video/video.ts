@@ -100,10 +100,10 @@ import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models
 import { VideoAbuseModel } from '../abuse/video-abuse'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
+import { ActorImageModel } from '../account/actor-image'
 import { UserModel } from '../account/user'
 import { UserVideoHistoryModel } from '../account/user-video-history'
 import { ActorModel } from '../activitypub/actor'
-import { AvatarModel } from '../avatar/avatar'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { ServerModel } from '../server/server'
 import { TrackerModel } from '../server/tracker'
@@ -286,7 +286,8 @@ export type AvailableForListIDsOptions = {
                 required: false
               },
               {
-                model: AvatarModel.unscoped(),
+                model: ActorImageModel.unscoped(),
+                as: 'Avatar',
                 required: false
               }
             ]
@@ -308,7 +309,8 @@ export type AvailableForListIDsOptions = {
                     required: false
                   },
                   {
-                    model: AvatarModel.unscoped(),
+                    model: ActorImageModel.unscoped(),
+                    as: 'Avatar',
                     required: false
                   }
                 ]
@@ -1703,7 +1705,7 @@ export class VideoModel extends Model {
 
     function buildActor (rowActor: any) {
       const avatarModel = rowActor.Avatar.id !== null
-        ? new AvatarModel(pick(rowActor.Avatar, avatarKeys), buildOpts)
+        ? new ActorImageModel(pick(rowActor.Avatar, avatarKeys), buildOpts)
         : null
 
       const serverModel = rowActor.Server.id !== null
