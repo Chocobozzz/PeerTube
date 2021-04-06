@@ -49,6 +49,16 @@ function isIntOrNull (value: any) {
   return value === null || validator.isInt('' + value)
 }
 
+function isIntPercentage (value: any) {
+  const v = '' + value
+  if (validator.isInt(v)) {
+    const n = validator.toInt(v)
+    return n >= 0 && n <= 100
+  } else {
+    return false
+  }
+}
+
 function toIntOrNull (value: string) {
   const v = toValueOrNull(value)
 
@@ -165,6 +175,7 @@ export {
   isNotEmptyIntArray,
   isArray,
   isIntOrNull,
+  isIntPercentage,
   isIdValid,
   isSafePath,
   isUUIDValid,
