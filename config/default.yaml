@@ -272,7 +272,7 @@ transcoding:
   # If you also enabled the hls format, it will multiply videos storage by 2
   # If disabled, breaks federation with PeerTube instances < 2.1
   webtorrent:
-    enabled: true
+    enabled: false
 
   # /!\ Requires ffmpeg >= 4.1
   # Generate HLS playlists and fragmented MP4 files. Better playback than with WebTorrent:
@@ -281,7 +281,7 @@ transcoding:
   #     * More stable playback (less bugs/infinite loading)
   # If you also enabled the webtorrent format, it will multiply videos storage by 2
   hls:
-    enabled: false
+    enabled: true
 
 live:
   enabled: false
