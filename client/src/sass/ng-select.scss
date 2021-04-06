@@ -40,14 +40,10 @@ $ng-select-value-padding-left: 15px;
     color: pvar(--inputForegroundColor);
   }
 
-  &.ng-select-multiple {
-    .ng-select-container {
-      .ng-value-container {
-        padding-left: 12px;
-        .ng-value {
-          margin-left: 3px;
-        }
-      }
+  &.ng-select-multiple .ng-select-container .ng-value-container {
+    padding-left: 12px;
+    .ng-value {
+      margin-left: 3px;
     }
   }
 }
