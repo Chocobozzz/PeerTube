@@ -33,7 +33,7 @@ import {
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { ApplicationModel } from '../application/application'
-import { AvatarModel } from '../avatar/avatar'
+import { ActorImageModel } from './actor-image'
 import { ServerModel } from '../server/server'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { getSort, throwIfNotValid } from '../utils'
@@ -82,7 +82,8 @@ export type SummaryOptions = {
           serverInclude,
 
           {
-            model: AvatarModel.unscoped(),
+            model: ActorImageModel.unscoped(),
+            as: 'Avatar',
             required: false
           }
         ]

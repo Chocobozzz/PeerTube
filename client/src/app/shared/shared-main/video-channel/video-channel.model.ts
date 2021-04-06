@@ -1,4 +1,4 @@
-import { Account as ServerAccount, Avatar, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@shared/models'
+import { Account as ServerAccount, ActorImage, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@shared/models'
 import { Account } from '../account/account.model'
 import { Actor } from '../account/actor.model'
 
@@ -51,7 +51,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     }
   }
 
-  updateAvatar (newAvatar: Avatar) {
+  updateAvatar (newAvatar: ActorImage) {
     this.avatar = newAvatar
 
     this.updateComputedAttributes()

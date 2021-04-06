@@ -1,5 +1,5 @@
+import { ActorImage } from './actor-image.model'
 import { Actor } from './actor.model'
-import { Avatar } from '../avatars'
 
 export interface Account extends Actor {
   displayName: string
@@ -14,5 +14,5 @@ export interface AccountSummary {
   displayName: string
   url: string
   host: string
-  avatar?: Avatar
+  avatar?: ActorImage
 }

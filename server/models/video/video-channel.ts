@@ -36,9 +36,9 @@ import {
   MChannelSummaryFormattable
 } from '../../types/models/video'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
+import { ActorImageModel } from '../account/actor-image'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
-import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -130,7 +130,8 @@ export type SummaryOptions = {
             required: false
           },
           {
-            model: AvatarModel.unscoped(),
+            model: ActorImageModel.unscoped(),
+            as: 'Avatar',
             required: false
           }
         ]

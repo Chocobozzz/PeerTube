@@ -1,17 +1,17 @@
 import 'multer'
-import { sendUpdateActor } from './activitypub/send'
-import { AVATARS_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
-import { updateActorAvatarInstance, deleteActorAvatarInstance } from './activitypub/actor'
-import { processImage } from '../helpers/image-utils'
-import { extname, join } from 'path'
-import { retryTransactionWrapper } from '../helpers/database-utils'
-import { v4 as uuidv4 } from 'uuid'
-import { CONFIG } from '../initializers/config'
-import { sequelizeTypescript } from '../initializers/database'
-import * as LRUCache from 'lru-cache'
 import { queue } from 'async'
+import * as LRUCache from 'lru-cache'
+import { extname, join } from 'path'
+import { v4 as uuidv4 } from 'uuid'
+import { retryTransactionWrapper } from '../helpers/database-utils'
+import { processImage } from '../helpers/image-utils'
 import { downloadImage } from '../helpers/requests'
+import { CONFIG } from '../initializers/config'
+import { AVATARS_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
+import { sequelizeTypescript } from '../initializers/database'
 import { MAccountDefault, MChannelDefault } from '../types/models'
+import { deleteActorAvatarInstance, updateActorAvatarInstance } from './activitypub/actor'
+import { sendUpdateActor } from './activitypub/send'
 
 async function updateLocalActorAvatarFile (
   accountOrChannel: MAccountDefault | MChannelDefault,
@@ -20,7 +20,7 @@ async function updateLocalActorAvatarFile (
   const extension = extname(avatarPhysicalFile.filename)
 
   const avatarName = uuidv4() + extension
-  const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
+  const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, avatarName)
   await processImage(avatarPhysicalFile.path, destination, AVATARS_SIZE)
 
   return retryTransactionWrapper(() => {
@@ -59,12 +59,12 @@ async function deleteLocalActorAvatarFile (
 type DownloadImageQueueTask = { fileUrl: string, filename: string }
 
 const downloadImageQueue = queue<DownloadImageQueueTask, Error>((task, cb) => {
-  downloadImage(task.fileUrl, CONFIG.STORAGE.AVATARS_DIR, task.filename, AVATARS_SIZE)
+  downloadImage(task.fileUrl, CONFIG.STORAGE.ACTOR_IMAGES, task.filename, AVATARS_SIZE)
     .then(() => cb())
     .catch(err => cb(err))
-}, QUEUE_CONCURRENCY.AVATAR_PROCESS_IMAGE)
+}, QUEUE_CONCURRENCY.ACTOR_PROCESS_IMAGE)
 
-function pushAvatarProcessInQueue (task: DownloadImageQueueTask) {
+function pushActorImageProcessInQueue (task: DownloadImageQueueTask) {
   return new Promise<void>((res, rej) => {
     downloadImageQueue.push(task, err => {
       if (err) return rej(err)
@@ -75,11 +75,11 @@ function pushAvatarProcessInQueue (task: DownloadImageQueueTask) {
 }
 
 // Unsafe so could returns paths that does not exist anymore
-const avatarPathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.AVATAR_STATIC.MAX_SIZE })
+const actorImagePathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.ACTOR_IMAGE_STATIC.MAX_SIZE })
 
 export {
-  avatarPathUnsafeCache,
+  actorImagePathUnsafeCache,
   updateLocalActorAvatarFile,
   deleteLocalActorAvatarFile,
-  pushAvatarProcessInQueue
+  pushActorImageProcessInQueue
 }

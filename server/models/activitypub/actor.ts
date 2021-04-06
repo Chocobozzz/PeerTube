@@ -19,7 +19,7 @@ import {
 } from 'sequelize-typescript'
 import { ModelCache } from '@server/models/model-cache'
 import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
-import { Avatar } from '../../../shared/models/avatars/avatar.model'
+import { ActorImage } from '../../../shared/models/actors/actor-image.model'
 import { activityPubContextify } from '../../helpers/activitypub'
 import {
   isActorFollowersCountValid,
@@ -43,7 +43,7 @@ import {
   MActorWithInboxes
 } from '../../types/models'
 import { AccountModel } from '../account/account'
-import { AvatarModel } from '../avatar/avatar'
+import { ActorImageModel } from '../account/actor-image'
 import { ServerModel } from '../server/server'
 import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
@@ -73,7 +73,8 @@ export const unusedActorAttributesForAPI = [
       required: false
     },
     {
-      model: AvatarModel,
+      model: ActorImageModel,
+      as: 'Avatar',
       required: false
     }
   ]
@@ -100,7 +101,8 @@ export const unusedActorAttributesForAPI = [
         required: false
       },
       {
-        model: AvatarModel,
+        model: ActorImageModel,
+        as: 'Avatar',
         required: false
       }
     ]
@@ -213,18 +215,35 @@ export class ActorModel extends Model {
   @UpdatedAt
   updatedAt: Date
 
-  @ForeignKey(() => AvatarModel)
+  @ForeignKey(() => ActorImageModel)
   @Column
   avatarId: number
 
-  @BelongsTo(() => AvatarModel, {
+  @ForeignKey(() => ActorImageModel)
+  @Column
+  bannerId: number
+
+  @BelongsTo(() => ActorImageModel, {
     foreignKey: {
+      name: 'avatarId',
       allowNull: true
     },
+    as: 'Avatar',
     onDelete: 'set null',
     hooks: true
   })
-  Avatar: AvatarModel
+  Avatar: ActorImageModel
+
+  @BelongsTo(() => ActorImageModel, {
+    foreignKey: {
+      name: 'bannerId',
+      allowNull: true
+    },
+    as: 'Banner',
+    onDelete: 'set null',
+    hooks: true
+  })
+  Banner: ActorImageModel
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -496,7 +515,7 @@ export class ActorModel extends Model {
   }
 
   toFormattedSummaryJSON (this: MActorSummaryFormattable) {
-    let avatar: Avatar = null
+    let avatar: ActorImage = null
     if (this.Avatar) {
       avatar = this.Avatar.toFormattedJSON()
     }

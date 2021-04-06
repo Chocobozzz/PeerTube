@@ -1,15 +1,15 @@
-import { ActorModel } from '../../../models/activitypub/actor'
 import { FunctionProperties, PickWith, PickWithOpt } from '@shared/core-utils'
-import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { MServer, MServerHost, MServerHostBlocks, MServerRedundancyAllowed } from '../server'
-import { MAvatar, MAvatarFormattable } from './avatar'
 import { MChannel, MChannelAccountActor, MChannelAccountDefault, MChannelId, MChannelIdActor } from '../video'
+import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
+import { MActorImage, MActorImageFormattable } from './actor-image'
 
 type Use<K extends keyof ActorModel, M> = PickWith<ActorModel, K, M>
 
 // ############################################################################
 
-export type MActor = Omit<ActorModel, 'Account' | 'VideoChannel' | 'ActorFollowing' | 'Avatar' | 'ActorFollowers' | 'Server'>
+export type MActor = Omit<ActorModel, 'Account' | 'VideoChannel' | 'ActorFollowing' | 'Avatar' | 'ActorFollowers' | 'Server' | 'Banner'>
 
 // ############################################################################
 
@@ -34,7 +34,7 @@ export type MActorRedundancyAllowedOpt = PickWithOpt<ActorModel, 'Server', MServ
 export type MActorDefaultLight =
   MActorLight &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MAvatar>
+  Use<'Avatar', MActorImage>
 
 export type MActorAccountId =
   MActor &
@@ -78,7 +78,7 @@ export type MActorServer =
 export type MActorDefault =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MAvatar>
+  Use<'Avatar', MActorImage>
 
 // Actor with channel that is associated to an account and its actor
 // Actor -> VideoChannel -> Account -> Actor
@@ -89,7 +89,7 @@ export type MActorChannelAccountActor =
 export type MActorFull =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MAvatar> &
+  Use<'Avatar', MActorImage> &
   Use<'Account', MAccount> &
   Use<'VideoChannel', MChannelAccountActor>
 
@@ -97,7 +97,7 @@ export type MActorFull =
 export type MActorFullActor =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MAvatar> &
+  Use<'Avatar', MActorImage> &
   Use<'Account', MAccountDefault> &
   Use<'VideoChannel', MChannelAccountDefault>
 
@@ -109,7 +109,7 @@ export type MActorSummary =
   FunctionProperties<MActor> &
   Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarId'> &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MAvatar>
+  Use<'Avatar', MActorImage>
 
 export type MActorSummaryBlocks =
   MActorSummary &
@@ -127,7 +127,7 @@ export type MActorSummaryFormattable =
   FunctionProperties<MActor> &
   Pick<MActor, 'url' | 'preferredUsername'> &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MAvatarFormattable>
+  Use<'Avatar', MActorImageFormattable>
 
 export type MActorFormattable =
   MActorSummaryFormattable &
@@ -136,4 +136,4 @@ export type MActorFormattable =
 
 export type MActorAP =
   MActor &
-  Use<'Avatar', MAvatar>
+  Use<'Avatar', MActorImage>
