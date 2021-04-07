@@ -71,6 +71,7 @@ import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { AccountModel } from './account'
 import { UserNotificationSettingModel } from './user-notification-setting'
+import { ActorImageModel } from './actor-image'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -97,7 +98,20 @@ enum ScopeNames {
         model: AccountModel,
         include: [
           {
-            model: VideoChannelModel
+            model: VideoChannelModel.unscoped(),
+            include: [
+              {
+                model: ActorModel,
+                required: true,
+                include: [
+                  {
+                    model: ActorImageModel,
+                    as: 'Banner',
+                    required: false
+                  }
+                ]
+              }
+            ]
           },
           {
             attributes: [ 'id', 'name', 'type' ],

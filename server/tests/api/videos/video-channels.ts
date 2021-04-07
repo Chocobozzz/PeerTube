@@ -9,6 +9,7 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
+  getVideoChannel,
   getVideoChannelVideos,
   testImage,
   updateVideo,
@@ -306,7 +307,8 @@ describe('Test video channels', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const videoChannel = await findChannel(server, secondVideoChannelId)
+      const res = await getVideoChannel(server.url, 'second_video_channel@' + servers[0].host)
+      const videoChannel = res.body
 
       await testImage(server.url, 'banner-resized', videoChannel.banner.path)
     }

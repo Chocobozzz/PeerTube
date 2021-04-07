@@ -21,7 +21,7 @@ textarea {
 }
 
 .screenratio {
-  @include large-screen-ratio($selector: 'div, ::ng-deep iframe') {
+  @include block-ratio($selector: 'div, ::ng-deep iframe') {
     left: 0;
   };
 }

@@ -1,21 +1,25 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
+import { Account, VideoChannel } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
-import { Account } from '../account/account.model'
-import { VideoChannel } from '../video-channel/video-channel.model'
-import { Actor } from './actor.model'
 
 @Component({
-  selector: 'my-actor-avatar-info',
-  templateUrl: './actor-avatar-info.component.html',
-  styleUrls: [ './actor-avatar-info.component.scss' ]
+  selector: 'my-actor-avatar-edit',
+  templateUrl: './actor-avatar-edit.component.html',
+  styleUrls: [
+    './actor-image-edit.scss',
+    './actor-avatar-edit.component.scss'
+  ]
 })
-export class ActorAvatarInfoComponent implements OnInit, OnChanges {
+export class ActorAvatarEditComponent implements OnInit {
   @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>
   @ViewChild('avatarPopover') avatarPopover: NgbPopover
 
   @Input() actor: VideoChannel | Account
+  @Input() editable = true
+  @Input() displaySubscribers = true
+  @Input() displayUsername = true
 
   @Output() avatarChange = new EventEmitter<FormData>()
   @Output() avatarDelete = new EventEmitter<void>()
@@ -23,8 +27,6 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
   avatarFormat = ''
   maxAvatarSize = 0
   avatarExtensions = ''
-
-  private avatarUrl: string
 
   constructor (
     private serverService: ServerService,
@@ -40,12 +42,6 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
           this.avatarFormat = `${$localize`max size`}: 192*192px, ` +
                               `${getBytes(this.maxAvatarSize)} ${$localize`extensions`}: ${this.avatarExtensions}`
         })
-  }
-
-  ngOnChanges (changes: SimpleChanges) {
-    if (changes['actor']) {
-      this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.actor)
-    }
   }
 
   onAvatarChange (input: HTMLInputElement) {
@@ -68,7 +64,7 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
   }
 
   hasAvatar () {
-    return !!this.avatarUrl
+    return !!this.actor.avatar
   }
 
   isChannel () {

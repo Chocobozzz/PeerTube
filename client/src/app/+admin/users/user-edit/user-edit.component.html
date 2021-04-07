@@ -72,7 +72,7 @@
     <div class="anchor" id="user"></div> <!-- user anchor -->
     <div *ngIf="isCreation()" class="account-title" i18n>NEW USER</div>
     <div *ngIf="!isCreation() && user" class="account-title">
-      <my-actor-avatar-info [actor]="user.account"></my-actor-avatar-info>
+      <my-actor-avatar-edit [actor]="user.account" [editable]="false" [displaySubscribers]="false" [displayUsername]="false"></my-actor-avatar-edit>
     </div>
   </div>
 

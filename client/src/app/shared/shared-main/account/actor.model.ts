@@ -3,15 +3,18 @@ import { getAbsoluteAPIUrl } from '@app/helpers'
 
 export abstract class Actor implements ActorServer {
   id: number
-  url: string
   name: string
+
   host: string
+  url: string
+
   followingCount: number
   followersCount: number
+
   createdAt: Date | string
   updatedAt: Date | string
-  avatar: ActorImage
 
+  avatar: ActorImage
   avatarUrl: string
 
   isLocal: boolean
@@ -24,6 +27,8 @@ export abstract class Actor implements ActorServer {
 
       return absoluteAPIUrl + actor.avatar.path
     }
+
+    return ''
   }
 
   static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {
