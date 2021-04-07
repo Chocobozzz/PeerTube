@@ -106,7 +106,7 @@ videosRouter.get('/',
 
 const getTmpPath = (fileId: string) => `/tmp/peertube-${fileId}`
 
-videosRouter.use('/x-upload', uploadx({
+videosRouter.use('/upload', uploadx({
   directory: CONFIG.STORAGE.VIDEOS_DIR.slice(0, -1),
   onComplete: async (file: any) => {
     const filePath = `${CONFIG.STORAGE.VIDEOS_DIR}${file.id}`

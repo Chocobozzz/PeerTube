@@ -25,9 +25,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
 
   protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
-  get videoExtensions () {
-    return this.serverConfig.video.file.extensions.join(', ')
-  }
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
   @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
@@ -76,7 +73,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
     const comp = this
 
     this.options = {
-      endpoint: `${environment.apiUrl}/api/v1/videos/x-upload?uploadType=multipart`,
+      endpoint: `${environment.apiUrl}/api/v1/videos/upload?uploadType=multipart`,
       multiple: false,
       token: this.authService.getAccessToken(),
       metadata: {
@@ -92,6 +89,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
         privacy: VideoPrivacy.PRIVATE.toString()
       }
     }
+  }
+
+  get videoExtensions () {
+    return this.serverConfig.video.file.extensions.join(', ')
   }
 
   onUploadVideoOngoing (state: UploadState) {
