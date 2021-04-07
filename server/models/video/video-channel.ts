@@ -99,7 +99,14 @@ export type SummaryOptions = {
                 }
               }
             ]
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              as: 'Banner',
+              required: false
+            }
+          ]
         },
         {
           model: AccountModel,

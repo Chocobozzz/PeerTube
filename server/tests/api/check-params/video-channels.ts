@@ -234,7 +234,8 @@ describe('Test video channels API validator', function () {
     })
   })
 
-  describe('When updating video channel avatar', function () {
+  describe('When updating video channel avatar/banner', function () {
+    const types = [ 'avatar', 'banner' ]
     let path: string
 
     before(async function () {
@@ -242,48 +243,57 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with an incorrect input file', async function () {
-      const fields = {}
-      const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+      for (const type of types) {
+        const fields = {}
+        const attaches = {
+          [type + 'file']: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        }
+
+        await makeUploadRequest({ url: server.url, path: `${path}/${type}/pick`, token: server.accessToken, fields, attaches })
       }
-      await makeUploadRequest({ url: server.url, path: path + '/avatar/pick', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a big file', async function () {
-      const fields = {}
-      const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+      for (const type of types) {
+        const fields = {}
+        const attaches = {
+          [type + 'file']: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        }
+        await makeUploadRequest({ url: server.url, path: `${path}/${type}/pick`, token: server.accessToken, fields, attaches })
       }
-      await makeUploadRequest({ url: server.url, path: path + '/avatar/pick', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with an unauthenticated user', async function () {
-      const fields = {}
-      const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+      for (const type of types) {
+        const fields = {}
+        const attaches = {
+          [type + 'file']: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        }
+        await makeUploadRequest({
+          url: server.url,
+          path: `${path}/${type}/pick`,
+          fields,
+          attaches,
+          statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        })
       }
-      await makeUploadRequest({
-        url: server.url,
-        path: path + '/avatar/pick',
-        fields,
-        attaches,
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
-      })
     })
 
     it('Should succeed with the correct params', async function () {
-      const fields = {}
-      const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+      for (const type of types) {
+        const fields = {}
+        const attaches = {
+          [type + 'file']: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        }
+        await makeUploadRequest({
+          url: server.url,
+          path: `${path}/${type}/pick`,
+          token: server.accessToken,
+          fields,
+          attaches,
+          statusCodeExpected: HttpStatusCode.OK_200
+        })
       }
-      await makeUploadRequest({
-        url: server.url,
-        path: path + '/avatar/pick',
-        token: server.accessToken,
-        fields,
-        attaches,
-        statusCodeExpected: HttpStatusCode.OK_200
-      })
     })
   })
 

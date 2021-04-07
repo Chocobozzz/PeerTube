@@ -34,11 +34,10 @@ async function updateLocalActorImageFile (
       const actorImageInfo = {
         name: imageName,
         fileUrl: null,
-        type,
         onDisk: true
       }
 
-      const updatedActor = await updateActorImageInstance(accountOrChannel.Actor, actorImageInfo, t)
+      const updatedActor = await updateActorImageInstance(accountOrChannel.Actor, type, actorImageInfo, t)
       await updatedActor.save({ transaction: t })
 
       await sendUpdateActor(accountOrChannel, t)

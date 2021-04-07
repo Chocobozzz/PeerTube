@@ -33,7 +33,7 @@ import {
   videoPlaylistsSortValidator
 } from '../../middlewares'
 import { videoChannelsNameWithHostValidator, videoChannelsOwnSearchValidator, videosSortValidator } from '../../middlewares/validators'
-import { updateAvatarValidator, updateBannerValidator } from '../../middlewares/validators/avatar'
+import { updateAvatarValidator, updateBannerValidator } from '../../middlewares/validators/actor-image'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
 import { VideoModel } from '../../models/video/video'
