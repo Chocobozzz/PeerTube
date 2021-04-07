@@ -111,6 +111,14 @@ export class VideoService implements VideosProvider {
                )
   }
 
+  prepareUploadVideo (video: FormData) {
+    const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + 'x-upload', video, { reportProgress: true })
+
+    return this.authHttp
+               .request<{ video: { id: number, uuid: string } }>(req)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
   uploadVideo (video: FormData) {
     const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + 'upload', video, { reportProgress: true })
 

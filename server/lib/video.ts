@@ -32,7 +32,7 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
 
 async function buildVideoThumbnailsFromReq (options: {
   video: MVideoThumbnail
-  files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[]
+  files: { [fieldname: string]: { path: string } | Express.Multer.File[] } | Express.Multer.File[]
   fallback: (type: ThumbnailType) => Promise<MThumbnail>
   automaticallyGenerated?: boolean
 }) {
