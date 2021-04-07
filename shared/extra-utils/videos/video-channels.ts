@@ -3,7 +3,7 @@
 import * as request from 'supertest'
 import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-update.model'
 import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
-import { makeGetRequest, updateAvatarRequest } from '../requests/requests'
+import { makeDeleteRequest, makeGetRequest, updateImageRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 import { User } from '../../models/users/user.model'
 import { getMyUserInformation } from '../users/users'
@@ -129,16 +129,32 @@ function getVideoChannel (url: string, channelName: string) {
     .expect('Content-Type', /json/)
 }
 
-function updateVideoChannelAvatar (options: {
+function updateVideoChannelImage (options: {
   url: string
   accessToken: string
   fixture: string
   videoChannelName: string | number
+  type: 'avatar' | 'banner'
 }) {
+  const path = `/api/v1/video-channels/${options.videoChannelName}/${options.type}/pick`
 
-  const path = '/api/v1/video-channels/' + options.videoChannelName + '/avatar/pick'
+  return updateImageRequest({ ...options, path, fieldname: options.type + 'file' })
+}
 
-  return updateAvatarRequest(Object.assign(options, { path }))
+function deleteVideoChannelImage (options: {
+  url: string
+  accessToken: string
+  videoChannelName: string | number
+  type: 'avatar' | 'banner'
+}) {
+  const path = `/api/v1/video-channels/${options.videoChannelName}/${options.type}`
+
+  return makeDeleteRequest({
+    url: options.url,
+    token: options.accessToken,
+    path,
+    statusCodeExpected: 204
+  })
 }
 
 function setDefaultVideoChannel (servers: ServerInfo[]) {
@@ -157,12 +173,13 @@ function setDefaultVideoChannel (servers: ServerInfo[]) {
 // ---------------------------------------------------------------------------
 
 export {
-  updateVideoChannelAvatar,
+  updateVideoChannelImage,
   getVideoChannelsList,
   getAccountVideoChannelsList,
   addVideoChannel,
   updateVideoChannel,
   deleteVideoChannel,
   getVideoChannel,
-  setDefaultVideoChannel
+  setDefaultVideoChannel,
+  deleteVideoChannelImage
 }

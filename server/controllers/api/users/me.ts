@@ -25,7 +25,7 @@ import {
   usersVideoRatingValidator
 } from '../../../middlewares'
 import { deleteMeValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
-import { updateAvatarValidator } from '../../../middlewares/validators/avatar'
+import { updateAvatarValidator } from '../../../middlewares/validators/actor-image'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { UserModel } from '../../../models/account/user'

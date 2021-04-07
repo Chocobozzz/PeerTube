@@ -5,13 +5,14 @@ import * as chai from 'chai'
 import {
   cleanupTests,
   createUser,
+  deleteVideoChannelImage,
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
   getVideoChannelVideos,
   testImage,
   updateVideo,
-  updateVideoChannelAvatar,
+  updateVideoChannelImage,
   uploadVideo,
   userLogin,
   wait
@@ -21,7 +22,6 @@ import {
   deleteVideoChannel,
   getAccountVideoChannelsList,
   getMyUserInformation,
-  getVideoChannel,
   getVideoChannelsList,
   ServerInfo,
   setAccessTokensToServers,
@@ -32,6 +32,13 @@ import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { User, Video, VideoChannel, VideoDetails } from '../../../../shared/index'
 
 const expect = chai.expect
+
+async function findChannel (server: ServerInfo, channelId: number) {
+  const res = await getVideoChannelsList(server.url, 0, 5, '-name')
+  const videoChannel = res.body.data.find(c => c.id === channelId)
+
+  return videoChannel as VideoChannel
+}
 
 describe('Test video channels', function () {
   let servers: ServerInfo[]
@@ -262,38 +269,85 @@ describe('Test video channels', function () {
   })
 
   it('Should update video channel avatar', async function () {
-    this.timeout(5000)
+    this.timeout(15000)
 
     const fixture = 'avatar.png'
 
-    await updateVideoChannelAvatar({
+    await updateVideoChannelImage({
       url: servers[0].url,
       accessToken: servers[0].accessToken,
       videoChannelName: 'second_video_channel',
-      fixture
+      fixture,
+      type: 'avatar'
     })
 
     await waitJobs(servers)
-  })
 
-  it('Should have video channel avatar updated', async function () {
     for (const server of servers) {
-      const res = await getVideoChannelsList(server.url, 0, 1, '-name')
-
-      const videoChannel = res.body.data.find(c => c.id === secondVideoChannelId)
+      const videoChannel = await findChannel(server, secondVideoChannelId)
 
       await testImage(server.url, 'avatar-resized', videoChannel.avatar.path, '.png')
     }
   })
 
-  it('Should get video channel', async function () {
-    const res = await getVideoChannel(servers[0].url, 'second_video_channel')
+  it('Should update video channel banner', async function () {
+    this.timeout(15000)
 
-    const videoChannel = res.body
-    expect(videoChannel.name).to.equal('second_video_channel')
-    expect(videoChannel.displayName).to.equal('video channel updated')
-    expect(videoChannel.description).to.equal('video channel description updated')
-    expect(videoChannel.support).to.equal('video channel support text updated')
+    const fixture = 'banner.jpg'
+
+    await updateVideoChannelImage({
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
+      videoChannelName: 'second_video_channel',
+      fixture,
+      type: 'banner'
+    })
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const videoChannel = await findChannel(server, secondVideoChannelId)
+
+      await testImage(server.url, 'banner-resized', videoChannel.banner.path)
+    }
+  })
+
+  it('Should delete the video channel avatar', async function () {
+    this.timeout(15000)
+
+    await deleteVideoChannelImage({
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
+      videoChannelName: 'second_video_channel',
+      type: 'avatar'
+    })
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const videoChannel = await findChannel(server, secondVideoChannelId)
+
+      expect(videoChannel.avatar).to.be.null
+    }
+  })
+
+  it('Should delete the video channel banner', async function () {
+    this.timeout(15000)
+
+    await deleteVideoChannelImage({
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
+      videoChannelName: 'second_video_channel',
+      type: 'banner'
+    })
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const videoChannel = await findChannel(server, secondVideoChannelId)
+
+      expect(videoChannel.banner).to.be.null
+    }
   })
 
   it('Should list the second video channel videos', async function () {

@@ -34,6 +34,7 @@ import {
   MActorFull,
   MActorFullActor,
   MActorId,
+  MActorImage,
   MActorImages,
   MChannel
 } from '../../types/models'
@@ -169,38 +170,34 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   }
 }
 
-type AvatarInfo = { name: string, onDisk: boolean, fileUrl: string, type: ActorImageType }
-async function updateActorImageInstance (actor: MActorImages, info: AvatarInfo, t: Transaction) {
-  if (!info.name) return actor
-
-  const oldImageModel = info.type === ActorImageType.AVATAR
+type ImageInfo = { name: string, onDisk?: boolean, fileUrl: string }
+async function updateActorImageInstance (actor: MActorImages, type: ActorImageType, imageInfo: ImageInfo | null, t: Transaction) {
+  const oldImageModel = type === ActorImageType.AVATAR
     ? actor.Avatar
     : actor.Banner
 
   if (oldImageModel) {
     // Don't update the avatar if the file URL did not change
-    if (info.fileUrl && oldImageModel.fileUrl === info.fileUrl) return actor
+    if (imageInfo?.fileUrl && oldImageModel.fileUrl === imageInfo.fileUrl) return actor
 
     try {
       await oldImageModel.destroy({ transaction: t })
+
+      setActorImage(actor, type, null)
     } catch (err) {
       logger.error('Cannot remove old actor image of actor %s.', actor.url, { err })
     }
   }
 
-  const imageModel = await ActorImageModel.create({
-    filename: info.name,
-    onDisk: info.onDisk,
-    fileUrl: info.fileUrl,
-    type: info.type
-  }, { transaction: t })
+  if (imageInfo) {
+    const imageModel = await ActorImageModel.create({
+      filename: imageInfo.name,
+      onDisk: imageInfo.onDisk ?? false,
+      fileUrl: imageInfo.fileUrl,
+      type: type
+    }, { transaction: t })
 
-  if (info.type === ActorImageType.AVATAR) {
-    actor.avatarId = imageModel.id
-    actor.Avatar = imageModel
-  } else {
-    actor.bannerId = imageModel.id
-    actor.Banner = imageModel
+    setActorImage(actor, type, imageModel)
   }
 
   return actor
@@ -310,27 +307,8 @@ async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannel
     return sequelizeTypescript.transaction(async t => {
       updateInstanceWithAnother(actor, result.actor)
 
-      if (result.avatar !== undefined) {
-        const avatarInfo = {
-          name: result.avatar.name,
-          fileUrl: result.avatar.fileUrl,
-          onDisk: false,
-          type: ActorImageType.AVATAR
-        }
-
-        await updateActorImageInstance(actor, avatarInfo, t)
-      }
-
-      if (result.banner !== undefined) {
-        const bannerInfo = {
-          name: result.banner.name,
-          fileUrl: result.banner.fileUrl,
-          onDisk: false,
-          type: ActorImageType.BANNER
-        }
-
-        await updateActorImageInstance(actor, bannerInfo, t)
-      }
+      await updateActorImageInstance(actor, ActorImageType.AVATAR, result.avatar, t)
+      await updateActorImageInstance(actor, ActorImageType.BANNER, result.banner, t)
 
       // Force update
       actor.setDataValue('updatedAt', new Date())
@@ -380,6 +358,22 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function setActorImage (actorModel: MActorImages, type: ActorImageType, imageModel: MActorImage) {
+  const id = imageModel
+    ? imageModel.id
+    : null
+
+  if (type === ActorImageType.AVATAR) {
+    actorModel.avatarId = id
+    actorModel.Avatar = imageModel
+  } else {
+    actorModel.bannerId = id
+    actorModel.Banner = imageModel
+  }
+
+  return actorModel
+}
 
 function saveActorAndServerAndModelIfNotExist (
   result: FetchRemoteActorResult,

@@ -134,13 +134,8 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
 
       await updateActorInstance(actor, actorAttributesToUpdate)
 
-      for (const imageInfo of [ avatarInfo, bannerInfo ]) {
-        if (!imageInfo) continue
-
-        const imageOptions = Object.assign({}, imageInfo, { onDisk: false })
-
-        await updateActorImageInstance(actor, imageOptions, t)
-      }
+      await updateActorImageInstance(actor, ActorImageType.AVATAR, avatarInfo, t)
+      await updateActorImageInstance(actor, ActorImageType.BANNER, bannerInfo, t)
 
       await actor.save({ transaction: t })
 

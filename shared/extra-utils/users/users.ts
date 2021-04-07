@@ -4,7 +4,7 @@ import { UserUpdateMe } from '../../models/users'
 import { UserAdminFlag } from '../../models/users/user-flag.model'
 import { UserRegister } from '../../models/users/user-register.model'
 import { UserRole } from '../../models/users/user-role'
-import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
+import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, updateImageRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 import { userLogin } from './login'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
@@ -275,7 +275,7 @@ function updateMyAvatar (options: {
 }) {
   const path = '/api/v1/users/me/avatar/pick'
 
-  return updateAvatarRequest(Object.assign(options, { path }))
+  return updateImageRequest({ ...options, path, fieldname: 'avatarfile' })
 }
 
 function updateUser (options: {
