@@ -72,7 +72,11 @@ export class ActorImageModel extends Model {
   }
 
   getStaticPath () {
-    return join(LAZY_STATIC_PATHS.AVATARS, this.filename)
+    if (this.type === ActorImageType.AVATAR) {
+      return join(LAZY_STATIC_PATHS.AVATARS, this.filename)
+    }
+
+    return join(LAZY_STATIC_PATHS.BANNERS, this.filename)
   }
 
   getPath () {

@@ -32,7 +32,7 @@
     color: pvar(--inputPlaceholderColor);
   }
 
-  @include large-screen-ratio($selector: 'div, ::ng-deep iframe') {
+  @include block-ratio($selector: 'div, ::ng-deep iframe') {
     width: 100% !important;
     height: 100% !important;
     left: 0;

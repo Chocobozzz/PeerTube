@@ -886,14 +886,16 @@
   }
 }
 
-// applies 16:9 ratio to a child element (using $selector) only using
-// an immediate's parent size. This allows 16:9 ratio without explicit
+// applies ratio (default to 16:9) to a child element (using $selector) only using
+// an immediate's parent size. This allows to set a ratio without explicit
 // dimensions, as width/height cannot be computed from each other.
-@mixin large-screen-ratio ($selector: 'div') {
+@mixin block-ratio ($selector: 'div', $inverted-ratio: 9/16) {
+  $padding-percent: percentage($inverted-ratio);
+
   position: relative;
   height: 0;
   width: 100%;
-  padding-top: 56%;
+  padding-top: $padding-percent;
 
   #{$selector} {
     position: absolute;

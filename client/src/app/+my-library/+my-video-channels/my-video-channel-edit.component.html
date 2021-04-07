@@ -44,10 +44,17 @@
         </div>
       </div>
 
-      <my-actor-avatar-info
+      <h6 i18n>Banner image of your channel</h6>
+
+      <my-actor-banner-edit
+        *ngIf="!isCreation() && videoChannelToUpdate"
+        [actor]="videoChannelToUpdate" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"
+      ></my-actor-banner-edit>
+
+      <my-actor-avatar-edit
         *ngIf="!isCreation() && videoChannelToUpdate"
         [actor]="videoChannelToUpdate" (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
-      ></my-actor-avatar-info>
+      ></my-actor-avatar-edit>
 
       <div class="form-group">
         <label i18n for="display-name">Display name</label>

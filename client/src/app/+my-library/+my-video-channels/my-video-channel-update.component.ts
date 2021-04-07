@@ -1,7 +1,9 @@
 import { Subscription } from 'rxjs'
+import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
+import { uploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
@@ -11,8 +13,6 @@ import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { ServerConfig, VideoChannelUpdate } from '@shared/models'
 import { MyVideoChannelEdit } from './my-video-channel-edit'
-import { HttpErrorResponse } from '@angular/common/http'
-import { uploadErrorHandler } from '@app/helpers'
 
 @Component({
   selector: 'my-video-channel-update',
@@ -101,7 +101,7 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
   }
 
   onAvatarChange (formData: FormData) {
-    this.videoChannelService.changeVideoChannelAvatar(this.videoChannelToUpdate.name, formData)
+    this.videoChannelService.changeVideoChannelImage(this.videoChannelToUpdate.name, formData, 'avatar')
         .subscribe(
           data => {
             this.notifier.success($localize`Avatar changed.`)
@@ -118,12 +118,42 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
   }
 
   onAvatarDelete () {
-    this.videoChannelService.deleteVideoChannelAvatar(this.videoChannelToUpdate.name)
+    this.videoChannelService.deleteVideoChannelImage(this.videoChannelToUpdate.name, 'avatar')
                             .subscribe(
                               data => {
                                 this.notifier.success($localize`Avatar deleted.`)
 
                                 this.videoChannelToUpdate.resetAvatar()
+                              },
+
+                              err => this.notifier.error(err.message)
+                            )
+  }
+
+  onBannerChange (formData: FormData) {
+    this.videoChannelService.changeVideoChannelImage(this.videoChannelToUpdate.name, formData, 'banner')
+        .subscribe(
+          data => {
+            this.notifier.success($localize`Banner changed.`)
+
+            this.videoChannelToUpdate.updateBanner(data.banner)
+          },
+
+          (err: HttpErrorResponse) => uploadErrorHandler({
+            err,
+            name: $localize`banner`,
+            notifier: this.notifier
+          })
+        )
+  }
+
+  onBannerDelete () {
+    this.videoChannelService.deleteVideoChannelImage(this.videoChannelToUpdate.name, 'banner')
+                            .subscribe(
+                              data => {
+                                this.notifier.success($localize`Banner deleted.`)
+
+                                this.videoChannelToUpdate.resetBanner()
                               },
 
                               err => this.notifier.error(err.message)

@@ -10,9 +10,14 @@ label {
   @include settings-big-title;
 }
 
-my-actor-avatar-info {
+my-actor-avatar-edit,
+my-actor-banner-edit {
   display: block;
   margin-bottom: 20px;
+}
+
+my-actor-banner-edit {
+  max-width: 500px;
 }
 
 .input-group {

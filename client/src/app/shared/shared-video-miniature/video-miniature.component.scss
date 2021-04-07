@@ -97,7 +97,7 @@ $more-button-width: 40px;
   width: 100%;
 
   my-video-thumbnail {
-    @include large-screen-ratio($selector: '::ng-deep .video-thumbnail');
+    @include block-ratio($selector: '::ng-deep .video-thumbnail');
   }
 
   .video-bottom {

@@ -163,6 +163,14 @@ async function getConfig (req: express.Request, res: express.Response) {
         extensions: CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
       }
     },
+    banner: {
+      file: {
+        size: {
+          max: CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max
+        },
+        extensions: CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
+      }
+    },
     video: {
       image: {
         extensions: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME,
