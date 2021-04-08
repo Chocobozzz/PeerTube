@@ -21,7 +21,7 @@ import { MyVideoChannelEdit } from './my-video-channel-edit'
 })
 export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements OnInit, OnDestroy {
   error: string
-  videoChannelToUpdate: VideoChannel
+  videoChannel: VideoChannel
 
   private paramsSub: Subscription
   private oldSupportField: string
@@ -56,7 +56,7 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
 
       this.videoChannelService.getVideoChannel(videoChannelId).subscribe(
         videoChannelToUpdate => {
-          this.videoChannelToUpdate = videoChannelToUpdate
+          this.videoChannel = videoChannelToUpdate
 
           this.oldSupportField = videoChannelToUpdate.support
 
@@ -87,7 +87,7 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
       bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false
     }
 
-    this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.name, videoChannelUpdate).subscribe(
+    this.videoChannelService.updateVideoChannel(this.videoChannel.name, videoChannelUpdate).subscribe(
       () => {
         this.authService.refreshUserInformation()
 
@@ -101,12 +101,12 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
   }
 
   onAvatarChange (formData: FormData) {
-    this.videoChannelService.changeVideoChannelImage(this.videoChannelToUpdate.name, formData, 'avatar')
+    this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'avatar')
         .subscribe(
           data => {
             this.notifier.success($localize`Avatar changed.`)
 
-            this.videoChannelToUpdate.updateAvatar(data.avatar)
+            this.videoChannel.updateAvatar(data.avatar)
           },
 
           (err: HttpErrorResponse) => uploadErrorHandler({
@@ -118,12 +118,12 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
   }
 
   onAvatarDelete () {
-    this.videoChannelService.deleteVideoChannelImage(this.videoChannelToUpdate.name, 'avatar')
+    this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'avatar')
                             .subscribe(
                               data => {
                                 this.notifier.success($localize`Avatar deleted.`)
 
-                                this.videoChannelToUpdate.resetAvatar()
+                                this.videoChannel.resetAvatar()
                               },
 
                               err => this.notifier.error(err.message)
@@ -131,12 +131,12 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
   }
 
   onBannerChange (formData: FormData) {
-    this.videoChannelService.changeVideoChannelImage(this.videoChannelToUpdate.name, formData, 'banner')
+    this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'banner')
         .subscribe(
           data => {
             this.notifier.success($localize`Banner changed.`)
 
-            this.videoChannelToUpdate.updateBanner(data.banner)
+            this.videoChannel.updateBanner(data.banner)
           },
 
           (err: HttpErrorResponse) => uploadErrorHandler({
@@ -148,12 +148,12 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
   }
 
   onBannerDelete () {
-    this.videoChannelService.deleteVideoChannelImage(this.videoChannelToUpdate.name, 'banner')
+    this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'banner')
                             .subscribe(
                               data => {
                                 this.notifier.success($localize`Banner deleted.`)
 
-                                this.videoChannelToUpdate.resetBanner()
+                                this.videoChannel.resetBanner()
                               },
 
                               err => this.notifier.error(err.message)

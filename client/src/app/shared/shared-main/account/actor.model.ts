@@ -47,11 +47,11 @@ export abstract class Actor implements ActorServer {
     return host.trim() === thisHost
   }
 
-  protected constructor (hash: ActorServer) {
+  protected constructor (hash: Partial<ActorServer>) {
     this.id = hash.id
-    this.url = hash.url
-    this.name = hash.name
-    this.host = hash.host
+    this.url = hash.url ?? ''
+    this.name = hash.name ?? ''
+    this.host = hash.host ?? ''
     this.followingCount = hash.followingCount
     this.followersCount = hash.followersCount
 

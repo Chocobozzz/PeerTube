@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
 import { Account, VideoChannel } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
@@ -20,6 +21,7 @@ export class ActorAvatarEditComponent implements OnInit {
   @Input() editable = true
   @Input() displaySubscribers = true
   @Input() displayUsername = true
+  @Input() previewImage = false
 
   @Output() avatarChange = new EventEmitter<FormData>()
   @Output() avatarDelete = new EventEmitter<void>()
@@ -28,7 +30,10 @@ export class ActorAvatarEditComponent implements OnInit {
   maxAvatarSize = 0
   avatarExtensions = ''
 
+  preview: SafeResourceUrl
+
   constructor (
+    private sanitizer: DomSanitizer,
     private serverService: ServerService,
     private notifier: Notifier
   ) { }
@@ -57,14 +62,19 @@ export class ActorAvatarEditComponent implements OnInit {
     formData.append('avatarfile', avatarfile)
     this.avatarPopover?.close()
     this.avatarChange.emit(formData)
+
+    if (this.previewImage) {
+      this.preview = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(avatarfile))
+    }
   }
 
   deleteAvatar () {
+    this.preview = undefined
     this.avatarDelete.emit()
   }
 
   hasAvatar () {
-    return !!this.actor.avatar
+    return !!this.preview || !!this.actor.avatar
   }
 
   isChannel () {

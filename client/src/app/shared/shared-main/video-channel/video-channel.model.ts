@@ -44,7 +44,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     return `${window.location.origin}/client/assets/images/default-avatar-videochannel.png`
   }
 
-  constructor (hash: ServerVideoChannel) {
+  constructor (hash: Partial<ServerVideoChannel>) {
     super(hash)
 
     this.displayName = hash.displayName
@@ -93,7 +93,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.updateBanner(null)
   }
 
-  private updateComputedAttributes () {
+  updateComputedAttributes () {
     this.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this)
     this.bannerUrl = VideoChannel.GET_ACTOR_BANNER_URL(this)
   }

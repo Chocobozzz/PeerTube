@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
@@ -17,6 +18,7 @@ export class ActorBannerEditComponent implements OnInit {
   @ViewChild('bannerPopover') bannerPopover: NgbPopover
 
   @Input() actor: VideoChannel
+  @Input() previewImage = false
 
   @Output() bannerChange = new EventEmitter<FormData>()
   @Output() bannerDelete = new EventEmitter<void>()
@@ -25,7 +27,10 @@ export class ActorBannerEditComponent implements OnInit {
   maxBannerSize = 0
   bannerExtensions = ''
 
+  preview: SafeResourceUrl
+
   constructor (
+    private sanitizer: DomSanitizer,
     private serverService: ServerService,
     private notifier: Notifier
   ) { }
@@ -54,13 +59,18 @@ export class ActorBannerEditComponent implements OnInit {
     formData.append('bannerfile', bannerfile)
     this.bannerPopover?.close()
     this.bannerChange.emit(formData)
+
+    if (this.previewImage) {
+      this.preview = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(bannerfile))
+    }
   }
 
   deleteBanner () {
+    this.preview = undefined
     this.bannerDelete.emit()
   }
 
   hasBanner () {
-    return !!this.actor.bannerUrl
+    return !!this.preview || !!this.actor.bannerUrl
   }
 }
