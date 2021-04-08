@@ -279,16 +279,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showSupportModal () {
-    // Check video was playing before opening support modal
-    const isVideoPlaying = this.isPlaying()
-
-    const modalRef = this.supportModal.show()
-
-    modalRef.result.then(() => {
-      if (isVideoPlaying) {
-        this.resumePlayer()
-      }
-    })
+    this.supportModal.show()
   }
 
   showShareModal () {
@@ -864,18 +855,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     return { playerMode: mode, playerOptions: options }
-  }
-
-  private resumePlayer () {
-    if (!this.player) return
-
-    this.player.play()
-  }
-
-  private isPlaying () {
-    if (!this.player) return
-
-    return !this.player.paused()
   }
 
   private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {
