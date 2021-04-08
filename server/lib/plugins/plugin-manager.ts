@@ -23,6 +23,8 @@ import { ClientHtml } from '../client-html'
 import { RegisterHelpers } from './register-helpers'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
 
+const decache = require('decache')
+
 export interface RegisteredPlugin {
   npmName: string
   name: string
@@ -411,7 +413,7 @@ export class PluginManager implements ServerHook {
 
     // Delete cache if needed
     const modulePath = join(pluginPath, packageJSON.library)
-    delete require.cache[modulePath]
+    decache(modulePath)
     const library: PluginLibrary = require(modulePath)
 
     if (!isLibraryCodeValid(library)) {
