@@ -26,7 +26,7 @@
     <span class="sr-only" i18n>Clear filters</span>
   </div>
 
-  <div class="peertube-select-container peertube-select-button ml-2">
+  <div class="peertube-select-container peertube-select-button">
     <select [(ngModel)]="sort" (ngModelChange)="onChangeSortColumn()" class="form-control">
       <option value="undefined" disabled>Sort by</option>
       <option value="-publishedAt" i18n>Last published first</option>
