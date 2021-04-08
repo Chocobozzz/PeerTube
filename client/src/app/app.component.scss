@@ -43,6 +43,10 @@ $assets-path: '../assets';
         background-color: pvar(--mainForegroundColor);
         mask-image: url('#{$assets-path}/images/misc/menu.svg');
         margin: 0 18px 0 20px;
+        
+        @media screen and (max-width: $mobile-view) {
+          margin: 0 10px;
+        }
       }
     }
 
@@ -71,15 +75,10 @@ $assets-path: '../assets';
     }
 
     @media screen and (max-width: $mobile-view) {
-      width: 70px;
 
       .peertube-title {
         display: none;
       }
-    }
-
-    @media screen and (max-width: 350px) {
-      flex: auto;
     }
   }
 
