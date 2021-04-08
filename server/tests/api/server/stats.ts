@@ -10,7 +10,6 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   follow,
-  getMyUserInformation,
   ServerInfo,
   unfollow,
   updateCustomSubConfig,
@@ -31,6 +30,7 @@ const expect = chai.expect
 
 describe('Test stats (excluding redundancy)', function () {
   let servers: ServerInfo[] = []
+  let channelId
   const user = {
     username: 'user1',
     password: 'super_password'
@@ -144,7 +144,6 @@ describe('Test stats (excluding redundancy)', function () {
 
   it('Should have the correct active channel stats', async function () {
     const server = servers[0]
-    const videoChannelProperties = { name: 'second_channel', displayName: 'My second channel' }
 
     {
       const res = await getStats(server.url)
@@ -155,7 +154,12 @@ describe('Test stats (excluding redundancy)', function () {
     }
 
     {
-      await addVideoChannel(server.url, server.accessToken, videoChannelProperties)
+      const channelAttributes = {
+        name: 'stats_channel',
+        displayName: 'My stats channel'
+      }
+      const resChannel = await addVideoChannel(server.url, server.accessToken, channelAttributes)
+      channelId = resChannel.body.videoChannel.id
 
       const res = await getStats(server.url)
       const data: ServerStats = res.body
@@ -165,10 +169,7 @@ describe('Test stats (excluding redundancy)', function () {
     }
 
     {
-      const resChannel = await getMyUserInformation(server.url, server.accessToken)
-      const videoChannel = server.videoChannel = resChannel.body.videoChannels.find(v => v.name === videoChannelProperties.name)
-
-      await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.webm', channelId: videoChannel.id })
+      await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.webm', channelId })
 
       const res = await getStats(server.url)
       const data: ServerStats = res.body
@@ -194,7 +195,7 @@ describe('Test stats (excluding redundancy)', function () {
         playlistAttrs: {
           displayName: 'playlist for count',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: server.videoChannel.id
+          videoChannelId: channelId
         }
       })
 
@@ -242,8 +243,8 @@ describe('Test stats (excluding redundancy)', function () {
     {
       const res = await getStats(servers[0].url)
       const data: ServerStats = res.body
-      expect(data.totalLocalVideoFilesSize).to.be.greaterThan(300000)
-      expect(data.totalLocalVideoFilesSize).to.be.lessThan(400000)
+      expect(data.totalLocalVideoFilesSize).to.be.greaterThan(500000)
+      expect(data.totalLocalVideoFilesSize).to.be.lessThan(600000)
     }
   })
 

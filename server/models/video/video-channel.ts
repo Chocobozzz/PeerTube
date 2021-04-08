@@ -347,11 +347,11 @@ export class VideoChannelModel extends Model {
       }
 
       const query = `
-SELECT          Count(DISTINCT("VideoChannelModel"."id")) AS "count"
+SELECT          COUNT(DISTINCT("VideoChannelModel"."id")) AS "count"
 FROM            "videoChannel"                            AS "VideoChannelModel"
 INNER JOIN      "video"                                   AS "Videos"
 ON              "VideoChannelModel"."id" = "Videos"."channelId"
-AND             ("Videos"."createdAt" > Now() - interval '${days}d')
+AND             ("Videos"."publishedAt" > Now() - interval '${days}d')
 INNER JOIN      "account" AS "Account"
 ON              "VideoChannelModel"."accountId" = "Account"."id"
 INNER JOIN      "actor" AS "Account->Actor"
