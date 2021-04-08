@@ -1020,7 +1020,7 @@
       </trans-unit>
       <trans-unit id="3b59dc73883104c81370e6cd20a039474f71f156" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="new"> Logging into an account lets you publish content </target>
+        <target state="translated">Chỉ khi đăng nhập mới có thể đăng video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">56,57</context>
@@ -1079,7 +1079,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="06c663bf1474713f57551123a46b34318543b67d" datatype="html">
         <source>Reset</source>
-        <target state="new">Reset</target>
+        <target state="translated">Reset</target>
         <note priority="1" from="description">Password reset button</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
