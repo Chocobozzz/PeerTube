@@ -1,4 +1,8 @@
 <div class="root" *ngIf="videoChannel">
+  <div class="banner" *ngIf="videoChannel.bannerUrl">
+    <img [src]="videoChannel.bannerUrl" alt="Channel banner">
+  </div>
+
   <div class="channel-info">
 
     <ng-template #buttonsTemplate>

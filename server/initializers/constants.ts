@@ -614,7 +614,7 @@ const ACTOR_IMAGES_SIZE = {
   },
   BANNERS: {
     width: 1920,
-    height: 384
+    height: 317 // 6/1 ratio
   }
 }
 

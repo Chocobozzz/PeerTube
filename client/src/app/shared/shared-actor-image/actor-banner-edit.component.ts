@@ -36,7 +36,8 @@ export class ActorBannerEditComponent implements OnInit {
           this.maxBannerSize = config.banner.file.size.max
           this.bannerExtensions = config.banner.file.extensions.join(', ')
 
-          this.bannerFormat = $localize`maxsize: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
+          // tslint:disable:max-line-length
+          this.bannerFormat = $localize`ratio 6/1, recommended size: 1600x266, max size: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
         })
   }
 
