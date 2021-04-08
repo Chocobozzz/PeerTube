@@ -1,6 +1,7 @@
 import { remove } from 'fs-extra'
 import { join } from 'path'
 import { AfterDestroy, AllowNull, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { v4 as uuidv4 } from 'uuid'
 import { MActorImageFormattable } from '@server/types/models'
 import { ActorImageType } from '@shared/models'
 import { ActorImage } from '../../../shared/models/actors/actor-image.model'
@@ -51,6 +52,10 @@ export class ActorImageModel extends Model {
     // Don't block the transaction
     instance.removeImage()
       .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, err))
+  }
+
+  static generateFilename () {
+    return uuidv4() + '.jpg'
   }
 
   static loadByName (filename: string) {

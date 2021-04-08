@@ -24,7 +24,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { v4 as uuidv4 } from 'uuid'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live-manager'
@@ -1871,18 +1870,10 @@ export class VideoModel extends Model {
     this.Thumbnails.push(savedThumbnail)
   }
 
-  generateThumbnailName () {
-    return uuidv4() + '.jpg'
-  }
-
   getMiniature () {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
     return this.Thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
-  }
-
-  generatePreviewName () {
-    return uuidv4() + '.jpg'
   }
 
   hasPreview () {

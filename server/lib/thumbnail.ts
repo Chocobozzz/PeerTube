@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { ActorImageModel } from '@server/models/account/actor-image'
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
 import { processImage } from '../helpers/image-utils'
@@ -200,7 +201,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
     : undefined
 
   if (type === ThumbnailType.MINIATURE) {
-    const filename = video.generateThumbnailName()
+    const filename = ActorImageModel.generateFilename()
     const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 
     return {
@@ -214,7 +215,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
   }
 
   if (type === ThumbnailType.PREVIEW) {
-    const filename = video.generatePreviewName()
+    const filename = ActorImageModel.generateFilename()
     const basePath = CONFIG.STORAGE.PREVIEWS_DIR
 
     return {

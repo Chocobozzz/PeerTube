@@ -3,6 +3,7 @@ import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import { basename, join } from 'path'
 import { Transaction } from 'sequelize/types'
+import { ActorImageModel } from '@server/models/account/actor-image'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
@@ -899,7 +900,7 @@ function getPreviewFromIcons (videoObject: VideoObject) {
 function getPreviewUrl (previewIcon: ActivityIconObject, video: MVideoWithHost) {
   return previewIcon
     ? previewIcon.url
-    : buildRemoteVideoBaseUrl(video, join(LAZY_STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
+    : buildRemoteVideoBaseUrl(video, join(LAZY_STATIC_PATHS.PREVIEWS, ActorImageModel.generateFilename()))
 }
 
 function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {
