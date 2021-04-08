@@ -5,7 +5,8 @@ $playlist-menu-width: 350px;
   right: 0;
   height: 100%;
   width: $playlist-menu-width;
-  background: rgba(0, 0, 0, 0.8);
+  // !important to prevent none background set on focus
+  background: rgba(0, 0, 0, 0.8) !important;
   z-index: 101;
   transition: right 0.2s;
   overflow-y: scroll;
