@@ -1918,7 +1918,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c" datatype="html">
         <source>Add this caption</source>
-        <target state="new">Add this caption</target>
+        <target state="translated">Thêm caption này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e">
@@ -1958,7 +1958,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
         <source>This image is too large.</source>
-        <target state="new">This image is too large.</target>
+        <target state="translated">Hình này quá lớn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -1966,7 +1966,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="be24dae69c0d0605237d6dd638b172a42a88851e" datatype="html">
         <source>No items found</source>
-        <target state="new">No items found</target>
+        <target state="translated">Không tìm thấy</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
@@ -1990,7 +1990,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ef0f544578470cd6dd75432d0f1ba0e27914d2cc" datatype="html">
         <source><x id="START_LINK"/>Choose<x id="CLOSE_LINK"/> the appropriate license for your work. </source>
-        <target state="new"><x id="START_LINK"/>Choose<x id="CLOSE_LINK"/> the appropriate license for your work. </target>
+        <target state="translated"><x id="START_LINK"/>Chọn<x id="CLOSE_LINK"/> một giấy phép cho video của bạn. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
@@ -2020,22 +2020,22 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
         <source>FAQ</source>
-        <target state="new">FAQ</target>
+        <target state="translated">FAQ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="a2892dc0bd40629b160c490cdd4aff82204bbec6" datatype="html">
         <source>Frequently asked questions about PeerTube</source>
-        <target state="new">Frequently asked questions about PeerTube</target>
+        <target state="translated">Câu hỏi thường gặp về PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="e351b40b3869a5c7d19c3d4918cb1ac7aaab95c4" datatype="html">
         <source>API</source>
-        <target state="new">API</target>
+        <target state="translated">API</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="fd91a5f2ef27c48b6908d9016fb6de2a224e8559" datatype="html">
         <source>API documentation</source>
-        <target state="new">API documentation</target>
+        <target state="translated">Tài liệu API</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
@@ -2047,7 +2047,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ea504765b49242bfcaefec84a9cf2f6f179c2ea5" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="new">Contains sensitive content</target>
+        <target state="translated">Chứa nội dung nhạy cảm</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
@@ -2057,12 +2057,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ec396d3c2e26cbe4a1b3d6747c732419c6dcc3bb" datatype="html">
         <source>Publish after transcoding</source>
-        <target state="new">Publish after transcoding</target>
+        <target state="translated">Đăng sau khi chuyển đổi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63" datatype="html">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
-        <target state="new">If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</target>
+        <target state="translated">Nếu bạn chọn không đợi chuyển mã khi đăng video, bạn sẽ không xem video được cho đến khi chuyển xong.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -2072,12 +2072,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="92bcfd1d237a2bfe48dc9f46d074ed26abc8df22" datatype="html">
         <source>Add another caption</source>
-        <target state="new">Add another caption</target>
+        <target state="translated">Thêm caption khác</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed" datatype="html">
         <source>See the subtitle file</source>
-        <target state="new">See the subtitle file</target>
+        <target state="translated">Xem file phụ đề</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
@@ -2107,14 +2107,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0" datatype="html">
         <source>No captions for now.</source>
-        <target state="new">
-            No captions for now.
-          </target>
+        <target state="translated">Hiện không có caption nào.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">200</context></context-group>
       </trans-unit>
       <trans-unit id="f98c72e3e802851f600b498e00763e7e32688a88" datatype="html">
         <source>Live settings</source>
-        <target state="new">Live settings</target>
+        <target state="translated">Thiết lập trực tiếp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">208</context></context-group>
       </trans-unit>
       <trans-unit id="a3ecb8ed851e54c72dd44723d9fc3117e49ea498" datatype="html">
@@ -2124,22 +2122,22 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="223e01b44f68af4522e390bae9d584b4cbbdfebe" datatype="html">
         <source>This is a permanent live</source>
-        <target state="new">This is a permanent live</target>
+        <target state="translated">Đây là trực tiếp vĩnh viễn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="4b5b87d3c8366afa8bd2e40e0b07cc3102133250" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="new">⚠️ If you enable this option, your live will be terminated if you exceed your video quota</target>
+        <target state="translated">⚠️ Nếu kích hoạt tùy chọn này, buổi trực tiếp sẽ hủy bỏ nếu bạn đạt giới hạn dung lượng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">248</context></context-group>
       </trans-unit>
       <trans-unit id="e495a796f252097a77a501a99db7cb30d1019296" datatype="html">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="new">Automatically publish a replay when your live ends</target>
+        <target state="translated">Đăng video phát lại sau khi buổi trực tiếp kết thúc</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93" datatype="html">
         <source>Captions</source>
-        <target state="new">Captions</target>
+        <target state="translated">Caption</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430">
@@ -2154,9 +2152,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="64ec6a11fd39e7a4cba76281bdd490124437e96f" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="new">
-                    Short text to tell people how they can support you (membership platform...).
-                  </target>
+        <target state="translated">Viết ngắn nói về cách họ có thể hỗ trợ bạn (nền tảng donate, membership...).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">280</context></context-group>
       </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6">
@@ -2173,7 +2169,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="48c3bde722dc317f76aa607445f11128f7fc7276" datatype="html">
         <source>Plugin settings</source>
-        <target state="new">Plugin settings</target>
+        <target state="translated">Thiết lập plugin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">330</context></context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
@@ -2242,12 +2238,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
-        <target state="new">Hide the video until a specific date</target>
+        <target state="translated">Ẩn video dưới một ngày đặc biệt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d" datatype="html">
         <source>Video background image</source>
-        <target state="new">Video background image</target>
+        <target state="translated">Hình nền video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="1860b3f71e0b82e9c10e1eaf0ff073216ed896cc" datatype="html">
@@ -2263,23 +2259,23 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5d8068c24887a511fc8b04308de94829c9b13cce" datatype="html">
         <source>Total video uploaded</source>
-        <target state="new">Total video uploaded</target>
+        <target state="translated">Tổng số video đã đăng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="dfd046dad933ba0a50926b9ab3c1b579c802312e" datatype="html">
         <source>Processing…</source>
-        <target state="new">Processing…</target>
+        <target state="translated">Đang xử lí…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="38e0956efb7c78e758d638c8f1e5c99859b82836" datatype="html">
         <source>Retry</source>
-        <target state="new">Retry</target>
+        <target state="translated">Thử lại</target>
         <note priority="1" from="description">Retry failed upload of a video</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="a81bfce50be151484f8e59b34829ab07ef97982b" datatype="html">
         <source>Total video quota</source>
-        <target state="new">Total video quota</target>
+        <target state="translated">Quota</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
@@ -2308,7 +2304,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="d8bd78a04cdb225ea9a4c95dbdc4db26229981e2" datatype="html">
         <source>Read instance rules for help</source>
-        <target state="new">Read instance rules for help</target>
+        <target state="translated">Hãy đọc quy tắc máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
@@ -2319,7 +2315,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="63f5d0ec23e3cf4abf6d5221107633c90d8d4a15" datatype="html">
         <source>OR</source>
-        <target state="new">OR</target>
+        <target state="translated">HOẶC</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
@@ -2329,9 +2325,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266" datatype="html">
         <source>Congratulations, the video will be imported with BitTorrent! You can already add information about this video.</source>
-        <target state="new">
-  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
-</target>
+        <target state="translated">Chúc mừng, video có thể nhập bằng BitTorrent! Bạn có thể nhập thêm thông tin về video này.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7860848084471862305" datatype="html">
@@ -2351,7 +2345,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="40e85da538414cc425f42d2b09189ce344865aa1" datatype="html">
         <source>Go Live</source>
-        <target state="new">Go Live</target>
+        <target state="translated">Trực Tiếp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="975c4cdb9e07ef4c43e2c7aa3f787feabc9a47d2" datatype="html">
@@ -2406,24 +2400,22 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="d90cc5777a7e16ef76f325c89fe0f9270b9fa827" datatype="html">
         <source>Go live</source>
-        <target state="new">Go live</target>
+        <target state="translated">Trực tiếp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1" datatype="html">
         <source>Other videos</source>
-        <target state="new">
-        Other videos
-      </target>
+        <target state="translated">Video khác</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/recommendations/recommended-videos.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="70155053814b6999f8abce4f89bab85afc76e538" datatype="html">
         <source>AUTOPLAY</source>
-        <target state="new">AUTOPLAY</target>
+        <target state="translated">TỰ ĐỘNG PHÁT</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/recommendations/recommended-videos.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="4619111912751495491" datatype="html">
         <source>Report this comment</source>
-        <target state="new">Report this comment</target>
+        <target state="translated">Báo cáo bình luận này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment.component.ts</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
@@ -2434,7 +2426,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="71420314c00d8b709ea1aad8f608498f8db92258" datatype="html">
         <source>Share the playlist</source>
-        <target state="new">Share the playlist</target>
+        <target state="translated">Chia sẻ danh sách</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="dfc8701a2a6898d6784db0ebf9d3191552d81d89" datatype="html">
@@ -2444,7 +2436,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="51f7d84d38a304f7f056d2dcaf6d733c3ade35f9" datatype="html">
         <source>Share the video</source>
-        <target state="new">Share the video</target>
+        <target state="translated">Chia sẻ video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="e0cfbc8ea680e4527ebf094c035f3342e9146d9f">
@@ -2455,9 +2447,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="08c1bbb22df74b12c362fd114d0aa5a230ee4656" datatype="html">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="new">
-                The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
-              </target>
+        <target state="translated">Đường link không an toàn (phải là HTTPS), nên video nhúng sẽ không hoạt động ở những trang web dùng HTTPS.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
@@ -2469,21 +2459,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="9adb13e2ba5160c8b0b100dc3f4cbe6051b5af9b" datatype="html">
         <source>Auto select subtitle</source>
-        <target state="new">Auto select subtitle</target>
+        <target state="translated">Tự động chọn phụ đề</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="f0e9c70583e8264cda79a8151de51cbb1ecb02ef" datatype="html">
         <source>More customization</source>
-        <target state="new">
-              More customization
-            </target>
+        <target state="translated">Thêm tùy chỉnh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="cfad9c5d4357d7c4ac99cc2ce63c54c9738901d7" datatype="html">
         <source>Less customization</source>
-        <target state="new">
-              Less customization
-            </target>
+        <target state="translated">Ít tùy chỉnh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">231</context></context-group>
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
@@ -2498,14 +2484,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="71b6e75eb1d54bcd9a64b9af9b99121785a065d0" datatype="html">
         <source>Support <x id="INTERPOLATION"/></source>
-        <target state="new">Support 
-          <x id="INTERPOLATION" equiv-text="{{ video.account.displayName }}"/>
-        </target>
+        <target state="translated">Hỗ trợ <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-support.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="cb66498f1a530d9b29ee5bc6605628add658dd87" datatype="html">
         <source>Maybe later</source>
-        <target state="new">Maybe later</target>
+        <target state="translated">Để sau</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-support.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809">
