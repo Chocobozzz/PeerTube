@@ -657,7 +657,7 @@ function getFFmpegVersion () {
 
       return execPromise(`${ffmpegPath} -version`)
         .then(stdout => {
-          const parsed = stdout.match(/ffmpeg version .(\d+\.\d+\.\d+)/)
+          const parsed = stdout.match(/ffmpeg version .?(\d+\.\d+\.\d+)/)
           if (!parsed || !parsed[1]) return rej(new Error(`Could not find ffmpeg version in ${stdout}`))
 
           return res(parsed[1])

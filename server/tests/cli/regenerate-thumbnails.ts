@@ -77,14 +77,14 @@ describe('Test regenerate thumbnails script', function () {
     }
   })
 
-  it('Should regenerate thumbnails from the CLI', async function () {
+  it('Should regenerate local thumbnails from the CLI', async function () {
     this.timeout(15000)
 
     const env = getEnvCli(servers[0])
     await execCLI(`${env} npm run regenerate-thumbnails`)
   })
 
-  it('Should have regenerated thumbbnails', async function () {
+  it('Should have regenerated local thumbnails', async function () {
     {
       const res1 = await makeRawRequest(join(servers[0].url, video1.thumbnailPath), HttpStatusCode.OK_200)
       expect(res1.body).to.not.have.lengthOf(0)
