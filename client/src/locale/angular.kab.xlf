@@ -1257,7 +1257,7 @@
       </trans-unit>
       <trans-unit id="c38a3f5b5eff069d0097527fa40a3f8c4d9c1e4e" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="translated">Managing users, following other instances, dealing with spammers...</target>
+        <target state="translated">Asefrek n yiseqdac, amulteɣ ɣer tummanin-nniḍen, sefrek ispamen...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="4e020f13aa4db2285047eba96e50dc716fb5f417" datatype="html">
@@ -1267,7 +1267,7 @@
       </trans-unit>
       <trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Setup your account, managing video playlists, discover third-party applications...</target>
+        <target state="translated">Sbadu amiḍan-ik·im, sefrek tibdarin n tɣuri n tvidyutin, snirem isnasen n wis kraḍ...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6b705cdf0d567cf608b9891a1d912daebac3523e" datatype="html">
@@ -1317,7 +1317,7 @@
       </trans-unit>
       <trans-unit id="e30fd615e98eb6ebc28346024a89f00192a98396" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="translated">You enabled user registration on your instance but did not configure the following fields:</target>
+        <target state="translated">Tremdeḍ ajerred n useqdac ɣef tummant-ik·im maca ur yeswil ara urtiyen-a:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="ab7e3d0be94cc55ce997a5f38c679956e66f3936" datatype="html">
@@ -1337,17 +1337,17 @@
       </trans-unit>
       <trans-unit id="de688f72fc745cc8481a5e9cc70b8ca9e6f41e2a" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target state="translated">How long you plan to maintain your instance</target>
+        <target state="translated">I wacḥal i tettxemmimeḍ ad teǧǧeḍ tummant-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="af60a062ecc7c70b278bdb3ba7ad0147abfecf0a" datatype="html">
         <source>How you plan to pay your instance</source>
-        <target state="translated">How you plan to pay your instance</target>
+        <target state="translated">Amek i tettxemmimeḍ ad txellseḍ tummant-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="c69c1bd027bae555557a48123a26d770a93ee473" datatype="html">
         <source>How you will moderate your instance</source>
-        <target state="translated">How you will moderate your instance</target>
+        <target state="translated">Amek ara tsedduḍ tummant-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c" datatype="html">
@@ -1376,7 +1376,7 @@
       </trans-unit>
       <trans-unit id="7d438f72f9985c4d06ed4fe80c90afc2e1df34d2" datatype="html">
         <source>Don't show me this warning anymore</source>
-        <target state="translated">Don't show me this warning anymore</target>
+        <target state="translated">Dayen ur iyi-d-skanay ara alɣu-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8" datatype="html">
@@ -1771,12 +1771,12 @@
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="translated">Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</target>
+        <target state="translated">Igmaḍ ad nnernin s wid n umatar n wis kraḍ. Isefka kan i ilaqen i unadi ara yettwaznen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="ee697ded3eb6909ca0e619ab5cc9647cbd849da5" datatype="html">
         <source>ADVANCED SEARCH</source>
-        <target state="translated">ADVANCED SEARCH</target>
+        <target state="translated">ANADI LEQQAYEN</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="8e799fee4b3df7ea53786f096380f81c78a77efd" datatype="html">
@@ -1958,17 +1958,17 @@
       </trans-unit>
       <trans-unit id="c34c61401151c29fb3679638a7d0b95258145ec3" datatype="html">
         <source>This will replace an existing caption!</source>
-        <target state="translated">This will replace an existing caption!</target>
+        <target state="translated">Aya ad yeṭṭef amkan n tneffust yellan!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c" datatype="html">
         <source>Add this caption</source>
-        <target state="translated">Add this caption</target>
+        <target state="translated">Rnu taneffust-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7" datatype="html">
         <source>Basic info</source>
-        <target state="translated">Basic info</target>
+        <target state="translated">Talɣut tazadurt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e" datatype="html">
@@ -1989,7 +1989,7 @@
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0" datatype="html">
         <source>Enter a new tag</source>
-        <target state="translated">Enter a new tag</target>
+        <target state="translated">Sekcem tabzimt tamaynut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="6179532215548637839" datatype="html">
@@ -2007,12 +2007,12 @@
       </trans-unit>
       <trans-unit id="be24dae69c0d0605237d6dd638b172a42a88851e" datatype="html">
         <source>No items found</source>
-        <target state="translated">No items found</target>
+        <target state="translated">Ulac iferdisen yettwafen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0" datatype="html">
         <source>Description</source>
-        <target>Description</target>
+        <target>Aglam</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">113</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">35</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context><context context-type="linenumber">28</context></context-group>
@@ -2024,7 +2024,7 @@
       </trans-unit>
       <trans-unit id="3b86a740c713742c3f7538c60b890fccdd0a5caf" datatype="html">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="translated">Video descriptions are truncated by default and require manual action to expand them.</target>
+        <target state="translated">Aglam n tvidyut yettwagzem s wudem awurman, yesra tigawt s ufus i usnerni-ines.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="ef0f544578470cd6dd75432d0f1ba0e27914d2cc" datatype="html">
@@ -2034,7 +2034,7 @@
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071" datatype="html">
         <source>Channel</source>
-        <target state="translated">Channel</target>
+        <target state="translated">Abadu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">33</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">33</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">70</context></context-group>
@@ -2064,67 +2064,67 @@
       </trans-unit>
       <trans-unit id="ea504765b49242bfcaefec84a9cf2f6f179c2ea5" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="translated">Contains sensitive content</target>
+        <target state="translated">Deg-s agbur amḥulfu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644" datatype="html">
         <source>Some instances do not list videos containing mature or explicit content by default.</source>
-        <target state="translated">Some instances do not list videos containing mature or explicit content by default.</target>
+        <target state="translated">Kra n tummanin ur d-ttabdarent ara, s wudem amezwer, tividyutin ideg yella ugbur n yimeqqranen d ugbur amḥulfu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="ec396d3c2e26cbe4a1b3d6747c732419c6dcc3bb" datatype="html">
         <source>Publish after transcoding</source>
-        <target state="translated">Publish after transcoding</target>
+        <target state="translated">Suffeɣ seld anigtengel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63" datatype="html">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
-        <target state="translated">If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</target>
+        <target state="translated">Ma yella twalaḍ ur tettraǧuḍ ara i wanigtengel send asuffeɣ n tvidyut, yezmer ur d-yettwaɣra alamma yekfa wanigtengel.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93" datatype="html">
         <source>Captions</source>
-        <target state="translated">Captions</target>
+        <target state="translated">Tineffusin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="92bcfd1d237a2bfe48dc9f46d074ed26abc8df22" datatype="html">
         <source>Add another caption</source>
-        <target state="translated">Add another caption</target>
+        <target state="translated">Rnu taneffust-nniḍen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed" datatype="html">
         <source>See the subtitle file</source>
-        <target state="translated">See the subtitle file</target>
+        <target state="translated">Wali afaylu n yiduzwilen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee" datatype="html">
         <source>Already uploaded ✔</source>
-        <target state="translated">Already uploaded ✔</target>
+        <target state="translated">Yettwasader yakan ✔</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="ca4588e185413b2fc77dbe35c861cc540b11b9ad" datatype="html">
         <source>Will be created on update</source>
-        <target state="translated">Will be created on update</target>
+        <target state="translated">Ad yettwarnu deg uleqqem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">184</context></context-group>
       </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9" datatype="html">
         <source>Cancel create</source>
-        <target state="translated">Cancel create</target>
+        <target state="translated">Sefsex timerna</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="b6bfdd386cb0b560d697c93555d8cd8cab00c393" datatype="html">
         <source>Will be deleted on update</source>
-        <target state="translated">Will be deleted on update</target>
+        <target state="translated">Ad yettwakkes deg uleqqem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c" datatype="html">
         <source>Cancel deletion</source>
-        <target state="translated">Cancel deletion</target>
+        <target state="translated">Sefsex tukksa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0" datatype="html">
         <source>No captions for now.</source>
-        <target state="translated">No captions for now.</target>
+        <target state="translated">Ulac tineffusin akka tura.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">200</context></context-group>
       </trans-unit>
       <trans-unit id="f98c72e3e802851f600b498e00763e7e32688a88" datatype="html">
@@ -2159,22 +2159,22 @@
       </trans-unit>
       <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430" datatype="html">
         <source>Video preview</source>
-        <target state="translated">Video preview</target>
+        <target state="translated">Taskant n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">267</context></context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604" datatype="html">
         <source>Support</source>
-        <target>Tallelt</target>
+        <target>Tallalt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">276</context></context-group>
       </trans-unit>
       <trans-unit id="64ec6a11fd39e7a4cba76281bdd490124437e96f" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="translated">Short text to tell people how they can support you (membership platform...).</target>
+        <target state="translated">Aḍris wezzilen ideg ara tsutreḍ deg yimdanen ad ak·akem-mudden asebɣes (tiɣerɣert n yimttekkiyen...).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">280</context></context-group>
       </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6" datatype="html">
         <source>Original publication date</source>
-        <target state="translated">Original publication date</target>
+        <target state="translated">Azemz aneẓli n tsuffeɣt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">296</context></context-group>
       </trans-unit>
       <trans-unit id="109ff29714fe8f2a0bfb232f04b908062fac22b0" datatype="html">
@@ -2184,17 +2184,17 @@
       </trans-unit>
       <trans-unit id="48c3bde722dc317f76aa607445f11128f7fc7276" datatype="html">
         <source>Plugin settings</source>
-        <target state="translated">Plugin settings</target>
+        <target state="translated">Iɣewwaren n uzegrir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">330</context></context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a" datatype="html">
         <source>Enable video comments</source>
-        <target state="translated">Enable video comments</target>
+        <target state="translated">Rmed iwenniten n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">317</context></context-group>
       </trans-unit>
       <trans-unit id="0b365218ce1ae736f9066fd3d47278cc8f3ed1d0" datatype="html">
         <source>Enable download</source>
-        <target state="translated">Enable download</target>
+        <target state="translated">Rmed asader</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">322</context></context-group>
       </trans-unit>
       <trans-unit id="801b98c6f02fe3b32f6afa3ee854c99ed83474e6" datatype="html">
@@ -2211,7 +2211,7 @@
       </trans-unit>
       <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7" datatype="html">
         <source>Sorry, but something went wrong</source>
-        <target state="translated">Sorry, but something went wrong</target>
+        <target state="translated">Nesḥassef, yella wayen ur nteddu ara akken ilaq</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">51</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">26</context></context-group>
@@ -2244,12 +2244,12 @@
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
-        <target state="translated">Hide the video until a specific date</target>
+        <target state="translated">Ffer tavidyut alamma azemz usdid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d" datatype="html">
         <source>Video background image</source>
-        <target state="translated">Video background image</target>
+        <target state="translated">Tugna n ugilal n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="1860b3f71e0b82e9c10e1eaf0ff073216ed896cc" datatype="html">
@@ -4694,7 +4694,7 @@
       </trans-unit>
       <trans-unit id="bd2cd2546be171832b25627d5eca96a4e9086ee3" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
-        <target state="translated">Ma yella afmiḍi n yiseqdac yewweḍ, Peertube ad isseḥbes s wudem awurman asuddem usrid.</target>
+        <target state="translated">Ma yella afmiḍi n yiseqdac yewweḍ, Peertube ad isseḥbes s wudem awurman asuddem usrid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">34,35</context>
@@ -4937,7 +4937,7 @@
       </trans-unit>
       <trans-unit id="7e1ada48d1911a7ab02c5ba2519fa2d14240945a" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="new"> Some files are not federated, and fetched when necessary. Define their caching policies. </target>
+        <target state="translated">Kra n yifuyla ur ddukklen ara, ad d-ttwarrent ma yili ilaq. Sbadu tisertiyin-nsen n tuffra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -4992,7 +4992,7 @@
       </trans-unit>
       <trans-unit id="ff71044c7bbbc9fdbbaa9209a218e4900fbde590" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="new"> Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill. </target>
+        <target state="translated">Isnifal ifessasen i tummant-ik·im PeerTube mi ara yettwarnu uzegrir neɣ usentel iɛeddan talast.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c" datatype="html">
@@ -5750,7 +5750,7 @@
       </trans-unit>
       <trans-unit id="eb99819c4e231fb1efe7f0856756941908ddf172" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="new"> The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video. </target>
+        <target state="translated">Ugur agejdan i tudert-ik·im tabaḍnit i d-yekka seg BitTorrent yeqqen ɣer uklas n tansa-k·m IP deg uneḍfar BitTorrent n tummant imi mazal tsadareḍ-d neɣ tettwaliḍ tavidyut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -5793,7 +5793,7 @@
       </trans-unit>
       <trans-unit id="f360bcf79135ae541bdb1bbd419ccc4cb2fb6ab3" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target state="new"> Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </target>
+        <target state="translated">Tiyigiwin n Web ulac anekcum ɣur-sent s wudem azayaz: acku nesseqdac ttawil n usiweḍ websocket, aneggaf-a yemgarad ɣef uneḍfar BitTorrent aklasik. Mi ara tiliḍ deg yiminig web, tettazneḍ asɣal ideg tella tansa-k·m IP ɣer uneḍfar ara ifernen kan akka tiyigiwin-nniḍen wuɣur ara yazen talɣut. Wali <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>asemli-a<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> i wugar n talɣut </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">118,122</context>
@@ -6002,7 +6002,7 @@
       </trans-unit>
       <trans-unit id="76118692a327ca6158811d5c3f4e9eeea30dc8b1" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="new"> Video uploads are disabled on this instance, hence your account won't be able to upload videos. </target>
+        <target state="translated">Asali n tvidyutin yensa deg tummant-a, amiḍan-ik·im ur yettizmir ara ad d-isali tividyutin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -6230,7 +6230,7 @@
       </trans-unit>
       <trans-unit id="f157a6b81f7de696ad6915dbfb0be299b5fa04bf" datatype="html">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="new"> Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically. </target>
+        <target state="translated">Aseḍkeḍ n tezmart n uqeddac i wanigtengel d usuddem n tvidyutin ur yeshil ara yerna ur nezmir ara ad nṣeggem PeerTube s wudem awurman.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -6995,12 +6995,12 @@
       </trans-unit>
       <trans-unit id="177544274549739411" datatype="html">
         <source>Following list</source>
-        <target state="translated">Following list</target>
+        <target state="translated">Tabdart n uḍfar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="8092429110007204784" datatype="html">
         <source>Followers list</source>
-        <target state="translated">Followers list</target>
+        <target state="translated">Tabdart n yineḍfaren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
@@ -7025,12 +7025,12 @@
       </trans-unit>
       <trans-unit id="1525334987774465166" datatype="html">
         <source>Create a user</source>
-        <target state="translated">Create a user</target>
+        <target state="translated">Rnu aseqdac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/users.routes.ts</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="5552039423287890133" datatype="html">
         <source>Update a user</source>
-        <target state="translated">Update a user</target>
+        <target state="translated">Leqqem aseqdac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/users.routes.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
@@ -7040,23 +7040,23 @@
       </trans-unit>
       <trans-unit id="4682675125751819107" datatype="html">
         <source>Instances you follow</source>
-        <target state="translated">Instances you follow</target>
+        <target state="translated">Tummanin teṭṭafareḍ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8899833753704589712" datatype="html">
         <source>Instances following you</source>
-        <target state="translated">Instances following you</target>
+        <target state="translated">Tummanin i ak·akem-yeṭṭafaren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="3767259920053407667" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="translated">Videos will be deleted, comments will be tombstoned.</target>
+        <target state="translated">Tividyutin ad ttwakksent, iwenniten ad ttwasfesxen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">269</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="4209525355702493436" datatype="html">
         <source>Ban</source>
-        <target state="translated">Agi</target>
+        <target state="translated">Gdel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">273</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
@@ -7075,13 +7075,13 @@
       </trans-unit>
       <trans-unit id="7210277223053877333" datatype="html">
         <source>Set Email as Verified</source>
-        <target state="translated">Set Email as Verified</target>
+        <target state="translated">Sbadu imayl am wakken yettusenqed</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">285</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="3403978719736970622" datatype="html">
         <source>You cannot ban root.</source>
-        <target state="translated">You cannot ban root.</target>
+        <target state="translated">Ur tezmired ara ad tgedleḍ aseqdac aẓar.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">58</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
@@ -7092,28 +7092,28 @@
       </trans-unit>
       <trans-unit id="8712248120167780385" datatype="html">
         <source><x id="PH"/> users unbanned. </source>
-        <target state="translated"><x id="PH"/> users unbanned. </target>
+        <target state="translated"><x id="PH"/> iseqdacen yettwagedlen. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="5325873477837320044" datatype="html">
         <source>You cannot delete root.</source>
-        <target state="translated">You cannot delete root.</target>
+        <target state="translated">Ur tezmireḍ ara ad tekkseḍ aseqdac aẓar.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">86</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="4086135983283545219" datatype="html">
         <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <target state="translated">If you remove these users, you will not be able to create others with the same username!</target>
+        <target state="translated">Ma yella tekkseḍ iseqdacen-a, ur tettizmireḍ ara ad ternuḍ wiyaḍ s yisem-nni kan n useqdac!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">193</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
         <source><x id="PH"/> users deleted. </source>
-        <target state="translated"><x id="PH"/> users deleted. </target>
+        <target state="translated"><x id="PH"/> iseqdacen yettwagedlen. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">199</context></context-group>
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH"/> users email set as verified. </source>
-        <target state="translated"><x id="PH"/> users email set as verified. </target>
+        <target state="translated"><x id="PH"/> imayl n yiseqdac yettusbadu yettusenqed. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context><context context-type="linenumber">210</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
@@ -7130,27 +7130,27 @@
       </trans-unit>
       <trans-unit id="5551551295632950210" datatype="html">
         <source>Videos history is enabled</source>
-        <target state="translated">Videos history is enabled</target>
+        <target state="translated">Azray n tvidyutin yettwarmed</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="9136227503281311926" datatype="html">
         <source>Videos history is disabled</source>
-        <target state="translated">Videos history is disabled</target>
+        <target state="translated">Azray n tvidyutin yensa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="8966726118414892732" datatype="html">
         <source>Delete videos history</source>
-        <target state="translated">Delete videos history</target>
+        <target state="translated">Kkes azray n tvidyutin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="2482543433481435105" datatype="html">
         <source>Are you sure you want to delete all your videos history?</source>
-        <target state="translated">Are you sure you want to delete all your videos history?</target>
+        <target state="translated">D tidet tebɣiḍ ad tekkseḍ meṛṛa azray-ik·im n tvidyutin?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="4051606152827088952" datatype="html">
         <source>Videos history deleted</source>
-        <target state="translated">Videos history deleted</target>
+        <target state="translated">Azray n tvidyutin yettwakkes</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="192815f43d0d7337dbf99f84281f5a4c3155af8f" datatype="html">
@@ -7179,17 +7179,17 @@
       </trans-unit>
       <trans-unit id="3183245287221165928" datatype="html">
         <source>Ownership accepted</source>
-        <target state="translated">Ownership accepted</target>
+        <target state="translated">Abeddel n bab-is yettwaqbel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="6012072687166259654" datatype="html">
         <source>Please check your emails to verify your new email.</source>
-        <target state="translated">Please check your emails to verify your new email.</target>
+        <target state="translated">Ttxil-k·m senqed imaylen-ik·im i wakken ad tesneqdeḍ imayl-ik·im amaynut.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6585766371605707311" datatype="html">
         <source>Email updated.</source>
-        <target state="translated">Email updated.</target>
+        <target state="translated">Yettwaleqqem yimayl.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="73fc884417b68de6671fbab6e72e054c38a1990a" datatype="html">
@@ -7202,23 +7202,23 @@
       </trans-unit>
       <trans-unit id="853586874765134886" datatype="html">
         <source>You current password is invalid.</source>
-        <target state="translated">You current password is invalid.</target>
+        <target state="translated">Awal-ik·im uffir amiran d arameɣtu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context><context context-type="linenumber">56</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="6159571046971090595" datatype="html">
         <source>Password updated.</source>
-        <target state="translated">Password updated.</target>
+        <target state="translated">Yettwaleqqem wawal uffir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="5179099584732142331" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="translated">Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">D tidet tebɣiḍ ad tekkseḍ amiḍan-ik·im? Aya ad yekkes meṛṛa isefka-inek·inem, ula d ibuda, tividyutin d yiwenniten. Agbur yettwaffer s yiqeddacen-nniḍen akked wis kraḍ yezmer ad yeṭṭef aṭas n wakud i wakken ad ttwakksen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="6897292459203320054" datatype="html">
         <source>Type your username to confirm</source>
-        <target state="translated">Type your username to confirm</target>
+        <target state="translated">Sit ɣef yisem-ik·im n useqdac i usentem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
@@ -7233,93 +7233,93 @@
       </trans-unit>
       <trans-unit id="3902597758945766483" datatype="html">
         <source>Your account is deleted.</source>
-        <target state="translated">Your account is deleted.</target>
+        <target state="translated">Amiḍan-ik·im yettwakkes.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html">
         <source>Interface settings updated.</source>
-        <target state="translated">Interface settings updated.</target>
+        <target state="translated">Iɣewwaren n ugrudem ttwaleqqmen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">74</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="77907918814566205" datatype="html">
         <source>New video from your subscriptions</source>
-        <target state="translated">New video from your subscriptions</target>
+        <target state="translated">Tavidyut tamaynut sɣur imultaɣ-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4343589211916204486" datatype="html">
         <source>New comment on your video</source>
-        <target state="translated">New comment on your video</target>
+        <target state="translated">Awennit amaynut ɣef tvidyut-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
         <source>New abuse</source>
-        <target state="translated">New abuse</target>
+        <target state="translated">Yir aseqdec-nniḍen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="2265829846010085268" datatype="html">
         <source>Video blocked automatically waiting review</source>
-        <target state="translated">Video blocked automatically waiting review</target>
+        <target state="translated">Tettusewḥel tvidyut s wudem awurman tettṛaǧu asenqed</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="5671547068905553663" datatype="html">
         <source>One of your video is blocked/unblocked</source>
-        <target state="translated">One of your video is blocked/unblocked</target>
+        <target state="translated">Yiwet seg tvidyutin-ik·im tettusewḥel/yettwakkes-as usewḥel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="1158912204255103651" datatype="html">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="translated">Video published (after transcoding/scheduled update)</target>
+        <target state="translated">Tavidyut yettwasuffɣen (seld anigtengel/lqem yettusɣawsen)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3809414664640924954" datatype="html">
         <source>Video import finished</source>
-        <target state="translated">Video import finished</target>
+        <target state="translated">Yemmed uktar n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="3268838889659873892" datatype="html">
         <source>A new user registered on your instance</source>
-        <target state="translated">A new user registered on your instance</target>
+        <target state="translated">Aseqdac amaynut ijerred ɣef tummant-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="7373104725413001009" datatype="html">
         <source>You or your channel(s) has a new follower</source>
-        <target state="translated">You or your channel(s) has a new follower</target>
+        <target state="translated">Kečč·kemm neɣ abadu(ibuda)-inek·inem ɣur-s(ɣur-sen) aneḍfar amaynut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target state="translated">Someone mentioned you in video comments</target>
+        <target state="translated">Yella win i ak·akem-id-ibedren deg yiwenniten n tvidyut-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
         <source>Your instance has a new follower</source>
-        <target state="translated">Your instance has a new follower</target>
+        <target state="translated">Tummant-ik·im ɣur-s aneḍfar amaynut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="773085434165307906" datatype="html">
         <source>Your instance automatically followed another instance</source>
-        <target state="translated">Your instance automatically followed another instance</target>
+        <target state="translated">Tummant-ik·im teṭṭafareḍ s wudem awurman tummant-nniḍen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="translated">An abuse report received a new message</target>
+        <target state="translated">Aneqqis ɣef yir aseqdec yermes izen amaynut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="translated">One of your abuse reports has been accepted or rejected by moderators</target>
+        <target state="translated">Yiwen seg yineqqisen-ik·im ɣef yir aseqdec yettwaqbal neɣ yettwagi sɣur imḍebbren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="5095562193296630034" datatype="html">
         <source>Preferences saved</source>
-        <target state="translated">Preferences saved</target>
+        <target state="translated">Ismenyifen ttwaskelsen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="4967231969832964676" datatype="html">
         <source>Profile updated.</source>
-        <target>Alegdis yemucceḍ.</target>
+        <target>Amaɣnu yettwaleqqem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="d2ade8ba2e32c6fe467932b6b156025fe50da7c3" datatype="html">
@@ -7332,7 +7332,7 @@
       </trans-unit>
       <trans-unit id="3525866160632851851" datatype="html">
         <source>Avatar changed.</source>
-        <target state="translated">Avatar changed.</target>
+        <target state="translated">Yettwabeddel avaṭar.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-update.component.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
@@ -7361,22 +7361,22 @@
       </trans-unit>
       <trans-unit id="3761504852202418603" datatype="html">
         <source>Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</source>
-        <target state="translated">Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</target>
+        <target state="translated">Aṭas n tutlayin i yettwaremden. Ttxil-k·m rmed-itent akk neɣ qqim ddaw deg 20 n tutlayin yettwaremden.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="1904720062363293328" datatype="html">
         <source>You need to enable at least 1 video language.</source>
-        <target state="translated">You need to enable at least 1 video language.</target>
+        <target state="translated">Tesriḍ ad tremdeḍ ma drus 1 n tutlayt n tvidyut.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="3960396487495291449" datatype="html">
         <source>Video settings updated.</source>
-        <target state="translated">Video settings updated.</target>
+        <target state="translated">Iɣewwaren n tvidyut ttwaremden.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="3326446048041727269" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target state="translated">Display/Video settings updated.</target>
+        <target state="translated">Iɣewwaren n tvidyut/n uskan ttwaleqqmen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
@@ -7386,7 +7386,7 @@
       </trans-unit>
       <trans-unit id="8723777130353305761" datatype="html">
         <source>This name already exists on this instance.</source>
-        <target state="translated">This name already exists on this instance.</target>
+        <target state="translated">Isem-a yella yakan ɣef tummant-a.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-create.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="7589345916094713536" datatype="html">
@@ -7411,12 +7411,12 @@
       </trans-unit>
       <trans-unit id="6059091237492573541" datatype="html">
         <source>Update video channel</source>
-        <target state="translated">Update video channel</target>
+        <target state="translated">Leqqem abadu n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels-routing.module.ts</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="6595008830732269870" datatype="html">
         <source>Not found</source>
-        <target state="translated">Not found</target>
+        <target state="translated">Ur yettwaf ara</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found-routing.module.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
@@ -7501,7 +7501,7 @@
       </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894" datatype="html">
         <source>My videos</source>
-        <target state="translated">My videos</target>
+        <target state="translated">Tividyutin-inu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="73022f1676784c4f9b8cdbb322e52b02ccc800b7" datatype="html">
@@ -7516,12 +7516,12 @@
       </trans-unit>
       <trans-unit id="2728855911908920537" datatype="html">
         <source><x id="PH"/> videos deleted. </source>
-        <target state="translated"><x id="PH"/> videos deleted. </target>
+        <target state="translated"><x id="PH"/> tividyutin yettwakksen. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="2027805873922338635" datatype="html">
         <source>Do you really want to delete <x id="PH"/>? </source>
-        <target state="translated">Do you really want to delete <x id="PH"/>? </target>
+        <target state="translated">Tebɣiḍ s tidet ad t-tekkseḍ <x id="PH"/>? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7561,32 +7561,32 @@
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
         <source>My subscriptions</source>
-        <target state="translated">My subscriptions</target>
+        <target state="translated">Imultaɣ-inu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f" datatype="html">
         <source>My channels</source>
-        <target state="translated">My channels</target>
+        <target state="translated">Ibuda-inu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="6749bdfd88a223fd464a9b09541342fbf42a0ad6" datatype="html">
         <source>Search your channels</source>
-        <target state="translated">Search your channels</target>
+        <target state="translated">Nadi ibuda-inek·inem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="1d3408919f4d08414721cc22c4be39d93d6691d2" datatype="html">
         <source>My playlists</source>
-        <target state="translated">My playlists</target>
+        <target state="translated">Tibdarin-inu n tɣuri</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9" datatype="html">
         <source>My subscriptions</source>
-        <target state="translated">My subscriptions</target>
+        <target state="translated">Imultaɣ-inu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="31e313e20810b296cb7cc389fd7a3736cff7df44" datatype="html">
         <source>Search your subscriptions</source>
-        <target state="translated">Search your subscriptions</target>
+        <target state="translated">Nadi imultaɣ-inek·inem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="61cb418b053c4b1099a9c7e5a34a9cf52c87f8dd" datatype="html">
@@ -7629,7 +7629,7 @@
       </trans-unit>
       <trans-unit id="7916647920967632052" datatype="html">
         <source>max size</source>
-        <target state="translated">max size</target>
+        <target state="translated">teɣzi tafellayt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
@@ -7788,7 +7788,7 @@
       </trans-unit>
       <trans-unit id="4534458451100881847" datatype="html">
         <source>display</source>
-        <target state="translated">display</target>
+        <target state="translated">sken</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">292</context></context-group>
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
@@ -7846,12 +7846,12 @@
       </trans-unit>
       <trans-unit id="7473676707373218484" datatype="html">
         <source>Older</source>
-        <target state="translated">Older</target>
+        <target state="translated">Aqbur akk</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="5036991421517255667" datatype="html">
         <source>Cannot load more videos. Try again later.</source>
-        <target state="translated">Cannot load more videos. Try again later.</target>
+        <target state="translated">Ur yezmir ara ad d-isali ugar n tvidyutin. Ɛreḍ tikkelt-niḍen ticki.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="7460399579150761114" datatype="html">
@@ -7876,17 +7876,17 @@
       </trans-unit>
       <trans-unit id="8487565500496466433" datatype="html">
         <source>Short (&lt; 4 min)</source>
-        <target state="translated">Short (&lt; 4 min)</target>
+        <target state="translated">Tewzel (&lt; 4 tsd)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="3642535017283477339" datatype="html">
         <source>Medium (4-10 min)</source>
-        <target state="translated">Medium (4-10 min)</target>
+        <target state="translated">Alemmas (4-10 tsd)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6613870447286561244" datatype="html">
         <source>Long (&gt; 10 min)</source>
-        <target state="translated">Long (&gt; 10 min)</target>
+        <target state="translated">Aqezzfan (&gt; 10 tsd)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="1787083504545967" datatype="html">
@@ -7938,22 +7938,22 @@
       </trans-unit>
       <trans-unit id="9022576335789205254" datatype="html">
         <source><x id="PH"/> months ago </source>
-        <target state="translated"><x id="PH"/> months ago </target>
+        <target state="translated"><x id="PH"/> ayyuren aya </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="9139359498077914820" datatype="html">
         <source><x id="PH"/> month ago </source>
-        <target state="translated"><x id="PH"/> month ago </target>
+        <target state="translated"><x id="PH"/> ayyur aya </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6473426250245763193" datatype="html">
         <source><x id="PH"/> weeks ago </source>
-        <target state="translated"><x id="PH"/> weeks ago </target>
+        <target state="translated"><x id="PH"/> imalasen aya </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3334373857036457679" datatype="html">
         <source><x id="PH"/> week ago </source>
-        <target state="translated"><x id="PH"/> week ago </target>
+        <target state="translated"><x id="PH"/> amalas aya </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="5186107770140555014" datatype="html">
@@ -8012,7 +8012,7 @@
       </trans-unit>
       <trans-unit id="7784486624424057376" datatype="html">
         <source>Instance name is required.</source>
-        <target state="translated">Instance name is required.</target>
+        <target state="translated">Isem n tummant yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3281212084219111058" datatype="html">
@@ -8022,12 +8022,12 @@
       </trans-unit>
       <trans-unit id="6033463036257195528" datatype="html">
         <source>Twitter username is required.</source>
-        <target state="translated">Twitter username is required.</target>
+        <target state="translated">Isem n useqdac n Twitter yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="8198703669620791633" datatype="html">
         <source>Previews cache size is required.</source>
-        <target state="translated">Previews cache size is required.</target>
+        <target state="translated">Teɣzi n tuffirt n teskanin tettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="3971192070835972256" datatype="html">
@@ -8156,23 +8156,23 @@
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="translated">Index URL should be a URL</target>
+        <target state="translated">URL n umatar ilaq ad yili d URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="translated">Search index URL should be a URL</target>
+        <target state="translated">URLn umatar n unadi ilaq ad yili d URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
         <source>Email is required.</source>
-        <target state="translated">Email is required.</target>
+        <target state="translated">Yettwasra yimayl.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="4591482207344282590" datatype="html">
         <source>Email must be valid.</source>
-        <target state="translated">Email must be valid.</target>
+        <target state="translated">Ilaq ad yili yimayl d ameɣtu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
@@ -8194,95 +8194,95 @@
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
-        <target state="translated">Your name is required.</target>
+        <target state="translated">Yettusra yisem-ik·im.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5799695548385507586" datatype="html">
         <source>Your name must be at least 1 character long.</source>
-        <target state="translated">Your name must be at least 1 character long.</target>
+        <target state="translated">Isem-ik·im ilaq ad yesεu ma drus 1 usekkil.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3600004643604731577" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
-        <target state="translated">Your name cannot be more than 120 characters long.</target>
+        <target state="translated">Isem-ik·im ur yezmir ara ad yili nnig 120 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
         <source>A subject is required.</source>
-        <target state="translated">A subject is required.</target>
+        <target state="translated">Asentel yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target state="translated">The subject must be at least 1 character long.</target>
+        <target state="translated">Asentel ilaq ad yesεu ma drus 1 n usekkil.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="5905189237950302829" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="translated">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">Asentel ur ilaq ara ad yesεu nnig 120 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="847704400962945123" datatype="html">
         <source>A message is required.</source>
-        <target state="translated">A message is required.</target>
+        <target state="translated">Yettwasra yizen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3871842658394273178" datatype="html">
         <source>The message must be at least 3 characters long.</source>
-        <target state="translated">The message must be at least 3 characters long.</target>
+        <target state="translated">Izen ilaq ad yesεu ma drus 3 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3731145759205895653" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
-        <target state="translated">The message cannot be more than 5000 characters long.</target>
+        <target state="translated">Izen ur ilaq ara ad yesεu nnig 5000 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="3868123820758341861" datatype="html">
         <source>Username is required.</source>
-        <target state="translated">Username is required.</target>
+        <target state="translated">Isem n useqdac yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="3577237269587081090" datatype="html">
         <source>Password is required.</source>
-        <target state="translated">Password is required.</target>
+        <target state="translated">Yettwasra wawal uffir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">58</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="3152303769378345477" datatype="html">
         <source>Confirmation of the password is required.</source>
-        <target state="translated">Confirmation of the password is required.</target>
+        <target state="translated">Asentem n wawal uffir yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/reset-password-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
         <source>Username must be at least 1 character long.</source>
-        <target state="translated">Username must be at least 1 character long.</target>
+        <target state="translated">Isem n useqdac ilaq ad yesεu ma drus 1 usekkil.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="1019755749203839300" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
-        <target state="translated">Username cannot be more than 50 characters long.</target>
+        <target state="translated">Isem n useqdac ur ilaq ara ad yesεu nnig 50 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="translated">Username should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Isem n useqdac yezmer ad yesεu isekkilen imeẓẓyanen, izwilen, agazen d yijerriden ddaw.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
-        <target state="translated">Channel name is required.</target>
+        <target state="translated">Isem n ubadu yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
         <source>Channel name must be at least 1 character long.</source>
-        <target state="translated">Channel name must be at least 1 character long.</target>
+        <target state="translated">Isem n ubadu ilaq ad yesεu ma drus 1 usekkil.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="8602785819772117007" datatype="html">
         <source>Channel name cannot be more than 50 characters long.</source>
-        <target state="translated">Channel name cannot be more than 50 characters long.</target>
+        <target state="translated">Isem n ubadu ur ilaq ara ad iεeddi nnig 50 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
@@ -8292,85 +8292,85 @@
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
         <source>Password must be at least 6 characters long.</source>
-        <target state="translated">Password must be at least 6 characters long.</target>
+        <target state="translated">Awal uffir ilaq ad yesεu ma drus 6 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">70</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="1099684476181448167" datatype="html">
         <source>Password cannot be more than 255 characters long.</source>
-        <target state="translated">Password cannot be more than 255 characters long.</target>
+        <target state="translated">Awal uffir ur ilaq ara ad iεeddi nnig 255 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">71</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="3392630942539073768" datatype="html">
         <source>The new password and the confirmed password do not correspond.</source>
-        <target state="translated">The new password and the confirmed password do not correspond.</target>
+        <target state="translated">Awal uffir amaynut d win yettusnetmen ur mṣadan ara.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
         <source>Video quota is required.</source>
-        <target state="translated">Video quota is required.</target>
+        <target state="translated">Amur n tvidyut yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
         <source>Quota must be greater than -1.</source>
-        <target state="translated">Quota must be greater than -1.</target>
+        <target state="translated">Amur ilaq ad yili ugar n -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
         <source>Daily upload limit is required.</source>
-        <target state="translated">Daily upload limit is required.</target>
+        <target state="translated">Talast n usali i wass tettusra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="8959404382357999234" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
-        <target state="translated">Daily upload limit must be greater than -1.</target>
+        <target state="translated">Talast n usali i wass ilaq ad tili ugar n -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="4796798537475457493" datatype="html">
         <source>User role is required.</source>
-        <target state="translated">User role is required.</target>
+        <target state="translated">Tamlilt n useqdac tettusra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="2761226139624435788" datatype="html">
         <source>Description must be at least 3 characters long.</source>
-        <target state="translated">Description must be at least 3 characters long.</target>
+        <target state="translated">Aglam ilaq ad ilin deg-s ma drus 3 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">123</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="4717982586356605243" datatype="html">
         <source>Description cannot be more than 1000 characters long.</source>
-        <target state="translated">Description cannot be more than 1000 characters long.</target>
+        <target state="translated">Aglam ur ilaq ara ad iεeddi 1000 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">124</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="translated">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">Ilaq ad tqebleḍ tiwtilin n tummant i wakken ad tizmired ad tjerrdeḍ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="7803960725351649605" datatype="html">
         <source>Ban reason must be at least 3 characters long.</source>
-        <target state="translated">Ban reason must be at least 3 characters long.</target>
+        <target state="translated">Ssebba n ugdal ilaq ad ilin deg-s ma drus 3 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="3851609012243698179" datatype="html">
         <source>Ban reason cannot be more than 250 characters long.</source>
-        <target state="translated">Ban reason cannot be more than 250 characters long.</target>
+        <target state="translated">Ssebba n ugdal ur ilaq ara ad tεeddi nnig 250 yisekkilen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
         <source>Display name is required.</source>
-        <target state="translated">Display name is required.</target>
+        <target state="translated">Isem yettwaskanen yettusra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">153</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="1303578752658966736" datatype="html">
         <source>Display name must be at least 1 character long.</source>
-        <target state="translated">Display name must be at least 1 character long.</target>
+        <target state="translated">Isem yettwaskanen ilaq ad yesεu ma drus 1 usekkil.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">154</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">13</context></context-group>
@@ -8463,7 +8463,7 @@
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
         <source>Name is required.</source>
-        <target state="translated">Name is required.</target>
+        <target state="translated">Isem yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="4006797705713167676" datatype="html">
@@ -8521,7 +8521,7 @@
       </trans-unit>
       <trans-unit id="6198895122092095739" datatype="html">
         <source>Privacy is required.</source>
-        <target state="translated">Privacy is required.</target>
+        <target state="translated">Tabaḍnit tettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
@@ -8570,7 +8570,7 @@
       </trans-unit>
       <trans-unit id="5437132245714159662" datatype="html">
         <source>Video name is required.</source>
-        <target state="translated">Video name is required.</target>
+        <target state="translated">Isem n tvidyut yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="2807676084745266104" datatype="html">
@@ -8598,7 +8598,7 @@
       </trans-unit>
       <trans-unit id="7309902991450450996" datatype="html">
         <source>Video channel is required.</source>
-        <target state="translated">Video channel is required.</target>
+        <target state="translated">Abadu n tvidyut yettwasra.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="3959376623771116873" datatype="html">
@@ -8660,7 +8660,7 @@
       </trans-unit>
       <trans-unit id="8728283516316752593" datatype="html">
         <source>This file is too large.</source>
-        <target state="translated">This file is too large.</target>
+        <target state="translated">Afaylu-a ɣezzif aṭas.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="6360987759186261451" datatype="html">
@@ -8670,7 +8670,7 @@
       </trans-unit>
       <trans-unit id="6708273825233539746" datatype="html">
         <source>Add a new option</source>
-        <target state="translated">Add a new option</target>
+        <target state="translated">Rnu taxtiṛt-nniḍen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox.component.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
@@ -8945,7 +8945,7 @@
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
-        <target state="translated">Instance languages</target>
+        <target state="translated">Tutlayin n tummant</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
@@ -8961,53 +8961,53 @@
       </trans-unit>
       <trans-unit id="2173989454916398137" datatype="html">
         <source>Blurred with confirmation request</source>
-        <target state="translated">Blurred with confirmation request</target>
+        <target state="translated">Yerwi d usuter n usentem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="8929218224642530466" datatype="html">
         <source>Displayed</source>
-        <target>Affiché</target>
+        <target>Yettwaskan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="6291055174438137560" datatype="html">
         <source>~ 1 minute</source>
-        <target state="translated">~ 1 minute</target>
+        <target state="translated">~ 1 tesdat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="189524047518780716" datatype="html">
         <source>~ <x id="PH"/> minutes</source>
-        <target state="translated">~ <x id="PH"/> minutes</target>
+        <target state="translated">~ <x id="PH"/> n tesdatin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6028521920505655348" datatype="html">
         <source><x id="PH"/> of full HD videos </source>
-        <target state="translated"><x id="PH"/> of full HD videos </target>
+        <target state="translated"><x id="PH"/> n tvidyutin tiččuranin n HD </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="117588083391484998" datatype="html">
         <source><x id="PH"/> of HD videos </source>
-        <target state="translated"><x id="PH"/> of HD videos </target>
+        <target state="translated"><x id="PH"/> n tvidyutin n HD </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="6636555695556123073" datatype="html">
         <source><x id="PH"/> of average quality videos </source>
-        <target state="translated"><x id="PH"/> of average quality videos </target>
+        <target state="translated"><x id="PH"/> n tvidyutin n tɣara talemmast </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH"/> (channel page) </source>
-        <target state="translated"><x id="PH"/> (channel page) </target>
+        <target state="translated"><x id="PH"/> (asebter n ubadu) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
-        <target state="translated"><x id="PH"/> (account page) </target>
+        <target state="translated"><x id="PH"/> (asebter n umiḍan) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="2516633974298697807" datatype="html">
         <source>Emphasis</source>
-        <target state="translated">Emphasis</target>
+        <target state="translated">Tuffayt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="7565716024468232322" datatype="html">
@@ -9017,12 +9017,12 @@
       </trans-unit>
       <trans-unit id="7838476952710404110" datatype="html">
         <source>New lines</source>
-        <target state="translated">New lines</target>
+        <target state="translated">Iseɣwan imaynuten</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="8756167649220050929" datatype="html">
         <source>Lists</source>
-        <target>Tibdarint</target>
+        <target>Tibdarin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="414887388288176527" datatype="html">
@@ -9032,12 +9032,12 @@
       </trans-unit>
       <trans-unit id="5708680277917691451" datatype="html">
         <source><x id="PH"/> users banned. </source>
-        <target state="translated"><x id="PH"/> users banned. </target>
+        <target state="translated"><x id="PH"/> iseqdacen yettwagedlen. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="2448281151916042849" datatype="html">
         <source>User <x id="PH"/> banned.</source>
-        <target state="translated">Aseqdac <x id="PH"/> yettwagdel.</target>
+        <target state="translated">Aseqdac <x id="PH"/> yettwagedlen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html">
@@ -9156,27 +9156,27 @@
       </trans-unit>
       <trans-unit id="6198109035280957164" datatype="html">
         <source>Mute the instance</source>
-        <target state="translated">Mute the instance</target>
+        <target state="translated">Sgugem tummant-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">309</context></context-group>
       </trans-unit>
       <trans-unit id="4537735378779630558" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="translated">Hide any content from that instance for you.</target>
+        <target state="translated">Ffer yal agbur seg tummant-a fell-ak·am.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">310</context></context-group>
       </trans-unit>
       <trans-unit id="6247487021683085858" datatype="html">
         <source>Unmute the instance</source>
-        <target state="translated">Unmute the instance</target>
+        <target state="translated">Kkes asgugem i tummant-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">315</context></context-group>
       </trans-unit>
       <trans-unit id="4024846984475742259" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="translated">Show back content from that instance for you.</target>
+        <target state="translated">Sken tikkelt-nniḍen agbur seg tummant-a i kečč·kemm.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">316</context></context-group>
       </trans-unit>
       <trans-unit id="3108200185023875257" datatype="html">
         <source>Remove comments from your videos</source>
-        <target state="translated">Remove comments from your videos</target>
+        <target state="translated">Kkes iwenniten seg tvidyutin-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group>
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
@@ -9221,12 +9221,12 @@
       </trans-unit>
       <trans-unit id="758471033841077314" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="translated">Show back content from that instance for you, your instance and its users.</target>
+        <target state="translated">Sken i tikkelt-nniḍen agbur n tummant-a, tummant-ik·im akked d yiseqdacen-is.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">358</context></context-group>
       </trans-unit>
       <trans-unit id="3785095284194008197" datatype="html">
         <source>Remove comments from your instance</source>
-        <target state="translated">Remove comments from your instance</target>
+        <target state="translated">Kkes iwenniten seg tummant-ik·im</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">368</context></context-group>
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
@@ -9256,7 +9256,7 @@
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
         <source>Spam, ad or false news</source>
-        <target state="translated">Spam, ad or false news</target>
+        <target state="translated">Aspam, adellel neɣ isallen n ukellex</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
@@ -9281,7 +9281,7 @@
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
         <source>Breaks server rules</source>
-        <target state="translated">Breaks server rules</target>
+        <target state="translated">Ittruẓu ilugan n uqeddac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">164</context></context-group>
       </trans-unit>
       <trans-unit id="7930601470861156366" datatype="html">
@@ -9291,18 +9291,18 @@
       </trans-unit>
       <trans-unit id="8700771664729810984" datatype="html">
         <source>The above can only be seen in thumbnails.</source>
-        <target state="translated">The above can only be seen in thumbnails.</target>
+        <target state="translated">Ayen yezrin yezmer kan ad yettuwali deg tenfulin.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
         <source>Captions</source>
-        <target state="translated">Captions</target>
+        <target state="translated">Tineffusin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">178</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="5779804235244672536" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="translated">The above can only be seen in captions (please describe which).</target>
+        <target state="translated">Ayen yezrin ur yezmir ad yettuwali ala deg tneffusin (ttxil-k·m glem-d d anti).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="968295009933361070" datatype="html">
@@ -9312,12 +9312,12 @@
       </trans-unit>
       <trans-unit id="4965472196059235310" datatype="html">
         <source>Too many attempts, please try again later.</source>
-        <target state="translated">Too many attempts, please try again later.</target>
+        <target state="translated">Aṭas n yineεruḍen, ttxil-k·m εreḍ tikkelt-nniḍen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="1693549688987384699" datatype="html">
         <source>Server error. Please retry later.</source>
-        <target state="translated">Server error. Please retry later.</target>
+        <target state="translated">Tuccḍa deg uqeddac. Ttxil-k·m εreḍ tikkelt-nniḍen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
@@ -9332,17 +9332,17 @@
       </trans-unit>
       <trans-unit id="7019115336138470191" datatype="html">
         <source>Subscribed</source>
-        <target state="translated">Subscribed</target>
+        <target state="translated">Imulteɣ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH"/> </source>
-        <target state="translated">Unsubscribed from all channels of <x id="PH"/> </target>
+        <target state="translated">Yettwasefsex umulteɣ seg meṛṛa ibuda n <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="9201562016527884133" datatype="html">
         <source>Unsubscribed from <x id="PH"/> </source>
-        <target state="translated">Unsubscribed from <x id="PH"/> </target>
+        <target state="translated">Yettwasefsex umulteɣ seg <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="516954136005961440" datatype="html">
@@ -9378,7 +9378,7 @@
       </trans-unit>
       <trans-unit id="3723085768598852106" datatype="html">
         <source>Video removed from <x id="PH"/> </source>
-        <target state="translated">Video removed from <x id="PH"/> </target>
+        <target state="translated">Tavidyut tettwakkes seg <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">98</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">307</context></context-group>
       </trans-unit>
@@ -9389,29 +9389,29 @@
       </trans-unit>
       <trans-unit id="7754186870520534716" datatype="html">
         <source>Video added in <x id="PH"/> </source>
-        <target state="translated">Video added in <x id="PH"/> </target>
+        <target state="translated">Tavidyut tettwarna deg <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">378</context></context-group>
       </trans-unit>
       <trans-unit id="985751964589921228" datatype="html">
         <source>Timestamps updated</source>
-        <target state="translated">Timestamps updated</target>
+        <target state="translated">Azemzakud yettwaleqqem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="6421445850411984665" datatype="html">
         <source>Starts at</source>
-        <target state="translated">Starts at</target>
+        <target state="translated">Ad yebdu ɣef</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">140</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="7145200412085189912" datatype="html">
         <source>Stops at</source>
-        <target state="translated">Stops at</target>
+        <target state="translated">Ad yeḥbes ɣef</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="921225940108335688" datatype="html">
         <source>and stops at</source>
-        <target state="translated">and stops at</target>
+        <target state="translated">syen ad yeḥbes ɣef</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="346270517625845962" datatype="html">
@@ -9421,7 +9421,7 @@
       </trans-unit>
       <trans-unit id="2331557444464201331" datatype="html">
         <source>Format name</source>
-        <target>Format</target>
+        <target>Isem n umasal</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="45739481977493163" datatype="html">
@@ -9457,37 +9457,37 @@
       </trans-unit>
       <trans-unit id="44862519224794374" datatype="html">
         <source>Average frame rate</source>
-        <target state="translated">Average frame rate</target>
+        <target state="translated">Afmiḍi n ukatar alemmas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="5053683525387462246" datatype="html">
         <source>Pixel format</source>
-        <target state="translated">Pixel format</target>
+        <target state="translated">Amasal n piksel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="7858676566953242358" datatype="html">
         <source>Sample rate</source>
-        <target>Atug n ulemmec</target>
+        <target>Afmiḍi n ulemmec</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="5403856660543890284" datatype="html">
         <source>Channel Layout</source>
-        <target state="translated">Channel Layout</target>
+        <target state="translated">Taneɣruft n ubadu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="1472171759957681533" datatype="html">
         <source>Video reported.</source>
-        <target state="translated">Video reported.</target>
+        <target state="translated">Tavidyut iɣef yettwazen uneqqis.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="2990849907502572301" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target state="translated">This video will be duplicated by your instance.</target>
+        <target state="translated">Tavidyut-a ad tettwales i tikkelt-nniḍen s tummant-ik·im.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
         <source>Download</source>
-        <target state="translated">Sider</target>
+        <target state="translated">Sader</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">272</context></context-group>
       </trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
@@ -9507,12 +9507,12 @@
       </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
-        <target state="translated">Iḥedran</target>
+        <target state="translated">Iḥedren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">290</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
         <source>Save to playlist</source>
-        <target state="translated">Save to playlist</target>
+        <target state="translated">Sekles deg tebdart n tɣuri</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">156</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
@@ -9538,12 +9538,12 @@
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
         <source>Remove &amp; re-draft</source>
-        <target state="translated">Remove &amp; re-draft</target>
+        <target state="translated">Kkes &amp; ales tira</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
         <source>Mute account</source>
-        <target state="translated">Mute account</target>
+        <target state="translated">Sgugem amiḍan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">322</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">287</context></context-group>
       </trans-unit>
@@ -9561,7 +9561,7 @@
       </trans-unit>
       <trans-unit id="3719503424625455635" datatype="html">
         <source>Mute server account</source>
-        <target state="translated">Mute server account</target>
+        <target state="translated">Sgugem amiḍan n uqeddac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">293</context></context-group>
       </trans-unit>
       <trans-unit id="4058575476871566236" datatype="html">
@@ -9571,27 +9571,27 @@
       </trans-unit>
       <trans-unit id="1747928867514972971" datatype="html">
         <source>Publication scheduled on</source>
-        <target state="translated">Publication scheduled on</target>
+        <target state="translated">Tasuffeɣt tettusɣawas ass</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="4887724548587271148" datatype="html">
         <source>Waiting transcoding</source>
-        <target state="translated">Waiting transcoding</target>
+        <target state="translated">Aṛaǧu n wanigtengel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="4517785179607945981" datatype="html">
         <source>To transcode</source>
-        <target state="translated">To transcode</target>
+        <target state="translated">i wanigtengel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">175</context></context-group>
       </trans-unit>
       <trans-unit id="3299576663551440736" datatype="html">
         <source>To import</source>
-        <target state="translated">To import</target>
+        <target state="translated">I uktar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="1795705931707209785" datatype="html">
         <source>Add to watch later</source>
-        <target state="translated">Add to watch later</target>
+        <target state="translated">Rnu ad tt-twaliḍ ticki</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8498940878158860248" datatype="html">
@@ -9818,12 +9818,12 @@
       </trans-unit>
       <trans-unit id="5699822024600815733" datatype="html">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
-        <target state="translated">But associated data (tags, description...) will be lost, are you sure you want to leave this page?</target>
+        <target state="translated">Maca ad tesruḥeḍ isefka yemcudden (tibzimin, aglam...), d tidet tebɣiḍ ad teffɣeḍ seg usebter-a?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="1219739004043110649" datatype="html">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="translated">Your video is not uploaded yet, are you sure you want to leave this page?</target>
+        <target state="translated">Tavidyut-a mazal ur d-tettwasuli ara, d tidet tebɣiḍ ad teffɣeḍ seg usebter-a?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
@@ -9883,7 +9883,7 @@
       </trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="translated">Stop looping playlist videos</target>
+        <target state="translated">Seḥbes taɣuri n tvidyutin i d-yettuɣalin n tebdart n tɣuri</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch-playlist.component.ts</context><context context-type="linenumber">209</context></context-group>
       </trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
@@ -9901,42 +9901,42 @@
       </trans-unit>
       <trans-unit id="677619204556459328" datatype="html">
         <source>Like this video</source>
-        <target state="translated">Like this video</target>
+        <target state="translated">Teεǧeb-iyi tvidyut-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="1979134407801821102" datatype="html">
         <source>Dislike this video</source>
-        <target state="translated">Dislike this video</target>
+        <target state="translated">Ur iyi-teεǧib ara tvidyut-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="4001371302469308813" datatype="html">
         <source>Support options for this video</source>
-        <target state="translated">Support options for this video</target>
+        <target state="translated">Tixtiṛiyin n tallalt i tvidyut-a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
         <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</source>
-        <target state="translated">This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</target>
+        <target state="translated">Tavidyut-a ulac-itt deg tummant. Tebɣiḍ ad tettuwellheḍ ɣer tummant taneẓlit: &lt;a href="<x id="PH"/>"&gt;<x id="PH_1"/>&lt;/a&gt;?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">427</context></context-group>
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
         <source>Redirection</source>
-        <target state="translated">Redirection</target>
+        <target state="translated">Allus n uwelleh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">428</context></context-group>
       </trans-unit>
       <trans-unit id="8858527736400081688" datatype="html">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
-        <target state="translated">This video contains mature or explicit content. Are you sure you want to watch it?</target>
+        <target state="translated">Tavidyut-a deg-s agbur ai yimeqqranen neɣ agbur amḥulfu. D tidet tebɣiḍ ad t-twaliḍ?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">558</context></context-group>
       </trans-unit>
       <trans-unit id="3937119019020041049" datatype="html">
         <source>Mature or explicit content</source>
-        <target state="translated">Mature or explicit content</target>
+        <target state="translated">Agbur i yimeqqranen neq agbur amḥulfu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">559</context></context-group>
       </trans-unit>
       <trans-unit id="1755474755114288376" datatype="html">
         <source>Up Next</source>
-        <target state="translated">Up Next</target>
+        <target state="translated">Uḍfir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">627</context></context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
@@ -9956,12 +9956,12 @@
       </trans-unit>
       <trans-unit id="7618388257165864759" datatype="html">
         <source>Play/Pause the video (requires player focus)</source>
-        <target state="translated">Play/Pause the video (requires player focus)</target>
+        <target state="translated">Taɣuri/Aḥbas n tvidyutPause(yesra afukus n tɣuri)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">940</context></context-group>
       </trans-unit>
       <trans-unit id="7761890399634216630" datatype="html">
         <source>Mute/unmute the video (requires player focus)</source>
-        <target state="translated">Mute/unmute the video (requires player focus)</target>
+        <target state="translated">Sgugem/kkes asgugem tavidyut (yesra afukus n tɣuri)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">941</context></context-group>
       </trans-unit>
       <trans-unit id="5996585232248234904" datatype="html">
@@ -10072,7 +10072,7 @@
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
-        <target state="translated">Tivvidyutin i d-yettuɣalen</target>
+        <target state="translated">Tividyutin i d-yettuɣalen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
@@ -10082,7 +10082,7 @@
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
         <source>Upload a video</source>
-        <target state="translated">Upload a video</target>
+        <target state="translated">Sali-d tavidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
