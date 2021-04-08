@@ -76,7 +76,7 @@ function getYoutubeDLSubs (url: string, opts?: object): Promise<YoutubeDLSubs> {
           logger.debug('Get subtitles from youtube dl.', { url, files })
 
           const subtitles = files.reduce((acc, filename) => {
-            const matched = filename.match(/\.([a-z]{2})\.(vtt|ttml)/i)
+            const matched = filename.match(/\.([a-z]{2})(-[a-z]+)?\.(vtt|ttml)/i)
             if (!matched || !matched[1]) return acc
 
             return [
