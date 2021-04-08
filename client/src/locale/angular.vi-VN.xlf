@@ -1122,7 +1122,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="8890553633144307762" datatype="html">
         <source>Back</source>
-        <target state="new">Back</target>
+        <target state="translated">Quay lại</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -1131,7 +1131,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3885497195825665706" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Kế tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -1140,7 +1140,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5018804994794983050" datatype="html">
         <source>Signup</source>
-        <target state="new">Signup</target>
+        <target state="translated">Đăng kí</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -1184,13 +1184,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5cf92a1d527e65908c75633e8484cdd3b6d16b9b" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target state="new">Welcome to PeerTube, dear administrator!</target>
+        <target state="translated">Chào mừng đến với PeerTube, người anh em!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="fb2ab91ad6091b4a42f4ec08487650a0bc2d541c" datatype="html">
         <source>CLI documentation</source>
-        <target state="new">CLI
-            documentation</target>
+        <target state="translated">Tài liệu CLI</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="65462878ca6d04c826906432816a3df3e048ac87" datatype="html">
@@ -1200,37 +1199,32 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="054dd8ba0dece8069a5a7e538efaca9f58cf81f9" datatype="html">
         <source>Administer documentation</source>
-        <target state="new">Administer
-            documentation</target>
+        <target state="translated">Tài liệu quản trị server</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="c38a3f5b5eff069d0097527fa40a3f8c4d9c1e4e" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="new">Managing users, following other instances, dealing with spammers...</target>
+        <target state="translated">Quản lí người dùng, liên hợp với máy chủ khác, đánh chết mẹ bọn spam...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="4e020f13aa4db2285047eba96e50dc716fb5f417" datatype="html">
         <source>Use documentation</source>
-        <target state="new">Use
-            documentation</target>
+        <target state="translated">Dùng tài liệu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="new">Setup your account, managing video playlists, discover third-party applications...</target>
+        <target state="translated">Thiết lập tài khoản, quản lí danh sách video, khám phá ứng dụng bên thứ ba...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6b705cdf0d567cf608b9891a1d912daebac3523e" datatype="html">
         <source>Useful links</source>
-        <target state="new">Useful links</target>
+        <target state="translated">Mẹo khác</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></source>
-        <target state="new">Official PeerTube website (news, support, contribute...): 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">Trang web chính thức PeerTube (tin tức, hỗ trợ, đóng góp...): <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6" datatype="html">
@@ -1243,7 +1237,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target state="new">It's time to configure your instance!</target>
+        <target state="translated">Tới lúc cấu hình máy chủ của bạn!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6" datatype="html">
@@ -1275,19 +1269,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
         <source>Remind me later</source>
-        <target state="new">Remind me later</target>
+        <target state="translated">Nhắc tôi sau</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="b310fa17f1bbfc4dd61b80c1cfc4116a81a9c76c" datatype="html">
         <source>Configure my instance</source>
-        <target state="new">
-      Configure my instance
-    </target>
+        <target state="translated">Cấu hình máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="a9af18b4f210f5a19bb2503407923d3f25c57f98" datatype="html">
         <source>Configuration warning!</source>
-        <target state="new">Configuration warning!</target>
+        <target state="translated">Cảnh báo cấu hình!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="e30fd615e98eb6ebc28346024a89f00192a98396" datatype="html">
@@ -1297,37 +1289,37 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ab7e3d0be94cc55ce997a5f38c679956e66f3936" datatype="html">
         <source>Instance name</source>
-        <target state="new">Instance name</target>
+        <target state="translated">Tên máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="b6e9a7a198c9882894677a0358d22ed79482808a" datatype="html">
         <source>Instance short description</source>
-        <target state="new">Instance short description</target>
+        <target state="translated">Mô tả ngắn về máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="801cb5b4cc93a5c0a4d89a46b96487d3638f0bc5" datatype="html">
         <source>Who you are</source>
-        <target state="new">Who you are</target>
+        <target state="translated">Bạn là ai</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="de688f72fc745cc8481a5e9cc70b8ca9e6f41e2a" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target state="new">How long you plan to maintain your instance</target>
+        <target state="translated">Bạn dự kiến mở máy chủ trong bao lâu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="af60a062ecc7c70b278bdb3ba7ad0147abfecf0a" datatype="html">
         <source>How you plan to pay your instance</source>
-        <target state="new">How you plan to pay your instance</target>
+        <target state="translated">Bạn dự kiến kiếm tiền nuôi máy chủ thế nào</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="c69c1bd027bae555557a48123a26d770a93ee473" datatype="html">
         <source>How you will moderate your instance</source>
-        <target state="new">How you will moderate your instance</target>
+        <target state="translated">Cách bạn kiểm duyệt trên máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c" datatype="html">
         <source>Instance terms</source>
-        <target state="new">Instance terms</target>
+        <target state="translated">Quy tắc máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6" datatype="html">
@@ -1338,7 +1330,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="772fa4cd7612cf9dd6a7fb1a3930756a95825709" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="new">These settings apply only to your session on this instance.</target>
+        <target state="translated">Những thiết lập này chỉ áp dụng tạm thời trên máy chủ này.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1359,7 +1351,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7d438f72f9985c4d06ed4fe80c90afc2e1df34d2" datatype="html">
         <source>Don't show me this warning anymore</source>
-        <target state="new">Don't show me this warning anymore</target>
+        <target state="translated">Đừng hiện cảnh báo cho tôi nữa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
@@ -1370,14 +1362,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5d3bc02dfb6c9b6fdd716f77c487a779ba6d6cc2" datatype="html">
         <source>Update live settings</source>
-        <target state="new">Update live settings</target>
+        <target state="translated">Thiết lập luồng trực tiếp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="c2fe7580753ac7c1442df31eb97f8acc6fa250e6" datatype="html">
         <source>Configure</source>
-        <target state="new">
-       Configure
-    </target>
+        <target state="translated">Cấu hình</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -1394,7 +1384,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="608d7164ed2d996dc827b17cd7b6f5915c617be4" datatype="html">
         <source>Public profile</source>
-        <target state="new">Public profile</target>
+        <target state="translated">Tài khoản công khai</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="c43efa2dff95b97be0c36a65d2ada4cd594e010f" datatype="html">
@@ -1404,12 +1394,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="a9ada5fec7ddf53a031711b025014495372627de" datatype="html">
         <source>Videos:</source>
-        <target state="new">Videos:</target>
+        <target state="translated">Video:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="9fe1faff741de7a4d50e520d2161209997f8224c" datatype="html">
         <source>Sensitive:</source>
-        <target state="new">Sensitive:</target>
+        <target state="translated">Nhạy cảm:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
@@ -1425,7 +1415,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5ef7ce1bada0c3d3b4e5e299dad0d336f7897a34" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2021</target>
+        <target state="translated">powered by PeerTube - CopyLeft 2015-2021</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="85b79c9064aed1ead31ace985f31aa1363f6bdaf" datatype="html">
@@ -1440,7 +1430,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="f8e6eaa974acec3b80e5c77ec0dc4ff80939964d" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="new">powered by PeerTube</target>
+        <target state="translated">powered by PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="3fdc751b264ca9998e1542fcf5794e274cd56344">
@@ -1450,12 +1440,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="e4825b5d86d89ae0f4c797ba256f66fd8abd4ee6" datatype="html">
         <source>My account</source>
-        <target state="new">My account</target>
+        <target state="translated">Tài khoản của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="4ef4f031c147fb9ee0168bc6eacb78de180d7432" datatype="html">
         <source>My library</source>
-        <target state="new">My library</target>
+        <target state="translated">Kho video của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
@@ -1466,33 +1456,33 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="618ca563e3091faf22978665282787c282a867b8" datatype="html">
         <source>IN MY LIBRARY</source>
-        <target state="new">IN MY LIBRARY</target>
+        <target state="translated">KHO CỦA TÔI</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
         <source>My videos</source>
-        <target state="new">My videos</target>
+        <target state="translated">Video của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">77</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="3108704604266608109" datatype="html">
         <source>My video imports</source>
-        <target state="new">My video imports</target>
+        <target state="translated">Video của tôi nhập</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
         <source>My playlists</source>
-        <target state="new">My playlists</target>
+        <target state="translated">Danh sách của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
         <source>Create a new playlist</source>
-        <target state="new">Create a new playlist</target>
+        <target state="translated">Tạo một danh sách mới</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="2527931602940887636" datatype="html">
         <source>My subscriptions</source>
-        <target state="new">My subscriptions</target>
+        <target state="translated">Kênh tôi đăng kí</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238">
@@ -1522,7 +1512,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="165035acb08983753bcecc3e8b6b18c7caf26d35" datatype="html">
         <source>VIDEOS</source>
-        <target state="new">VIDEOS</target>
+        <target state="translated">VIDEO</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">210</context></context-group>
       </trans-unit>
       <trans-unit id="aaa6659d34c4ad40826f672315a950f9cd5889fe" datatype="html">
@@ -1555,7 +1545,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="58c5c598fe5cdb9aeb4425ed9609a3eafa671158" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
-        <target state="new">Allow import with HTTP URL (e.g. YouTube)</target>
+        <target state="translated">Cho phép nhập URL HTTP(ví dụ YouTube)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">234</context></context-group>
       </trans-unit>
       <trans-unit id="411ca58f59b00246e15b161e07409df55b5eb6db">
@@ -1605,7 +1595,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1da23f4068fd3796fbcb24d0c42bb62f92c96829" datatype="html">
         <source>Mark all as read</source>
-        <target state="new">Mark all as read</target>
+        <target state="translated">Đánh dấu tất cả là đã đọc</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">20</context></context-group>
@@ -1622,12 +1612,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4424964105331349857" datatype="html">
         <source>I'm a teapot</source>
-        <target state="new">I'm a teapot</target>
+        <target state="translated">Tôi là ấm trà</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="75183663cb423cbc64e9443f38b091e65cf71ceb" datatype="html">
         <source>That's an error.</source>
-        <target state="new">That's an error.</target>
+        <target state="translated">Đây là lỗi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
