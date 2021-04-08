@@ -1633,7 +1633,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="c2c0aec88a83dd3aabac669264c432058f9e197e" datatype="html">
         <source>Possible reasons:</source>
-        <target state="new">Possible reasons:</target>
+        <target state="translated">Lý do:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1642,12 +1642,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ed052af4856de46aa0482d05b23b393619689cd2" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="new">You may have used an outdated or broken link</target>
+        <target state="translated">Bạn sử dụng một đường link hết hạn hoặc không đúng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="22729b8fc19b701735ef98d5ad6636257dea7164" datatype="html">
         <source>The <x id="INTERPOLATION" equiv-text="{{ getRessourceName() }}"/> may have been moved or deleted</source>
-        <target state="new">The <x id="INTERPOLATION" equiv-text="{{ getRessourceName() }}"/> may have been moved or deleted</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getRessourceName() }}"/> đã di chuyển hoặc bị xóa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1655,7 +1655,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="b274f3be0260cd15f51c8d2de3387ec128a85083" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="new">You may have typed the address or URL incorrectly</target>
+        <target state="translated">Bạn nhập sai địa chỉ URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1663,7 +1663,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="c3c3952c91bf07af957ccbe84f3491a30eba63bb" datatype="html">
         <source>You are not authorized here.</source>
-        <target state="new">You are not authorized here.</target>
+        <target state="translated">Bạn không có quyền truy cập.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">23</context>
@@ -1685,13 +1685,13 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="68ffb388e7bfe4b0a6f9f6faef194f536a195c09" datatype="html">
         <source>Sepia seems to like it.</source>
-        <target state="new">Sepia seems to like it.</target>
+        <target state="translated">Sepia thích điều này.</target>
         <note priority="1" from="description">This is about Sepia's tea</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="new">Media is too large for the server. Please contact you administrator if you want to increase the limit size.</target>
+        <target state="translated">Video có dung lượng quá lớn. Hãy liên hệ quản trị viên nếu bạn muốn tăng giới hạn dung lượng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="73216504c8903e04fdb415d876eb8969dd3afa60" datatype="html">
@@ -1701,14 +1701,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="90ce30ddedd5892740bb41e9ead736cd2c0f9b53" datatype="html">
         <source>GLOBAL SEARCH</source>
-        <target state="new">GLOBAL SEARCH</target>
+        <target state="translated">TÌM KIẾM TOÀN CẦU</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="b2f3e08a790518414d240fbe2c3c116c6f83c275" datatype="html">
         <source>using <x id="INTERPOLATION"/></source>
-        <target state="new">using 
-          <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/>
-        </target>
+        <target state="translated">đang dùng <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
@@ -1718,17 +1716,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="ee697ded3eb6909ca0e619ab5cc9647cbd849da5" datatype="html">
         <source>ADVANCED SEARCH</source>
-        <target state="new">ADVANCED SEARCH</target>
+        <target state="translated">TÌM KIẾM NÂNG CAO</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="8e799fee4b3df7ea53786f096380f81c78a77efd" datatype="html">
         <source>any instance</source>
-        <target state="new">any instance</target>
+        <target state="translated">mọi máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target state="new">only followed instances</target>
+        <target state="translated">chỉ những máy chủ đã theo dõi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="e5a60e5f83aad776726b8b9e7ff1b69f047a8416" datatype="html">
@@ -1738,13 +1736,13 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="648ca3b1ac41763033a412ead17c4a3dd71545be" datatype="html">
         <source>will list the matching channel</source>
-        <target state="new">will list the matching channel</target>
+        <target state="translated">sẽ liệt kê những kênh trùng khớp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="48d27fa96b882d9c5c2a779376328790d80378eb" datatype="html">
         <source>will list the matching video</source>
-        <target state="new">will list the matching video</target>
+        <target state="translated">sẽ liệt kê những video trùng khớp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="25d438ce4c6d14835921c34bda6cc88f4fe5b1b4" datatype="html">
@@ -1759,12 +1757,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="39ec2a3e2da523763f4db4b2227b7dbae5d70eba" datatype="html">
         <source>In this instance's network</source>
-        <target state="new">In this instance's network</target>
+        <target state="translated">Trong mạng liên hợp của máy chủ này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="9848e55d7c95eddc1c4a044a63ed0e88e8cb6f5c" datatype="html">
         <source>In the vidiverse</source>
-        <target state="new">In the vidiverse</target>
+        <target state="translated">Trong Vidiverse</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5d43539fc358c3a548b9d487be821db73e2702ff">
@@ -1774,9 +1772,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="a57adbb9bc3ecbc397157af25f96fc2123c9c383" datatype="html">
         <source>Reset</source>
-        <target state="new">
-            Reset
-          </target>
+        <target state="translated">Reset</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">9</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">42</context></context-group>
@@ -1833,9 +1829,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="265ee68edfe57e510270da31ec99f67d94346009" datatype="html">
         <source>Reset</source>
-        <target state="new">
-          Reset
-        </target>
+        <target state="translated">Reset</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">104</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">130</context></context-group>
@@ -1844,7 +1838,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="75706466a5cffa6f6bf0d6c94a8345a001ce8cea" datatype="html">
         <source>Display all categories</source>
-        <target state="new">Display all categories</target>
+        <target state="translated">Hiển thị mọi thể loại</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
@@ -1856,7 +1850,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="e19d80c6277747a68f3da8cfe1318303d2b5c952" datatype="html">
         <source>Display all licenses</source>
-        <target state="new">Display all licenses</target>
+        <target state="translated">Hiển thị mọi giấy phép</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
@@ -1869,7 +1863,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="dcc3173a99661496cd1f836283993cc3e6576b26" datatype="html">
         <source>Display all languages</source>
-        <target state="new">Display all languages</target>
+        <target state="translated">Hiển thị mọi ngôn ngữ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -1884,19 +1878,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="118bedbb308a28f06d1c0c84645a35c9bf93cbf3" datatype="html">
         <source>Search target</source>
-        <target state="new">Search target</target>
+        <target state="translated">Tìm kiếm mục tiêu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="cdfec9a92a3081018d34e82d74e85e4e9f63a95f" datatype="html">
         <source>Vidiverse</source>
-        <target state="new">Vidiverse</target>
+        <target state="translated">Vidiverse</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="ca72d574353a355b8fadbc1ceda174a0bd1bf7cd" datatype="html">
         <source>Reset</source>
-        <target state="new">
-      Reset
-    </target>
+        <target state="translated">Reset</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
@@ -1906,24 +1898,22 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8" datatype="html">
         <source>Video channels</source>
-        <target state="new">Video channels</target>
+        <target state="translated">Kênh video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0" datatype="html">
         <source>Add caption</source>
-        <target state="new">Add caption</target>
+        <target state="translated">Thêm caption</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="6bad752cfcac8f3572bdf2c619daec683d56d1a8" datatype="html">
         <source>Select the caption file</source>
-        <target state="new">Select the caption file</target>
+        <target state="translated">Thêm file caption</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="c34c61401151c29fb3679638a7d0b95258145ec3" datatype="html">
         <source>This will replace an existing caption!</source>
-        <target state="new">
-        This will replace an existing caption!
-      </target>
+        <target state="translated">Điều này sẽ thay thế caption hiện có!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c" datatype="html">
