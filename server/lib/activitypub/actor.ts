@@ -170,7 +170,13 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   }
 }
 
-type ImageInfo = { name: string, onDisk?: boolean, fileUrl: string }
+type ImageInfo = {
+  name: string
+  fileUrl: string
+  height: number
+  width: number
+  onDisk?: boolean
+}
 async function updateActorImageInstance (actor: MActorImages, type: ActorImageType, imageInfo: ImageInfo | null, t: Transaction) {
   const oldImageModel = type === ActorImageType.AVATAR
     ? actor.Avatar
@@ -194,7 +200,9 @@ async function updateActorImageInstance (actor: MActorImages, type: ActorImageTy
       filename: imageInfo.name,
       onDisk: imageInfo.onDisk ?? false,
       fileUrl: imageInfo.fileUrl,
-      type: type
+      height: imageInfo.height,
+      width: imageInfo.width,
+      type
     }, { transaction: t })
 
     setActorImage(actor, type, imageModel)
@@ -257,6 +265,8 @@ function getImageInfoIfExists (actorJSON: ActivityPubActor, type: ActorImageType
   return {
     name: uuidv4() + extension,
     fileUrl: icon.url,
+    height: icon.height,
+    width: icon.width,
     type
   }
 }
@@ -408,6 +418,8 @@ function saveActorAndServerAndModelIfNotExist (
       const avatar = await ActorImageModel.create({
         filename: result.avatar.name,
         fileUrl: result.avatar.fileUrl,
+        width: result.avatar.width,
+        height: result.avatar.height,
         onDisk: false,
         type: ActorImageType.AVATAR
       }, { transaction: t })
@@ -420,6 +432,8 @@ function saveActorAndServerAndModelIfNotExist (
       const banner = await ActorImageModel.create({
         filename: result.banner.name,
         fileUrl: result.banner.fileUrl,
+        width: result.banner.width,
+        height: result.banner.height,
         onDisk: false,
         type: ActorImageType.BANNER
       }, { transaction: t })
@@ -470,20 +484,21 @@ function saveActorAndServerAndModelIfNotExist (
   }
 }
 
+type ImageResult = {
+  name: string
+  fileUrl: string
+  height: number
+  width: number
+}
+
 type FetchRemoteActorResult = {
   actor: MActor
   name: string
   summary: string
   support?: string
   playlists?: string
-  avatar?: {
-    name: string
-    fileUrl: string
-  }
-  banner?: {
-    name: string
-    fileUrl: string
-  }
+  avatar?: ImageResult
+  banner?: ImageResult
   attributedTo: ActivityPubAttributedTo[]
 }
 async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: number, result: FetchRemoteActorResult }> {

@@ -2,12 +2,14 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { basename } from 'path'
 import {
   cleanupTests,
   createUser,
   deleteVideoChannelImage,
   doubleFollow,
   flushAndRunMultipleServers,
+  getActorImage,
   getVideo,
   getVideoChannel,
   getVideoChannelVideos,
@@ -31,6 +33,7 @@ import {
 } from '../../../../shared/extra-utils/index'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { User, Video, VideoChannel, VideoDetails } from '../../../../shared/index'
+import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 
 const expect = chai.expect
 
@@ -288,6 +291,10 @@ describe('Test video channels', function () {
       const videoChannel = await findChannel(server, secondVideoChannelId)
 
       await testImage(server.url, 'avatar-resized', videoChannel.avatar.path, '.png')
+
+      const row = await getActorImage(server.internalServerNumber, basename(videoChannel.avatar.path))
+      expect(row.height).to.equal(ACTOR_IMAGES_SIZE.AVATARS.height)
+      expect(row.width).to.equal(ACTOR_IMAGES_SIZE.AVATARS.width)
     }
   })
 
@@ -311,6 +318,10 @@ describe('Test video channels', function () {
       const videoChannel = res.body
 
       await testImage(server.url, 'banner-resized', videoChannel.banner.path)
+
+      const row = await getActorImage(server.internalServerNumber, basename(videoChannel.banner.path))
+      expect(row.height).to.equal(ACTOR_IMAGES_SIZE.BANNERS.height)
+      expect(row.width).to.equal(ACTOR_IMAGES_SIZE.BANNERS.width)
     }
   })
 

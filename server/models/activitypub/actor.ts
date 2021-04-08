@@ -570,16 +570,21 @@ export class ActorModel extends Model {
       icon = {
         type: 'Image',
         mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
+        height: this.Avatar.height,
+        width: this.Avatar.width,
         url: this.getAvatarUrl()
       }
     }
 
     if (this.bannerId) {
-      const extension = extname((this as MActorAPChannel).Banner.filename)
+      const banner = (this as MActorAPChannel).Banner
+      const extension = extname(banner.filename)
 
       image = {
         type: 'Image',
         mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
+        height: banner.height,
+        width: banner.width,
         url: this.getBannerUrl()
       }
     }

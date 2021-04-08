@@ -82,6 +82,11 @@ async function countVideoViewsOf (internalServerNumber: number, uuid: string) {
   return parseInt(total + '', 10)
 }
 
+function getActorImage (internalServerNumber: number, filename: string) {
+  return selectQuery(internalServerNumber, `SELECT * FROM "actorImage" WHERE filename = '${filename}'`)
+    .then(rows => rows[0])
+}
+
 function selectQuery (internalServerNumber: number, query: string) {
   const seq = getSequelize(internalServerNumber)
   const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
@@ -146,6 +151,7 @@ export {
   setPluginVersion,
   setPluginLatestVersion,
   selectQuery,
+  getActorImage,
   deleteAll,
   setTokenField,
   updateQuery,

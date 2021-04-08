@@ -34,6 +34,8 @@ async function updateLocalActorImageFile (
       const actorImageInfo = {
         name: imageName,
         fileUrl: null,
+        height: imageSize.height,
+        width: imageSize.width,
         onDisk: true
       }
 

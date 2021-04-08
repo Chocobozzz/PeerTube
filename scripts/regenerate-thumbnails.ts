@@ -4,12 +4,11 @@ registerTSPaths()
 import * as Bluebird from 'bluebird'
 import * as program from 'commander'
 import { pathExists, remove } from 'fs-extra'
-import { processImage } from '@server/helpers/image-utils'
+import { generateImageFilename, processImage } from '@server/helpers/image-utils'
 import { THUMBNAILS_SIZE } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
 import { MVideo } from '@server/types/models'
 import { initDatabaseModels } from '@server/initializers/database'
-import { ActorImageModel } from '@server/models/account/actor-image'
 
 program
   .description('Regenerate local thumbnails using preview files')
@@ -52,7 +51,7 @@ async function processVideo (videoArg: MVideo) {
   const oldPath = thumbnail.getPath()
 
   // Update thumbnail
-  thumbnail.filename = ActorImageModel.generateFilename()
+  thumbnail.filename = generateImageFilename()
   thumbnail.width = size.width
   thumbnail.height = size.height
 
