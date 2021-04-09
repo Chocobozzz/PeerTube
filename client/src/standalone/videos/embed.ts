@@ -759,6 +759,7 @@ export class PeerTubeEmbed {
         await loadPlugin({
           hooks: this.peertubeHooks,
           pluginInfo,
+          onSettingsScripts: () => undefined,
           peertubeHelpersFactory: _ => this.buildPeerTubeHelpers(translations)
         })
       }

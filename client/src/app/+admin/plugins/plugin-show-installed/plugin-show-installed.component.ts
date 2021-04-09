@@ -19,6 +19,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   pluginTypeLabel: string
 
   private sub: Subscription
+  private npmName: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -33,9 +34,9 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   ngOnInit () {
     this.sub = this.route.params.subscribe(
       routeParams => {
-        const npmName = routeParams['npmName']
+        this.npmName = routeParams['npmName']
 
-        this.loadPlugin(npmName)
+        this.loadPlugin(this.npmName)
       }
     )
   }
@@ -62,7 +63,11 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   }
 
   isSettingHidden (setting: RegisterServerSettingOptions) {
-    return false
+    const script = this.pluginService.getRegisteredSettingsScript(this.npmName)
+
+    if (!script?.isSettingHidden) return false
+
+    return script.isSettingHidden({ setting, formValues: this.form.value })
   }
 
   private loadPlugin (npmName: string) {
@@ -74,6 +79,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
         .subscribe(
           async ({ plugin, registeredSettings }) => {
             this.plugin = plugin
+
             this.registeredSettings = await this.translateSettings(registeredSettings)
 
             this.pluginTypeLabel = this.pluginAPIService.getPluginTypeLabel(this.plugin.type)
@@ -110,11 +116,9 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   }
 
   private async translateSettings (settings: RegisterServerSettingOptions[]) {
-    const npmName = this.pluginService.nameToNpmName(this.plugin.name, this.plugin.type)
-
     for (const setting of settings) {
       for (const key of [ 'label', 'html', 'descriptionHTML' ]) {
-        if (setting[key]) setting[key] = await this.pluginService.translateBy(npmName, setting[key])
+        if (setting[key]) setting[key] = await this.pluginService.translateBy(this.npmName, setting[key])
       }
 
       if (Array.isArray(setting.options)) {
@@ -123,7 +127,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
         for (const o of setting.options) {
           newOptions.push({
             value: o.value,
-            label: await this.pluginService.translateBy(npmName, o.label)
+            label: await this.pluginService.translateBy(this.npmName, o.label)
           })
         }
 

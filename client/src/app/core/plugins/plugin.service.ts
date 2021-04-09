@@ -19,6 +19,7 @@ import {
   PluginTranslation,
   PluginType,
   PublicServerSetting,
+  RegisterClientSettingsScript,
   ServerConfigPlugin
 } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -58,6 +59,7 @@ export class PluginService implements ClientHook {
   private formFields: FormFields = {
     video: []
   }
+  private settingsScripts: { [ npmName: string ]: RegisterClientSettingsScript } = {}
 
   constructor (
     private authService: AuthService,
@@ -200,6 +202,10 @@ export class PluginService implements ClientHook {
     return this.formFields.video.filter(f => f.videoFormOptions.type === type)
   }
 
+  getRegisteredSettingsScript (npmName: string) {
+    return this.settingsScripts[npmName]
+  }
+
   translateBy (npmName: string, toTranslate: string) {
     const helpers = this.helpers[npmName]
     if (!helpers) {
@@ -220,6 +226,7 @@ export class PluginService implements ClientHook {
       return loadPlugin({
         hooks: this.hooks,
         formFields: this.formFields,
+        onSettingsScripts: options => this.settingsScripts[npmName] = options,
         pluginInfo,
         peertubeHelpersFactory: () => helpers
       })
