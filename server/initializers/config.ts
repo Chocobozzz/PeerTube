@@ -1,12 +1,13 @@
-import { IConfig } from 'config'
-import { dirname, join } from 'path'
-import { VideosRedundancyStrategy } from '../../shared/models'
-// Do not use barrels, remain constants as independent as possible
-import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
-import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import * as bytes from 'bytes'
+import { IConfig } from 'config'
+import decache from 'decache'
+import { dirname, join } from 'path'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { BroadcastMessageLevel } from '@shared/models/server'
+import { VideosRedundancyStrategy } from '../../shared/models'
+import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
+// Do not use barrels, remain constants as independent as possible
+import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -410,7 +411,7 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
 
 export function reloadConfig () {
 
-  function directory () {
+  function getConfigDirectory () {
     if (process.env.NODE_CONFIG_DIR) {
       return process.env.NODE_CONFIG_DIR
     }
@@ -419,15 +420,17 @@ export function reloadConfig () {
   }
 
   function purge () {
+    const directory = getConfigDirectory()
+
     for (const fileName in require.cache) {
-      if (fileName.includes(directory()) === false) {
+      if (fileName.includes(directory) === false) {
         continue
       }
 
       delete require.cache[fileName]
     }
 
-    delete require.cache[require.resolve('config')]
+    decache('config')
   }
 
   purge()

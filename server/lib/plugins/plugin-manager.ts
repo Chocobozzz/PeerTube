@@ -1,3 +1,4 @@
+import decache from 'decache'
 import * as express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
 import { outputFile, readJSON } from 'fs-extra'
@@ -22,8 +23,6 @@ import { PluginLibrary, RegisterServerAuthExternalOptions, RegisterServerAuthPas
 import { ClientHtml } from '../client-html'
 import { RegisterHelpers } from './register-helpers'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
-
-const decache = require('decache')
 
 export interface RegisteredPlugin {
   npmName: string
