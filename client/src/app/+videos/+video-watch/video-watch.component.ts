@@ -565,7 +565,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.setOpenGraphTags()
     this.checkUserRating()
 
-    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', { videojs })
+    const hookOptions = {
+      videojs,
+      video: this.video,
+      playlist: this.playlist
+    }
+    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', hookOptions)
   }
 
   private async buildPlayer (urlOptions: URLOptions) {
