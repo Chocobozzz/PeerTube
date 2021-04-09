@@ -46,7 +46,10 @@ export class PluginService implements ClientHook {
   customModal: CustomModalComponent
 
   private plugins: ServerConfigPlugin[] = []
+  private helpers: { [ npmName: string ]: RegisterClientHelpers } = {}
+
   private scopes: { [ scopeName: string ]: PluginInfo[] } = {}
+
   private loadedScripts: { [ script: string ]: boolean } = {}
   private loadedScopes: PluginClientScope[] = []
   private loadingScopes: { [id in PluginClientScope]?: boolean } = {}
@@ -197,13 +200,28 @@ export class PluginService implements ClientHook {
     return this.formFields.video.filter(f => f.videoFormOptions.type === type)
   }
 
+  translateBy (npmName: string, toTranslate: string) {
+    const helpers = this.helpers[npmName]
+    if (!helpers) {
+      console.error('Unknown helpers to translate %s from %s.', toTranslate, npmName)
+      return toTranslate
+    }
+
+    return helpers.translate(toTranslate)
+  }
+
   private loadPlugin (pluginInfo: PluginInfo) {
     return this.zone.runOutsideAngular(() => {
+      const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
+
+      const helpers = this.buildPeerTubeHelpers(pluginInfo)
+      this.helpers[npmName] = helpers
+
       return loadPlugin({
         hooks: this.hooks,
         formFields: this.formFields,
         pluginInfo,
-        peertubeHelpersFactory: pluginInfo => this.buildPeerTubeHelpers(pluginInfo)
+        peertubeHelpersFactory: () => helpers
       })
     })
   }
