@@ -9,6 +9,7 @@ import { execPromise, promisify0 } from './core-utils'
 import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
+import { FilterSpecification } from 'fluent-ffmpeg'
 
 /**
  *
@@ -226,21 +227,14 @@ async function getLiveTranscodingCommand (options: {
 
   const varStreamMap: string[] = []
 
-  command.complexFilter([
+  const complexFilter: FilterSpecification[] = [
     {
       inputs: '[v:0]',
       filter: 'split',
       options: resolutions.length,
       outputs: resolutions.map(r => `vtemp${r}`)
-    },
-
-    ...resolutions.map(r => ({
-      inputs: `vtemp${r}`,
-      filter: 'scale',
-      options: `w=-2:h=${r}`,
-      outputs: `vout${r}`
-    }))
-  ])
+    }
+  ]
 
   command.outputOption('-preset superfast')
   command.outputOption('-sc_threshold 0')
@@ -278,6 +272,13 @@ async function getLiveTranscodingCommand (options: {
 
       command.outputOption(`${buildStreamSuffix('-c:v', i)} ${builderResult.encoder}`)
       applyEncoderOptions(command, builderResult.result)
+
+      complexFilter.push({
+        inputs: `vtemp${resolution}`,
+        filter: getScaleFilter(builderResult.result),
+        options: `w=-2:h=${resolution}`,
+        outputs: `vout${resolution}`
+      })
     }
 
     {
@@ -299,6 +300,8 @@ async function getLiveTranscodingCommand (options: {
 
     varStreamMap.push(`v:${i},a:${i}`)
   }
+
+  command.complexFilter(complexFilter)
 
   addDefaultLiveHLSParams(command, outPath)
 
@@ -389,16 +392,15 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
   let fps = await getVideoFileFPS(options.inputPath)
   fps = computeFPS(fps, options.resolution)
 
-  command = await presetVideo(command, options.inputPath, options, fps)
+  let scaleFilterValue: string
 
   if (options.resolution !== undefined) {
-    // '?x720' or '720x?' for example
-    const size = options.isPortraitMode === true
-      ? `${options.resolution}x?`
-      : `?x${options.resolution}`
-
-    command = command.size(size)
+    scaleFilterValue = options.isPortraitMode === true
+      ? `${options.resolution}:-2`
+      : `-2:${options.resolution}`
   }
+
+  command = await presetVideo({ command, input: options.inputPath, transcodeOptions: options, fps, scaleFilterValue })
 
   return command
 }
@@ -406,12 +408,13 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
 async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: MergeAudioTranscodeOptions) {
   command = command.loop(undefined)
 
-  command = await presetVideo(command, options.audioPath, options)
+  // Avoid "height not divisible by 2" error
+  const scaleFilterValue = 'trunc(iw/2)*2:trunc(ih/2)*2'
+  command = await presetVideo({ command, input: options.audioPath, transcodeOptions: options, scaleFilterValue })
 
   command.outputOption('-preset:v veryfast')
 
   command = command.input(options.audioPath)
-                   .videoFilter('scale=trunc(iw/2)*2:trunc(ih/2)*2') // Avoid "height not divisible by 2" error
                    .outputOption('-tune stillimage')
                    .outputOption('-shortest')
 
@@ -555,12 +558,15 @@ async function getEncoderBuilderResult (options: {
   return null
 }
 
-async function presetVideo (
-  command: ffmpeg.FfmpegCommand,
-  input: string,
-  transcodeOptions: TranscodeOptions,
+async function presetVideo (options: {
+  command: ffmpeg.FfmpegCommand
+  input: string
+  transcodeOptions: TranscodeOptions
   fps?: number
-) {
+  scaleFilterValue?: string
+}) {
+  const { command, input, transcodeOptions, fps, scaleFilterValue } = options
+
   let localCommand = command
     .format('mp4')
     .outputOption('-movflags faststart')
@@ -601,9 +607,14 @@ async function presetVideo (
 
     if (streamType === 'video') {
       localCommand.videoCodec(builderResult.encoder)
+
+      if (scaleFilterValue) {
+        localCommand.outputOption(`-vf ${getScaleFilter(builderResult.result)}=${scaleFilterValue}`)
+      }
     } else if (streamType === 'audio') {
       localCommand.audioCodec(builderResult.encoder)
     }
+
     applyEncoderOptions(localCommand, builderResult.result)
     addDefaultEncoderParams({ command: localCommand, encoder: builderResult.encoder, fps })
   }
@@ -628,8 +639,13 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
 function applyEncoderOptions (command: ffmpeg.FfmpegCommand, options: EncoderOptions): ffmpeg.FfmpegCommand {
   return command
     .inputOptions(options.inputOptions ?? [])
-    .videoFilters(options.videoFilters ?? [])
     .outputOptions(options.outputOptions ?? [])
+}
+
+function getScaleFilter (options: EncoderOptions): string {
+  if (options.scaleFilter) return options.scaleFilter.name
+
+  return 'scale'
 }
 
 // ---------------------------------------------------------------------------
