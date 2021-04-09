@@ -109,7 +109,7 @@ export class RegisterHelpers {
     const unregisterIdAndPassAuth = this.buildUnregisterIdAndPassAuth()
     const unregisterExternalAuth = this.buildUnregisterExternalAuth()
 
-    const peertubeHelpers = buildPluginHelpers(this.npmName)
+    const peertubeHelpers = buildPluginHelpers(this.plugin, this.npmName)
 
     return {
       registerHook,

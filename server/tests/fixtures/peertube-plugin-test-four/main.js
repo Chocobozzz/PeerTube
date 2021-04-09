@@ -69,7 +69,20 @@ async function register ({
         res.sendStatus(500)
       }
     })
+
+    router.get('/server-config', async (req, res) => {
+      const serverConfig = await peertubeHelpers.config.getServerConfig()
+
+      return res.json({ serverConfig })
+    })
+
+    router.get('/static-route', async (req, res) => {
+      const staticRoute = await peertubeHelpers.plugin.getBaseStaticRoute()
+
+      return res.json({ staticRoute })
+    })
   }
+
 }
 
 async function unregister () {

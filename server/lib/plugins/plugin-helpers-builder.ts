@@ -12,8 +12,10 @@ import { VideoBlacklistCreate } from '@shared/models'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
+import { getServerConfig } from '../config'
+import { MPlugin } from '@server/types/models'
 
-function buildPluginHelpers (npmName: string): PeerTubeHelpers {
+function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
   const logger = buildPluginLogger(npmName)
 
   const database = buildDatabaseHelpers()
@@ -25,12 +27,15 @@ function buildPluginHelpers (npmName: string): PeerTubeHelpers {
 
   const moderation = buildModerationHelpers()
 
+  const plugin = buildPluginRelatedHelpers(pluginModel)
+
   return {
     logger,
     database,
     videos,
     config,
     moderation,
+    plugin,
     server
   }
 }
@@ -132,6 +137,16 @@ function buildConfigHelpers () {
   return {
     getWebserverUrl () {
       return WEBSERVER.URL
+    },
+
+    getServerConfig () {
+      return getServerConfig()
     }
+  }
+}
+
+function buildPluginRelatedHelpers (plugin: MPlugin) {
+  return {
+    getBaseStaticRoute: () => `/plugins/${plugin.name}/${plugin.version}/static/`
   }
 }

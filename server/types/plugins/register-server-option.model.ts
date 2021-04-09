@@ -12,6 +12,7 @@ import {
   PluginVideoPrivacyManager,
   RegisterServerHookOptions,
   RegisterServerSettingOptions,
+  ServerConfig,
   VideoBlacklistCreate
 } from '@shared/models'
 import { MVideoThumbnail } from '../models'
@@ -37,6 +38,8 @@ export type PeerTubeHelpers = {
 
   config: {
     getWebserverUrl: () => string
+
+    getServerConfig: () => Promise<ServerConfig>
   }
 
   moderation: {
@@ -51,6 +54,10 @@ export type PeerTubeHelpers = {
 
   server: {
     getServerActor: () => Promise<ActorModel>
+  }
+
+  plugin: {
+    getBaseStaticRoute: () => string
   }
 }
 
