@@ -539,7 +539,7 @@ async function refreshVideoIfNeeded (options: {
       account: channelActor.VideoChannel.Account,
       channel: channelActor.VideoChannel
     }
-    await retryTransactionWrapper(updateVideoFromAP, updateOptions)
+    await updateVideoFromAP(updateOptions)
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
 
     ActorFollowScoreCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
