@@ -341,9 +341,16 @@ async function register ({
       const streamString = streamNum ? ':' + streamNum : ''
 
       // You can also return a promise
-      // All these options are optional and defaults to []
+      // All these options are optional
       return {
+        scaleFilter: {
+          // Used to define an alternative scale filter, needed by some encoders
+          // Default to 'scale'
+          name: 'scale_vaapi'
+        },
+        // Default to []
         inputOptions: [],
+        // Default to []
         outputOptions: [
         // Use a custom bitrate
           '-b' + streamString + ' 10K'

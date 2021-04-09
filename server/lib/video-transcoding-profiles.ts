@@ -24,10 +24,9 @@ import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 
 const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, resolution, fps }) => {
   const targetBitrate = await buildTargetBitrate({ input, resolution, fps })
-  if (!targetBitrate) return { inputOptions: [ ], outputOptions: [ ] }
+  if (!targetBitrate) return { outputOptions: [ ] }
 
   return {
-    inputOptions: [ ],
     outputOptions: [
       `-preset veryfast`,
       `-r ${fps}`,
@@ -41,7 +40,6 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution
   const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
 
   return {
-    inputOptions: [ ],
     outputOptions: [
       `-preset veryfast`,
       `${buildStreamSuffix('-r:v', streamNum)} ${fps}`,
@@ -57,7 +55,7 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
 
   if (await canDoQuickAudioTranscode(input, probe)) {
     logger.debug('Copy audio stream %s by AAC encoder.', input)
-    return { copy: true, inputOptions: [ ], outputOptions: [ ] }
+    return { copy: true, outputOptions: [ ] }
   }
 
   const parsedAudio = await getAudioStream(input, probe)
@@ -72,14 +70,14 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
   logger.debug('Calculating audio bitrate of %s by AAC encoder.', input, { bitrate: parsedAudio.bitrate, audioCodecName })
 
   if (bitrate !== undefined && bitrate !== -1) {
-    return { inputOptions: [ ], outputOptions: [ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ] }
+    return { outputOptions: [ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ] }
   }
 
-  return { inputOptions: [ ], outputOptions: [ ] }
+  return { outputOptions: [ ] }
 }
 
 const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum }) => {
-  return { inputOptions: [ ], outputOptions: [ buildStreamSuffix('-q:a', streamNum), '5' ] }
+  return { outputOptions: [ buildStreamSuffix('-q:a', streamNum), '5' ] }
 }
 
 // Used to get and update available encoders
