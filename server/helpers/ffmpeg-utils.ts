@@ -396,8 +396,8 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
 
   if (options.resolution !== undefined) {
     scaleFilterValue = options.isPortraitMode === true
-      ? `${options.resolution}:-2`
-      : `-2:${options.resolution}`
+      ? `w=${options.resolution}:h=-2`
+      : `w=-2:h=${options.resolution}`
   }
 
   command = await presetVideo({ command, input: options.inputPath, transcodeOptions: options, fps, scaleFilterValue })

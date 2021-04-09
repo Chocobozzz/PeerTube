@@ -19,7 +19,6 @@ import {
   uninstallPlugin,
   updateCustomSubConfig,
   uploadVideoAndGetId,
-  waitFfmpegUntilError,
   waitJobs,
   waitUntilLivePublished
 } from '../../../shared/extra-utils'
