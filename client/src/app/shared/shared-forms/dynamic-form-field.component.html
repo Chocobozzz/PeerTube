@@ -1,5 +1,12 @@
 <div [formGroup]="form">
-  <label *ngIf="setting.label" [attr.for]="setting.name" [innerHTML]="setting.label"></label>
+  <label *ngIf="setting.label && setting.type !== 'input-checkbox'" [attr.for]="setting.name" [innerHTML]="setting.label"></label>
+
+  <my-peertube-checkbox
+    *ngIf="setting.type === 'input-checkbox'"
+    [inputName]="setting.name"
+    [formControlName]="setting.name"
+    [labelInnerHTML]="setting.label"
+  ></my-peertube-checkbox>
 
   <div *ngIf="setting.descriptionHTML" class="label-small-info" [innerHTML]="setting.descriptionHTML"></div>
 
@@ -30,13 +37,6 @@
     markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
     [classes]="{ 'input-error': formErrors['settings.name'] }"
   ></my-markdown-textarea>
-
-  <my-peertube-checkbox
-    *ngIf="setting.type === 'input-checkbox'"
-    [inputName]="setting.name"
-    [formControlName]="setting.name"
-    [labelInnerHTML]="setting.label"
-  ></my-peertube-checkbox>
 
   <div *ngIf="setting.type === 'html'" [innerHTML]="setting.html"></div>
 
