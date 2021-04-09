@@ -22,7 +22,8 @@ describe('Test create transcoding jobs', function () {
       const command = await execCLI(`npm run print-transcode-command -- ${fixturePath} -r ${resolution}`)
       const targetBitrate = Math.min(getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS), bitrate)
 
-      expect(command).to.includes(`-y -acodec aac -vcodec libx264 -filter:v scale=w=trunc(oh*a/2)*2:h=${resolution}`)
+      expect(command).to.includes(`-vf scale=w=-2:h=${resolution}`)
+      expect(command).to.includes(`-y -acodec aac -vcodec libx264`)
       expect(command).to.includes('-f mp4')
       expect(command).to.includes('-movflags faststart')
       expect(command).to.includes('-b:a 256k')
