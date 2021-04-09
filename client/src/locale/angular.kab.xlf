@@ -3258,7 +3258,7 @@
       </trans-unit>
       <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496" datatype="html">
         <source>Daily video quota</source>
-        <target state="translated">Daily video quota</target>
+        <target state="translated">Afmiḍi n tvidyut n wass</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">172</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">172</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">13</context></context-group>
@@ -3289,32 +3289,32 @@
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="translated">Doesn't need review before a video goes public</target>
+        <target state="translated">Ur yeḥwaǧ ara asenqed send ad d-teffeɣ tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">201</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">201</context></context-group>
       </trans-unit>
       <trans-unit id="e6c299a11dadb59bf789ecc5d85eb1a1ebff4613" datatype="html">
         <source>DANGER ZONE</source>
-        <target state="translated">DANGER ZONE</target>
+        <target state="translated">TAMNAḌT N YIMIHI</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">219</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">219</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="27a8f947ecc46bcad10d965360f500a14128bd7d" datatype="html">
         <source>Send a link to reset the password by email to the user</source>
-        <target state="translated">Send a link to reset the password by email to the user</target>
+        <target state="translated">Azen aseɣwen i uwennez n wawal uffir s yimayl i useqdac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">226</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="950adafba22e3c85e889f2c38faebe98145bfb7f" datatype="html">
         <source>Ask for new password</source>
-        <target state="translated">Ask for new password</target>
+        <target state="translated">Suter awal uffir amaynut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">227</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="e6a48b1ed6160a99fba3a1607e27e9e93a4f4244" datatype="html">
         <source>Manually set the user password</source>
-        <target state="translated">Manually set the user password</target>
+        <target state="translated">Sbadu s ufus awal uffir n useqdac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">231</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">231</context></context-group>
       </trans-unit>
@@ -3340,12 +3340,12 @@
       </trans-unit>
       <trans-unit id="48c6910585f5bef4f725104287ec904c7cb8c6e9" datatype="html">
         <source>Select columns</source>
-        <target state="translated">Select columns</target>
+        <target state="translated">Fren tigejda</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="ed66036cb394f49f63cb5fb5632f483613b790f6" datatype="html">
         <source>Highlight banned users</source>
-        <target state="translated">Highlight banned users</target>
+        <target state="translated">Sebrureq iseqdacen yettwagedlen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="ea762ca1d74c96d8568ac68482778f52ca531cc4" datatype="html">
@@ -3358,7 +3358,7 @@
       </trans-unit>
       <trans-unit id="715d36ab50d156b744ffedc975ffb97cae75ff7b" datatype="html">
         <source>Advanced user filters</source>
-        <target state="translated">Advanced user filters</target>
+        <target state="translated">Imsizedgen n useqdac leqqayen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="765fcd9017ea1e180bbd266673d7cf11535d8c4a" datatype="html">
@@ -3374,7 +3374,7 @@
       </trans-unit>
       <trans-unit id="ed64ec2b14251cfbe9ab28abde51d3f052fde1e7" datatype="html">
         <source>Open account in a new tab</source>
-        <target state="translated">Open account in a new tab</target>
+        <target state="translated">Ldi amiḍan deg yiccer amaynut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">66</context></context-group>
@@ -3385,28 +3385,28 @@
       </trans-unit>
       <trans-unit id="d9e38d58225f58cb64126e4d5ec58f39dcb326df" datatype="html">
         <source>Deleted account</source>
-        <target state="translated">Deleted account</target>
+        <target state="translated">Amiḍan yettwakksen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5" datatype="html">
         <source>User's email must be verified to login</source>
-        <target state="translated">User's email must be verified to login</target>
+        <target state="translated">Imayl n useqdac ilaq ad yettusenqad i wakken ad teqqneḍ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">130</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="79cee9973620b2592ff2824c525aa8ed0b5e2b8b" datatype="html">
         <source>User's email is verified / User can login without email verification</source>
-        <target state="translated">User's email is verified / User can login without email verification</target>
+        <target state="translated">Imayl n useqdac yettwasenqed / Aseqdac yezmer ad yekcem s war imayl n usenqed</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="12289e981bf1acd36d74ee0e50d6fb43ba29ca6a" datatype="html">
         <source>Total daily video quota</source>
-        <target state="translated">Total daily video quota</target>
+        <target state="translated">Asemday n ufmiḍi n tvidyut n wass</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee" datatype="html">
         <source>Ban reason:</source>
-        <target state="translated">Ban reason:</target>
+        <target state="translated">Ssebba n ugdal:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
