@@ -2192,7 +2192,7 @@
       </trans-unit>
       <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
         <source>Paste magnet URI</source>
-        <target>Copier l'URL magnet</target>
+        <target>Coller l'URI magnet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266">
@@ -3580,7 +3580,7 @@
       </trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8">
         <source>Unmute</source>
-        <target>Activer le son</target>
+        <target>Rétablir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">36</context></context-group>
@@ -4412,7 +4412,7 @@
       </trans-unit>
       <trans-unit id="ec3d83c2ae784e843fbe96eb368f9e6e0f26cc2e" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target state="translated">Permettre l'import avec un fichier torrent ou un magnet URI</target>
+        <target state="translated">Permettre l'import avec un fichier torrent ou un URI magnet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">241</context></context-group>
       </trans-unit>
       <trans-unit id="c590ac6eba10ab6269e068156a910c7c58328cc5" datatype="html">
