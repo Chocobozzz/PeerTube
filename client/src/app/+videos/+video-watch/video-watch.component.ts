@@ -295,6 +295,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
+  getVideoUrl () {
+    if (!this.video.url) {
+      return this.video.originInstanceUrl + VideoDetails.buildClientUrl(this.video.uuid)
+    }
+    return this.video.url
+  }
+
   getVideoTags () {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
