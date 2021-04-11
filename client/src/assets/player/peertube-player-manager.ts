@@ -1,6 +1,6 @@
 import 'videojs-hotkeys/videojs.hotkeys'
 import 'videojs-dock'
-import 'videojs-contextmenu-ui'
+import 'videojs-contextmenu-pt'
 import 'videojs-contrib-quality-levels'
 import './upnext/end-card'
 import './upnext/upnext-plugin'
@@ -122,7 +122,6 @@ export type PeertubePlayerManagerOptions = {
 export class PeertubePlayerManager {
   private static playerElementClassName: string
   private static onPlayerChange: (player: videojs.Player) => void
-
   private static alreadyPlayed = false
 
   static initState () {
@@ -497,36 +496,48 @@ export class PeertubePlayerManager {
   }
 
   private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string, videoEmbedTitle: string) {
-    const content = [
-      {
-        label: player.localize('Copy the video URL'),
-        listener: function () {
-          copyToClipboard(buildVideoLink())
+    const content = () => {
+      const isLoopEnabled = player.options_['loop']
+      const items = [
+        {
+          label: isLoopEnabled ? player.localize('Stop playing in loop') : player.localize('Play in loop'),
+          listener: function () {
+            player.options_['loop'] = !isLoopEnabled
+          }
+        },
+        {
+          label: player.localize('Copy the video URL'),
+          listener: function () {
+            copyToClipboard(buildVideoLink())
+          }
+        },
+        {
+          label: player.localize('Copy the video URL at the current time'),
+          listener: function (this: videojs.Player) {
+            copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
+          }
+        },
+        {
+          label: player.localize('Copy embed code'),
+          listener: () => {
+            copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl, videoEmbedTitle))
+          }
         }
-      },
-      {
-        label: player.localize('Copy the video URL at the current time'),
-        listener: function (this: videojs.Player) {
-          copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
-        }
-      },
-      {
-        label: player.localize('Copy embed code'),
-        listener: () => {
-          copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl, videoEmbedTitle))
-        }
-      }
-    ]
+      ]
 
-    if (mode === 'webtorrent') {
-      content.push({
-        label: player.localize('Copy magnet URI'),
-        listener: function (this: videojs.Player) {
-          copyToClipboard(this.webtorrent().getCurrentVideoFile().magnetUri)
-        }
-      })
+      if (mode === 'webtorrent') {
+        items.push({
+          label: player.localize('Copy magnet URI'),
+          listener: function (this: videojs.Player) {
+            copyToClipboard(this.webtorrent().getCurrentVideoFile().magnetUri)
+          }
+        })
+      }
+
+      return items
     }
 
+    // adding the menu
     player.contextmenuUI({ content })
   }
 
