@@ -5,7 +5,6 @@ import { join } from 'path'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
 import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
-import { SANITIZE_OPTIONS, TEXT_WITH_HTML_RULES } from '@shared/core-utils'
 import { AbuseState, EmailPayload, UserAbuse } from '@shared/models'
 import { SendEmailDefaultOptions } from '../../shared/models/server/emailer.model'
 import { isTestInstance, root } from '../helpers/core-utils'
@@ -15,26 +14,7 @@ import { WEBSERVER } from '../initializers/constants'
 import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorFollowFull, MPlugin, MUser } from '../types/models'
 import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
 import { JobQueue } from './job-queue'
-
-const sanitizeHtml = require('sanitize-html')
-const markdownItEmoji = require('markdown-it-emoji/light')
-const MarkdownItClass = require('markdown-it')
-const markdownIt = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
-
-markdownIt.enable(TEXT_WITH_HTML_RULES)
-
-markdownIt.use(markdownItEmoji)
-
-const toSafeHtml = text => {
-  // Restore line feed
-  const textWithLineFeed = text.replace(/<br.?\/?>/g, '\r\n')
-
-  // Convert possible markdown (emojis, emphasis and lists) to html
-  const html = markdownIt.render(textWithLineFeed)
-
-  // Convert to safe Html
-  return sanitizeHtml(html, SANITIZE_OPTIONS)
-}
+import { toSafeHtml } from '../helpers/markdown'
 
 const Email = require('email-templates')
 
