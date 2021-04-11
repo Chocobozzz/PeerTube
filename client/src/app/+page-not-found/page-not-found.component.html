@@ -3,8 +3,9 @@
     <strong>{{ status }}.</strong>
     <span class="ml-1 text-muted" i18n>That's an error.</span>
 
-    <div class="text mt-4" i18n>
-      We couldn't find any {{ getRessourceName() }} tied to the URL {{ pathname }} you were looking for.
+    <div class="text mt-4">
+      <ng-container *ngIf="type === 'video'" i18n>We couldn't find any video tied to the URL {{ pathname }} you were looking for.</ng-container>
+      <ng-container *ngIf="type !== 'video'" i18n>We couldn't find any resource tied to the URL {{ pathname }} you were looking for.</ng-container>
     </div>
 
     <div class="text-muted mt-4">
@@ -12,7 +13,10 @@
 
       <ul>
         <li i18n>You may have used an outdated or broken link</li>
-        <li i18n>The {{ getRessourceName() }} may have been moved or deleted</li>
+        <li>
+          <ng-container *ngIf="type === 'video'" i18n>The video may have been moved or deleted</ng-container>
+          <ng-container *ngIf="type !== 'video'" i18n>The resource may have been moved or deleted</ng-container>
+        </li>
         <li i18n>You may have typed the address or URL incorrectly</li>
       </ul>
     </div>
@@ -22,8 +26,9 @@
     <strong>{{ status }}.</strong>
     <span class="ml-1 text-muted" i18n>You are not authorized here.</span>
 
-    <div class="text mt-4" i18n>
-      You might need to check your account is allowed by the {{ getRessourceName() }} or instance owner.
+    <div class="text mt-4">
+      <ng-container *ngIf="type === 'video'" i18n>You might need to check your account is allowed by the video or instance owner.</ng-container>
+      <ng-container *ngIf="type !== 'video'" i18n>You might need to check your account is allowed by the resource or instance owner.</ng-container>
     </div>
   </div>
 
