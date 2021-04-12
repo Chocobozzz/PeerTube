@@ -500,7 +500,8 @@ export class PeertubePlayerManager {
       const isLoopEnabled = player.options_['loop']
       const items = [
         {
-          label: isLoopEnabled ? player.localize('Stop playing in loop') : player.localize('Play in loop'),
+          icon: 'repeat',
+          label: player.localize('Play in loop') + (isLoopEnabled ? '<span class="vjs-icon-tick-white"></span>' : ''),
           listener: function () {
             player.options_['loop'] = !isLoopEnabled
           }
@@ -518,6 +519,7 @@ export class PeertubePlayerManager {
           }
         },
         {
+          icon: 'code',
           label: player.localize('Copy embed code'),
           listener: () => {
             copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl, videoEmbedTitle))
@@ -534,7 +536,10 @@ export class PeertubePlayerManager {
         })
       }
 
-      return items
+      return items.map(i => ({
+        ...i,
+        label: `<span class="vjs-icon-${i.icon || 'link-2'}"></span>` + i.label
+      }))
     }
 
     // adding the menu
