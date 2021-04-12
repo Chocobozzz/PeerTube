@@ -151,6 +151,11 @@ csp:
   report_only: true # CSP directives are still being tested, so disable the report only mode at your own risk!
   report_uri:
 
+security:
+  # Set the X-Frame-Options header to help to mitigate clickjacking attacks
+  frameguard:
+    enabled: true
+
 tracker:
   # If you disable the tracker, you disable the P2P aspect of PeerTube
   enabled: true

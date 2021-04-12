@@ -59,11 +59,11 @@ import { baseCSP } from './server/middlewares/csp'
 
 if (CONFIG.CSP.ENABLED) {
   app.use(baseCSP)
-  app.use(helmet({
-    frameguard: {
-      action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
-    },
-    hsts: false
+}
+
+if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
+  app.use(helmet.frameguard({
+    action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
   }))
 }
 
