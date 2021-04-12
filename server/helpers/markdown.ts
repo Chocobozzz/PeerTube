@@ -19,8 +19,21 @@ const toSafeHtml = text => {
   return sanitizeHtml(html, SANITIZE_OPTIONS)
 }
 
+const mdToPlainText = text => {
+  // Convert possible markdown (emojis, emphasis and lists) to html
+  const html = markdownIt.render(text)
+
+  // Convert to safe Html
+  const safeHtml = sanitizeHtml(html, SANITIZE_OPTIONS)
+
+  return safeHtml.replace(/<[^>]+>/g, '')
+                 .replace(/\n$/, '')
+                 .replace('\n', ', ')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  toSafeHtml
+  toSafeHtml,
+  mdToPlainText
 }
