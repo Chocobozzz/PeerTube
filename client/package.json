@@ -107,7 +107,7 @@
     "sanitize-html": "^2.1.2",
     "sass": "^1.29.0",
     "sass-lint": "^1.13.1",
-    "sass-loader": "11.0.1",
+    "sass-loader": "^10",
     "sass-resources-loader": "^2.0.0",
     "sha.js": "^2.4.11",
     "socket.io-client": "^4.0.1",
