@@ -2027,9 +2027,11 @@ export class VideoModel extends Model {
   }
 
   setAsRefreshed () {
-    this.changed('updatedAt', true)
+    const options = {
+      where: { id: this.id }
+    }
 
-    return this.save()
+    return VideoModel.update({ updatedAt: new Date() }, options)
   }
 
   requiresAuth () {
