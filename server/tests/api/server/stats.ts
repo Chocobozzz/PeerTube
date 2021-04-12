@@ -3,8 +3,10 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
+  addVideoChannel,
   cleanupTests,
   createUser,
+  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   follow,
@@ -21,12 +23,14 @@ import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { getStats } from '../../../../shared/extra-utils/server/stats'
 import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { ActivityType } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test stats (excluding redundancy)', function () {
   let servers: ServerInfo[] = []
+  let channelId
   const user = {
     username: 'user1',
     password: 'super_password'
@@ -70,6 +74,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(2)
     expect(data.totalInstanceFollowing).to.equal(1)
+    expect(data.totalLocalPlaylists).to.equal(0)
   })
 
   it('Should have the correct stats on instance 2', async function () {
@@ -85,6 +90,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(1)
     expect(data.totalInstanceFollowing).to.equal(1)
+    expect(data.totalLocalPlaylists).to.equal(0)
   })
 
   it('Should have the correct stats on instance 3', async function () {
@@ -99,6 +105,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowing).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(0)
+    expect(data.totalLocalPlaylists).to.equal(0)
   })
 
   it('Should have the correct total videos stats after an unfollow', async function () {
@@ -113,7 +120,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(0)
   })
 
-  it('Should have the correct active users stats', async function () {
+  it('Should have the correct active user stats', async function () {
     const server = servers[0]
 
     {
@@ -132,6 +139,69 @@ describe('Test stats (excluding redundancy)', function () {
       expect(data.totalDailyActiveUsers).to.equal(2)
       expect(data.totalWeeklyActiveUsers).to.equal(2)
       expect(data.totalMonthlyActiveUsers).to.equal(2)
+    }
+  })
+
+  it('Should have the correct active channel stats', async function () {
+    const server = servers[0]
+
+    {
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+      expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
+    }
+
+    {
+      const channelAttributes = {
+        name: 'stats_channel',
+        displayName: 'My stats channel'
+      }
+      const resChannel = await addVideoChannel(server.url, server.accessToken, channelAttributes)
+      channelId = resChannel.body.videoChannel.id
+
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+      expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
+      expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
+    }
+
+    {
+      await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.webm', channelId })
+
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+      expect(data.totalLocalDailyActiveVideoChannels).to.equal(2)
+      expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(2)
+      expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(2)
+    }
+  })
+
+  it('Should have the correct playlist stats', async function () {
+    const server = servers[0]
+
+    {
+      const resStats = await getStats(server.url)
+      const dataStats: ServerStats = resStats.body
+      expect(dataStats.totalLocalPlaylists).to.equal(0)
+    }
+
+    {
+      await createVideoPlaylist({
+        url: server.url,
+        token: server.accessToken,
+        playlistAttrs: {
+          displayName: 'playlist for count',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: channelId
+        }
+      })
+
+      const resStats = await getStats(server.url)
+      const dataStats: ServerStats = resStats.body
+      expect(dataStats.totalLocalPlaylists).to.equal(1)
     }
   })
 
@@ -173,8 +243,8 @@ describe('Test stats (excluding redundancy)', function () {
     {
       const res = await getStats(servers[0].url)
       const data: ServerStats = res.body
-      expect(data.totalLocalVideoFilesSize).to.be.greaterThan(300000)
-      expect(data.totalLocalVideoFilesSize).to.be.lessThan(400000)
+      expect(data.totalLocalVideoFilesSize).to.be.greaterThan(500000)
+      expect(data.totalLocalVideoFilesSize).to.be.lessThan(600000)
     }
   })
 
