@@ -67,7 +67,19 @@ async function getLatestPluginsVersion (npmNames: string[]): Promise<PeertubePlu
   return body
 }
 
+async function getLatestPluginVersion (npmName: string) {
+  const results = await getLatestPluginsVersion([ npmName ])
+
+  if (Array.isArray(results) === false || results.length !== 1) {
+    logger.warn('Cannot get latest supported plugin version of %s.', npmName)
+    return undefined
+  }
+
+  return results[0].latestVersion
+}
+
 export {
   listAvailablePluginsFromIndex,
+  getLatestPluginVersion,
   getLatestPluginsVersion
 }

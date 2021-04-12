@@ -328,10 +328,17 @@ export class PluginManager implements ServerHook {
     return plugin
   }
 
-  async update (toUpdate: string, version?: string, fromDisk = false) {
+  async update (toUpdate: string, fromDisk = false) {
     const npmName = fromDisk ? basename(toUpdate) : toUpdate
 
     logger.info('Updating plugin %s.', npmName)
+
+    // Use the latest version from DB, to not upgrade to a version that does not support our PeerTube version
+    let version: string
+    if (!fromDisk) {
+      const plugin = await PluginModel.loadByNpmName(toUpdate)
+      version = plugin.latestVersion
+    }
 
     // Unregister old hooks
     await this.unregister(npmName)
