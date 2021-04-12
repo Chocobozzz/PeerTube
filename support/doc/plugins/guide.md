@@ -633,7 +633,7 @@ async function register ({ registerSettingsScript }) {
 
 PeerTube provides some HTML id so plugins can easily insert their own element:
 
-```
+```js
 async function register (...) {
   const elem = document.createElement('div')
   elem.className = 'hello-world-h4'
