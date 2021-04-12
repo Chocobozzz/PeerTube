@@ -45,6 +45,7 @@ function saveTheaterInStore (enabled: boolean) {
 }
 
 function saveAverageBandwidth (value: number) {
+  /** used to choose the most fitting resolution */
   return setLocalStorage('average-bandwidth', value.toString())
 }
 

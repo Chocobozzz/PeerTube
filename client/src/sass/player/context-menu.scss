@@ -8,7 +8,7 @@ $context-menu-width: 350px;
 
 .video-js .vjs-contextmenu-ui-menu {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: $primary-background-color;
   padding: 8px 0;
   border-radius: 4px;
   width: $context-menu-width;
@@ -42,7 +42,7 @@ $context-menu-width: 350px;
       mask-size: cover;
       margin-right: 0.8rem !important;
 
-      $icons: 'link-2', 'repeat', 'code', 'tick-white';
+      $icons: 'link-2', 'repeat', 'code', 'tick-white', 'info';
 
       @each $icon in $icons {
         &[class$="-#{$icon}"] {
