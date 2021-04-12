@@ -128,6 +128,16 @@ export class PluginListInstalledComponent implements OnInit {
     const updatingKey = this.getUpdatingKey(plugin)
     if (this.updating[updatingKey]) return
 
+    if (this.isMajorUpgrade(plugin)) {
+      const res = await this.confirmService.confirm(
+        $localize`This is a major plugin upgrade. Please go on the plugin homepage to check potential release notes.`,
+        $localize`Upgrade`,
+        $localize`Proceed upgrade`
+      )
+
+      if (res === false) return
+    }
+
     this.updating[updatingKey] = true
 
     this.pluginApiService.update(plugin.name, plugin.type)
@@ -155,5 +165,14 @@ export class PluginListInstalledComponent implements OnInit {
 
   private getUpdatingKey (plugin: PeerTubePlugin) {
     return plugin.name + plugin.type
+  }
+
+  private isMajorUpgrade (plugin: PeerTubePlugin) {
+    if (!plugin.latestVersion) return false
+
+    const latestMajor = plugin.latestVersion.split('.')[0]
+    const currentMajor = plugin.version.split('.')[0]
+
+    return latestMajor > currentMajor
   }
 }
