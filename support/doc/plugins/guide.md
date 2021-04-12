@@ -15,7 +15,7 @@
     - [Add custom routes](#add-custom-routes)
     - [Add external auth methods](#add-external-auth-methods)
     - [Add new transcoding profiles](#add-new-transcoding-profiles)
-  - [Helpers](#helpers)
+    - [Server helpers](#server-helpers)
   - [Client API (themes & plugins)](#client-api-themes--plugins)
     - [Plugin static route](#plugin-static-route)
     - [Notifier](#notifier)
@@ -26,6 +26,7 @@
     - [Get server config](#get-server-config)
     - [Add custom fields to video form](#add-custom-fields-to-video-form)
     - [Register settings script](#register-settings-script)
+    - [HTML placeholder elements](#html-placeholder-elements)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
   - [Clone the quickstart repository](#clone-the-quickstart-repository)
@@ -424,7 +425,7 @@ async function register ({
 During live transcode input options are applied once for each target resolution.
 Plugins are responsible for detecting such situation and applying input options only once if necessary.
 
-### Helpers
+#### Server helpers
 
 PeerTube provides your plugin some helpers. For example:
 
@@ -628,6 +629,21 @@ async function register ({ registerSettingsScript }) {
 }
 ```
 
+#### HTML placeholder elements
+
+PeerTube provides some HTML id so plugins can easily insert their own element:
+
+```
+async function register (...) {
+  const elem = document.createElement('div')
+  elem.className = 'hello-world-h4'
+  elem.innerHTML = '<h4>Hello everybody! This is an element next to the player</h4>'
+
+  document.getElementById('plugin-placeholder-player-next').appendChild(elem)
+}
+```
+
+See the complete list on https://docs.joinpeertube.org/api-plugins
 
 ### Publishing
 

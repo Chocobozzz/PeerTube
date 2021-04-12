@@ -33,6 +33,7 @@ import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
 import { HelpComponent, ListOverflowComponent, SimpleSearchInputComponent, TopMenuDropdownComponent } from './misc'
+import { PluginPlaceholderComponent } from './plugins'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
@@ -92,7 +93,9 @@ import { VideoChannelService } from './video-channel'
     SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    PluginPlaceholderComponent
   ],
 
   exports: [
@@ -144,7 +147,9 @@ import { VideoChannelService } from './video-channel'
     SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    PluginPlaceholderComponent
   ],
 
   providers: [
