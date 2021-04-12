@@ -31,8 +31,6 @@ export class PluginListInstalledComponent implements OnInit {
   plugins: PeerTubePlugin[] = []
   updating: { [name: string]: boolean } = {}
 
-  PluginType = PluginType
-
   onDataSubject = new Subject<any[]>()
 
   constructor (
@@ -102,6 +100,10 @@ export class PluginListInstalledComponent implements OnInit {
 
   isUpdating (plugin: PeerTubePlugin) {
     return !!this.updating[this.getUpdatingKey(plugin)]
+  }
+
+  isTheme (plugin: PeerTubePlugin) {
+    return plugin.type === PluginType.THEME
   }
 
   async uninstall (plugin: PeerTubePlugin) {
