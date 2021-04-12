@@ -7,6 +7,7 @@ import { PlayerMode } from './peertube-player-manager'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlaylistPlugin } from './playlist/playlist-plugin'
 import { EndCardOptions } from './upnext/end-card'
+import { StatsCardOptions } from './stats/stats-card'
 import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
 
 declare module 'video.js' {
@@ -35,6 +36,8 @@ declare module 'video.js' {
     contextmenuUI (options: any): any
 
     bezels (): void
+
+    stats (options?: Partial<StatsCardOptions>): any
 
     qualityLevels (): QualityLevels
 

@@ -4,6 +4,8 @@ import 'videojs-contextmenu-pt'
 import 'videojs-contrib-quality-levels'
 import './upnext/end-card'
 import './upnext/upnext-plugin'
+import './stats/stats-card'
+import './stats/stats-plugin'
 import './bezels/bezels-plugin'
 import './peertube-plugin'
 import './videojs-components/next-previous-video-button'
@@ -170,6 +172,11 @@ export class PeertubePlayerManager {
         self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
 
         player.bezels()
+        player.stats({
+          videoUUID: options.common.videoUUID,
+          videoIsLive: options.common.isLive,
+          mode
+        })
 
         return res(player)
       })
@@ -537,6 +544,14 @@ export class PeertubePlayerManager {
           }
         })
       }
+
+      items.push({
+        icon: 'info',
+        label: player.localize('Stats for nerds'),
+        listener: () => {
+          player.stats().show()
+        }
+      })
 
       return items.map(i => ({
         ...i,
