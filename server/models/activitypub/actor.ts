@@ -545,7 +545,7 @@ export class ActorModel extends Model {
     const base = this.toFormattedSummaryJSON()
 
     let banner: ActorImage = null
-    if (this.bannerId) {
+    if (this.Banner) {
       banner = this.Banner.toFormattedJSON()
     }
 
