@@ -4151,15 +4151,19 @@ components:
           description: 'Video file size in bytes'
         torrentUrl:
           type: string
+          description: Direct URL of the torrent file
           format: url
         torrentDownloadUrl:
           type: string
+          description: URL endpoint that transfers the torrent file as an attachment (so that the browser opens a download dialog)
           format: url
         fileUrl:
           type: string
+          description: Direct URL of the video
           format: url
         fileDownloadUrl:
           type: string
+          description: URL endpoint that transfers the video file as an attachment (so that the browser opens a download dialog)
           format: url
         fps:
           type: number
