@@ -220,7 +220,9 @@ export class PeertubePlayerManager {
     const isHLS = mode === 'p2p-media-loader'
 
     let autoplay = this.getAutoPlayValue(commonOptions.autoplay)
-    let html5 = {}
+    let html5 = {
+      preloadTextTracks: false
+    }
 
     const plugins: VideoJSPluginOptions = {
       peertube: {
@@ -248,7 +250,7 @@ export class PeertubePlayerManager {
     if (isHLS) {
       const { hlsjs } = PeertubePlayerManager.addP2PMediaLoaderOptions(plugins, options, p2pMediaLoaderModule)
 
-      html5 = hlsjs.html5
+      Object.assign(html5, hlsjs.html5)
     }
 
     if (mode === 'webtorrent') {
