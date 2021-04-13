@@ -57,7 +57,7 @@
         <div class="actor-info">
           <div>
             <div class="actor-display-name">
-              <h1>{{ videoChannel.displayName }}</h1>
+              <h1 i18n-title [title]="'Channel created on ' + (videoChannel.createdAt | date)">{{ videoChannel.displayName }}</h1>
             </div>
 
             <div class="actor-handle">
@@ -87,8 +87,6 @@
 
     <div class="channel-description" [ngClass]="{ expanded: channelDescriptionExpanded }">
       <div class="description-html" [innerHTML]="channelDescriptionHTML"></div>
-
-      <div class="created-at" i18n>Channel created on {{ videoChannel.createdAt | date }}</div>
     </div>
 
     <div *ngIf="hasShowMoreDescription()" class="show-more" role="button"

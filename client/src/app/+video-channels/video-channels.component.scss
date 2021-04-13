@@ -43,6 +43,7 @@
   background-color: pvar(--channelBackgroundColor);
   margin-bottom: 45px;
   padding-top: var(--myGlobalTopPadding);
+  padding-bottom: var(--myGlobalTopPadding);
   font-size: var(--myFontSize);
 }
 
@@ -81,12 +82,6 @@
 // Only used by mobile
 .channel-buttons.bottom {
   display: none;
-}
-
-.created-at {
-  margin-top: 15px;
-  color: pvar(--greyForegroundColor);
-  padding-bottom: 60px;
 }
 
 .owner-card {
