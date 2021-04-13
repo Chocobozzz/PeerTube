@@ -20,6 +20,8 @@
 
     <ng-template #ownerTemplate>
       <div class="owner-block">
+        <div class="section-label" i18n>OWNER ACCOUNT</div>
+
         <div class="avatar-row">
           <a [routerLink]="getAccountUrl()" title="View account" i18n-title>
             <img class="account-avatar" [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
@@ -101,15 +103,11 @@
     </div>
 
     <div class="owner-card">
-      <div class="section-label" i18n>OWNER ACCOUNT</div>
-
       <ng-template *ngTemplateOutlet="ownerTemplate"></ng-template>
     </div>
   </div>
 
   <div class="bottom-owner">
-    <div class="section-label" i18n>OWNER ACCOUNT</div>
-
     <ng-template *ngTemplateOutlet="ownerTemplate"></ng-template>
   </div>
 

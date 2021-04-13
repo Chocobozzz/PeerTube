@@ -43,7 +43,6 @@
   background-color: pvar(--channelBackgroundColor);
   margin-bottom: 45px;
   padding-top: var(--myGlobalTopPadding);
-  padding-bottom: var(--myGlobalTopPadding);
   font-size: var(--myFontSize);
 }
 
@@ -58,6 +57,7 @@
 .channel-description {
   grid-column: 1;
   word-break: break-word;
+  padding-bottom: var(--myGlobalTopPadding);
 }
 
 .show-more {
