@@ -8,6 +8,7 @@ import { Component, ViewEncapsulation } from '@angular/core'
   selector: 'my-player-styles',
   template: '',
   styleUrls: [ './player-styles.component.scss' ],
+  // tslint:disable:use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None
 })
 export class PlayerStylesComponent {
