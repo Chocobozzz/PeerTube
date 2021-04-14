@@ -14,6 +14,7 @@ import { VideoCommentService } from '../../shared/shared-video-comment/video-com
 import { VideoCommentAddComponent } from './comment/video-comment-add.component'
 import { VideoCommentComponent } from './comment/video-comment.component'
 import { VideoCommentsComponent } from './comment/video-comments.component'
+import { PlayerStylesComponent } from './player-styles.component'
 import { RecommendationsModule } from './recommendations/recommendations.module'
 import { TimestampRouteTransformerDirective } from './timestamp-route-transformer.directive'
 import { VideoAvatarChannelComponent } from './video-avatar-channel.component'
@@ -50,7 +51,8 @@ import { VideoWatchComponent } from './video-watch.component'
     VideoAvatarChannelComponent,
 
     TimestampRouteTransformerDirective,
-    TimestampRouteTransformerDirective
+
+    PlayerStylesComponent
   ],
 
   exports: [

@@ -3,8 +3,6 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 
-$assets-path: '../assets';
-
 .peertube-container {
   padding-bottom: 20px;
 }
@@ -41,9 +39,9 @@ $assets-path: '../assets';
 
       &.icon-menu {
         background-color: pvar(--mainForegroundColor);
-        mask-image: url('#{$assets-path}/images/misc/menu.svg');
+        mask-image: url('../assets/images/misc/menu.svg');
         margin: 0 18px 0 20px;
-        
+
         @media screen and (max-width: $mobile-view) {
           margin: 0 10px;
         }

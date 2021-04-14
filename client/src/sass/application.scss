@@ -6,11 +6,6 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 @import '_fonts';
 
-@import '~video.js/dist/video-js.css';
-
-$assets-path: '../../assets/';
-@import './player/index';
-
 @import './bootstrap';
 @import './primeng-custom';
 @import './ng-select.scss';
