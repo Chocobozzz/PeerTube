@@ -163,10 +163,6 @@ export class UserListComponent extends RestTable implements OnInit {
     this.loadData()
   }
 
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
-  }
-
   async unbanUsers (users: User[]) {
     const res = await this.confirmService.confirm($localize`Do you really want to unban ${users.length} users?`, $localize`Unban`)
     if (res === false) return

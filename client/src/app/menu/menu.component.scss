@@ -176,9 +176,7 @@ menu {
     border-radius: $main-radius;
   }
 
-  img {
-    @include avatar(34px);
-
+  my-account-avatar {
     margin-right: 10px;
   }
 }

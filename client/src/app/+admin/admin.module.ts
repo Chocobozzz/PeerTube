@@ -38,6 +38,7 @@ import { JobService, LogsComponent, LogsService, SystemComponent } from './syste
 import { DebugComponent, DebugService } from './system/debug'
 import { JobsComponent } from './system/jobs/jobs.component'
 import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersComponent, UserUpdateComponent } from './users'
+import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     SharedGlobalIconModule,
     SharedAbuseListModule,
     SharedVideoCommentModule,
+    SharedAccountAvatarModule,
 
     TableModule,
     SelectButtonModule,

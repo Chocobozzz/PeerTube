@@ -4,15 +4,15 @@
       <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" class="channel-avatar" />
     </a>
 
-    <a [routerLink]="[ '/accounts', video.byAccount ]" [title]="accountLinkTitle">
-      <img [src]="video.accountAvatarUrl" i18n-alt alt="Account avatar" />
-    </a>
-  </ng-container>
+    <my-account-avatar
+      [account]="video.account"
+    ></my-account-avatar>
+</ng-container>
 
   <ng-container *ngIf="!isChannelAvatarNull() && genericChannel">
-    <a [routerLink]="[ '/accounts', video.byAccount ]" [title]="accountLinkTitle">
-      <img [src]="video.accountAvatarUrl" i18n-alt alt="Account avatar" />
-    </a>
+    <my-account-avatar
+      [account]="video.account"
+    ></my-account-avatar>
 
     <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
       <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" class="channel-avatar" />
@@ -20,8 +20,8 @@
   </ng-container>
 
   <ng-container *ngIf="isChannelAvatarNull()">
-    <a [routerLink]="[ '/accounts', video.byAccount ]" [title]="accountLinkTitle">
-      <img [src]="video.accountAvatarUrl" i18n-alt alt="Account avatar" />
-    </a>
+    <my-account-avatar
+      [account]="video.account"
+    ></my-account-avatar>
   </ng-container>
 </div>

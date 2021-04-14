@@ -30,10 +30,6 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
     this.initialize()
   }
 
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
-  }
-
   unblockAccount (accountBlock: AccountBlock) {
     const blockedAccount = accountBlock.blockedAccount
     const operation = this.mode === BlocklistComponentType.Account

@@ -131,10 +131,6 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     )
   }
 
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
-  }
-
   isCommentDisplayed () {
     // Not deleted
     return !this.comment.isDeleted ||

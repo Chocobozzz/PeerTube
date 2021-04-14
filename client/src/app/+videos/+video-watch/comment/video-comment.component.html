@@ -1,14 +1,6 @@
 <div *ngIf="isCommentDisplayed()" class="root-comment">
   <div class="left">
-    <a *ngIf="!comment.isDeleted" [href]="comment.account.url" target="_blank" rel="noopener noreferrer">
-      <img
-        class="comment-avatar"
-        [src]="comment.accountAvatarUrl"
-        (error)="switchToDefaultAvatar($event)"
-        alt="Avatar"
-      />
-    </a>
-
+    <my-account-avatar *ngIf="!comment.isDeleted" [account]="comment.account"></my-account-avatar>
     <div class="vertical-border"></div>
   </div>
 

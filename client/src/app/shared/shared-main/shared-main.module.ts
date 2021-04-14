@@ -17,7 +17,7 @@ import {
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
-import { AccountService, ActorAvatarInfoComponent, VideoAvatarChannelComponent } from './account'
+import { AccountService, ActorAvatarInfoComponent } from './account'
 import {
   AutofocusDirective,
   BytesPipe,
@@ -37,6 +37,7 @@ import { UserHistoryService, UserNotificationsComponent, UserNotificationService
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
+import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -65,7 +66,6 @@ import { VideoChannelService } from './video-channel'
   ],
 
   declarations: [
-    VideoAvatarChannelComponent,
     ActorAvatarInfoComponent,
 
     FromNowPipe,
@@ -120,7 +120,6 @@ import { VideoChannelService } from './video-channel'
 
     PrimeSharedModule,
 
-    VideoAvatarChannelComponent,
     ActorAvatarInfoComponent,
 
     FromNowPipe,

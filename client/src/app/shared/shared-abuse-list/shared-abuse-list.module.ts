@@ -10,6 +10,7 @@ import { AbuseDetailsComponent } from './abuse-details.component'
 import { AbuseListTableComponent } from './abuse-list-table.component'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
+import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { ModerationCommentModalComponent } from './moderation-comment-modal.comp
     SharedFormModule,
     SharedModerationModule,
     SharedGlobalIconModule,
-    SharedVideoCommentModule
+    SharedVideoCommentModule,
+    SharedAccountAvatarModule
   ],
 
   declarations: [

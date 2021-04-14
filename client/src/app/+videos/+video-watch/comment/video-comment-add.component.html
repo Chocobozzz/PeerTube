@@ -1,6 +1,8 @@
 <form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
   <div class="avatar-and-textarea">
-    <img [src]="getAvatarUrl()" alt="Avatar" />
+    <my-account-avatar
+      [account]="user?.account"
+    ></my-account-avatar>
 
     <div class="form-group">
       <textarea i18n-placeholder placeholder="Add comment..." myAutoResize

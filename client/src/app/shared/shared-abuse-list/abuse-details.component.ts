@@ -45,8 +45,4 @@ export class AbuseDetailsComponent {
       label: this.predefinedReasonsTranslations[r]
     }))
   }
-
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
-  }
 }

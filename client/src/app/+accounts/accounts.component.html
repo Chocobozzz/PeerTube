@@ -2,7 +2,10 @@
   <div class="account-info">
 
     <div class="account-avatar-row">
-      <img class="account-avatar" [src]="account.avatarUrl" alt="Avatar" />
+      <my-account-avatar
+        [account]="account"
+        size="120"
+      ></my-account-avatar>
 
       <div>
         <div class="section-label" i18n>PEERTUBE ACCOUNT</div>

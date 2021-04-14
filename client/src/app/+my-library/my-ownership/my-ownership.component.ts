@@ -43,10 +43,6 @@ export class MyOwnershipComponent extends RestTable implements OnInit {
     }
   }
 
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
-  }
-
   openAcceptModal (videoChangeOwnership: VideoChangeOwnership) {
     this.myAccountAcceptOwnershipComponent.show(videoChangeOwnership)
   }

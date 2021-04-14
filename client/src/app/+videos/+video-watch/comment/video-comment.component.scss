@@ -23,10 +23,6 @@
     width: 100%;
   }
 
-  .comment-avatar {
-    @include avatar(36px);
-  }
-
   .comment {
     flex-grow: 1;
     // Fix word-wrap with flex

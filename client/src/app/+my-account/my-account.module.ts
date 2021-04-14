@@ -22,6 +22,7 @@ import { MyAccountProfileComponent } from './my-account-settings/my-account-prof
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountComponent } from './my-account.component'
+import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { MyAccountComponent } from './my-account.component'
     SharedUserInterfaceSettingsModule,
     SharedGlobalIconModule,
     SharedAbuseListModule,
-    SharedShareModal
+    SharedShareModal,
+    SharedAccountAvatarModule
   ],
 
   declarations: [
