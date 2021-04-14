@@ -182,7 +182,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   getAvatarUrl () {
     if (this.displayOwnerAccount()) {
-      return this.video.account.url
+      return this.video.account.avatar?.url
     }
 
     return this.video.videoChannelAvatarUrl

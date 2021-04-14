@@ -1,4 +1,4 @@
-<a [href]="account.url" target="_blank" rel="noopener noreferrer" [title]="linkTitle">
+<a *ngIf="account" [href]="href" target="_blank" rel="noopener noreferrer" [title]="title">
   <img
     [class]="class"
     [src]="avatarUrl"

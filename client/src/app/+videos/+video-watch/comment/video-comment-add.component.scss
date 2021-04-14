@@ -9,9 +9,7 @@ form {
   display: flex;
   margin-bottom: 10px;
 
-  img {
-    @include avatar(25px);
-
+  my-account-avatar {
     vertical-align: top;
     margin-right: 10px;
   }

@@ -12,12 +12,9 @@ $more-button-width: 40px;
   width: calc(100% - #{$more-button-width});
 }
 
+my-account-avatar,
 .avatar {
   margin: 10px 10px 0 0;
-
-  img:not(.channel) {
-    @include avatar(40px);
-  }
 
   img.channel {
     @include channel-avatar(40px);

@@ -8,15 +8,28 @@ import { Account } from '../shared-main/account/account.model'
   templateUrl: './account-avatar.component.html'
 })
 export class AccountAvatarComponent {
+  _href: string
+  _title: string
+
   @Input() account: { name: string, avatar?: { url?: string }, url: string }
   @Input() size = '36'
+  @Input() set href (value) {
+    this._href = value
+  }
+  @Input() set title (value) {
+    this._title = value
+  }
+
+  get href () {
+    return this._href || this.account?.url
+  }
+
+  get title () {
+    return this._title || $localize`${this.account.name} (account page)`
+  }
 
   get class () {
     return `avatar avatar-${this.size}`
-  }
-
-  get linkTitle () {
-    return $localize`${this.account.name} (account page)`
   }
 
   get avatarUrl () {
