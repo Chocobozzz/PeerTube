@@ -293,7 +293,7 @@
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target/>
+        <target>এই ইন্সট্যান্সে, ইন্সট্যান্স অনুসরণকারী নেই।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
@@ -301,7 +301,7 @@
       </trans-unit>
       <trans-unit id="144d423719b19c9f99ee6aaff85aed693d5cdd97" datatype="html">
         <source>Show full list</source>
-        <target/>
+        <target>সম্পূর্ণ তালিকা দেখাও</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">12</context>
@@ -313,7 +313,7 @@
       </trans-unit>
       <trans-unit id="aed1bb4393932c974d4347ff743a2253cc64ef02" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target/>
+        <target>অনুসৃত ইন্সট্যান্স (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
