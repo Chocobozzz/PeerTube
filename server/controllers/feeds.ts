@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as Feed from 'pfeed-podcast'
-import { flatMap, groupBy, isNull, last, map, orderBy } from 'lodash'
+import { groupBy, isNull, last, map, orderBy } from 'lodash'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
 import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
@@ -12,14 +12,13 @@ import {
   setFeedFormatContentType,
   videoCommentsFeedsValidator,
   videoFeedsValidator,
-  videosOverviewValidator,
   videosSortValidator,
   videoSubscriptionFeedsValidator
 } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoFilter } from '../../shared/models/videos/video-query.type'
+import { VideoFilter } from '@shared/models'
 import { VideoResolution, VideoStreamingPlaylistType } from '@shared/models'
 
 const feedsRouter = express.Router()
@@ -159,7 +158,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
     link = videoChannel.getLocalUrl()
-    
+
     author.name = videoChannel.Account.getDisplayName()
     if (!isNull(videoChannel.Actor.Avatar)) {
       image = WEBSERVER.URL + videoChannel.Actor.Avatar.getStaticPath()
@@ -353,7 +352,7 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
 
           return result
         })
-      
+
       const media = [...sortedVideos, ...streamingPlaylists]
 
       const categories: { value: number, label: string }[] = []
@@ -380,7 +379,6 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         if (!type) return {}
         return {
           url: WEBSERVER.URL + "/lazy-static/video-captions/" + caption.filename,
-          //"http://localhost:9000/lazy-static/video-captions/0abe184c-37a5-47bb-9751-50ca9a468606-en.vtt"
           language: caption.language,
           type,
           rel: "captions"
@@ -389,11 +387,10 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
 
       const item = {
         title: video.name,
-        // Live videos need unique GUIDs 
+        // Live videos need unique GUIDs
         id: video.url,
         link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
-        description: video.getTruncatedDescription(),
-        content: video.description,
+        description: video.description,
         author: [
           {
             name: video.VideoChannel.Account.getDisplayName(),
@@ -423,7 +420,7 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
   } else {
     for (const video of videos) {
       const formattedVideoFiles = video.getFormattedVideoFilesJSON(false)
-      
+
       const torrents = formattedVideoFiles.map(videoFile => ({
         title: video.name,
         url: videoFile.torrentUrl,
