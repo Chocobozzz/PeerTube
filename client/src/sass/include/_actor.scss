@@ -31,6 +31,7 @@
 
   > div {
     margin-left: $img-margin;
+    min-width: 1px;
   }
 
   .actor-info {
@@ -38,6 +39,7 @@
 
     > div:first-child {
       flex-grow: 1;
+      min-width: 1px;
     }
   }
 
@@ -50,6 +52,10 @@
     font-size: 28px;
     font-weight: $font-bold;
     margin: 0;
+  }
+
+  .actor-handle {
+    @include ellipsis;
   }
 
   .actor-handle,

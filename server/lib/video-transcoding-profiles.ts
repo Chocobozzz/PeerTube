@@ -55,7 +55,7 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
 
   if (await canDoQuickAudioTranscode(input, probe)) {
     logger.debug('Copy audio stream %s by AAC encoder.', input)
-    return { copy: true, outputOptions: [] }
+    return { copy: true, outputOptions: [ ] }
   }
 
   const parsedAudio = await getAudioStream(input, probe)

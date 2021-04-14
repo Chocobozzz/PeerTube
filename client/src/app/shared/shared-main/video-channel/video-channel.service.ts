@@ -3,7 +3,7 @@ import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
-import { Avatar, ResultList, VideoChannel as VideoChannelServer, VideoChannelCreate, VideoChannelUpdate } from '@shared/models'
+import { ActorImage, ResultList, VideoChannel as VideoChannelServer, VideoChannelCreate, VideoChannelUpdate } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account'
 import { AccountService } from '../account/account.service'
@@ -82,15 +82,15 @@ export class VideoChannelService {
                )
   }
 
-  changeVideoChannelAvatar (videoChannelName: string, avatarForm: FormData) {
-    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/avatar/pick'
+  changeVideoChannelImage (videoChannelName: string, avatarForm: FormData, type: 'avatar' | 'banner') {
+    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/' + type + '/pick'
 
-    return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
+    return this.authHttp.post<{ avatar?: ActorImage, banner?: ActorImage }>(url, avatarForm)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  deleteVideoChannelAvatar (videoChannelName: string) {
-    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/avatar'
+  deleteVideoChannelImage (videoChannelName: string, type: 'avatar' | 'banner') {
+    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/' + type
 
     return this.authHttp.delete(url)
                .pipe(

@@ -6,7 +6,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { getAvatarInfoIfExists, updateActorAvatarInstance, updateActorInstance } from '../actor'
+import { getImageInfoIfExists, updateActorImageInstance, updateActorInstance } from '../actor'
 import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, updateVideoFromAP } from '../videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file'
@@ -17,6 +17,7 @@ import { createOrUpdateVideoPlaylist } from '../playlist'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature, MAccountIdActor } from '../../../types/models'
 import { isRedundancyAccepted } from '@server/lib/redundancy'
+import { ActorImageType } from '@shared/models'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
   const { activity, byActor } = options
@@ -119,7 +120,8 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
   let accountOrChannelFieldsSave: object
 
   // Fetch icon?
-  const avatarInfo = await getAvatarInfoIfExists(actorAttributesToUpdate)
+  const avatarInfo = getImageInfoIfExists(actorAttributesToUpdate, ActorImageType.AVATAR)
+  const bannerInfo = getImageInfoIfExists(actorAttributesToUpdate, ActorImageType.BANNER)
 
   try {
     await sequelizeTypescript.transaction(async t => {
@@ -132,11 +134,8 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
 
       await updateActorInstance(actor, actorAttributesToUpdate)
 
-      if (avatarInfo !== undefined) {
-        const avatarOptions = Object.assign({}, avatarInfo, { onDisk: false })
-
-        await updateActorAvatarInstance(actor, avatarOptions, t)
-      }
+      await updateActorImageInstance(actor, ActorImageType.AVATAR, avatarInfo, t)
+      await updateActorImageInstance(actor, ActorImageType.BANNER, bannerInfo, t)
 
       await actor.save({ transaction: t })
 

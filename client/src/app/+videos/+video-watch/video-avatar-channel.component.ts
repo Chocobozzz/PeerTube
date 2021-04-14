@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { Video } from '../../shared/shared-main/video/video.model'
-
+import { Video } from '@app/shared/shared-main/video'
 @Component({
   selector: 'my-video-avatar-channel',
   templateUrl: './video-avatar-channel.component.html',

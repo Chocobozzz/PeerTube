@@ -8,13 +8,3 @@
 li {
   margin-bottom: 10px;
 }
-
-.action-button-cancel {
-  @include peertube-button;
-  @include grey-button;
-}
-
-.action-button-confirm {
-  @include peertube-button;
-  @include orange-button;
-}

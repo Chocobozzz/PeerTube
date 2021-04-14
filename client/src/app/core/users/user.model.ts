@@ -1,7 +1,7 @@
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { hasUserRight } from '@shared/core-utils/users'
 import {
-  Avatar,
+  ActorImage,
   NSFWPolicyType,
   User as UserServerModel,
   UserAdminFlag,
@@ -125,7 +125,7 @@ export class User implements UserServerModel {
     }
   }
 
-  updateAccountAvatar (newAccountAvatar?: Avatar) {
+  updateAccountAvatar (newAccountAvatar?: ActorImage) {
     if (newAccountAvatar) this.account.updateAvatar(newAccountAvatar)
     else this.account.resetAvatar()
   }

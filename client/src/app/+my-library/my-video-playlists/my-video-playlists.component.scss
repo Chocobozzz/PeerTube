@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+h1 {
+  display: flex;
+}
+
 .create-button {
   @include create-button;
 }
@@ -9,64 +13,45 @@ input[type=text] {
   @include peertube-input-text(300px);
 }
 
-::ng-deep .action-button {
-  &.action-button-delete {
-    margin-right: 10px;
-  }
+.video-playlist {
+  @include row-blocks($column-responsive: false);
 }
 
-.video-playlist {
-  @include row-blocks;
-
-  .miniature-wrapper {
-    flex-grow: 1;
-
-    ::ng-deep .miniature {
-      display: flex;
-
-      .miniature-info {
-        margin-left: 10px;
-        width: auto;
-      }
-    }
-  }
-
-  .video-playlist-buttons {
-    min-width: 190px;
-    height: max-content;
-  }
+.video-playlist-buttons {
+  display: flex;
+  margin-left: 10px;
+  align-self: flex-end;
 }
 
 .video-playlists-header {
   margin-bottom: 30px;
 }
 
-@media screen and (max-width: $small-view) {
+my-video-playlist-miniature {
+  display: block;
+  flex-grow: 1;
+}
+
+my-delete-button {
+  margin-right: 10px;
+}
+
+@include on-small-main-col {
   .video-playlists-header {
     text-align: center;
   }
 
   .video-playlist {
-
-    .video-playlist-buttons {
-      margin-top: 10px;
-    }
+    flex-wrap: wrap;
   }
 
-  my-video-playlist-miniature ::ng-deep .miniature {
-    flex-direction: column;
-
-    .miniature-info {
-      margin-left: 0 !important;
-    }
-
-    .miniature-name {
-      max-width: $video-thumbnail-width;
-    }
+  .video-playlist-buttons {
+    margin-top: 10px;
+    margin-left: auto;
   }
 }
 
-@media screen and (max-width: $mobile-view) {
+@include on-mobile-main-col {
   .video-playlists-header {
     flex-direction: column;
 
@@ -74,5 +59,9 @@ input[type=text] {
       width: 100% !important;
       margin-bottom: 12px;
     }
+  }
+
+  .action-button {
+    margin-left: 0;
   }
 }

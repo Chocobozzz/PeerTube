@@ -1,4 +1,4 @@
-<div class="other-videos">
+<div class="other-videos" [ngClass]="{ 'display-as-row': displayAsRow }">
   <ng-container *ngIf="hasVideos$ | async">
     <div class="title-page-container">
       <h2 i18n class="title-page title-page-single">
@@ -14,7 +14,7 @@
 
     <ng-container *ngFor="let video of (videos$ | async); let i = index; let length = count">
       <my-video-miniature
-        [displayOptions]="displayOptions" [video]="video" [user]="userMiniature"
+        [displayOptions]="displayOptions" [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow"
         (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (videoAccountMuted)="onVideoRemoved()">
       </my-video-miniature>
 

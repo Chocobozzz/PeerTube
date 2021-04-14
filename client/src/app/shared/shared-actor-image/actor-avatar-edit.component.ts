@@ -1,21 +1,27 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
+import { Account, VideoChannel } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
-import { Account } from '../account/account.model'
-import { VideoChannel } from '../video-channel/video-channel.model'
-import { Actor } from './actor.model'
 
 @Component({
-  selector: 'my-actor-avatar-info',
-  templateUrl: './actor-avatar-info.component.html',
-  styleUrls: [ './actor-avatar-info.component.scss' ]
+  selector: 'my-actor-avatar-edit',
+  templateUrl: './actor-avatar-edit.component.html',
+  styleUrls: [
+    './actor-image-edit.scss',
+    './actor-avatar-edit.component.scss'
+  ]
 })
-export class ActorAvatarInfoComponent implements OnInit, OnChanges {
+export class ActorAvatarEditComponent implements OnInit {
   @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>
   @ViewChild('avatarPopover') avatarPopover: NgbPopover
 
   @Input() actor: VideoChannel | Account
+  @Input() editable = true
+  @Input() displaySubscribers = true
+  @Input() displayUsername = true
+  @Input() previewImage = false
 
   @Output() avatarChange = new EventEmitter<FormData>()
   @Output() avatarDelete = new EventEmitter<void>()
@@ -24,9 +30,10 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
   maxAvatarSize = 0
   avatarExtensions = ''
 
-  private avatarUrl: string
+  preview: SafeResourceUrl
 
   constructor (
+    private sanitizer: DomSanitizer,
     private serverService: ServerService,
     private notifier: Notifier
   ) { }
@@ -42,12 +49,6 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
         })
   }
 
-  ngOnChanges (changes: SimpleChanges) {
-    if (changes['actor']) {
-      this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.actor)
-    }
-  }
-
   onAvatarChange (input: HTMLInputElement) {
     this.avatarfileInput = new ElementRef(input)
 
@@ -61,14 +62,19 @@ export class ActorAvatarInfoComponent implements OnInit, OnChanges {
     formData.append('avatarfile', avatarfile)
     this.avatarPopover?.close()
     this.avatarChange.emit(formData)
+
+    if (this.previewImage) {
+      this.preview = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(avatarfile))
+    }
   }
 
   deleteAvatar () {
+    this.preview = undefined
     this.avatarDelete.emit()
   }
 
   hasAvatar () {
-    return !!this.avatarUrl
+    return !!this.preview || !!this.actor.avatar
   }
 
   isChannel () {

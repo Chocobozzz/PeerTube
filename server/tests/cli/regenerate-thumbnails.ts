@@ -2,7 +2,7 @@ import 'mocha'
 import { expect } from 'chai'
 import { writeFile } from 'fs-extra'
 import { basename, join } from 'path'
-import { Video } from '@shared/models'
+import { Video, VideoDetails } from '@shared/models'
 import {
   buildServerDirectory,
   cleanupTests,
@@ -18,6 +18,17 @@ import {
   waitJobs
 } from '../../../shared/extra-utils'
 import { HttpStatusCode } from '@shared/core-utils'
+
+async function testThumbnail (server: ServerInfo, videoId: number | string) {
+  const res = await getVideo(server.url, videoId)
+  const video: VideoDetails = res.body
+
+  const res1 = await makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
+  expect(res1.body).to.not.have.lengthOf(0)
+
+  const res2 = await makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
+  expect(res2.body).to.not.have.lengthOf(0)
+}
 
 describe('Test regenerate thumbnails script', function () {
   let servers: ServerInfo[]
@@ -77,25 +88,28 @@ describe('Test regenerate thumbnails script', function () {
     }
   })
 
-  it('Should regenerate thumbnails from the CLI', async function () {
+  it('Should regenerate local thumbnails from the CLI', async function () {
     this.timeout(15000)
 
     const env = getEnvCli(servers[0])
     await execCLI(`${env} npm run regenerate-thumbnails`)
   })
 
-  it('Should have regenerated thumbbnails', async function () {
-    {
-      const res1 = await makeRawRequest(join(servers[0].url, video1.thumbnailPath), HttpStatusCode.OK_200)
-      expect(res1.body).to.not.have.lengthOf(0)
+  it('Should have generated new thumbnail files', async function () {
+    await testThumbnail(servers[0], video1.uuid)
+    await testThumbnail(servers[0], video2.uuid)
 
-      const res2 = await makeRawRequest(join(servers[0].url, video1.previewPath), HttpStatusCode.OK_200)
-      expect(res2.body).to.not.have.lengthOf(0)
+    const res = await makeRawRequest(join(servers[0].url, remoteVideo.thumbnailPath), HttpStatusCode.OK_200)
+    expect(res.body).to.have.lengthOf(0)
+  })
+
+  it('Should have deleted old thumbnail files', async function () {
+    {
+      await makeRawRequest(join(servers[0].url, video1.thumbnailPath), HttpStatusCode.NOT_FOUND_404)
     }
 
     {
-      const res = await makeRawRequest(join(servers[0].url, video2.thumbnailPath), HttpStatusCode.OK_200)
-      expect(res.body).to.not.have.lengthOf(0)
+      await makeRawRequest(join(servers[0].url, video2.thumbnailPath), HttpStatusCode.NOT_FOUND_404)
     }
 
     {

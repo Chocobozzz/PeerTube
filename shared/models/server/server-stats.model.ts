@@ -13,6 +13,13 @@ export interface ServerStats {
   totalVideos: number
   totalVideoComments: number
 
+  totalLocalVideoChannels: number
+  totalLocalDailyActiveVideoChannels: number
+  totalLocalWeeklyActiveVideoChannels: number
+  totalLocalMonthlyActiveVideoChannels: number
+
+  totalLocalPlaylists: number
+
   totalInstanceFollowers: number
   totalInstanceFollowing: number
 

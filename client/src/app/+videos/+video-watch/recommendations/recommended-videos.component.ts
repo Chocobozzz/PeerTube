@@ -16,6 +16,8 @@ import { RecommendedVideosStore } from './recommended-videos.store'
 export class RecommendedVideosComponent implements OnInit, OnChanges {
   @Input() inputRecommendation: RecommendationInfo
   @Input() playlist: VideoPlaylist
+  @Input() displayAsRow: boolean
+
   @Output() gotRecommendations = new EventEmitter<Video[]>()
 
   autoPlayNextVideo: boolean

@@ -38,7 +38,7 @@ export interface User {
   abusesAcceptedCount?: number
   abusesCreatedCount?: number
 
-  videoCommentsCount? : number
+  videoCommentsCount?: number
 
   theme: string
 

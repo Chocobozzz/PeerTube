@@ -6,8 +6,7 @@ import { VideoChannel } from '@shared/models'
 
 @Component({
   selector: 'my-support-modal',
-  templateUrl: './support-modal.component.html',
-  styleUrls: [ './support-modal.component.scss' ]
+  templateUrl: './support-modal.component.html'
 })
 export class SupportModalComponent {
   @Input() video: VideoDetails = null

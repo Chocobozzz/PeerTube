@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { Notifier } from '@app/core'
+import { Notifier, PluginService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { PeerTubePlugin, RegisterServerSettingOptions } from '@shared/models'
@@ -19,10 +19,12 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   pluginTypeLabel: string
 
   private sub: Subscription
+  private npmName: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private pluginService: PluginApiService,
+    private pluginService: PluginService,
+    private pluginAPIService: PluginApiService,
     private notifier: Notifier,
     private route: ActivatedRoute
   ) {
@@ -32,9 +34,9 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   ngOnInit () {
     this.sub = this.route.params.subscribe(
       routeParams => {
-        const npmName = routeParams['npmName']
+        this.npmName = routeParams['npmName']
 
-        this.loadPlugin(npmName)
+        this.loadPlugin(this.npmName)
       }
     )
   }
@@ -46,7 +48,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   formValidated () {
     const settings = this.form.value
 
-    this.pluginService.updatePluginSettings(this.plugin.name, this.plugin.type, settings)
+    this.pluginAPIService.updatePluginSettings(this.plugin.name, this.plugin.type, settings)
         .subscribe(
           () => {
             this.notifier.success($localize`Settings updated.`)
@@ -60,18 +62,27 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     return Array.isArray(this.registeredSettings) && this.registeredSettings.length !== 0
   }
 
+  isSettingHidden (setting: RegisterServerSettingOptions) {
+    const script = this.pluginService.getRegisteredSettingsScript(this.npmName)
+
+    if (!script?.isSettingHidden) return false
+
+    return script.isSettingHidden({ setting, formValues: this.form.value })
+  }
+
   private loadPlugin (npmName: string) {
-    this.pluginService.getPlugin(npmName)
+    this.pluginAPIService.getPlugin(npmName)
         .pipe(switchMap(plugin => {
-          return this.pluginService.getPluginRegisteredSettings(plugin.name, plugin.type)
+          return this.pluginAPIService.getPluginRegisteredSettings(plugin.name, plugin.type)
             .pipe(map(data => ({ plugin, registeredSettings: data.registeredSettings })))
         }))
         .subscribe(
-          ({ plugin, registeredSettings }) => {
+          async ({ plugin, registeredSettings }) => {
             this.plugin = plugin
-            this.registeredSettings = registeredSettings
 
-            this.pluginTypeLabel = this.pluginService.getPluginTypeLabel(this.plugin.type)
+            this.registeredSettings = await this.translateSettings(registeredSettings)
+
+            this.pluginTypeLabel = this.pluginAPIService.getPluginTypeLabel(this.plugin.type)
 
             this.buildSettingsForm()
           },
@@ -102,6 +113,29 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     const registered = this.registeredSettings.find(r => r.name === name)
 
     return registered.default
+  }
+
+  private async translateSettings (settings: RegisterServerSettingOptions[]) {
+    for (const setting of settings) {
+      for (const key of [ 'label', 'html', 'descriptionHTML' ]) {
+        if (setting[key]) setting[key] = await this.pluginService.translateBy(this.npmName, setting[key])
+      }
+
+      if (Array.isArray(setting.options)) {
+        const newOptions = []
+
+        for (const o of setting.options) {
+          newOptions.push({
+            value: o.value,
+            label: await this.pluginService.translateBy(this.npmName, o.label)
+          })
+        }
+
+        setting.options = newOptions
+      }
+    }
+
+    return settings
   }
 
 }

@@ -72,11 +72,3 @@ input[type=submit], button {
   @include dashboard;
   max-width: 900px;
 }
-
-my-actor-avatar-info ::ng-deep {
-  .actor-img-edit-container,
-  .actor-info-followers,
-  .actor-info-username {
-    display: none;
-  }
-}

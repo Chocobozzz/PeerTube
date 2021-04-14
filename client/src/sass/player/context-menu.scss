@@ -9,7 +9,8 @@ $context-menu-width: 350px;
 .video-js .vjs-contextmenu-ui-menu {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 5px 0;
+  padding: 8px 0;
+  border-radius: 4px;
   width: $context-menu-width;
 
   .vjs-menu-content {
@@ -28,6 +29,31 @@ $context-menu-width: 350px;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [class^="vjs-icon-"] {
+      display: inline-flex;
+      position: relative;
+      top: 2px;
+      cursor: pointer;
+      width: 14px;
+      height: 14px;
+      background-color: white;
+      mask-size: cover;
+      margin-right: 0.8rem !important;
+
+      $icons: 'link-2', 'repeat', 'code', 'tick-white';
+
+      @each $icon in $icons {
+        &[class$="-#{$icon}"] {
+          mask-image: url('#{$assets-path}/player/images/#{$icon}.svg');
+        }
+      }
+
+      &[class$="-tick-white"] {
+        float: right;
+        margin: 0 !important;
+      }
     }
   }
 }

@@ -6,7 +6,7 @@ import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
-  Avatar,
+  ActorImage,
   ServerConfig,
   UserRight,
   Video as VideoServerModel,
@@ -71,7 +71,7 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: Avatar
+    avatar?: ActorImage
   }
 
   channel: {
@@ -80,7 +80,7 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: Avatar
+    avatar?: ActorImage
   }
 
   userHistory?: {

@@ -41,7 +41,7 @@
             </div>
           </div>
 
-          <input type="submit" i18n-value value="Login" [disabled]="!form.valid">
+          <input type="submit" class="peertube-button orange-button" i18n-value value="Login" [disabled]="!form.valid">
 
           <div class="additionnal-links">
             <a i18n class="forgot-password-button" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
@@ -114,12 +114,12 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
       (click)="hideForgotPasswordModal()" (key.enter)="hideForgotPasswordModal()"
     >
 
     <input
-      type="submit" i18n-value="Password reset button" value="Reset" class="action-button-submit"
+      type="submit" i18n-value="Password reset button" value="Reset" class="peertube-button orange-button"
       (click)="askResetPassword()" [disabled]="!forgotPasswordEmailInput.validity.valid"
     >
   </div>

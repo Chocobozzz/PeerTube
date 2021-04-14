@@ -6,11 +6,6 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 @import '_fonts';
 
-@import '~video.js/dist/video-js.css';
-
-$assets-path: '../../assets/';
-@import './player/index';
-
 @import './bootstrap';
 @import './primeng-custom';
 @import './ng-select.scss';
@@ -58,6 +53,7 @@ body {
   --activatedActionButtonColor: #{$activated-action-button-color};
 
   --horizontalMarginContent: #{$not-expanded-horizontal-margins};
+  --videosHorizontalMarginContent: 6vw;
   --mainColWidth: calc(100vw - #{$menu-width});
 
   font-family: $main-fonts;
@@ -332,16 +328,28 @@ ngx-loading-bar {
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {
-  .main-col.expanded {
-    --horizontalMarginContent: #{$expanded-horizontal-margins/2};
+  .main-col {
+    & {
+      --horizontalMarginContent: #{$not-expanded-horizontal-margins / 2};
+    }
+
+    &.expanded {
+      --horizontalMarginContent: #{$expanded-horizontal-margins / 2};
+    }
+
+    --videosHorizontalMarginContent: 30px;
   }
 }
 
 @media screen and (max-width: #{breakpoint(lg)}) {
+  .main-col {
+    --videosHorizontalMarginContent: #{pvar(--horizontalMarginContent)};
+  }
+
   /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
   .main-col,
   .main-col.expanded {
-    --horizontalMarginContent: #{$expanded-horizontal-margins/3};
+    --horizontalMarginContent: #{$expanded-horizontal-margins / 3};
 
     .sub-menu {
       padding-left: 50px;

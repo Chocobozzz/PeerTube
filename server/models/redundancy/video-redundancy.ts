@@ -32,6 +32,7 @@ import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
 import { ActorModel } from '../activitypub/actor'
 import { ServerModel } from '../server/server'
 import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../utils'
+import { ScheduleVideoUpdateModel } from '../video/schedule-video-update'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoFileModel } from '../video/video-file'
@@ -374,7 +375,13 @@ export class VideoRedundancyModel extends Model {
         ...this.buildVideoIdsForDuplication(peertubeActor)
       },
       include: [
-        VideoRedundancyModel.buildServerRedundancyInclude()
+        VideoRedundancyModel.buildServerRedundancyInclude(),
+
+        // Required by publishedAt sort
+        {
+          model: ScheduleVideoUpdateModel.unscoped(),
+          required: false
+        }
       ]
     }
 

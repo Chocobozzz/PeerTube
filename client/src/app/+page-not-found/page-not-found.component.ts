@@ -32,15 +32,6 @@ export class PageNotFoundComponent implements OnInit {
     return window.location.pathname
   }
 
-  getRessourceName () {
-    switch (this.type) {
-      case 'video':
-        return $localize`video`
-      default:
-        return $localize`ressource`
-    }
-  }
-
   getMascotName () {
     switch (this.status) {
       case HttpStatusCode.I_AM_A_TEAPOT_418:

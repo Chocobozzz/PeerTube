@@ -3,7 +3,7 @@
 @import '_bootstrap-variables';
 @import '_miniature';
 
-$player-factor: 1.7; // 16/9
+$player-factor: 16/9;
 $video-info-margin-left: 44px;
 
 @function getPlayerHeight($width){
@@ -407,37 +407,12 @@ $video-info-margin-left: 44px;
       }
     }
   }
+}
 
-  ::ng-deep .other-videos {
-    padding-left: 15px;
-    min-width: $video-miniature-width;
-
-    @media screen and (min-width: 1800px - (3* $video-miniature-width)) {
-      width: min-content;
-    }
-
-    .title-page {
-      margin: 0 !important;
-    }
-
-    .video-miniature {
-      display: flex;
-      width: max-content;
-      height: 100%;
-      padding-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .video-bottom {
-      @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
-        margin-left: 1rem;
-      }
-      @media screen and (max-width: 500px) {
-        margin-left: 0;
-        margin-top: .5rem;
-      }
-    }
-  }
+my-recommended-videos {
+  display: block;
+  padding-left: 15px;
+  min-width: 250px;
 }
 
 my-video-comments {
@@ -531,6 +506,7 @@ my-video-comments {
   }
 }
 
+// Use the same breakpoint than in the typescript component to display the other video miniatures as row
 @media screen and (max-width: 1100px) {
   #video-wrapper {
     flex-direction: column;
@@ -543,15 +519,10 @@ my-video-comments {
 
   .video-bottom {
     flex-direction: column;
+  }
 
-    ::ng-deep .other-videos {
-      padding-left: 0 !important;
-
-      ::ng-deep .video-miniature  {
-        flex-direction: row;
-        width: auto;
-      }
-    }
+  my-recommended-videos {
+    padding-left: 0;
   }
 }
 
@@ -571,10 +542,6 @@ my-video-comments {
         }
       }
     }
-  }
-
-  ::ng-deep .other-videos .video-miniature  {
-    flex-direction: column;
   }
 
   .privacy-concerns {

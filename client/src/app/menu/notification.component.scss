@@ -1,6 +1,9 @@
 @import '_variables';
 @import '_mixins';
 
+.content {
+  scrollbar-color: auto;
+}
 
 .notification-inbox-popover {
   padding: 10px;

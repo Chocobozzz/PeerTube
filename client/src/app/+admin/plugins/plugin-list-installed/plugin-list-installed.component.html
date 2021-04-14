@@ -23,7 +23,7 @@
         </a>
 
         <div class="buttons">
-          <my-edit-button *ngIf="pluginType !== PluginType.THEME" [routerLink]="getShowRouterLink(plugin)" label="Settings" i18n-label></my-edit-button>
+          <my-edit-button *ngIf="!isTheme(plugin)" [routerLink]="getShowRouterLink(plugin)" label="Settings" i18n-label></my-edit-button>
 
           <my-button class="update-button" *ngIf="isUpdateAvailable(plugin)" (click)="update(plugin)" [loading]="isUpdating(plugin)"
                      [label]="getUpdateLabel(plugin)" icon="refresh" [attr.disabled]="isUpdating(plugin)"

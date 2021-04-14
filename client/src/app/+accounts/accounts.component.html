@@ -13,7 +13,7 @@
         <div class="actor-info">
           <div>
             <div class="actor-display-name">
-              <h1>{{ account.displayName }}</h1>
+              <h1 i18n-title [title]="'Created on ' + (account.createdAt | date)">{{ account.displayName }}</h1>
 
               <my-user-moderation-dropdown
                 [prependActions]="prependModerationActions"
@@ -51,8 +51,6 @@
 
     <div class="description" [ngClass]="{ expanded: accountDescriptionExpanded }">
       <div class="description-html" [innerHTML]="accountDescriptionHTML"></div>
-
-      <div class="created-at" i18n>Account created on {{ account.createdAt | date }}</div>
     </div>
 
     <div *ngIf="hasShowMoreDescription()" class="show-more" role="button"

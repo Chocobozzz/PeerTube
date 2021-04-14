@@ -7,8 +7,7 @@ import { AuthService } from '@app/core/auth'
 import { getBytes } from '@root-helpers/bytes'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import {
-  Avatar,
-  NSFWPolicyType,
+  ActorImage,
   ResultList,
   User as UserServerModel,
   UserCreate,
@@ -136,7 +135,7 @@ export class UserService {
   changeAvatar (avatarForm: FormData) {
     const url = UserService.BASE_USERS_URL + 'me/avatar/pick'
 
-    return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
+    return this.authHttp.post<{ avatar: ActorImage }>(url, avatarForm)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

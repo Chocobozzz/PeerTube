@@ -974,7 +974,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Avatar'
+                type: object
+                properties:
+                  avatar:
+                    $ref: '#/components/schemas/ActorImage'
         '413':
           description: image file too large
           headers:
@@ -996,6 +999,17 @@ paths:
             encoding:
               avatarfile:
                 contentType: image/png, image/jpeg
+  /users/me/avatar:
+    delete:
+      summary: Delete my avatar
+      security:
+        - OAuth2: []
+      tags:
+        - My User
+      responses:
+        '204':
+          description: successful operation
+
   /videos/ownership:
     get:
       summary: List video ownership changes
@@ -2185,6 +2199,112 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+  '/video-channels/{channelHandle}/avatar/pick':
+    post:
+      summary: Update channel avatar
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatar:
+                    $ref: '#/components/schemas/ActorImage'
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the avatar
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatarfile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              avatarfile:
+                contentType: image/png, image/jpeg
+  '/video-channels/{channelHandle}/avatar':
+    delete:
+      summary: Delete channel avatar
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '204':
+          description: successful operation
+
+
+  '/video-channels/{channelHandle}/banner/pick':
+    post:
+      summary: Update channel banner
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  banner:
+                    $ref: '#/components/schemas/ActorImage'
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the banner
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                bannerfile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              bannerfile:
+                contentType: image/png, image/jpeg
+  '/video-channels/{channelHandle}/banner':
+    delete:
+      summary: Delete channel banner
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '204':
+          description: successful operation
 
   /video-playlists/privacies:
     get:
@@ -2526,9 +2646,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/VideoChannel'
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoChannel'
   '/accounts/{name}/ratings':
     get:
       summary: List ratings of an account
@@ -3984,7 +4109,7 @@ components:
         avatar:
           nullable: true
           allOf:
-            - $ref: '#/components/schemas/Avatar'
+            - $ref: '#/components/schemas/ActorImage'
     VideoChannelSummary:
       properties:
         id:
@@ -4002,7 +4127,7 @@ components:
         avatar:
           nullable: true
           allOf:
-            - $ref: '#/components/schemas/Avatar'
+            - $ref: '#/components/schemas/ActorImage'
     PlaylistElement:
       properties:
         position:
@@ -4026,15 +4151,19 @@ components:
           description: 'Video file size in bytes'
         torrentUrl:
           type: string
+          description: Direct URL of the torrent file
           format: url
         torrentDownloadUrl:
           type: string
+          description: URL endpoint that transfers the torrent file as an attachment (so that the browser opens a download dialog)
           format: url
         fileUrl:
           type: string
+          description: Direct URL of the video
           format: url
         fileDownloadUrl:
           type: string
+          description: URL endpoint that transfers the video file as an attachment (so that the browser opens a download dialog)
           format: url
         fps:
           type: number
@@ -4455,7 +4584,7 @@ components:
           $ref: '#/components/schemas/VideoConstantString'
         captionPath:
           type: string
-    Avatar:
+    ActorImage:
       properties:
         path:
           type: string
@@ -4507,7 +4636,7 @@ components:
           type: string
           format: date-time
         avatar:
-          $ref: '#/components/schemas/Avatar'
+          $ref: '#/components/schemas/ActorImage'
     Account:
       allOf:
         - $ref: '#/components/schemas/Actor'
@@ -5688,6 +5817,8 @@ components:
         permanentLive:
           description: User can stream multiple times in a permanent live
           type: boolean
+
+
 
   callbacks:
     searchIndex:

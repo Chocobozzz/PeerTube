@@ -16,6 +16,8 @@
       [playlist]="playlist" class="playlist"
       (videoFound)="onPlaylistVideoFound($event)"
     ></my-video-watch-playlist>
+
+    <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
   </div>
 
   <div class="row">
@@ -142,7 +144,7 @@
                   <ng-container *ngIf="isUserLoggedIn()">
                     <my-video-actions-dropdown
                       placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [videoCaptions]="videoCaptions"
-                      [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
+                      [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()"
                     ></my-video-actions-dropdown>
                   </ng-container>
                 </div>
@@ -230,8 +232,8 @@
         </div>
 
         <div *ngIf="video.isLocal === false" class="video-attribute">
-          <span i18n class="video-attribute-label">Origin instance</span>
-          <a class="video-attribute-value" target="_blank" rel="noopener noreferrer" [href]="video.originInstanceUrl">{{ video.originInstanceHost }}</a>
+          <span i18n class="video-attribute-label">Origin</span>
+          <a class="video-attribute-value" target="_blank" rel="noopener noreferrer" [href]="getVideoUrl()">{{ video.originInstanceHost }}</a>
         </div>
 
         <div *ngIf="!!video.originallyPublishedAt" class="video-attribute">
@@ -289,6 +291,7 @@
     </div>
 
     <my-recommended-videos
+      [displayAsRow]="displayOtherVideosAsRow()"
       [inputRecommendation]="{ uuid: video.uuid, tags: video.tags }"
       [playlist]="playlist"
       (gotRecommendations)="onRecommendations($event)"
@@ -316,3 +319,5 @@
   <my-support-modal #supportModal [video]="video"></my-support-modal>
   <my-video-share #videoShareModal [video]="video" [videoCaptions]="videoCaptions" [playlist]="playlist"></my-video-share>
 </ng-container>
+
+<my-player-styles></my-player-styles>

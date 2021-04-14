@@ -33,11 +33,11 @@
 
   <ng-container *ngFor="let result of results">
     <div *ngIf="isVideoChannel(result)" class="entry video-channel">
-      <a *ngIf="!isExternalChannelUrl()" [routerLink]="getChannelUrl(result)">
+      <a class="link-avatar" *ngIf="!isExternalChannelUrl()" [routerLink]="getChannelUrl(result)">
         <img [src]="result.avatarUrl" alt="Avatar" />
       </a>
 
-      <a *ngIf="isExternalChannelUrl()" [href]="getChannelUrl(result)" target="_blank">
+      <a class="link-avatar" *ngIf="isExternalChannelUrl()" [href]="getChannelUrl(result)" target="_blank">
         <img [src]="result.avatarUrl" alt="Avatar" />
       </a>
 

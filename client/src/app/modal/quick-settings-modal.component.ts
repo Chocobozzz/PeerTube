@@ -8,8 +8,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 
 @Component({
   selector: 'my-quick-settings',
-  templateUrl: './quick-settings-modal.component.html',
-  styleUrls: [ './quick-settings-modal.component.scss' ]
+  templateUrl: './quick-settings-modal.component.html'
 })
 export class QuickSettingsModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

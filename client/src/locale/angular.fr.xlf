@@ -648,7 +648,7 @@
       </trans-unit>
       <trans-unit id="f8e6eaa974acec3b80e5c77ec0dc4ff80939964d" datatype="html">
         <source>powered by PeerTube</source>
-        <target>alimenté par PeerTube</target>
+        <target>propulsé par PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">184</context>
@@ -1905,7 +1905,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target>Ce média est trop gros pour le serveur. Merci de contacter votre administrateur pour augmenter cette limite.</target>
+        <target>Ce média est trop volumineux pour le serveur. Veuillez contacter votre administrateur pour augmenter cette limite.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -9382,7 +9382,7 @@
       </trans-unit>
       <trans-unit id="8762033369923733525" datatype="html">
         <source>Trending for the last <x id="PH" equiv-text="trendingDays"/> days</source>
-        <target state="translated">Trending for the last <x id="PH" equiv-text="trendingDays"/> days</target>
+        <target state="translated">Tendances des <x id="PH" equiv-text="trendingDays"/> derniers jours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -9390,7 +9390,7 @@
       </trans-unit>
       <trans-unit id="6332970411264495724" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last <x id="PH" equiv-text="trendingDays"/> days</source>
-        <target state="translated">Trending videos are those totalizing the greatest number of views during the last <x id="PH" equiv-text="trendingDays"/> days</target>
+        <target state="translated">Les vidéos en tendances sont celles cumulant le plus grand nombre de vues sur les <x id="PH" equiv-text="trendingDays"/> derniers jours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">52</context>

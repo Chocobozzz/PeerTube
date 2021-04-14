@@ -12,6 +12,7 @@ import {
   getConfig,
   getCustomConfig,
   killallServers,
+  makeGetRequest,
   parallelTests,
   registerUser,
   reRunServer,
@@ -506,6 +507,39 @@ describe('Test config', function () {
     const data = res.body
 
     checkInitialConfig(server, data)
+  })
+
+  it('Should enable frameguard', async function () {
+    this.timeout(25000)
+
+    {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/config',
+        statusCodeExpected: 200
+      })
+
+      expect(res.headers['x-frame-options']).to.exist
+    }
+
+    killallServers([ server ])
+
+    const config = {
+      security: {
+        frameguard: { enabled: false }
+      }
+    }
+    server = await reRunServer(server, config)
+
+    {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/config',
+        statusCodeExpected: 200
+      })
+
+      expect(res.headers['x-frame-options']).to.not.exist
+    }
   })
 
   after(async function () {

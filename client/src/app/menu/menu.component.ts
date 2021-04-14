@@ -10,6 +10,7 @@ import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
 import { NgbDropdown, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap'
+import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 
 const logger = debug('peertube:menu:MenuComponent')
 
@@ -54,6 +55,7 @@ export class MenuComponent implements OnInit {
     private hotkeysService: HotkeysService,
     private screenService: ScreenService,
     private menuService: MenuService,
+    private modalService: PeertubeModalService,
     private dropdownConfig: NgbDropdownConfig,
     private router: Router
   ) {
@@ -130,6 +132,9 @@ export class MenuComponent implements OnInit {
         this.authService.userInformationLoaded
           .subscribe(() => this.buildUserLanguages())
       })
+
+    this.modalService.openQuickSettingsSubject
+      .subscribe(() => this.openQuickSettings())
   }
 
   isRegistrationAllowed () {

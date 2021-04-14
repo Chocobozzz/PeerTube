@@ -73,13 +73,11 @@ const videoChannelsUpdateValidator = [
     if (res.locals.videoChannel.Actor.isOwned() === false) {
       return res.status(HttpStatusCode.FORBIDDEN_403)
         .json({ error: 'Cannot update video channel of another server' })
-        .end()
     }
 
     if (res.locals.videoChannel.Account.userId !== res.locals.oauth.token.User.id) {
       return res.status(HttpStatusCode.FORBIDDEN_403)
         .json({ error: 'Cannot update video channel of another user' })
-        .end()
     }
 
     return next()

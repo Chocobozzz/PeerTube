@@ -11,16 +11,24 @@
 
 .top-buttons {
   margin-bottom: 30px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 250px 1fr auto auto;
   align-items: center;
-  flex-wrap: wrap;
 
-  #history-search {
-    @include peertube-input-text(250px);
+  .search-wrapper {
+    grid-column: 1;
+
+    input {
+      @include peertube-input-text(250px);
+    }
   }
 
   .history-switch {
+    grid-column: 3;
+
     display: flex;
+    margin-left: auto;
+    margin-right: 15px;
 
     label {
       margin: 0 0 0 5px;
@@ -31,6 +39,8 @@
   }
 
   .delete-history {
+    grid-column: 4;
+
     @include peertube-button;
     @include grey-button;
     @include button-with-icon;
@@ -40,26 +50,27 @@
 }
 
 .video {
-  @include row-blocks;
-
-  .my-video-miniature {
-    flex-grow: 1;
-  }
+  @include row-blocks($column-responsive: false);
 }
 
-@media screen and (max-width: $mobile-view) {
+@media screen and (max-width: $small-view) {
   .top-buttons {
-    .history-switch label, .delete-history {
-      @include ellipsis;
-    }
+    grid-template-columns: auto 1fr auto;
+    row-gap: 20px;
 
-    .history-switch label {
-      width: 60%;
+    .history-switch {
+      grid-row: 1;
+      grid-column: 1;
+      margin: 0;
     }
 
     .delete-history {
-      margin-left: auto;
-      max-width: 32%;
+      grid-row: 1;
+      grid-column: 3;
+    }
+
+    .search-wrapper {
+      grid-column: 1 / 4;
     }
   }
 }

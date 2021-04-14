@@ -54,6 +54,7 @@ import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getPlaylistSort, isOutdat
 import { ThumbnailModel } from './thumbnail'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
 import { VideoPlaylistElementModel } from './video-playlist-element'
+import { ActorModel } from '../activitypub/actor'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -65,7 +66,7 @@ enum ScopeNames {
 }
 
 type AvailableForListOptions = {
-  followerActorId: number
+  followerActorId?: number
   type?: VideoPlaylistType
   accountId?: number
   videoChannelId?: number
@@ -134,20 +135,26 @@ type AvailableForListOptions = {
         privacy: VideoPlaylistPrivacy.PUBLIC
       })
 
-      // Only list local playlists OR playlists that are on an instance followed by actorId
-      const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
+      // Only list local playlists
+      const whereActorOr: WhereOptions[] = [
+        {
+          serverId: null
+        }
+      ]
+
+      // … OR playlists that are on an instance followed by actorId
+      if (options.followerActorId) {
+        const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
+
+        whereActorOr.push({
+          serverId: {
+            [Op.in]: literal(inQueryInstanceFollow)
+          }
+        })
+      }
 
       whereActor = {
-        [Op.or]: [
-          {
-            serverId: null
-          },
-          {
-            serverId: {
-              [Op.in]: literal(inQueryInstanceFollow)
-            }
-          }
-        ]
+        [Op.or]: whereActorOr
       }
     }
 
@@ -493,6 +500,33 @@ export class VideoPlaylistModel extends Model {
 
   getEmbedStaticPath () {
     return '/video-playlists/embed/' + this.uuid
+  }
+
+  static async getStats () {
+    const totalLocalPlaylists = await VideoPlaylistModel.count({
+      include: [
+        {
+          model: AccountModel,
+          required: true,
+          include: [
+            {
+              model: ActorModel,
+              required: true,
+              where: {
+                serverId: null
+              }
+            }
+          ]
+        }
+      ],
+      where: {
+        privacy: VideoPlaylistPrivacy.PUBLIC
+      }
+    })
+
+    return {
+      totalLocalPlaylists
+    }
   }
 
   setAsRefreshed () {

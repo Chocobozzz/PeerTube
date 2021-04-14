@@ -2,7 +2,7 @@ import 'multer'
 import * as express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
+import { ActorImageType, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -11,7 +11,7 @@ import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
-import { deleteLocalActorAvatarFile, updateLocalActorAvatarFile } from '../../../lib/avatar'
+import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../../lib/actor-image'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
@@ -25,7 +25,7 @@ import {
   usersVideoRatingValidator
 } from '../../../middlewares'
 import { deleteMeValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
-import { updateAvatarValidator } from '../../../middlewares/validators/avatar'
+import { updateAvatarValidator } from '../../../middlewares/validators/actor-image'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { UserModel } from '../../../models/account/user'
@@ -238,7 +238,7 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatar = await updateLocalActorAvatarFile(userAccount, avatarPhysicalFile)
+  const avatar = await updateLocalActorImageFile(userAccount, avatarPhysicalFile, ActorImageType.AVATAR)
 
   return res.json({ avatar: avatar.toFormattedJSON() })
 }
@@ -247,7 +247,7 @@ async function deleteMyAvatar (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
 
   const userAccount = await AccountModel.load(user.Account.id)
-  await deleteLocalActorAvatarFile(userAccount)
+  await deleteLocalActorImageFile(userAccount, ActorImageType.AVATAR)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

@@ -1,14 +1,32 @@
-.title-page {
-  margin-top: 0;
-}
+@import '_variables';
+@import '_mixins';
+@import '_miniature';
 
-.video-playlist {
+.playlists {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 
-  .playlist-miniature-container {
+  .playlist-wrapper {
     margin-right: 15px;
     margin-bottom: 30px;
+  }
+}
+
+.margin-content {
+  @include grid-videos-miniature-layout;
+}
+
+@media screen and (max-width: $mobile-view) {
+  .title-page {
+    display: block;
+    text-align: center;
+  }
+
+  .playlists {
+    justify-content: left;
+
+    margin-left: pvar(--horizontalMarginContent) !important;
+    margin-right: pvar(--horizontalMarginContent) !important;
   }
 }

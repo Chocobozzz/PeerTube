@@ -29,7 +29,12 @@ import { MetaService } from '@ngx-meta/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
-import { cleanupVideoWatch, getStoredP2PEnabled, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
+import {
+  cleanupVideoWatch,
+  getStoredP2PEnabled,
+  getStoredTheater,
+  getStoredVideoWatchHistory
+} from '../../../assets/player/peertube-player-local-storage'
 import {
   CustomizationOptions,
   P2PMediaLoaderOptions,
@@ -279,28 +284,22 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showSupportModal () {
-    // Check video was playing before opening support modal
-    const isVideoPlaying = this.isPlaying()
-
-    this.pausePlayer()
-
-    const modalRef = this.supportModal.show()
-
-    modalRef.result.then(() => {
-      if (isVideoPlaying) {
-        this.resumePlayer()
-      }
-    })
+    this.supportModal.show()
   }
 
   showShareModal () {
-    this.pausePlayer()
-
     this.videoShareModal.show(this.currentTime, this.videoWatchPlaylist.currentPlaylistPosition)
   }
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
+  }
+
+  getVideoUrl () {
+    if (!this.video.url) {
+      return this.video.originInstanceUrl + VideoDetails.buildClientUrl(this.video.uuid)
+    }
+    return this.video.url
   }
 
   getVideoTags () {
@@ -316,10 +315,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.nextVideoUuid = video.uuid
       this.nextVideoTitle = video.name
     }
-  }
-
-  onModalOpened () {
-    this.pausePlayer()
   }
 
   onVideoRemoved () {
@@ -396,6 +391,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   onPlaylistVideoFound (videoId: string) {
     this.loadVideo(videoId)
+  }
+
+  displayOtherVideosAsRow () {
+    // Use the same value as in the SASS file
+    return this.screenService.getWindowInnerWidth() <= 1100
   }
 
   private loadVideo (videoId: string) {
@@ -572,7 +572,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.setOpenGraphTags()
     this.checkUserRating()
 
-    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', { videojs })
+    const hookOptions = {
+      videojs,
+      video: this.video,
+      playlist: this.playlist
+    }
+    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', hookOptions)
   }
 
   private async buildPlayer (urlOptions: URLOptions) {
@@ -872,24 +877,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     return { playerMode: mode, playerOptions: options }
-  }
-
-  private pausePlayer () {
-    if (!this.player) return
-
-    this.player.pause()
-  }
-
-  private resumePlayer () {
-    if (!this.player) return
-
-    this.player.play()
-  }
-
-  private isPlaying () {
-    if (!this.player) return
-
-    return !this.player.paused()
   }
 
   private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {

@@ -5,7 +5,7 @@
   <my-feed [syndicationItems]="syndicationItems"></my-feed>
 </h1>
 
-<em>This view also shows comments from muted accounts.</em>
+<em i18n>This view also shows comments from muted accounts.</em>
 
 <p-table
   [value]="comments" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"

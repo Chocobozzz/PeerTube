@@ -10,7 +10,6 @@ import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { ApplicationModel } from '../application/application'
-import { AvatarModel } from '../avatar/avatar'
 import { PluginModel } from '../server/plugin'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
@@ -20,6 +19,7 @@ import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { VideoImportModel } from '../video/video-import'
 import { AccountModel } from './account'
+import { ActorImageModel } from './actor-image'
 import { UserModel } from './user'
 
 enum ScopeNames {
@@ -34,7 +34,8 @@ function buildActorWithAvatarInclude () {
     include: [
       {
         attributes: [ 'filename' ],
-        model: AvatarModel.unscoped(),
+        as: 'Avatar',
+        model: ActorImageModel.unscoped(),
         required: false
       },
       {
@@ -172,7 +173,8 @@ function buildAccountInclude (required: boolean, withActor = false) {
               },
               {
                 attributes: [ 'filename' ],
-                model: AvatarModel.unscoped(),
+                as: 'Avatar',
+                model: ActorImageModel.unscoped(),
                 required: false
               },
               {

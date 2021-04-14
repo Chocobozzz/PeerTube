@@ -490,12 +490,13 @@ function wrapForAPIResults (baseQuery: string, replacements: any, options: Build
     'INNER JOIN "actor" AS "VideoChannel->Account->Actor" ON "VideoChannel->Account"."actorId" = "VideoChannel->Account->Actor"."id"',
 
     'LEFT OUTER JOIN "server" AS "VideoChannel->Actor->Server" ON "VideoChannel->Actor"."serverId" = "VideoChannel->Actor->Server"."id"',
-    'LEFT OUTER JOIN "avatar" AS "VideoChannel->Actor->Avatar" ON "VideoChannel->Actor"."avatarId" = "VideoChannel->Actor->Avatar"."id"',
+    'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Actor->Avatar" ' +
+      'ON "VideoChannel->Actor"."avatarId" = "VideoChannel->Actor->Avatar"."id"',
 
     'LEFT OUTER JOIN "server" AS "VideoChannel->Account->Actor->Server" ' +
       'ON "VideoChannel->Account->Actor"."serverId" = "VideoChannel->Account->Actor->Server"."id"',
 
-    'LEFT OUTER JOIN "avatar" AS "VideoChannel->Account->Actor->Avatar" ' +
+    'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatar" ' +
       'ON "VideoChannel->Account->Actor"."avatarId" = "VideoChannel->Account->Actor->Avatar"."id"',
 
     'LEFT OUTER JOIN "thumbnail" AS "Thumbnails" ON "video"."id" = "Thumbnails"."videoId"'

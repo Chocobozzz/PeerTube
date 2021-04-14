@@ -39,7 +39,8 @@ describe('Test a client controllers', function () {
   let account: Account
 
   const videoName = 'my super name for server 1'
-  const videoDescription = 'my super description for server 1'
+  const videoDescription = 'my<br> super __description__ for *server* 1<p></p>'
+  const videoDescriptionPlainText = 'my super description for server 1'
 
   const playlistName = 'super playlist name'
   const playlistDescription = 'super playlist description'
@@ -169,7 +170,7 @@ describe('Test a client controllers', function () {
         .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain(`<meta property="og:title" content="${videoName}" />`)
-      expect(res.text).to.contain(`<meta property="og:description" content="${videoDescription}" />`)
+      expect(res.text).to.contain(`<meta property="og:description" content="${videoDescriptionPlainText}" />`)
       expect(res.text).to.contain('<meta property="og:type" content="video" />')
       expect(res.text).to.contain(`<meta property="og:url" content="${servers[0].url}/videos/watch/${servers[0].video.uuid}" />`)
     })
@@ -181,7 +182,7 @@ describe('Test a client controllers', function () {
         .expect(HttpStatusCode.OK_200)
 
       expect(res.text).to.contain(`<meta property="og:title" content="${videoName}" />`)
-      expect(res.text).to.contain(`<meta property="og:description" content="${videoDescription}" />`)
+      expect(res.text).to.contain(`<meta property="og:description" content="${videoDescriptionPlainText}" />`)
       expect(res.text).to.contain('<meta property="og:type" content="video" />')
       expect(res.text).to.contain(`<meta property="og:url" content="${servers[0].url}/videos/watch/${servers[0].video.uuid}" />`)
     })
@@ -210,7 +211,7 @@ describe('Test a client controllers', function () {
       expect(res.text).to.contain('<meta property="twitter:card" content="summary_large_image" />')
       expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
       expect(res.text).to.contain(`<meta property="twitter:title" content="${videoName}" />`)
-      expect(res.text).to.contain(`<meta property="twitter:description" content="${videoDescription}" />`)
+      expect(res.text).to.contain(`<meta property="twitter:description" content="${videoDescriptionPlainText}" />`)
     })
 
     it('Should have valid twitter card on the watch playlist page', async function () {

@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 625
+const LAST_MIGRATION_VERSION = 635
 
 // ---------------------------------------------------------------------------
 
@@ -305,7 +305,7 @@ const CONSTRAINTS_FIELDS = {
     PUBLIC_KEY: { min: 10, max: 5000 }, // Length
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
     URL: { min: 3, max: 2000 }, // Length
-    AVATAR: {
+    IMAGE: {
       EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
       FILE_SIZE: {
         max: 2 * 1024 * 1024 // 2MB
@@ -466,6 +466,8 @@ const MIMETYPES = {
   IMAGE: {
     MIMETYPE_EXT: {
       'image/png': '.png',
+      'image/gif': '.gif',
+      'image/webp': '.webp',
       'image/jpg': '.jpg',
       'image/jpeg': '.jpg'
     },
@@ -580,6 +582,7 @@ const STATIC_DOWNLOAD_PATHS = {
   HLS_VIDEOS: '/download/streaming-playlists/hls/videos/'
 }
 const LAZY_STATIC_PATHS = {
+  BANNERS: '/lazy-static/banners/',
   AVATARS: '/lazy-static/avatars/',
   PREVIEWS: '/lazy-static/previews/',
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
@@ -595,8 +598,8 @@ const STATIC_MAX_AGE = {
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
-  width: 223,
-  height: 122,
+  width: 280,
+  height: 157,
   minWidth: 150
 }
 const PREVIEWS_SIZE = {
@@ -604,9 +607,15 @@ const PREVIEWS_SIZE = {
   height: 480,
   minWidth: 400
 }
-const AVATARS_SIZE = {
-  width: 120,
-  height: 120
+const ACTOR_IMAGES_SIZE = {
+  AVATARS: {
+    width: 120,
+    height: 120
+  },
+  BANNERS: {
+    width: 1920,
+    height: 317 // 6/1 ratio
+  }
 }
 
 const EMBED_SIZE = {
@@ -634,7 +643,7 @@ const LRU_CACHE = {
   USER_TOKENS: {
     MAX_SIZE: 1000
   },
-  AVATAR_STATIC: {
+  ACTOR_IMAGE_STATIC: {
     MAX_SIZE: 500
   }
 }
@@ -671,7 +680,7 @@ const MEMOIZE_LENGTH = {
 }
 
 const QUEUE_CONCURRENCY = {
-  AVATAR_PROCESS_IMAGE: 3
+  ACTOR_PROCESS_IMAGE: 3
 }
 
 const REDUNDANCY = {
@@ -754,7 +763,7 @@ if (isTestInstance() === true) {
   ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
   ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
-  CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
+  CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
   CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max = 400 * 1024 // 400KB
 
   SCHEDULER_INTERVALS_MS.actorFollowScores = 1000
@@ -815,7 +824,7 @@ export {
   SEARCH_INDEX,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
-  AVATARS_SIZE,
+  ACTOR_IMAGES_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
   TRACKER_RATE_LIMITS,

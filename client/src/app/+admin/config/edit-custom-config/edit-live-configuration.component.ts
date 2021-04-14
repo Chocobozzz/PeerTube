@@ -1,6 +1,6 @@
 
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ServerConfig } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
@@ -11,12 +11,14 @@ import { EditConfigurationService, ResolutionOption } from './edit-configuration
   templateUrl: './edit-live-configuration.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
-export class EditLiveConfigurationComponent implements OnInit {
+export class EditLiveConfigurationComponent implements OnInit, OnChanges {
   @Input() form: FormGroup
   @Input() formErrors: any
   @Input() serverConfig: ServerConfig
 
   transcodingThreadOptions: SelectOptionsItem[] = []
+  transcodingProfiles: SelectOptionsItem[] = []
+
   liveMaxDurationOptions: SelectOptionsItem[] = []
   liveResolutions: ResolutionOption[] = []
 
@@ -39,7 +41,13 @@ export class EditLiveConfigurationComponent implements OnInit {
     this.liveResolutions = this.editConfigurationService.getLiveResolutions()
   }
 
-  getAvailableTranscodingProfile () {
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes['serverConfig']) {
+      this.transcodingProfiles = this.buildAvailableTranscodingProfile()
+    }
+  }
+
+  buildAvailableTranscodingProfile () {
     const profiles = this.serverConfig.live.transcoding.availableProfiles
 
     return profiles.map(p => {

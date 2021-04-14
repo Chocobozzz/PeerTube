@@ -1,15 +1,17 @@
-import { ActorModel } from '../../../models/activitypub/actor'
+
 import { FunctionProperties, PickWith, PickWithOpt } from '@shared/core-utils'
-import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { MServer, MServerHost, MServerHostBlocks, MServerRedundancyAllowed } from '../server'
-import { MAvatar, MAvatarFormattable } from './avatar'
 import { MChannel, MChannelAccountActor, MChannelAccountDefault, MChannelId, MChannelIdActor } from '../video'
+import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
+import { MActorImage, MActorImageFormattable } from './actor-image'
 
 type Use<K extends keyof ActorModel, M> = PickWith<ActorModel, K, M>
+type UseOpt<K extends keyof ActorModel, M> = PickWithOpt<ActorModel, K, M>
 
 // ############################################################################
 
-export type MActor = Omit<ActorModel, 'Account' | 'VideoChannel' | 'ActorFollowing' | 'Avatar' | 'ActorFollowers' | 'Server'>
+export type MActor = Omit<ActorModel, 'Account' | 'VideoChannel' | 'ActorFollowing' | 'Avatar' | 'ActorFollowers' | 'Server' | 'Banner'>
 
 // ############################################################################
 
@@ -34,7 +36,7 @@ export type MActorRedundancyAllowedOpt = PickWithOpt<ActorModel, 'Server', MServ
 export type MActorDefaultLight =
   MActorLight &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MAvatar>
+  Use<'Avatar', MActorImage>
 
 export type MActorAccountId =
   MActor &
@@ -75,10 +77,25 @@ export type MActorServer =
 
 // Complex actor associations
 
+export type MActorImages =
+  MActor &
+  Use<'Avatar', MActorImage> &
+  UseOpt<'Banner', MActorImage>
+
 export type MActorDefault =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MAvatar>
+  Use<'Avatar', MActorImage>
+
+export type MActorDefaultChannelId =
+  MActorDefault &
+  Use<'VideoChannel', MChannelId>
+
+export type MActorDefaultBanner =
+  MActor &
+  Use<'Server', MServer> &
+  Use<'Avatar', MActorImage> &
+  Use<'Banner', MActorImage>
 
 // Actor with channel that is associated to an account and its actor
 // Actor -> VideoChannel -> Account -> Actor
@@ -89,7 +106,8 @@ export type MActorChannelAccountActor =
 export type MActorFull =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MAvatar> &
+  Use<'Avatar', MActorImage> &
+  Use<'Banner', MActorImage> &
   Use<'Account', MAccount> &
   Use<'VideoChannel', MChannelAccountActor>
 
@@ -97,7 +115,8 @@ export type MActorFull =
 export type MActorFullActor =
   MActor &
   Use<'Server', MServer> &
-  Use<'Avatar', MAvatar> &
+  Use<'Avatar', MActorImage> &
+  Use<'Banner', MActorImage> &
   Use<'Account', MAccountDefault> &
   Use<'VideoChannel', MChannelAccountDefault>
 
@@ -109,7 +128,7 @@ export type MActorSummary =
   FunctionProperties<MActor> &
   Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarId'> &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MAvatar>
+  Use<'Avatar', MActorImage>
 
 export type MActorSummaryBlocks =
   MActorSummary &
@@ -127,13 +146,21 @@ export type MActorSummaryFormattable =
   FunctionProperties<MActor> &
   Pick<MActor, 'url' | 'preferredUsername'> &
   Use<'Server', MServerHost> &
-  Use<'Avatar', MAvatarFormattable>
+  Use<'Avatar', MActorImageFormattable>
 
 export type MActorFormattable =
   MActorSummaryFormattable &
-  Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt'> &
-  Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>>
+  Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt' | 'bannerId' | 'avatarId'> &
+  Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>> &
+  UseOpt<'Banner', MActorImageFormattable>
 
-export type MActorAP =
+type MActorAPBase =
   MActor &
-  Use<'Avatar', MAvatar>
+  Use<'Avatar', MActorImage>
+
+export type MActorAPAccount =
+  MActorAPBase
+
+export type MActorAPChannel =
+  MActorAPBase &
+  Use<'Banner', MActorImage>

@@ -1,8 +1,8 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import { join } from 'path'
-import { getRegisteredPlugins, getRegisteredThemes } from '@server/controllers/api/config'
 import { serveIndexHTML } from '@server/lib/client-html'
+import { getRegisteredPlugins, getRegisteredThemes } from '@server/lib/config'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
 import { root } from '../helpers/core-utils'
@@ -252,9 +252,9 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
           avatar: {
             file: {
               size: {
-                max: CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max
+                max: CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max
               },
-              extensions: CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME
+              extensions: CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
             }
           },
           video: {

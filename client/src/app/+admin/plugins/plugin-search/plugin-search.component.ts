@@ -3,7 +3,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
+import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
 import { PeerTubePluginIndex } from '@shared/models/plugins/peertube-plugin-index.model'
 import { PluginType } from '@shared/models/plugins/plugin.type'
 
@@ -39,6 +39,7 @@ export class PluginSearchComponent implements OnInit {
   private searchSubject = new Subject<string>()
 
   constructor (
+    private pluginService: PluginService,
     private pluginApiService: PluginApiService,
     private notifier: Notifier,
     private confirmService: ConfirmService,
@@ -117,6 +118,14 @@ export class PluginSearchComponent implements OnInit {
 
   getPluginOrThemeHref (name: string) {
     return this.pluginApiService.getPluginOrThemeHref(this.pluginType, name)
+  }
+
+  getShowRouterLink (plugin: PeerTubePluginIndex) {
+    return [ '/admin', 'plugins', 'show', this.pluginService.nameToNpmName(plugin.name, this.pluginType) ]
+  }
+
+  isThemeSearch () {
+    return this.pluginType === PluginType.THEME
   }
 
   async install (plugin: PeerTubePluginIndex) {

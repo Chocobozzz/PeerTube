@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
-import { basename, join } from 'path'
+import { basename } from 'path'
 import { Transaction } from 'sequelize/types'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -16,7 +16,7 @@ import {
   ActivityUrlObject,
   ActivityVideoUrlObject
 } from '../../../shared/index'
-import { ActivityIconObject, ActivityTrackerUrlObject, VideoObject } from '../../../shared/models/activitypub/objects'
+import { ActivityTrackerUrlObject, VideoObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -34,7 +34,6 @@ import { doJSONRequest, PeerTubeRequestError } from '../../helpers/requests'
 import { fetchVideoByUrl, getExtFromMimetype, VideoFetchByUrlType } from '../../helpers/video'
 import {
   ACTIVITY_PUB,
-  LAZY_STATIC_PATHS,
   MIMETYPES,
   P2P_MEDIA_LOADER_PEER_VERSION,
   PREVIEWS_SIZE,
@@ -367,13 +366,13 @@ async function updateVideoFromAP (options: {
 
       if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)
 
-      if (videoUpdated.getPreview()) {
-        const previewUrl = getPreviewUrl(getPreviewFromIcons(videoObject), video)
+      const previewIcon = getPreviewFromIcons(videoObject)
+      if (videoUpdated.getPreview() && previewIcon) {
         const previewModel = createPlaceholderThumbnail({
-          fileUrl: previewUrl,
+          fileUrl: previewIcon.url,
           video,
           type: ThumbnailType.PREVIEW,
-          size: PREVIEWS_SIZE
+          size: previewIcon
         })
         await videoUpdated.addAndSaveThumbnail(previewModel, t)
       }
@@ -540,7 +539,7 @@ async function refreshVideoIfNeeded (options: {
       account: channelActor.VideoChannel.Account,
       channel: channelActor.VideoChannel
     }
-    await retryTransactionWrapper(updateVideoFromAP, updateOptions)
+    await updateVideoFromAP(updateOptions)
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
 
     ActorFollowScoreCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
@@ -628,15 +627,17 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
 
       if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
 
-      const previewUrl = getPreviewUrl(getPreviewFromIcons(videoObject), videoCreated)
-      const previewModel = createPlaceholderThumbnail({
-        fileUrl: previewUrl,
-        video: videoCreated,
-        type: ThumbnailType.PREVIEW,
-        size: PREVIEWS_SIZE
-      })
+      const previewIcon = getPreviewFromIcons(videoObject)
+      if (previewIcon) {
+        const previewModel = createPlaceholderThumbnail({
+          fileUrl: previewIcon.url,
+          video: videoCreated,
+          type: ThumbnailType.PREVIEW,
+          size: previewIcon
+        })
 
-      if (thumbnailModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
+        await videoCreated.addAndSaveThumbnail(previewModel, t)
+      }
 
       // Process files
       const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject.url)
@@ -894,12 +895,6 @@ function getPreviewFromIcons (videoObject: VideoObject) {
   const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minWidth)
 
   return maxBy(validIcons, 'width')
-}
-
-function getPreviewUrl (previewIcon: ActivityIconObject, video: MVideoWithHost) {
-  return previewIcon
-    ? previewIcon.url
-    : buildRemoteVideoBaseUrl(video, join(LAZY_STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
 }
 
 function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {

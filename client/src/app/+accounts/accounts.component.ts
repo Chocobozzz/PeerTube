@@ -79,7 +79,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
                         )
 
     this.links = [
-      { label: $localize`VIDEO CHANNELS`, routerLink: 'video-channels' },
+      { label: $localize`CHANNELS`, routerLink: 'video-channels' },
       { label: $localize`VIDEOS`, routerLink: 'videos' }
     ]
   }

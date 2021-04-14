@@ -151,7 +151,7 @@ async function updatePlugin (req: express.Request, res: express.Response) {
   const fromDisk = !!body.path
   const toUpdate = body.npmName || body.path
   try {
-    const plugin = await PluginManager.Instance.update(toUpdate, undefined, fromDisk)
+    const plugin = await PluginManager.Instance.update(toUpdate, fromDisk)
 
     return res.json(plugin.toFormattedJSON())
   } catch (err) {

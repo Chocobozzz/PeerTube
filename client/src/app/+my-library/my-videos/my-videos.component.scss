@@ -5,6 +5,11 @@ input[type=text] {
   @include peertube-input-text(300px);
 }
 
+.peertube-select-container {
+  @include peertube-select-container(auto);
+  margin-left: 0.5rem;
+}
+
 h1 {
   display: flex;
   justify-content: space-between;
@@ -32,36 +37,9 @@ h1 {
   }
 }
 
-::ng-deep {
-  .video {
-    flex-wrap: wrap;
-  }
-
-  .action-button span {
-    white-space: nowrap;
-  }
-
-  .video-miniature {
-    &.display-as-row {
-      // width: min-content !important;
-      width: 100% !important;
-
-      .video-bottom .video-miniature-information {
-        width: max-content !important;
-        min-width: unset !important;
-      }
-    }
-
-    .video-bottom {
-      max-width: 350px;
-    }
-  }
-}
-
 .action-button {
   display: flex;
-  margin-left: 55px;
-  margin-top: 10px;
+  margin-left: 10px;
   align-self: flex-end;
 }
 
@@ -69,7 +47,7 @@ my-edit-button {
   margin-right: 10px;
 }
 
-@media screen and (max-width: $small-view) {
+@include on-small-main-col {
   h1 {
     flex-direction: column;
 
@@ -80,44 +58,25 @@ my-edit-button {
   }
 
   .action-button {
-    flex-direction: column;
-    align-self: center;
-    align-items: center;
-    margin-left: 0px;
-  }
-
-  my-edit-button {
-    margin: 15px 0 5px 0;
-    width: 100%;
-    text-align: center;
-
-    ::ng-deep {
-      .action-button {
-        /* same width than a.video-thumbnail */
-        width: $video-thumbnail-width;
-      }
-    }
-  }
-
-  ::ng-deep {
-    .video-miniature {
-      align-items: center;
-
-      .video-bottom,
-      .video-bottom .video-miniature-information {
-        /* same width than a.video-thumbnail */
-        max-width: $video-thumbnail-width !important;
-      }
-    }
+    margin-top: 10px;
+    margin-left: auto;
   }
 }
 
-@media screen and (max-width: $mobile-view) {
+@include on-mobile-main-col {
   .videos-header {
     flex-direction: column;
 
     input[type=text] {
-      width: 100% !important;
+      width: 100%;
+      margin-bottom: 12px;
     }
+    .peertube-select-container {
+      margin-left: 0;
+    }
+  }
+
+  .action-button {
+    margin-left: 0;
   }
 }

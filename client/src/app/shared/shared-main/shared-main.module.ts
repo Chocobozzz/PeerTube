@@ -6,18 +6,18 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import {
+  NgbButtonsModule,
   NgbCollapseModule,
   NgbDropdownModule,
   NgbModalModule,
   NgbNavModule,
   NgbPopoverModule,
-  NgbTooltipModule,
-  NgbButtonsModule
+  NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
-import { AccountService, ActorAvatarInfoComponent } from './account'
+import { AccountService } from './account'
 import {
   AutofocusDirective,
   BytesPipe,
@@ -32,12 +32,12 @@ import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditBu
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
-import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent, SimpleSearchInputComponent } from './misc'
+import { HelpComponent, ListOverflowComponent, SimpleSearchInputComponent, TopMenuDropdownComponent } from './misc'
+import { PluginPlaceholderComponent } from './plugins'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
-import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -66,8 +66,6 @@ import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-accou
   ],
 
   declarations: [
-    ActorAvatarInfoComponent,
-
     FromNowPipe,
     NumberFormatterPipe,
     BytesPipe,
@@ -95,7 +93,9 @@ import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-accou
     SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    PluginPlaceholderComponent
   ],
 
   exports: [
@@ -120,8 +120,6 @@ import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-accou
 
     PrimeSharedModule,
 
-    ActorAvatarInfoComponent,
-
     FromNowPipe,
     BytesPipe,
     NumberFormatterPipe,
@@ -149,7 +147,9 @@ import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-accou
     SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    PluginPlaceholderComponent
   ],
 
   providers: [

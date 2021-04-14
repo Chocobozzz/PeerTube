@@ -16,7 +16,6 @@ import { Video } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType } from './video-actions-dropdown.component'
 
-export type OwnerDisplayType = 'account' | 'videoChannel'
 export type MiniatureDisplayOptions = {
   date?: boolean
   views?: boolean
@@ -50,9 +49,9 @@ export class VideoMiniatureComponent implements OnInit {
     state: false,
     blacklistInfo: false
   }
-  @Input() displayAsRow = false
   @Input() displayVideoActions = true
-  @Input() fitWidth = false
+
+  @Input() displayAsRow = false
 
   @Input() videoLinkType: VideoLinkType = 'internal'
 
@@ -241,6 +240,12 @@ export class VideoMiniatureComponent implements OnInit {
 
   isWatchLaterPlaylistDisplayed () {
     return this.displayVideoActions && this.isUserLoggedIn() && this.inWatchLaterPlaylist !== undefined
+  }
+
+  getClasses () {
+    return {
+      'display-as-row': this.displayAsRow
+    }
   }
 
   private setUpBy () {
