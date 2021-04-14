@@ -153,17 +153,8 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     margin-bottom: 0;
     text-align: right;
 
-    .action-button-cancel {
-      @include peertube-button;
-      @include tertiary-button;
-
-      display: inline-block;
-      margin-right: 10px;
-    }
-
-    .action-button-submit {
-      @include peertube-button;
-      @include orange-button;
+    > .peertube-button:not(:first-child) {
+      margin-left: 10px
     }
   }
 }
