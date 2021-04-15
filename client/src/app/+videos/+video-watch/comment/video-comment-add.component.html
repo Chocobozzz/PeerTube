@@ -8,8 +8,8 @@
                 (click)="openVisitorModal($event)"
                 formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
                 (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
-
       </textarea>
+
       <my-help class="markdown-guide" helpType="custom" iconName="markdown" tooltipPlacement="left auto" autoClose="true" i18n-title title="Markdown compatible">
         <ng-template ptTemplate="customHtml">
           <span i18n>Markdown compatible that supports:</span>
@@ -41,10 +41,11 @@
   </div>
 
   <div class="comment-buttons">
-    <button *ngIf="isAddButtonDisplayed()" class="cancel-button" (click)="cancelCommentReply()" type="button" i18n>
+    <button *ngIf="isAddButtonDisplayed()" class="peertube-button tertiary-button cancel-button" (click)="cancelCommentReply()" type="button" i18n>
       Cancel
     </button>
-    <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid || addingComment }">
+
+    <button *ngIf="isAddButtonDisplayed()" class="peertube-button orange-button" [ngClass]="{ disabled: !form.valid || addingComment }">
       {{ addingCommentButtonValue }}
     </button>
   </div>
@@ -55,6 +56,7 @@
     <h4 class="modal-title" id="modal-basic-title" i18n>You are one step away from commenting</h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hideModals()"></my-global-icon>
   </div>
+
   <div class="modal-body">
     <span i18n>
       You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).
@@ -62,14 +64,15 @@
 
     <my-remote-subscribe [interact]="true" [uri]="getUri()"></my-remote-subscribe>
   </div>
+
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
       (click)="hideModals()" (key.enter)="hideModals()"
     >
 
     <input
-      type="submit" i18n-value value="Login to comment" class="action-button-submit"
+      type="submit" i18n-value value="Login to comment" class="peertube-button orange-button"
       (click)="gotoLogin()"
     >
   </div>

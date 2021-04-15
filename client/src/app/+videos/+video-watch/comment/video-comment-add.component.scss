@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+$markdown-icon-height: 18px;
+$markdown-icon-width: 30px;
+$peertube-textarea-height: 60px;
+
 form {
   margin-bottom: 30px;
 }
@@ -18,51 +22,47 @@ form {
     flex-grow: 1;
     margin: 0;
     position: relative;
+  }
 
-    $peertube-textarea-height: 60px;
-    $markdown-icon-height: 18px;
-    $markdown-icon-width: 30px;
+  textarea {
+    @include peertube-textarea(100%, $peertube-textarea-height);
+    @include button-focus(pvar(--mainColorLightest));
 
-    .markdown-guide {
-      position: absolute;
-      top: 5px;
-      right: 9px;
+    min-height: calc(#{$peertube-textarea-height} - 15px * 2);
+    padding-right: $markdown-icon-width + 15px !important;
 
-      ::ng-deep .help-tooltip-button {
-        my-global-icon {
-          height: $markdown-icon-height;
-          width: $markdown-icon-width;
+    @media screen and (max-width: 600px) {
+      padding-right: $markdown-icon-width + 19px  !important;
+    }
 
-          svg {
-            color: #C6C6C6;
-            fill: #C6C6C6;
-            border-radius: 3px;
-          }
-        }
+    &:focus::placeholder {
+      opacity: 0;
+    }
+  }
+}
 
-        &:focus, &:active, &:hover {
-          my-global-icon svg {
-            background-color: #C6C6C6;
-            color: pvar(--mainBackgroundColor);
-            fill: pvar(--mainBackgroundColor);
-          }
-        }
+.markdown-guide {
+  position: absolute;
+  top: 5px;
+  right: 9px;
+
+  ::ng-deep .help-tooltip-button {
+    my-global-icon {
+      height: $markdown-icon-height;
+      width: $markdown-icon-width;
+
+      svg {
+        color: #C6C6C6;
+        fill: #C6C6C6;
+        border-radius: 3px;
       }
     }
 
-    textarea {
-      @include peertube-textarea(100%, $peertube-textarea-height);
-      @include button-focus(pvar(--mainColorLightest));
-
-      min-height: calc(#{$peertube-textarea-height} - 15px * 2);
-      padding-right: $markdown-icon-width + 15px !important;
-
-      @media screen and (max-width: 600px) {
-        padding-right: $markdown-icon-width + 19px  !important;
-      }
-
-      &:focus::placeholder {
-        opacity: 0;
+    &:focus, &:active, &:hover {
+      my-global-icon svg {
+        background-color: #C6C6C6;
+        color: pvar(--mainBackgroundColor);
+        fill: pvar(--mainBackgroundColor);
       }
     }
   }
@@ -71,30 +71,6 @@ form {
 .comment-buttons {
   display: flex;
   justify-content: flex-end;
-
-  button {
-    @include peertube-button;
-    @include disable-outline;
-    @include disable-default-a-behaviour;
-
-    &:not(:last-child) {
-      margin-right: .5rem;
-    }
-
-    &:last-child {
-      @include orange-button;
-    }
-  }
-
-  .cancel-button {
-    @include tertiary-button;
-
-    font-weight: $font-semibold;
-    display: inline-block;
-    padding: 0 10px 0 10px;
-    white-space: nowrap;
-    background: transparent;
-  }
 }
 
 .emoji-flex {
@@ -117,7 +93,8 @@ form {
 }
 
 @media screen and (max-width: 600px) {
-  textarea, .comment-buttons button {
+  textarea,
+  .comment-buttons button {
     font-size: 14px !important;
   }
 
@@ -127,12 +104,7 @@ form {
 }
 
 .modal-body {
-  .btn {
-    @include peertube-button;
-    @include orange-button;
-  }
-
-  span {
+  > span {
     float: left;
     margin-bottom: 20px;
   }
