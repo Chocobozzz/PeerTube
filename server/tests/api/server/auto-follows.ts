@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import {
   acceptFollower,
   cleanupTests,
@@ -153,9 +153,10 @@ describe('Test auto follows', function () {
 
   describe('Auto follow index', function () {
     const instanceIndexServer = new MockInstancesIndex()
+    let port: number
 
     before(async () => {
-      await instanceIndexServer.initialize()
+      port = await instanceIndexServer.initialize()
     })
 
     it('Should not auto follow index if the option is not enabled', async function () {
@@ -177,7 +178,7 @@ describe('Test auto follows', function () {
         followings: {
           instance: {
             autoFollowIndex: {
-              indexUrl: 'http://localhost:42101/api/v1/instances/hosts',
+              indexUrl: `http://localhost:${port}/api/v1/instances/hosts`,
               enabled: true
             }
           }

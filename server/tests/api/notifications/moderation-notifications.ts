@@ -2,8 +2,9 @@
 
 import 'mocha'
 import { v4 as uuidv4 } from 'uuid'
-
+import { AbuseState } from '@shared/models'
 import {
+  addAbuseMessage,
   addVideoCommentThread,
   addVideoToBlacklist,
   cleanupTests,
@@ -20,18 +21,19 @@ import {
   removeVideoFromBlacklist,
   reportAbuse,
   unfollow,
+  updateAbuse,
   updateCustomConfig,
   updateCustomSubConfig,
-  wait,
-  updateAbuse,
-  addAbuseMessage
+  wait
 } from '../../../../shared/extra-utils'
 import { ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
+  checkAbuseStateChange,
   checkAutoInstanceFollowing,
   CheckerBaseParams,
+  checkNewAbuseMessage,
   checkNewAccountAbuseForModerators,
   checkNewBlacklistOnMyVideo,
   checkNewCommentAbuseForModerators,
@@ -41,15 +43,12 @@ import {
   checkUserRegistered,
   checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
-  prepareNotificationsTest,
-  checkAbuseStateChange,
-  checkNewAbuseMessage
+  prepareNotificationsTest
 } from '../../../../shared/extra-utils/users/user-notifications'
 import { addUserSubscription, removeUserSubscription } from '../../../../shared/extra-utils/users/user-subscriptions'
 import { CustomConfig } from '../../../../shared/models/server'
 import { UserNotification } from '../../../../shared/models/users'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { AbuseState } from '@shared/models'
 
 describe('Test moderation notifications', function () {
   let servers: ServerInfo[] = []
@@ -364,16 +363,7 @@ describe('Test moderation notifications', function () {
 
   describe('New instance follows', function () {
     const instanceIndexServer = new MockInstancesIndex()
-    const config = {
-      followings: {
-        instance: {
-          autoFollowIndex: {
-            indexUrl: 'http://localhost:42101/api/v1/instances/hosts',
-            enabled: true
-          }
-        }
-      }
-    }
+    let config: any
     let baseParams: CheckerBaseParams
 
     before(async () => {
@@ -384,8 +374,19 @@ describe('Test moderation notifications', function () {
         token: servers[0].accessToken
       }
 
-      await instanceIndexServer.initialize()
+      const port = await instanceIndexServer.initialize()
       instanceIndexServer.addInstance(servers[1].host)
+
+      config = {
+        followings: {
+          instance: {
+            autoFollowIndex: {
+              indexUrl: `http://localhost:${port}/api/v1/instances/hosts`,
+              enabled: true
+            }
+          }
+        }
+      }
     })
 
     it('Should send a notification only to admin when there is a new instance follower', async function () {
