@@ -38,9 +38,7 @@
       <td>
         <a [href]="accountBlock.blockedAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <my-account-avatar
-              [account]="accountBlock.blockedAccount"
-            ></my-account-avatar>
+            <my-account-avatar [account]="accountBlock.blockedAccount"></my-account-avatar>
             <div>
               {{ accountBlock.blockedAccount.displayName }}
               <span class="text-muted">{{ accountBlock.blockedAccount.nameWithHost }}</span>
