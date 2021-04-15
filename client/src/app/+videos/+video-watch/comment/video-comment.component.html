@@ -1,6 +1,6 @@
 <div *ngIf="isCommentDisplayed()" class="root-comment">
   <div class="left">
-    <my-account-avatar *ngIf="!comment.isDeleted" [account]="comment.account"></my-account-avatar>
+    <my-account-avatar *ngIf="!comment.isDeleted" [href]="comment.account.url" [account]="comment.account"></my-account-avatar>
     <div class="vertical-border"></div>
   </div>
 

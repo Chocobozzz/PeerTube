@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core'
-import { Account as AccountInterface } from '@shared/models'
 import { Account } from '../shared-main/account/account.model'
 
 @Component({
@@ -8,21 +7,23 @@ import { Account } from '../shared-main/account/account.model'
   templateUrl: './account-avatar.component.html'
 })
 export class AccountAvatarComponent {
-  _href: string
-  _title: string
-
-  @Input() account: { name: string, avatar?: { url?: string }, url: string }
-  @Input() size = '36'
-  @Input() set href (value) {
-    this._href = value
+  @Input() account: {
+    name: string
+    avatar?: { url?: string, path: string }
+    url: string
   }
+  @Input() size: '25' | '34' | '36' | '40' | '120' = '36'
+
+  // Use an external link
+  @Input() href: string
+  // Use routerLink
+  @Input() internalHref: string | string[]
+
   @Input() set title (value) {
     this._title = value
   }
 
-  get href () {
-    return this._href || this.account?.url
-  }
+  private _title: string
 
   get title () {
     return this._title || $localize`${this.account.name} (account page)`
@@ -33,6 +34,6 @@ export class AccountAvatarComponent {
   }
 
   get avatarUrl () {
-    return this.account?.avatar ? this.account.avatar.url : Account.GET_DEFAULT_AVATAR_URL()
+    return Account.GET_ACTOR_AVATAR_URL(this.account)
   }
 }

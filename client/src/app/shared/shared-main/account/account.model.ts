@@ -1,4 +1,4 @@
-import { Account as ServerAccount, ActorImage } from '@shared/models'
+import { Account as ServerAccount, Actor as ServerActor, ActorImage } from '@shared/models'
 import { Actor } from './actor.model'
 
 export class Account extends Actor implements ServerAccount {
@@ -13,7 +13,7 @@ export class Account extends Actor implements ServerAccount {
 
   userId?: number
 
-  static GET_ACTOR_AVATAR_URL (actor: object) {
+  static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
     return Actor.GET_ACTOR_AVATAR_URL(actor) || this.GET_DEFAULT_AVATAR_URL()
   }
 

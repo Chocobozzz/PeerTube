@@ -1,8 +1,15 @@
-<a *ngIf="account" [href]="href" target="_blank" rel="noopener noreferrer" [title]="title">
-  <img
-    [class]="class"
-    [src]="avatarUrl"
-    i18n-alt
-    alt="Account avatar"
-  />
+<ng-template #img>
+  <img [class]="class" [src]="avatarUrl" i18n-alt alt="Account avatar" />
+</ng-template>
+
+<a *ngIf="account && href" [href]="href" target="_blank" rel="noopener noreferrer" [title]="title">
+  <ng-template *ngTemplateOutlet="img"></ng-template>
 </a>
+
+<a *ngIf="account && internalHref" [routerLink]="internalHref" [title]="title">
+  <ng-template *ngTemplateOutlet="img"></ng-template>
+</a>
+
+<ng-container *ngIf="!account || (!href && !internalHref)">
+  <ng-template *ngTemplateOutlet="img"></ng-template>
+</ng-container>

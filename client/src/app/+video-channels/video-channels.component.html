@@ -23,8 +23,8 @@
         <div class="section-label" i18n>OWNER ACCOUNT</div>
 
         <div class="avatar-row">
-          <my-account-avatar [account]="videoChannel.ownerAccount" size="120"></my-account-avatar>
-  
+          <my-account-avatar [account]="videoChannel.ownerAccount" [internalHref]="getAccountUrl()" size="120"></my-account-avatar>
+
           <div class="actor-info">
             <h4>
               <a [routerLink]="getAccountUrl()" title="View account" i18n-title>{{ videoChannel.ownerAccount.displayName }}</a>
