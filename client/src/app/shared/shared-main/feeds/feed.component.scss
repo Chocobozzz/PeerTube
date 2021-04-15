@@ -2,19 +2,17 @@
 @import '_mixins';
 
 .feed {
-  width: min-content;
+  width: 100%;
 
   a {
     color: black;
     display: block;
   }
+}
 
-  my-global-icon {
-    cursor: pointer;
-    width: 12px;
-    position: relative;
-    top: -2px;
+my-global-icon {
+  cursor: pointer;
+  width: 100%;
 
-    @include apply-svg-color(pvar(--mainForegroundColor))
-  }
+  @include apply-svg-color(pvar(--mainForegroundColor))
 }

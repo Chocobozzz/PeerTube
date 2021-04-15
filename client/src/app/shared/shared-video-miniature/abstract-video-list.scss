@@ -15,18 +15,9 @@ $iconSize: 16px;
   justify-content: space-between;
   align-items: center;
 
-  .action-block {
-    ::ng-deep my-feed {
-      my-global-icon {
-        width: calc(#{$iconSize} - 2px);
-      }
-    }
-
-    a button {
-      @include peertube-button;
-      @include grey-button;
-      @include button-with-icon($iconSize, 3px, -1px);
-    }
+  my-feed {
+    display: inline-block;
+    width: calc(#{$iconSize} - 2px);
   }
 
   .moderation-block {
@@ -34,21 +25,12 @@ $iconSize: 16px;
     my-global-icon {
       position: relative;
       width: $iconSize;
-      top: -2px;
     }
 
     margin-left: .4rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
-    .dropdown-item {
-      padding: 0;
-
-      ::ng-deep my-peertube-checkbox label {
-        padding: 3px 15px;
-      }
-    }
   }
 }
 

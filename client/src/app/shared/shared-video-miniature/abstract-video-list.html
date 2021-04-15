@@ -4,6 +4,7 @@
 
     <div class="action-block">
       <my-feed *ngIf="syndicationItems" [syndicationItems]="syndicationItems"></my-feed>
+
       <ng-container *ngFor="let action of actions">
         <a *ngIf="action.routerLink" class="ml-2" [routerLink]="action.routerLink" routerLinkActive="active">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>

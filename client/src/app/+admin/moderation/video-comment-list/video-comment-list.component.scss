@@ -1,17 +1,9 @@
 @import 'mixins';
 
-h1 {
-  my-feed {
-    margin-left: 5px;
-    display: inline-block;
-
-    ::ng-deep {
-      my-global-icon {
-        width: 15px !important;
-        top: 0 !important;
-      }
-    }
-  }
+my-feed {
+  margin-left: 5px;
+  display: inline-block;
+  width: 15px;
 }
 
 my-global-icon {
