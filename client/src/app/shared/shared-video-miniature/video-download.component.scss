@@ -37,15 +37,6 @@
   }
 }
 
-.action-button-cancel {
-  @include peertube-button-link;
-}
-
-.action-button-submit {
-  @include peertube-button-link;
-  @include orange-button;
-}
-
 #dropdown-download-type {
   cursor: pointer;
 }
