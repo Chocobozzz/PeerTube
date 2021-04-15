@@ -3633,7 +3633,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887" datatype="html">
         <source>Muted accounts</source>
-        <target state="translated">Muted accounts</target>
+        <target state="translated">Imiḍanen yettwasgugmen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">31</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">86</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">74</context></context-group>
@@ -3641,7 +3641,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853" datatype="html">
         <source>Muted servers</source>
-        <target state="translated">Muted servers</target>
+        <target state="translated">Iqeddacen yettwasgugmen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">95</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">81</context></context-group>
@@ -3658,18 +3658,18 @@
       </trans-unit>
       <trans-unit id="d2e7333704502d1720b353742634630b71ea8bd7" datatype="html">
         <source>Video blocks</source>
-        <target state="translated">Video blocks</target>
+        <target state="translated">Imsewḥal n tvidyut</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c" datatype="html">
         <source>Muted accounts</source>
-        <target state="translated">Muted accounts</target>
+        <target state="translated">Imiḍanen yettwasgugmen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="bd0611346af048015e0a1275091ef68ce98832d2" datatype="html">
         <source>Muted servers</source>
-        <target state="translated">Muted servers</target>
+        <target state="translated">Iqeddacen yettwasgugmen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -4447,12 +4447,12 @@
       </trans-unit>
       <trans-unit id="09d61fa0397899a1b26d09123aef7e7bf5bd78e1" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="translated">It's important to know for users who want to register on your instance</target>
+        <target state="translated">Yesɛa azal i yiseqdacen-ik·im i yebɣan ad jerrden ɣef tummant-ik·im ad t-ẓren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d" datatype="html">
         <source>How will you finance the PeerTube server?</source>
-        <target state="translated">How will you finance the PeerTube server?</target>
+        <target state="translated">Amek ara tettxelliseḍ aqeddac n PeerTube?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="1bb1ca2264b1ab8be73deee74852a4e6d40101c5" datatype="html">
@@ -4477,7 +4477,7 @@
       </trans-unit>
       <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5" datatype="html">
         <source>Basic configuration</source>
-        <target state="translated">Basic configuration</target>
+        <target state="translated">Tawila tazadurt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="b20a7aabcda694678c9485942ba237b86fd0cc9a" datatype="html">
@@ -4505,12 +4505,12 @@
       </trans-unit>
       <trans-unit id="a42daa4748e433f25a51f598627d10de9c88d5d3" datatype="html">
         <source>Landing page</source>
-        <target state="translated">Landing page</target>
+        <target state="translated">Asebter agejdan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
-        <target state="translated">Discover videos</target>
+        <target state="translated">Snirem tividyutin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="caa128fe5c4b611830f6138e844709c348f07948" datatype="html">
@@ -4556,7 +4556,7 @@
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
         <source>Recently added videos</source>
-        <target state="translated">Recently added videos</target>
+        <target state="translated">Tividyutin yettwarnan melmi kan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f" datatype="html">
@@ -4620,12 +4620,12 @@
       </trans-unit>
       <trans-unit id="90f449b1f4787e6c9731198a96d35399c1b340a7" datatype="html">
         <source>Signup requires email verification</source>
-        <target state="translated">Signup requires email verification</target>
+        <target state="translated">Ajerred yyesra imayl n usenqed</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="68bda70e0dd4f7f91549462e55f1b2a1602d8402" datatype="html">
         <source>Signup limit</source>
-        <target state="translated">Signup limit</target>
+        <target state="translated">Talast n ujerred</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="b4d3a94d4c67e02c861a8c7c66c34b74ad2ddf0d" datatype="html">
@@ -4643,7 +4643,7 @@
       </trans-unit>
       <trans-unit id="25de1b6d18bda68f72a31c4ce8aa1c493584764f" datatype="html">
         <source>Enable Signup</source>
-        <target state="translated">Enable Signup</target>
+        <target state="translated">Rmed ajerred</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="ec47d80e9b5608ecd396c32a46ca6b87601e7b20" datatype="html">
