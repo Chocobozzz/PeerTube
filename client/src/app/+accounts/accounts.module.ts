@@ -10,6 +10,7 @@ import { AccountVideoChannelsComponent } from './account-video-channels/account-
 import { AccountVideosComponent } from './account-videos/account-videos.component'
 import { AccountsRoutingModule } from './accounts-routing.module'
 import { AccountsComponent } from './accounts.component'
+import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { AccountsComponent } from './accounts.component'
     SharedUserSubscriptionModule,
     SharedModerationModule,
     SharedVideoMiniatureModule,
-    SharedGlobalIconModule
+    SharedGlobalIconModule,
+    SharedAccountAvatarModule
   ],
 
   declarations: [

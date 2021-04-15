@@ -143,11 +143,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     return window.location.href
   }
 
-  getAvatarUrl () {
-    if (this.user) return this.user.accountAvatarUrl
-    return Account.GET_DEFAULT_AVATAR_URL()
-  }
-
   gotoLogin () {
     this.hideModals()
     this.router.navigate([ '/login' ])

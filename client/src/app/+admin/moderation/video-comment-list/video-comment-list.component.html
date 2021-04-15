@@ -86,12 +86,8 @@
       <td>
         <a [href]="videoComment.account.localUrl" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <img
-              class="avatar"
-              [src]="videoComment.accountAvatarUrl"
-              alt=""
-            >
-            <div>
+            <my-account-avatar [account]="videoComment.account"></my-account-avatar>
+          <div>
               {{ videoComment.account.displayName }}
               <span>{{ videoComment.by }}</span>
             </div>

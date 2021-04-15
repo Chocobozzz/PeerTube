@@ -1,0 +1,22 @@
+@import '_variables';
+@import '_mixins';
+
+.avatar-25 {
+  @include avatar(25px);
+}
+
+.avatar-34 {
+  @include avatar(34px);
+}
+
+.avatar-36 {
+  @include avatar(36px);
+}
+
+.avatar-40 {
+  @include avatar(40px);
+}
+
+.avatar-120 {
+  @include avatar(120px);
+}

@@ -13,13 +13,15 @@ import { UserBanModalComponent } from './user-ban-modal.component'
 import { UserModerationDropdownComponent } from './user-moderation-dropdown.component'
 import { VideoBlockComponent } from './video-block.component'
 import { VideoBlockService } from './video-block.service'
+import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
     SharedMainModule,
     SharedFormModule,
     SharedGlobalIconModule,
-    SharedVideoCommentModule
+    SharedVideoCommentModule,
+    SharedAccountAvatarModule
   ],
 
   declarations: [

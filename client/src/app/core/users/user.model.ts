@@ -111,12 +111,6 @@ export class User implements UserServerModel {
     }
   }
 
-  get accountAvatarUrl () {
-    if (!this.account) return ''
-
-    return this.account.avatarUrl
-  }
-
   hasRight (right: UserRight) {
     return hasUserRight(this.role, right)
   }

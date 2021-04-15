@@ -10,12 +10,7 @@
         <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
           class="chip"
         >
-          <img
-            class="avatar"
-            [src]="abuse.reporterAccount.avatar?.path"
-            (error)="switchToDefaultAvatar($event)"
-            alt="Avatar"
-          >
+          <my-account-avatar [account]="abuse.reporterAccount"></my-account-avatar>
           <div>
             <span class="text-muted">{{ abuse.reporterAccount.nameWithHost }}</span>
           </div>
@@ -35,12 +30,7 @@
         <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
           class="chip"
         >
-          <img
-            class="avatar"
-            [src]="abuse.flaggedAccount?.avatar?.path"
-            (error)="switchToDefaultAvatar($event)"
-            alt="Avatar"
-          >
+          <my-account-avatar [account]="abuse.flaggedAccount"></my-account-avatar>
           <div>
             <span class="text-muted">{{ abuse.flaggedAccount ? abuse.flaggedAccount.nameWithHost : '' }}</span>
           </div>

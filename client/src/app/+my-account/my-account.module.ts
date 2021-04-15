@@ -23,6 +23,7 @@ import { MyAccountNotificationPreferencesComponent } from './my-account-settings
 import { MyAccountProfileComponent } from './my-account-settings/my-account-profile/my-account-profile.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountComponent } from './my-account.component'
+import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { MyAccountComponent } from './my-account.component'
     SharedGlobalIconModule,
     SharedAbuseListModule,
     SharedShareModal,
+    SharedAccountAvatarModule,
     SharedActorImageModule
   ],
 

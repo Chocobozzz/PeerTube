@@ -17,7 +17,6 @@ export class VideoComment implements VideoCommentServerModel {
   totalRepliesFromVideoAuthor: number
   totalReplies: number
   by: string
-  accountAvatarUrl: string
 
   isLocal: boolean
 
@@ -38,7 +37,6 @@ export class VideoComment implements VideoCommentServerModel {
 
     if (this.account) {
       this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
-      this.accountAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.account)
 
       const absoluteAPIUrl = getAbsoluteAPIUrl()
       const thisHost = new URL(absoluteAPIUrl).host
@@ -70,7 +68,6 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
   }
 
   by: string
-  accountAvatarUrl: string
 
   constructor (hash: VideoCommentAdminServerModel, textHtml: string) {
     this.id = hash.id
@@ -97,7 +94,6 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
 
     if (this.account) {
       this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
-      this.accountAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.account)
 
       this.account.localUrl = '/accounts/' + this.by
     }

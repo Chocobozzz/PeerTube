@@ -106,13 +106,8 @@
       <td *ngIf="isSelected('username')">
         <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/accounts/' + user.username ]">
           <div class="chip two-lines">
-            <img
-              class="avatar"
-              [src]="user?.account?.avatar?.path"
-              (error)="switchToDefaultAvatar($event)"
-              alt="Avatar"
-            >
-            <div>
+            <my-account-avatar [account]="user?.account"></my-account-avatar>
+           <div>
               <span class="user-table-primary-text">{{ user.account.displayName }}</span>
               <span class="text-muted">{{ user.username }}</span>
             </div>

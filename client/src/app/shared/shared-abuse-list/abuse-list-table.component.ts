@@ -122,10 +122,6 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
     )
   }
 
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
-  }
-
   async removeAbuse (abuse: AdminAbuse) {
     const res = await this.confirmService.confirm($localize`Do you really want to delete this abuse report?`, $localize`Delete`)
     if (res === false) return

@@ -65,12 +65,7 @@
       <td *ngIf="isAdminView()">
         <a *ngIf="abuse.reporterAccount" [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <img
-              class="avatar"
-              [src]="abuse.reporterAccount.avatar?.path"
-              (error)="switchToDefaultAvatar($event)"
-              alt="Avatar"
-            >
+            <my-account-avatar [account]="abuse.reporterAccount"></my-account-avatar>
             <div>
               {{ abuse.reporterAccount.displayName }}
               <span>{{ abuse.reporterAccount.nameWithHost }}</span>

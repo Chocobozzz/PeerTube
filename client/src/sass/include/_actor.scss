@@ -29,10 +29,6 @@
     @include channel-avatar(120px);
   }
 
-  .account-avatar {
-    @include avatar(120px);
-  }
-
   > div {
     margin-left: $img-margin;
     min-width: 1px;

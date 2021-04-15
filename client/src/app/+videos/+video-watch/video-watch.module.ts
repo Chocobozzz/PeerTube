@@ -17,10 +17,11 @@ import { VideoCommentsComponent } from './comment/video-comments.component'
 import { PlayerStylesComponent } from './player-styles.component'
 import { RecommendationsModule } from './recommendations/recommendations.module'
 import { TimestampRouteTransformerDirective } from './timestamp-route-transformer.directive'
-import { VideoAvatarChannelComponent } from './video-avatar-channel.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 import { VideoWatchComponent } from './video-watch.component'
+import { SharedAccountAvatarModule } from '../../shared/shared-account-avatar/shared-account-avatar.module'
+import { VideoAvatarChannelComponent } from './video-avatar-channel.component'
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { VideoWatchComponent } from './video-watch.component'
     SharedVideoCommentModule,
     SharedShareModal,
     SharedVideoModule,
-    SharedSupportModal
+    SharedSupportModal,
+    SharedAccountAvatarModule
   ],
 
   declarations: [
@@ -47,6 +49,7 @@ import { VideoWatchComponent } from './video-watch.component'
     VideoCommentsComponent,
     VideoCommentAddComponent,
     VideoCommentComponent,
+    VideoAvatarChannelComponent,
 
     VideoAvatarChannelComponent,
 
