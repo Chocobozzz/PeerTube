@@ -255,7 +255,7 @@ describe('Test live', function () {
     }
 
     it('Should not allow a stream without the appropriate path', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       liveVideo = await createLiveWrapper()
 
@@ -264,14 +264,14 @@ describe('Test live', function () {
     })
 
     it('Should not allow a stream without the appropriate stream key', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       const command = sendRTMPStream(rtmpUrl + '/live', 'bad-stream-key')
       await testFfmpegStreamError(command, true)
     })
 
     it('Should succeed with the correct params', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
       await testFfmpegStreamError(command, false)
@@ -292,7 +292,7 @@ describe('Test live', function () {
     })
 
     it('Should not allow a stream on a live that was blacklisted', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       liveVideo = await createLiveWrapper()
 
@@ -303,7 +303,7 @@ describe('Test live', function () {
     })
 
     it('Should not allow a stream on a live that was deleted', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       liveVideo = await createLiveWrapper()
 
