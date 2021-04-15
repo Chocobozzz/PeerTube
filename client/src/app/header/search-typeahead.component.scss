@@ -5,6 +5,7 @@
 
 #search-video {
   @include peertube-input-text($search-input-width);
+
   padding-left: 10px;
   padding-right: 40px; // For the search icon
   font-size: 14px;
@@ -14,7 +15,7 @@
   }
 }
 
-.icon.icon-search {
+.icon-search {
   @include icon(25px);
   height: 18px;
 

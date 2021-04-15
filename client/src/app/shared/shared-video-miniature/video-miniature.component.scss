@@ -13,12 +13,12 @@ $more-button-width: 40px;
 }
 
 my-account-avatar,
-.avatar {
+.channel-avatar {
   margin: 10px 10px 0 0;
+}
 
-  img.channel {
-    @include channel-avatar(40px);
-  }
+.channel-avatar img{
+  @include channel-avatar(40px);
 }
 
 .video-miniature-created-at-views {
@@ -78,9 +78,9 @@ my-account-avatar,
   }
 }
 
-.video-miniature {
-  &:hover ::ng-deep .video-thumbnail-actions-overlay,
-  &:hover .video-actions ::ng-deep .dropdown-root {
+.video-miniature:hover {
+  ::ng-deep .video-thumbnail-actions-overlay,
+  .video-actions ::ng-deep .dropdown-root {
     opacity: 1 !important;
   }
 }
@@ -153,7 +153,7 @@ my-account-avatar,
   }
 
   // We don't display avatar in row mode
-  .avatar {
+  .channel-avatar {
     display: none;
   }
 

@@ -21,13 +21,6 @@ input[type=email] {
   }
 }
 
-.modal-footer.inputs {
-  .action-button.action-button-cancel {
-    width: auto !important;
-    display: inline-block;
-  }
-}
-
 @media screen and (max-width: #{map-get($container-max-widths, sm)}) {
   .modal-body {
     #forgot-password-email {
@@ -35,10 +28,8 @@ input[type=email] {
     }
   }
 
-  .modal-footer.inputs {
-    .action-button.action-button-cancel {
-      display: none;
-    }
+  .modal-footer .grey-button {
+    display: none;
   }
 }
 

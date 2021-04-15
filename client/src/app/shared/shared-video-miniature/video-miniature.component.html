@@ -10,10 +10,14 @@
   <div class="video-bottom">
     <div class="video-miniature-information">
       <div class="d-flex video-miniature-meta">
-        <a *ngIf="displayOptions.avatar && displayOwnerVideoChannel()" class="avatar" [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
-          <img [src]="getAvatarUrl()" alt="" class="channel" />
+        <a *ngIf="displayOptions.avatar && displayOwnerVideoChannel()" class="channel-avatar" [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
+          <img [src]="getAvatarUrl()" alt="" />
         </a>
-        <my-account-avatar *ngIf="displayOptions.avatar && displayOwnerAccount()" [account]="video.account" size="40" [internalHref]="'/video-channels/' + video.byVideoChannel" [title]="channelLinkTitle"></my-account-avatar>
+
+        <my-account-avatar
+          *ngIf="displayOptions.avatar && displayOwnerAccount()" [title]="channelLinkTitle"
+          [account]="video.account" size="40" [internalHref]="'/video-channels/' + video.byVideoChannel"
+        ></my-account-avatar>
 
         <div class="w-100 d-flex flex-column">
           <a *ngIf="!videoHref" tabindex="-1" class="video-miniature-name"
