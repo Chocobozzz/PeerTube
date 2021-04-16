@@ -1,0 +1,71 @@
+version: "3.3"
+services:
+  peertube:
+    image: chocobozzz/peertube:production-buster
+    networks:
+      default:
+        ipv4_address: $NETWORK_IP
+    ports:
+      - 1935:1935
+      - 9000:9000
+    volumes:
+      - assets:/app/client/dist
+      - ./docker-volume/data:/data
+      - ./docker-volume/config:/config
+    depends_on:
+      - postgres
+      - redis
+      - postfix
+    restart: "always"
+    environment:
+      - PEERTUBE_ADMIN_EMAIL=$PEERTUBE_ADMIN_EMAIL
+      - PEERTUBE_DB_USERNAME=$POSTGRES_USER
+      - PEERTUBE_DB_PASSWORD=$POSTGRES_PASSWORD
+      - PEERTUBE_DB_HOSTNAME=postgres
+      - PEERTUBE_SMTP_HOSTNAME=postfix
+      - PEERTUBE_SMTP_PORT=25
+      - PEERTUBE_SMTP_TLS=false
+      - PEERTUBE_SMTP_DISABLE_STARTTLS=false
+      - PEERTUBE_SMTP_FROM=$PEERTUBE_SMTP_FROM
+      - PEERTUBE_WEBSERVER_HOSTNAME=$PEERTUBE_WEBSERVER_HOSTNAME
+      - PEERTUBE_WEBSERVER_HTTPS=false
+      # Tells OAuth what port to expect the server on from the browser's perspective.
+      # Because no reverse proxy is in use, this must match the container's exposed port.
+      - PEERTUBE_WEBSERVER_PORT=9000
+
+  postgres:
+    image: postgres:13-alpine
+    volumes:
+      - ./docker-volume/db:/var/lib/postgresql/data
+    restart: "always"
+    environment:
+      - POSTGRES_DB=peertube
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - ./docker-volume/redis:/data
+    restart: "always"
+
+  postfix:
+    image: mwader/postfix-relay
+    volumes:
+      - ./docker-volume/opendkim/keys:/etc/opendkim/keys
+    restart: "always"
+    environment:
+      - OPENDKIM_DOMAINS=$PEERTUBE_WEBSERVER_HOSTNAME=peertube
+      - OPENDKIM_RequireSafeKeys=no
+      - POSTFIX_myhostname=$PEERTUBE_WEBSERVER_HOSTNAME
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: $NETWORK_SUBNET
+
+volumes:
+  assets:
+

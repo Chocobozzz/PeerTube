@@ -1,7 +1,11 @@
 # Docker guide
 
 This guide requires [docker](https://www.docker.com/community-edition) and
-[docker-compose](https://docs.docker.com/compose/install/).
+[docker-compose](https://docs.docker.com/compose/install/), and describes
+how to configure an instance of PeerTube on a public domain name using a
+SSL certificate created with Let's Encrypt.
+
+There's also another guide to [run a private instance locally without SSL](docker-local.md).
 
 ## Install
 
@@ -54,9 +58,9 @@ Other environment variables are used in
 [/support/docker/production/config/custom-environment-variables.yaml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/custom-environment-variables.yaml) and can be
 intuited from usage.
 
-#### Webserver
+#### Reverse Proxy
 
-*The docker compose file includes a configured web server. You can skip this part and comment the appropriate section in the docker compose if you use another webserver/proxy.*
+*The docker compose file includes a configured `nginx` reverse proxy. You can skip this part and comment the appropriate section in the docker compose if you use another reverse proxy.*
 
 Install the template that the nginx container will use.
 The container will generate the configuration by replacing `${WEBSERVER_HOST}` and `${PEERTUBE_HOST}` using your docker compose env file.
@@ -116,6 +120,22 @@ See the production guide ["Administrator" section](https://docs.joinpeertube.org
 #### What now?
 
 See the production guide ["What now" section](https://docs.joinpeertube.org/install-any-os?id=what-now).
+
+## Troubleshooting
+
+If you see either of these errors:
+
+1. `Cannot retrieve OAuth Client credentials: undefined` (a pop-up in the lower right)
+2. `Invalid client: client is invalid` (an error after logging in that leaves you logged out)
+
+...it is likely there's a mismatch between what host name and port number you are using from
+your browser, and the host name and port number that PeerTube thinks you are using.
+
+_In `.env` double check:_
+
+* `PEERTUBE_WEBSERVER_HOSTNAME` - must be the DNS name of your server
+* `PEERTUBE_WEBSERVER_PORT` - must be the port number the `nginx` reverse-proxy is listening on (likely 443)
+* `PEERTUBE_WEBSERVER_HTTPS` - must be `true` when using `Let's Encrypt` or your own certificates
 
 ## Upgrade
 
