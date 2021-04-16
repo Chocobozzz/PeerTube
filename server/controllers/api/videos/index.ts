@@ -110,6 +110,9 @@ videosRouter.get('/',
 
 const getTmpPath = (fileId: string) => `/tmp/peertube-${fileId}`
 
+const clearUploadFile = filePath =>
+  existsSync(filePath) && unlinkSync(filePath)
+
 videosRouter.use('/upload',
   authenticate,
   asyncMiddleware(videosAddValidator),
@@ -117,14 +120,14 @@ videosRouter.use('/upload',
     directory: CONFIG.STORAGE.VIDEOS_DIR.slice(0, -1)
   }), async (req, res) => {
     const file = req.body
-    const filePath = `${CONFIG.STORAGE.VIDEOS_DIR}${file.id}`
+    file.path = `${CONFIG.STORAGE.VIDEOS_DIR}${file.id}`
 
-    if (!await isVideoAccepted(req, res, file)) return unlinkSync(filePath)
+    if (!await isVideoAccepted(req, res, file)) return clearUploadFile(file.path)
 
     if (file.metadata.isAudioBg) {
       const filename = `${file.id}-${uuidv4()}`
       try {
-        await move(filePath, getTmpPath(filename))
+        await move(file.path, getTmpPath(filename))
       } catch (error) {
         logger.error(error)
         return res.status(500).json({
@@ -136,24 +139,21 @@ videosRouter.use('/upload',
       })
     }
 
-    file.path = filePath
-
     try {
       await addDurationToVideo(file)
     } catch (err) {
       logger.error('Invalid input file in videosAddValidator.', { err })
       res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422).json({ error: 'Video file unreadable.' })
-      return unlinkSync(filePath)
+      return clearUploadFile(file.path)
     }
 
     try {
       file.video = await addVideo({ file, user: res.locals.oauth.token.User })
+      auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(file.video.toFormattedDetailsJSON()))
     } catch (error) {
       logger.error(error)
 
-      if (existsSync(file.path)) {
-        unlinkSync(file.path)
-      }
+      clearUploadFile(file.path)
 
       return res.status(500).json({})
     }
@@ -312,7 +312,6 @@ async function addVideo ({ file: videoPhysicalFile, user }) {
       transaction: t
     })
 
-    // auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid, lTags(videoCreated.uuid))
 
     return { videoCreated }

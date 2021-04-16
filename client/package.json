@@ -133,7 +133,5 @@
     "webtorrent": "^0.116.1",
     "whatwg-fetch": "^3.0.0",
     "zone.js": "~0.11.3"
-  },
-  "dependencies": {
   }
 }
