@@ -4648,7 +4648,7 @@
       </trans-unit>
       <trans-unit id="ec47d80e9b5608ecd396c32a46ca6b87601e7b20" datatype="html">
         <source>Default video quota per user</source>
-        <target state="translated">Default video quota per user</target>
+        <target state="translated">Afmiḍi n tvidyut amezwer i useqdac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="d1ec787ddabed4188c1a5c365dc65e7022a4db35" datatype="html">
@@ -4754,12 +4754,12 @@
       </trans-unit>
       <trans-unit id="be8b7fa8a3193d5015561140328a1240190842c1" datatype="html">
         <source>Search bar uses the global search index by default</source>
-        <target state="translated">Search bar uses the global search index by default</target>
+        <target state="translated">Talast n usali n wass tamezwert i yal aseqdac</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="bcaa25583cd971359254080004fbbb71c2b97ad6" datatype="html">
         <source>Enable global search</source>
-        <target state="translated">Enable global search</target>
+        <target state="translated">Rmed anadi amatu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">308</context></context-group>
       </trans-unit>
       <trans-unit id="3f237e2a863d0308a21bdb0bb5d4b84e3376dbee" datatype="html">
@@ -5339,7 +5339,7 @@
       </trans-unit>
       <trans-unit id="fbc450919a486e8ed311a7e91a41987d47d83804" datatype="html">
         <source>Accept ownership</source>
-        <target state="translated">Accept ownership</target>
+        <target state="translated">Qbel ad tiliḍ d bab-is</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="765e3847550ed5aab483c2a03f320090aa0a13f2" datatype="html">
