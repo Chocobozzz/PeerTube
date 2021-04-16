@@ -110,8 +110,12 @@ videosRouter.get('/',
 
 const getTmpPath = (fileId: string) => `/tmp/peertube-${fileId}`
 
-const clearUploadFile = filePath =>
-  existsSync(filePath) && unlinkSync(filePath)
+function clearUploadFile (filePath: string) {
+  return Promise.all(
+    exists(filePath),
+    unlink(filePath)
+  ).catch(err => logger.warn('Cannot clear upload file %s.', filePath, { err }))
+}
 
 videosRouter.use('/upload',
   authenticate,
