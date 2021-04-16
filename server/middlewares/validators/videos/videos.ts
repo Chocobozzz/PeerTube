@@ -496,8 +496,11 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   return false
 }
 
-export async function isVideoAccepted
-(req: express.Request, res: express.Response, videoFile: Express.Multer.File & { duration?: number }) {
+export async function isVideoAccepted (
+  req: express.Request,
+  res: express.Response,
+  videoFile: Express.Multer.File & { duration?: number }
+) {
   // Check we accept this video
   const acceptParameters = {
     videoBody: req.body,
