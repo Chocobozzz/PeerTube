@@ -65,7 +65,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.method !== 'POST') {
+    if (req.method !== 'POST' || req.body.isAudioBg) {
       return next()
     }
 

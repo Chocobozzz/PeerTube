@@ -119,15 +119,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
         break
       case 'complete':
         if (this.isUploadingPreviewFile) {
-          this.uploadService.handleFiles(this.getVideoFile(), {
-            ...this.options,
-            metadata: {
-              ...this.options.metadata,
-              audioBg: state.response.id
-            }
-          })
-          this.isUploadingPreviewFile = false
-          this.isUploadingVideo = true
+          this.uploadVideoFile(state.response.filename)
           return
         }
 
@@ -137,7 +129,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
         this.videoUploadedIds = state?.response.video
         break
     }
-
   }
 
   ngOnInit () {
@@ -205,15 +196,19 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
     this.notifier.info($localize`Upload cancelled`)
   }
 
-  uploadPreviewFile () {
-    this.isUploadingPreviewFile = true
+  uploadAudio () {
+    if (this.previewfileUpload) {
+      this.isUploadingPreviewFile = true
 
-    this.uploadService.handleFiles(this.previewfileUpload, {
-      ...this.options,
-      metadata: {
-        isAudioBg: true
-      }
-    })
+      this.uploadService.handleFiles(this.previewfileUpload, {
+        ...this.options,
+        metadata: {
+          isAudioBg: true
+        }
+      })
+    } else {
+      this.uploadVideoFile()
+    }
   }
 
   setVideoFile (files: FileList) {
@@ -274,6 +269,18 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
             console.error(err)
           }
         )
+  }
+
+  private uploadVideoFile (audioBg?: string) {
+    this.uploadService.handleFiles(this.getVideoFile(), {
+      ...this.options,
+      metadata: {
+        ...this.options.metadata,
+        audioBg
+      }
+    })
+    this.isUploadingPreviewFile = false
+    this.isUploadingVideo = true
   }
 
   private handleUploadError (err: HttpErrorResponse) {

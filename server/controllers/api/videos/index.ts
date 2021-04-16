@@ -2,6 +2,7 @@ import * as express from 'express'
 import { unlinkSync } from 'fs'
 import { move, existsSync } from 'fs-extra'
 import { extname } from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import toInt from 'validator/lib/toInt'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
@@ -121,8 +122,18 @@ videosRouter.use('/upload',
     if (!await isVideoAccepted(req, res, file)) return unlinkSync(filePath)
 
     if (file.metadata.isAudioBg) {
-      await move(filePath, getTmpPath(file.id))
-      return
+      const filename = `${file.id}-${uuidv4()}`
+      try {
+        await move(filePath, getTmpPath(filename))
+      } catch (error) {
+        logger.error(error)
+        return res.status(500).json({
+          error: 'Couldn\'t save the file.'
+        })
+      }
+      return res.json({
+        filename
+      })
     }
 
     file.path = filePath
