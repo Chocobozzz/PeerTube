@@ -45,6 +45,11 @@ declare module 'express' {
   interface Response {
     locals: PeerTubeLocals
   }
+  export interface FileUploadMetadata {
+    mimetype: string
+    originalname: string
+    size: number
+  }
 }
 
 interface PeerTubeLocals {

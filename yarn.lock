@@ -1057,6 +1057,60 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
+<<<<<<< HEAD
+||||||| parent of bd99e4859 (video upload: error handling)
+"@uploadx/core@^4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@uploadx/core/-/core-4.2.3.tgz#9ee2e1edd491ccf3c56c0f94b6965030675469c8"
+  integrity sha512-X5UXK6SuNdGc4VJVm4SJAVPYR3lHBllpxStDsHT947qtTD2ctOAK+BofysbcCuZcmqgz5VtJ2vxBFASv2t0fKQ==
+  dependencies:
+    bytes "^3.1.0"
+    debug "^4.2.0"
+    multiparty "^4.2.2"
+
+"@uploadx/gcs@^4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@uploadx/gcs/-/gcs-4.2.3.tgz#0a65d01089c0e996c2b102ac7ce9be4f255007b9"
+  integrity sha512-OS5VSrNThVpXllizWEXgLvXl/0pUTkKzqihx57WV5gVRMveOvBq2M/7nLBXxjdjnlhta5HxeAgoKUAS3AeGXCQ==
+  dependencies:
+    abort-controller "^3.0.0"
+    google-auth-library "^7.0.0"
+    node-fetch "^2.6.1"
+
+"@uploadx/s3@^4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@uploadx/s3/-/s3-4.2.3.tgz#c330a6c575e2f3c3c7d42530f894756c7287d2e7"
+  integrity sha512-Cv+C7s++eI/6fOMk9PW4c1Io4Wj5fojkN6cmAquXCCWP3yFb0wis8yPKsjNDDmrC3LPDoMpyEwrRdEQs8GVM3g==
+  dependencies:
+    aws-sdk "^2.782.0"
+
+=======
+"@uploadx/core@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@uploadx/core/-/core-4.3.0.tgz#2acdca27bc3305c81c46981c1d2fc09da3d0f1c3"
+  integrity sha512-7sj/6RpGA1YzKlGqI97dmDwAQ9Ku8Xq5Bu9KGGfIvAF7i5sdavO6s+ckevZPjtQLZfYrwhiCysBirRMVLR5bpg==
+  dependencies:
+    bytes "^3.1.0"
+    debug "^4.2.0"
+    multiparty "^4.2.2"
+
+"@uploadx/gcs@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@uploadx/gcs/-/gcs-4.3.0.tgz#5322bd549c6b7ca680c188ef65a0fa056bcc0b80"
+  integrity sha512-UQgFGqiPATy5GtAt4mDYqD2TwGa7H43a/1tjeO5Cf9X0hE5QdRDdQpbdQFBq9D4pkAWdR1Ud7ugVe2wRhZLeXA==
+  dependencies:
+    abort-controller "^3.0.0"
+    google-auth-library "^7.0.0"
+    node-fetch "^2.6.1"
+
+"@uploadx/s3@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@uploadx/s3/-/s3-4.3.0.tgz#c252151672f33a96cce91fc6fca6930fe5133ec9"
+  integrity sha512-17osnRZ0zXNP+z7Fz37dt/LvMSksuFa/cR3XV/9koITENodkXupLyzIHU4+LFzIfo2yA0ziAedNdBSvG/cRnnA==
+  dependencies:
+    aws-sdk "^2.782.0"
+
+>>>>>>> bd99e4859 (video upload: error handling)
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -5655,6 +5709,28 @@ node-media-server@^2.1.4:
     mkdirp "1.0.3"
     ws "^5.2.2"
 
+<<<<<<< HEAD
+||||||| parent of bd99e4859 (video upload: error handling)
+node-uploadx@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/node-uploadx/-/node-uploadx-4.2.3.tgz#cef1e0087c0a68f5181d6b7e4e6779958be2deb2"
+  integrity sha512-1c+PiOMlGAanzE7/yPbN3jJtHCQy2bKiXliDd0tjjc0X+7lglAUx6PSFsul9JQaONn2Up9mlvuxZqzs4LYjN0A==
+  dependencies:
+    "@uploadx/core" "^4.2.3"
+    "@uploadx/gcs" "^4.2.3"
+    "@uploadx/s3" "^4.2.3"
+
+=======
+node-uploadx@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/node-uploadx/-/node-uploadx-4.3.0.tgz#241818d99056d9e74df95f20d3e8dff3260b8896"
+  integrity sha512-NpB10Yf7mXK3XV29W+siGfL8VK5UmWDt/baQta8YwYwoYP+JRjBFW4Z9jdpIiACLQsV3mljdtY80mA3Fgtobxw==
+  dependencies:
+    "@uploadx/core" "^4.3.0"
+    "@uploadx/gcs" "^4.3.0"
+    "@uploadx/s3" "^4.3.0"
+
+>>>>>>> bd99e4859 (video upload: error handling)
 nodemailer@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-5.0.0.tgz#bcb409eca613114e85de42646d0ce7f1fa70b716"

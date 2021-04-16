@@ -1,6 +1,7 @@
 import 'multer'
 import validator from 'validator'
 import { sep } from 'path'
+import { FileUploadMetadata } from 'express'
 
 function exists (value: any) {
   return value !== undefined && value !== null
@@ -108,7 +109,7 @@ function isFileFieldValid (
 }
 
 function isFileMimeTypeValid (
-  files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
+  files: { [ fieldname: string ]: FileUploadMetadata[] } | FileUploadMetadata[],
   mimeTypeRegex: string,
   field: string,
   optional = false

@@ -11,6 +11,7 @@ import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
 import { environment } from 'src/environments/environment'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 
 @Component({
   selector: 'my-video-upload',
@@ -97,6 +98,19 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
 
   onUploadVideoOngoing (state: UploadState) {
     switch (state.status) {
+      case 'error':
+        this.handleUploadError({
+          error: new Error(state.response.error),
+          name: 'HttpErrorResponse',
+          message: state.response.error,
+          ok: false,
+          headers: new HttpHeaders(state.responseHeaders),
+          status: +state.responseStatus,
+          statusText: state.response.error,
+          type: HttpEventType.Response,
+          url: state.url
+        })
+        break
       case 'queue':
         this.closeFirstStep(state.name)
         break
@@ -137,23 +151,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
 
     this.uploadService.events
       .subscribe(
-        state => this.onUploadVideoOngoing(state),
-        err => {
-          // Reset progress (but keep isUploadingVideo true)
-          this.videoUploadPercents = 0
-          this.enableRetryAfterError = true
-
-          this.error = uploadErrorHandler({
-            err,
-            name: $localize`video`,
-            notifier: this.notifier,
-            sticky: false
-          })
-
-          if (err.status === HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415) {
-            this.cancelUpload()
-          }
-        }
+        state => this.onUploadVideoOngoing(state)
       )
   }
 
@@ -276,6 +274,23 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
             console.error(err)
           }
         )
+  }
+
+  private handleUploadError (err: HttpErrorResponse) {
+    // Reset progress (but keep isUploadingVideo true)
+    this.videoUploadPercents = 0
+    this.enableRetryAfterError = true
+
+    this.error = uploadErrorHandler({
+      err,
+      name: $localize`video`,
+      notifier: this.notifier,
+      sticky: false
+    })
+
+    if (err.status === HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415) {
+      this.cancelUpload()
+    }
   }
 
   private closeFirstStep (filename: string) {

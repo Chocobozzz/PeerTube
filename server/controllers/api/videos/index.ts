@@ -1,12 +1,13 @@
 import * as express from 'express'
-import { move } from 'fs-extra'
+import { unlinkSync } from 'fs'
+import { move, existsSync } from 'fs-extra'
 import { extname } from 'path'
 import toInt from 'validator/lib/toInt'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { LiveManager } from '@server/lib/live-manager'
-import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
+import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags, addOptimizeOrMergeAudioJob } from '@server/lib/video'
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
@@ -43,11 +44,13 @@ import {
   authenticate,
   checkVideoFollowConstraints,
   commonVideosFiltersValidator,
+  isVideoAccepted,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultVideosSort,
   videoFileMetadataGetValidator,
+  videosAddValidator,
   videosCustomGetValidator,
   videosGetValidator,
   videosRemoveValidator,
@@ -106,10 +109,16 @@ videosRouter.get('/',
 
 const getTmpPath = (fileId: string) => `/tmp/peertube-${fileId}`
 
-videosRouter.use('/upload', uploadx({
-  directory: CONFIG.STORAGE.VIDEOS_DIR.slice(0, -1),
-  onComplete: async (file: any) => {
+videosRouter.use('/upload',
+  authenticate,
+  asyncMiddleware(videosAddValidator),
+  uploadx.upload({
+    directory: CONFIG.STORAGE.VIDEOS_DIR.slice(0, -1)
+  }), async (req, res) => {
+    const file = req.body
     const filePath = `${CONFIG.STORAGE.VIDEOS_DIR}${file.id}`
+
+    if (!await isVideoAccepted(req, res, file)) return unlinkSync(filePath)
 
     if (file.metadata.isAudioBg) {
       await move(filePath, getTmpPath(file.id))
@@ -117,9 +126,29 @@ videosRouter.use('/upload', uploadx({
     }
 
     file.path = filePath
-    file.video = await addVideo(file)
-  }
-}))
+
+    try {
+      await addDurationToVideo(file)
+    } catch (err) {
+      logger.error('Invalid input file in videosAddValidator.', { err })
+      res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422).json({ error: 'Video file unreadable.' })
+      return unlinkSync(filePath)
+    }
+
+    try {
+      file.video = await addVideo({ file, user: res.locals.oauth.token.User })
+    } catch (error) {
+      logger.error(error)
+
+      if (existsSync(file.path)) {
+        unlinkSync(file.path)
+      }
+
+      return res.status(500).json({})
+    }
+
+    return res.json(req.body)
+  })
 
 videosRouter.put('/:id',
   authenticate,
@@ -177,32 +206,15 @@ function listVideoPrivacies (req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
-async function addDurationToVideo (file: any) {
-  const videoFile: Express.Multer.File & { duration?: number, metadata?: any } = file
-
-  let duration: number
-
-  try {
-    duration = await getDurationFromVideoFile(file.path)
-  } catch (err) {
-    logger.error('Invalid input file in videosAddValidator.', { err })
-    /**
-     * TODO: Uncomment when we have the res object
-     * res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422).json({ error: 'Video file unreadable.' })
-     * return cleanUpReqFiles(req)
-     */
-
-    return
-  }
+async function addDurationToVideo (videoFile: Express.Multer.File & { duration?: number, metadata?: any }) {
+  const duration: number = await getDurationFromVideoFile(videoFile.path)
 
   if (!isNaN(duration)) {
     videoFile.duration = duration
   }
 }
 
-async function addVideo (videoPhysicalFile: any) {
-  await addDurationToVideo(videoPhysicalFile)
-
+async function addVideo ({ file: videoPhysicalFile, user }) {
   const videoInfo: any = videoPhysicalFile.metadata
 
   const videoData = buildLocalVideoFromReq(videoInfo, videoInfo.channelId)
@@ -281,16 +293,13 @@ async function addVideo (videoPhysicalFile: any) {
       }, { transaction: t })
     }
 
-    /*
-    TODO: Uncomment when we have the user object
     await autoBlacklistVideoIfNeeded({
       video,
-      user: res.locals.oauth.token.User,
+      user,
       isRemote: false,
       isNew: true,
       transaction: t
     })
-    */
 
     // auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid, lTags(videoCreated.uuid))
@@ -315,10 +324,7 @@ async function addVideo (videoPhysicalFile: any) {
     .catch(err => logger.error('Cannot federate or notify video creation %s', video.url, { err, ...lTags(video.uuid) }))
 
   if (video.state === VideoState.TO_TRANSCODE) {
-    /*
-    TODO: Uncomment when we have the user object
-    await addOptimizeOrMergeAudioJob(videoCreated, videoFile, res.locals.oauth.token.User)
-    */
+    await addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
   }
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated })

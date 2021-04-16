@@ -11,7 +11,6 @@ import {
   exists,
   isBooleanValid,
   isDateValid,
-  isFileFieldValid,
   isIdOrUUIDValid,
   isIdValid,
   isUUIDValid,
@@ -39,7 +38,6 @@ import {
   isVideoTagsValid
 } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { getDurationFromVideoFile } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import {
   checkUserCanManageVideo,
@@ -58,9 +56,6 @@ import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
-  body('videofile')
-    .custom((value, { req }) => isFileFieldValid(req.files, 'videofile'))
-    .withMessage('Should have a file'),
   body('name')
     .trim()
     .custom(isVideoNameValid)
@@ -70,57 +65,47 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.method !== 'POST') {
+      return next()
+    }
+
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
-    if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
-    if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
+    if (areValidationErrors(req, res)) return
+    if (areErrorsInScheduleUpdate(req, res)) return
 
-    const videoFile: Express.Multer.File & { duration?: number } = req.files['videofile'][0]
+    const videoFileMetadata = {
+      mimetype: req.body.mimeType,
+      size: req.body.size,
+      originalname: req.body.name
+    }
     const user = res.locals.oauth.token.User
 
-    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return
 
-    if (!isVideoFileMimeTypeValid(req.files)) {
-      res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+    if (!isVideoFileMimeTypeValid({
+      videofile: [
+        videoFileMetadata
+      ]
+    })) {
+      return res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
          .json({
            error: 'This file is not supported. Please, make sure it is of the following type: ' +
                   CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
          })
-
-      return cleanUpReqFiles(req)
     }
 
-    if (!isVideoFileSizeValid(videoFile.size.toString())) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+    if (!isVideoFileSizeValid(videoFileMetadata.size.toString())) {
+      return res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
          .json({
            error: 'This file is too large.'
          })
-
-      return cleanUpReqFiles(req)
     }
 
-    if (await isAbleToUploadVideo(user.id, videoFile.size) === false) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+    if (await isAbleToUploadVideo(user.id, videoFileMetadata.size) === false) {
+      return res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
          .json({ error: 'The user video quota is exceeded with this video.' })
-
-      return cleanUpReqFiles(req)
     }
-
-    let duration: number
-
-    try {
-      duration = await getDurationFromVideoFile(videoFile.path)
-    } catch (err) {
-      logger.error('Invalid input file in videosAddValidator.', { err })
-      res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
-         .json({ error: 'Video file unreadable.' })
-
-      return cleanUpReqFiles(req)
-    }
-
-    videoFile.duration = duration
-
-    if (!await isVideoAccepted(req, res, videoFile)) return cleanUpReqFiles(req)
 
     return next()
   }
@@ -511,7 +496,8 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   return false
 }
 
-async function isVideoAccepted (req: express.Request, res: express.Response, videoFile: Express.Multer.File & { duration?: number }) {
+export async function isVideoAccepted
+(req: express.Request, res: express.Response, videoFile: Express.Multer.File & { duration?: number }) {
   // Check we accept this video
   const acceptParameters = {
     videoBody: req.body,
