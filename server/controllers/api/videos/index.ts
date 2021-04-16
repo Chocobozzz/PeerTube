@@ -154,8 +154,8 @@ videosRouter.use('/upload',
     try {
       file.video = await addVideo({ file, user: res.locals.oauth.token.User })
       auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(file.video.toFormattedDetailsJSON()))
-    } catch (error) {
-      logger.error(error)
+    } catch (err) {
+      logger.error("Failed to add video", { err })
 
       clearUploadFile(file.path)
 
