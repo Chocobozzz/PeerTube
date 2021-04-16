@@ -9,6 +9,8 @@ markdownIt.enable(TEXT_WITH_HTML_RULES)
 markdownIt.use(markdownItEmoji)
 
 const toSafeHtml = text => {
+  if (!text) return ''
+
   // Restore line feed
   const textWithLineFeed = text.replace(/<br.?\/?>/g, '\r\n')
 
@@ -20,6 +22,8 @@ const toSafeHtml = text => {
 }
 
 const mdToPlainText = text => {
+  if (!text) return ''
+
   // Convert possible markdown (emojis, emphasis and lists) to html
   const html = markdownIt.render(text)
 
