@@ -191,8 +191,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       // Handle the ?playlistPosition
       let position = queryParams[ 'playlistPosition' ]
       if (position === 'last') position = -1 // Handle the "last" index
-      if (typeof position === 'string') position = parseInt(position); // Sanitization needed for the "reverse" index
-      if (isNaN(position)) position = 1;
+      if (typeof position === 'string') position = parseInt(position, 10) // Sanitization needed for the "reverse" index
+      if (isNaN(position)) position = 1
 
       if (this.playlist && position < 0) this.playlistPosition = this.playlist.videosLength - position + 1
       else this.playlistPosition = position
