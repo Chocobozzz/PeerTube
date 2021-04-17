@@ -167,8 +167,8 @@ function isXPercentInViewport (el: HTMLElement, percentVisible: number) {
   )
 }
 
-function uploadErrorHandler (parameters: {
-  err: HttpErrorResponse
+function genericUploadErrorHandler (parameters: {
+  err: Pick<HttpErrorResponse, 'message' | 'status' | 'headers'>
   name: string
   notifier: Notifier
   sticky?: boolean
@@ -210,5 +210,5 @@ export {
   isInViewport,
   isXPercentInViewport,
   listUserChannels,
-  uploadErrorHandler
+  genericUploadErrorHandler
 }

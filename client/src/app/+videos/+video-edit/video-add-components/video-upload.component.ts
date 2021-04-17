@@ -1,16 +1,14 @@
-import { Subscription } from 'rxjs'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { UploadxOptions, UploadState, UploadxService } from 'ngx-uploadx'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService, UserService } from '@app/core'
-import { scrollToTop, uploadErrorHandler } from '@app/helpers'
+import { scrollToTop, genericUploadErrorHandler } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { BytesPipe, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
-import { environment } from 'src/environments/environment'
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 
 @Component({
@@ -23,15 +21,9 @@ import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/h
   ]
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
-
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
-
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
   @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
-
-  // So that it can be accessed in the template
-  readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
   userVideoQuotaUsed = 0
   userVideoQuotaUsedDaily = 0
@@ -54,7 +46,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   error: string
   enableRetryAfterError: boolean
 
-  options: UploadxOptions = {}
+  options: UploadxOptions
+
+  // So that it can be accessed in the template
+  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
+  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + 'upload-resumable'
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -71,10 +67,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     ) {
     super()
 
-    const comp = this
+    const self = this
 
     this.options = {
-      endpoint: `${environment.apiUrl}/api/v1/videos/upload`,
+      endpoint: this.BASE_VIDEO_UPLOAD_URL,
       multiple: false,
       token: this.authService.getAccessToken(),
       metadata: {
@@ -82,10 +78,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         commentsEnabled: true,
         downloadEnabled: true,
         get channelId () {
-          return comp.firstStepChannelId
+          return self.firstStepChannelId
         },
         get nsfw () {
-          return comp.serverConfig.instance.isNSFW
+          return self.serverConfig.instance.isNSFW
         },
         privacy: VideoPrivacy.PRIVATE.toString()
       }
@@ -110,6 +106,14 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           type: HttpEventType.Response,
           url: state.url
         })
+        break
+      case 'cancelled':
+        this.isUploadingVideo = false
+        this.videoUploadPercents = 0
+
+        this.firstStepError.emit()
+        this.enableRetryAfterError = false
+        this.error = ''
         break
       case 'queue':
         this.closeFirstStep(state.name)
@@ -154,7 +158,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   ngOnDestroy () {
-    this.uploadService.control({ action: 'cancel' })
+    this.cancelUpload()
   }
 
   canDeactivate () {
@@ -192,13 +196,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   cancelUpload () {
     this.uploadService.control({ action: 'cancel' })
-
-    this.isUploadingVideo = false
-    this.videoUploadPercents = 0
-
-    this.firstStepError.emit()
-    this.enableRetryAfterError = false
-    this.error = ''
   }
 
   uploadAudio () {
@@ -293,7 +290,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     this.videoUploadPercents = 0
     this.enableRetryAfterError = true
 
-    this.error = uploadErrorHandler({
+    this.error = genericUploadErrorHandler({
       err,
       name: $localize`video`,
       notifier: this.notifier,
@@ -349,9 +346,7 @@ video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuota
       const videoSizeBytes = bytePipes.transform(videofile.size, 0)
       const quotaUsedDailyBytes = bytePipes.transform(this.userVideoQuotaUsedDaily, 0)
       const quotaDailyBytes = bytePipes.transform(videoQuotaDaily, 0)
-
-      const msg = $localize`Your daily video quota is exceeded with this video (
-video size: ${videoSizeBytes}, used: ${quotaUsedDailyBytes}, quota: ${quotaDailyBytes})`
+      const msg = $localize`Your daily video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${quotaUsedDailyBytes}, quota: ${quotaDailyBytes})`
       this.notifier.error(msg)
 
       return false

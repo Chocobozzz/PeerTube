@@ -1,4 +1,4 @@
-import { remove } from 'fs-extra'
+import { remove, access, unlink } from 'fs-extra'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { join } from 'path'
 import { ResultList } from '../../shared'
@@ -9,6 +9,13 @@ import { logger } from './logger'
 function deleteFileAsync (path: string) {
   remove(path)
     .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
+}
+
+function clearFile (filePath: string) {
+  return Promise.all([
+    access(filePath),
+    unlink(filePath)
+  ]).catch(err => logger.warn('Cannot clear upload file %s.', filePath, { err }))
 }
 
 async function generateRandomString (size: number) {
@@ -80,14 +87,20 @@ function getUUIDFromFilename (filename: string) {
   return result[0]
 }
 
+function getTmpPath (fileId: string) {
+  return `/tmp/peertube-${fileId}`
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   deleteFileAsync,
+  clearFile,
   generateRandomString,
   getFormattedObjects,
   getSecureTorrentName,
   getServerCommit,
   generateVideoImportTmpPath,
-  getUUIDFromFilename
+  getUUIDFromFilename,
+  getTmpPath
 }

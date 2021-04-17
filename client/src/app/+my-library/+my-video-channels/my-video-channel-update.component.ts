@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { uploadErrorHandler } from '@app/helpers'
+import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
@@ -109,7 +109,7 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
             this.videoChannel.updateAvatar(data.avatar)
           },
 
-          (err: HttpErrorResponse) => uploadErrorHandler({
+          (err: HttpErrorResponse) => genericUploadErrorHandler({
             err,
             name: $localize`avatar`,
             notifier: this.notifier
@@ -139,7 +139,7 @@ export class MyVideoChannelUpdateComponent extends MyVideoChannelEdit implements
             this.videoChannel.updateBanner(data.banner)
           },
 
-          (err: HttpErrorResponse) => uploadErrorHandler({
+          (err: HttpErrorResponse) => genericUploadErrorHandler({
             err,
             name: $localize`banner`,
             notifier: this.notifier
