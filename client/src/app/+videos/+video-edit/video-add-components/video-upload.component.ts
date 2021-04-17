@@ -22,7 +22,7 @@ import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/h
     './video-send.scss'
   ]
 })
-export class VideoUploadComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {
+export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
 
   protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
@@ -74,7 +74,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
     const comp = this
 
     this.options = {
-      endpoint: `${environment.apiUrl}/api/v1/videos/upload?uploadType=multipart`,
+      endpoint: `${environment.apiUrl}/api/v1/videos/upload`,
       multiple: false,
       token: this.authService.getAccessToken(),
       metadata: {
@@ -117,6 +117,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
       case 'uploading':
         this.videoUploadPercents = state.progress
         break
+      case 'paused':
+        this.notifier.info($localize`Upload cancelled`)
+        break
       case 'complete':
         if (this.isUploadingPreviewFile) {
           this.uploadVideoFile(state.response.filename)
@@ -148,6 +151,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
 
   ngAfterViewInit () {
     this.hooks.runAction('action:video-upload.init', 'video-edit')
+  }
+
+  ngOnDestroy () {
+    this.uploadService.control({ action: 'cancel' })
   }
 
   canDeactivate () {
@@ -192,8 +199,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, AfterView
     this.firstStepError.emit()
     this.enableRetryAfterError = false
     this.error = ''
-
-    this.notifier.info($localize`Upload cancelled`)
   }
 
   uploadAudio () {

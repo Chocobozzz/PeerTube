@@ -69,7 +69,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
       return next()
     }
 
-    logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
+    logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files, req })
 
     if (areValidationErrors(req, res)) return
     if (areErrorsInScheduleUpdate(req, res)) return

@@ -83,7 +83,6 @@ function isVideoFileExtnameValid (value: string) {
 }
 
 function isVideoFileMimeTypeValid (files: { [ fieldname: string ]: FileUploadMetadata[] } | FileUploadMetadata[]) {
-  console.log(files)
   return isFileMimeTypeValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
 }
 
