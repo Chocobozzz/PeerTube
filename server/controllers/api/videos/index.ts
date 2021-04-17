@@ -18,7 +18,7 @@ import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helper
 import { buildNSFWFilter, createReqFiles, getCountVideos } from '../../../helpers/express-utils'
 import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { getFormattedObjects, clearFile as clearUploadFile, getTmpPath } from '../../../helpers/utils'
+import { getFormattedObjects, getTmpPath } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import {
   DEFAULT_AUDIO_RESOLUTION,
@@ -200,18 +200,43 @@ async function addVideoMultipart (req: express.Request, res: express.Response) {
 
   const videoPhysicalFile = req.files['videofile'][0]
   const videoInfo: VideoCreate = req.body
+  const files = req.files
 
-  const videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
+  return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
+}
+
+async function addVideoResumable (req: express.Request, res: express.Response) {
+  const videoPhysicalFile = res.locals.videoFile as any
+  const videoInfo: VideoCreate & { size: number} = videoPhysicalFile.metadata
+  const files = {
+    bg: {
+      path: getTmpPath(videoPhysicalFile.metadata.audioBg)
+    }
+  }
+
+  return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
+}
+
+async function addVideo (req: express.Request, res: express.Response, parameters: {
+  videoPhysicalFile
+  videoInfo: VideoCreate & { size?: number }
+  files
+}) {
+  const { videoPhysicalFile, videoInfo, files } = parameters
+  const videoChannel = res.locals.videoChannel
+  const user = res.locals.oauth.token.User
+
+  const videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
   videoData.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
   videoData.duration = videoPhysicalFile['duration'] // duration was added by a previous middleware
 
   const video = new VideoModel(videoData) as MVideoFullLight
-  video.VideoChannel = res.locals.videoChannel
+  video.VideoChannel = videoChannel
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = new VideoFileModel({
-    extname: extname(videoPhysicalFile.filename),
-    size: videoPhysicalFile.size,
+    extname: extname(videoPhysicalFile.filename || videoInfo.name),
+    size: videoInfo.size || videoPhysicalFile.size,
     videoStreamingPlaylistId: null,
     metadata: await getMetadataFromFile(videoPhysicalFile.path)
   })
@@ -234,7 +259,7 @@ async function addVideoMultipart (req: express.Request, res: express.Response) {
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video,
-    files: req.files,
+    files,
     fallback: type => generateVideoMiniature({ video, videoFile, type })
   })
 
@@ -267,7 +292,7 @@ async function addVideoMultipart (req: express.Request, res: express.Response) {
 
     await autoBlacklistVideoIfNeeded({
       video,
-      user: res.locals.oauth.token.User,
+      user,
       isRemote: false,
       isNew: true,
       transaction: t
@@ -296,7 +321,7 @@ async function addVideoMultipart (req: express.Request, res: express.Response) {
     .catch(err => logger.error('Cannot federate or notify video creation %s', video.url, { err, ...lTags(video.uuid) }))
 
   if (video.state === VideoState.TO_TRANSCODE) {
-    await addOptimizeOrMergeAudioJob(videoCreated, videoFile, res.locals.oauth.token.User)
+    await addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
   }
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
@@ -305,142 +330,6 @@ async function addVideoMultipart (req: express.Request, res: express.Response) {
     video: {
       id: videoCreated.id,
       uuid: videoCreated.uuid
-    }
-  })
-}
-
-async function addVideoResumable (req: express.Request, res: express.Response) {
-  const file = res.locals.videoFile as any
-  const user = res.locals.oauth.token.User
-  const videoChannel = res.locals.videoChannel
-
-  try {
-    const videoPhysicalFile = file
-    const videoInfo: VideoCreate & { size: number} = videoPhysicalFile.metadata
-    const videoData = buildLocalVideoFromReq(videoInfo, videoInfo.channelId)
-    videoData.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
-    videoData.duration = videoPhysicalFile['duration']
-
-    const video = new VideoModel(videoData) as MVideoFullLight
-    video.VideoChannel = videoChannel
-    video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
-
-    const videoFile = new VideoFileModel({
-      extname: extname(videoInfo.name),
-      size: videoInfo.size,
-      videoStreamingPlaylistId: null,
-      metadata: await getMetadataFromFile(videoPhysicalFile.path)
-    })
-
-    if (videoFile.isAudio()) {
-      videoFile.resolution = DEFAULT_AUDIO_RESOLUTION
-    } else {
-      videoFile.fps = await getVideoFileFPS(videoPhysicalFile.path)
-      videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).videoFileResolution
-    }
-
-    const filename = generateVideoFilename(video, false, videoFile.resolution, videoFile.extname)
-    videoFile.filename = filename
-
-    // Move physical file
-    const destination = getVideoFilePath(video, videoFile)
-    await move(videoPhysicalFile.path, destination)
-
-    // This is important in case if there is another attempt in the retry process
-    videoPhysicalFile.filename = getVideoFilePath(video, videoFile)
-    videoPhysicalFile.path = destination
-
-    const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
-      video,
-      files: {
-        bg: {
-          path: getTmpPath(videoPhysicalFile.metadata.audioBg)
-        }
-      },
-      fallback: type => generateVideoMiniature({ video, videoFile, type })
-    })
-
-    const videoCreated = await sequelizeTypescript.transaction(async t => {
-      const sequelizeOptions = { transaction: t }
-
-      const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
-
-      await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
-
-      await videoCreated.addAndSaveThumbnail(previewModel, t)
-
-      // Do not forget to add video channel information to the created video
-      videoCreated.VideoChannel = videoChannel
-
-      videoFile.videoId = video.id
-      try {
-        await videoFile.save(sequelizeOptions)
-      } catch (error) {
-        logger.error("Couldn't save video to database.", { error })
-        throw error
-      }
-
-      video.VideoFiles = [ videoFile ]
-
-      await setVideoTags({ video, tags: videoInfo.tags, transaction: t })
-
-      // Schedule an update in the future?
-      if (videoInfo.scheduleUpdate) {
-        await ScheduleVideoUpdateModel.create({
-          videoId: video.id,
-          updateAt: videoInfo.scheduleUpdate.updateAt,
-          privacy: videoInfo.scheduleUpdate.privacy || null
-        }, { transaction: t })
-      }
-
-      await autoBlacklistVideoIfNeeded({
-        video,
-        user,
-        isRemote: false,
-        isNew: true,
-        transaction: t
-      })
-
-      logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid, lTags(videoCreated.uuid))
-
-      return videoCreated
-    })
-
-    // Create the torrent file in async way because it could be long
-    createTorrentAndSetInfoHashAsync(video, videoFile)
-      .catch(err => logger.error('Cannot create torrent file for video %s', video.url, { err, ...lTags(video.uuid) }))
-      .then(() => VideoModel.loadAndPopulateAccountAndServerAndTags(video.id))
-      .then(refreshedVideo => {
-        if (!refreshedVideo) return
-
-        // Only federate and notify after the torrent creation
-        Notifier.Instance.notifyOnNewVideoIfNeeded(refreshedVideo)
-
-        return retryTransactionWrapper(() => {
-          return sequelizeTypescript.transaction(t => federateVideoIfNeeded(refreshedVideo, true, t))
-        })
-      })
-      .catch(err => logger.error('Cannot federate or notify video creation %s', video.url, { err, ...lTags(video.uuid) }))
-
-    if (video.state === VideoState.TO_TRANSCODE) {
-      await addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
-    }
-
-    Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
-
-    file.video = videoCreated
-    auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(file.video.toFormattedDetailsJSON()))
-  } catch (err) {
-    logger.error("Failed to add video", { err })
-    await clearUploadFile(file.path)
-    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
-              .json({ error: 'Failed to add video' })
-  }
-
-  return res.json({
-    video: {
-      id: file.video.id,
-      uuid: file.video.uuid
     }
   })
 }
