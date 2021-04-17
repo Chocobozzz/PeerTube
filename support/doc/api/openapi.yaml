@@ -1459,6 +1459,139 @@ paths:
               --form videofile=@"$FILE_PATH" \
               --form channelId=$CHANNEL_ID \
               --form name="$NAME"
+  /videos/upload-resumable:
+    post:
+      summary: Initialize the resumable upload of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the upload of a video
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+      parameters:
+        - name: X-Upload-Content-Length
+          in: header
+          schema:
+            type: number
+            example: 2469036
+        - name: X-Upload-Content-Type
+          in: header
+          schema:
+            type: string
+            format: mimetype
+            example: video/mp4
+      responses:
+        '200':
+          description: file already exists, send a [`resume`](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) request instead
+        '201':
+          description: created
+          headers:
+            Location:
+              schema: 
+                type: string
+                format: url
+                example: /api/v1/videos/upload-resumable?upload_id=471e97554f21dec3b8bb5d4602939c51
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+    put:
+      summary: Send chunk for the resumable upload of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue the upload of a video
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+      parameters:
+        - name: upload_id
+          in: path
+          required: true
+          description: created upload id to proceed with
+          schema:
+            type: string
+        - name: Content-Range
+          in: header
+          schema:
+            type: string
+            example: bytes 0-262143/2469036
+          required: true
+        - name: Content-Length
+          in: header
+          schema:
+            type: number
+            example: 262144
+          required: true
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: last chunk received
+          headers:
+            Content-Length:
+              schema:
+                type: number
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+        '308':
+          description: resume incomplete
+          headers:
+            Range:
+              schema: 
+                type: string
+                example: bytes=0-262143
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+        '400':
+          description: invalid file field, schedule date or parameter
+        '403':
+          description: video didn't pass upload filter
+        '413':
+          description: video file too large, due to quota or max body size limit set by the reverse-proxy
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the video
+        '415':
+          description: video type unsupported
+        '422':
+          description: video unreadable
+    delete:
+      summary: Cancel the resumable upload of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+      parameters:
+        - name: upload_id
+          in: path
+          required: true
+          description: created upload id to proceed with
+          schema:
+            type: string
+        - name: Content-Length
+          in: header
+          required: true
+          schema:
+            type: number
+            example: 0
+      responses:
+        '204':
+          description: upload cancelled
+          headers:
+            Content-Length:
+              schema:
+                type: number
+                example: 0
   /videos/imports:
     post:
       summary: Import a video
