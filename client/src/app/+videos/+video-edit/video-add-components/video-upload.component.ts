@@ -63,7 +63,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     private userService: UserService,
     private router: Router,
     private hooks: HooksService,
-    private uploadService: UploadxService
+    private resumableUploadService: UploadxService
     ) {
     super()
 
@@ -147,7 +147,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
         })
 
-    this.uploadService.events
+    this.resumableUploadService.events
       .subscribe(
         state => this.onUploadVideoOngoing(state)
       )
@@ -195,14 +195,14 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   cancelUpload () {
-    this.uploadService.control({ action: 'cancel' })
+    this.resumableUploadService.control({ action: 'cancel' })
   }
 
   uploadAudio () {
     if (this.previewfileUpload) {
       this.isUploadingPreviewFile = true
 
-      this.uploadService.handleFiles(this.previewfileUpload, {
+      this.resumableUploadService.handleFiles(this.previewfileUpload, {
         ...this.options,
         metadata: {
           isAudioBg: true
@@ -233,7 +233,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       this.isUploadingVideo = true
     }
 
-    this.uploadService.handleFiles(file, this.options)
+    this.resumableUploadService.handleFiles(file, this.options)
   }
 
   isPublishingButtonDisabled () {
@@ -274,7 +274,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   private uploadVideoFile (audioBg?: string) {
-    this.uploadService.handleFiles(this.getVideoFile(), {
+    this.resumableUploadService.handleFiles(this.getVideoFile(), {
       ...this.options,
       metadata: {
         ...this.options.metadata,

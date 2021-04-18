@@ -145,7 +145,7 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
       originalname: req.body.name
     }
     const user = res.locals.oauth.token.User
-    const file = req.body
+    const file: Express.Multer.File & { id: string, metadata: any } = req.body
     file.path = `${CONFIG.STORAGE.VIDEOS_DIR}${file.id}`
 
     if (
@@ -177,7 +177,7 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
       return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422).json({ error: 'Video file unreadable.' })
     }
 
-    res.locals.videoFile = file
+    res.locals.videoFile = file as any
 
     if (req.method !== 'POST' || req.body.isAudioBg) {
       return next()

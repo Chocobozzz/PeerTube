@@ -235,7 +235,7 @@ async function addVideo (req: express.Request, res: express.Response, parameters
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = new VideoFileModel({
-    extname: extname(videoPhysicalFile.filename || videoInfo.name),
+    extname: videoPhysicalFile.filename ? extname(videoPhysicalFile.filename) : extname(videoInfo.name),
     size: videoInfo.size || videoPhysicalFile.size,
     videoStreamingPlaylistId: null,
     metadata: await getMetadataFromFile(videoPhysicalFile.path)

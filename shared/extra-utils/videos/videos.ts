@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { expect } from 'chai'
-import { pathExists, readdir, readFile } from 'fs-extra'
+import { pathExists, readdir, readFile, createReadStream, stat } from 'fs-extra'
 import * as parseTorrent from 'parse-torrent'
 import { extname, join } from 'path'
 import * as request from 'supertest'
@@ -23,6 +23,7 @@ import { makeGetRequest, makePutBodyRequest, makeRawRequest, makeUploadRequest }
 import { waitJobs } from '../server/jobs'
 import { ServerInfo } from '../server/servers'
 import { getMyUserInformation } from '../users/users'
+import { reject } from 'bluebird'
 
 loadLanguages()
 
@@ -351,8 +352,13 @@ async function checkVideoFilesWereRemoved (
   }
 }
 
-async function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = HttpStatusCode.OK_200) {
-  const path = '/api/v1/videos/upload'
+async function uploadVideo (
+  url: string,
+  accessToken: string,
+  videoAttributesArg: VideoAttributes,
+  specialStatus = HttpStatusCode.OK_200,
+  mode: 'legacy' | 'resumable' = 'legacy'
+) {
   let defaultChannelId = '1'
 
   try {
@@ -378,61 +384,107 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     fixture: 'video_short.webm'
   }, videoAttributesArg)
 
-  const req = request(url)
-              .post(path)
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + accessToken)
-              .field('name', attributes.name)
-              .field('nsfw', JSON.stringify(attributes.nsfw))
-              .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
-              .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))
-              .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
-              .field('privacy', attributes.privacy.toString())
-              .field('channelId', attributes.channelId)
+  /* START part varying depending on selected mode */
+  let res
+  if (mode === 'legacy') {
+    const path = '/api/v1/videos/upload'
+    const req = request(url)
+                .post(path)
+                .set('Accept', 'application/json')
+                .set('Authorization', 'Bearer ' + accessToken)
+                .field('name', attributes.name)
+                .field('nsfw', JSON.stringify(attributes.nsfw))
+                .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
+                .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))
+                .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
+                .field('privacy', attributes.privacy.toString())
+                .field('channelId', attributes.channelId)
 
-  if (attributes.support !== undefined) {
-    req.field('support', attributes.support)
-  }
-
-  if (attributes.description !== undefined) {
-    req.field('description', attributes.description)
-  }
-  if (attributes.language !== undefined) {
-    req.field('language', attributes.language.toString())
-  }
-  if (attributes.category !== undefined) {
-    req.field('category', attributes.category.toString())
-  }
-  if (attributes.licence !== undefined) {
-    req.field('licence', attributes.licence.toString())
-  }
-
-  const tags = attributes.tags || []
-  for (let i = 0; i < tags.length; i++) {
-    req.field('tags[' + i + ']', attributes.tags[i])
-  }
-
-  if (attributes.thumbnailfile !== undefined) {
-    req.attach('thumbnailfile', buildAbsoluteFixturePath(attributes.thumbnailfile))
-  }
-  if (attributes.previewfile !== undefined) {
-    req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
-  }
-
-  if (attributes.scheduleUpdate) {
-    req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
-
-    if (attributes.scheduleUpdate.privacy) {
-      req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
+    if (attributes.support !== undefined) {
+      req.field('support', attributes.support)
     }
-  }
 
-  if (attributes.originallyPublishedAt !== undefined) {
-    req.field('originallyPublishedAt', attributes.originallyPublishedAt)
-  }
+    if (attributes.description !== undefined) {
+      req.field('description', attributes.description)
+    }
+    if (attributes.language !== undefined) {
+      req.field('language', attributes.language.toString())
+    }
+    if (attributes.category !== undefined) {
+      req.field('category', attributes.category.toString())
+    }
+    if (attributes.licence !== undefined) {
+      req.field('licence', attributes.licence.toString())
+    }
 
-  const res = await req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
-            .expect(specialStatus)
+    const tags = attributes.tags || []
+    for (let i = 0; i < tags.length; i++) {
+      req.field('tags[' + i + ']', attributes.tags[i])
+    }
+
+    if (attributes.thumbnailfile !== undefined) {
+      req.attach('thumbnailfile', buildAbsoluteFixturePath(attributes.thumbnailfile))
+    }
+    if (attributes.previewfile !== undefined) {
+      req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
+    }
+
+    if (attributes.scheduleUpdate) {
+      req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
+
+      if (attributes.scheduleUpdate.privacy) {
+        req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
+      }
+    }
+
+    if (attributes.originallyPublishedAt !== undefined) {
+      req.field('originallyPublishedAt', attributes.originallyPublishedAt)
+    }
+
+    res = await req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
+                   .expect(specialStatus)
+  } else if (mode === 'resumable') {
+    let start = 0
+    const path = '/api/v1/videos/upload-resumable'
+    const videoFilePath = buildAbsoluteFixturePath(attributes.fixture)
+    const size = (await stat(videoFilePath)).size
+    const readable = createReadStream(videoFilePath)
+
+    const initializeSession = await request(url)
+                                    .post(path)
+                                    .set('Authorization', 'Bearer ' + accessToken)
+                                    .set('X-Upload-Content-Type', 'video/mp4')
+                                    .set('X-Upload-Content-Length', size.toString())
+                                    .send(attributes)
+                                    .expect(HttpStatusCode.CREATED_201)
+                                    .expect(res => res.header['location'] !== undefined)
+    const pathUploadId = initializeSession.header['location'].split('?')[1]
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    res = await new Promise((resolve, _) => {
+      readable.on('data', async (chunk: { length: number }) => {
+        readable.pause()
+
+        const chunkResponse = await request(url)
+                                    .put(path + '?' + pathUploadId)
+                                    .redirects(0)
+                                    .set('Authorization', 'Bearer ' + accessToken)
+                                    .set('Content-Type', 'application/octet-stream')
+                                    .set('Content-Range', `bytes ${start}-${start + chunk.length - 1}/${size}`)
+                                    .send(chunk)
+        start += chunk.length
+
+        if (chunkResponse.status === HttpStatusCode.OK_200) {
+          resolve(chunkResponse)
+        } else if (chunkResponse.status !== HttpStatusCode.PERMANENT_REDIRECT_308) {
+          reject('incorrect transient behaviour sending intermediary chunks')
+        }
+
+        readable.resume()
+      })
+    })
+  }
+  /* END part varying depending on selected mode */
 
   // Wait torrent generation
   if (specialStatus === HttpStatusCode.OK_200) {

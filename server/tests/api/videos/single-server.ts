@@ -486,6 +486,22 @@ describe('Test a single server', function () {
     }
   })
 
+  it('Should upload the video in a resumable fashion', async function () {
+    this.timeout(10000)
+
+    const videoAttributes = {
+      name: 'resumable video.mp4',
+      fixture: 'video_short.mp4'
+    }
+    const res = await uploadVideo(server.url, server.accessToken, videoAttributes, 200, 'resumable')
+    expect(res.body.video).to.not.be.undefined
+    expect(res.body.video.id).to.equal(8)
+    expect(res.body.video.uuid).to.have.length.above(5)
+
+    videoId = res.body.video.id
+    videoUUID = res.body.video.uuid
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })
