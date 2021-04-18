@@ -1,7 +1,7 @@
 # Docker guide
 
-[Part 1](#part-1-local-instance) - Local Instance
-[Part 2](#part-2-public-instance) - Public Instance with Let's Encrypt
+* [Part 1](#part-1---local-instance) - Local Instance
+* [Part 2](#part-2---public-instance) - Public Instance with Let's Encrypt
 
 
 ## Pre-requisites
@@ -11,6 +11,11 @@ This guide requires [docker](https://www.docker.com/community-edition) and
 
 
 # Part 1 - Local Instance
+
+## Constraints
+
+You will need a way to configure a domain name to resolve to an IP - e.g. `/etc/hosts` or a `DNS` entry.
+
 
 #### Create a new, empty workdir
 
@@ -43,7 +48,7 @@ domain name used in this guide, or there is a Docker network conflict on
 subnets.
 
 
-## Review the `.env` file
+#### Review the `.env` file
 
 ```shell
 cat .env
@@ -55,7 +60,7 @@ name of your choice, provided that it has at least one period `.` in it. The
 name `localhost` will not work.
 
 
-#### Configure Domain Name
+#### Configure domain name
 
 For local-only testing, you can add an entry to your `/etc/hosts` file. Add one
 line using the host name and IP address from the `.env` file:
@@ -102,7 +107,7 @@ peertube_1  | [peertube.local:9000] 2019-11-16 04:26:06.083 info: User password:
 Now browse to `http://peertube.local:9000` and login as `root`.
 
 
-#### Differences in Part 1 vs. Production Configuration in Part 2
+## Differences in Part 1 vs. Production Configuration in Part 2
 
 To simplify _Part 1_ of this guide, some configuration was omitted, which limits some features.
 
@@ -134,6 +139,8 @@ Your local instance should be usable if you configure its name in a local DNS se
 **PeerTube does not support webserver host change**. Keep in mind your domain
 name is definitive after your first PeerTube start.
 
+
+## Configure
 
 #### Create a new, empty workdir
 
@@ -257,6 +264,14 @@ _In `.env` double check:_
 * `PEERTUBE_WEBSERVER_HOSTNAME` - must be the DNS name of your server
 * `PEERTUBE_WEBSERVER_PORT` - must be the port number the `nginx` reverse-proxy is listening on (likely 443)
 * `PEERTUBE_WEBSERVER_HTTPS` - must be `true` when using `Let's Encrypt` or your own certificates
+
+
+## Running from a git clone
+
+The Part 1 local demo can be run by cloning the git repository, making `peertube.local` resolve to the expected IP, and using `docker-compose up` from the `support/docker/local` folder.
+
+The Part 2 demo requires extensive modification to the `docker-compose.yml` and `.env` files - you can clone the git repo and then modify them, but it may not be worth it. Be sure not to commit your local-only changes.
+
 
 ## Upgrade
 
