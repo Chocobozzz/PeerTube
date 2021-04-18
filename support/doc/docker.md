@@ -139,6 +139,9 @@ Your local instance should be usable if you configure its name in a local DNS se
 **PeerTube does not support webserver host change**. Keep in mind your domain
 name is definitive after your first PeerTube start.
 
+Your server will need to be reachable from the public internet on port 80 and 
+have a resolvable dns name.
+
 
 ## Configure
 
