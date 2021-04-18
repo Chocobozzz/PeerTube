@@ -137,6 +137,33 @@ export class VideoWatchPlaylistComponent {
     this.onPlaylistVideosNearOfBottom(position)
   }
 
+  findPreviousPlaylistVideo (position = this.currentPlaylistPosition): VideoPlaylistElement {
+    if (this.currentPlaylistPosition <= 1) {
+      // we have reached the top of the playlist: either loop or stop
+      if (this.loopPlaylist) {
+        this.currentPlaylistPosition = position = this.playlistPagination.totalItems
+      } else {
+        return
+      }
+    }
+    const previous = this.playlistElements.find(e => e.position === position)
+
+    if (!previous || !previous.video) {
+      return this.findPreviousPlaylistVideo(position - 1)
+    }
+
+    return previous
+  }
+
+  navigateToPreviousPlaylistVideo () {
+    const previous = this.findPreviousPlaylistVideo(this.currentPlaylistPosition - 1)
+    if (!previous) return
+
+    const start = previous.startTimestamp
+    const stop = previous.stopTimestamp
+    this.router.navigate([],{ queryParams: { playlistPosition: previous.position, start, stop } })
+  }
+
   findNextPlaylistVideo (position = this.currentPlaylistPosition): VideoPlaylistElement {
     if (this.currentPlaylistPosition >= this.playlistPagination.totalItems) {
       // we have reached the end of the playlist: either loop or stop

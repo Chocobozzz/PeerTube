@@ -799,6 +799,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       common: {
         autoplay: this.isAutoplay(),
         nextVideo: () => this.zone.run(() => this.autoplayNext()),
+        previousVideo: () => this.zone.run(() => {
+          // FIXME: Only show if this is a playlist
+          if (this.playlist) this.zone.run(() => this.videoWatchPlaylist.navigateToPreviousPlaylistVideo())
+        }),
 
         playerElement: this.playerElement,
         onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
