@@ -67,7 +67,7 @@ import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
-import { DiskStorageOptions, uploadx } from 'node-uploadx'
+import { DiskStorageOptions, uploadx } from '@uploadx/core'
 import { VideoCreate } from '../../../../shared/models/videos/video-create.model'
 
 const lTags = loggerTagsFactory('api', 'video')
