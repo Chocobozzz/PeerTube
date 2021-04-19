@@ -205,7 +205,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       this.resumableUploadService.handleFiles(this.previewfileUpload, {
         ...this.options,
         metadata: {
-          isAudio: true
+          isPreviewForAudio: true
         }
       })
     } else {
