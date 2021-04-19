@@ -2,6 +2,7 @@
 // We duplicated this plugin to choose the hls.js version we want, because streamroot only provide a bundled file
 
 import * as Hlsjs from 'hls.js/dist/hls.light.js'
+import { Level } from 'hls.js'
 import videojs from 'video.js'
 import { HlsjsConfigHandlerOptions, QualityLevelRepresentation, QualityLevels, VideoJSTechHLS } from '../peertube-videojs-typings'
 
@@ -10,7 +11,7 @@ type ErrorCounts = {
 }
 
 type Metadata = {
-  levels: Hlsjs.Level[]
+  levels: Level[]
 }
 
 type CustomAudioTrack = Hlsjs.HlsAudioTrack & { name?: string, lang?: string }
@@ -285,7 +286,7 @@ class Html5Hlsjs {
     this.hls.nextLevel = qualityId
   }
 
-  private _levelLabel (level: Hlsjs.Level) {
+  private _levelLabel (level: Level) {
     if (this.player.srOptions_.levelLabelHandler) {
       return this.player.srOptions_.levelLabelHandler(level)
     }
