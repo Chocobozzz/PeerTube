@@ -51,18 +51,27 @@ const dbname = CONFIG.DATABASE.DBNAME
 const username = CONFIG.DATABASE.USERNAME
 const password = CONFIG.DATABASE.PASSWORD
 const host = CONFIG.DATABASE.HOSTNAME
-const ssl = CONFIG.DATABASE.SSL
 const port = CONFIG.DATABASE.PORT
 const poolMax = CONFIG.DATABASE.POOL.MAX
+
+let dialectOptions: any = {}
+
+if (CONFIG.DATABASE.SSL) {
+  dialectOptions = {
+    ssl: {
+      rejectUnauthorized: false
+    }
+  }
+}
 
 const sequelizeTypescript = new SequelizeTypescript({
   database: dbname,
   dialect: 'postgres',
+  dialectOptions,
   host,
   port,
   username,
   password,
-  ssl,
   pool: {
     max: poolMax
   },
