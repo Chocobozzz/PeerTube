@@ -124,7 +124,7 @@ videosRouter.post('/upload',
   authenticate,
   reqVideoFileAdd,
   asyncMiddleware(videosAddValidator),
-  asyncRetryTransactionMiddleware(addVideoMultipart)
+  asyncRetryTransactionMiddleware(addVideoLegacy)
 )
 
 videosRouter.use('/upload-resumable',
@@ -190,7 +190,7 @@ function listVideoPrivacies (req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
-async function addVideoMultipart (req: express.Request, res: express.Response) {
+async function addVideoLegacy (req: express.Request, res: express.Response) {
   // Uploading the video could be long
   // Set timeout to 10 minutes, as Express's default is 2 minutes
   req.setTimeout(1000 * 60 * 10, () => {
@@ -206,19 +206,15 @@ async function addVideoMultipart (req: express.Request, res: express.Response) {
 }
 
 async function addVideoResumable (req: express.Request, res: express.Response) {
-  const videoPhysicalFile = res.locals.videoFile as any
+  const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo: VideoCreate & { size: number} = videoPhysicalFile.metadata
-  const files = {
-    bg: {
-      path: getTmpPath(videoPhysicalFile.metadata.audioBg)
-    }
-  }
+  const files = { bg: { path: getTmpPath(videoPhysicalFile.filename) } }
 
   return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
 }
 
 async function addVideo (req: express.Request, res: express.Response, parameters: {
-  videoPhysicalFile
+  videoPhysicalFile: { duration: number, filename: string, size: number, path: string }
   videoInfo: VideoCreate & { size?: number }
   files
 }) {

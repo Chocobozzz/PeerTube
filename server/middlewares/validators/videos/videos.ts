@@ -149,7 +149,7 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
     file.path = `${CONFIG.STORAGE.VIDEOS_DIR}${file.id}`
 
     if (
-      !file.metadata.isAudioBg &&
+      !file.metadata.isAudio &&
       !await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)
     ) return
 
@@ -158,8 +158,9 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
       return res.status(HttpStatusCode.BAD_REQUEST_400).json({ error: 'Video was refused.' })
     }
 
-    if (file.metadata.isAudioBg) {
+    if (file.metadata.isAudio) {
       const filename = `${file.id}-${uuidv4()}`
+      file.filename = filename
       try {
         await move(file.path, getTmpPath(filename))
       } catch (err) {
@@ -177,9 +178,9 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
       return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422).json({ error: 'Video file unreadable.' })
     }
 
-    res.locals.videoFile = file as any
+    res.locals.videoFileResumable = file as any
 
-    if (req.method !== 'POST' || req.body.isAudioBg) {
+    if (req.method !== 'POST' || req.body.isAudio) {
       return next()
     } /** The middleware applies what follows only to non-audio POST */
 

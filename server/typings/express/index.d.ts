@@ -19,6 +19,8 @@ import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server'
 import { MVideoImportDefault } from '@server/types/models/video/video-import'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate'
+import { VideoCreate } from '@shared/models'
+import { FileUploadMetadata } from 'express'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
   MAccountDefault,
@@ -64,6 +66,10 @@ interface PeerTubeLocals {
   videoShare?: MVideoShareActor
 
   videoFile?: MVideoFile
+
+  videoFileResumable?: any & {
+    metadata: VideoCreate & FileUploadMetadata
+  }
 
   videoImport?: MVideoImportDefault
 
