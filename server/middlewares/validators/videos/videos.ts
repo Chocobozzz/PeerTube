@@ -162,7 +162,7 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
       const filename = `${file.id}-${uuidv4()}`
       file.filename = filename
       try {
-        await move(file.path, getTmpPath(filename))
+        await move(file.path, await getTmpPath(filename))
       } catch (err) {
         logger.error("Couldn't save incoming file", { err })
         return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).json({ error: "Couldn't save the file." })

@@ -146,7 +146,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 1
+  'video-live-ending': 1,
+  'video-upload-tmp-folder-cleaner': 1
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -161,7 +162,8 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 10
+  'video-live-ending': 10,
+  'video-upload-tmp-folder-cleaner': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -177,7 +179,8 @@ const JOB_TTL: { [id in JobType]: number } = {
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
-  'video-live-ending': 1000 * 60 * 10 // 10 minutes
+  'video-live-ending': 1000 * 60 * 10, // 10 minutes
+  'video-upload-tmp-folder-cleaner': 60000 // 1 minute
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
@@ -185,6 +188,9 @@ const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = 
   },
   'activitypub-cleaner': {
     cron: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
+  },
+  'video-upload-tmp-folder-cleaner': {
+    cron: randomInt(30, 40) + ' * * * *' // Between 30-40 minutes past the hour
   }
 }
 const JOB_PRIORITY = {
@@ -211,7 +217,8 @@ const SCHEDULER_INTERVALS_MS = {
   autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
-  updateInboxStats: 1000 * 60// 1 minute
+  updateInboxStats: 1000 * 60, // 1 minute
+  removeTmpVideo: 60000 * 60 // 1 hour
 }
 
 // ---------------------------------------------------------------------------
@@ -776,6 +783,7 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.checkPeerTubeVersion = 2000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
+  REPEAT_JOBS['video-upload-tmp-folder-cleaner'] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 

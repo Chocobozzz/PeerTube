@@ -208,7 +208,7 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
 async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo: VideoCreate & { size: number} = videoPhysicalFile.metadata
-  const files = { bg: { path: getTmpPath(videoPhysicalFile.filename) } }
+  const files = { bg: { path: await getTmpPath(videoPhysicalFile.filename) } }
 
   return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
 }

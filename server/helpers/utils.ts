@@ -87,8 +87,17 @@ function getUUIDFromFilename (filename: string) {
   return result[0]
 }
 
-function getTmpPath (fileId: string) {
-  return `/tmp/peertube-${fileId}`
+let tmpPath
+async function getTmpPath (filename?: string) {
+  if (!tmpPath) {
+    try {
+      tmpPath = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploads')
+    } catch (error) {
+      logger.error('Failed to create tmp folder.', { error })
+    }
+  }
+
+  return filename ? join(tmpPath, filename) : tmpPath
 }
 
 // ---------------------------------------------------------------------------
