@@ -189,7 +189,7 @@ export class PluginManager implements ServerHook {
     return undefined
   }
 
-  onSettingsChanged (name: string, settings: any) {
+  async onSettingsChanged (name: string, settings: any) {
     const registered = this.getRegisteredPluginByShortName(name)
     if (!registered) {
       logger.error('Cannot find plugin %s to call on settings changed.', name)
@@ -197,7 +197,7 @@ export class PluginManager implements ServerHook {
 
     for (const cb of registered.registerHelpers.getOnSettingsChangedCallbacks()) {
       try {
-        cb(settings)
+        await cb(settings)
       } catch (err) {
         logger.error('Cannot run on settings changed callback for %s.', registered.npmName, { err })
       }
