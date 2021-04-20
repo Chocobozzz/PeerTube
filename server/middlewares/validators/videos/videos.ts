@@ -143,7 +143,7 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
       mimetype: req.body.mimeType,
       size: req.body.size,
       originalname: req.body.name
-    }
+    } as express.FileUploadMetadata
     const user = res.locals.oauth.token.User
     const file: Express.Multer.File & { id: string, metadata: any } = req.body
     file.path = `${CONFIG.STORAGE.VIDEOS_DIR}${file.id}`
@@ -178,7 +178,7 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
       return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422).json({ error: 'Video file unreadable.' })
     }
 
-    res.locals.videoFileResumable = file as any
+    res.locals.videoFileResumable = file
 
     if (req.method !== 'POST' || req.body.isPreviewForAudio) {
       return next()

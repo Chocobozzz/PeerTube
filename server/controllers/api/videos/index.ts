@@ -206,8 +206,16 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
 }
 
 async function addVideoResumable (req: express.Request, res: express.Response) {
-  const videoPhysicalFile = res.locals.videoFileResumable
-  const videoInfo: VideoCreate & { size: number} = videoPhysicalFile.metadata
+  interface VideoPhysicalFile {
+    duration: number
+    filename: string
+    size: number
+    path: string
+    metadata: VideoCreate & express.FileUploadMetadata
+  }
+
+  const videoPhysicalFile = res.locals.videoFileResumable as VideoPhysicalFile
+  const videoInfo = videoPhysicalFile.metadata
   const files = { bg: { path: await getTmpPath(videoPhysicalFile.filename) } }
 
   return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
@@ -215,14 +223,14 @@ async function addVideoResumable (req: express.Request, res: express.Response) {
 
 async function addVideo (req: express.Request, res: express.Response, parameters: {
   videoPhysicalFile: { duration: number, filename: string, size: number, path: string }
-  videoInfo: VideoCreate & { size?: number }
+  videoInfo: VideoCreate | VideoCreate & express.FileUploadMetadata
   files
 }) {
   const { videoPhysicalFile, videoInfo, files } = parameters
   const videoChannel = res.locals.videoChannel
   const user = res.locals.oauth.token.User
 
-  const videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
+  const videoData = buildLocalVideoFromReq(videoInfo as VideoCreate, videoChannel.id)
   videoData.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
   videoData.duration = videoPhysicalFile['duration'] // duration was added by a previous middleware
 
@@ -232,7 +240,7 @@ async function addVideo (req: express.Request, res: express.Response, parameters
 
   const videoFile = new VideoFileModel({
     extname: videoPhysicalFile.filename ? extname(videoPhysicalFile.filename) : extname(videoInfo.name),
-    size: videoInfo.size || videoPhysicalFile.size,
+    size: videoPhysicalFile.size,
     videoStreamingPlaylistId: null,
     metadata: await getMetadataFromFile(videoPhysicalFile.path)
   })

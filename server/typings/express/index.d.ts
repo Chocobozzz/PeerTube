@@ -67,8 +67,12 @@ interface PeerTubeLocals {
 
   videoFile?: MVideoFile
 
-  videoFileResumable?: any & {
+  videoFileResumable?: Express.Multer.File & {
+    id: string
+    path: string
     metadata: VideoCreate & FileUploadMetadata
+    duration?: number
+    filename?: string
   }
 
   videoImport?: MVideoImportDefault
