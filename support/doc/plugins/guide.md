@@ -744,7 +744,7 @@ If you want to translate strings of your plugin (like labels of your registered 
 {
   ...,
   "translations": {
-    "fr-FR": "./languages/fr.json",
+    "fr": "./languages/fr.json",
     "pt-BR": "./languages/pt-BR.json"
   },
   ...
@@ -752,7 +752,6 @@ If you want to translate strings of your plugin (like labels of your registered 
 ```
 
 The key should be one of the locales defined in [i18n.ts](https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/i18n/i18n.ts).
-You **must** use the complete locales (`fr-FR` instead of `fr`).
 
 Translation files are just objects, with the english sentence as the key and the translation as the value.
 `fr.json` could contain for example:

@@ -23,6 +23,7 @@ import { PluginLibrary, RegisterServerAuthExternalOptions, RegisterServerAuthPas
 import { ClientHtml } from '../client-html'
 import { RegisterHelpers } from './register-helpers'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
+import { getCompleteLocale } from '@shared/core-utils'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -444,10 +445,12 @@ export class PluginManager implements ServerHook {
       const path = translationPaths[locale]
       const json = await readJSON(join(this.getPluginPath(plugin.name, plugin.type), path))
 
-      if (!this.translations[locale]) this.translations[locale] = {}
-      this.translations[locale][npmName] = json
+      const completeLocale = getCompleteLocale(locale)
 
-      logger.info('Added locale %s of plugin %s.', locale, npmName)
+      if (!this.translations[completeLocale]) this.translations[completeLocale] = {}
+      this.translations[completeLocale][npmName] = json
+
+      logger.info('Added locale %s of plugin %s.', completeLocale, npmName)
     }
   }
 
