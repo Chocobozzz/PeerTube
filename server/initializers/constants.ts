@@ -177,7 +177,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
-  'video-live-ending': 1000 * 60 * 10, // 10 minutes
+  'video-live-ending': 1000 * 60 * 10 // 10 minutes
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {

@@ -152,7 +152,7 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
     if (
       !file.metadata.isPreviewForAudio &&
       !await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)
-    ) return
+    ) return clearUploadFile(file.path)
 
     if (!await isVideoAccepted(req, res, file)) return clearUploadFile(file.path)
 
@@ -179,16 +179,17 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
 
     logger.debug('Checking videosAddResumable parameters', { parameters: req.body, files: req.files })
 
-    if (areValidationErrors(req, res)) return
-    if (areErrorsInScheduleUpdate(req, res)) return
+    if (areValidationErrors(req, res)) return clearUploadFile(file.path)
+    if (areErrorsInScheduleUpdate(req, res)) return clearUploadFile(file.path)
 
-    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return
+    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return clearUploadFile(file.path)
 
     if (!isVideoFileMimeTypeValid({
       videofile: [
         videoFileMetadata
       ]
     })) {
+      await clearUploadFile(file.path)
       return res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
          .json({
            error: 'This file is not supported. Please, make sure it is of the following type: ' +
@@ -197,10 +198,12 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
     }
 
     if (!isVideoFileSizeValid(videoFileMetadata.size.toString())) {
+      await clearUploadFile(file.path)
       return res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413).json({ error: 'This file is too large.' })
     }
 
     if (await isAbleToUploadVideo(user.id, videoFileMetadata.size) === false) {
+      await clearUploadFile(file.path)
       return res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413).json({ error: 'The user video quota is exceeded with this video.' })
     }
 
