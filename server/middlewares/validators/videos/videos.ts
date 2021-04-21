@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { move } from 'fs-extra'
+import { join } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { body, param, query, ValidationChain } from 'express-validator'
 import { isAbleToUploadVideo } from '@server/lib/user'
@@ -58,9 +59,9 @@ import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
-import { getTmpPath, clearFile as clearUploadFile } from '../../../helpers/utils'
+import { getResumableUploadPath, deleteFileAsync as clearUploadFile } from '../../../helpers/utils'
 
-const videosAddValidator = getCommonVideoEditAttributes().concat([
+const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
     .custom((value, { req }) => isFileFieldValid(req.files, 'videofile'))
     .withMessage('Should have a file'),
@@ -146,27 +147,19 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
     } as express.FileUploadMetadata
     const user = res.locals.oauth.token.User
     const file: Express.Multer.File & { id: string, metadata: any } = req.body
-    file.path = `${CONFIG.STORAGE.VIDEOS_DIR}${file.id}`
+    file.path = join(CONFIG.STORAGE.VIDEOS_DIR, file.id)
 
     if (
       !file.metadata.isPreviewForAudio &&
       !await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)
     ) return
 
-    if (!await isVideoAccepted(req, res, file)) {
-      await clearUploadFile(file.path)
-      return res.status(HttpStatusCode.BAD_REQUEST_400).json({ error: 'Video was refused.' })
-    }
+    if (!await isVideoAccepted(req, res, file)) return clearUploadFile(file.path)
 
     if (file.metadata.isPreviewForAudio) {
       const filename = `${file.id}-${uuidv4()}`
       file.filename = filename
-      try {
-        await move(file.path, await getTmpPath(filename))
-      } catch (err) {
-        logger.error("Couldn't save incoming file", { err })
-        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).json({ error: "Couldn't save the file." })
-      }
+      await move(file.path, await getResumableUploadPath(filename))
       return res.json({ filename })
     }
 
@@ -563,7 +556,7 @@ const commonVideosFiltersValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  videosAddValidator,
+  videosAddLegacyValidator,
   videosAddResumableValidator,
   videosUpdateValidator,
   videosGetValidator,
@@ -632,7 +625,7 @@ export async function isVideoAccepted (
 async function addDurationToVideo (videoFile: Express.Multer.File & { duration?: number, metadata?: any }) {
   const duration: number = await getDurationFromVideoFile(videoFile.path)
 
-  if (!isNaN(duration)) {
-    videoFile.duration = duration
-  }
+  if (isNaN(duration)) throw new Error("Couldn't get video duration")
+
+  videoFile.duration = duration
 }

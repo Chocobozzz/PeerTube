@@ -1,21 +1,15 @@
-import { remove, access, unlink } from 'fs-extra'
+import { remove } from 'fs-extra'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { join } from 'path'
 import { ResultList } from '../../shared'
 import { CONFIG } from '../initializers/config'
 import { execPromise, execPromise2, randomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
+import { RESUMABLE_UPLOAD_DIRECTORY } from '../initializers/constants'
 
 function deleteFileAsync (path: string) {
   remove(path)
     .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
-}
-
-function clearFile (filePath: string) {
-  return Promise.all([
-    access(filePath),
-    unlink(filePath)
-  ]).catch(err => logger.warn('Cannot clear upload file %s.', filePath, { err }))
 }
 
 async function generateRandomString (size: number) {
@@ -87,29 +81,19 @@ function getUUIDFromFilename (filename: string) {
   return result[0]
 }
 
-let tmpPath
-async function getTmpPath (filename?: string) {
-  if (!tmpPath) {
-    try {
-      tmpPath = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploads')
-    } catch (error) {
-      logger.error('Failed to create tmp folder.', { error })
-    }
-  }
-
-  return filename ? join(tmpPath, filename) : tmpPath
+function getResumableUploadPath (filename?: string) {
+  return filename ? join(RESUMABLE_UPLOAD_DIRECTORY, filename) : RESUMABLE_UPLOAD_DIRECTORY
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   deleteFileAsync,
-  clearFile,
   generateRandomString,
   getFormattedObjects,
   getSecureTorrentName,
   getServerCommit,
   generateVideoImportTmpPath,
   getUUIDFromFilename,
-  getTmpPath
+  getResumableUploadPath
 }

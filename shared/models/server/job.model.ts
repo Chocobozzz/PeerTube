@@ -18,7 +18,6 @@ export type JobType =
   | 'activitypub-refresher'
   | 'video-redundancy'
   | 'video-live-ending'
-  | 'video-upload-tmp-folder-cleaner'
   | 'actor-keys'
 
 export interface Job {

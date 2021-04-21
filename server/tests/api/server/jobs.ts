@@ -56,7 +56,7 @@ describe('Test jobs', function () {
 
       let job: Job = res.body.data[0]
       // Skip repeat jobs
-      if ([ 'videos-views', 'video-upload-tmp-folder-cleaner' ].includes(job.type)) job = res.body.data[1]
+      if (job.type === 'videos-views') job = res.body.data[1]
 
       expect(job.state).to.equal('completed')
       expect(job.type.startsWith('activitypub-')).to.be.true

@@ -146,8 +146,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 1,
-  'video-upload-tmp-folder-cleaner': 1
+  'video-live-ending': 1
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -162,8 +161,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 10,
-  'video-upload-tmp-folder-cleaner': 1
+  'video-live-ending': 10
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -180,7 +178,6 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
-  'video-upload-tmp-folder-cleaner': 60000 // 1 minute
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
@@ -188,9 +185,6 @@ const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = 
   },
   'activitypub-cleaner': {
     cron: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
-  },
-  'video-upload-tmp-folder-cleaner': {
-    cron: randomInt(30, 40) + ' * * * *' // Between 30-40 minutes past the hour
   }
 }
 const JOB_PRIORITY = {
@@ -218,7 +212,7 @@ const SCHEDULER_INTERVALS_MS = {
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
   updateInboxStats: 1000 * 60, // 1 minute
-  removeTmpVideo: 60000 * 60 // 1 hour
+  removeDanglingResumableUploads: 60000 * 60 * 12 // 12 hours
 }
 
 // ---------------------------------------------------------------------------
@@ -655,6 +649,7 @@ const LRU_CACHE = {
   }
 }
 
+const RESUMABLE_UPLOAD_DIRECTORY = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploads')
 const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
 const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
@@ -781,9 +776,9 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
   SCHEDULER_INTERVALS_MS.updateInboxStats = 5000
   SCHEDULER_INTERVALS_MS.checkPeerTubeVersion = 2000
+  SCHEDULER_INTERVALS_MS.removeDanglingResumableUploads = 10000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
-  REPEAT_JOBS['video-upload-tmp-folder-cleaner'] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
@@ -830,6 +825,7 @@ export {
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,
   SEARCH_INDEX,
+  RESUMABLE_UPLOAD_DIRECTORY,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
   ACTOR_IMAGES_SIZE,

@@ -4064,7 +4064,6 @@ components:
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
-          - video-upload-tmp-folder-cleaner
   securitySchemes:
     OAuth2:
       description: >
@@ -5215,7 +5214,6 @@ components:
             - videos-views
             - activitypub-refresher
             - video-redundancy
-            - video-upload-tmp-folder-cleaner
         data:
           type: object
           additionalProperties: true

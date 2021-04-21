@@ -18,7 +18,7 @@ import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helper
 import { buildNSFWFilter, createReqFiles, getCountVideos } from '../../../helpers/express-utils'
 import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { getFormattedObjects, getTmpPath } from '../../../helpers/utils'
+import { getFormattedObjects, getResumableUploadPath } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import {
   DEFAULT_AUDIO_RESOLUTION,
@@ -48,7 +48,7 @@ import {
   setDefaultPagination,
   setDefaultVideosSort,
   videoFileMetadataGetValidator,
-  videosAddValidator,
+  videosAddLegacyValidator,
   videosAddResumableValidator,
   videosCustomGetValidator,
   videosGetValidator,
@@ -73,9 +73,7 @@ import { VideoCreate } from '../../../../shared/models/videos/video-create.model
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
-const uploadxOptions = {
-  directory: CONFIG.STORAGE.VIDEOS_DIR.replace(/\/$/, "")
-} as DiskStorageOptions
+const uploadxOptions = { directory: CONFIG.STORAGE.VIDEOS_DIR } as DiskStorageOptions
 
 const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
@@ -123,7 +121,7 @@ videosRouter.get('/',
 videosRouter.post('/upload',
   authenticate,
   reqVideoFileAdd,
-  asyncMiddleware(videosAddValidator),
+  asyncMiddleware(videosAddLegacyValidator),
   asyncRetryTransactionMiddleware(addVideoLegacy)
 )
 
@@ -216,7 +214,7 @@ async function addVideoResumable (req: express.Request, res: express.Response) {
 
   const videoPhysicalFile = res.locals.videoFileResumable as VideoPhysicalFile
   const videoInfo = videoPhysicalFile.metadata
-  const files = { bg: { path: await getTmpPath(videoPhysicalFile.filename) } }
+  const files = { bg: { path: await getResumableUploadPath(videoPhysicalFile.filename) } }
 
   return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
 }

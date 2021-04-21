@@ -63,7 +63,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   else servers = serversArg as ServerInfo[]
 
   const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
-  const repeatableJobs = [ 'videos-views', 'activitypub-cleaner', 'video-upload-tmp-folder-cleaner' ]
+  const repeatableJobs = [ 'videos-views', 'activitypub-cleaner' ]
   let pendingRequests: boolean
 
   function tasksBuilder () {

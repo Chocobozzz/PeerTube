@@ -34,7 +34,6 @@ import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViews } from './handlers/video-views'
-import { processVideoUploadTmpFolderCleaner } from './handlers/video-upload-tmp-folder-cleaner'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -50,8 +49,7 @@ type CreateJobArgument =
   { type: 'videos-views', payload: {} } |
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
   { type: 'actor-keys', payload: ActorKeysPayload } |
-  { type: 'video-redundancy', payload: VideoRedundancyPayload } |
-  { type: 'video-upload-tmp-folder-cleaner', payload: { }}
+  { type: 'video-redundancy', payload: VideoRedundancyPayload }
 
 type CreateJobOptions = {
   delay?: number
@@ -72,8 +70,7 @@ const handlers: { [id in JobType]: (job: Bull.Job) => Promise<any> } = {
   'activitypub-refresher': refreshAPObject,
   'video-live-ending': processVideoLiveEnding,
   'actor-keys': processActorKeys,
-  'video-redundancy': processVideoRedundancy,
-  'video-upload-tmp-folder-cleaner': processVideoUploadTmpFolderCleaner
+  'video-redundancy': processVideoRedundancy
 }
 
 const jobTypes: JobType[] = [
@@ -89,7 +86,6 @@ const jobTypes: JobType[] = [
   'videos-views',
   'activitypub-refresher',
   'video-redundancy',
-  'video-upload-tmp-folder-cleaner',
   'actor-keys',
   'video-live-ending'
 ]
@@ -240,10 +236,6 @@ class JobQueue {
   private addRepeatableJobs () {
     this.queues['videos-views'].add({}, {
       repeat: REPEAT_JOBS['videos-views']
-    }).catch(err => logger.error('Cannot add repeatable job.', { err }))
-
-    this.queues['video-upload-tmp-folder-cleaner'].add({}, {
-      repeat: REPEAT_JOBS['video-upload-tmp-folder-cleaner']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {
