@@ -9,12 +9,13 @@ const lTags = loggerTagsFactory('scheduler', 'resumable uploads', 'cleaner')
 export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
-  private now: number
+  private lastExecutionTimeMs: number
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.removeDanglingResumableUploads
 
   private constructor () {
     super()
+    this.lastExecutionTimeMs = new Date().getTime()
   }
 
   protected async internalExecute () {
@@ -23,13 +24,12 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
 
     logger.debug('Reading resumable video upload folder %s with %d files', path, files.length, lTags())
 
-    // current time (in miliseconds):
-    this.now = new Date().getTime()
-
     try {
-      await Promise.all(files.map(f => handleFile(f, this.now)))
+      await Promise.all(files.map(file => handleFile(file, this.lastExecutionTimeMs)))
     } catch (error) {
       logger.error('Failed to handle file during resumable video upload folder cleanup', { error, ...lTags() })
+    } finally {
+      this.lastExecutionTimeMs = new Date().getTime()
     }
   }
 
@@ -40,7 +40,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
 
 // ---------------------------------------------------------------------------
 
-async function handleFile (file: string, now: number) {
+async function handleFile (file: string, limit: number) {
   const filePath = getResumableUploadPath(file)
   let statResult: Stats
 
@@ -51,8 +51,5 @@ async function handleFile (file: string, now: number) {
     return
   }
 
-  // time of last status change, plus 1h (in miliseconds):
-  const endTime = statResult.ctimeMs + SCHEDULER_INTERVALS_MS.removeDanglingResumableUploads
-
-  if (now > endTime) await deleteFileAsync(filePath)
+  if (statResult.ctimeMs < limit) await deleteFileAsync(filePath)
 }
