@@ -92,6 +92,7 @@ async function getVideoStreamCodec (path: string) {
   const videoCodec = videoStream.codec_tag_string
 
   if (videoCodec === 'vp09') return 'vp09.00.50.08'
+  if (videoCodec === 'hev1') return 'hev1.1.6.L93.B0'
 
   const baseProfileMatrix = {
     avc1: {
