@@ -29,14 +29,18 @@ const playerKeys = {
   'Watching this video may reveal your IP address to others.': 'Watching this video may reveal your IP address to others.',
   'Copy the video URL': 'Copy the video URL',
   'Copy the video URL at the current time': 'Copy the video URL at the current time',
-  'Copy embed code': 'Copy embed code',
+  'Copy video embed code': 'Copy video embed code',
   'Copy magnet URI': 'Copy magnet URI',
   'Total downloaded: ': 'Total downloaded: ',
   'Total uploaded: ': 'Total uploaded: ',
   'From servers: ': 'From servers: ',
   'From peers: ': 'From peers: ',
   'Normal mode': 'Normal mode',
-  'Theater mode': 'Theater mode'
+  'Play in loop': 'Play in loop',
+  'Theater mode': 'Theater mode',
+  'Copy the playlist URL': 'Copy the playlist URL',
+  'Copy the playlist URL at current video position': 'Copy the playlist URL at current video position',
+  'Copy the playlist embed code': 'Copy the playlist embed code'
 }
 Object.assign(playerKeys, videojs)
 

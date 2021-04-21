@@ -795,6 +795,19 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       src: environment.apiUrl + c.captionPath
     }))
 
+    const playlistOptions = this.playlist
+      ? {
+        createComponent: false,
+
+        playlist: this.playlist,
+
+        getCurrentPosition: () => this.playlistPosition,
+
+        embedUrl: this.playlist.embedUrl,
+        embedTitle: this.playlist.displayName
+      }
+      : undefined
+
     const options: PeertubePlayerManagerOptions = {
       common: {
         autoplay: this.isAutoplay(),
@@ -839,7 +852,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         videoCaptions: playerCaptions,
 
-        videoUUID: video.uuid
+        videoUUID: video.uuid,
+
+        playlist: playlistOptions
       },
 
       webtorrent: {

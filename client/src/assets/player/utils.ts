@@ -94,9 +94,8 @@ function buildVideoLink (options: {
 
 function buildPlaylistLink (options: {
   baseUrl?: string
-
-  playlistPosition: number
-}) {
+  playlistPosition?: number
+} = {}) {
   const { baseUrl } = options
 
   const url = baseUrl
@@ -106,6 +105,7 @@ function buildPlaylistLink (options: {
   const params = generateParams(window.location.search)
 
   if (options.playlistPosition) params.set('playlistPosition', '' + options.playlistPosition)
+  else params.delete('playlistPosition')
 
   return buildUrl(url, params)
 }
