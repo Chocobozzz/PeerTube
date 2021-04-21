@@ -645,7 +645,8 @@ class Emailer {
     this.transporter = createTransport({
       sendmail: true,
       newline: 'unix',
-      path: CONFIG.SMTP.SENDMAIL
+      path: CONFIG.SMTP.SENDMAIL,
+      logger: bunyanLogger as any
     })
   }
 
