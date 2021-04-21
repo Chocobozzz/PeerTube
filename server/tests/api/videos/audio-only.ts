@@ -16,6 +16,7 @@ import {
   waitJobs
 } from '../../../../shared/extra-utils'
 import { VideoDetails } from '../../../../shared/models/videos'
+import { HttpStatusCode } from '@shared/core-utils'
 
 const expect = chai.expect
 
@@ -60,6 +61,35 @@ describe('Test audio only video transcoding', function () {
     this.timeout(120000)
 
     const resUpload = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'audio only' })
+    videoUUID = resUpload.body.video.uuid
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideo(server.url, videoUUID)
+      const video: VideoDetails = res.body
+
+      expect(video.streamingPlaylists).to.have.lengthOf(1)
+
+      for (const files of [ video.files, video.streamingPlaylists[0].files ]) {
+        expect(files).to.have.lengthOf(3)
+        expect(files[0].resolution.id).to.equal(720)
+        expect(files[1].resolution.id).to.equal(240)
+        expect(files[2].resolution.id).to.equal(0)
+      }
+    }
+  })
+
+  it('Should upload a video in a resumable fashion and transcode it', async function () {
+    this.timeout(120000)
+
+    const resUpload = await uploadVideo(
+      servers[0].url,
+      servers[0].accessToken,
+      { name: 'audio only.webm' },
+      HttpStatusCode.OK_200,
+      'resumable'
+    )
     videoUUID = resUpload.body.video.uuid
 
     await waitJobs(servers)

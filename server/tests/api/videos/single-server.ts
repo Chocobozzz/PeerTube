@@ -28,6 +28,7 @@ import {
   viewVideo,
   wait
 } from '../../../../shared/extra-utils'
+import { HttpStatusCode } from '@shared/core-utils'
 
 const expect = chai.expect
 
@@ -493,7 +494,7 @@ describe('Test a single server', function () {
       name: 'resumable video.mp4',
       fixture: 'video_short.mp4'
     }
-    const res = await uploadVideo(server.url, server.accessToken, videoAttributes, 200, 'resumable')
+    const res = await uploadVideo(server.url, server.accessToken, videoAttributes, HttpStatusCode.OK_200, 'resumable')
     expect(res.body.video).to.not.be.undefined
     expect(res.body.video.id).to.equal(8)
     expect(res.body.video.uuid).to.have.length.above(5)
