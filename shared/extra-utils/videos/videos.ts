@@ -392,57 +392,10 @@ async function uploadVideo (
                 .post(path)
                 .set('Accept', 'application/json')
                 .set('Authorization', 'Bearer ' + accessToken)
-                .field('name', attributes.name)
-                .field('nsfw', JSON.stringify(attributes.nsfw))
-                .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
-                .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))
-                .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
-                .field('privacy', attributes.privacy.toString())
-                .field('channelId', attributes.channelId)
 
-    if (attributes.support !== undefined) {
-      req.field('support', attributes.support)
-    }
+    buildLegacyUploadReq(req, attributes)
 
-    if (attributes.description !== undefined) {
-      req.field('description', attributes.description)
-    }
-    if (attributes.language !== undefined) {
-      req.field('language', attributes.language.toString())
-    }
-    if (attributes.category !== undefined) {
-      req.field('category', attributes.category.toString())
-    }
-    if (attributes.licence !== undefined) {
-      req.field('licence', attributes.licence.toString())
-    }
-
-    const tags = attributes.tags || []
-    for (let i = 0; i < tags.length; i++) {
-      req.field('tags[' + i + ']', attributes.tags[i])
-    }
-
-    if (attributes.thumbnailfile !== undefined) {
-      req.attach('thumbnailfile', buildAbsoluteFixturePath(attributes.thumbnailfile))
-    }
-    if (attributes.previewfile !== undefined) {
-      req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
-    }
-
-    if (attributes.scheduleUpdate) {
-      req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
-
-      if (attributes.scheduleUpdate.privacy) {
-        req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
-      }
-    }
-
-    if (attributes.originallyPublishedAt !== undefined) {
-      req.field('originallyPublishedAt', attributes.originallyPublishedAt)
-    }
-
-    res = await req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
-                   .expect(specialStatus)
+    res = await req.expect(specialStatus)
   } else if (mode === 'resumable') {
     let start = 0
     const path = '/api/v1/videos/upload-resumable'
@@ -806,4 +759,59 @@ export {
   uploadVideoAndGetId,
   getLocalIdByUUID,
   getVideoIdFromUUID
+}
+
+// ---------------------------------------------------------------------------
+
+function buildLegacyUploadReq (req: request.Test, attributes: any) {
+  req.field('name', attributes.name)
+     .field('nsfw', JSON.stringify(attributes.nsfw))
+     .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
+     .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))
+     .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
+     .field('privacy', attributes.privacy.toString())
+     .field('channelId', attributes.channelId)
+
+  if (attributes.support !== undefined) {
+    req.field('support', attributes.support)
+  }
+
+  if (attributes.description !== undefined) {
+    req.field('description', attributes.description)
+  }
+  if (attributes.language !== undefined) {
+    req.field('language', attributes.language.toString())
+  }
+  if (attributes.category !== undefined) {
+    req.field('category', attributes.category.toString())
+  }
+  if (attributes.licence !== undefined) {
+    req.field('licence', attributes.licence.toString())
+  }
+
+  const tags = attributes.tags || []
+  for (let i = 0; i < tags.length; i++) {
+    req.field('tags[' + i + ']', attributes.tags[i])
+  }
+
+  if (attributes.thumbnailfile !== undefined) {
+    req.attach('thumbnailfile', buildAbsoluteFixturePath(attributes.thumbnailfile))
+  }
+  if (attributes.previewfile !== undefined) {
+    req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
+  }
+
+  if (attributes.scheduleUpdate) {
+    req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
+
+    if (attributes.scheduleUpdate.privacy) {
+      req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
+    }
+  }
+
+  if (attributes.originallyPublishedAt !== undefined) {
+    req.field('originallyPublishedAt', attributes.originallyPublishedAt)
+  }
+
+  req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
 }
