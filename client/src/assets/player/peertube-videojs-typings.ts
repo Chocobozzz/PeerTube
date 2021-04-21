@@ -113,18 +113,13 @@ type PeerTubePluginOptions = {
 }
 
 type PlaylistPluginOptions = {
-  createComponent: boolean
-
-  elements?: VideoPlaylistElement[]
+  elements: VideoPlaylistElement[]
 
   playlist: VideoPlaylist
 
   getCurrentPosition: () => number
 
-  embedUrl: string
-  embedTitle: string
-
-  onItemClicked?: (element: VideoPlaylistElement) => void
+  onItemClicked: (element: VideoPlaylistElement) => void
 }
 
 type NextPreviousVideoButtonOptions = {

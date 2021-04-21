@@ -492,8 +492,6 @@ export class PeerTubeEmbed {
 
     const playlistPlugin = this.currentPlaylistElement
       ? {
-        createComponent: true,
-
         elements: this.playlistElements,
         playlist: this.playlist,
 
@@ -504,10 +502,7 @@ export class PeerTubeEmbed {
 
           this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
             .catch(err => console.error(err))
-        },
-
-        embedTitle: this.playlist.displayName,
-        embedUrl: window.location.origin + this.playlist.embedPath
+        }
       }
       : undefined
 

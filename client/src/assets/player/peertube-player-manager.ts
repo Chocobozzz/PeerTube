@@ -35,7 +35,7 @@ import {
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoOrPlaylistEmbed, buildVideoLink, getRtcConfig, isSafari, isIOS, buildPlaylistLink } from './utils'
+import { buildVideoOrPlaylistEmbed, buildVideoLink, getRtcConfig, isSafari, isIOS } from './utils'
 import { copyToClipboard } from '../../root-helpers/utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
@@ -87,8 +87,6 @@ export interface CommonOptions extends CustomizationOptions {
   hasPreviousVideo?: () => boolean
 
   playlist?: PlaylistPluginOptions
-  playlistEmbedUrl?: string
-  playlistEmbedTitle?: string
 
   videoDuration: number
   enableHotkeys: boolean
@@ -169,13 +167,7 @@ export class PeertubePlayerManager {
           PeertubePlayerManager.alreadyPlayed = true
         })
 
-        self.addContextMenu({
-          mode,
-          player,
-          videoEmbedUrl: options.common.embedUrl,
-          videoEmbedTitle: options.common.embedTitle,
-          playlist: options.common.playlist
-        })
+        self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
 
         player.bezels()
 
@@ -213,13 +205,7 @@ export class PeertubePlayerManager {
     videojs(newVideoElement, videojsOptions, function (this: videojs.Player) {
       const player = this
 
-      self.addContextMenu({
-        mode,
-        player,
-        videoEmbedUrl: options.common.embedUrl,
-        videoEmbedTitle: options.common.embedTitle,
-        playlist: options.common.playlist
-      })
+      self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
 
       PeertubePlayerManager.onPlayerChange(player)
     })
@@ -253,7 +239,7 @@ export class PeertubePlayerManager {
       }
     }
 
-    if (commonOptions.playlist?.createComponent === true) {
+    if (commonOptions.playlist) {
       plugins.playlist = commonOptions.playlist
     }
 
@@ -511,71 +497,37 @@ export class PeertubePlayerManager {
     return children
   }
 
-  private static addContextMenu (options: {
-    mode: PlayerMode
-    player: videojs.Player
-    videoEmbedUrl: string
-    videoEmbedTitle: string
-    playlist?: PlaylistPluginOptions
-  }) {
-    const { mode, player, videoEmbedUrl, videoEmbedTitle, playlist } = options
-
+  private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string, videoEmbedTitle: string) {
     const content = () => {
-      let items: { icon?: string, label: string, listener: Function }[] = []
-
-      if (!playlist) {
-        const isLoopEnabled = player.options_['loop']
-        items = items.concat([
-          {
-            icon: 'repeat',
-            label: player.localize('Play in loop') + (isLoopEnabled ? '<span class="vjs-icon-tick-white"></span>' : ''),
-            listener: function () {
-              player.options_['loop'] = !isLoopEnabled
-            }
-          },
-          {
-            label: player.localize('Copy the video URL'),
-            listener: function () {
-              copyToClipboard(buildVideoLink())
-            }
-          },
-          {
-            label: player.localize('Copy the video URL at the current time'),
-            listener: function (this: videojs.Player) {
-              copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
-            }
+      const isLoopEnabled = player.options_['loop']
+      const items = [
+        {
+          icon: 'repeat',
+          label: player.localize('Play in loop') + (isLoopEnabled ? '<span class="vjs-icon-tick-white"></span>' : ''),
+          listener: function () {
+            player.options_['loop'] = !isLoopEnabled
           }
-        ])
-      } else {
-        items = items.concat([
-          {
-            label: player.localize('Copy the playlist URL'),
-            listener: function () {
-              copyToClipboard(buildPlaylistLink())
-            }
-          },
-          {
-            label: player.localize('Copy the playlist URL at current video position'),
-            listener: function (this: videojs.Player) {
-              copyToClipboard(buildPlaylistLink({ playlistPosition: playlist.getCurrentPosition() }))
-            }
-          },
-          {
-            label: player.localize('Copy the playlist embed code'),
-            listener: function (this: videojs.Player) {
-              copyToClipboard(buildVideoOrPlaylistEmbed(playlist.embedUrl, playlist.embedTitle))
-            }
+        },
+        {
+          label: player.localize('Copy the video URL'),
+          listener: function () {
+            copyToClipboard(buildVideoLink())
           }
-        ])
-      }
-
-      items = items.concat({
-        icon: 'code',
-        label: player.localize('Copy video embed code'),
-        listener: () => {
-          copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl, videoEmbedTitle))
+        },
+        {
+          label: player.localize('Copy the video URL at the current time'),
+          listener: function (this: videojs.Player) {
+            copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
+          }
+        },
+        {
+          icon: 'code',
+          label: player.localize('Copy embed code'),
+          listener: () => {
+            copyToClipboard(buildVideoOrPlaylistEmbed(videoEmbedUrl, videoEmbedTitle))
+          }
         }
-      })
+      ]
 
       if (mode === 'webtorrent') {
         items.push({
