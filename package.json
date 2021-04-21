@@ -81,6 +81,7 @@
     "swagger-cli": "swagger-cli"
   },
   "dependencies": {
+    "@uploadx/core": "^4.3.0",
     "apicache": "1.6.2",
     "async": "^3.0.1",
     "async-lru": "^1.1.1",
@@ -124,7 +125,6 @@
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
     "node-media-server": "^2.1.4",
-    "node-uploadx": "^4.3.0",
     "nodemailer": "^6.0.0",
     "oauth2-server": "3.1.1",
     "parse-torrent": "^9.1.0",
