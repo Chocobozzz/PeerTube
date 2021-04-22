@@ -34,6 +34,7 @@ export class PluginService implements ClientHook {
 
   pluginsLoaded: { [ scope in PluginClientScope ]: ReplaySubject<boolean> } = {
     common: new ReplaySubject<boolean>(1),
+    'admin-plugin': new ReplaySubject<boolean>(1),
     search: new ReplaySubject<boolean>(1),
     'video-watch': new ReplaySubject<boolean>(1),
     signup: new ReplaySubject<boolean>(1),

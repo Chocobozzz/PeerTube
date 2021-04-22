@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { Notifier, PluginService } from '@app/core'
+import { HooksService, Notifier, PluginService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { PeerTubePlugin, RegisterServerSettingOptions } from '@shared/models'
@@ -26,6 +26,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     private pluginService: PluginService,
     private pluginAPIService: PluginApiService,
     private notifier: Notifier,
+    private hooks: HooksService,
     private route: ActivatedRoute
   ) {
     super()
@@ -70,6 +71,12 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     return script.isSettingHidden({ setting, formValues: this.form.value })
   }
 
+  getWrapperId (setting: RegisterServerSettingOptions) {
+    if (!setting.name) return
+
+    return setting.name + '-wrapper'
+  }
+
   private loadPlugin (npmName: string) {
     this.pluginAPIService.getPlugin(npmName)
         .pipe(switchMap(plugin => {
@@ -103,6 +110,8 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     this.buildForm(buildOptions)
 
     this.form.patchValue(settingsValues)
+
+    setTimeout(() => this.hooks.runAction('action:admin-plugin-settings.init', 'admin-plugin', { npmName: this.npmName }))
   }
 
   private getSetting (name: string) {

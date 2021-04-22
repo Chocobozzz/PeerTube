@@ -6,7 +6,7 @@
   </h2>
 
   <form *ngIf="hasRegisteredSettings()" role="form" (ngSubmit)="formValidated()" [formGroup]="form">
-    <div class="form-group" *ngFor="let setting of registeredSettings">
+    <div class="form-group" *ngFor="let setting of registeredSettings" [id]="getWrapperId(setting)">
       <my-dynamic-form-field [hidden]="isSettingHidden(setting)" [form]="form" [setting]="setting" [formErrors]="formErrors"></my-dynamic-form-field>
     </div>
 

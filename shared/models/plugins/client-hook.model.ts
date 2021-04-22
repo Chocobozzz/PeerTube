@@ -85,6 +85,10 @@ export const clientActionHookObject = {
   // Fired when the registration page is being initialized
   'action:signup.register.init': true,
 
+  // PeerTube >= 3.2
+  // Fired when the admin plugin settings page is being initialized
+  'action:admin-plugin-settings.init': true,
+
   // Fired when the video upload page is being initalized
   'action:video-upload.init': true,
   // Fired when the video import by URL page is being initalized
