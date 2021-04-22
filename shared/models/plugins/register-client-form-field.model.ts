@@ -16,5 +16,5 @@ export type RegisterClientFormFieldOptions = {
 }
 
 export interface RegisterClientVideoFieldOptions {
-  type: 'import-url' | 'import-torrent' | 'update' | 'upload'
+  type: 'update' | 'upload' | 'import-url' | 'import-torrent' | 'go-live'
 }

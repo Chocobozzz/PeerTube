@@ -626,7 +626,7 @@ async function register ({ registerVideoField, peertubeHelpers }) {
     default: ''
   }
 
-  for (const type of [ 'upload', 'import-url', 'import-torrent', 'update' ]) {
+  for (const type of [ 'upload', 'import-url', 'import-torrent', 'update', 'go-live' ]) {
     registerVideoField(commonOptions, { type })
   }
 }
