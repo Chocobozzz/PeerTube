@@ -60,6 +60,7 @@ import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 import { getResumableUploadPath, deleteFileAsync as clearUploadFile } from '../../../helpers/utils'
+import { Metadata } from '@uploadx/core'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -96,9 +97,7 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 
     if (!isVideoFileSizeValid(videoFile.size.toString())) {
       res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-         .json({
-           error: 'This file is too large.'
-         })
+         .json({ error: 'This file is too large.' })
 
       return cleanUpReqFiles(req)
     }
@@ -130,23 +129,10 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
-const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
-  body('name')
-    .trim()
-    .custom(isVideoNameValid)
-    .withMessage('Should have a valid name'),
-  body('channelId')
-    .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
-
+const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const videoFileMetadata = {
-      mimetype: req.body.mimeType,
-      size: req.body.size,
-      originalname: req.body.name
-    } as express.FileUploadMetadata
     const user = res.locals.oauth.token.User
-    const file: Express.Multer.File & { id: string, metadata: any } = req.body
+    const file: { id: string, metadata: Metadata, duration: number, size: number, path: string, filename: string } = req.body
     file.path = join(CONFIG.STORAGE.VIDEOS_DIR, file.id)
 
     if (
@@ -154,7 +140,7 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
       !await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)
     ) return clearUploadFile(file.path)
 
-    if (!await isVideoAccepted(req, res, file)) return clearUploadFile(file.path)
+    if (!await isVideoAccepted(req, res, file as any)) return clearUploadFile(file.path)
 
     if (file.metadata.isPreviewForAudio) {
       const filename = `${file.id}-${uuidv4()}`
@@ -164,18 +150,47 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
     }
 
     try {
-      await addDurationToVideo(file)
+      if (!file.duration) await addDurationToVideo(file)
     } catch (err) {
       logger.error('Invalid input file in videosAddValidator.', { err })
-      await clearUploadFile(file.path)
-      return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422).json({ error: 'Video file unreadable.' })
+      res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
+         .json({ error: 'Video file unreadable.' })
+
+      return clearUploadFile(file.path)
     }
 
     res.locals.videoFileResumable = file
 
-    if (req.method !== 'POST' || req.body.isPreviewForAudio) {
-      return next()
-    } /** The middleware applies what follows only to non-audio POST */
+    return next()
+  }
+]
+
+/**
+ * File is created in POST initialisation, and metadata is saved by uploadx for
+ * later use.
+ *
+ * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/uploadx.ts#L41
+ */
+const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
+  body('name')
+    .trim()
+    .custom(isVideoNameValid)
+    .withMessage('Should have a valid name'),
+  body('channelId')
+    .customSanitizer(toIntOrNull)
+    .custom(isIdValid).withMessage('Should have correct video channel id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.method !== 'POST') return next()
+    if (req.body.isPreviewForAudio) return next()
+
+    const videoFileMetadata = {
+      mimetype: req.body.mimeType,
+      size: req.body.size,
+      originalname: req.body.name
+    } as express.FileUploadMetadata
+    const user = res.locals.oauth.token.User
+    const file = res.locals.videoFileResumable
 
     logger.debug('Checking videosAddResumable parameters', { parameters: req.body, files: req.files })
 
@@ -189,22 +204,27 @@ const videosAddResumableValidator = getCommonVideoEditAttributes().concat([
         videoFileMetadata
       ]
     })) {
-      await clearUploadFile(file.path)
-      return res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+      res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
          .json({
            error: 'This file is not supported. Please, make sure it is of the following type: ' +
                   CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
          })
+
+      return clearUploadFile(file.path)
     }
 
     if (!isVideoFileSizeValid(videoFileMetadata.size.toString())) {
-      await clearUploadFile(file.path)
-      return res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413).json({ error: 'This file is too large.' })
+      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+         .json({ error: 'This file is too large.' })
+
+      return clearUploadFile(file.path)
     }
 
     if (await isAbleToUploadVideo(user.id, videoFileMetadata.size) === false) {
-      await clearUploadFile(file.path)
-      return res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413).json({ error: 'The user video quota is exceeded with this video.' })
+      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+         .json({ error: 'The user video quota is exceeded with this video.' })
+
+      return clearUploadFile(file.path)
     }
 
     return next()
@@ -561,6 +581,7 @@ const commonVideosFiltersValidator = [
 export {
   videosAddLegacyValidator,
   videosAddResumableValidator,
+  videosAddResumableInitValidator,
   videosUpdateValidator,
   videosGetValidator,
   videoFileMetadataGetValidator,
@@ -625,7 +646,7 @@ export async function isVideoAccepted (
   return true
 }
 
-async function addDurationToVideo (videoFile: Express.Multer.File & { duration?: number, metadata?: any }) {
+async function addDurationToVideo (videoFile: any) {
   const duration: number = await getDurationFromVideoFile(videoFile.path)
 
   if (isNaN(duration)) throw new Error("Couldn't get video duration")

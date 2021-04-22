@@ -43,12 +43,15 @@ import {
   authenticate,
   checkVideoFollowConstraints,
   commonVideosFiltersValidator,
+  executeIfPOST,
+  onlyAllowMethods,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultVideosSort,
   videoFileMetadataGetValidator,
   videosAddLegacyValidator,
+  videosAddResumableInitValidator,
   videosAddResumableValidator,
   videosCustomGetValidator,
   videosGetValidator,
@@ -67,7 +70,7 @@ import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
-import { DiskStorageOptions, uploadx } from '@uploadx/core'
+import { DiskStorageOptions, Metadata, uploadx } from '@uploadx/core'
 import { VideoCreate } from '../../../../shared/models/videos/video-create.model'
 
 const lTags = loggerTagsFactory('api', 'video')
@@ -126,9 +129,11 @@ videosRouter.post('/upload',
 )
 
 videosRouter.use('/upload-resumable',
+  onlyAllowMethods([ 'POST', 'PUT', 'DELETE' ]), // uploadx also allows GET and PATCH
   authenticate,
   uploadx.upload(uploadxOptions),
   asyncMiddleware(videosAddResumableValidator),
+  executeIfPOST(asyncMiddleware(videosAddResumableInitValidator)),
   asyncMiddleware(addVideoResumable)
 )
 
@@ -204,15 +209,7 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
 }
 
 async function addVideoResumable (req: express.Request, res: express.Response) {
-  interface VideoPhysicalFile {
-    duration: number
-    filename: string
-    size: number
-    path: string
-    metadata: VideoCreate & express.FileUploadMetadata
-  }
-
-  const videoPhysicalFile = res.locals.videoFileResumable as VideoPhysicalFile
+  const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
   const files = { bg: { path: await getResumableUploadPath(videoPhysicalFile.filename) } }
 
@@ -221,7 +218,7 @@ async function addVideoResumable (req: express.Request, res: express.Response) {
 
 async function addVideo (req: express.Request, res: express.Response, parameters: {
   videoPhysicalFile: { duration: number, filename: string, size: number, path: string }
-  videoInfo: VideoCreate | VideoCreate & express.FileUploadMetadata
+  videoInfo: VideoCreate | Metadata
   files
 }) {
   const { videoPhysicalFile, videoInfo, files } = parameters

@@ -1351,78 +1351,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                videofile:
-                  description: Video file
-                  type: string
-                  format: binary
-                channelId:
-                  description: Channel id that will contain this video
-                  type: integer
-                thumbnailfile:
-                  description: Video thumbnail file
-                  type: string
-                  format: binary
-                previewfile:
-                  description: Video preview file
-                  type: string
-                  format: binary
-                privacy:
-                  $ref: '#/components/schemas/VideoPrivacySet'
-                category:
-                  description: Video category
-                  type: integer
-                  example: 4
-                licence:
-                  description: Video licence
-                  type: integer
-                  example: 2
-                language:
-                  description: Video language
-                  type: string
-                description:
-                  description: Video description
-                  type: string
-                waitTranscoding:
-                  description: Whether or not we wait transcoding before publish the video
-                  type: boolean
-                support:
-                  description: A text tell the audience how to support the video creator
-                  example: Please support my work on <insert crowdfunding plateform>! <3
-                  type: string
-                nsfw:
-                  description: Whether or not this video contains sensitive content
-                  type: boolean
-                name:
-                  description: Video name
-                  type: string
-                tags:
-                  description: Video tags (maximum 5 tags each between 2 and 30 characters)
-                  type: array
-                  minItems: 1
-                  maxItems: 5
-                  uniqueItems: true
-                  items:
-                    type: string
-                    minLength: 2
-                    maxLength: 30
-                commentsEnabled:
-                  description: Enable or disable comments for this video
-                  type: boolean
-                downloadEnabled:
-                  description: Enable or disable downloading for this video
-                  type: boolean
-                originallyPublishedAt:
-                  description: Date when the content was originally published
-                  type: string
-                  format: date-time
-                scheduleUpdate:
-                  $ref: '#/components/schemas/VideoScheduledUpdate'
-              required:
-                - videofile
-                - channelId
-                - name
+              $ref: '#/components/schemas/VideoUploadRequestLegacy'
             encoding:
               videofile:
                 contentType: video/mp4, video/webm, video/ogg, video/avi, video/quicktime, video/x-msvideo, video/x-flv, video/x-matroska, application/octet-stream
@@ -1473,12 +1402,19 @@ paths:
           schema:
             type: number
             example: 2469036
+          required: true
+          description: Length in bytes of the file to be transferred
         - name: X-Upload-Content-Type
           in: header
           schema:
             type: string
             format: mimetype
             example: video/mp4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoUploadRequestCommon'
       responses:
         '200':
           description: file already exists, send a [`resume`](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) request instead
@@ -1494,6 +1430,12 @@ paths:
               schema:
                 type: number
                 example: 0
+        '400':
+          description: invalid file field, schedule date or parameter
+        '413':
+          description: video file too large, due to quota or absolute max file size
+        '415':
+          description: video type unsupported
     put:
       summary: Send chunk for the resumable upload of a video
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue the upload of a video
@@ -1548,20 +1490,10 @@ paths:
               schema:
                 type: number
                 example: 0
-        '400':
-          description: invalid file field, schedule date or parameter
         '403':
           description: video didn't pass upload filter
         '413':
           description: video file too large, due to quota or max body size limit set by the reverse-proxy
-          headers:
-            X-File-Maximum-Size:
-              schema:
-                type: string
-                format: Nginx size
-              description: Maximum file size for the video
-        '415':
-          description: video type unsupported
         '422':
           description: video unreadable
     delete:
@@ -5243,6 +5175,84 @@ components:
                 id:
                   type: integer
                   example: 37
+    VideoUploadRequestCommon:
+      properties:
+        channelId:
+          description: Channel id that will contain this video
+          type: integer
+        privacy:
+          $ref: '#/components/schemas/VideoPrivacySet'
+        category:
+          description: Video category
+          type: integer
+          example: 4
+        licence:
+          description: Video licence
+          type: integer
+          example: 2
+        language:
+          description: Video language
+          type: string
+        description:
+          description: Video description
+          type: string
+        waitTranscoding:
+          description: Whether or not we wait transcoding before publish the video
+          type: boolean
+        support:
+          description: A text tell the audience how to support the video creator
+          example: Please support my work on <insert crowdfunding plateform>! <3
+          type: string
+        nsfw:
+          description: Whether or not this video contains sensitive content
+          type: boolean
+        name:
+          description: Video name
+          type: string
+        tags:
+          description: Video tags (maximum 5 tags each between 2 and 30 characters)
+          type: array
+          minItems: 1
+          maxItems: 5
+          uniqueItems: true
+          items:
+            type: string
+            minLength: 2
+            maxLength: 30
+        commentsEnabled:
+          description: Enable or disable comments for this video
+          type: boolean
+        downloadEnabled:
+          description: Enable or disable downloading for this video
+          type: boolean
+        originallyPublishedAt:
+          description: Date when the content was originally published
+          type: string
+          format: date-time
+        scheduleUpdate:
+          $ref: '#/components/schemas/VideoScheduledUpdate'
+      required:
+        - channelId
+        - name
+    VideoUploadRequestLegacy:
+      allOf:
+        - $ref: '#/components/schemas/VideoUploadRequestCommon'
+        - type: object
+          required:
+            - videofile
+          properties:
+            videofile:
+              description: Video file
+              type: string
+              format: binary
+            thumbnailfile:
+              description: Video thumbnail file
+              type: string
+              format: binary
+            previewfile:
+              description: Video preview file
+              type: string
+              format: binary
     VideoUploadResponse:
       properties:
         video:
