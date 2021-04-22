@@ -271,6 +271,13 @@ export class PluginService implements ClientHook {
         return this.authService.isLoggedIn()
       },
 
+      getAuthHeader: () => {
+        if (!this.authService.isLoggedIn()) return undefined
+
+        const value = this.authService.getRequestHeaderValue()
+        return { 'Authorization': value }
+      },
+
       notifier: {
         info: (text: string, title?: string, timeout?: number) => this.notifier.info(text, title, timeout),
         error: (text: string, title?: string, timeout?: number) => this.notifier.error(text, title, timeout),

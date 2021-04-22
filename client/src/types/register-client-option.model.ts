@@ -21,6 +21,8 @@ export type RegisterClientHelpers = {
 
   isLoggedIn: () => boolean
 
+  getAuthHeader: () => { 'Authorization': string } | undefined
+
   getSettings: () => Promise<{ [ name: string ]: string }>
 
   getServerConfig: () => Promise<ServerConfig>
