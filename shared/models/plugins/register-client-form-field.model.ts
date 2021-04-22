@@ -13,6 +13,9 @@ export type RegisterClientFormFieldOptions = {
 
   // Default setting value
   default?: string | boolean
+
+  // Not supported by plugin setting registration, use registerSettingsScript instead
+  hidden?: (options: any) => boolean
 }
 
 export interface RegisterClientVideoFieldOptions {

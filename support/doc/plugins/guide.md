@@ -623,7 +623,13 @@ async function register ({ registerVideoField, peertubeHelpers }) {
     label: 'My added field',
     descriptionHTML: 'Optional description',
     type: 'input-textarea',
-    default: ''
+    default: '',
+    // Optional, to hide a field depending on the current form state
+    // liveVideo is in the options object when the user is creating/updating a live
+    // videoToUpdate is in the options object when the user is updating a video
+    hidden: ({ formValues, videoToUpdate, liveVideo }) => {
+      return formValues.pluginData['other-field'] === 'toto'
+    }
   }
 
   for (const type of [ 'upload', 'import-url', 'import-torrent', 'update', 'go-live' ]) {

@@ -333,7 +333,7 @@
         <div class="row plugin-settings">
 
           <div class="col-md-12 col-xl-8">
-            <div *ngFor="let pluginSetting of pluginFields" class="form-group">
+            <div *ngFor="let pluginSetting of pluginFields" class="form-group" [hidden]="isPluginFieldHidden(pluginSetting)">
               <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
             </div>
           </div>

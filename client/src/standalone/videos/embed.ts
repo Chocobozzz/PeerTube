@@ -777,6 +777,7 @@ export class PeerTubeEmbed {
       getSettings: unimplemented,
 
       isLoggedIn: unimplemented,
+      getAuthHeader: unimplemented,
 
       notifier: {
         info: unimplemented,
