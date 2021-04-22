@@ -1,8 +1,7 @@
+/* eslint-disable max-len */
 import * as express from 'express'
 import { move } from 'fs-extra'
-import { join } from 'path'
-import { v4 as uuidv4 } from 'uuid'
-import { body, param, query, ValidationChain } from 'express-validator'
+import { body, header, param, query, ValidationChain } from 'express-validator'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
@@ -60,7 +59,7 @@ import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 import { getResumableUploadPath, deleteFileAsync as clearUploadFile } from '../../../helpers/utils'
-import { Metadata } from '@uploadx/core'
+import { File } from '@uploadx/core'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -128,8 +127,8 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
-    const file: { id: string, metadata: Metadata, duration: number, size: number, path: string, filename: string } = req.body
-    file.path = join(CONFIG.STORAGE.VIDEOS_DIR, file.id)
+    const file: File & { duration: number, path: string, filename: string } = req.body
+    file.path = getResumableUploadPath(file.id)
 
     if (
       !file.metadata.isPreviewForAudio &&
@@ -139,9 +138,9 @@ const videosAddResumableValidator = [
     if (!await isVideoAccepted(req, res, file as any)) return clearUploadFile(file.path)
 
     if (file.metadata.isPreviewForAudio) {
-      const filename = `${file.id}-${uuidv4()}`
+      const filename = `${file.id}-preview`
       file.filename = filename
-      await move(file.path, await getResumableUploadPath(filename))
+      await move(file.path, getResumableUploadPath(filename))
       return res.json({ filename })
     }
 
@@ -162,10 +161,11 @@ const videosAddResumableValidator = [
 ]
 
 /**
- * File is created in POST initialisation, and metadata is saved by uploadx for
- * later use.
- *
+ * File is created in POST initialisation, and its body is saved as a 'metadata' field is saved by uploadx for later use.
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/uploadx.ts#L41
+ *
+ * Uploadx doesn't use next() until the upload completes, so this middleware has to be placed before uploadx
+ * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts#L81-L93
  */
 const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('name')
@@ -175,31 +175,36 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid).withMessage('Should have correct video channel id'),
+  header('x-upload-content-length')
+    .isNumeric()
+    .exists()
+    .withMessage('Should specify the file length'),
+  header('x-upload-content-type')
+    .isString()
+    .exists()
+    .withMessage('Should specify the file mimetype'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (req.method !== 'POST') return next()
-    if (req.body.isPreviewForAudio) return next()
+    if (req.body.isPreviewForAudio) return next() // don't check mimetype for audio preview TODO: check size?
 
     const videoFileMetadata = {
-      mimetype: req.body.mimeType,
-      size: req.body.size,
+      mimetype: req.headers['x-upload-content-type'],
+      size: +req.headers['x-upload-content-length'],
       originalname: req.body.name
     } as express.FileUploadMetadata
     const user = res.locals.oauth.token.User
-    const file = res.locals.videoFileResumable
+    const file: File & { duration: number, path: string, filename: string } = req.body
+    file.path = getResumableUploadPath(file.id)
 
-    logger.debug('Checking videosAddResumable parameters', { parameters: req.body, files: req.files })
+    logger.debug('Checking videosAddResumableInitValidator parameters and headers', { parameters: req.body, headers: req.headers })
 
     if (areValidationErrors(req, res)) return clearUploadFile(file.path)
     if (areErrorsInScheduleUpdate(req, res)) return clearUploadFile(file.path)
 
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return clearUploadFile(file.path)
 
-    if (!isVideoFileMimeTypeValid({
-      videofile: [
-        videoFileMetadata
-      ]
-    })) {
+    if (!isVideoFileMimeTypeValid({ videofile: [ videoFileMetadata ] })) {
       res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
          .json({
            error: 'This file is not supported. Please, make sure it is of the following type: ' +

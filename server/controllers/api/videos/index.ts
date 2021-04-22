@@ -76,7 +76,7 @@ import { VideoCreate } from '../../../../shared/models/videos/video-create.model
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
-const uploadxOptions = { directory: CONFIG.STORAGE.VIDEOS_DIR } as DiskStorageOptions
+const uploadxOptions = { directory: getResumableUploadPath() } as DiskStorageOptions
 
 const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
@@ -131,9 +131,9 @@ videosRouter.post('/upload',
 videosRouter.use('/upload-resumable',
   onlyAllowMethods([ 'POST', 'PUT', 'DELETE' ]), // uploadx also allows GET and PATCH
   authenticate,
-  uploadx.upload(uploadxOptions),
-  asyncMiddleware(videosAddResumableValidator),
   executeIfPOST(asyncMiddleware(videosAddResumableInitValidator)),
+  uploadx.upload(uploadxOptions), // uploadx doesn't use call next() before the file upload completes
+  asyncMiddleware(videosAddResumableValidator),
   asyncMiddleware(addVideoResumable)
 )
 
@@ -211,7 +211,7 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
 async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
-  const files = { bg: { path: await getResumableUploadPath(videoPhysicalFile.filename) } }
+  const files = { image: { path: getResumableUploadPath(videoPhysicalFile.filename) } }
 
   return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
 }

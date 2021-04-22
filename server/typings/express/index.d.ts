@@ -19,7 +19,7 @@ import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server'
 import { MVideoImportDefault } from '@server/types/models/video/video-import'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate'
-import { Metadata } from '@uploadx/core'
+import { File as MResumableFile } from '@uploadx/core'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
   MAccountDefault,
@@ -66,13 +66,10 @@ interface PeerTubeLocals {
 
   videoFile?: MVideoFile
 
-  videoFileResumable?: {
-    id: string
-    path: string
-    metadata: Metadata
+  videoFileResumable?: MResumableFile & {
     duration: number
+    path: string
     filename: string
-    size: number
   }
 
   videoImport?: MVideoImportDefault

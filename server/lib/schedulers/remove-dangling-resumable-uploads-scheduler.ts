@@ -19,7 +19,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
-    const path = await getResumableUploadPath()
+    const path = getResumableUploadPath()
     const files = await readdir(path)
 
     logger.debug('Reading resumable video upload folder %s with %d files', path, files.length, lTags())
