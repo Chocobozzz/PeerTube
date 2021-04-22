@@ -58,14 +58,18 @@ export type PeerTubeHelpers = {
   }
 
   plugin: {
+    // PeerTube >= 3.2
     getBaseStaticRoute: () => string
 
+    // PeerTube >= 3.2
     getBaseRouterRoute: () => string
 
+    // PeerTube >= 3.2
     getDataDirectoryPath: () => string
   }
 
   user: {
+    // PeerTube >= 3.2
     getAuthUser: (response: Response) => {
       id?: string
       username: string

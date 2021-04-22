@@ -20,6 +20,7 @@
     - [Plugin static route](#plugin-static-route)
     - [Notifier](#notifier)
     - [Markdown Renderer](#markdown-renderer)
+    - [Auth header](#auth-header)
     - [Custom Modal](#custom-modal)
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
@@ -203,7 +204,7 @@ function register ({
 }
 ```
 
-You can also store files in the plugin data directory (`/{plugins-directory}/data/{npm-plugin-name}`).
+You can also store files in the plugin data directory (`/{plugins-directory}/data/{npm-plugin-name}`) **in PeerTube >= 3.2**.
 This directory and its content won't be deleted when your plugin is uninstalled/upgraded.
 
 ```js
@@ -523,6 +524,30 @@ function register (...) {
 
   await markdownRenderer.enhancedMarkdownToHTML('![alt-img](http://.../my-image.jpg)')
   // return <img alt=alt-img src=http://.../my-image.jpg />
+}
+```
+
+#### Auth header
+
+**PeerTube >= 3.2**
+
+To make your own HTTP requests using the current authenticated user, use an helper to automatically set appropriate headers:
+
+```js
+function register (...) {
+  registerHook({
+    target: 'action:auth-user.information-loaded',
+    handler: ({ user }) => {
+
+      // Useless because we have the same info in the ({ user }) parameter
+      // It's just an example
+      fetch('/api/v1/users/me', {
+        method: 'GET',
+        headers: peertubeHelpers.getAuthHeader()
+      }).then(res => res.json())
+        .then(data => console.log('Hi %s.', data.username))
+    }
+  })
 }
 ```
 
