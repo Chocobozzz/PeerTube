@@ -5,6 +5,10 @@
   @include avatar(25px);
 }
 
+.avatar-32 {
+  @include avatar(32px);
+}
+
 .avatar-34 {
   @include avatar(34px);
 }

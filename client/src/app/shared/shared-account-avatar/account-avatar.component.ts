@@ -12,7 +12,7 @@ export class AccountAvatarComponent {
     avatar?: { url?: string, path: string }
     url: string
   }
-  @Input() size: '25' | '34' | '36' | '40' | '120' = '36'
+  @Input() size: '25' | '32' | '34' | '36' | '40' | '120' = '36'
 
   // Use an external link
   @Input() href: string
