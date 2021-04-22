@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, Response } from 'express'
 import { Logger } from 'winston'
 import { ActorModel } from '@server/models/activitypub/actor'
 import {
@@ -13,6 +13,7 @@ import {
   RegisterServerHookOptions,
   RegisterServerSettingOptions,
   ServerConfig,
+  UserRole,
   VideoBlacklistCreate
 } from '@shared/models'
 import { MVideoThumbnail } from '../models'
@@ -58,6 +59,20 @@ export type PeerTubeHelpers = {
 
   plugin: {
     getBaseStaticRoute: () => string
+
+    getBaseRouterRoute: () => string
+
+    getDataDirectoryPath: () => string
+  }
+
+  user: {
+    getAuthUser: (response: Response) => {
+      id?: string
+      username: string
+      email: string
+      blocked: boolean
+      role: UserRole
+    } | undefined
   }
 }
 

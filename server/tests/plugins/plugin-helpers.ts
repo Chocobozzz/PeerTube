@@ -100,6 +100,46 @@ describe('Test plugin helpers', function () {
 
       expect(res.body.staticRoute).to.equal('/plugins/test-four/0.0.1/static/')
     })
+
+    it('Should get the base static route', async function () {
+      const baseRouter = '/plugins/test-four/0.0.1/router/'
+
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: baseRouter + 'router-route',
+        statusCodeExpected: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.routerRoute).to.equal(baseRouter)
+    })
+  })
+
+  describe('User', function () {
+
+    it('Should not get a user if not authenticated', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/user',
+        statusCodeExpected: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.user).to.be.undefined
+    })
+
+    it('Should get a user if authenticated', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        token: servers[0].accessToken,
+        path: '/plugins/test-four/router/user',
+        statusCodeExpected: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.user).to.exist
+      expect(res.body.username).to.equal('root')
+      expect(res.body.isAdmin).to.be.true
+      expect(res.body.isModerator).to.be.false
+      expect(res.body.isUser).to.be.false
+    })
   })
 
   describe('Moderation', function () {

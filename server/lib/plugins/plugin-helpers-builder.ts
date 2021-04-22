@@ -1,19 +1,22 @@
-import { PeerTubeHelpers } from '@server/types/plugins'
-import { sequelizeTypescript } from '@server/initializers/database'
+import * as express from 'express'
+import { join } from 'path'
 import { buildLogger } from '@server/helpers/logger'
-import { VideoModel } from '@server/models/video/video'
+import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
-import { ServerModel } from '@server/models/server/server'
-import { getServerActor } from '@server/models/application/application'
-import { addServerInBlocklist, removeServerFromBlocklist, addAccountInBlocklist, removeAccountFromBlocklist } from '../blocklist'
-import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
+import { sequelizeTypescript } from '@server/initializers/database'
 import { AccountModel } from '@server/models/account/account'
-import { VideoBlacklistCreate } from '@shared/models'
-import { blacklistVideo, unblacklistVideo } from '../video-blacklist'
-import { VideoBlacklistModel } from '@server/models/video/video-blacklist'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
-import { getServerConfig } from '../config'
+import { getServerActor } from '@server/models/application/application'
+import { ServerModel } from '@server/models/server/server'
+import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
+import { VideoModel } from '@server/models/video/video'
+import { VideoBlacklistModel } from '@server/models/video/video-blacklist'
 import { MPlugin } from '@server/types/models'
+import { PeerTubeHelpers } from '@server/types/plugins'
+import { VideoBlacklistCreate } from '@shared/models'
+import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist'
+import { getServerConfig } from '../config'
+import { blacklistVideo, unblacklistVideo } from '../video-blacklist'
 
 function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
   const logger = buildPluginLogger(npmName)
@@ -27,7 +30,9 @@ function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHel
 
   const moderation = buildModerationHelpers()
 
-  const plugin = buildPluginRelatedHelpers(pluginModel)
+  const plugin = buildPluginRelatedHelpers(pluginModel, npmName)
+
+  const user = buildUserHelpers()
 
   return {
     logger,
@@ -36,7 +41,8 @@ function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHel
     config,
     moderation,
     plugin,
-    server
+    server,
+    user
   }
 }
 
@@ -145,8 +151,18 @@ function buildConfigHelpers () {
   }
 }
 
-function buildPluginRelatedHelpers (plugin: MPlugin) {
+function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
   return {
-    getBaseStaticRoute: () => `/plugins/${plugin.name}/${plugin.version}/static/`
+    getBaseStaticRoute: () => `/plugins/${plugin.name}/${plugin.version}/static/`,
+
+    getBaseRouterRoute: () => `/plugins/${plugin.name}/${plugin.version}/router/`,
+
+    getDataDirectoryPath: () => join(CONFIG.STORAGE.PLUGINS_DIR, 'data', npmName)
+  }
+}
+
+function buildUserHelpers () {
+  return {
+    getAuthUser: (res: express.Response) => res.locals.oauth?.token?.User
   }
 }

@@ -1,7 +1,7 @@
 import decache from 'decache'
 import * as express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
-import { outputFile, readJSON } from 'fs-extra'
+import { ensureDir, outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'
 import { MOAuthTokenUser, MUser } from '@server/types/models'
 import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
@@ -428,6 +428,9 @@ export class PluginManager implements ServerHook {
     }
 
     const { registerOptions, registerStore } = this.getRegisterHelpers(npmName, plugin)
+
+    await ensureDir(registerOptions.peertubeHelpers.plugin.getDataDirectoryPath())
+
     library.register(registerOptions)
            .catch(err => logger.error('Cannot register plugin %s.', npmName, { err }))
 

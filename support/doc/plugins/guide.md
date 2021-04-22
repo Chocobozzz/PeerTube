@@ -195,9 +195,27 @@ Plugins can store/load JSON data, that PeerTube will store in its database (so d
 Example:
 
 ```js
-function register (...) {
+function register ({
+  storageManager
+}) {
   const value = await storageManager.getData('mykey')
   await storageManager.storeData('mykey', { subkey: 'value' })
+}
+```
+
+You can also store files in the plugin data directory (`/{plugins-directory}/data/{npm-plugin-name}`).
+This directory and its content won't be deleted when your plugin is uninstalled/upgraded.
+
+```js
+function register ({
+  storageManager,
+  peertubeHelpers
+}) {
+  const basePath = peertubeHelpers.plugin.getDataDirectoryPath()
+
+  fs.writeFile(path.join(basePath, 'filename.txt'), 'content of my file', function (err) {
+    ...
+  })
 }
 ```
 
@@ -226,9 +244,27 @@ function register (...) {
 You can create custom routes using an [express Router](https://expressjs.com/en/4x/api.html#router) for your plugin:
 
 ```js
-function register (...) {
+function register ({
+  router
+}) {
   const router = getRouter()
   router.get('/ping', (req, res) => res.json({ message: 'pong' }))
+
+  // Users are automatically authenticated
+  router.get('/auth', (res, res) => {
+    const user = peertubeHelpers.user.getAuthUser(res)
+
+    const isAdmin = user.role === 0
+    const isModerator = user.role === 1
+    const isUser = user.role === 2
+
+    res.json({
+      username: user.username,
+      isAdmin,
+      isModerator,
+      isUser
+    })
+  })
 }
 ```
 
