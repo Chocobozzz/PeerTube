@@ -117,13 +117,11 @@ describe('Test plugin helpers', function () {
   describe('User', function () {
 
     it('Should not get a user if not authenticated', async function () {
-      const res = await makeGetRequest({
+      await makeGetRequest({
         url: servers[0].url,
         path: '/plugins/test-four/router/user',
-        statusCodeExpected: HttpStatusCode.OK_200
+        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
       })
-
-      expect(res.body.user).to.be.undefined
     })
 
     it('Should get a user if authenticated', async function () {
@@ -134,7 +132,6 @@ describe('Test plugin helpers', function () {
         statusCodeExpected: HttpStatusCode.OK_200
       })
 
-      expect(res.body.user).to.exist
       expect(res.body.username).to.equal('root')
       expect(res.body.isAdmin).to.be.true
       expect(res.body.isModerator).to.be.false
