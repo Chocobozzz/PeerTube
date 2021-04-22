@@ -109,19 +109,15 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
       return cleanUpReqFiles(req)
     }
 
-    let duration: number
-
     try {
-      duration = await getDurationFromVideoFile(videoFile.path)
+      if (!videoFile.duration) await addDurationToVideo(videoFile)
     } catch (err) {
-      logger.error('Invalid input file in videosAddValidator.', { err })
+      logger.error('Invalid input file in videosAddLegacyValidator.', { err })
       res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
          .json({ error: 'Video file unreadable.' })
 
       return cleanUpReqFiles(req)
     }
-
-    videoFile.duration = duration
 
     if (!await isVideoAccepted(req, res, videoFile)) return cleanUpReqFiles(req)
 
@@ -152,7 +148,7 @@ const videosAddResumableValidator = [
     try {
       if (!file.duration) await addDurationToVideo(file)
     } catch (err) {
-      logger.error('Invalid input file in videosAddValidator.', { err })
+      logger.error('Invalid input file in videosAddResumableValidator.', { err })
       res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
          .json({ error: 'Video file unreadable.' })
 
