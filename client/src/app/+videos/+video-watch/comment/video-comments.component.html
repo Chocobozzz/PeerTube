@@ -25,6 +25,11 @@
       [textValue]="commentThreadRedraftValue"
     ></my-video-comment-add>
 
+    <div *ngIf="newComments.length > 0" class="alert alert-primary">
+      <a class="alert-link" (click)="onClickShowNewComments($event)" href="">
+        {newComments.length, plural, =0 {Comments} =1 {1 new comment} other {{{newComments.length}} new comments}}
+      </a>
+    </div>
     <div *ngIf="totalNotDeletedComments === 0 && comments.length === 0" i18n>No comments.</div>
 
     <div

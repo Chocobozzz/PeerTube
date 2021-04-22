@@ -19,8 +19,10 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   @Output() timestampClicked = new EventEmitter<number>()
 
   comments: VideoComment[] = []
+  newComments: VideoComment[] = []
   highlightedThread: VideoComment
 
+  checkForNewCommentsInterval: NodeJS.Timeout
   sort = '-createdAt'
 
   componentPagination: ComponentPagination = {
@@ -72,6 +74,10 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy () {
     if (this.sub) this.sub.unsubscribe()
+
+    if (this.checkForNewCommentsInterval) {
+      clearTimeout(this.checkForNewCommentsInterval)
+    }
   }
 
   viewReplies (commentId: number, highlightThread = false) {
@@ -109,32 +115,25 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadMoreThreads () {
-    const params = {
-      videoId: this.video.id,
-      componentPagination: this.componentPagination,
-      sort: this.sort
-    }
+    return new Promise(resolve => {
+      this.fetchThreads({
+        componentPagination: this.componentPagination,
+        sort: this.sort
+      })
+      .subscribe(
+        res => {
+          this.comments = this.comments.concat(res.data)
+          this.componentPagination.totalItems = res.total
+          this.totalNotDeletedComments = res.totalNotDeletedComments
 
-    const obs = this.hooks.wrapObsFun(
-      this.videoCommentService.getVideoCommentThreads.bind(this.videoCommentService),
-      params,
-      'video-watch',
-      'filter:api.video-watch.video-threads.list.params',
-      'filter:api.video-watch.video-threads.list.result'
-    )
+          this.onDataSubject.next(res.data)
+          this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
+          resolve(res.data)
+        },
 
-    obs.subscribe(
-      res => {
-        this.comments = this.comments.concat(res.data)
-        this.componentPagination.totalItems = res.total
-        this.totalNotDeletedComments = res.totalNotDeletedComments
-
-        this.onDataSubject.next(res.data)
-        this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
-      },
-
-      err => this.notifier.error(err.message)
-    )
+        err => this.notifier.error(err.message)
+      )
+    })
   }
 
   onCommentThreadCreated (comment: VideoComment) {
@@ -221,11 +220,34 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
+  onClickShowNewComments (event: Event) {
+    event.preventDefault()
+
+    this.comments = [...this.newComments, ...this.comments]
+    this.newComments = []
+  }
+
   onNearOfBottom () {
     if (hasMoreItems(this.componentPagination)) {
       this.componentPagination.currentPage++
       this.loadMoreThreads()
     }
+  }
+
+  private fetchThreads (params: {
+    componentPagination: ComponentPagination,
+    sort: string
+  }) {
+    return this.hooks.wrapObsFun(
+      this.videoCommentService.getVideoCommentThreads.bind(this.videoCommentService),
+      {
+        videoId: this.video.id,
+        ...params
+      },
+      'video-watch',
+      'filter:api.video-watch.video-threads.list.params',
+      'filter:api.video-watch.video-threads.list.result'
+    )
   }
 
   private softDeleteComment (comment: VideoComment) {
@@ -235,7 +257,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     comment.account = null
   }
 
-  private resetVideo () {
+  private async resetVideo () {
     if (this.video.commentsEnabled === true) {
       // Reset all our fields
       this.highlightedThread = null
@@ -248,8 +270,39 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       this.totalNotDeletedComments = null
 
       this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video.uuid)
-      this.loadMoreThreads()
+
+      await this.loadMoreThreads()
+
+      if (this.checkForNewCommentsInterval) {
+        clearTimeout(this.checkForNewCommentsInterval)
+      }
+
+      this.checkForNewCommentsInterval = setInterval(() => this.checkForNewComments(), 30 * 1000)
     }
+  }
+
+  private checkForNewComments () {
+    /**
+     * TODO:
+     * - Need to handle when there's +20 new comments.
+     * - Need to check for new comment replies.
+     */
+    this.fetchThreads({
+      componentPagination: {
+        currentPage: 1,
+        itemsPerPage: 20,
+        totalItems: this.componentPagination.totalItems
+      },
+      sort: '-createdAt'
+    })
+    .subscribe(res => {
+      const latestCommentShown = this.comments[0].createdAt
+      const index = res.data.findIndex((comment) => (new Date(comment.createdAt)) <= latestCommentShown)
+
+      if (index === -1) return
+
+      this.newComments = res.data.slice(0, index)
+    })
   }
 
   private processHighlightedThread (highlightedThreadId: number) {
