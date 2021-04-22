@@ -14,7 +14,7 @@ export class Account extends Actor implements ServerAccount {
   userId?: number
 
   static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
-    return Actor.GET_ACTOR_AVATAR_URL(actor) || this.GET_DEFAULT_AVATAR_URL()
+    return Actor.GET_ACTOR_AVATAR_URL(actor)
   }
 
   static GET_DEFAULT_AVATAR_URL () {
@@ -46,7 +46,7 @@ export class Account extends Actor implements ServerAccount {
 
   resetAvatar () {
     this.avatar = null
-    this.avatarUrl = Account.GET_DEFAULT_AVATAR_URL()
+    this.avatarUrl = null
   }
 
   private updateComputedAttributes () {
