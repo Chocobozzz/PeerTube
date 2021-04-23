@@ -5,6 +5,7 @@ import { MenuGuards } from '@app/core/routing/menu-guard.service'
 import { POSSIBLE_LOCALES } from '@shared/core-utils/i18n'
 import { PreloadSelectedModulesList } from './core'
 import { EmptyComponent } from './empty.component'
+import { ActorsComponent } from './+actors/actors.component'
 
 const routes: Routes = [
   {
@@ -64,6 +65,18 @@ const routes: Routes = [
   {
     path: 'video-playlists/watch',
     redirectTo: 'videos/watch/playlist'
+  },
+  {
+    path: 'a',
+    redirectTo: 'accounts'
+  },
+  {
+    path: 'c',
+    redirectTo: 'video-channels'
+  },
+  {
+    path: ':actorName',
+    component: ActorsComponent
   },
   {
     path: '',
