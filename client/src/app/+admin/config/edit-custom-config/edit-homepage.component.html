@@ -13,7 +13,8 @@
           <label i18n for="instanceCustomHomepageContent">Homepage</label>
 
           <my-markdown-textarea
-            name="instanceCustomHomepageContent" formControlName="content" textareaMaxWidth="500px"
+            name="instanceCustomHomepageContent" formControlName="content" textareaMaxWidth="90%" textareaHeight="300px"
+            [customMarkdownRenderer]="customMarkdownRenderer"
             [classes]="{ 'input-error': formErrors['instanceCustomHomepage.content'] }"
           ></my-markdown-textarea>
 

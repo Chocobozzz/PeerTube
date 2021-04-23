@@ -1,5 +1,5 @@
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { CustomPage } from '@shared/models'
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { ActorModel } from '../activitypub/actor'
 import { getServerActor } from '../application/application'
 
@@ -15,7 +15,7 @@ import { getServerActor } from '../application/application'
 export class ActorCustomPageModel extends Model {
 
   @AllowNull(true)
-  @Column
+  @Column(DataType.TEXT)
   content: string
 
   @AllowNull(false)

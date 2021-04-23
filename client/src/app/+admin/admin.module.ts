@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
 import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
 import { SharedActorImageModule } from '@app/shared/shared-actor-image/shared-actor-image.module'
+import { SharedCustomMarkupModule } from '@app/shared/shared-custom-markup'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
@@ -54,6 +55,7 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     SharedVideoCommentModule,
     SharedActorImageModule,
     SharedActorImageEditModule,
+    SharedCustomMarkupModule,
 
     TableModule,
     SelectButtonModule,

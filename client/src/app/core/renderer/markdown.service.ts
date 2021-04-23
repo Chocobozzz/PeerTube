@@ -17,9 +17,9 @@ type MarkdownParsers = {
   enhancedMarkdownIt: MarkdownIt
   enhancedWithHTMLMarkdownIt: MarkdownIt
 
-  completeMarkdownIt: MarkdownIt
+  unsafeMarkdownIt: MarkdownIt
 
-  customMarkupMarkdownIt: MarkdownIt
+  customPageMarkdownIt: MarkdownIt
 }
 
 type MarkdownConfig = {
@@ -38,10 +38,13 @@ export class MarkdownService {
   private markdownParsers: MarkdownParsers = {
     textMarkdownIt: null,
     textWithHTMLMarkdownIt: null,
+
     enhancedMarkdownIt: null,
     enhancedWithHTMLMarkdownIt: null,
-    completeMarkdownIt: null,
-    customMarkupMarkdownIt: null
+
+    unsafeMarkdownIt: null,
+
+    customPageMarkdownIt: null
   }
   private parsersConfig: MarkdownParserConfigs = {
     textMarkdownIt: { rules: TEXT_RULES, breaks: true, html: false },
@@ -50,9 +53,9 @@ export class MarkdownService {
     enhancedMarkdownIt: { rules: ENHANCED_RULES, breaks: true, html: false },
     enhancedWithHTMLMarkdownIt: { rules: ENHANCED_WITH_HTML_RULES, breaks: true, html: true, escape: true },
 
-    completeMarkdownIt: { rules: COMPLETE_RULES, breaks: true, html: true },
+    unsafeMarkdownIt: { rules: COMPLETE_RULES, breaks: true, html: true, escape: false },
 
-    customMarkupMarkdownIt: { rules: COMPLETE_RULES, breaks: false, html: true, escape: true }
+    customPageMarkdownIt: { rules: COMPLETE_RULES, breaks: false, html: true, escape: true }
   }
 
   private emojiModule: any
@@ -71,15 +74,15 @@ export class MarkdownService {
     return this.render({ name: 'enhancedMarkdownIt', markdown, withEmoji })
   }
 
-  completeMarkdownToHTML (markdown: string) {
-    return this.render({ name: 'completeMarkdownIt', markdown, withEmoji: true })
+  unsafeMarkdownToHTML (markdown: string, _trustedInput: true) {
+    return this.render({ name: 'unsafeMarkdownIt', markdown, withEmoji: true })
   }
 
-  customMarkupMarkdownToHTML (markdown: string, additionalAllowedTags: string[]) {
-    return this.render({ name: 'customMarkupMarkdownIt', markdown, withEmoji: true, additionalAllowedTags })
+  customPageMarkdownToHTML (markdown: string, additionalAllowedTags: string[]) {
+    return this.render({ name: 'customPageMarkdownIt', markdown, withEmoji: true, additionalAllowedTags })
   }
 
-  async processVideoTimestamps (html: string) {
+  processVideoTimestamps (html: string) {
     return html.replace(/((\d{1,2}):)?(\d{1,2}):(\d{1,2})/g, function (str, _, h, m, s) {
       const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
       const url = buildVideoLink({ startTime: t })

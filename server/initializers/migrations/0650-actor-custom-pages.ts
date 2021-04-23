@@ -10,7 +10,7 @@ async function up (utils: {
     const query = `
     CREATE TABLE IF NOT EXISTS "actorCustomPage" (
       "id" serial,
-      "content" varchar(255),
+      "content" TEXT,
       "type" varchar(255) NOT NULL,
       "actorId" integer NOT NULL REFERENCES "actor" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
       "createdAt" timestamp WITH time zone NOT NULL,

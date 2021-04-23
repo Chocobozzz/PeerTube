@@ -231,7 +231,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
 
         this.broadcastMessage = {
-          message: await this.markdownService.completeMarkdownToHTML(messageConfig.message),
+          message: await this.markdownService.unsafeMarkdownToHTML(messageConfig.message, true),
           dismissable: messageConfig.dismissable,
           class: classes[messageConfig.level]
         }
