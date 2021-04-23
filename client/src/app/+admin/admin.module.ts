@@ -4,12 +4,12 @@ import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
 import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
+import { SharedActorImageModule } from '@app/shared/shared-actor-image/shared-actor-image.module'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
-import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
 import {
@@ -18,6 +18,7 @@ import {
   EditBasicConfigurationComponent,
   EditConfigurationService,
   EditCustomConfigComponent,
+  EditHomepageComponent,
   EditInstanceInformationComponent,
   EditLiveConfigurationComponent,
   EditVODTranscodingComponent
@@ -100,7 +101,8 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     EditVODTranscodingComponent,
     EditLiveConfigurationComponent,
     EditAdvancedConfigurationComponent,
-    EditInstanceInformationComponent
+    EditInstanceInformationComponent,
+    EditHomepageComponent
   ],
 
   exports: [

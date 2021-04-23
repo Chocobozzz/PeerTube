@@ -2,7 +2,6 @@ import * as cors from 'cors'
 import * as express from 'express'
 import { join } from 'path'
 import { serveIndexHTML } from '@server/lib/client-html'
-import { getRegisteredPlugins, getRegisteredThemes } from '@server/lib/config'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
 import { root } from '../helpers/core-utils'
@@ -24,6 +23,7 @@ import { cacheRoute } from '../middlewares/cache'
 import { UserModel } from '../models/account/user'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 
 const staticRouter = express.Router()
 
@@ -204,10 +204,10 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
             }
           },
           plugin: {
-            registered: getRegisteredPlugins()
+            registered: ServerConfigManager.Instance.getRegisteredPlugins()
           },
           theme: {
-            registered: getRegisteredThemes(),
+            registered: ServerConfigManager.Instance.getRegisteredThemes(),
             default: getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
           },
           email: {

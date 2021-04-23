@@ -1,4 +1,5 @@
 export * from './account'
+export * from './actor-custom-page'
 export * from './account-blocklist'
 export * from './actor-follow'
 export * from './actor-image'

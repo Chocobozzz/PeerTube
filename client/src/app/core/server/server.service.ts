@@ -176,6 +176,9 @@ export class ServerService {
         disableLocalSearch: false,
         isDefaultSearch: false
       }
+    },
+    menu: {
+      entries: []
     }
   }
 

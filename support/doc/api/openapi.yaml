@@ -167,6 +167,8 @@ tags:
   - name: Feeds
     description: >
       Server syndication feeds
+  - name: Homepage
+    description: Get and update the custom homepage
 x-tagGroups:
   - name: Accounts
     tags:
@@ -191,6 +193,9 @@ x-tagGroups:
   - name: Search
     tags:
       - Search
+  - name: Custom pages
+    tags:
+      - Homepage
   - name: Moderation
     tags:
       - Abuses
@@ -367,6 +372,41 @@ paths:
       responses:
         '200':
           description: successful operation
+
+  /custom-pages/homepage/instance:
+    get:
+      summary: Get instance custom homepage
+      tags:
+        - Homepage
+      responses:
+        '404':
+          description: No homepage set
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomHomepage'
+    put:
+      summary: Set instance custom homepage
+      tags:
+        - Homepage
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: content of the homepage, that will be injected in the client
+      responses:
+        '204':
+          description: successful operation
+
   /jobs/{state}:
     get:
       summary: List instance jobs
@@ -5037,6 +5077,18 @@ components:
                     indexUrl:
                       type: string
                       format: url
+        menu:
+          type: object
+          properties:
+            entries:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  path:
+                    type: string
     ServerConfigAbout:
       properties:
         instance:
@@ -5201,6 +5253,12 @@ components:
                   type: boolean
                 manualApproval:
                   type: boolean
+
+    CustomHomepage:
+      properties:
+        content:
+          type: string
+
     Follow:
       properties:
         id:
