@@ -2,12 +2,6 @@ import { ClientScript } from '../plugins/plugin-package-json.model'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
-export interface MenuEntry {
-  id: string
-  path: string
-  priority: number
-}
-
 export interface ServerConfigPlugin {
   name: string
   version: string
@@ -221,7 +215,7 @@ export interface ServerConfig {
     dismissable: boolean
   }
 
-  menu: {
-    entries: MenuEntry[]
+  homepage: {
+    enabled: boolean
   }
 }

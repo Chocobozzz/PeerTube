@@ -5077,18 +5077,12 @@ components:
                     indexUrl:
                       type: string
                       format: url
-        menu:
+        homepage:
           type: object
           properties:
-            entries:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  path:
-                    type: string
+            enabled:
+              type: boolean
+
     ServerConfigAbout:
       properties:
         instance:

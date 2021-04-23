@@ -3,6 +3,7 @@ import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
+import { MenuService } from '@app/core'
 import { ServerConfig } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
 
@@ -21,7 +22,8 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   defaultLandingPageOptions: SelectOptionsItem[] = []
 
   constructor (
-    private configService: ConfigService
+    private configService: ConfigService,
+    private menuService: MenuService
   ) { }
 
   ngOnInit () {
@@ -80,23 +82,12 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   buildLandingPageOptions () {
-    const labels = {
-      'home': $localize`Homepage`,
-      'videos-overview': $localize`Discover videos`,
-      'videos-trending': $localize`Trending page`,
-      'videos-recently-added': $localize`Recently added videos`,
-      'videos-local': $localize`Local videos`
-    }
-
-    this.defaultLandingPageOptions = this.serverConfig.menu.entries.map(e => ({
-      id: e.path,
-      label: labels[e.id],
-      description: e.path
-    }))
-  }
-
-  doesHomepageExist () {
-    return this.serverConfig.menu.entries.some(e => e.id === 'home')
+    this.defaultLandingPageOptions = this.menuService.buildCommonLinks(this.serverConfig)
+      .map(o => ({
+        id: o.path,
+        label: o.label,
+        description: o.path
+      }))
   }
 
   private checkSignupField () {

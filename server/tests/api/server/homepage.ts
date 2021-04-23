@@ -18,11 +18,11 @@ import {
 
 const expect = chai.expect
 
-async function getMenuEntries (server: ServerInfo) {
+async function getHomepageState (server: ServerInfo) {
   const res = await getConfig(server.url)
 
   const config = res.body as ServerConfig
-  return config.menu.entries
+  return config.homepage.enabled
 }
 
 describe('Test instance homepage actions', function () {
@@ -36,10 +36,8 @@ describe('Test instance homepage actions', function () {
   })
 
   it('Should not have a homepage', async function () {
-    const menuEntries = await getMenuEntries(server)
-    expect(menuEntries).to.have.lengthOf(4)
-    expect(menuEntries[0].id).to.equal('videos-overview')
-    expect(menuEntries[0].path).to.equal('/videos/overview')
+    const state = await getHomepageState(server)
+    expect(state).to.be.false
 
     await getInstanceHomepage(server.url, HttpStatusCode.NOT_FOUND_404)
   })
@@ -51,10 +49,8 @@ describe('Test instance homepage actions', function () {
     const page: CustomPage = res.body
     expect(page.content).to.equal('<picsou-magazine></picsou-magazine>')
 
-    const menuEntries = await getMenuEntries(server)
-    expect(menuEntries).to.have.lengthOf(5)
-    expect(menuEntries[0].id).to.equal('home')
-    expect(menuEntries[0].path).to.equal('/home')
+    const state = await getHomepageState(server)
+    expect(state).to.be.true
   })
 
   it('Should have the same homepage after a restart', async function () {
@@ -68,10 +64,8 @@ describe('Test instance homepage actions', function () {
     const page: CustomPage = res.body
     expect(page.content).to.equal('<picsou-magazine></picsou-magazine>')
 
-    const menuEntries = await getMenuEntries(server)
-    expect(menuEntries).to.have.lengthOf(5)
-    expect(menuEntries[0].id).to.equal('home')
-    expect(menuEntries[0].path).to.equal('/home')
+    const state = await getHomepageState(server)
+    expect(state).to.be.true
   })
 
   it('Should empty the homepage', async function () {
@@ -81,10 +75,8 @@ describe('Test instance homepage actions', function () {
     const page: CustomPage = res.body
     expect(page.content).to.be.empty
 
-    const menuEntries = await getMenuEntries(server)
-    expect(menuEntries).to.have.lengthOf(4)
-    expect(menuEntries[0].id).to.equal('videos-overview')
-    expect(menuEntries[0].path).to.equal('/videos/overview')
+    const state = await getHomepageState(server)
+    expect(state).to.be.false
   })
 
   after(async function () {

@@ -177,8 +177,8 @@ export class ServerService {
         isDefaultSearch: false
       }
     },
-    menu: {
-      entries: []
+    homepage: {
+      enabled: false
     }
   }
 

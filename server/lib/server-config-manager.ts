@@ -3,8 +3,7 @@ import { getServerCommit } from '@server/helpers/utils'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
-import { sortObjectComparator } from '@shared/core-utils'
-import { MenuEntry, RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConfig } from '@shared/models'
+import { RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConfig } from '@shared/models'
 import { Hooks } from './plugins/hooks'
 import { PluginManager } from './plugins/plugin-manager'
 import { getThemeOrDefault } from './plugins/theme-utils'
@@ -24,7 +23,7 @@ class ServerConfigManager {
 
   private serverCommit: string
 
-  private menuEntries: MenuEntry[] = []
+  private homepageEnabled = false
 
   private constructor () {}
 
@@ -35,38 +34,7 @@ class ServerConfigManager {
   }
 
   updateHomepageState (content: string) {
-    this.menuEntries = [
-      {
-        id: 'videos-overview',
-        path: '/videos/overview',
-        priority: 150
-      },
-      {
-        id: 'videos-trending',
-        path: '/videos/trending',
-        priority: 140
-      },
-      {
-        id: 'videos-recently-added',
-        path: '/videos/recently-added',
-        priority: 130
-      },
-      {
-        id: 'videos-local',
-        path: '/videos/local',
-        priority: 120
-      }
-    ]
-
-    if (content) {
-      this.menuEntries.push({
-        id: 'home',
-        path: '/home',
-        priority: 160
-      })
-    }
-
-    this.menuEntries.sort(sortObjectComparator('priority', 'desc'))
+    this.homepageEnabled = !!content
   }
 
   async getServerConfig (ip?: string): Promise<ServerConfig> {
@@ -245,8 +213,8 @@ class ServerConfigManager {
         dismissable: CONFIG.BROADCAST_MESSAGE.DISMISSABLE
       },
 
-      menu: {
-        entries: this.menuEntries
+      homepage: {
+        enabled: this.homepageEnabled
       }
     }
   }
