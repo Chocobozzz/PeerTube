@@ -1,4 +1,3 @@
-
 import { ComponentRef, Injectable } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import { EmbedMarkupData, PlaylistMiniatureMarkupData, VideoMiniatureMarkupData } from '@shared/models'

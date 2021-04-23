@@ -3,7 +3,7 @@ export function getSanitizeOptions () {
     allowedTags: [ 'a', 'p', 'span', 'br', 'strong', 'em', 'ul', 'ol', 'li' ],
     allowedSchemes: [ 'http', 'https' ],
     allowedAttributes: {
-      a: [ 'href', 'class', 'target', 'rel' ],
+      'a': [ 'href', 'class', 'target', 'rel' ],
       '*': [ 'data-*' ]
     },
     transformTags: {
