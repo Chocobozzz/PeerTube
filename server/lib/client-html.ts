@@ -196,11 +196,24 @@ class ClientHtml {
   }
 
   static async getAccountHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    return this.getAccountOrChannelHTMLPage(() => AccountModel.loadByNameWithHost(nameWithHost), req, res)
+    const accountModelPromise = AccountModel.loadByNameWithHost(nameWithHost)
+    return this.getAccountOrChannelHTMLPage(() => accountModelPromise, req, res)
   }
 
   static async getVideoChannelHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    return this.getAccountOrChannelHTMLPage(() => VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost), req, res)
+    const videoChannelModelPromise = VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+    return this.getAccountOrChannelHTMLPage(() => videoChannelModelPromise, req, res)
+  }
+
+  static async getActorHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
+    const accountModel = await AccountModel.loadByNameWithHost(nameWithHost)
+
+    if (accountModel) {
+      return this.getAccountOrChannelHTMLPage(() => new Promise(resolve => resolve(accountModel)), req, res)
+    } else {
+      const videoChannelModelPromise = VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+      return this.getAccountOrChannelHTMLPage(() => videoChannelModelPromise, req, res)
+    }
   }
 
   static async getEmbedHTML () {

@@ -140,27 +140,51 @@ describe('Test a client controllers', function () {
   describe('Open Graph', function () {
 
     it('Should have valid Open Graph tags on the account page', async function () {
-      const res = await request(servers[0].url)
+      const accountPageTests = (res) => {
+        expect(res.text).to.contain(`<meta property="og:title" content="${account.displayName}" />`)
+        expect(res.text).to.contain(`<meta property="og:description" content="${account.description}" />`)
+        expect(res.text).to.contain('<meta property="og:type" content="website" />')
+        expect(res.text).to.contain(`<meta property="og:url" content="${servers[0].url}/accounts/${servers[0].user.username}" />`)
+      }
+
+      accountPageTests(await request(servers[0].url)
         .get('/accounts/' + servers[0].user.username)
         .set('Accept', 'text/html')
-        .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200))
 
-      expect(res.text).to.contain(`<meta property="og:title" content="${account.displayName}" />`)
-      expect(res.text).to.contain(`<meta property="og:description" content="${account.description}" />`)
-      expect(res.text).to.contain('<meta property="og:type" content="website" />')
-      expect(res.text).to.contain(`<meta property="og:url" content="${servers[0].url}/accounts/${servers[0].user.username}" />`)
+      accountPageTests(await request(servers[0].url)
+        .get('/a/' + servers[0].user.username)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
+
+      accountPageTests(await request(servers[0].url)
+        .get('/@' + servers[0].user.username)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
     })
 
     it('Should have valid Open Graph tags on the channel page', async function () {
-      const res = await request(servers[0].url)
+      const channelPageOGtests = (res) => {
+        expect(res.text).to.contain(`<meta property="og:title" content="${servers[0].videoChannel.displayName}" />`)
+        expect(res.text).to.contain(`<meta property="og:description" content="${channelDescription}" />`)
+        expect(res.text).to.contain('<meta property="og:type" content="website" />')
+        expect(res.text).to.contain(`<meta property="og:url" content="${servers[0].url}/video-channels/${servers[0].videoChannel.name}" />`)
+      }
+
+      channelPageOGtests(await request(servers[0].url)
         .get('/video-channels/' + servers[0].videoChannel.name)
         .set('Accept', 'text/html')
-        .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200))
 
-      expect(res.text).to.contain(`<meta property="og:title" content="${servers[0].videoChannel.displayName}" />`)
-      expect(res.text).to.contain(`<meta property="og:description" content="${channelDescription}" />`)
-      expect(res.text).to.contain('<meta property="og:type" content="website" />')
-      expect(res.text).to.contain(`<meta property="og:url" content="${servers[0].url}/video-channels/${servers[0].videoChannel.name}" />`)
+      channelPageOGtests(await request(servers[0].url)
+        .get('/c/' + servers[0].videoChannel.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
+
+      channelPageOGtests(await request(servers[0].url)
+        .get('/@' + servers[0].videoChannel.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
     })
 
     it('Should have valid Open Graph tags on the watch page with video id', async function () {
@@ -227,27 +251,51 @@ describe('Test a client controllers', function () {
     })
 
     it('Should have valid twitter card on the account page', async function () {
-      const res = await request(servers[0].url)
+      const accountPageTests = (res) => {
+        expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
+        expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
+        expect(res.text).to.contain(`<meta property="twitter:title" content="${account.name}" />`)
+        expect(res.text).to.contain(`<meta property="twitter:description" content="${account.description}" />`)
+      }
+
+      accountPageTests(await request(servers[0].url)
         .get('/accounts/' + account.name)
         .set('Accept', 'text/html')
-        .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200))
 
-      expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
-      expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-      expect(res.text).to.contain(`<meta property="twitter:title" content="${account.name}" />`)
-      expect(res.text).to.contain(`<meta property="twitter:description" content="${account.description}" />`)
+      accountPageTests(await request(servers[0].url)
+        .get('/a/' + account.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
+
+      accountPageTests(await request(servers[0].url)
+        .get('/@' + account.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
     })
 
     it('Should have valid twitter card on the channel page', async function () {
-      const res = await request(servers[0].url)
+      const channelPageTests = (res) => {
+        expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
+        expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
+        expect(res.text).to.contain(`<meta property="twitter:title" content="${servers[0].videoChannel.displayName}" />`)
+        expect(res.text).to.contain(`<meta property="twitter:description" content="${channelDescription}" />`)
+      }
+
+      channelPageTests(await request(servers[0].url)
         .get('/video-channels/' + servers[0].videoChannel.name)
         .set('Accept', 'text/html')
-        .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200))
 
-      expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
-      expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-      expect(res.text).to.contain(`<meta property="twitter:title" content="${servers[0].videoChannel.displayName}" />`)
-      expect(res.text).to.contain(`<meta property="twitter:description" content="${channelDescription}" />`)
+      channelPageTests(await request(servers[0].url)
+        .get('/c/' + servers[0].videoChannel.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
+
+      channelPageTests(await request(servers[0].url)
+        .get('/@' + servers[0].videoChannel.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
     })
 
     it('Should have valid twitter card if Twitter is whitelisted', async function () {
@@ -275,21 +323,45 @@ describe('Test a client controllers', function () {
       expect(resVideoPlaylistRequest.text).to.contain('<meta property="twitter:card" content="player" />')
       expect(resVideoPlaylistRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
 
-      const resAccountRequest = await request(servers[0].url)
+      const accountTests = (res) => {
+        expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
+        expect(res.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      }
+
+      accountTests(await request(servers[0].url)
         .get('/accounts/' + account.name)
         .set('Accept', 'text/html')
-        .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200))
 
-      expect(resAccountRequest.text).to.contain('<meta property="twitter:card" content="summary" />')
-      expect(resAccountRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      accountTests(await request(servers[0].url)
+        .get('/a/' + account.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
 
-      const resChannelRequest = await request(servers[0].url)
+      accountTests(await request(servers[0].url)
+        .get('/@' + account.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
+
+      const channelTests = (res) => {
+        expect(res.text).to.contain('<meta property="twitter:card" content="summary" />')
+        expect(res.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      }
+
+      channelTests(await request(servers[0].url)
         .get('/video-channels/' + servers[0].videoChannel.name)
         .set('Accept', 'text/html')
-        .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200))
 
-      expect(resChannelRequest.text).to.contain('<meta property="twitter:card" content="summary" />')
-      expect(resChannelRequest.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      channelTests(await request(servers[0].url)
+        .get('/c/' + servers[0].videoChannel.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
+
+      channelTests(await request(servers[0].url)
+        .get('/@' + servers[0].videoChannel.name)
+        .set('Accept', 'text/html')
+        .expect(HttpStatusCode.OK_200))
     })
   })
 
@@ -335,13 +407,23 @@ describe('Test a client controllers', function () {
     })
 
     it('Should use the original account URL for the canonical tag', async function () {
-      const res = await makeHTMLRequest(servers[1].url, '/accounts/root@' + servers[0].host)
-      expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/accounts/root" />`)
+      const accountURLtest = (res) => {
+        expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/accounts/root" />`)
+      }
+
+      accountURLtest(await makeHTMLRequest(servers[1].url, '/accounts/root@' + servers[0].host))
+      accountURLtest(await makeHTMLRequest(servers[1].url, '/a/root@' + servers[0].host))
+      accountURLtest(await makeHTMLRequest(servers[1].url, '/@root@' + servers[0].host))
     })
 
     it('Should use the original channel URL for the canonical tag', async function () {
-      const res = await makeHTMLRequest(servers[1].url, '/video-channels/root_channel@' + servers[0].host)
-      expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/video-channels/root_channel" />`)
+      const channelURLtests = (res) => {
+        expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/video-channels/root_channel" />`)
+      }
+
+      channelURLtests(await makeHTMLRequest(servers[1].url, '/video-channels/root_channel@' + servers[0].host))
+      channelURLtests(await makeHTMLRequest(servers[1].url, '/c/root_channel@' + servers[0].host))
+      channelURLtests(await makeHTMLRequest(servers[1].url, '/@root_channel@' + servers[0].host))
     })
 
     it('Should use the original playlist URL for the canonical tag', async function () {

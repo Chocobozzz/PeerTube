@@ -21,8 +21,9 @@ const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 // Do not use a template engine for a so little thing
 clientsRouter.use('/videos/watch/playlist/:id', asyncMiddleware(generateWatchPlaylistHtmlPage))
 clientsRouter.use('/videos/watch/:id', asyncMiddleware(generateWatchHtmlPage))
-clientsRouter.use('/accounts/:nameWithHost', asyncMiddleware(generateAccountHtmlPage))
-clientsRouter.use('/video-channels/:nameWithHost', asyncMiddleware(generateVideoChannelHtmlPage))
+clientsRouter.use([ '/accounts/:nameWithHost', '/a/:nameWithHost' ], asyncMiddleware(generateAccountHtmlPage))
+clientsRouter.use([ '/video-channels/:nameWithHost', '/c/:nameWithHost' ], asyncMiddleware(generateVideoChannelHtmlPage))
+clientsRouter.use('/@:nameWithHost', asyncMiddleware(generateActorHtmlPage))
 
 const embedMiddlewares = [
   CONFIG.CSP.ENABLED
@@ -151,6 +152,12 @@ async function generateAccountHtmlPage (req: express.Request, res: express.Respo
 
 async function generateVideoChannelHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getVideoChannelHTMLPage(req.params.nameWithHost, req, res)
+
+  return sendHTML(html, res)
+}
+
+async function generateActorHtmlPage (req: express.Request, res: express.Response) {
+  const html = await ClientHtml.getActorHTMLPage(req.params.nameWithHost, req, res)
 
   return sendHTML(html, res)
 }
