@@ -65,9 +65,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
-        .subscribe(config => {
-          this.serverConfig = config
-        })
+        .subscribe(config => this.serverConfig = config)
 
     const formGroupData: { [key in keyof ComponentCustomConfig ]: any } = {
       instance: {
@@ -279,6 +277,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
           // Reload general configuration
           this.serverService.resetConfig()
+            .subscribe(config => this.serverConfig = config)
 
           this.updateForm()
 

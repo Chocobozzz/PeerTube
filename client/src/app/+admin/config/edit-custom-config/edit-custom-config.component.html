@@ -3,8 +3,8 @@
 
   <div ngbNav #nav="ngbNav" [activeId]="activeNav" (activeIdChange)="onNavChange($event)" class="nav-tabs">
 
-    <ng-container ngbNavItem="instance-information">
-      <a ngbNavLink i18n>Information</a>
+    <ng-container ngbNavItem="instance-homepage">
+      <a ngbNavLink i18n>Homepage</a>
 
       <ng-template ngbNavContent>
         <my-edit-homepage [form]="form" [formErrors]="formErrors"></my-edit-homepage>

@@ -1,6 +1,7 @@
 
 import { pairwise } from 'rxjs/operators'
-import { Component, Input, OnInit } from '@angular/core'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ServerConfig } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
@@ -10,20 +11,28 @@ import { ConfigService } from '../shared/config.service'
   templateUrl: './edit-basic-configuration.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
-export class EditBasicConfigurationComponent implements OnInit {
+export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   @Input() form: FormGroup
   @Input() formErrors: any
 
   @Input() serverConfig: ServerConfig
 
   signupAlertMessage: string
+  defaultLandingPageOptions: SelectOptionsItem[] = []
 
   constructor (
     private configService: ConfigService
   ) { }
 
   ngOnInit () {
+    this.buildLandingPageOptions()
     this.checkSignupField()
+  }
+
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes['serverConfig']) {
+      this.buildLandingPageOptions()
+    }
   }
 
   getVideoQuotaOptions () {
@@ -68,6 +77,26 @@ export class EditBasicConfigurationComponent implements OnInit {
 
   isAutoFollowIndexEnabled () {
     return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
+  }
+
+  buildLandingPageOptions () {
+    const labels = {
+      'home': $localize`Homepage`,
+      'videos-overview': $localize`Discover videos`,
+      'videos-trending': $localize`Trending page`,
+      'videos-recently-added': $localize`Recently added videos`,
+      'videos-local': $localize`Local videos`
+    }
+
+    this.defaultLandingPageOptions = this.serverConfig.menu.entries.map(e => ({
+      id: e.path,
+      label: labels[e.id],
+      description: e.path
+    }))
+  }
+
+  doesHomepageExist () {
+    return this.serverConfig.menu.entries.some(e => e.id === 'home')
   }
 
   private checkSignupField () {

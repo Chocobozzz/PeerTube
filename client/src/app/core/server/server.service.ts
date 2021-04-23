@@ -204,9 +204,7 @@ export class ServerService {
     this.configReset = true
 
     // Notify config update
-    this.getConfig().subscribe(() => {
-      // empty, to fire a reset config event
-    })
+    return this.getConfig()
   }
 
   getConfig () {

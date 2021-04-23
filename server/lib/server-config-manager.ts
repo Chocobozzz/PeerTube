@@ -47,8 +47,8 @@ class ServerConfigManager {
         priority: 140
       },
       {
-        id: 'videos-recently',
-        path: '/videos/recently',
+        id: 'videos-recently-added',
+        path: '/videos/recently-added',
         priority: 130
       },
       {
