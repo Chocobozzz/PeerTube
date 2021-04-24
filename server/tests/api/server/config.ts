@@ -60,6 +60,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.signup.enabled).to.be.true
   expect(data.signup.limit).to.equal(4)
+  expect(data.signup.minimumAge).to.equal(16)
   expect(data.signup.requiresEmailVerification).to.be.false
 
   expect(data.admin.email).to.equal('admin' + server.internalServerNumber + '@example.com')
@@ -151,6 +152,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.signup.enabled).to.be.false
   expect(data.signup.limit).to.equal(5)
   expect(data.signup.requiresEmailVerification).to.be.false
+  expect(data.signup.minimumAge).to.equal(10)
 
   // We override admin email in parallel tests, so skip this exception
   if (parallelTests() === false) {
@@ -316,7 +318,8 @@ describe('Test config', function () {
       signup: {
         enabled: false,
         limit: 5,
-        requiresEmailVerification: false
+        requiresEmailVerification: false,
+        minimumAge: 10
       },
       admin: {
         email: 'superadmin1@example.com'

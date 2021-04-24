@@ -158,6 +158,20 @@
 
                 <small i18n *ngIf="hasUnlimitedSignup()" class="text-muted">Signup won't be limited to a fixed number of users.</small>
               </div>
+
+              <div [ngClass]="getDisabledSignupClass()" class="mt-3">
+                <label i18n for="signupMinimumAge">Minimum required age to create an account</label>
+
+                <div class="number-with-unit">
+                    <input
+                      type="number" min="1" id="signupMinimumAge" class="form-control"
+                      formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors['signup.minimumAge'] }"
+                    >
+                    <span i18n>{form.value['signup']['minimumAge'], plural, =1 {year old} other {years old}}</span>
+                </div>
+
+                <div *ngIf="formErrors.signup.minimumAge" class="form-error">{{ formErrors.signup.minimumAge }}</div>
+              </div>
             </ng-container>
           </my-peertube-checkbox>
         </div>
@@ -469,7 +483,7 @@
         <ng-container formGroupName="twitter">
 
           <div class="form-group">
-            <label i18n for="signupLimit">Your Twitter username</label>
+            <label for="servicesTwitterUsername" i18n>Your Twitter username</label>
 
             <input
               type="text" id="servicesTwitterUsername" class="form-control"

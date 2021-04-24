@@ -216,6 +216,7 @@ class ServerConfigManager {
     const signup = {
       allowed,
       allowedForCurrentIP,
+      minimumAge: CONFIG.SIGNUP.MINIMUM_AGE,
       requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     }
 

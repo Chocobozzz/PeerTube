@@ -56,6 +56,10 @@ export class RegisterComponent implements OnInit {
     return this.serverConfig.signup.requiresEmailVerification
   }
 
+  get minimumAge () {
+    return this.serverConfig.signup.minimumAge
+  }
+
   ngOnInit (): void {
     this.serverConfig = this.route.snapshot.data.serverConfig
 

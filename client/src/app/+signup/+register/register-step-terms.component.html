@@ -2,8 +2,8 @@
   <div class="form-group form-group-terms">
     <my-peertube-checkbox inputName="terms" formControlName="terms">
       <ng-template ptTemplate="label">
-        <ng-container i18n>
-          I am at least 16 years old and agree
+        <ng-container i18n> 
+          I am at least {{ minimumAge }} years old and agree
           to the <a class="terms-anchor" (click)="onTermsClick($event)" href='#'>Terms</a>
           <ng-container *ngIf="hasCodeOfConduct"> and to the <a (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
           of this instance

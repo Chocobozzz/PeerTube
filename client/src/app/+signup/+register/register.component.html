@@ -17,6 +17,7 @@
 
           <my-register-step-terms
             [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
+            [minimumAge]="minimumAge"
             (formBuilt)="onTermsFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
           ></my-register-step-terms>
 

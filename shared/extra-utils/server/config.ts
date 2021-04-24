@@ -98,7 +98,8 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
     signup: {
       enabled: false,
       limit: 5,
-      requiresEmailVerification: false
+      requiresEmailVerification: false,
+      minimumAge: 16
     },
     admin: {
       email: 'superadmin1@example.com'

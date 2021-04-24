@@ -174,7 +174,8 @@ function customConfig (): CustomConfig {
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED,
       limit: CONFIG.SIGNUP.LIMIT,
-      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION,
+      minimumAge: CONFIG.SIGNUP.MINIMUM_AGE
     },
     admin: {
       email: CONFIG.ADMIN.EMAIL
