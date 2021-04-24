@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
     return this.serverConfig.signup.requiresEmailVerification
   }
 
-  get minimumAge() {
+  get minimumAge () {
     return this.serverConfig.signup.minimumAge
   }
 
