@@ -49,6 +49,15 @@ export const SIGNUP_LIMIT_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const SIGNUP_MINIMUM_AGE_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [Validators.required, Validators.min(1), Validators.pattern('[0-9]+')],
+  MESSAGES: {
+    'required': $localize`Signup minimum age is required.`,
+    'min': $localize`Signup minimum age must be greater than 1.`,
+    'pattern': $localize`Signup minimum age must be a number.`
+  }
+}
+
 export const ADMIN_EMAIL_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [Validators.required, Validators.email],
   MESSAGES: {

@@ -63,7 +63,8 @@ export class ServerService {
     signup: {
       allowed: false,
       allowedForCurrentIP: false,
-      requiresEmailVerification: false
+      requiresEmailVerification: false,
+      minimumAge: 16
     },
     transcoding: {
       profile: 'default',

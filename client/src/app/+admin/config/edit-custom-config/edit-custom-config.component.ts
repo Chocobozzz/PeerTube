@@ -20,6 +20,7 @@ import {
   SEARCH_INDEX_URL_VALIDATOR,
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
+  SIGNUP_MINIMUM_AGE_VALIDATOR,
   TRANSCODING_THREADS_VALIDATOR
 } from '@app/shared/form-validators/custom-config-validators'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
@@ -113,7 +114,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       signup: {
         enabled: null,
         limit: SIGNUP_LIMIT_VALIDATOR,
-        requiresEmailVerification: null
+        requiresEmailVerification: null,
+        minimumAge: SIGNUP_MINIMUM_AGE_VALIDATOR
       },
       import: {
         videos: {

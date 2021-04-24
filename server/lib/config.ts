@@ -69,7 +69,8 @@ async function getServerConfig (ip?: string): Promise<ServerConfig> {
     signup: {
       allowed,
       allowedForCurrentIP,
-      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION,
+      minimumAge: CONFIG.SIGNUP.MINIMUM_AGE
     },
     transcoding: {
       hls: {

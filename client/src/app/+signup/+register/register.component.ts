@@ -5,7 +5,7 @@ import { AuthService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { UserRegister } from '@shared/models'
-import { ServerConfig } from '@shared/models/server'
+import { ServerConfig } from '@shared/models'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 
 @Component({
@@ -56,7 +56,12 @@ export class RegisterComponent implements OnInit {
     return this.serverConfig.signup.requiresEmailVerification
   }
 
+  get minimumAge() {
+    return this.serverConfig.signup.minimumAge
+  }
+
   ngOnInit (): void {
+    console.log(this.route.snapshot.data.serverConfig)
     this.serverConfig = this.route.snapshot.data.serverConfig
 
     this.videoUploadDisabled = this.serverConfig.user.videoQuota === 0

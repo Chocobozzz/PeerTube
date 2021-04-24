@@ -30,6 +30,7 @@ const customConfigUpdateValidator = [
   body('signup.enabled').isBoolean().withMessage('Should have a valid signup enabled boolean'),
   body('signup.limit').isInt().withMessage('Should have a valid signup limit'),
   body('signup.requiresEmailVerification').isBoolean().withMessage('Should have a valid requiresEmailVerification boolean'),
+  body('signup.minimumAge').isInt().withMessage("Should have a valid minimum age required"),
 
   body('admin.email').isEmail().withMessage('Should have a valid administrator email'),
   body('contactForm.enabled').isBoolean().withMessage('Should have a valid contact form enabled boolean'),

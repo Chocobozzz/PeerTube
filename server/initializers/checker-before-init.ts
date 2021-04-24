@@ -19,7 +19,7 @@ function checkMissedConfig () {
     'csp.enabled', 'csp.report_only', 'csp.report_uri',
     'security.frameguard.enabled',
     'cache.previews.size', 'cache.captions.size', 'cache.torrents.size', 'admin.email', 'contact_form.enabled',
-    'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
+    'signup.enabled', 'signup.limit', 'signup.requires_email_verification', 'signup.minimum_age',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
     'redundancy.videos.strategies', 'redundancy.videos.check_interval',
     'transcoding.enabled', 'transcoding.threads', 'transcoding.allow_additional_extensions', 'transcoding.hls.enabled',

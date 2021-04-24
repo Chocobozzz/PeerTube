@@ -69,6 +69,7 @@ export interface CustomConfig {
     enabled: boolean
     limit: number
     requiresEmailVerification: boolean
+    minimumAge: number
   }
 
   admin: {
