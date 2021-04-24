@@ -5,7 +5,7 @@ import { AuthService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { UserRegister } from '@shared/models'
-import { ServerConfig } from '@shared/models'
+import { ServerConfig } from '@shared/models/server'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 
 @Component({
@@ -61,7 +61,6 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit (): void {
-    console.log(this.route.snapshot.data.serverConfig)
     this.serverConfig = this.route.snapshot.data.serverConfig
 
     this.videoUploadDisabled = this.serverConfig.user.videoQuota === 0
