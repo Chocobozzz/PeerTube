@@ -848,8 +848,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     // Only set this if we're in a playlist
-    if (this.playlist) options.common.previousVideo = () => {
-      this.zone.run(() => this.videoWatchPlaylist.navigateToPreviousPlaylistVideo())
+    if (this.playlist) {
+      options.common.previousVideo = () => {
+        this.zone.run(() => this.videoWatchPlaylist.navigateToPreviousPlaylistVideo())
+      }
     }
 
     let mode: PlayerMode
