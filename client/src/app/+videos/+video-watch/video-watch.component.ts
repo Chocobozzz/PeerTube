@@ -197,7 +197,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         console.error("'?playlistPosition=" + positionParam + "' was parsed as NaN, defaulting to 1.")
       }
 
-      console.log("playlistPosition: " + this.playlistPosition)
       this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
 
       const start = queryParams[ 'start' ]
