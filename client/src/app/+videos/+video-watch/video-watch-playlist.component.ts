@@ -119,7 +119,7 @@ export class VideoWatchPlaylistComponent {
     if (this.playlistElements.length === 0 || !position) return
 
     // Handle the reverse index
-    if (position < 0) position = this.playlist.videosLength + position + 1;
+    if (position < 0) position = this.playlist.videosLength + position + 1
 
     for (const playlistElement of this.playlistElements) {
       // >= if the previous videos were not valid
