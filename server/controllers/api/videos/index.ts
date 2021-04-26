@@ -129,7 +129,7 @@ videosRouter.post('/upload',
   asyncRetryTransactionMiddleware(addVideoLegacy)
 )
 
-videosRouter.use('/upload-resumable',
+videosRouter.all('/upload-resumable',
   onlyAllowMethods([ 'POST', 'PUT', 'DELETE' ]), // uploadx also allows GET and PATCH
   authenticate,
   executeIfPOST(asyncMiddleware(videosAddResumableInitValidator)),
