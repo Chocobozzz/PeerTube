@@ -58,7 +58,7 @@ import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 import { getResumableUploadPath, deleteFileAsync as clearUploadFile } from '../../../helpers/utils'
-import { File } from '@uploadx/core'
+import { File as UploadxFile } from '@uploadx/core'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -126,7 +126,7 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
-    const file: File & { duration: number, path: string, filename: string } = req.body
+    const file: UploadxFile & { duration: number, path: string, filename: string } = req.body
     file.path = getResumableUploadPath(file.id)
 
     if (
@@ -195,7 +195,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
       originalname: req.body.name
     } as express.FileUploadMetadata
     const user = res.locals.oauth.token.User
-    const file: File & { duration: number, path: string, filename: string } = req.body
+    const file: UploadxFile & { duration: number, path: string, filename: string } = req.body
     file.path = getResumableUploadPath(file.id)
 
     logger.debug('Checking videosAddResumableInitValidator parameters and headers', { parameters: req.body, headers: req.headers })
