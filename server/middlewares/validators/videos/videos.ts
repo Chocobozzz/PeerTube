@@ -80,32 +80,10 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 
     const videoFile: Express.Multer.File & { duration?: number } = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
+    const cleanup = () => cleanUpReqFiles(req)
 
-    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
-
-    if (!isVideoFileMimeTypeValid(req.files)) {
-      res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
-         .json({
-           error: 'This file is not supported. Please, make sure it is of the following type: ' +
-                  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
-         })
-
-      return cleanUpReqFiles(req)
-    }
-
-    if (!isVideoFileSizeValid(videoFile.size.toString())) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-         .json({ error: 'This file is too large.' })
-
-      return cleanUpReqFiles(req)
-    }
-
-    if (await isAbleToUploadVideo(user.id, videoFile.size) === false) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-         .json({ error: 'The user video quota is exceeded with this video.' })
-
-      return cleanUpReqFiles(req)
-    }
+    /* eslint-disable @typescript-eslint/no-floating-promises */
+    commonVideoChecks({ req, res, user, videoFileSize: videoFile.size, file: req.files, cleanup })
 
     try {
       if (!videoFile.duration) await addDurationToVideo(videoFile)
@@ -204,31 +182,10 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     if (areValidationErrors(req, res)) return clearUploadFile(file.path)
     if (areErrorsInScheduleUpdate(req, res)) return clearUploadFile(file.path)
 
-    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return clearUploadFile(file.path)
+    const cleanup = () => clearUploadFile(file.path)
 
-    if (!isVideoFileMimeTypeValid({ videofile: [ videoFileMetadata ] })) {
-      res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
-         .json({
-           error: 'This file is not supported. Please, make sure it is of the following type: ' +
-                  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
-         })
-
-      return clearUploadFile(file.path)
-    }
-
-    if (!isVideoFileSizeValid(videoFileMetadata.size.toString())) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-         .json({ error: 'This file is too large.' })
-
-      return clearUploadFile(file.path)
-    }
-
-    if (await isAbleToUploadVideo(user.id, videoFileMetadata.size) === false) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-         .json({ error: 'The user video quota is exceeded with this video.' })
-
-      return clearUploadFile(file.path)
-    }
+    /* eslint-disable @typescript-eslint/no-floating-promises */
+    commonVideoChecks({ req, res, user, videoFileSize: videoFileMetadata.size, file: [ videoFileMetadata ], cleanup })
 
     return next()
   }
@@ -619,6 +576,43 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   }
 
   return false
+}
+
+async function commonVideoChecks (parameters: {
+  req
+  res
+  user
+  videoFileSize: number
+  file: { [ fieldname: string ]: express.FileUploadMetadata[] } | express.FileUploadMetadata[]
+  cleanup: Function
+}) {
+  const { req, res, user, videoFileSize, file, cleanup } = parameters
+
+  if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanup()
+
+  if (!isVideoFileMimeTypeValid(file)) {
+    res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+        .json({
+          error: 'This file is not supported. Please, make sure it is of the following type: ' +
+                CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
+        })
+
+    return cleanup()
+  }
+
+  if (!isVideoFileSizeValid(videoFileSize.toString())) {
+    res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+        .json({ error: 'This file is too large.' })
+
+    return cleanup()
+  }
+
+  if (await isAbleToUploadVideo(user.id, videoFileSize) === false) {
+    res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+        .json({ error: 'The user video quota is exceeded with this video.' })
+
+    return cleanup()
+  }
 }
 
 export async function isVideoAccepted (
