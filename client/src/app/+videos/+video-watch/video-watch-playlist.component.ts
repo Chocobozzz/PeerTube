@@ -137,26 +137,8 @@ export class VideoWatchPlaylistComponent {
     this.onPlaylistVideosNearOfBottom(position)
   }
 
-  findPreviousPlaylistVideo (position = this.currentPlaylistPosition): VideoPlaylistElement {
-    if (this.currentPlaylistPosition <= 1) {
-      // we have reached the top of the playlist: either loop or stop
-      if (this.loopPlaylist) {
-        this.currentPlaylistPosition = position = this.playlistPagination.totalItems
-      } else {
-        return
-      }
-    }
-    const previous = this.playlistElements.find(e => e.position === position)
-
-    if (!previous || !previous.video) {
-      return this.findPreviousPlaylistVideo(position - 1)
-    }
-
-    return previous
-  }
-
   navigateToPreviousPlaylistVideo () {
-    const previous = this.findPreviousPlaylistVideo(this.currentPlaylistPosition - 1)
+    const previous = this.findPlaylistVideo(this.currentPlaylistPosition - 1, 'previous')
     if (!previous) return
 
     const start = previous.startTimestamp
@@ -164,27 +146,32 @@ export class VideoWatchPlaylistComponent {
     this.router.navigate([],{ queryParams: { playlistPosition: previous.position, start, stop } })
   }
 
-  findNextPlaylistVideo (position = this.currentPlaylistPosition): VideoPlaylistElement {
-    if (this.currentPlaylistPosition >= this.playlistPagination.totalItems) {
-      // we have reached the end of the playlist: either loop or stop
-      if (this.loopPlaylist) {
-        this.currentPlaylistPosition = position = 0
-      } else {
-        return
-      }
+  findPlaylistVideo (position: number, type: 'previous' | 'next'): VideoPlaylistElement {
+    if (
+      (type === 'next' && position > this.playlistPagination.totalItems) ||
+      (type === 'previous' && position < 1)
+    ) {
+      // End of the playlist: end the recursion if we're not in the loop mode
+      if (!this.loopPlaylist) return
+
+      // Loop mode
+      position = type === 'previous'
+        ? this.playlistPagination.totalItems
+        : 1
     }
 
-    const next = this.playlistElements.find(e => e.position === position)
+    const found = this.playlistElements.find(e => e.position === position)
+    if (found && found.video) return found
 
-    if (!next || !next.video) {
-      return this.findNextPlaylistVideo(position + 1)
-    }
+    const newPosition = type === 'previous'
+      ? position - 1
+      : position + 1
 
-    return next
+    return this.findPlaylistVideo(newPosition, type)
   }
 
   navigateToNextPlaylistVideo () {
-    const next = this.findNextPlaylistVideo(this.currentPlaylistPosition + 1)
+    const next = this.findPlaylistVideo(this.currentPlaylistPosition + 1, 'next')
     if (!next) return
 
     const start = next.startTimestamp
