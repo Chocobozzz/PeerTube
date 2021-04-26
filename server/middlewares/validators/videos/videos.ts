@@ -651,7 +651,7 @@ export async function isVideoAccepted (
 async function addDurationToVideo (videoFile: any) {
   const duration: number = await getDurationFromVideoFile(videoFile.path)
 
-  if (isNaN(duration)) throw new Error("Couldn't get video duration")
+  if (isNaN(duration)) throw new Error(`Couldn't get video duration`)
 
   videoFile.duration = duration
 }
