@@ -229,9 +229,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     if (this.isAudioFile(file.name)) {
       this.isUploadingAudioFile = true
       return
-    } else {
-      this.isUploadingVideo = true
     }
+
+    this.isUploadingVideo = true
 
     this.resumableUploadService.handleFiles(file, this.uploadxOptions)
   }
