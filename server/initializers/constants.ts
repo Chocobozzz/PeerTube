@@ -289,6 +289,7 @@ const CONSTRAINTS_FIELDS = {
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
     FILE_SIZE: { min: -1 },
+    PARTIAL_UPLOAD_SIZE: { max: 50 * 1024 * 1024 * 1024 }, // 50GB
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_PLAYLISTS: {

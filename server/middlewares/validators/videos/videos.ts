@@ -1,5 +1,6 @@
 import * as express from 'express'
-import { move } from 'fs-extra'
+import { FileUploadMetadata } from 'express'
+import { move, stat } from 'fs-extra'
 import { body, header, param, query, ValidationChain } from 'express-validator'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
@@ -58,7 +59,7 @@ import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 import { getResumableUploadPath, deleteFileAsync as clearUploadFile } from '../../../helpers/utils'
-import { File as UploadxFile } from '@uploadx/core'
+import { DiskStorage, File as UploadxFile } from '@uploadx/core'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -80,10 +81,10 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 
     const videoFile: Express.Multer.File & { duration?: number } = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
-    const cleanup = () => cleanUpReqFiles(req)
 
-    /* eslint-disable @typescript-eslint/no-floating-promises */
-    commonVideoChecks({ req, res, user, videoFileSize: videoFile.size, file: req.files, cleanup })
+    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files })) {
+      return cleanUpReqFiles(req)
+    }
 
     try {
       if (!videoFile.duration) await addDurationToVideo(videoFile)
@@ -182,10 +183,23 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     if (areValidationErrors(req, res)) return clearUploadFile(file.path)
     if (areErrorsInScheduleUpdate(req, res)) return clearUploadFile(file.path)
 
-    const cleanup = () => clearUploadFile(file.path)
+    const files = { videofile: [ videoFileMetadata ] }
+    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) {
+      return clearUploadFile(file.path)
+    }
 
-    /* eslint-disable @typescript-eslint/no-floating-promises */
-    commonVideoChecks({ req, res, user, videoFileSize: videoFileMetadata.size, file: [ videoFileMetadata ], cleanup })
+    try {
+      const storage = new DiskStorage({ directory: getResumableUploadPath() })
+      const userPartiallyUploadedFiles = await storage.get(user.id + '') // uploadx's default naming uses req.user.id to prefix file names
+      const userPartiallyUploadedFilesSize = await Promise.all(userPartiallyUploadedFiles.map(f => stat(f.name).then(s => s.size)))
+      const userPartiallyUploadedFilesTotalSize = userPartiallyUploadedFilesSize.reduce((a, b) => a + b, 0) + file.size
+      if (userPartiallyUploadedFilesTotalSize > CONSTRAINTS_FIELDS.VIDEOS.PARTIAL_UPLOAD_SIZE.max) throw new Error()
+    } catch (err) {
+      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+         .json({ error: 'This file is too large. It exceeds the partial uploads combined file size authorized.' })
+
+      return clearUploadFile(file.path)
+    }
 
     return next()
   }
@@ -578,41 +592,42 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   return false
 }
 
-async function commonVideoChecks (parameters: {
+async function commonVideoChecksPass (parameters: {
   req
   res
   user
   videoFileSize: number
-  file: { [ fieldname: string ]: express.FileUploadMetadata[] } | express.FileUploadMetadata[]
-  cleanup: Function
-}) {
-  const { req, res, user, videoFileSize, file, cleanup } = parameters
+  files: { [ fieldname: string ]: FileUploadMetadata[] } | FileUploadMetadata[]
+}): Promise<boolean> {
+  const { req, res, user, videoFileSize, files } = parameters
 
-  if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanup()
+  if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
 
-  if (!isVideoFileMimeTypeValid(file)) {
+  if (!isVideoFileMimeTypeValid(files)) {
     res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
         .json({
           error: 'This file is not supported. Please, make sure it is of the following type: ' +
                 CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
         })
 
-    return cleanup()
+    return false
   }
 
   if (!isVideoFileSizeValid(videoFileSize.toString())) {
     res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-        .json({ error: 'This file is too large.' })
+        .json({ error: 'This file is too large. It exceeds the maximum file size authorized.' })
 
-    return cleanup()
+    return false
   }
 
   if (await isAbleToUploadVideo(user.id, videoFileSize) === false) {
     res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
         .json({ error: 'The user video quota is exceeded with this video.' })
 
-    return cleanup()
+    return false
   }
+
+  return true
 }
 
 export async function isVideoAccepted (
