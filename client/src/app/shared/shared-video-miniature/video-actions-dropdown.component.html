@@ -15,6 +15,7 @@
   <my-action-dropdown
     [actions]="videoActions" [label]="label" [entry]="{ video: video }" (click)="loadDropdownInformation()"
     [buttonSize]="buttonSize" [placement]="placement" [buttonDirection]="buttonDirection" [buttonStyled]="buttonStyled"
+    container="body"
   ></my-action-dropdown>
 
   <my-video-download #videoDownloadModal></my-video-download>
