@@ -46,7 +46,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   error: string
   enableRetryAfterError: boolean
 
-  options: UploadxOptions
+  uploadxOptions: UploadxOptions
 
   // So that it can be accessed in the template
   protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
@@ -69,7 +69,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
     const self = this
 
-    this.options = {
+    this.uploadxOptions = {
       endpoint: this.BASE_VIDEO_UPLOAD_URL,
       multiple: false,
       token: this.authService.getAccessToken(),
@@ -203,7 +203,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       this.isUploadingPreviewFile = true
 
       this.resumableUploadService.handleFiles(this.previewfileUpload, {
-        ...this.options,
+        ...this.uploadxOptions,
         metadata: {
           isPreviewForAudio: true
         }
@@ -233,7 +233,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       this.isUploadingVideo = true
     }
 
-    this.resumableUploadService.handleFiles(file, this.options)
+    this.resumableUploadService.handleFiles(file, this.uploadxOptions)
   }
 
   isPublishingButtonDisabled () {
@@ -275,9 +275,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   private uploadVideoFile (audioBg?: string) {
     this.resumableUploadService.handleFiles(this.getVideoFile(), {
-      ...this.options,
+      ...this.uploadxOptions,
       metadata: {
-        ...this.options.metadata,
+        ...this.uploadxOptions.metadata,
         audioBg
       }
     })
