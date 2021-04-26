@@ -10,6 +10,7 @@ import { federateVideoIfNeeded } from './activitypub/videos'
 import { JobQueue } from './job-queue/job-queue'
 import { Notifier } from './notifier'
 import { createVideoMiniatureFromExisting } from './thumbnail'
+import { UploadVideoFiles } from 'express'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -32,7 +33,7 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
 
 async function buildVideoThumbnailsFromReq (options: {
   video: MVideoThumbnail
-  files: { [fieldname: string]: { path: string } | Express.Multer.File[] } | Express.Multer.File[]
+  files: UploadVideoFiles | Express.Multer.File[]
   fallback: (type: ThumbnailType) => Promise<MThumbnail>
   automaticallyGenerated?: boolean
 }) {

@@ -51,6 +51,10 @@ declare module 'express' {
     originalname: string
     size: number
   }
+
+  export interface UploadVideoFiles {
+    [fieldname: string]: { path: string } | Express.Multer.File[]
+  }
 }
 
 interface PeerTubeLocals {

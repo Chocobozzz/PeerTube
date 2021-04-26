@@ -72,6 +72,7 @@ import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
 import { DiskStorageOptions, Metadata, uploadx } from '@uploadx/core'
 import { VideoCreate } from '../../../../shared/models/videos/video-create.model'
+import { UploadVideoFiles } from 'express'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -219,7 +220,7 @@ async function addVideoResumable (req: express.Request, res: express.Response) {
 async function addVideo (req: express.Request, res: express.Response, parameters: {
   videoPhysicalFile: { duration: number, filename: string, size: number, path: string }
   videoInfo: VideoCreate | Metadata
-  files
+  files: UploadVideoFiles | Express.Multer.File[]
 }) {
   const { videoPhysicalFile, videoInfo, files } = parameters
   const videoChannel = res.locals.videoChannel
