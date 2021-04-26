@@ -7,6 +7,11 @@ import { execPromise, execPromise2, randomBytesPromise, sha256 } from './core-ut
 import { logger } from './logger'
 import { RESUMABLE_UPLOAD_DIRECTORY } from '../initializers/constants'
 
+function deleteFile (path: string) {
+  return remove(path)
+    .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
+}
+
 function deleteFileAsync (path: string) {
   remove(path)
     .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
@@ -88,6 +93,7 @@ function getResumableUploadPath (filename?: string) {
 // ---------------------------------------------------------------------------
 
 export {
+  deleteFile,
   deleteFileAsync,
   generateRandomString,
   getFormattedObjects,

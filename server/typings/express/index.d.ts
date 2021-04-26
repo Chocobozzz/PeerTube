@@ -19,6 +19,7 @@ import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server'
 import { MVideoImportDefault } from '@server/types/models/video/video-import'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate'
+import { HttpMethod } from '@shared/core-utils/miscs/http-methods'
 import { File as MResumableFile } from '@uploadx/core'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
@@ -42,6 +43,7 @@ import {
 declare module 'express' {
   export interface Request {
     query: any
+    method: HttpMethod
   }
   interface Response {
     locals: PeerTubeLocals

@@ -1,6 +1,6 @@
 import { readdir, stat, Stats } from 'fs-extra'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { deleteFileAsync, getResumableUploadPath } from '@server/helpers/utils'
+import { deleteFile, getResumableUploadPath } from '@server/helpers/utils'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants'
 import { AbstractScheduler } from './abstract-scheduler'
 
@@ -29,7 +29,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
       return
     }
 
-    if (statResult.ctimeMs < limit) await deleteFileAsync(filePath)
+    if (statResult.ctimeMs < limit) await deleteFile(filePath)
   }
 
   protected async internalExecute () {

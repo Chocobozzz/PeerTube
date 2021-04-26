@@ -166,6 +166,8 @@ const videosAddResumableValidator = [
  *
  * Uploadx doesn't use next() until the upload completes, so this middleware has to be placed before uploadx
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts#L81-L93
+ *
+ * This validator is meant for POST requests only.
  */
 /* eslint-enable max-len */
 const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
@@ -186,7 +188,6 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .withMessage('Should specify the file mimetype'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.method !== 'POST') return next()
     if (req.body.isPreviewForAudio) return next() // don't check mimetype for audio preview TODO: check size?
 
     const videoFileMetadata = {

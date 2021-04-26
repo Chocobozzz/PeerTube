@@ -11,7 +11,7 @@ import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths
 import { getServerActor } from '@server/models/application/application'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoState, VideoUpdate } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode, HttpMethod } from '../../../../shared/core-utils/miscs'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -130,7 +130,7 @@ videosRouter.post('/upload',
 )
 
 videosRouter.all('/upload-resumable',
-  onlyAllowMethods([ 'POST', 'PUT', 'DELETE' ]), // uploadx also allows GET and PATCH
+  onlyAllowMethods([ HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT ]), // uploadx also allows GET and PATCH
   authenticate,
   executeIfPOST(asyncMiddleware(videosAddResumableInitValidator)),
   uploadx.upload(uploadxOptions), // uploadx doesn't use call next() before the file upload completes

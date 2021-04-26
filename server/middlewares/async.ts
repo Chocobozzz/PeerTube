@@ -3,7 +3,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ValidationChain } from 'express-validator'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { retryTransactionWrapper } from '../helpers/database-utils'
-import { HttpStatusCode } from '@shared/core-utils'
+import { HttpMethod, HttpStatusCode } from '@shared/core-utils'
 
 // Syntactic sugar to avoid try/catch in express controllers
 // Thanks: https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016
@@ -33,7 +33,7 @@ function asyncRetryTransactionMiddleware (fun: (req: Request, res: Response, nex
 }
 
 function executeIfMethod (fun: (req: Request, res: Response, next: NextFunction)
-=> void | Promise<void>, method: 'CONNECT' | 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' |  'PATCH' | 'POST' | 'PUT' | 'TRACE') {
+=> void | Promise<void>, method: HttpMethod) {
   return (req: Request, res: Response, next: NextFunction) => {
     return req.method === method
       ? Promise.resolve((fun as RequestHandler)(req, res, next))
@@ -42,10 +42,10 @@ function executeIfMethod (fun: (req: Request, res: Response, next: NextFunction)
 }
 
 function executeIfPOST (fun) {
-  return executeIfMethod(fun, 'POST')
+  return executeIfMethod(fun, HttpMethod.POST)
 }
 
-function onlyAllowMethods (methods: string[]) {
+function onlyAllowMethods (methods: HttpMethod[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!methods.includes(req.method)) return res.status(HttpStatusCode.METHOD_NOT_ALLOWED_405)
 
