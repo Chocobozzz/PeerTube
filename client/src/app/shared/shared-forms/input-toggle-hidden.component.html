@@ -6,7 +6,7 @@
   />
 
   <div *ngIf="withToggle || withCopy" class="input-group-append">
-    <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary" [title]="toggleTitle">
+    <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary eye-button" [title]="toggleTitle">
       <span class="glyphicon glyphicon-eye-{{ show ? 'open' : 'close' }}"></span>
     </button>
 
