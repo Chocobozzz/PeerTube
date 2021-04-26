@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import * as express from 'express'
 import { move } from 'fs-extra'
 import { body, header, param, query, ValidationChain } from 'express-validator'
@@ -160,6 +159,7 @@ const videosAddResumableValidator = [
   }
 ]
 
+/* eslint-disable max-len */
 /**
  * File is created in POST initialisation, and its body is saved as a 'metadata' field is saved by uploadx for later use.
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/uploadx.ts#L41
@@ -167,6 +167,7 @@ const videosAddResumableValidator = [
  * Uploadx doesn't use next() until the upload completes, so this middleware has to be placed before uploadx
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts#L81-L93
  */
+/* eslint-enable max-len */
 const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('name')
     .trim()
