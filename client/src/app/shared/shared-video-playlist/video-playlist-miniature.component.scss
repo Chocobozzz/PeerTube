@@ -42,9 +42,9 @@
 
   .miniature-name {
     @include miniature-name;
-    @include ellipsis-multiline(1.3em, 2);
 
-    margin: 0;
+    margin-top: 10px;
+    margin-bottom: 5px;
   }
 
   .by {
@@ -56,9 +56,9 @@
 
   .privacy-date {
     margin-top: 5px;
+    font-size: 13px;
 
     .video-info-privacy {
-      font-size: 14px;
       font-weight: $font-semibold;
 
       &::after {
