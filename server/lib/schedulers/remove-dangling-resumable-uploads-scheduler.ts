@@ -18,6 +18,20 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
     this.lastExecutionTimeMs = new Date().getTime()
   }
 
+  private async deleteIfOlderThan (file: string, limit: number) {
+    const filePath = getResumableUploadPath(file)
+    let statResult: Stats
+
+    try {
+      statResult = await stat(filePath)
+    } catch (error) {
+      logger.error('Failed to run stat for %s', filePath, { error, ...lTags() })
+      return
+    }
+
+    if (statResult.ctimeMs < limit) await deleteFileAsync(filePath)
+  }
+
   protected async internalExecute () {
     const path = getResumableUploadPath()
     const files = await readdir(path)
@@ -25,7 +39,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
     logger.debug('Reading resumable video upload folder %s with %d files', path, files.length, lTags())
 
     try {
-      await Promise.all(files.map(file => handleFile(file, this.lastExecutionTimeMs)))
+      await Promise.all(files.map(file => this.deleteIfOlderThan(file, this.lastExecutionTimeMs)))
     } catch (error) {
       logger.error('Failed to handle file during resumable video upload folder cleanup', { error, ...lTags() })
     } finally {
@@ -36,20 +50,4 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
   static get Instance () {
     return this.instance || (this.instance = new this())
   }
-}
-
-// ---------------------------------------------------------------------------
-
-async function handleFile (file: string, limit: number) {
-  const filePath = getResumableUploadPath(file)
-  let statResult: Stats
-
-  try {
-    statResult = await stat(filePath)
-  } catch (error) {
-    logger.error('Failed to run stat for %s', filePath, { error, ...lTags() })
-    return
-  }
-
-  if (statResult.ctimeMs < limit) await deleteFileAsync(filePath)
 }
