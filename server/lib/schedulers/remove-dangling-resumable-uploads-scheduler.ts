@@ -4,7 +4,7 @@ import { deleteFileAsync, getResumableUploadPath } from '@server/helpers/utils'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants'
 import { AbstractScheduler } from './abstract-scheduler'
 
-const lTags = loggerTagsFactory('scheduler', 'resumable uploads', 'cleaner')
+const lTags = loggerTagsFactory('scheduler', 'resumable-upload', 'cleaner')
 
 export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
 
