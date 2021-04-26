@@ -190,11 +190,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
       // Handle the ?playlistPosition
       const positionParam = queryParams[ 'playlistPosition' ]
-      if (positionParam === 'last') this.playlistPosition = -1 // Handle the "last" index
-      else this.playlistPosition = parseInt(positionParam, 10)
+
+      this.playlistPosition = positionParam === 'last'
+        ? -1 // Handle the "last" index
+        : parseInt(positionParam, 10)
+
       if (isNaN(this.playlistPosition)) {
+        console.error(`playlistPosition query param '${positionParam}' was parsed as NaN, defaulting to 1.`)
         this.playlistPosition = 1
-        console.error("'?playlistPosition=" + positionParam + "' was parsed as NaN, defaulting to 1.")
       }
 
       this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
