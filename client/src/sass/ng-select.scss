@@ -12,15 +12,13 @@ $ng-select-box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
 // $ng-select-placeholder: lighten($ng-select-primary-text, 40) !default;
 $ng-select-height: 30px;
 $ng-select-value-padding-left: 15px;
-// $ng-select-value-font-size: 0.9em !default;
+$ng-select-value-font-size: 15px;
 
 @import "~@ng-select/ng-select/scss/default.theme.scss";
 
-.ng-input {
-  font-size: .9em;
-}
-
 .ng-select {
+  font-size: $ng-select-value-font-size;
+
   &.ng-select-focused {
     &:not(.ng-select-opened) > .ng-select-container {
       border-color: #ccc !important;
