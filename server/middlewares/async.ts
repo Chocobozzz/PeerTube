@@ -33,7 +33,7 @@ function asyncRetryTransactionMiddleware (fun: (req: Request, res: Response, nex
 }
 
 function executeIfMethod (fun: (req: Request, res: Response, next: NextFunction)
-=> void | Promise<void>, method: 'GET' | 'POST' | 'PUT' | 'PATCH') {
+=> void | Promise<void>, method: 'CONNECT' | 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' |  'PATCH' | 'POST' | 'PUT' | 'TRACE') {
   return (req: Request, res: Response, next: NextFunction) => {
     return req.method === method
       ? Promise.resolve((fun as RequestHandler)(req, res, next))
