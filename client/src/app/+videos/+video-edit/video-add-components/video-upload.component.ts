@@ -278,7 +278,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       ...this.uploadxOptions,
       metadata: {
         ...this.uploadxOptions.metadata,
-        audioBg
+        audioBg // only used for audio background generation
       }
     })
     this.isUploadingPreviewFile = false
