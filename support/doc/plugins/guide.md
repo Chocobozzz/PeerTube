@@ -173,9 +173,18 @@ function register (...) {
   registerSetting({
     name: 'admin-name',
     label: 'Admin name',
+
     type: 'input',
-    // type: input | input-checkbox | input-password | input-textarea | markdown-text | markdown-enhanced | 'select' | 'html'
-    default: 'my super name'
+    // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
+
+    // Optional
+    descriptionHTML: 'The purpose of this field is...',
+
+    default: 'my super name',
+
+    // If the setting is not private, anyone can view its value (client code included)
+    // If the setting is private, only server-side hooks can access it
+    private: false
   })
 
   const adminName = await settingsManager.getSetting('admin-name')
