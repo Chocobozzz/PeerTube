@@ -9,6 +9,7 @@ import { PlaylistPlugin } from './playlist/playlist-plugin'
 import { EndCardOptions } from './upnext/end-card'
 import { StatsCardOptions } from './stats/stats-card'
 import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
+import { StatsForNerdsPlugin } from './stats/stats-plugin'
 
 declare module 'video.js' {
 
@@ -37,7 +38,7 @@ declare module 'video.js' {
 
     bezels (): void
 
-    stats (options?: Partial<StatsCardOptions>): any
+    stats (options?: StatsCardOptions): StatsForNerdsPlugin
 
     qualityLevels (): QualityLevels
 
@@ -198,6 +199,9 @@ type PlayerNetworkInfo = {
     uploaded: number
     numPeers: number
   }
+
+  // In bytes
+  bandwidthEstimate: number
 }
 
 type PlaylistItemOptions = {

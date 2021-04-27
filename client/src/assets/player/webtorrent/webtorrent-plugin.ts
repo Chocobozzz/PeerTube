@@ -506,7 +506,8 @@ class WebTorrentPlugin extends Plugin {
           uploadSpeed: this.torrent.uploadSpeed,
           downloaded: this.torrent.downloaded,
           uploaded: this.torrent.uploaded
-        }
+        },
+        bandwidthEstimate: this.webtorrent.downloadSpeed
       } as PlayerNetworkInfo)
     }, this.CONSTANTS.INFO_SCHEDULER)
   }
