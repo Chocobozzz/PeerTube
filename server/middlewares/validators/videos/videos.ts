@@ -59,7 +59,7 @@ import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 import { getResumableUploadPath, deleteFileAsync as clearUploadFile } from '../../../helpers/utils'
-import { DiskStorage, File as UploadxFile } from '@uploadx/core'
+import { DiskStorage, File as UploadxFile, METAFILE_EXTNAME } from '@uploadx/core'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -102,19 +102,23 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
+/**
+ * Gets called after the last PUT request
+ */
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     const file: UploadxFile & { duration: number, path: string, filename: string } = req.body
     file.path = getResumableUploadPath(file.id)
     file.filename = file.metadata.filename
+    const cleanup = () => clearUploadFile(file.path)
 
     if (
       !file.metadata.isPreviewForAudio &&
       !await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)
-    ) return clearUploadFile(file.path)
+    ) return cleanup()
 
-    if (!await isVideoAccepted(req, res, file as any)) return clearUploadFile(file.path)
+    if (!await isVideoAccepted(req, res, file as any)) return cleanup()
 
     if (file.metadata.isPreviewForAudio) {
       const filename = `${file.id}-preview`
@@ -130,7 +134,7 @@ const videosAddResumableValidator = [
       res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
          .json({ error: 'Video file unreadable.' })
 
-      return clearUploadFile(file.path)
+      return cleanup()
     }
 
     res.locals.videoFileResumable = file
@@ -182,15 +186,16 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     const user = res.locals.oauth.token.User
     const file: UploadxFile & { duration: number, path: string, filename: string } = req.body
     file.path = getResumableUploadPath(file.id)
+    const cleanup = () => clearUploadFile(file.path)
 
     logger.debug('Checking videosAddResumableInitValidator parameters and headers', { parameters: req.body, headers: req.headers })
 
-    if (areValidationErrors(req, res)) return clearUploadFile(file.path)
-    if (areErrorsInScheduleUpdate(req, res)) return clearUploadFile(file.path)
+    if (areValidationErrors(req, res)) return cleanup()
+    if (areErrorsInScheduleUpdate(req, res)) return cleanup()
 
     const files = { videofile: [ videoFileMetadata ] }
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) {
-      return clearUploadFile(file.path)
+      return cleanup()
     }
 
     try {
@@ -203,7 +208,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
       res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
          .json({ error: 'This file is too large. It exceeds the partial uploads combined file size authorized.' })
 
-      return clearUploadFile(file.path)
+      return cleanup()
     }
 
     return next()

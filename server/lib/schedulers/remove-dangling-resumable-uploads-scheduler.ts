@@ -3,6 +3,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { deleteFile, getResumableUploadPath } from '@server/helpers/utils'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants'
 import { AbstractScheduler } from './abstract-scheduler'
+import { METAFILE_EXTNAME } from '@uploadx/core'
 
 const lTags = loggerTagsFactory('scheduler', 'resumable-upload', 'cleaner')
 
@@ -29,12 +30,18 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
       return
     }
 
-    if (statResult.ctimeMs < limit) await deleteFile(filePath)
+    if (statResult.ctimeMs < limit) {
+      await Promise.all([
+        deleteFile(filePath),
+        deleteFile(filePath + METAFILE_EXTNAME) // also delete the .META file, which was not updated since the initial POST request
+      ])
+    }
   }
 
   protected async internalExecute () {
     const path = getResumableUploadPath()
     const files = await readdir(path)
+      .then(files => files.filter(filename => !filename.includes(METAFILE_EXTNAME))) // exclude .META files, which are not updated at PUT
 
     logger.debug('Reading resumable video upload folder %s with %d files', path, files.length, lTags())
 
