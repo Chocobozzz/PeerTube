@@ -1,103 +1,42 @@
 import videojs from 'video.js'
-import { PlayerNetworkInfo } from '../peertube-videojs-typings'
-import { getAverageBandwidthInStore } from '../peertube-player-local-storage'
-import { bytes } from '../utils'
+import { PlayerNetworkInfo as EventPlayerNetworkInfo } from '../peertube-videojs-typings'
+import { bytes, secondsToTime } from '../utils'
 
 interface StatsCardOptions extends videojs.ComponentOptions {
-  videoUUID?: string,
-  videoIsLive?: boolean,
-  mode?: 'webtorrent' | 'p2p-media-loader'
+  videoUUID: string
+  videoIsLive: boolean
+  mode: 'webtorrent' | 'p2p-media-loader'
 }
 
-function getListTemplate (
-  options: StatsCardOptions,
-  player: videojs.Player,
-  args: {
-    playerNetworkInfo?: any
-    videoFile?: any
-    progress?: number
-  }) {
-  const { playerNetworkInfo, videoFile, progress } = args
+interface PlayerNetworkInfo {
+  downloadSpeed?: string
+  uploadSpeed?: string
+  totalDownloaded?: string
+  totalUploaded?: string
+  numPeers?: number
+  averageBandwidth?: string
 
-  const videoQuality: VideoPlaybackQuality = player.getVideoPlaybackQuality()
-  const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-  const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-  const pr = (window.devicePixelRatio || 1).toFixed(2)
-  const colorspace = videoFile?.metadata?.streams[0]['color_space'] !== "unknown"
-    ? videoFile?.metadata?.streams[0]['color_space']
-    : undefined
-
-  return `
-    <div>
-      <div>${player.localize('Video UUID')}</div>
-      <span>${options.videoUUID || ''}</span>
-    </div>
-    <div>
-      <div>Viewport / ${player.localize('Frames')}</div>
-      <span>${vw}x${vh}*${pr} / ${videoQuality.droppedVideoFrames} dropped of ${videoQuality.totalVideoFrames}</span>
-    </div>
-    <div${videoFile !== undefined ? '' : ' style="display: none;"'}>
-      <div>${player.localize('Resolution')}</div>
-      <span>${videoFile?.resolution.label + videoFile?.fps}</span>
-    </div>
-    <div>
-      <div>${player.localize('Volume')}</div>
-      <span>${~~(player.volume() * 100)}%${player.muted() ? ' (muted)' : ''}</span>
-    </div>
-    <div${videoFile !== undefined ? '' : ' style="display: none;"'}>
-      <div>${player.localize('Codecs')}</div>
-      <span>${videoFile?.metadata?.streams[0]['codec_name'] || 'avc1'}</span>
-    </div>
-    <div${videoFile !== undefined ? '' : ' style="display: none;"'}>
-      <div>${player.localize('Color')}</div>
-      <span>${colorspace || 'bt709'}</span>
-    </div>
-    <div${playerNetworkInfo.averageBandwidth !== undefined ? '' : ' style="display: none;"'}>
-      <div>${player.localize('Connection Speed')}</div>
-      <span>${playerNetworkInfo.averageBandwidth}</span>
-    </div>
-    <div${playerNetworkInfo.downloadSpeed !== undefined ? '' : ' style="display: none;"'}>
-      <div>${player.localize('Network Activity')}</div>
-      <span>${playerNetworkInfo.downloadSpeed} &dArr; / ${playerNetworkInfo.uploadSpeed} &uArr;</span>
-    </div>
-    <div${playerNetworkInfo.totalDownloaded !== undefined ? '' : ' style="display: none;"'}>
-      <div>${player.localize('Total Transfered')}</div>
-      <span>${playerNetworkInfo.totalDownloaded} &dArr; / ${playerNetworkInfo.totalUploaded} &uArr;</span>
-    </div>
-    <div${playerNetworkInfo.downloadedFromServer ? '' : ' style="display: none;"'}>
-      <div>${player.localize('Download Breakdown')}</div>
-      <span>${playerNetworkInfo.downloadedFromServer} from server · ${playerNetworkInfo.downloadedFromPeers} from peers</span>
-    </div>
-    <div${progress !== undefined && videoFile !== undefined ? '' : ' style="display: none;"'}>
-      <div>${player.localize('Buffer Health')}</div>
-      <span>${(progress * 100).toFixed(1)}% (${(progress * videoFile?.metadata?.format.duration).toFixed(1)}s)</span>
-    </div>
-    <div style="display: none;"> <!-- TODO: implement live latency measure -->
-      <div>${player.localize('Live Latency')}</div>
-      <span></span>
-    </div>
-  `
-}
-
-function getMainTemplate () {
-  return `
-    <button class="vjs-stats-close" tabindex=0 aria-label="Close stats" title="Close stats">[x]</button>
-    <div class="vjs-stats-list"></div>
-  `
+  downloadedFromServer?: string
+  downloadedFromPeers?: string
 }
 
 const Component = videojs.getComponent('Component')
 class StatsCard extends Component {
   options_: StatsCardOptions
+
   container: HTMLDivElement
+
   list: HTMLDivElement
   closeButton: HTMLElement
-  update: any
-  source: any
 
-  interval = 300
-  playerNetworkInfo: any = {}
-  statsForNerdsEvents = new videojs.EventTarget()
+  updateInterval: any
+
+  mode: 'webtorrent' | 'p2p-media-loader'
+
+  metadataStore: any = {}
+
+  intervalMs = 300
+  playerNetworkInfo: PlayerNetworkInfo = {}
 
   constructor (player: videojs.Player, options: StatsCardOptions) {
     super(player, options)
@@ -106,7 +45,7 @@ class StatsCard extends Component {
   createEl () {
     const container = super.createEl('div', {
       className: 'vjs-stats-content',
-      innerHTML: getMainTemplate()
+      innerHTML: this.getMainTemplate()
     }) as HTMLDivElement
     this.container = container
     this.container.style.display = 'none'
@@ -116,12 +55,10 @@ class StatsCard extends Component {
 
     this.list = this.container.getElementsByClassName('vjs-stats-list')[0] as HTMLDivElement
 
-    console.log(this.player_.qualityLevels())
-
-    this.player_.on('p2pInfo', (event: any, data: PlayerNetworkInfo) => {
+    this.player_.on('p2pInfo', (event: any, data: EventPlayerNetworkInfo) => {
       if (!data) return // HTTP fallback
 
-      this.source = data.source
+      this.mode = data.source
 
       const p2pStats = data.p2p
       const httpStats = data.http
@@ -131,7 +68,7 @@ class StatsCard extends Component {
       this.playerNetworkInfo.totalDownloaded = bytes(p2pStats.downloaded + httpStats.downloaded).join(' ')
       this.playerNetworkInfo.totalUploaded = bytes(p2pStats.uploaded + httpStats.uploaded).join(' ')
       this.playerNetworkInfo.numPeers = p2pStats.numPeers
-      this.playerNetworkInfo.averageBandwidth = bytes(getAverageBandwidthInStore() || p2pStats.downloaded + httpStats.downloaded).join(' ')
+      this.playerNetworkInfo.averageBandwidth = bytes(data.bandwidthEstimate).join(' ') + '/s'
 
       if (data.source === 'p2p-media-loader') {
         this.playerNetworkInfo.downloadedFromServer = bytes(httpStats.downloaded).join(' ')
@@ -143,36 +80,186 @@ class StatsCard extends Component {
   }
 
   toggle () {
-    this.update
+    this.updateInterval
       ? this.hide()
       : this.show()
   }
 
-  show (options?: StatsCardOptions) {
-    if (options) this.options_ = options
-
-    let metadata = {}
-
+  show () {
     this.container.style.display = 'block'
-    this.update = setInterval(async () => {
+    this.updateInterval = setInterval(async () => {
       try {
-        if (this.source === 'webtorrent') {
-          const progress = this.player_.webtorrent().getTorrent()?.progress
-          const videoFile = this.player_.webtorrent().getCurrentVideoFile()
-          videoFile.metadata = metadata[videoFile.fileUrl] = videoFile.metadata || metadata[videoFile.fileUrl] || videoFile.metadataUrl && await fetch(videoFile.metadataUrl).then(res => res.json())
-          this.list.innerHTML = getListTemplate(this.options_, this.player_, { playerNetworkInfo: this.playerNetworkInfo, videoFile, progress })
-        } else {
-          this.list.innerHTML = getListTemplate(this.options_, this.player_, { playerNetworkInfo: this.playerNetworkInfo })
-        }
-      } catch (e) {
-        clearInterval(this.update)
+        const options = this.mode === 'webtorrent'
+          ? await this.buildWebTorrentOptions()
+          : await this.buildHLSOptions()
+
+        this.list.innerHTML = this.getListTemplate(options)
+      } catch (err) {
+        console.error('Cannot update stats.', err)
+        clearInterval(this.updateInterval)
       }
-    }, this.interval)
+    }, this.intervalMs)
   }
 
   hide () {
-    clearInterval(this.update)
+    clearInterval(this.updateInterval)
     this.container.style.display = 'none'
+  }
+
+  private async buildHLSOptions () {
+    const p2pMediaLoader = this.player_.p2pMediaLoader()
+    const level = p2pMediaLoader.getCurrentLevel()
+
+    const codecs = level?.videoCodec || level?.audioCodec
+      ? `${level?.videoCodec || ''} / ${level?.audioCodec || ''}`
+      : undefined
+
+    const resolution = `${level?.height}p${level?.attrs['FRAME-RATE'] || ''}`
+    const buffer = this.timeRangesToString(this.player().buffered())
+
+    let progress: number
+    let latency: string
+
+    if (this.options_.videoIsLive) {
+      latency = secondsToTime(p2pMediaLoader.getLiveLatency())
+    } else {
+      progress = this.player().bufferedPercent()
+    }
+
+    return {
+      playerNetworkInfo: this.playerNetworkInfo,
+      resolution,
+      codecs,
+      buffer,
+      latency,
+      progress
+    }
+  }
+
+  private async buildWebTorrentOptions () {
+    const videoFile = this.player_.webtorrent().getCurrentVideoFile()
+
+    if (!this.metadataStore[videoFile.fileUrl]) {
+      this.metadataStore[videoFile.fileUrl] = await fetch(videoFile.metadataUrl).then(res => res.json())
+    }
+
+    const metadata = this.metadataStore[videoFile.fileUrl]
+
+    let colorSpace = 'unknown'
+    let codecs = 'unknown'
+
+    if (metadata?.streams[0]) {
+      const stream = metadata.streams[0]
+
+      colorSpace = stream['color_space'] !== 'unknown'
+        ? stream['color_space']
+        : 'bt709'
+
+      codecs = stream['codec_name'] || 'avc1'
+    }
+
+    const resolution = videoFile?.resolution.label + videoFile?.fps
+    const buffer = this.timeRangesToString(this.player().buffered())
+    const progress = this.player_.webtorrent().getTorrent()?.progress
+
+    return {
+      playerNetworkInfo: this.playerNetworkInfo,
+      progress,
+      colorSpace,
+      codecs,
+      resolution,
+      buffer
+    }
+  }
+
+  private getListTemplate (options: {
+    playerNetworkInfo: PlayerNetworkInfo
+    progress: number
+    codecs: string
+    resolution: string
+    buffer: string
+
+    latency?: string
+    colorSpace?: string
+  }) {
+    const { playerNetworkInfo, progress, colorSpace, codecs, resolution, buffer, latency } = options
+    const player = this.player()
+
+    const videoQuality: VideoPlaybackQuality = player.getVideoPlaybackQuality()
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+    const pr = (window.devicePixelRatio || 1).toFixed(2)
+    const frames = `${vw}x${vh}*${pr} / ${videoQuality.droppedVideoFrames} dropped of ${videoQuality.totalVideoFrames}`
+
+    const duration = player.duration()
+
+    let volume = `${player.volume() * 100}`
+    if (player.muted()) volume += ' (muted)'
+
+    const networkActivity = playerNetworkInfo.downloadSpeed
+      ? `${playerNetworkInfo.downloadSpeed} &dArr; / ${playerNetworkInfo.uploadSpeed} &uArr;`
+      : undefined
+
+    const totalTransferred = playerNetworkInfo.totalDownloaded
+      ? `${playerNetworkInfo.totalDownloaded} &dArr; / ${playerNetworkInfo.totalUploaded} &uArr;`
+      : undefined
+    const downloadBreakdown = playerNetworkInfo.downloadedFromServer
+      ? `${playerNetworkInfo.downloadedFromServer} from server · ${playerNetworkInfo.downloadedFromPeers} from peers`
+      : undefined
+
+    const bufferProgress = progress !== undefined
+      ? `${(progress * 100).toFixed(1)}% (${(progress * duration).toFixed(1)}s)`
+      : undefined
+
+    return `
+      ${this.buildElement(player.localize('Video UUID'), this.options_.videoUUID)}
+
+      ${this.buildElement(player.localize('Viewport / Frames'), frames)}
+
+      ${this.buildElement(player.localize('Resolution'), resolution)}
+
+      ${this.buildElement(player.localize('Volume'), volume)}
+
+      ${this.buildElement(player.localize('Codecs'), codecs)}
+      ${this.buildElement(player.localize('Color'), colorSpace)}
+
+      ${this.buildElement(player.localize('Connection Speed'), playerNetworkInfo.averageBandwidth)}
+
+      ${this.buildElement(player.localize('Network Activity'), networkActivity)}
+      ${this.buildElement(player.localize('Total Transfered'), totalTransferred)}
+      ${this.buildElement(player.localize('Download Breakdown'), downloadBreakdown)}
+
+      ${this.buildElement(player.localize('Buffer Progress'), bufferProgress)}
+      ${this.buildElement(player.localize('Buffer State'), buffer)}
+
+      ${this.buildElement(player.localize('Live Latency'), latency)}
+    `
+  }
+
+  private getMainTemplate () {
+    return `
+      <button class="vjs-stats-close" tabindex=0 aria-label="Close stats" title="Close stats">[x]</button>
+      <div class="vjs-stats-list"></div>
+    `
+  }
+
+  private buildElement (label: string, value?: string) {
+    if (!value) return ''
+
+    return `<div><div>${label}</div><span>${value}</span></div>`
+  }
+
+  private timeRangesToString (r: videojs.TimeRange) {
+    let result = ''
+
+    for (let i = 0; i < r.length; i++) {
+      const start = Math.floor(r.start(i))
+      const end = Math.floor(r.end(i))
+
+      result += `[${secondsToTime(start)}, ${secondsToTime(end)}] `
+    }
+
+    return result
   }
 }
 

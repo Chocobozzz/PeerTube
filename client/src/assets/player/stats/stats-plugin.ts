@@ -6,7 +6,7 @@ const Plugin = videojs.getPlugin('plugin')
 class StatsForNerdsPlugin extends Plugin {
   private statsCard: StatsCard
 
-  constructor (player: videojs.Player, options: Partial<StatsCardOptions> = {}) {
+  constructor (player: videojs.Player, options: StatsCardOptions) {
     const settings = {
       ...options
     }
@@ -22,8 +22,8 @@ class StatsForNerdsPlugin extends Plugin {
     player.addChild(this.statsCard, settings)
   }
 
-  show (options?: StatsCardOptions) {
-    this.statsCard.show(options)
+  show () {
+    this.statsCard.show()
   }
 }
 
