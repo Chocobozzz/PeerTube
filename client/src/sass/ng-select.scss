@@ -36,6 +36,11 @@ $ng-select-value-font-size: 15px;
 
   &.ng-select-single .ng-value-container .ng-value {
     color: pvar(--inputForegroundColor);
+
+    .ng-value-label {
+      display: flex;
+      align-items: center;
+    }
   }
 
   &.ng-select-multiple .ng-select-container .ng-value-container {
