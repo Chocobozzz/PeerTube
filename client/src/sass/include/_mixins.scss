@@ -830,17 +830,9 @@
     --chip-padding: .2rem .3rem;
   }
 
-  .avatar {
+  ::ng-deep .avatar {
     margin-left: -.4rem;
     margin-right: .2rem;
-    height: $avatar-height;
-    width: $avatar-height;
-
-    border-radius: 50%;
-    display: inline-block;
-    line-height: 1.25;
-    position: relative;
-    vertical-align: middle;
   }
 
   &.two-lines {

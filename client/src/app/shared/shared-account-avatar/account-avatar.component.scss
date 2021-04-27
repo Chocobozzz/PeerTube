@@ -5,6 +5,10 @@
   @include avatar(25px);
 }
 
+.avatar-32 {
+  @include avatar(32px);
+}
+
 .avatar-34 {
   @include avatar(34px);
 }
@@ -19,4 +23,54 @@
 
 .avatar-120 {
   @include avatar(120px);
+
+  &.initial {
+    font-size: 46px;
+  }
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.initial {
+  background-color: #3C2109;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  border-radius: 50%;
+
+  &.blue {
+    background-color: #009FD4;
+  }
+
+  &.green {
+    background-color: #00AA55;
+  }
+
+  &.purple {
+    background-color: #B381B3;
+  }
+
+  &.gray {
+    background-color: #939393;
+  }
+
+  &.yellow {
+    background-color: #AA8F00;
+  }
+
+  &.orange {
+    background-color: #D47500;
+  }
+
+  &.red {
+    background-color: #E76E3C;
+  }
+
+  &.dark-blue {
+    background-color: #0A3055;
+  }
 }
