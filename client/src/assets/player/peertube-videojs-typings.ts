@@ -1,4 +1,5 @@
-import { Config, Level } from 'hls.js'
+import * as Hlsjs from 'hls.js'
+import { HlsConfig } from 'hls.js'
 import videojs from 'video.js'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
 import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
@@ -56,10 +57,10 @@ export interface VideoJSTechHLS extends videojs.Tech {
 }
 
 export interface HlsjsConfigHandlerOptions {
-  hlsjsConfig?: Config & { cueHandler: any }// FIXME: typings
+  hlsjsConfig?: HlsConfig & { cueHandler: any }// FIXME: typings
   captionConfig?: any // FIXME: typings
 
-  levelLabelHandler?: (level: Level) => string
+  levelLabelHandler?: (level: Hlsjs.Level) => string
 }
 
 type QualityLevelRepresentation = {
