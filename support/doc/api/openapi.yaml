@@ -115,15 +115,22 @@ tags:
   - name: Video
     description: |
       Operations dealing with listing, uploading, fetching or modifying videos.
-  - name: Search
+  - name: Video Upload
     description: |
-      The search helps to find _videos_ or _channels_ from within the instance and beyond.
-      Videos from other instances federated by the instance (that is, instances
-      followed by the instance) can be found via keywords and other criteria of
-      the advanced search.
+      Operations dealing with uploading video or audio. PeerTube supports two upload modes:
+        
+      - [_legacy_](#tag/Video-Upload/paths/~1videos~1upload/post), where the video file is sent in a single request
+      - [_resumable_](#tag/Video-Upload/paths/~1videos~1upload-resumable/post), where the video file is sent in chunks
 
-      Administrators can also enable the use of a remote search system, indexing
-      videos and channels not could be not federated by the instance.
+      You can upload videos more reliably by using the resumable variant. Its protocol lets
+      you resume an upload operation after a network interruption or other transmission failure,
+      saving time and bandwidth in the event of network failures.
+
+      Favor using resumable uploads in any of the following cases:
+      - You are transferring large files
+      - The likelihood of a network interruption is high
+      - Uploads are originating from a device with a low-bandwidth or unstable Internet connection,
+        such as a mobile device
   - name: Video Comments
     description: >
       Operations dealing with comments to a video. Comments are organized in
@@ -145,6 +152,20 @@ tags:
   - name: Feeds
     description: >
       Server syndication feeds
+  - name: Search
+    description: |
+      The search helps to find _videos_ or _channels_ from within the instance and beyond.
+      Videos from other instances federated by the instance (that is, instances
+      followed by the instance) can be found via keywords and other criteria of
+      the advanced search.
+
+      Administrators can also enable the use of a remote search system, indexing
+      videos and channels not could be not federated by the instance.
+  - name: Video Mirroring
+    description: |
+      PeerTube instances can mirror videos from one another, and help distribute some videos.
+
+      For importing videos as your own, refer to [video imports](#tag/Video-Upload/paths/~1videos~1imports/post).
 x-tagGroups:
   - name: Accounts
     tags:
@@ -157,6 +178,7 @@ x-tagGroups:
   - name: Videos
     tags:
       - Video
+      - Video Upload
       - Video Captions
       - Video Channels
       - Video Comments
@@ -1318,10 +1340,12 @@ paths:
   /videos/upload:
     post:
       summary: Upload a video
+      description: Uses a single request to upload a video.
       security:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
       responses:
         '200':
           description: successful operation
@@ -1396,6 +1420,7 @@ paths:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
       parameters:
         - name: X-Upload-Content-Length
           in: header
@@ -1403,13 +1428,15 @@ paths:
             type: number
             example: 2469036
           required: true
-          description: Length in bytes of the file to be transferred
+          description: Number of bytes that will be uploaded in subsequent requests. Set this value to the size of the file you are uploading.
         - name: X-Upload-Content-Type
           in: header
           schema:
             type: string
             format: mimetype
             example: video/mp4
+          required: true
+          description: MIME type of the file that you are uploading. Depending on your instance settings, acceptable values might vary.
       requestBody:
         content:
           application/json:
@@ -1433,21 +1460,24 @@ paths:
         '400':
           description: invalid file field, schedule date or parameter
         '413':
-          description: video file too large, due to quota or absolute max file size
+          description: video file too large, due to quota, absolute max file size or concurrent partial upload limit
         '415':
           description: video type unsupported
     put:
       summary: Send chunk for the resumable upload of a video
-      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue the upload of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the upload of a video
       security:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
       parameters:
         - name: upload_id
           in: path
           required: true
-          description: created upload id to proceed with
+          description: |
+            Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
+            not valid anymore and you need to initialize a new upload.
           schema:
             type: string
         - name: Content-Range
@@ -1456,12 +1486,25 @@ paths:
             type: string
             example: bytes 0-262143/2469036
           required: true
+          description: |
+            Specifies the bytes in the file that the request is uploading.
+
+            For example, a value of `bytes 0-262143/1000000` shows that the request is sending the first
+            262144 bytes (256 x 1024) in a 2,469,036 byte file.
         - name: Content-Length
           in: header
           schema:
             type: number
             example: 262144
           required: true
+          description: |
+            Size of the chunk that the request is sending.
+
+            The chunk size __must be a multiple of 256 KB__, and unlike [Google Resumable](https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol)
+            doesn't mandate for chunks to have the same size throughout the upload sequence.
+
+            Remember that larger chunks are more efficient. PeerTube's web client uses chunks varying from
+            1048576 bytes (~1MB) and increases or reduces size depending on connection health.
       requestBody:
         content:
           application/octet-stream:
@@ -1497,17 +1540,20 @@ paths:
         '422':
           description: video unreadable
     delete:
-      summary: Cancel the resumable upload of a video
+      summary: Cancel the resumable upload of a video, deleting any data uploaded so far
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
       security:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
       parameters:
         - name: upload_id
           in: path
           required: true
-          description: created upload id to proceed with
+          description: |
+            Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
+            not valid anymore and the upload session has already been deleted with its data ;-)
           schema:
             type: string
         - name: Content-Length
@@ -1532,6 +1578,7 @@ paths:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
       requestBody:
         content:
           multipart/form-data:
@@ -1718,7 +1765,7 @@ paths:
 
   /videos/live/{id}:
     get:
-      summary: Get a live information
+      summary: Get information about a live
       security:
         - OAuth2: []
       tags:
@@ -1734,7 +1781,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LiveVideoResponse'
     put:
-      summary: Update a live information
+      summary: Update information about a live
       security:
         - OAuth2: []
       tags:
@@ -5177,6 +5224,9 @@ components:
                   example: 37
     VideoUploadRequestCommon:
       properties:
+        name:
+          description: Video name
+          type: string
         channelId:
           description: Channel id that will contain this video
           type: integer
@@ -5206,9 +5256,6 @@ components:
         nsfw:
           description: Whether or not this video contains sensitive content
           type: boolean
-        name:
-          description: Video name
-          type: string
         tags:
           description: Video tags (maximum 5 tags each between 2 and 30 characters)
           type: array
