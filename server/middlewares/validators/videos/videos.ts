@@ -107,6 +107,7 @@ const videosAddResumableValidator = [
     const user = res.locals.oauth.token.User
     const file: UploadxFile & { duration: number, path: string, filename: string } = req.body
     file.path = getResumableUploadPath(file.id)
+    file.filename = file.metadata.filename
 
     if (
       !file.metadata.isPreviewForAudio &&
@@ -150,6 +151,10 @@ const videosAddResumableValidator = [
  */
 /* eslint-enable max-len */
 const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
+  body('filename')
+    .isString()
+    .exists()
+    .withMessage('Should have a valid filename'),
   body('name')
     .trim()
     .custom(isVideoNameValid)

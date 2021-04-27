@@ -408,7 +408,7 @@ async function uploadVideo (
                                     .set('Authorization', 'Bearer ' + accessToken)
                                     .set('X-Upload-Content-Type', 'video/mp4')
                                     .set('X-Upload-Content-Length', size.toString())
-                                    .send(attributes)
+                                    .send({ ...attributes, filename: attributes.fixture })
                                     .expect(HttpStatusCode.CREATED_201)
                                     .expect(res => res.header['location'] !== undefined)
     const pathUploadId = initializeSession.header['location'].split('?')[1]

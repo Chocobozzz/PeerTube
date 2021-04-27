@@ -86,7 +86,7 @@ describe('Test audio only video transcoding', function () {
     const resUpload = await uploadVideo(
       servers[0].url,
       servers[0].accessToken,
-      { name: 'audio only.webm' },
+      { name: 'audio only resumable' },
       HttpStatusCode.OK_200,
       'resumable'
     )

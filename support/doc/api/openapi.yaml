@@ -1414,7 +1414,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VideoUploadRequestCommon'
+              $ref: '#/components/schemas/VideoUploadRequestResumable'
       responses:
         '200':
           description: file already exists, send a [`resume`](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) request instead
@@ -5253,6 +5253,17 @@ components:
               description: Video preview file
               type: string
               format: binary
+    VideoUploadRequestResumable:
+      allOf:
+        - $ref: '#/components/schemas/VideoUploadRequestCommon'
+        - type: object
+          required:
+            - filename
+          properties:
+            filename:
+              description: Video filename including extension
+              type: string
+              format: filename
     VideoUploadResponse:
       properties:
         video:

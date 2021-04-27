@@ -491,7 +491,7 @@ describe('Test a single server', function () {
     this.timeout(10000)
 
     const videoAttributes = {
-      name: 'resumable video.mp4',
+      name: 'resumable video',
       fixture: 'video_short.mp4'
     }
     const res = await uploadVideo(server.url, server.accessToken, videoAttributes, HttpStatusCode.OK_200, 'resumable')
