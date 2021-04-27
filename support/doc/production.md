@@ -66,6 +66,7 @@ Open the peertube directory, create a few required directories
 ```
 $ cd /var/www/peertube
 $ sudo -u peertube mkdir config storage versions
+$ sudo -u peertube chmod 750 config/
 ```
 
 Download the latest version of the Peertube client, unzip it and remove the zip
