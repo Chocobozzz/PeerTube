@@ -18,7 +18,6 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
 
   ownerAccount?: ServerAccount
   ownerBy?: string
-  ownerAvatarUrl?: string
 
   videosCount?: number
 
@@ -67,7 +66,6 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     if (hash.ownerAccount) {
       this.ownerAccount = hash.ownerAccount
       this.ownerBy = Actor.CREATE_BY_STRING(hash.ownerAccount.name, hash.ownerAccount.host)
-      this.ownerAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.ownerAccount)
     }
 
     this.updateComputedAttributes()
@@ -94,7 +92,6 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   }
 
   updateComputedAttributes () {
-    this.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this)
     this.bannerUrl = VideoChannel.GET_ACTOR_BANNER_URL(this)
   }
 }

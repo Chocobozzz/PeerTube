@@ -10,7 +10,6 @@ export class VideoAvatarChannelComponent implements OnInit {
   @Input() video: Video
   @Input() byAccount: string
 
-  @Input() size: 'md' | 'sm' = 'md'
   @Input() genericChannel: boolean
 
   channelLinkTitle = ''

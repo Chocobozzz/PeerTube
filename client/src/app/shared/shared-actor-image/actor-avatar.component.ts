@@ -73,7 +73,7 @@ export class ActorAvatarComponent {
 
   get avatarUrl () {
     if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account)
-    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.account)
+    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.channel)
 
     return ''
   }

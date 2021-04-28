@@ -24,8 +24,6 @@ export class Account extends Actor implements ServerAccount {
   constructor (hash: ServerAccount) {
     super(hash)
 
-    this.updateComputedAttributes()
-
     this.displayName = hash.displayName
     this.description = hash.description
     this.userId = hash.userId
@@ -40,16 +38,9 @@ export class Account extends Actor implements ServerAccount {
 
   updateAvatar (newAvatar: ActorImage) {
     this.avatar = newAvatar
-
-    this.updateComputedAttributes()
   }
 
   resetAvatar () {
     this.avatar = null
-    this.avatarUrl = null
-  }
-
-  private updateComputedAttributes () {
-    this.avatarUrl = Account.GET_ACTOR_AVATAR_URL(this)
   }
 }

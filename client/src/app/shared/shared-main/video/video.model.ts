@@ -20,8 +20,6 @@ export class Video implements VideoServerModel {
   byVideoChannel: string
   byAccount: string
 
-  videoChannelAvatarUrl: string
-
   createdAt: Date
   updatedAt: Date
   publishedAt: Date
@@ -143,7 +141,6 @@ export class Video implements VideoServerModel {
 
     this.byAccount = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
     this.byVideoChannel = Actor.CREATE_BY_STRING(hash.channel.name, hash.channel.host)
-    this.videoChannelAvatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this.channel)
 
     this.category.label = peertubeTranslate(this.category.label, translations)
     this.licence.label = peertubeTranslate(this.licence.label, translations)

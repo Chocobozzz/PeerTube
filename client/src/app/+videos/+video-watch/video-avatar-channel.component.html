@@ -1,21 +1,11 @@
-<div class="wrapper" [ngClass]="'avatar-' + size">
-  <ng-container *ngIf="!isChannelAvatarNull() && !genericChannel">
-    <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
-      <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" class="channel-avatar" />
-    </a>
+<div class="wrapper" [ngClass]="{ 'generic-channel': genericChannel }">
+  <my-actor-avatar
+    class="channel" [channel]="video.channel"
+    [internalHref]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle"
+  ></my-actor-avatar>
 
-    <my-actor-avatar [account]="video.account" [title]="accountLinkTitle" [internalHref]="[ '/accounts', video.byAccount ]"></my-actor-avatar>
-</ng-container>
-
-  <ng-container *ngIf="!isChannelAvatarNull() && genericChannel">
-    <my-actor-avatar [account]="video.account" [title]="accountLinkTitle" [internalHref]="[ '/accounts', video.byAccount ]"></my-actor-avatar>
-
-    <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
-      <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" class="channel-avatar" />
-    </a>
-  </ng-container>
-
-  <ng-container *ngIf="isChannelAvatarNull()">
-    <my-actor-avatar [account]="video.account" [title]="accountLinkTitle" [internalHref]="[ '/accounts', video.byAccount ]"></my-actor-avatar>
-  </ng-container>
+  <my-actor-avatar
+    class="account" [account]="video.account"
+    [internalHref]="[ '/accounts', video.byAccount ]" [title]="accountLinkTitle">
+  </my-actor-avatar>
 </div>

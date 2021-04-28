@@ -15,7 +15,6 @@ export abstract class Actor implements ServerActor {
   updatedAt: Date | string
 
   avatar: ActorImage
-  avatarUrl: string
 
   isLocal: boolean
 

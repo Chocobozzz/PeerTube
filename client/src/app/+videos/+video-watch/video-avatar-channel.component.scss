@@ -1,44 +1,42 @@
 @import '_mixins';
 
-.wrapper {
-  $avatar-size: 35px;
+@mixin main {
+  @include actor-avatar-size(35px);
+}
 
-  width: $avatar-size;
-  height: $avatar-size;
+@mixin secondary {
+  height: 60%;
+  width: 60%;
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.wrapper {
+  @include actor-avatar-size(35px);
+
   position: relative;
   margin-right: 5px;
   margin-bottom: 5px;
 
-  &.avatar-sm {
-    width: 28px;
-    height: 28px;
-    margin-bottom: 3px;
-  }
+  &.generic-channel {
+    .account {
+      @include main();
+    }
 
-  a {
-    @include disable-outline;
-  }
-
-  a img {
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
-    border-radius: 5px;
-
-    &:not(.channel-avatar) {
-      border-radius: 50%;
+    .channel {
+      display: none !important;
     }
   }
 
-  a:nth-of-type(2) img {
-    height: 60%;
-    width: 60%;
-    border: 2px solid pvar(--mainBackgroundColor);
-    transform: translateX(15%);
-    position: relative;
-    background-color: pvar(--mainBackgroundColor);
+  &:not(.generic-channel) {
+    .account {
+      @include secondary();
+    }
+
+    .channel {
+      @include main();
+    }
   }
 }
