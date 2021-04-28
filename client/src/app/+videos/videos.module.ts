@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { SharedActorImageModule } from '@app/shared/shared-actor-image/shared-actor-image.module'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
@@ -21,7 +22,8 @@ import { VideosComponent } from './videos.component'
     SharedFormModule,
     SharedVideoMiniatureModule,
     SharedUserSubscriptionModule,
-    SharedGlobalIconModule
+    SharedGlobalIconModule,
+    SharedActorImageModule
   ],
 
   declarations: [

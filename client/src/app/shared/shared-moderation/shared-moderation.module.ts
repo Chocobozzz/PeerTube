@@ -13,7 +13,7 @@ import { UserBanModalComponent } from './user-ban-modal.component'
 import { UserModerationDropdownComponent } from './user-moderation-dropdown.component'
 import { VideoBlockComponent } from './video-block.component'
 import { VideoBlockService } from './video-block.service'
-import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-account-avatar.module'
+import { SharedActorImageModule } from '../shared-actor-image/shared-actor-image.module'
 
 @NgModule({
   imports: [
@@ -21,7 +21,7 @@ import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-accou
     SharedFormModule,
     SharedGlobalIconModule,
     SharedVideoCommentModule,
-    SharedAccountAvatarModule
+    SharedActorImageModule
   ],
 
   declarations: [

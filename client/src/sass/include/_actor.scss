@@ -25,8 +25,8 @@
   grid-column: 1;
   margin-bottom: 30px;
 
-  .channel-avatar {
-    @include channel-avatar(120px);
+  .main-avatar {
+    @include actor-avatar-size(120px);
   }
 
   > div {
@@ -77,12 +77,8 @@
       font-size: 22px;
     }
 
-    .channel-avatar {
-      @include channel-avatar(80px);
-    }
-
-    .account-avatar {
-      @include avatar(120px);
+    .main-avatar {
+      @include actor-avatar-size(80px);
     }
   }
 }

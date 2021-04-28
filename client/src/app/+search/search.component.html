@@ -33,20 +33,15 @@
 
   <ng-container *ngFor="let result of results">
     <div *ngIf="isVideoChannel(result)" class="entry video-channel">
-      <a class="link-avatar" *ngIf="!isExternalChannelUrl()" [routerLink]="getChannelUrl(result)">
-        <img [src]="result.avatarUrl" alt="Avatar" />
-      </a>
 
-      <a class="link-avatar" *ngIf="isExternalChannelUrl()" [href]="getChannelUrl(result)" target="_blank">
-        <img [src]="result.avatarUrl" alt="Avatar" />
-      </a>
+      <my-actor-avatar [channel]="result" [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)"></my-actor-avatar>
 
       <div class="video-channel-info">
-        <a *ngIf="!isExternalChannelUrl()" [routerLink]="getChannelUrl(result)" class="video-channel-names">
+        <a *ngIf="!isExternalChannelUrl()" [routerLink]="getInternalChannelUrl(result)" class="video-channel-names">
           <ng-container *ngTemplateOutlet="aContent"></ng-container>
         </a>
 
-        <a *ngIf="isExternalChannelUrl()" [href]="getChannelUrl(result)" target="_blank" class="video-channel-names">
+        <a *ngIf="isExternalChannelUrl()" [href]="getExternalChannelUrl(result)" target="_blank" class="video-channel-names">
           <ng-container *ngTemplateOutlet="aContent"></ng-container>
         </a>
 

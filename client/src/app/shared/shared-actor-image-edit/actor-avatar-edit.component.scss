@@ -4,16 +4,8 @@
 .actor {
   display: flex;
 
-  img {
+  my-actor-avatar {
     margin-right: 15px;
-
-    &:not(.channel) {
-      @include avatar(100px);
-    }
-
-    &.channel {
-      @include channel-avatar(100px);
-    }
   }
 
   .actor-info {

@@ -1,32 +1,58 @@
 @import '_variables';
 @import '_mixins';
 
+.avatar {
+  --avatarSize: 100%;
+  --initialFontSize: 22px;
+
+  width: var(--avatarSize);
+  height: var(--avatarSize);
+  min-width: var(--avatarSize);
+  min-height: var(--avatarSize);
+
+  &.account {
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  &.channel {
+    border-radius: 5px;
+  }
+}
+
+.avatar-18 {
+  --avatarSize: 18px;
+  --initialFontSize: 13px;
+}
+
 .avatar-25 {
-  @include avatar(25px);
+  --avatarSize: 25px;
 }
 
 .avatar-32 {
-  @include avatar(32px);
+ --avatarSize: 32px;
 }
 
 .avatar-34 {
-  @include avatar(34px);
+ --avatarSize: 34px;
 }
 
 .avatar-36 {
-  @include avatar(36px);
+ --avatarSize: 36px;
 }
 
 .avatar-40 {
-  @include avatar(40px);
+ --avatarSize: 40px;
 }
 
-.avatar-120 {
-  @include avatar(120px);
+.avatar-100 {
+  --avatarSize: 100px;
+  --initialFontSize: 40px;
+ }
 
-  &.initial {
-    font-size: 46px;
-  }
+.avatar-120 {
+ --avatarSize: 120px;
+ --initialFontSize: 46px;
 }
 
 a:hover {
@@ -39,8 +65,7 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  border-radius: 50%;
+  font-size: var(--initialFontSize);
 
   &.blue {
     background-color: #009FD4;

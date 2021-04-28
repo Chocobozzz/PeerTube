@@ -10,7 +10,7 @@ import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedShareModal } from '@app/shared/shared-share-modal'
 import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-settings'
-import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
+import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
 import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
 import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-blocklist.component'
@@ -40,7 +40,7 @@ import { MyAccountComponent } from './my-account.component'
     SharedGlobalIconModule,
     SharedAbuseListModule,
     SharedShareModal,
-    SharedAccountAvatarModule,
+    SharedActorImageModule,
     SharedActorImageEditModule
   ],
 

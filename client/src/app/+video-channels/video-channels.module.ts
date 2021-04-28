@@ -10,7 +10,7 @@ import { VideoChannelPlaylistsComponent } from './video-channel-playlists/video-
 import { VideoChannelVideosComponent } from './video-channel-videos/video-channel-videos.component'
 import { VideoChannelsRoutingModule } from './video-channels-routing.module'
 import { VideoChannelsComponent } from './video-channels.component'
-import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
+import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
 
 @NgModule({
   imports: [
@@ -23,7 +23,7 @@ import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/share
     SharedUserSubscriptionModule,
     SharedGlobalIconModule,
     SharedSupportModal,
-    SharedAccountAvatarModule
+    SharedActorImageModule
   ],
 
   declarations: [

@@ -8,6 +8,7 @@ import { MyVideoChannelCreateComponent } from './my-video-channel-create.compone
 import { MyVideoChannelUpdateComponent } from './my-video-channel-update.component'
 import { MyVideoChannelsRoutingModule } from './my-video-channels-routing.module'
 import { MyVideoChannelsComponent } from './my-video-channels.component'
+import { SharedActorImageModule } from '@app/shared/shared-actor-image/shared-actor-image.module'
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { MyVideoChannelsComponent } from './my-video-channels.component'
     SharedMainModule,
     SharedFormModule,
     SharedGlobalIconModule,
-    SharedActorImageEditModule
+    SharedActorImageEditModule,
+    SharedActorImageModule
   ],
 
   declarations: [

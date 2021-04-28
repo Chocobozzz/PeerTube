@@ -22,9 +22,7 @@
 
 <div class="video-channels">
   <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
-    <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]">
-      <img [src]="videoChannel.avatarUrl" alt="Avatar" />
-    </a>
+    <my-actor-avatar [channel]="videoChannel" [internalHref]="[ '/video-channels', videoChannel.nameWithHost ]"></my-actor-avatar>
 
     <div class="video-channel-info">
       <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Channel page">

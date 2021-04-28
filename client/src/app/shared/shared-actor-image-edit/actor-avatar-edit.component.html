@@ -1,6 +1,6 @@
 <div class="actor" *ngIf="actor">
   <div class="d-flex">
-    <img [ngClass]="{ channel: isChannel() }" [src]="preview || actor.avatarUrl" alt="Avatar" />
+    <my-actor-avatar [channel]="getChannel()" [account]="getAccount()" [previewImage]="preview" size="100"></my-actor-avatar>
 
     <div class="actor-img-edit-container">
 
@@ -34,6 +34,7 @@
     <span for="avatarfile" i18n>Upload a new avatar</span>
     <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
   </div>
+
   <div class="dropdown-item c-hand" (click)="deleteAvatar()" (key.enter)="deleteAvatar()">
     <my-global-icon iconName="delete"></my-global-icon>
     <span i18n>Remove avatar</span>

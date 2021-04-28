@@ -138,6 +138,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       (this.commentTree?.hasDisplayedChildren) // Or this is a reply that have other replies
   }
 
+  isChild () {
+    return this.parentComments.length !== 0
+  }
+
   private getUserIfNeeded (account: Account) {
     if (!account.userId) return
     if (!this.authService.isLoggedIn()) return

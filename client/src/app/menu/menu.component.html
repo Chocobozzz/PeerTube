@@ -5,7 +5,7 @@
         <div>
           <div class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left" [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside">
             <div ngbDropdownToggle>
-              <my-account-avatar [account]="user.account" size="34"></my-account-avatar>
+              <my-actor-avatar [account]="user.account" size="34"></my-actor-avatar>
               <div class="logged-in-info">
                 <div class="logged-in-display-name">{{ user.account?.displayName }}</div>
 

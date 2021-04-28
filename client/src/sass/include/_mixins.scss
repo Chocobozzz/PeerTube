@@ -539,21 +539,12 @@
   }
 }
 
-@mixin avatar ($size) {
-  object-fit: cover;
-  border-radius: 50%;
+@mixin actor-avatar-size ($size) {
+  display: inline-block;
   width: $size;
   height: $size;
   min-width: $size;
   min-height: $size;
-}
-
-@mixin channel-avatar ($size) {
-  width: $size;
-  height: $size;
-  min-width: $size;
-  min-height: $size;
-  border-radius: 5px;
 }
 
 @mixin chevron ($size, $border-width) {
@@ -593,26 +584,6 @@
   font-weight: $font-bold;
   font-size: 110%;
   margin-bottom: 10px;
-}
-
-@mixin actor-owner {
-  @include disable-default-a-behaviour;
-
-  font-size: 13px;
-  margin-top: 4px;
-  color: pvar(--mainForegroundColor);
-
-  span:hover {
-    opacity: 0.8;
-  }
-
-  img {
-    @include avatar(18px);
-
-    margin-left: 7px;
-    position: relative;
-    top: -2px;
-  }
 }
 
 @mixin create-button {

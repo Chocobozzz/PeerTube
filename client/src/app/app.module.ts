@@ -24,7 +24,7 @@ import { SharedGlobalIconModule } from './shared/shared-icons'
 import { SharedInstanceModule } from './shared/shared-instance'
 import { SharedMainModule } from './shared/shared-main'
 import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings'
-import { SharedAccountAvatarModule } from './shared/shared-account-avatar/shared-account-avatar.module'
+import { SharedActorImageModule } from './shared/shared-actor-image/shared-actor-image.module'
 
 registerLocaleData(localeOc, 'oc')
 
@@ -60,7 +60,7 @@ registerLocaleData(localeOc, 'oc')
     SharedUserInterfaceSettingsModule,
     SharedGlobalIconModule,
     SharedInstanceModule,
-    SharedAccountAvatarModule,
+    SharedActorImageModule,
 
     MetaModule.forRoot({
       provide: MetaLoader,

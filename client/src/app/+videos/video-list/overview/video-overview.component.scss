@@ -49,9 +49,10 @@
         width: fit-content;
         align-items: center;
 
-        img {
-          @include channel-avatar(28px);
+        my-actor-avatar {
+          @include actor-avatar-size(28px);
 
+          font-size: initial;
           margin-right: 8px;
         }
       }

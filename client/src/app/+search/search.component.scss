@@ -5,7 +5,7 @@
   $image-size: min(130px, $video-img-width);
   $margin-size: ($video-img-width - $image-size) / 2; // So we have the same width than the video miniature
 
-  @include channel-avatar($image-size);
+  @include actor-avatar-size($image-size);
 
   margin: 0 $margin-size 0 $margin-size;
 }
@@ -53,10 +53,8 @@
   max-width: 800px;
 }
 
-.video-channel {
-  img {
-    @include build-channel-img-size($video-thumbnail-width);
-  }
+.video-channel my-actor-avatar {
+  @include build-channel-img-size($video-thumbnail-width);
 }
 
 .video-channel-info {
@@ -92,13 +90,11 @@
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto;
 
-    .link-avatar {
+    my-actor-avatar {
+      @include build-channel-img-size($video-thumbnail-medium-width);
+
       grid-column: 1;
       grid-row: 1 / -1;
-    }
-
-    img {
-      @include build-channel-img-size($video-thumbnail-medium-width);
     }
   }
 
@@ -115,7 +111,7 @@
 }
 
 @include on-mobile-main-col {
-  .video-channel img {
+  .video-channel my-actor-avatar {
     @include build-channel-img-size($video-thumbnail-small-width);
   }
 }

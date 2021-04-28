@@ -12,13 +12,8 @@ $more-button-width: 40px;
   width: calc(100% - #{$more-button-width});
 }
 
-my-account-avatar,
-.channel-avatar {
+my-actor-avatar {
   margin: 10px 10px 0 0;
-}
-
-.channel-avatar img{
-  @include channel-avatar(40px);
 }
 
 .video-miniature-created-at-views {

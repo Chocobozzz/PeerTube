@@ -10,7 +10,7 @@ import { AbuseDetailsComponent } from './abuse-details.component'
 import { AbuseListTableComponent } from './abuse-list-table.component'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
-import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-account-avatar.module'
+import { SharedActorImageModule } from '../shared-actor-image/shared-actor-image.module'
 
 @NgModule({
   imports: [
@@ -21,7 +21,7 @@ import { SharedAccountAvatarModule } from '../shared-account-avatar/shared-accou
     SharedModerationModule,
     SharedGlobalIconModule,
     SharedVideoCommentModule,
-    SharedAccountAvatarModule
+    SharedActorImageModule
   ],
 
   declarations: [

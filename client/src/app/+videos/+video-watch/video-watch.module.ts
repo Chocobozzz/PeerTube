@@ -20,7 +20,7 @@ import { TimestampRouteTransformerDirective } from './timestamp-route-transforme
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 import { VideoWatchComponent } from './video-watch.component'
-import { SharedAccountAvatarModule } from '../../shared/shared-account-avatar/shared-account-avatar.module'
+import { SharedActorImageModule } from '../../shared/shared-actor-image/shared-actor-image.module'
 import { VideoAvatarChannelComponent } from './video-avatar-channel.component'
 
 @NgModule({
@@ -39,7 +39,7 @@ import { VideoAvatarChannelComponent } from './video-avatar-channel.component'
     SharedShareModal,
     SharedVideoModule,
     SharedSupportModal,
-    SharedAccountAvatarModule
+    SharedActorImageModule
   ],
 
   declarations: [

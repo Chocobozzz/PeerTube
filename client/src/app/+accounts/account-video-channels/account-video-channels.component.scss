@@ -27,14 +27,12 @@
   grid-template-columns: auto auto 1fr;
   grid-template-rows: auto 1fr;
 
-  .avatar-link {
+  my-actor-avatar {
+    @include actor-avatar-size(75px);
+
     grid-column: 1;
     grid-row: 1 / 3;
-    margin-right: 30px;
-  }
-
-  img {
-    @include channel-avatar(75px);
+    margin-right: 15px;
   }
 
   a {

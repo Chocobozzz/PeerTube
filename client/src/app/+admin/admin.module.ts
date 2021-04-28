@@ -9,7 +9,7 @@ import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
-import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
+import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
 import {
@@ -51,7 +51,7 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     SharedGlobalIconModule,
     SharedAbuseListModule,
     SharedVideoCommentModule,
-    SharedAccountAvatarModule,
+    SharedActorImageModule,
     SharedActorImageEditModule,
 
     TableModule,

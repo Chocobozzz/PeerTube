@@ -1,12 +1,10 @@
-<div *ngIf="isCommentDisplayed()" class="root-comment">
+<div *ngIf="isCommentDisplayed()" class="root-comment" [ngClass]="{ 'is-child': isChild() }">
   <div class="left">
-    <my-account-avatar *ngIf="!comment.isDeleted" [href]="comment.account.url" [account]="comment.account"></my-account-avatar>
+    <my-actor-avatar *ngIf="!comment.isDeleted" [href]="comment.account.url" [account]="comment.account"></my-actor-avatar>
     <div class="vertical-border"></div>
   </div>
 
   <div class="right" [ngClass]="{ 'mb-3': firstInThread }">
-    <span *ngIf="comment.isDeleted" class="comment-avatar"></span>
-
     <div class="comment">
       <ng-container *ngIf="!comment.isDeleted">
         <div *ngIf="highlightedComment === true" class="highlighted-comment" i18n>Highlighted comment</div>
@@ -68,7 +66,7 @@
         [textValue]="redraftValue"
       ></my-video-comment-add>
 
-      <div *ngIf="commentTree" class="children">
+      <div *ngIf="commentTree">
         <div *ngFor="let commentChild of commentTree.children">
           <my-video-comment
             [comment]="commentChild.comment"

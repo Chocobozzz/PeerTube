@@ -132,10 +132,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     return 'internal'
   }
 
-  isExternalChannelUrl () {
-    return this.getVideoLinkType() === 'external'
-  }
-
   search () {
     forkJoin([
       this.getVideosObs(),
@@ -200,17 +196,33 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.results = this.results.filter(r => !this.isVideo(r) || r.id !== video.id)
   }
 
-  getChannelUrl (channel: VideoChannel) {
+  isExternalChannelUrl () {
+    return this.getVideoLinkType() === 'external'
+  }
+
+  getExternalChannelUrl (channel: VideoChannel) {
     // Same algorithm than videos
     if (this.getVideoLinkType() === 'external') {
       return channel.url
     }
 
-    if (this.getVideoLinkType() === 'internal') {
+    // lazy-load or internal
+    return undefined
+  }
+
+  getInternalChannelUrl (channel: VideoChannel) {
+    const linkType = this.getVideoLinkType()
+
+    if (linkType === 'internal') {
       return [ '/video-channels', channel.nameWithHost ]
     }
 
-    return [ '/search/lazy-load-channel', { url: channel.url } ]
+    if (linkType === 'lazy-load') {
+      return [ '/search/lazy-load-channel', { url: channel.url } ]
+    }
+
+    // external
+    return undefined
   }
 
   hideActions () {

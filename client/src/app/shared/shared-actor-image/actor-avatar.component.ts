@@ -1,0 +1,110 @@
+import { Component, Input } from '@angular/core'
+import { SafeResourceUrl } from '@angular/platform-browser'
+import { VideoChannel } from '../shared-main'
+import { Account } from '../shared-main/account/account.model'
+
+type ActorInput = {
+  name: string
+  avatar?: { url?: string, path: string }
+  url: string
+}
+
+@Component({
+  selector: 'my-actor-avatar',
+  styleUrls: [ './actor-avatar.component.scss' ],
+  templateUrl: './actor-avatar.component.html'
+})
+export class ActorAvatarComponent {
+  @Input() account: ActorInput
+  @Input() channel: ActorInput
+
+  @Input() previewImage: SafeResourceUrl
+
+  @Input() size: '18' | '25' | '32' | '34' | '36' | '40' | '100' | '120'
+
+  // Use an external link
+  @Input() href: string
+  // Use routerLink
+  @Input() internalHref: string | any[]
+
+  @Input() set title (value) {
+    this._title = value
+  }
+
+  private _title: string
+
+  get title () {
+    if (this._title) return this._title
+    if (this.account) return $localize`${this.account.name} (account page)`
+    if (this.channel) return $localize`${this.channel.name} (channel page)`
+
+    return ''
+  }
+
+  get alt () {
+    if (this.account) return $localize`Account avatar`
+    if (this.channel) return $localize`Channel avatar`
+
+    return ''
+  }
+
+  get class () {
+    const base = [ 'avatar' ]
+
+    if (this.size) base.push(`avatar-${this.size}`)
+
+    if (this.account) base.push('account')
+    else base.push('channel')
+
+    if (this.initial) {
+      base.push('initial')
+      base.push(this.getColorTheme())
+    }
+
+    return base
+  }
+
+  get defaultAvatarUrl () {
+    if (this.account) Account.GET_DEFAULT_AVATAR_URL()
+    if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL()
+
+    return ''
+  }
+
+  get avatarUrl () {
+    if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account)
+    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.account)
+
+    return ''
+  }
+
+  get initial () {
+    const name = this.account?.name
+    if (!name) return ''
+
+    return name.slice(0, 1)
+  }
+
+  hasActor () {
+    return !!this.account || !!this.channel
+  }
+
+  private getColorTheme () {
+    // Keep consistency with CSS
+    const themes = {
+      abc: 'blue',
+      def: 'green',
+      ghi: 'purple',
+      jkl: 'gray',
+      mno: 'yellow',
+      pqr: 'orange',
+      stv: 'red',
+      wxyz: 'dark-blue'
+    }
+
+    const theme = Object.keys(themes)
+                        .find(chars => chars.includes(this.initial))
+
+    return themes[theme]
+  }
+}

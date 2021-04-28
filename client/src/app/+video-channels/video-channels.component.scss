@@ -107,8 +107,8 @@
     display: flex;
     margin-bottom: 15px;
 
-    img {
-      @include avatar(48px);
+    .account-avatar {
+      @include actor-avatar-size(48px);
     }
 
     .actor-info {
@@ -289,8 +289,8 @@
         margin-top: -5px;
       }
 
-      img {
-        @include channel-avatar(64px);
+      .account-avatar {
+        @include actor-avatar-size(64px);
 
         margin: -30px 0 0 15px;
       }

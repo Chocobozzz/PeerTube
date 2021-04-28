@@ -8,9 +8,10 @@
     <div class="channel" *ngFor="let videoChannel of videoChannels">
 
       <div class="channel-avatar-row">
-        <a class="avatar-link" [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">
-          <img [src]="videoChannel.avatarUrl" alt="Avatar" />
-        </a>
+        <my-actor-avatar
+          [channel]="videoChannel" [internalHref]="getVideoChannelLink(videoChannel)"
+          i18n-title title="See this video channel"
+        ></my-actor-avatar>
 
         <h2>
           <a [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">

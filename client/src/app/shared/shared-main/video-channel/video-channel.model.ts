@@ -25,7 +25,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   viewsPerDay?: ViewsPerDate[]
 
   static GET_ACTOR_AVATAR_URL (actor: object) {
-    return Actor.GET_ACTOR_AVATAR_URL(actor) || this.GET_DEFAULT_AVATAR_URL()
+    return Actor.GET_ACTOR_AVATAR_URL(actor)
   }
 
   static GET_ACTOR_BANNER_URL (channel: ServerVideoChannel) {

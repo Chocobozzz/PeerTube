@@ -20,8 +20,8 @@ input[type=text] {
 
   padding-bottom: 0;
 
-  img {
-    @include channel-avatar(80px);
+  my-actor-avatar {
+    @include actor-avatar-size(80px);
 
     margin-right: 10px;
   }

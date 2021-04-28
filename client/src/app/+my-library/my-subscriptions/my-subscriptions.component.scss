@@ -8,8 +8,8 @@ input[type=text] {
 .video-channel {
   @include row-blocks;
 
-  img {
-    @include channel-avatar(80px);
+  > my-actor-avatar {
+    @include actor-avatar-size(80px);
 
     margin-right: 10px;
   }
@@ -40,9 +40,20 @@ input[type=text] {
 }
 
 .actor-owner {
-  @include actor-owner;
+  @include disable-default-a-behaviour;
 
-  margin-top: 0;
+  font-size: 13px;
+  color: pvar(--mainForegroundColor);
+
+  span:hover {
+    opacity: 0.8;
+  }
+
+  my-actor-avatar {
+    margin-left: 7px;
+    display: inline-block;
+    vertical-align: top;
+  }
 }
 
 .video-subscriptions-header {

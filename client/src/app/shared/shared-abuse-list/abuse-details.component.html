@@ -10,7 +10,7 @@
         <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
           class="chip"
         >
-          <my-account-avatar [account]="abuse.reporterAccount"></my-account-avatar>
+          <my-actor-avatar [account]="abuse.reporterAccount"></my-actor-avatar>
           <div>
             <span class="text-muted">{{ abuse.reporterAccount.nameWithHost }}</span>
           </div>
@@ -30,7 +30,7 @@
         <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
           class="chip"
         >
-          <my-account-avatar [account]="abuse.flaggedAccount"></my-account-avatar>
+          <my-actor-avatar [account]="abuse.flaggedAccount"></my-actor-avatar>
           <div>
             <span class="text-muted">{{ abuse.flaggedAccount ? abuse.flaggedAccount.nameWithHost : '' }}</span>
           </div>

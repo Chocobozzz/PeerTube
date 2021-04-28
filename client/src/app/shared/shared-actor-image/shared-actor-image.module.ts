@@ -2,7 +2,7 @@
 import { NgModule } from '@angular/core'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
-import { AccountAvatarComponent } from './account-avatar.component'
+import { ActorAvatarComponent } from './actor-avatar.component'
 
 @NgModule({
   imports: [
@@ -11,13 +11,13 @@ import { AccountAvatarComponent } from './account-avatar.component'
   ],
 
   declarations: [
-    AccountAvatarComponent
+    ActorAvatarComponent
   ],
 
   exports: [
-    AccountAvatarComponent
+    ActorAvatarComponent
   ],
 
   providers: [ ]
 })
-export class SharedAccountAvatarModule { }
+export class SharedActorImageModule { }
