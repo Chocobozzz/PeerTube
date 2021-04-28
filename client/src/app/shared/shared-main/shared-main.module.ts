@@ -17,7 +17,7 @@ import {
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
-import { AccountService } from './account'
+import { AccountService, ActorService } from './account'
 import {
   AutofocusDirective,
   BytesPipe,
@@ -160,6 +160,7 @@ import { VideoChannelService } from './video-channel'
     AUTH_INTERCEPTOR_PROVIDER,
 
     AccountService,
+    ActorService,
 
     UserHistoryService,
     UserNotificationService,

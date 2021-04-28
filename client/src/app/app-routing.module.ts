@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
-import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
+import { RouteReuseStrategy, RouterModule, Routes, UrlMatchResult, UrlSegment } from '@angular/router'
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 import { MenuGuards } from '@app/core/routing/menu-guard.service'
 import { POSSIBLE_LOCALES } from '@shared/core-utils/i18n'
 import { PreloadSelectedModulesList } from './core'
 import { EmptyComponent } from './empty.component'
-import { ActorsComponent } from './+actors/actors.component'
+import { RootComponent } from './root.component'
 
 const routes: Routes = [
   {
@@ -75,8 +75,20 @@ const routes: Routes = [
     redirectTo: 'video-channels'
   },
   {
-    path: ':actorName',
-    component: ActorsComponent
+    matcher: (url): UrlMatchResult => {
+      // Matches /@:actorName
+      if (url.length === 1 && url[0].path.match(/^@[\w]+$/gm)) {
+        return {
+          consumed: url,
+          posParams: {
+            actorName: new UrlSegment(url[0].path.substr(1), {})
+          }
+        }
+      }
+
+      return null
+    },
+    component: RootComponent
   },
   {
     path: '',
