@@ -59,7 +59,7 @@ import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 import { getResumableUploadPath, deleteFileAsync as clearUploadFile } from '../../../helpers/utils'
-import { DiskStorage, File as UploadxFile, METAFILE_EXTNAME } from '@uploadx/core'
+import { DiskStorage, File as UploadxFile } from '@uploadx/core'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -118,14 +118,18 @@ const videosAddResumableValidator = [
       !await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)
     ) return cleanup()
 
-    if (!await isVideoAccepted(req, res, file as any)) return cleanup()
-
     if (file.metadata.isPreviewForAudio) {
+      // we move preview to and identifiable path
       const filename = `${file.id}-preview`
       file.filename = filename
       await move(file.path, getResumableUploadPath(filename))
-      return res.json({ filename })
+      return res.status(HttpStatusCode.CREATED_201)
+                .json({
+                  previewfile: filename // return the filename, which the user will include under that key in the audio upload
+                })
     }
+
+    if (!await isVideoAccepted(req, res, file as any)) return cleanup()
 
     try {
       if (!file.duration) await addDurationToVideo(file)

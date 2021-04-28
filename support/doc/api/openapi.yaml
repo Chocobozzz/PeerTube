@@ -101,7 +101,7 @@ tags:
       Redundancy is part of the inter-server solidarity that PeerTube fosters.
       Manage the list of instances you wish to help by seeding their videos according
       to the policy of video selection of your choice. Note that you have a similar functionality
-      to mirror individual videos, see `Video Mirroring`.
+      to mirror individual videos, see [video mirroring](#tag/Video-Mirroring).
     externalDocs:
       url: https://docs.joinpeertube.org/admin-following-instances?id=instances-redundancy
   - name: Plugins
@@ -131,27 +131,23 @@ tags:
       - The likelihood of a network interruption is high
       - Uploads are originating from a device with a low-bandwidth or unstable Internet connection,
         such as a mobile device
+  - name: Video Captions
+    description: Operations dealing with listing, adding and removing closed captions of a video.
+  - name: Video Channels
+    description: Operations dealing with the creation, modification and listing of videos within a channel.
   - name: Video Comments
     description: >
-      Operations dealing with comments to a video. Comments are organized in
-      threads.
-  - name: Video Playlists
-    description: >
-      Operations dealing with playlists of videos. Playlists are bound to users
-      and/or channels.
-  - name: Video Channels
-    description: >
-      Operations dealing with the creation, modification and listing of videos within a channel.
+      Operations dealing with comments to a video. Comments are organized in threads: adding a 
+      comment in response to the video starts a thread, adding a reply to a comment adds it to
+      its root comment thread.
   - name: Video Blocks
-    description: >
-      Operations dealing with blocking videos (removing them from view and
-      preventing interactions).
+    description: Operations dealing with blocking videos (removing them from view and preventing interactions).
   - name: Video Rates
-    description: >
-      Like/dislike a video.
+    description: Like/dislike a video.
+  - name: Video Playlists
+    description: Operations dealing with playlists of videos. Playlists are bound to users and/or channels.
   - name: Feeds
-    description: >
-      Server syndication feeds
+    description: Server syndication feeds
   - name: Search
     description: |
       The search helps to find _videos_ or _channels_ from within the instance and beyond.
@@ -3927,6 +3923,7 @@ components:
         oneOf:
         - type: string
         - type: array
+          maxItems: 5
           items:
             type: string
       style: form
@@ -5153,6 +5150,7 @@ components:
     PredefinedAbuseReasons:
       description: Reason categories that help triage reports
       type: array
+      maxItems: 8
       items:
         type: string
         enum:
