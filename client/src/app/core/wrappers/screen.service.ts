@@ -39,9 +39,9 @@ export class ScreenService {
     let numberOfVideos = 1
 
     if (screenWidth > 1850) numberOfVideos = 5
-    else if (screenWidth > 1600) numberOfVideos = 4
-    else if (screenWidth > 1370) numberOfVideos = 3
-    else if (screenWidth > 1100) numberOfVideos = 2
+    else if (screenWidth > 1410) numberOfVideos = 4
+    else if (screenWidth > 1120) numberOfVideos = 3
+    else if (screenWidth > 890) numberOfVideos = 2
 
     return numberOfVideos
   }
