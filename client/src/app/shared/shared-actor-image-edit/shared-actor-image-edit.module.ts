@@ -26,4 +26,4 @@ import { ActorBannerEditComponent } from './actor-banner-edit.component'
 
   providers: [ ]
 })
-export class SharedActorImageModule { }
+export class SharedActorImageEditModule { }

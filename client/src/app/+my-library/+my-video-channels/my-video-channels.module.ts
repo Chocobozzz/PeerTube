@@ -1,6 +1,6 @@
 import { ChartModule } from 'primeng/chart'
 import { NgModule } from '@angular/core'
-import { SharedActorImageModule } from '@app/shared/shared-actor-image'
+import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
@@ -18,7 +18,7 @@ import { MyVideoChannelsComponent } from './my-video-channels.component'
     SharedMainModule,
     SharedFormModule,
     SharedGlobalIconModule,
-    SharedActorImageModule
+    SharedActorImageEditModule
   ],
 
   declarations: [

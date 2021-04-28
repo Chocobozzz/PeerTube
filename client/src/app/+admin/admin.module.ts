@@ -3,12 +3,13 @@ import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
-import { SharedActorImageModule } from '@app/shared/shared-actor-image'
+import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
+import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
 import {
@@ -39,7 +40,6 @@ import { JobService, LogsComponent, LogsService, SystemComponent } from './syste
 import { DebugComponent, DebugService } from './system/debug'
 import { JobsComponent } from './system/jobs/jobs.component'
 import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersComponent, UserUpdateComponent } from './users'
-import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -52,7 +52,7 @@ import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/share
     SharedAbuseListModule,
     SharedVideoCommentModule,
     SharedAccountAvatarModule,
-    SharedActorImageModule,
+    SharedActorImageEditModule,
 
     TableModule,
     SelectButtonModule,

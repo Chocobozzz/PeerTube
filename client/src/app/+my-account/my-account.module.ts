@@ -3,13 +3,14 @@ import { TableModule } from 'primeng/table'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
-import { SharedActorImageModule } from '@app/shared/shared-actor-image'
+import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedShareModal } from '@app/shared/shared-share-modal'
 import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-settings'
+import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
 import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
 import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-blocklist.component'
@@ -23,7 +24,6 @@ import { MyAccountNotificationPreferencesComponent } from './my-account-settings
 import { MyAccountProfileComponent } from './my-account-settings/my-account-profile/my-account-profile.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountComponent } from './my-account.component'
-import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/shared-account-avatar.module'
 
 @NgModule({
   imports: [
@@ -41,7 +41,7 @@ import { SharedAccountAvatarModule } from '../shared/shared-account-avatar/share
     SharedAbuseListModule,
     SharedShareModal,
     SharedAccountAvatarModule,
-    SharedActorImageModule
+    SharedActorImageEditModule
   ],
 
   declarations: [
