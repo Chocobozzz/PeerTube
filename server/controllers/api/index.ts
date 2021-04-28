@@ -15,6 +15,7 @@ import { pluginRouter } from './plugins'
 import { searchRouter } from './search'
 import { serverRouter } from './server'
 import { usersRouter } from './users'
+import { actorRouter } from './actor'
 import { videoChannelRouter } from './video-channel'
 import { videoPlaylistRouter } from './video-playlist'
 import { videosRouter } from './videos'
@@ -39,6 +40,7 @@ apiRouter.use('/bulk', bulkRouter)
 apiRouter.use('/oauth-clients', oauthClientsRouter)
 apiRouter.use('/config', configRouter)
 apiRouter.use('/users', usersRouter)
+apiRouter.use('/actors', actorRouter)
 apiRouter.use('/accounts', accountsRouter)
 apiRouter.use('/video-channels', videoChannelRouter)
 apiRouter.use('/video-playlists', videoPlaylistRouter)

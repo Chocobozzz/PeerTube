@@ -1,5 +1,6 @@
 export * from './abuse'
 export * from './account'
+export * from './actor'
 export * from './actor-image'
 export * from './blocklist'
 export * from './oembed'
