@@ -34,6 +34,8 @@ async function run () {
 
   let toDelete: string[] = []
 
+  console.log('Detecting files to remove, it could take a while...')
+
   toDelete = toDelete.concat(
     await pruneDirectory(CONFIG.STORAGE.VIDEOS_DIR, doesVideoExist(true)),
     await pruneDirectory(CONFIG.STORAGE.TORRENTS_DIR, doesVideoExist(true)),
