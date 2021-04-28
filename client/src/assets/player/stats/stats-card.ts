@@ -212,6 +212,8 @@ class StatsCard extends Component {
       : undefined
 
     return `
+      ${this.buildElement(player.localize('Player mode'), this.options_.mode)}
+
       ${this.buildElement(player.localize('Video UUID'), this.options_.videoUUID)}
 
       ${this.buildElement(player.localize('Viewport / Frames'), frames)}

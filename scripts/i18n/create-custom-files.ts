@@ -50,7 +50,8 @@ const playerKeys = {
   'Download Breakdown': 'Download Breakdown',
   'Buffer Progress': 'Buffer Progress',
   'Buffer State': 'Buffer State',
-  'Live Latency': 'Live Latency'
+  'Live Latency': 'Live Latency',
+  'Player mode': 'Player mode'
 }
 Object.assign(playerKeys, videojs)
 
