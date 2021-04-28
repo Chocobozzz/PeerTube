@@ -214,7 +214,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     const linkType = this.getVideoLinkType()
 
     if (linkType === 'internal') {
-      return [ '/video-channels', channel.nameWithHost ]
+      return [ '/c', channel.nameWithHost ]
     }
 
     if (linkType === 'lazy-load') {

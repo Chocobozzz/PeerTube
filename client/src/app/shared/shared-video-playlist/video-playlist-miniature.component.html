@@ -19,7 +19,7 @@
       {{ playlist.displayName }}
     </a>
 
-    <a i18n [routerLink]="[ '/video-channels', playlist.videoChannelBy ]" class="by" *ngIf="displayChannel && playlist.videoChannelBy">
+    <a i18n [routerLink]="[ '/c', playlist.videoChannelBy ]" class="by" *ngIf="displayChannel && playlist.videoChannelBy">
       {{ playlist.videoChannelBy }}
     </a>
 

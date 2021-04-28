@@ -27,11 +27,11 @@ const routes: Routes = [
     loadChildren: () => import('./+signup/+verify-account/verify-account.module').then(m => m.VerifyAccountModule)
   },
   {
-    path: 'accounts',
+    path: 'a',
     loadChildren: () => import('./+accounts/accounts.module').then(m => m.AccountsModule)
   },
   {
-    path: 'video-channels',
+    path: 'c',
     loadChildren: () => import('./+video-channels/video-channels.module').then(m => m.VideoChannelsModule)
   },
   {
@@ -67,12 +67,12 @@ const routes: Routes = [
     redirectTo: 'videos/watch/playlist'
   },
   {
-    path: 'a',
-    redirectTo: 'accounts'
+    path: 'accounts',
+    redirectTo: 'a'
   },
   {
-    path: 'c',
-    redirectTo: 'video-channels'
+    path: 'video-channels',
+    redirectTo: 'c'
   },
   {
     matcher: (url): UrlMatchResult => {

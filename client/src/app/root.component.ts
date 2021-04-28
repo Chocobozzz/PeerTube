@@ -30,12 +30,12 @@ export class RootComponent implements OnInit {
           ]))
         )
         .subscribe(actor => {
-          if (actor.constructor.name === 'Account') {
-            this.router.navigateByUrl(`/accounts/${actor.name}`)
+          if (/\/accounts\//.test(actor.url)) {
+            this.router.navigate([ `/a/${actor.name}` ], { state: { type: 'others', obj: { status: 200 } }, skipLocationChange: true })
           }
 
-          if (actor.constructor.name === 'VideoChannel') {
-            this.router.navigateByUrl(`/video-channels/${actor.name}`)
+          if (/\/video-channels\//.test(actor.url)) {
+            this.router.navigate([ `/c/${actor.name}` ], { state: { type: 'others', obj: { status: 200 } }, skipLocationChange: true })
           }
         })
   }

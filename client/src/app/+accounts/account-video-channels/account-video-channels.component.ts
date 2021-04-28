@@ -133,6 +133,6 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   getVideoChannelLink (videoChannel: VideoChannel) {
-    return [ '/video-channels', videoChannel.nameWithHost ]
+    return [ '/c', videoChannel.nameWithHost ]
   }
 }

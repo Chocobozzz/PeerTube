@@ -124,7 +124,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
   }
 
   getAccountUrl (abuse: ProcessedAbuse) {
-    return '/accounts/' + abuse.flaggedAccount.nameWithHost
+    return '/a/' + abuse.flaggedAccount.nameWithHost
   }
 
   getVideoEmbed (abuse: AdminAbuse) {

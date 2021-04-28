@@ -95,7 +95,7 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
     if (this.account) {
       this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
 
-      this.account.localUrl = '/accounts/' + this.by
+      this.account.localUrl = '/a/' + this.by
     }
   }
 }

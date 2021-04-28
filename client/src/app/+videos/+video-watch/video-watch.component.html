@@ -183,16 +183,16 @@
 
               <div class="video-info-channel-left-links ml-1">
                 <ng-container *ngIf="!isChannelDisplayNameGeneric()">
-                  <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Channel page">
+                  <a [routerLink]="[ '/c', video.byVideoChannel ]" i18n-title title="Channel page">
                     {{ video.channel.displayName }}
                   </a>
-                  <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Account page">
+                  <a [routerLink]="[ '/a', video.byAccount ]" i18n-title title="Account page">
                     <span i18n>By {{ video.byAccount }}</span>
                   </a>
                 </ng-container>
 
                 <ng-container *ngIf="isChannelDisplayNameGeneric()">
-                  <a [routerLink]="[ '/accounts', video.byAccount ]" class="single-link" i18n-title title="Account page">
+                  <a [routerLink]="[ '/a', video.byAccount ]" class="single-link" i18n-title title="Account page">
                     <span i18n>{{ video.byAccount }}</span>
                   </a>
                 </ng-container>

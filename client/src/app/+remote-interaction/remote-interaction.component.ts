@@ -43,7 +43,7 @@ export class RemoteInteractionComponent implements OnInit {
       } else if (channelResult.data.length !== 0) {
         const channel = new VideoChannel(channelResult.data[0])
 
-        redirectUrl = '/video-channels/' + channel.nameWithHost
+        redirectUrl = '/c/' + channel.nameWithHost
       } else {
         this.error = $localize`Cannot access to the remote resource`
         return
