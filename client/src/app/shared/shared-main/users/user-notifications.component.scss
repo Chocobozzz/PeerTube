@@ -21,11 +21,11 @@
   }
 
   my-global-icon {
+    @include apply-svg-color(#333);
+
     width: 24px;
     margin-right: 11px;
     margin-left: 3px;
-
-    @include apply-svg-color(#333);
   }
 
   .avatar {

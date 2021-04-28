@@ -41,7 +41,7 @@ my-actor-avatar {
 }
 
 .video-info-blocked {
-  color: red;
+  color: #ff0000;
 
   .blocked-reason::before {
     content: ' - ';
@@ -49,7 +49,7 @@ my-actor-avatar {
 }
 
 .video-info-nsfw {
-  color: red;
+  color: #ff0000;
 }
 
 .video-actions {

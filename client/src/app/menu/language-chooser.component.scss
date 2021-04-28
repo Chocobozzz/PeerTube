@@ -5,12 +5,12 @@
   @include peertube-button-link;
   @include orange-button;
 
+  border-radius: 0;
+
   &.focus-visible,
   &:focus {
     box-shadow: none;
   }
-
-  border-radius: 0;
 }
 
 .modal-body {

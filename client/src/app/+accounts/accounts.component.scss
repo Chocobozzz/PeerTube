@@ -40,7 +40,7 @@ my-user-moderation-dropdown,
 }
 
 .copy-button {
-  border: none;
+  border: 0;
 }
 
 .account-info {
@@ -104,9 +104,9 @@ my-user-moderation-dropdown,
   }
 
   .description:not(.expanded) {
-    max-height: 70px;
-
     @include fade-text(30px, pvar(--submenuBackgroundColor));
+
+    max-height: 70px;
   }
 
   .show-more {

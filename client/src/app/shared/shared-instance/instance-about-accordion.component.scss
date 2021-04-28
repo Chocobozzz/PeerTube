@@ -1,6 +1,6 @@
 @import '_variables';
 @import '_mixins';
-@import "./_bootstrap-variables";
+@import './_bootstrap-variables';
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
@@ -30,7 +30,7 @@ ngb-accordion ::ng-deep {
       background-color: unset;
       padding: 0;
 
-      & + .collapse.show {
+      + .collapse.show {
         background-color: var(--submenuBackgroundColor);
       }
     }

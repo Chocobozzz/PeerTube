@@ -31,7 +31,7 @@ form {
     padding-right: $markdown-icon-width + 15px !important;
 
     @media screen and (max-width: 600px) {
-      padding-right: $markdown-icon-width + 19px  !important;
+      padding-right: $markdown-icon-width + 19px !important;
     }
 
     &:focus::placeholder {
@@ -57,7 +57,9 @@ form {
       }
     }
 
-    &:focus, &:active, &:hover {
+    &:focus,
+    &:active,
+    &:hover {
       my-global-icon svg {
         background-color: #C6C6C6;
         color: pvar(--mainBackgroundColor);

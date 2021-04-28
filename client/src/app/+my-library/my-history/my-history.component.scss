@@ -39,11 +39,11 @@
   }
 
   .delete-history {
-    grid-column: 4;
-
     @include peertube-button;
     @include grey-button;
     @include button-with-icon;
+
+    grid-column: 4;
 
     font-size: 15px;
   }

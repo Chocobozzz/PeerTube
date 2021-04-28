@@ -31,18 +31,18 @@ $context-menu-width: 350px;
       background-color: rgba(255, 255, 255, 0.2);
     }
 
-    [class^="vjs-icon-"] {
+    [class^='vjs-icon-'] {
+      $icons: 'link-2', 'repeat', 'code', 'tick-white', 'info';
+
       display: inline-flex;
       position: relative;
       top: 2px;
       cursor: pointer;
       width: 14px;
       height: 14px;
-      background-color: white;
+      background-color: #fff;
       mask-size: cover;
       margin-right: 0.8rem !important;
-
-      $icons: 'link-2', 'repeat', 'code', 'tick-white', 'info';
 
       @each $icon in $icons {
         &[class$="-#{$icon}"] {
@@ -50,7 +50,7 @@ $context-menu-width: 350px;
         }
       }
 
-      &[class$="-tick-white"] {
+      &[class$='-tick-white'] {
         float: right;
         margin: 0 !important;
       }

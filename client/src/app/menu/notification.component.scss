@@ -16,19 +16,20 @@
 .notification-inbox-popover,
 .notification-inbox-link a {
   @include apply-svg-color(#808080);
-  ::ng-deep {
-    svg {
-      transition: color .1s ease-in-out;
-    }
-  }
 
   transition: all .1s ease-in-out;
   border-radius: 25px;
   cursor: pointer;
 
-  &:hover, &:active {
-    background-color: rgba(255, 255, 255, 0.15);
+  ::ng-deep svg {
+    transition: color .1s ease-in-out;
+  }
+
+  &:hover,
+  &:active {
     @include apply-svg-color(#fff);
+
+    background-color: rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -59,7 +60,7 @@
       font-size: 14px;
       font-family: $main-fonts;
       width: 400px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 
       .loader {
         display: flex;
@@ -80,7 +81,7 @@
           max-height: 500px;
         }
 
-        & > my-user-notifications:nth-child(2) {
+        > my-user-notifications:nth-child(2) {
           overflow-y: auto;
           flex-grow: 1;
         }
@@ -110,7 +111,8 @@
           background: transparent;
         }
 
-        a, button {
+        a,
+        button {
           color: rgba(20, 20, 20, 0.5);
 
           &:hover:not(:disabled) {
@@ -133,7 +135,8 @@
   }
 }
 
-.notification-inbox-popover, .notification-inbox-link {
+.notification-inbox-popover,
+.notification-inbox-link {
   cursor: pointer;
   position: relative;
 

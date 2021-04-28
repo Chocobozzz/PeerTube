@@ -2,20 +2,19 @@
 @import '_mixins';
 
 .help-tooltip-button {
-  cursor: pointer;
-  border: none;
+  @include disable-outline;
 
+  cursor: pointer;
+  border: 0;
   margin: 5px;
 
   my-global-icon {
+    @include apply-svg-color(pvar(--greyForegroundColor));
+
     width: 17px;
     position: relative;
     top: -1px;
-
-    @include apply-svg-color(pvar(--greyForegroundColor))
   }
-
-  @include disable-outline;
 }
 
 ::ng-deep {

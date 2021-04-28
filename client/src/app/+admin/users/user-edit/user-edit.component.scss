@@ -37,7 +37,8 @@ my-select-custom-value {
   display: block;
 }
 
-input[type=submit], button {
+input[type=submit],
+button {
   @include peertube-button;
   @include orange-button;
 

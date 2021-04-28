@@ -15,14 +15,14 @@
   "scripts": {
     "lint": "npm run lint-ts && npm run lint-scss",
     "lint-ts": "tslint --project ./tsconfig.app.json -c ./tslint.json 'src/app/**/*.ts' 'src/standalone/**/*.ts'",
-    "lint-scss": "sass-lint -c .sass-lint.yml",
+    "lint-scss": "stylelint 'src/**/*.scss'",
     "webpack": "webpack",
     "tslint": "tslint",
     "ng": "ng",
     "webpack-bundle-analyzer": "webpack-bundle-analyzer",
     "webdriver-manager": "webdriver-manager",
     "ngx-extractor": "ngx-extractor",
-    "sass-lint": "sass-lint"
+    "stylelint": "stylelint"
   },
   "typings": "*.d.ts",
   "resolutions": {
@@ -106,13 +106,14 @@
     "rxjs": "^6.5.2",
     "sanitize-html": "^2.1.2",
     "sass": "^1.29.0",
-    "sass-lint": "^1.13.1",
     "sass-loader": "^10",
     "sass-resources-loader": "^2.0.0",
     "sha.js": "^2.4.11",
     "socket.io-client": "^4.0.1",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.0.0",
+    "stylelint": "^13.13.0",
+    "stylelint-config-sass-guidelines": "^8.0.0",
     "terser-webpack-plugin": "^4",
     "ts-loader": "^8.0.14",
     "tslib": "^2.0.0",

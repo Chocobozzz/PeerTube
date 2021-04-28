@@ -131,10 +131,10 @@
   }
 
   .owner-description {
+    @include fade-text(120px, pvar(--mainBackgroundColor));
+
     max-height: 140px;
     word-break: break-word;
-
-    @include fade-text(120px, pvar(--mainBackgroundColor));
   }
 }
 
@@ -150,7 +150,7 @@
 }
 
 .copy-button {
-  border: none;
+  border: 0;
 }
 
 @media screen and (max-width: 1400px) {
@@ -178,9 +178,9 @@
   }
 
   .channel-description:not(.expanded) {
-    max-height: 70px;
-
     @include fade-text(30px, pvar(--channelBackgroundColor));
+
+    max-height: 70px;
   }
 
   .show-more {
@@ -220,10 +220,10 @@
     }
 
     .owner-description {
+      @include fade-text(30px, pvar(--mainBackgroundColor));
+
       grid-column: 2;
       max-height: 70px;
-
-      @include fade-text(30px, pvar(--mainBackgroundColor));
     }
 
     .view-account {

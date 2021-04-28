@@ -63,7 +63,8 @@
 
   position: relative;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     &::after {
       content: '#';
       display: inline-block;
@@ -71,7 +72,8 @@
     }
   }
 
-  .middle-title, .section-title {
+  .middle-title,
+  .section-title {
     display: inline-block;
   }
 

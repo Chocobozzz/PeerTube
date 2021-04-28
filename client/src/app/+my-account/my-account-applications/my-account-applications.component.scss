@@ -21,7 +21,7 @@ input[type=submit] {
   display: flex;
   margin-left: auto;
 
-  & + .form-error {
+  + .form-error {
     display: inline;
     margin-left: 5px;
   }

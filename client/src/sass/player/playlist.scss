@@ -44,10 +44,8 @@ $playlist-menu-width: 350px;
       width: 20px;
       height: 20px;
       mask-image: url('#{$assets-path}/images/feather/x.svg');
-      -webkit-mask-image: url('#{$assets-path}/images/feather/x.svg');
-      background-color: white;
+      background-color: #fff;
       mask-size: cover;
-      -webkit-mask-size: cover;
     }
   }
 }
@@ -90,10 +88,8 @@ $playlist-menu-width: 350px;
   width: 22px;
   height: 22px;
   mask-image: url('#{$assets-path}/images/feather/list.svg');
-  -webkit-mask-image: url('#{$assets-path}/images/feather/list.svg');
-  background-color: white;
+  background-color: #fff;
   mask-size: cover;
-  -webkit-mask-size: cover;
   margin-bottom: 3px;
 }
 
@@ -133,9 +129,9 @@ $playlist-menu-width: 350px;
   }
 
   .item-player {
-    display: none;
-
     @include play-icon(20px, 16px);
+
+    display: none;
   }
 
   &.vjs-selected {

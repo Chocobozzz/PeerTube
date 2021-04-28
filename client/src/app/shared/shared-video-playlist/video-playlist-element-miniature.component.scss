@@ -84,21 +84,23 @@ my-video-thumbnail,
         width: auto;
       }
 
-      .video-info-account, .video-info-timestamp {
+      .video-info-account,
+      .video-info-timestamp {
         color: pvar(--greyForegroundColor);
       }
     }
   }
 
   .video-info-name {
+    @include ellipsis;
+
     font-size: 18px;
     font-weight: $font-semibold;
     display: inline-block;
-
-    @include ellipsis;
   }
 
-  .more, my-edit-button {
+  .more,
+  my-edit-button {
     justify-self: flex-end;
     margin-left: auto;
     cursor: pointer;
@@ -118,7 +120,7 @@ my-video-thumbnail,
       display: flex;
 
       &::after {
-        border: none;
+        border: 0;
       }
     }
   }

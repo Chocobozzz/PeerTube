@@ -6,7 +6,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 // Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
 .glyphicon-refresh-animate {
-  animation: spin .7s infinite linear;
+  animation: spin 0.7s infinite linear;
 }
 
 .glyphicon-duplicate {
@@ -25,6 +25,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   from {
     transform: scale(1) rotate(0deg);
   }
+
   to {
     transform: scale(1) rotate(360deg);
   }
@@ -70,7 +71,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     &.active {
       color: pvar(--mainBackgroundColor) !important;
       background-color: pvar(--mainHoverColor);
-      opacity: .9;
+      opacity: 0.9;
     }
 
     &:active {
@@ -97,9 +98,9 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 @media screen and (min-width: #{breakpoint(md)}) {
-  .modal:before {
+  .modal::before {
     vertical-align: middle;
-    content: " ";
+    content: ' ';
     height: 100%;
   }
 
@@ -123,7 +124,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 
   .modal-header {
-    border-bottom: none;
+    border-bottom: 0;
     margin-bottom: 5px;
 
     .modal-title {
@@ -140,10 +141,11 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
       margin: 0;
       padding: 0;
-      opacity: .5;
+      opacity: 0.5;
 
-      &[iconName="cross"] {
+      &[iconName=cross] { /* stylelint-disable-line selector-max-compound-selectors */
         @include icon(16px);
+
         top: -3px;
       }
     }
@@ -154,7 +156,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     text-align: right;
 
     > .peertube-button:not(:first-child) {
-      margin-left: 10px
+      margin-left: 10px;
     }
   }
 }
@@ -168,7 +170,8 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 // On touchscreen devices, simply overflow: hidden to avoid detached overlay on scroll
 @media (hover: none) and (pointer: coarse) {
-  .modal-open, .menu-open {
+  .modal-open,
+  .menu-open {
     overflow: hidden !important;
   }
 
@@ -176,7 +179,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   .menu-open {
     .main-col {
       &::before {
-        background-color: black;
+        background-color: #000;
         width: 100vw;
         height: 100vh;
         opacity: 0.75;
@@ -204,7 +207,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   .nav-link {
     opacity: 0.6 !important;
 
-    &.active, &:hover, &:active, &:focus {
+    &.active,
+    &:hover,
+    &:active,
+    &:focus {
       opacity: 1 !important;
     }
   }
@@ -221,7 +227,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   color: pvar(--mainForegroundColor);
   font-weight: $font-semibold;
-  border: none;
+  border: 0;
   border-bottom: 2px solid transparent;
   opacity: 0.6;
 
@@ -231,7 +237,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     border-bottom-color: pvar(--mainColor);
   }
 
-  &.active, &:hover, &:active, &:focus {
+  &.active,
+  &:hover,
+  &:active,
+  &:focus {
     opacity: 1;
   }
 }
@@ -314,9 +323,10 @@ ngb-tooltip-window {
 }
 
 .input-group {
-  & > .form-control {
+  > .form-control {
     flex: initial;
   }
+
   input.form-control {
     width: unset !important;
     flex-grow: 1;
@@ -366,7 +376,7 @@ ngb-tooltip-window {
   border: 1px solid #eee;
   border-radius: .25rem;
 
-  & > label {
+  > label {
     position: relative;
     top: -5px;
     left: -10px;

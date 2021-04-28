@@ -17,7 +17,7 @@
 @mixin show-more-description {
   color: pvar(--mainColor);
   cursor: pointer;
-  margin: 10px auto 45px auto;
+  margin: 10px auto 45px;
 }
 
 @mixin avatar-row-responsive ($img-margin, $grey-font-size) {

@@ -8,7 +8,8 @@
   margin-bottom: 25px;
   flex-wrap: wrap-reverse;
 
-  .title-page.active, .title-page.title-page-single {
+  .title-page.active,
+  .title-page.title-page-single {
     margin-bottom: unset;
     margin-right: .5rem !important;
   }

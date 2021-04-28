@@ -32,7 +32,7 @@ ng-select ::ng-deep {
 }
 
 .root {
-  display:flex;
+  display: flex;
   align-items: center;
 
   > my-select-options {
@@ -41,9 +41,9 @@ ng-select ::ng-deep {
 }
 
 my-select-options + input {
-  margin-left: 5px;
-
   @include peertube-input-text($form-base-input-width);
+
+  margin-left: 5px;
   display: block;
 }
 

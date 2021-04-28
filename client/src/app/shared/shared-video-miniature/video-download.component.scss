@@ -28,7 +28,7 @@
 
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  border-right: none;
+  border-right: 0;
 
   select {
     height: inherit;
@@ -85,7 +85,7 @@
   &.metadata-attribute-tags {
     .metadata-attribute-value:not(:nth-child(2)) {
       &::before {
-        content: ', '
+        content: ', ';
       }
     }
   }

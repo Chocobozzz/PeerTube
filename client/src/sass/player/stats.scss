@@ -6,6 +6,8 @@ $contextmenu-background-color: rgba(0, 0, 0, 0.6);
 .video-js {
 
   .vjs-stats-content {
+    @include transition(opacity 0.1s);
+
     position: absolute;
     background-color: $contextmenu-background-color;
     padding: 5px 0;
@@ -18,8 +20,6 @@ $contextmenu-background-color: rgba(0, 0, 0, 0.6);
     z-index: 64;
     font-size: 12px;
     line-height: 1.2;
-
-    @include transition(opacity 0.1s);
   }
 
   .vjs-stats-close {
@@ -38,5 +38,4 @@ $contextmenu-background-color: rgba(0, 0, 0, 0.6);
     width: 11.5em;
     white-space: nowrap;
   }
-
 }

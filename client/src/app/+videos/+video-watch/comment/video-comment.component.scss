@@ -62,7 +62,7 @@ my-actor-avatar {
   display: inline-flex;
   padding-right: 6px;
   padding-left: 6px;
-  color: white !important;
+  color: #fff !important;
 }
 
 .comment-account {
@@ -133,7 +133,10 @@ my-actor-avatar {
     cursor: pointer;
     margin-right: 10px;
 
-    &:hover, &:active, &:focus, &:focus-visible {
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible {
       color: pvar(--mainForegroundColor);
     }
   }

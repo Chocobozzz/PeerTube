@@ -6,7 +6,7 @@
   display: inline-block;
   width: 100%;
 
-  &.no-videos:not(.to-manage){
+  &.no-videos:not(.to-manage) {
     a {
       cursor: default !important;
     }

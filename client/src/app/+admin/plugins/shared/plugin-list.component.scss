@@ -27,7 +27,7 @@
     my-global-icon {
       @include apply-svg-color(pvar(--greyForegroundColor));
 
-      &[iconName="npm"] {
+      &[iconName=npm] {
         @include fill-svg-color(pvar(--greyForegroundColor));
       }
     }
@@ -49,7 +49,7 @@
   justify-content: space-between;
 
   .description {
-    opacity: 0.8
+    opacity: 0.8;
   }
 }
 

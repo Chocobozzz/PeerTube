@@ -5,7 +5,8 @@ a {
   @include disable-default-a-behaviour;
   display: inline-block;
 
-  &, &:hover {
+  &,
+  &:hover {
     color: pvar(--mainForegroundColor);
   }
 

@@ -65,13 +65,13 @@
   }
 
   .description-html {
+    @include fade-text(30px, pvar(--channelBackgroundColor));
+
     grid-column: 2 / 4;
     grid-row: 2;
 
     max-height: 80px;
     font-size: 16px;
-
-    @include fade-text(30px, pvar(--channelBackgroundColor));
   }
 }
 

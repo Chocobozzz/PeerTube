@@ -16,7 +16,7 @@
     padding-top: 30px;
 
     .section-title {
-      border-top: none !important;
+      border-top: 0 !important;
     }
   }
 
@@ -33,12 +33,14 @@
     }
 
     a {
-      &:hover, &:focus:not(.focus-visible), &:active {
+      color: pvar(--mainForegroundColor);
+
+      &:hover,
+      &:focus:not(.focus-visible),
+      &:active {
         text-decoration: none;
         outline: none;
       }
-
-      color: pvar(--mainForegroundColor);
     }
   }
 

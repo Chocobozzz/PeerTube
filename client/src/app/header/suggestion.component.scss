@@ -2,9 +2,11 @@
 
 a {
   @include disable-default-a-behaviour;
+
   width: 100%;
 
-  &, &:hover {
+  &,
+  &:hover {
     color: pvar(--mainForegroundColor);
 
     &.focus-visible {
@@ -23,10 +25,10 @@ a {
 }
 
 my-global-icon {
+  @include apply-svg-color(pvar(--mainForegroundColor));
+
   width: 17px;
   position: relative;
   top: -2px;
   margin: 5px;
-
-  @include apply-svg-color(pvar(--mainForegroundColor));
 }

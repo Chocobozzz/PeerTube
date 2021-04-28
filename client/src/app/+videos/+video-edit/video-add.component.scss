@@ -44,7 +44,7 @@ $nav-link-height: 40px;
 
 ::ng-deep .video-add-nav {
   border-bottom: $border-width $border-type $border-color;
-  margin: 20px 0 0 0 !important;
+  margin: 20px 0 0 !important;
 
   &.hide-nav {
     display: none !important;

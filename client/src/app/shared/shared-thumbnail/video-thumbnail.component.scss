@@ -11,7 +11,7 @@
   width: 100%;
   position: absolute;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.20);
+  background-color: rgba(0, 0, 0, 0.2);
 
   div {
     height: 100%;
@@ -39,8 +39,8 @@
   top: 5px;
   font-weight: $font-bold;
 
-  &.warning { background-color: orange; }
-  &.danger { background-color: red; }
+  &.warning { background-color: #ffa500; }
+  &.danger { background-color: #ff0000; }
 }
 
 .video-thumbnail-duration-overlay,
@@ -77,9 +77,9 @@
   padding: 3px;
 
   my-global-icon {
+    @include apply-svg-color(#fff);
+
     width: 22px;
     height: 22px;
-
-    @include apply-svg-color(#fff);
   }
 }

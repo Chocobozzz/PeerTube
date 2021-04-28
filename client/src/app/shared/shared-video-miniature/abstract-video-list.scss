@@ -3,7 +3,7 @@
 @import '_mixins';
 @import '_miniature';
 
-$iconSize: 16px;
+$icon-size: 16px;
 
 ::ng-deep my-video-list-header {
   display: flex;
@@ -17,20 +17,19 @@ $iconSize: 16px;
 
   my-feed {
     display: inline-block;
-    width: calc(#{$iconSize} - 2px);
+    width: calc(#{$icon-size} - 2px);
   }
 
   .moderation-block {
-
-    my-global-icon {
-      position: relative;
-      width: $iconSize;
-    }
-
     margin-left: .4rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+
+    my-global-icon {
+      position: relative;
+      width: $icon-size;
+    }
   }
 }
 
@@ -72,7 +71,7 @@ $iconSize: 16px;
 
     .title-page {
       margin-bottom: 10px;
-      margin-right: 0px;
+      margin-right: 0;
     }
   }
 }

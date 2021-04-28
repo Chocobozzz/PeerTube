@@ -24,8 +24,9 @@ $footer-links-base-opacity: .8;
     background-color: rgba(255, 255, 255, 0.15);
   }
 
-  &:hover, &.focus-visible {
-    background-color: rgba(255, 255, 255, 0.10);
+  &:hover,
+  &.focus-visible {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   my-global-icon {
@@ -60,7 +61,8 @@ menu {
   margin: 0;
   padding: 0;
 
-  &:focus, &:hover {
+  &:focus,
+  &:hover {
     overflow-y: auto;
   }
 
@@ -125,7 +127,7 @@ my-notification {
   line-height: 1;
 
   &.show {
-    background-color: rgba(255, 255, 255, 0.20);
+    background-color: rgba(255, 255, 255, 0.2);
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
   }
 
@@ -158,14 +160,14 @@ my-notification {
       position: absolute;
       right: -35px;
       top: -8px;
-      color: grey;
+      color: #808080;
       width: $main-radius;
     }
   }
 
   .dropdown-toggle {
     &::after {
-      border: none;
+      border: 0;
     }
   }
 
@@ -193,11 +195,11 @@ my-actor-avatar {
 }
 
 .logged-in-display-name {
+  @include disable-default-a-behaviour;
+
   font-size: 16px;
   font-weight: $font-semibold;
   color: pvar(--menuForegroundColor);
-
-  @include disable-default-a-behaviour;
 }
 
 .logged-in-username {
@@ -251,7 +253,7 @@ my-actor-avatar {
 }
 
 .login-buttons-block {
-  margin: 30px 25px 35px 25px;
+  margin: 30px 25px 35px;
 
   > a {
     display: block;
@@ -305,7 +307,8 @@ my-actor-avatar {
 }
 
 .footer-links {
-  &, > div {
+  &,
+  > div {
     display: flex;
     flex-wrap: wrap;
   }
@@ -388,29 +391,29 @@ my-actor-avatar {
   .dropdown-item:hover,
   .dropdown-item:active {
     &.settings-sensitive my-global-icon ::ng-deep svg {
-      margin-top: 0px !important;
+      margin-top: 0 !important;
     }
   }
 }
 
 my-global-icon {
-  &[iconName="playlists"] {
+  &[iconName=playlists] {
     height: 24px;
     width: 24px;
 
     margin-right: 16px;
   }
 
-  &[iconName="videos"] {
+  &[iconName=videos] {
     position: relative;
     right: -1px;
   }
 
-  &[iconName="channel"] {
+  &[iconName=channel] {
     margin-top: -2px;
   }
 
-  &[iconName="sign-out"] {
+  &[iconName='sign-out'] {
     position: relative;
     right: -2px;
     height: 20px;

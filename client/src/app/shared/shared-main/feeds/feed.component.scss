@@ -5,14 +5,14 @@
   width: 100%;
 
   a {
-    color: black;
+    color: #000;
     display: block;
   }
 }
 
 my-global-icon {
+  @include apply-svg-color(pvar(--mainForegroundColor));
+
   cursor: pointer;
   width: 100%;
-
-  @include apply-svg-color(pvar(--mainForegroundColor))
 }

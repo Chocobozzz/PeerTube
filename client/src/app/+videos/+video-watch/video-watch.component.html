@@ -79,7 +79,7 @@
                   <span [innerHTML]="getRatePopoverText()"></span>
                 </ng-template>
 
-                <div class="video-actions fullWidth justify-content-end">
+                <div class="video-actions full-width justify-content-end">
                   <button
                     [ngbPopover]="getRatePopoverText() && ratePopoverText" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()" (keyup.enter)="setLike()"
                     class="action-button action-button-like" [attr.aria-pressed]="userRating === 'like'" [attr.aria-label]="tooltipLike"

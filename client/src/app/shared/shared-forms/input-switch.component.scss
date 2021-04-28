@@ -5,7 +5,7 @@ input {
   position: absolute;
   visibility: hidden;
 
-  & + label {
+  + label {
     cursor: pointer;
     text-indent: -9999px;
     width: 35px;
@@ -16,7 +16,7 @@ input {
     position: relative;
     margin: 0;
 
-    &:after {
+    &::after {
       content: '';
       position: absolute;
       top: 3px;
@@ -28,7 +28,7 @@ input {
       transition: 0.3s ease-out;
     }
 
-    &:active:after {
+    &:active::after {
       width: 40px;
     }
   }
@@ -36,7 +36,7 @@ input {
   &:checked + label {
     background: pvar(--mainColor);
 
-    &:after {
+    &::after {
       left: calc(100% - 3px);
       transform: translateX(-100%);
     }

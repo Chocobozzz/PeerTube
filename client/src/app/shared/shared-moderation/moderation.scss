@@ -17,12 +17,18 @@
     word-wrap: break-word;
 
     ::ng-deep p:last-child {
-      margin-bottom: 0px !important;
+      margin-bottom: 0 !important;
     }
   }
 }
 
 .screenratio {
+  @include block-ratio($selector: 'div, ::ng-deep iframe') {
+    width: 100% !important;
+    height: 100% !important;
+    left: 0;
+  };
+
   div {
     @include miniature-thumbnail;
 
@@ -31,12 +37,6 @@
     align-items: center;
     color: pvar(--inputPlaceholderColor);
   }
-
-  @include block-ratio($selector: 'div, ::ng-deep iframe') {
-    width: 100% !important;
-    height: 100% !important;
-    left: 0;
-  };
 }
 
 .input-group {
@@ -93,15 +93,15 @@ my-action-dropdown.show {
   display: inline-flex;
 
   .table-video-image {
-    @include miniature-thumbnail;
-
     $image-height: 45px;
+
+    @include miniature-thumbnail;
 
     height: $image-height;
     width: #{(16/9) * $image-height};
     margin-right: 0.5rem;
     border-radius: 2px;
-    border: none;
+    border: 0;
     background: transparent;
     display: inline-flex;
     justify-content: center;
@@ -139,7 +139,7 @@ my-action-dropdown.show {
 
     div .glyphicon {
       font-size: 80%;
-      color: gray;
+      color: #808080;
       margin-left: 0.1rem;
     }
 

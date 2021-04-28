@@ -71,8 +71,6 @@
     "ts-node": "ts-node",
     "eslint": "eslint",
     "concurrently": "concurrently",
-    "sasslint": "sass-lint --verbose --no-exit",
-    "sasslint:fix": "sass-lint-auto-fix -c .sass-lint.yml --verbose",
     "mocha": "mocha",
     "ci": "scripty",
     "release": "scripty",
@@ -80,8 +78,7 @@
     "nightly": "scripty",
     "openapi-clients": "scripty",
     "client-report": "scripty",
-    "swagger-cli": "swagger-cli",
-    "sass-lint": "sass-lint"
+    "swagger-cli": "swagger-cli"
   },
   "dependencies": {
     "apicache": "1.6.2",
@@ -222,7 +219,6 @@
   "scripty": {
     "silent": true
   },
-  "sasslintConfig": "client/.sass-lint.yml",
   "bundlewatch": {
     "files": [
       {

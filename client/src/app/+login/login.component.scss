@@ -33,7 +33,8 @@ input[type=email] {
   }
 }
 
-.create-an-account, .forgot-password-button {
+.create-an-account,
+.forgot-password-button {
   color: pvar(--mainForegroundColor);
   cursor: pointer;
   transition: opacity cubic-bezier(0.39, 0.575, 0.565, 1);
@@ -49,7 +50,7 @@ input[type=email] {
   justify-content: space-around;
   flex-wrap: wrap;
 
-  & > div {
+  > div {
     flex: 1 1;
   }
 
@@ -65,7 +66,8 @@ input[type=email] {
     form {
       margin: 0;
 
-      &, input {
+      &,
+      input {
         width: 100%;
       }
 
@@ -82,7 +84,8 @@ input[type=email] {
 
           color: var(--mainColor);
 
-          &:hover, &:active {
+          &:hover,
+          &:active {
             color: var(--mainHoverColor);
           }
         }
@@ -111,7 +114,7 @@ input[type=email] {
         min-width: 100px;
 
         &:hover {
-          background-color: rgba(209, 215, 224, 0.5)
+          background-color: rgba(209, 215, 224, 0.5);
         }
       }
     }
@@ -138,7 +141,7 @@ input[type=email] {
   }
 }
 
-@mixin columnReverseDisplay {
+@mixin column-reverse-display {
   flex-direction: column-reverse;
 
   .login-form-and-externals,
@@ -168,14 +171,14 @@ input[type=email] {
 
 @media screen and (max-width: breakpoint(md)) {
   .wrapper {
-    @include columnReverseDisplay();
+    @include column-reverse-display();
   }
 }
 
 @media screen and (max-width: breakpoint(md) + $menu-width) {
   :host-context(.main-col:not(.expanded)) {
     .wrapper {
-      @include columnReverseDisplay();
+      @include column-reverse-display();
     }
   }
 }

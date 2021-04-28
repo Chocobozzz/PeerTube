@@ -1,7 +1,9 @@
 @import '_variables';
 
 @mixin disable-default-a-behaviour {
-  &:hover, &:focus, &:active {
+  &:hover,
+  &:focus,
+  &:active {
     text-decoration: none !important;
     outline: none !important;
   }
@@ -22,7 +24,7 @@
 @mixin ellipsis-multiline($font-size: 16px, $number-of-lines: 2) {
   display: block;
   /* Fallback for non-webkit */
-  display: -webkit-box;
+  display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
   -webkit-line-clamp: $number-of-lines;
   /* Fallback for non-webkit */
   font-size: $font-size;
@@ -36,7 +38,7 @@
   position: relative;
   overflow: hidden;
 
-  &:after {
+  &::after {
     content: '';
     pointer-events: none;
     width: 100%;
@@ -109,9 +111,9 @@
   padding-bottom: 0;
   flex-wrap: nowrap;
 
-  .input-group-text{
+  .input-group-text {
     font-size: 14px;
-    color: gray;
+    color: #808080;
   }
 }
 
@@ -128,7 +130,9 @@
 @mixin orange-button {
   @include button-focus(pvar(--mainColorLightest));
 
-  &, &:active, &:focus {
+  &,
+  &:active,
+  &:focus {
     color: #fff;
     background-color: pvar(--mainColor);
   }
@@ -138,14 +142,15 @@
     background-color: pvar(--mainHoverColor);
   }
 
-  &[disabled], &.disabled {
+  &[disabled],
+  &.disabled {
     cursor: default;
     color: #fff;
     background-color: #C6C6C6;
   }
 
   my-global-icon {
-    @include apply-svg-color(#fff)
+    @include apply-svg-color(#fff);
   }
 }
 
@@ -155,7 +160,9 @@
   border: 2px solid pvar(--mainColor);
   font-weight: $font-semibold;
 
-  &, &:active, &:focus {
+  &,
+  &:active,
+  &:focus {
     color: pvar(--mainColor);
     background-color: pvar(--mainBackgroundColor);
   }
@@ -165,14 +172,15 @@
     background-color: pvar(--mainColorLightest);
   }
 
-  &[disabled], &.disabled {
+  &[disabled],
+  &.disabled {
     cursor: default;
     color: pvar(--mainColor);
     background-color: #C6C6C6;
   }
 
   my-global-icon {
-    @include apply-svg-color(pvar(--mainColor))
+    @include apply-svg-color(pvar(--mainColor));
   }
 }
 
@@ -182,12 +190,13 @@
   color: pvar(--greyForegroundColor);
   background-color: transparent;
 
-  &[disabled], &.disabled {
+  &[disabled],
+  .disabled {
     cursor: default;
   }
 
   my-global-icon {
-    @include apply-svg-color(transparent)
+    @include apply-svg-color(transparent);
   }
 }
 
@@ -197,17 +206,22 @@
   background-color: $grey-background-color;
   color: pvar(--greyForegroundColor);
 
-  &:hover, &:active, &:focus, &[disabled], &.disabled {
+  &:hover,
+  &:active,
+  &:focus,
+  &[disabled],
+  &.disabled {
     color: pvar(--greyForegroundColor);
     background-color: $grey-background-hover-color;
   }
 
-  &[disabled], &.disabled {
+  &[disabled],
+  &.disabled {
     cursor: default;
   }
 
   my-global-icon {
-    @include apply-svg-color(pvar(--greyForegroundColor))
+    @include apply-svg-color(pvar(--greyForegroundColor));
   }
 }
 
@@ -216,24 +230,30 @@
   $text: #fff6f5;
 
   @include button-focus(scale-color($color, $alpha: -95%));
+
   background-color: $color;
   color: $text;
 
-  &:hover, &:active, &:focus, &[disabled], &.disabled {
+  &:hover,
+  &:active,
+  &:focus,
+  &[disabled],
+  &.disabled {
     background-color: lighten($color: $color, $amount: 10);
   }
 
-  &[disabled], &.disabled {
+  &[disabled],
+  &.disabled {
     cursor: default;
   }
 
   my-global-icon {
-    @include apply-svg-color($text)
+    @include apply-svg-color($text);
   }
 }
 
 @mixin peertube-button {
-  border: none;
+  border: 0;
   font-weight: $font-semibold;
   font-size: 15px;
   height: $button-height;
@@ -246,18 +266,17 @@
 }
 
 @mixin peertube-button-link {
-  display: inline-block;
-
   @include disable-default-a-behaviour;
   @include peertube-button;
+
+  display: inline-block;
 }
 
 @mixin peertube-button-outline {
-  display: inline-block;
-
   @include disable-default-a-behaviour;
   @include peertube-button;
 
+  display: inline-block;
   border: 1px solid;
 }
 
@@ -291,17 +310,17 @@
     filter: alpha(opacity=0);
     opacity: 0;
     outline: none;
-    background: white;
+    background: #fff;
     cursor: inherit;
     display: block;
   }
 }
 
 @mixin peertube-button-file ($width) {
-  width: $width;
-
   @include peertube-file;
   @include peertube-button;
+
+  width: $width;
 }
 
 @mixin icon ($size) {
@@ -317,7 +336,7 @@
 @mixin select-arrow-down {
   top: 50%;
   right: calc(0% + 15px);
-  content: " ";
+  content: ' ';
   height: 0;
   width: 0;
   position: absolute;
@@ -358,7 +377,7 @@
     width: 100%;
   }
 
-  &:after {
+  &::after {
     @include select-arrow-down;
   }
 
@@ -394,21 +413,21 @@
     option {
       font-weight: $font-semibold;
       color: pvar(--greyForegroundColor);
-      border: none;
+      border: 0;
     }
   }
 }
 
 // Thanks: https://codepen.io/triss90/pen/XNEdRe/
 @mixin peertube-radio-container {
-  input[type="radio"] {
+  input[type=radio] {
     display: none;
 
-    & + label {
+    + label {
       font-weight: $font-regular;
       cursor: pointer;
 
-      &:before {
+      &::before {
         position: relative;
         top: -2px;
         content: '';
@@ -425,12 +444,12 @@
       }
     }
 
-    &:checked + label:before {
+    &:checked + label::before {
       background-color: #000;
       box-shadow: inset 0 0 0 4px #fff;
     }
 
-    &:focus + label:before {
+    &:focus + label::before {
       outline: none;
       border-color: #000;
     }
@@ -445,7 +464,7 @@
     box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
   }
 
-  & + span {
+  + span {
     position: relative;
     width: 18px;
     min-width: 18px;
@@ -455,7 +474,7 @@
     vertical-align: middle;
     cursor: pointer;
 
-    &:after {
+    &::after {
       content: '';
       position: absolute;
       top: calc(2px - #{$border-width});
@@ -474,13 +493,13 @@
     background: pvar(--mainColor);
     animation: jelly 0.6s ease;
 
-    &:after {
+    &::after {
       opacity: 1;
       transform: rotate(45deg) scale(1);
     }
   }
 
-  & + span + span {
+  + span + span {
     font-size: 15px;
     font-weight: $font-regular;
     margin-left: 5px;
@@ -489,7 +508,7 @@
   }
 
   &[disabled] + span,
-  &[disabled] + span + span{
+  &[disabled] + span + span {
     opacity: 0.5;
     cursor: default;
   }
@@ -685,13 +704,13 @@
       color: pvar(--mainColor);
     }
 
-    & + .breadcrumb-item {
+    + .breadcrumb-item {
       padding-left: 0.5rem;
       &::before {
         display: inline-block;
         padding-right: 0.5rem;
         color: #6c757d;
-        content: "/";
+        content: '/';
       }
     }
 
@@ -706,13 +725,13 @@
   flex-wrap: wrap;
   margin: 0 -5px;
 
-  & > div {
+  > div {
     box-sizing: border-box;
     flex: 0 0 percentage(1/3);
     padding: 0 5px;
     margin-bottom: 10px;
 
-    & > a {
+    > a {
       @include disable-default-a-behaviour;
 
       text-decoration: none;
@@ -727,8 +746,8 @@
       }
     }
 
-    & > a,
-    & > div {
+    > a,
+    > div {
       padding: 20px;
       background: pvar(--submenuBackgroundColor);
       border-radius: 4px;
@@ -737,7 +756,8 @@
     }
   }
 
-  .dashboard-num, .dashboard-text {
+  .dashboard-num,
+  .dashboard-text {
     text-align: center;
     font-size: 130%;
     color: pvar(--mainForegroundColor);
@@ -831,7 +851,7 @@
   flex-direction: column;
 
   .form-sub-title {
-    margin-right: 0px !important;
+    margin-right: 0 !important;
     margin-bottom: 10px;
     text-align: center;
   }

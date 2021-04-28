@@ -8,9 +8,9 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 @import './bootstrap';
 @import './primeng-custom';
-@import './ng-select.scss';
+@import './ng-select';
 
-@import './classes.scss';
+@import './classes';
 
 [hidden] {
   display: none !important;
@@ -89,14 +89,16 @@ input.readonly {
   background-color: pvar(--inputBackgroundColor) !important;
 }
 
-input, textarea {
+input,
+textarea {
   outline: none;
   color: pvar(--inputForegroundColor);
 }
 
 button {
-  background: unset;
   @include disable-outline;
+
+  background: unset;
 }
 
 label {
@@ -121,12 +123,12 @@ code {
   margin-top: 5px;
 }
 
-.input-error
+.input-error,
 my-input-toggle-hidden ::ng-deep input {
   border-color: $red !important;
 }
 
-.fullWidth {
+.full-width {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -134,7 +136,7 @@ my-input-toggle-hidden ::ng-deep input {
 }
 
 .glyphicon-black {
-  color: black;
+  color: #000;
 }
 
 .row {
@@ -184,26 +186,26 @@ my-input-toggle-hidden ::ng-deep input {
     width: 100%;
   }
 
-  &.lock-scroll .main-row > router-outlet + * {
+  &.lock-scroll .main-row > router-outlet + * {  /* stylelint-disable-line selector-max-compound-selectors */
     // Lock and hide body scrollbars
     position: fixed;
 
     // Lock and hide sub-menu scrollbars
-    .sub-menu {
+    .sub-menu { /* stylelint-disable-line */
       overflow-x: hidden;
     }
   }
 }
 
 .title-page {
+  @include disable-default-a-behaviour;
+
   opacity: 0.6;
   color: pvar(--mainForegroundColor);
   font-size: 16px;
   display: inline-block;
   margin-right: 55px;
   font-weight: $font-semibold;
-  @include disable-default-a-behaviour;
-
   border-bottom: 2px solid transparent;
 
   &.title-page-single {
@@ -219,13 +221,19 @@ my-input-toggle-hidden ::ng-deep input {
     font-size: 125%;
   }
 
-  &:hover, &:active, &:focus {
+  &:hover,
+  &:active,
+  &:focus {
     color: pvar(--mainForegroundColor);
   }
 
-  &.active, &:hover,  &:active, &:focus, &.title-page-single {
+  &.active,
+  &:hover,
+  &:active,
+  &:focus,
+  &.title-page-single {
     opacity: 1;
-    outline: 0px hidden !important;
+    outline: 0 hidden !important;
   }
 
   @media screen and (max-width: $mobile-view) {
@@ -262,7 +270,10 @@ my-input-toggle-hidden ::ng-deep input {
       background-color: pvar(--submenuBackgroundColor);
     }
 
-    &.active, &:hover, &:active, &:focus {
+    &.active,
+    &:hover,
+    &:active,
+    &:focus {
       opacity: 1;
     }
   }
@@ -275,8 +286,13 @@ my-input-toggle-hidden ::ng-deep input {
 
 // In tables, don't have a hover different background
 table {
-  .action-button-edit, .action-button-delete {
-    &:hover, &:active, &:focus, &[disabled], &.disabled {
+  .action-button-edit,
+  .action-button-delete {
+    &:hover,
+    &:active,
+    &:focus,
+    &[disabled],
+    &.disabled {
       background-color: $grey-background-color !important;
     }
   }
@@ -329,15 +345,12 @@ ngx-loading-bar {
 
 @media screen and (max-width: #{breakpoint(xxl)}) {
   .main-col {
-    & {
-      --horizontalMarginContent: #{$not-expanded-horizontal-margins / 2};
-    }
+    --horizontalMarginContent: #{$not-expanded-horizontal-margins / 2};
+    --videosHorizontalMarginContent: 30px;
 
     &.expanded {
       --horizontalMarginContent: #{$expanded-horizontal-margins / 2};
     }
-
-    --videosHorizontalMarginContent: 30px;
   }
 }
 

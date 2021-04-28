@@ -150,7 +150,7 @@ p-calendar {
   @include media-breakpoint-up(md) {
     @include make-col(7);
 
-    & + .col-video-edit {
+    + .col-video-edit {
       @include make-col(5);
     }
   }
@@ -158,7 +158,7 @@ p-calendar {
   @include media-breakpoint-up(xl) {
     @include make-col(8);
 
-    & + .col-video-edit {
+    + .col-video-edit {
       @include make-col(4);
     }
   }
@@ -169,7 +169,7 @@ p-calendar {
     @include media-breakpoint-up(md) {
       @include make-col(8);
 
-      & + .col-video-edit {
+      + .col-video-edit {
         @include make-col(4);
       }
     }

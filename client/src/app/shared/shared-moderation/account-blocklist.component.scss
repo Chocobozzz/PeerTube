@@ -6,6 +6,7 @@
 
   input {
     @include peertube-input-text(250px);
+
     flex-grow: 1;
   }
 }
