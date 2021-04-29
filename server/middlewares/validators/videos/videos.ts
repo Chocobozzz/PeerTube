@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { FileUploadMetadata } from 'express'
-import { move, stat } from 'fs-extra'
+import { stat } from 'fs-extra'
 import { body, header, param, query, ValidationChain } from 'express-validator'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
@@ -113,22 +113,7 @@ const videosAddResumableValidator = [
     file.filename = file.metadata.filename
     const cleanup = () => clearUploadFile(file.path)
 
-    if (
-      !file.metadata.isPreviewForAudio &&
-      !await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)
-    ) return cleanup()
-
-    if (file.metadata.isPreviewForAudio) {
-      // we move preview to and identifiable path
-      const filename = `${file.id}-preview`
-      file.filename = filename
-      await move(file.path, getResumableUploadPath(filename))
-      return res.status(HttpStatusCode.CREATED_201)
-                .json({
-                  previewfile: filename // return the filename, which the user will include under that key in the audio upload
-                })
-    }
-
+    if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
     if (!await isVideoAccepted(req, res, file as any)) return cleanup()
 
     try {
@@ -170,6 +155,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid).withMessage('Should have correct video channel id'),
+
   header('x-upload-content-length')
     .isNumeric()
     .exists()
@@ -180,33 +166,31 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .withMessage('Should specify the file mimetype'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.body.isPreviewForAudio) return next() // don't check mimetype for audio preview TODO: check size?
-
     const videoFileMetadata = {
       mimetype: req.headers['x-upload-content-type'],
       size: +req.headers['x-upload-content-length'],
       originalname: req.body.name
     } as express.FileUploadMetadata
     const user = res.locals.oauth.token.User
-    const file: UploadxFile & { duration: number, path: string, filename: string } = req.body
-    file.path = getResumableUploadPath(file.id)
-    const cleanup = () => clearUploadFile(file.path)
+    const cleanup = () => cleanUpReqFiles(req)
 
-    logger.debug('Checking videosAddResumableInitValidator parameters and headers', { parameters: req.body, headers: req.headers })
+    logger.debug('Checking videosAddResumableInitValidator parameters and headers', {
+      parameters: req.body,
+      headers: req.headers,
+      files: req.files
+    })
 
     if (areValidationErrors(req, res)) return cleanup()
     if (areErrorsInScheduleUpdate(req, res)) return cleanup()
 
     const files = { videofile: [ videoFileMetadata ] }
-    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) {
-      return cleanup()
-    }
+    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
 
     try {
       const storage = new DiskStorage({ directory: getResumableUploadPath() })
       const userPartiallyUploadedFiles = await storage.get(user.id + '') // uploadx's default naming uses req.user.id to prefix file names
       const userPartiallyUploadedFilesSize = await Promise.all(userPartiallyUploadedFiles.map(f => stat(f.name).then(s => s.size)))
-      const userPartiallyUploadedFilesTotalSize = userPartiallyUploadedFilesSize.reduce((a, b) => a + b, 0) + file.size
+      const userPartiallyUploadedFilesTotalSize = userPartiallyUploadedFilesSize.reduce((a, b) => a + b, 0) + videoFileMetadata.size
       if (userPartiallyUploadedFilesTotalSize > CONSTRAINTS_FIELDS.VIDEOS.PARTIAL_UPLOAD_SIZE.max) throw new Error()
     } catch (err) {
       res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
@@ -214,6 +198,11 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
 
       return cleanup()
     }
+
+    // multer required unsetting the Content-Type, now we can set it for node-uploadx
+    req.headers['content-type'] = 'application/json; charset=utf-8'
+    // place previewfile in metadata so that uploadx saves it in .META
+    if (req.files['previewfile']) req.body.previewfile = req.files['previewfile']
 
     return next()
   }

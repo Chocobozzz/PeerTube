@@ -393,7 +393,8 @@ async function uploadVideo (
                 .set('Accept', 'application/json')
                 .set('Authorization', 'Bearer ' + accessToken)
 
-    buildLegacyUploadReq(req, attributes)
+    buildUploadReq(req, attributes)
+    req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
 
     res = await req.expect(specialStatus)
   } else if (mode === 'resumable') {
@@ -403,14 +404,17 @@ async function uploadVideo (
     const size = (await stat(videoFilePath)).size
     const readable = createReadStream(videoFilePath)
 
-    const initializeSession = await request(url)
-                                    .post(path)
-                                    .set('Authorization', 'Bearer ' + accessToken)
-                                    .set('X-Upload-Content-Type', 'video/mp4')
-                                    .set('X-Upload-Content-Length', size.toString())
-                                    .send({ ...attributes, filename: attributes.fixture })
-                                    .expect(HttpStatusCode.CREATED_201)
-                                    .expect(res => res.header['location'] !== undefined)
+    const req = request(url)
+                .post(path)
+                .set('Authorization', 'Bearer ' + accessToken)
+                .set('X-Upload-Content-Type', 'video/mp4')
+                .set('X-Upload-Content-Length', size.toString())
+
+    buildUploadReq(req, attributes)
+    req.field('filename', attributes.fixture)
+
+    const initializeSession = await req.expect(HttpStatusCode.CREATED_201)
+                                       .expect(res => res.header['location'] !== undefined)
     const pathUploadId = initializeSession.header['location'].split('?')[1]
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -763,7 +767,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildLegacyUploadReq (req: request.Test, attributes: any) {
+function buildUploadReq (req: request.Test, attributes: any) {
   req.field('name', attributes.name)
      .field('nsfw', JSON.stringify(attributes.nsfw))
      .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
@@ -812,6 +816,4 @@ function buildLegacyUploadReq (req: request.Test, attributes: any) {
   if (attributes.originallyPublishedAt !== undefined) {
     req.field('originallyPublishedAt', attributes.originallyPublishedAt)
   }
-
-  req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
 }

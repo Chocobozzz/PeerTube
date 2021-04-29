@@ -10,6 +10,7 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getVideo,
+  makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
@@ -80,13 +81,13 @@ describe('Test audio only video transcoding', function () {
     }
   })
 
-  it('Should upload a video in a resumable fashion and transcode it', async function () {
+  it('Should upload a video in a resumable fashion with a preview and transcode it', async function () {
     this.timeout(120000)
 
     const resUpload = await uploadVideo(
       servers[0].url,
       servers[0].accessToken,
-      { name: 'audio only resumable' },
+      { name: 'audio only resumable', previewfile: 'preview.jpg' },
       HttpStatusCode.OK_200,
       'resumable'
     )
@@ -99,6 +100,9 @@ describe('Test audio only video transcoding', function () {
       const video: VideoDetails = res.body
 
       expect(video.streamingPlaylists).to.have.lengthOf(1)
+
+      await makeGetRequest({ url: server.url, path: video.thumbnailPath, statusCodeExpected: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path: video.previewPath, statusCodeExpected: HttpStatusCode.OK_200 })
 
       for (const files of [ video.files, video.streamingPlaylists[0].files ]) {
         expect(files).to.have.lengthOf(3)

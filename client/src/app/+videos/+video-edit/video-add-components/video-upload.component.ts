@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { UploadxOptions, UploadState, UploadxService } from 'ngx-uploadx'
+import { UploaderXFormData } from './uploaderx-form-data'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService, UserService } from '@app/core'
 import { scrollToTop, genericUploadErrorHandler } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
@@ -84,7 +85,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           return self.serverConfig.instance.isNSFW
         },
         privacy: VideoPrivacy.PRIVATE.toString()
-      }
+      },
+      uploaderClass: UploaderXFormData
     }
   }
 
@@ -125,11 +127,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.notifier.info($localize`Upload cancelled`)
         break
       case 'complete':
-        if (this.isUploadingPreviewFile) {
-          this.uploadVideoFile(state.response.filename)
-          return
-        }
-
         this.videoUploaded = true
         this.videoUploadPercents = 100
 
@@ -199,18 +196,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   uploadAudio () {
-    if (this.previewfileUpload) {
-      this.isUploadingPreviewFile = true
-
-      this.resumableUploadService.handleFiles(this.previewfileUpload, {
-        ...this.uploadxOptions,
-        metadata: {
-          isPreviewForAudio: true
-        }
-      })
-    } else {
-      this.uploadVideoFile()
-    }
+    this.uploadFile(this.getVideoFile(), this.previewfileUpload)
   }
 
   setVideoFile (files: FileList) {
@@ -232,8 +218,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
 
     this.isUploadingVideo = true
-
-    this.resumableUploadService.handleFiles(file, this.uploadxOptions)
+    this.uploadFile(file)
   }
 
   isPublishingButtonDisabled () {
@@ -273,12 +258,13 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         )
   }
 
-  private uploadVideoFile (audioBg?: string) {
-    this.resumableUploadService.handleFiles(this.getVideoFile(), {
+  private uploadFile (file: File, previewfile?: File) {
+    this.resumableUploadService.handleFiles(file, {
       ...this.uploadxOptions,
       metadata: {
         ...this.uploadxOptions.metadata,
-        audioBg // only used for audio background generation
+        filename: file.name,
+        previewfile: previewfile as any
       }
     })
     this.isUploadingPreviewFile = false

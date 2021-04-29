@@ -89,6 +89,15 @@ const reqVideoFileAdd = createReqFiles(
   }
 )
 
+const reqVideoFileAddResumable = createReqFiles(
+  [ 'thumbnailfile', 'previewfile' ],
+  MIMETYPES.IMAGE.MIMETYPE_EXT,
+  {
+    thumbnailfile: getResumableUploadPath(),
+    previewfile: getResumableUploadPath()
+  }
+)
+
 const reqVideoFileUpdate = createReqFiles(
   [ 'thumbnailfile', 'previewfile' ],
   MIMETYPES.IMAGE.MIMETYPE_EXT,
@@ -132,6 +141,7 @@ videosRouter.post('/upload',
 videosRouter.all('/upload-resumable',
   onlyAllowMethods([ HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT ]), // uploadx also allows GET and PATCH
   authenticate,
+  executeIfPOST(reqVideoFileAddResumable),
   executeIfPOST(asyncMiddleware(videosAddResumableInitValidator)),
   uploadx.upload(uploadxOptions), // uploadx doesn't use call next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),
@@ -212,9 +222,7 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
 async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
-  const files = { // only used for audio background generation
-    audioBg: { path: getResumableUploadPath(videoPhysicalFile.metadata.audioBg) }
-  }
+  const files = { previewfile: videoInfo.previewfile as Express.Multer.File[] }
 
   return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
 }
