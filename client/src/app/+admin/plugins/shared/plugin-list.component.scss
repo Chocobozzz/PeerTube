@@ -36,6 +36,7 @@
   .buttons {
     margin-left: auto;
     width: max-content;
+
     > *:not(:last-child) {
       margin-right: 10px;
     }
@@ -56,4 +57,15 @@
 .action-button {
   @include peertube-button-link;
   @include button-with-icon(21px, 0, -2px);
+}
+
+@media screen and (max-width: $small-view) {
+  .first-row {
+    flex-wrap: wrap;
+
+    .buttons {
+      flex-basis: 100%;
+      margin-top: 10px;
+    }
+  }
 }

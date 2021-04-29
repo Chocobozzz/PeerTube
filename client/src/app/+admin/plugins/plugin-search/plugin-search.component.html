@@ -48,10 +48,15 @@
         <span *ngIf="plugin.installed" class="badge badge-success">Installed</span>
 
         <div class="buttons">
-          <my-edit-button *ngIf="plugin.installed === true && !isThemeSearch()" [routerLink]="getShowRouterLink(plugin)" label="Settings" i18n-label></my-edit-button>
+          <my-edit-button
+            *ngIf="plugin.installed === true && !isThemeSearch()" [routerLink]="getShowRouterLink(plugin)"
+            label="Settings" i18n-label [responsiveLabel]="true"
+          ></my-edit-button>
 
-          <my-button class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)" [loading]="isInstalling(plugin)"
-                     label="Install" icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
+          <my-button
+            class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)"
+            [loading]="isInstalling(plugin)" label="Install" [responsiveLabel]="true"
+            icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
           ></my-button>
         </div>
       </div>

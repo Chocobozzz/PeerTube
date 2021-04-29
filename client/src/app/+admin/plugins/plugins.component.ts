@@ -1,8 +1,7 @@
 import { Component } from '@angular/core'
 
 @Component({
-  templateUrl: './plugins.component.html',
-  styleUrls: [ './plugins.component.scss' ]
+  templateUrl: './plugins.component.html'
 })
 export class PluginsComponent {
 }

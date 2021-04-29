@@ -1,6 +1,16 @@
 @import '_variables';
 @import '_mixins';
 
+@mixin responsive-label {
+  .action-button {
+    padding: 0 13px;
+  }
+
+  .button-label {
+    display: none;
+  }
+}
+
 :host {
   outline: none;
 }
@@ -46,12 +56,12 @@ span[class$=-button] {
 // In a table, try to minimize the space taken by this button
 @media screen and (max-width: 1400px) {
   :host-context(td) {
-    .action-button {
-      padding: 0 13px;
-    }
+    @include responsive-label;
+  }
+}
 
-    .button-label {
-      display: none;
-    }
+@media screen and (max-width: $small-view) {
+  .responsive-label {
+    @include responsive-label;
   }
 }
