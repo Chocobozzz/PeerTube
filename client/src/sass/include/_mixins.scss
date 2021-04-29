@@ -897,15 +897,17 @@
     padding-bottom: 15px;
     margin-bottom: $sub-menu-margin-bottom;
 
+    > span > my-global-icon,
     > my-global-icon {
       margin-right: 10px;
-      vertical-align: bottom;
       width: 24px;
       height: 24px;
+      vertical-align: top;
     }
 
     .badge {
       margin-left: 7px;
+      vertical-align: top;
     }
   }
 }
