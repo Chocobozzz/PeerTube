@@ -48,7 +48,7 @@ export class ActorAvatarComponent {
     return ''
   }
 
-  get class () {
+  getClass (type: 'avatar' | 'initial') {
     const base = [ 'avatar' ]
 
     if (this.size) base.push(`avatar-${this.size}`)
@@ -56,7 +56,7 @@ export class ActorAvatarComponent {
     if (this.account) base.push('account')
     else base.push('channel')
 
-    if (this.initial) {
+    if (type === 'initial' && this.initial) {
       base.push('initial')
       base.push(this.getColorTheme())
     }
