@@ -821,7 +821,7 @@
     --chip-padding: .2rem .3rem;
   }
 
-  ::ng-deep .avatar {
+  my-actor-avatar {
     margin-left: -.4rem;
     margin-right: .2rem;
   }
@@ -831,9 +831,8 @@
 
     height: $avatar-height;
 
-    .avatar {
-      height: $avatar-height;
-      width: $avatar-height;
+    my-actor-avatar {
+      @include actor-avatar-size($avatar-height);
     }
 
     div {
