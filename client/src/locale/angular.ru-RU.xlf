@@ -4017,7 +4017,7 @@
       </trans-unit>
       <trans-unit id="1f689bd2c3f3cfac3c800799545786e56aa5156d" datatype="html">
         <source>Local comments</source>
-        <target state="translated">Местные комментарии</target>
+        <target state="translated">Локальные комментарии</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3c770e01673ea017697b8c8a4feb63aefdd1f999" datatype="html">
