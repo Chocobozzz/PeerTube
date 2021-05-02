@@ -5266,7 +5266,7 @@
       </trans-unit>
       <trans-unit id="db930d0e3dbcb12963bec15cfec67fac6534542d" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="new">In Recently added, Trending, Local, Most liked and Search pages</target>
+        <target state="translated">Trong Gần Đây, Trending, Máy Chủ, Yêu Thích Nhất và những trang Tìm Kiếm</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="984be691d289644c6d40fa2cc858093be31ab58e" datatype="html">
@@ -6153,10 +6153,7 @@
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
-        <target state="new">
-        The worst-case scenario of an average person spying on their friends is quite unlikely.
-        There are much more effective ways to get that kind of information.
-      </target>
+        <target state="translated">Khó xảy ra trường hợp xấu nhất là một người bình thường theo dõi bạn bè của họ. Có nhiều cách hiệu quả hơn để lấy loại thông tin đó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf" datatype="html">
@@ -6166,11 +6163,7 @@
       </trans-unit>
       <trans-unit id="1fd22031e4f7920db2300cc76ee9c8516b25f50d" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="new">
-        The threats to privacy with YouTube are different from PeerTube's.
-        In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
-        Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
-      </target>
+        <target state="translated">Mối nguy hiểm bảo mật của YouTube khác với của PeerTube. Trong trường hợp của YouTube, nền tảng này thu thập một số lượng lớn thông tin cá nhân của bạn (không chỉ là IP) để chẩn đoán và định danh bạn. Còn nữa, YouTube là sản phẩm của Google/Alphabet, một công ty định danh bạn bằng nhiều trang web (thông qua AdSense hoặc Google Analytics).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99" datatype="html">
@@ -6180,48 +6173,37 @@
       </trans-unit>
       <trans-unit id="301e86f807ed659ff42d3b4bba6e03b88bff7907" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="new">
-        Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing
-        your IP in their connection logs: ISP/routers/trackers/CDN and more.
-        PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
-        Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
-      </target>
+        <target state="translated">Địa chỉ IP của bạn là công khai cho nên mỗi lần truy cập một trang web, một số lượng thành phần (bên cạnh nội dung trang web) thấy bạn trong lịch sử kết nối của họ: ISP/routers/trackers/CDN và nhiều hơn thế. PeerTube minh bạch về vấn đề này: chúng tôi cảnh báo bạn nếu bạn muốn giữ địa chỉ IP riêng tư, bạn phải dùng VPN hoặc Trình duyệt Tor. Nếu bạn nghĩ bỏ đi P2P khỏi PeerTube sẽ khiến bạn ẩn danh là chưa đúng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41" datatype="html">
         <source>What will be done to mitigate this problem?</source>
-        <target state="new">What will be done to mitigate this problem?</target>
+        <target state="translated">Làm gì để giảm thiểu vấn đề này?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="db4d65ed605b948169d51eac4c1b2ff662088eb7" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="new">
-        PeerTube wants to deliver the best countermeasures possible, to give you more choice
-        and render attacks less likely. Here is what we put in place so far:
-      </target>
+        <target state="translated">PeerTube muốn đưa ra các biện pháp tốt nhất có thể, để bạn có nhiều lựa chọn hơn và ít khả năng xảy ra các cuộc tấn công hơn. Đây là những gì chúng tôi đưa ra cho đến nay:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="89c0c2c3150b99bbea20214895df56c8f8d6125d" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target state="new">We set a limit to the number of peers sent by the tracker</target>
+        <target state="translated">Chúng tôi giới hạn số peer gửi bởi trình theo dõi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="b23c2b01db8b09f1a9bc6144d66291e28f02daf4" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target state="new">We set a limit on the request frequency received by the tracker</target>
+        <target state="translated">Chúng tôi giới hạn tuần suất yêu cầu nhận bởi trình theo dõi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target state="new">Allow instance admins to disable P2P from the administration interface</target>
+        <target state="translated">Cho phép quản trị viên tắt P2P từ giao diện quản trị</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="new">
-        Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling
-        WebRTC in your browser.
-      </target>
+        <target state="translated">Cuối cùng, hãy nhớ rằng bạn luôn có thể tắt P2P trong trình phát video hoặc chỉ bằng cách tắt WebRTC trong trình duyệt của bạn.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
@@ -6324,19 +6306,12 @@
       </trans-unit>
       <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b" datatype="html">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target state="new">
-      A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-      For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology.
-    
-        </target>
+        <target state="translated">Một kênh là nơi bạn mà đăng video lên. Tạo nhiều kênh sẽ giúp bạn sắp xếp và chia nội dung của bạn hợp lí. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Ví dụ: bạn có thể tạo một kênh để đăng các buổi hòa nhạc piano của bạn và một kênh khác để đăng các video nói về bảo vệ môi trường. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="df3021e29cbce57c12151ae6e1e0bf8c640e87da" datatype="html">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
-        <target state="new">
-      Other users can decide to subscribe any channel they want, to be notified when you publish a new video.
-    </target>
+        <target state="translated">Những người dùng khác có thể quyết định đăng ký bất kỳ kênh nào họ muốn, hoặc thông báo khi bạn đăng video mới.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="79b3619b36af71e5c70394a3a7b31545e32d83f0" datatype="html">
@@ -6364,21 +6339,17 @@
       </trans-unit>
       <trans-unit id="4a935862bd3120d5878e9635a9d46dfc1bcaedb4" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">Tên kênh là mã nhận dạng duy nhất của kênh của bạn trên máy chủ này và tất cả các máy chủ khác. Nó độc đáo như một địa chỉ email, giúp người khác dễ dàng tương tác với nó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="4b84dbfc388651c74c77bba7ee0078b5714baf00" datatype="html">
         <source>Channel name cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="new"> Channel name cannot be the same as your account name. You can click on the first step to update your account name. </target>
+        <target state="translated">Tên kênh không được giống với tên tài khoản của bạn. Bạn có thể trở lại bước đầu tiên để cập nhật tên tài khoản của mình.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="095664da04cb19afa1c2bb5992db6e253a664dd6" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">Tên kênh là mã nhận dạng duy nhất của kênh của bạn trên máy chủ này và tất cả các máy chủ khác. Nó độc đáo như một địa chỉ email, giúp người khác dễ dàng tương tác với nó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="76118692a327ca6158811d5c3f4e9eeea30dc8b1" datatype="html">
@@ -6573,7 +6544,7 @@
       </trans-unit>
       <trans-unit id="f157a6b81f7de696ad6915dbfb0be299b5fa04bf" datatype="html">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="new"> Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically. </target>
+        <target state="translated">Việc ước tính khả năng chuyển mã và phát trực tuyến video của máy chủ không dễ dàng và chúng tôi không thể tự động điều chỉnh PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -7035,14 +7006,12 @@
       </trans-unit>
       <trans-unit id="3962242315365992494" datatype="html">
         <source>Switch video block to manual</source>
-        <target state="new">Switch video block to manual</target>
+        <target state="translated">Chuyển video khóa thành bình thường</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6906423861055262169" datatype="html">
         <source>Video <x id="PH"/> switched to manual block.</source>
-        <target state="new">Video 
-          <x id="PH"/> switched to manual block.
-        </target>
+        <target state="translated">Video <x id="PH"/> đã chuyển thành bình thường.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="7293356040886494773" datatype="html">
@@ -7217,7 +7186,7 @@
       </trans-unit>
       <trans-unit id="4cdcc661c59f400db1fab16ca6f2dc79de9422c7" datatype="html">
         <source>Views may not be counted correctly (reduced compared to what they should be)</source>
-        <target state="new">Views may not be counted correctly (reduced compared to what they should be)</target>
+        <target state="translated">Số lượt xem có thể không được tính chính xác</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">8</context>
@@ -7225,7 +7194,7 @@
       </trans-unit>
       <trans-unit id="cc45411ae4a443d8c7e015f6fdbf5d9872e94688" datatype="html">
         <source>Anti brute force system could be overzealous</source>
-        <target state="new">Anti brute force system could be overzealous</target>
+        <target state="translated">Hệ thống chống spam có thể quá hăng hái</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7583,27 +7552,27 @@
       </trans-unit>
       <trans-unit id="5179099584732142331" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">Bạn có chắc rằng bạn muốn xóa tài khoản của bạn? Thao tác này sẽ xóa tất cả dữ liệu của bạn, bao gồm kênh, video và nhận xét. Nội dung được lưu trong bộ nhớ cache bởi các máy chủ khác và các bên thứ ba khác có thể mất nhiều thời gian hơn để bị xóa.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="6897292459203320054" datatype="html">
         <source>Type your username to confirm</source>
-        <target state="new">Type your username to confirm</target>
+        <target state="translated">Xác nhận tên tài khoản</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
         <source>Delete your account</source>
-        <target state="new">Delete your account</target>
+        <target state="translated">Xóa tài khoản</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="2520605306994744004" datatype="html">
         <source>Delete my account</source>
-        <target state="new">Delete my account</target>
+        <target state="translated">Xóa tài khoản của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="3902597758945766483" datatype="html">
         <source>Your account is deleted.</source>
-        <target state="new">Your account is deleted.</target>
+        <target state="translated">Tài khoản của bạn đã bị xóa.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html">
@@ -7614,52 +7583,52 @@
       </trans-unit>
       <trans-unit id="77907918814566205" datatype="html">
         <source>New video from your subscriptions</source>
-        <target state="new">New video from your subscriptions</target>
+        <target state="translated">Video mới từ kênh bạn đăng ký</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4343589211916204486" datatype="html">
         <source>New comment on your video</source>
-        <target state="new">New comment on your video</target>
+        <target state="translated">Bình luận mới trên video của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
         <source>New abuse</source>
-        <target state="new">New abuse</target>
+        <target state="translated">Lượt báo cáo mới</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="2265829846010085268" datatype="html">
         <source>Video blocked automatically waiting review</source>
-        <target state="new">Video blocked automatically waiting review</target>
+        <target state="translated">Video bị khóa tự động để chờ duyệt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="5671547068905553663" datatype="html">
         <source>One of your video is blocked/unblocked</source>
-        <target state="new">One of your video is blocked/unblocked</target>
+        <target state="translated">Một video của bạn bị khóa/mở khóa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="1158912204255103651" datatype="html">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="new">Video published (after transcoding/scheduled update)</target>
+        <target state="translated">Đã đăng video (sau khi chuyển mã/cập nhật lịch đăng)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3809414664640924954" datatype="html">
         <source>Video import finished</source>
-        <target state="new">Video import finished</target>
+        <target state="translated">Đã nhập video từ nguồn khác xong</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="3268838889659873892" datatype="html">
         <source>A new user registered on your instance</source>
-        <target state="new">A new user registered on your instance</target>
+        <target state="translated">Một thành viên vừa đăng ký máy chủ của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="7373104725413001009" datatype="html">
         <source>You or your channel(s) has a new follower</source>
-        <target state="new">You or your channel(s) has a new follower</target>
+        <target state="translated">Bạn hoặc kênh của bạn có người theo dõi mới</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target state="new">Someone mentioned you in video comments</target>
+        <target state="translated">Ai đó nhắc tới bạn trong bình luận video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
@@ -7669,17 +7638,17 @@
       </trans-unit>
       <trans-unit id="773085434165307906" datatype="html">
         <source>Your instance automatically followed another instance</source>
-        <target state="new">Your instance automatically followed another instance</target>
+        <target state="translated">Máy chủ của bạn tự động theo dõi máy chủ khác</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="new">An abuse report received a new message</target>
+        <target state="translated">Một báo cáo đã nhận được một tin nhắn mới</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="new">One of your abuse reports has been accepted or rejected by moderators</target>
+        <target state="translated">Một trong những báo cáo của bạn đã được kiểm duyệt viên chấp nhận hoặc từ chối</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="2764971902180889905" datatype="html">
@@ -7710,7 +7679,7 @@
       </trans-unit>
       <trans-unit id="d2ade8ba2e32c6fe467932b6b156025fe50da7c3" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="new"> People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
+        <target state="translated">Mọi người có thể tìm bạn bằng @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -7762,7 +7731,7 @@
       </trans-unit>
       <trans-unit id="3326446048041727269" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target state="new">Display/Video settings updated.</target>
+        <target state="translated">Đã cập nhật Hiển thị/Cài đặt Video.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
@@ -7806,9 +7775,7 @@
       </trans-unit>
       <trans-unit id="2575302837003821736" datatype="html">
         <source>Please type the display name of the video channel (<x id="PH"/>) to confirm</source>
-        <target state="new">Please type the display name of the video channel (
-          <x id="PH"/>) to confirm
-        </target>
+        <target state="translated">Hãy nhập tên hiển thị của kênh video ( <x id="PH"/>) để xác nhận</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="624066830180032195" datatype="html">
@@ -7833,7 +7800,7 @@
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="new">URL parameter is missing in URL parameters</target>
+        <target state="translated">Tham số URL bị thiếu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -7841,7 +7808,7 @@
       </trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
-        <target state="new">Cannot access to the remote resource</target>
+        <target state="translated">Không thể truy cập dữ liệu từ xa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -7849,7 +7816,7 @@
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
-        <target state="new">Remote interaction</target>
+        <target state="translated">Giao tiếp từ xa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -7880,7 +7847,7 @@
       </trans-unit>
       <trans-unit id="6658000829978978023" datatype="html">
         <source>Applications</source>
-        <target state="new">Applications</target>
+        <target state="translated">Những ứng dụng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">60</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
@@ -7918,7 +7885,7 @@
       </trans-unit>
       <trans-unit id="73022f1676784c4f9b8cdbb322e52b02ccc800b7" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">Thay đổi chủ sở hữu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8197117721861453263" datatype="html">
@@ -7947,7 +7914,7 @@
       </trans-unit>
       <trans-unit id="6810714890760227072" datatype="html">
         <source>Ownership change request sent.</source>
-        <target state="new">Ownership change request sent.</target>
+        <target state="translated">Đã gửi yêu cầu thay đổi chủ sở hữu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f" datatype="html">
@@ -7967,17 +7934,17 @@
       </trans-unit>
       <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9" datatype="html">
         <source>My subscriptions</source>
-        <target state="new">My subscriptions</target>
+        <target state="translated">Kênh tôi đăng ký</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="31e313e20810b296cb7cc389fd7a3736cff7df44" datatype="html">
         <source>Search your subscriptions</source>
-        <target state="new">Search your subscriptions</target>
+        <target state="translated">Tìm kênh bạn đăng ký</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="61cb418b053c4b1099a9c7e5a34a9cf52c87f8dd" datatype="html">
         <source>You don't have any subscription yet.</source>
-        <target state="new">You don't have any subscription yet.</target>
+        <target state="translated">Bạn chưa đăng ký kênh nào cả.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context>
           <context context-type="linenumber">18</context>
@@ -7985,12 +7952,12 @@
       </trans-unit>
       <trans-unit id="1991904494976135035" datatype="html">
         <source>My abuse reports</source>
-        <target state="new">My abuse reports</target>
+        <target state="translated">Báo cáo của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="5752861278140673787" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">Lượt thay đổi chủ sở hữu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="5983006734882925930" datatype="html">
@@ -8021,7 +7988,7 @@
       </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
-        <target state="new">Maximize editor</target>
+        <target state="translated">Phóng to trình chỉnh sửa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -8052,7 +8019,7 @@
       </trans-unit>
       <trans-unit id="4180693983967989981" datatype="html">
         <source>Unable to find user id or verification string.</source>
-        <target state="new">Unable to find user id or verification string.</target>
+        <target state="translated">Không thể tìm thấy id người dùng hoặc chuỗi xác minh.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.ts</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
@@ -8082,58 +8049,57 @@
       </trans-unit>
       <trans-unit id="4049262826107502276" datatype="html">
         <source>Toggle the left menu</source>
-        <target state="new">Toggle the left menu</target>
+        <target state="translated">Chuyển đổi menu bên trái</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">318</context></context-group>
       </trans-unit>
       <trans-unit id="5409372033656550095" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="new">Go to the discover videos page</target>
+        <target state="translated">Đến trang khám phá video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">323</context></context-group>
       </trans-unit>
       <trans-unit id="4278050445961255445" datatype="html">
         <source>Go to the trending videos page</source>
-        <target state="new">Go to the trending videos page</target>
+        <target state="translated">Đến trang Thịnh Hành</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">328</context></context-group>
       </trans-unit>
       <trans-unit id="3242234958443825475" datatype="html">
         <source>Go to the recently added videos page</source>
-        <target state="new">Go to the recently added videos page</target>
+        <target state="translated">Đến trang Gần Đây</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">333</context></context-group>
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="new">Go to the local videos page</target>
+        <target state="translated">Đến trang Máy Chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">338</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
         <source>Go to the videos upload page</source>
-        <target state="new">Go to the videos upload page</target>
+        <target state="translated">Đến trang upload video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">343</context></context-group>
       </trans-unit>
       <trans-unit id="3779524668013120370" datatype="html">
         <source>Go to my subscriptions</source>
-        <target state="new">Go to my subscriptions</target>
+        <target state="translated">Đến lượt đăng ký của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="1136469849928650779" datatype="html">
         <source>Go to my videos</source>
-        <target state="new">Go to my videos</target>
+        <target state="translated">Đến trang video của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="7836683738999600376" datatype="html">
         <source>Go to my imports</source>
-        <target state="new">Go to my imports</target>
+        <target state="translated">Đến trang video tôi nhập</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="7511292153332773503" datatype="html">
         <source>Go to my channels</source>
-        <target state="new">Go to my channels</target>
+        <target state="translated">Đến kênh của tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="error.text"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="new">Cannot retrieve OAuth Client credentials: <x id="PH"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="translated">Không thể truy xuất thông tin đăng nhập ứng dụng khách OAuth: <x id="PH"/>. Hãy chắc rằng bạn đã cấu hình đúng PeerTube (config/ directory), đặc biệt là phần "webserver".</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
@@ -8241,7 +8207,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7460399579150761114" datatype="html">
         <source>function is not implemented</source>
-        <target state="new">function is not implemented</target>
+        <target state="translated">chức năng không thực hiện được</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.ts</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="4873149362496451858" datatype="html">
@@ -8292,7 +8258,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3208627574396957172" datatype="html">
         <source>Search index is unavailable. Retrying with instance results instead.</source>
-        <target state="new">Search index is unavailable. Retrying with instance results instead.</target>
+        <target state="translated">Không thể tìm kiếm tất cả. Thay vào đó, hãy thử lại với kết quả chỉ ở máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="307702206382241469" datatype="html">
@@ -8310,7 +8276,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3c2c6b17d0326ab344e194b17abbee201d58dbea" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {kết quả} other {kết quả}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -8413,42 +8379,42 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8198703669620791633" datatype="html">
         <source>Previews cache size is required.</source>
-        <target state="new">Previews cache size is required.</target>
+        <target state="translated">Kích thước bộ nhớ cache của bản xem trước là bắt buộc.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="3971192070835972256" datatype="html">
         <source>Previews cache size must be greater than 1.</source>
-        <target state="new">Previews cache size must be greater than 1.</target>
+        <target state="translated">Kích thước bộ nhớ cache của các bản xem trước phải lớn hơn 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2903453036126968504" datatype="html">
         <source>Previews cache size must be a number.</source>
-        <target state="new">Previews cache size must be a number.</target>
+        <target state="translated">Kích thước bộ nhớ cache của các bản xem trước phải là số.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6941976540222684735" datatype="html">
         <source>Captions cache size is required.</source>
-        <target state="new">Captions cache size is required.</target>
+        <target state="translated">Kích thước bộ nhớ cache của phụ đề là bắt buộc.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="780869536819343075" datatype="html">
         <source>Captions cache size must be greater than 1.</source>
-        <target state="new">Captions cache size must be greater than 1.</target>
+        <target state="translated">Kích thước bộ nhớ cache của phụ đề phải lớn hơn 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2498218540197718478" datatype="html">
         <source>Captions cache size must be a number.</source>
-        <target state="new">Captions cache size must be a number.</target>
+        <target state="translated">Kích thước bộ nhớ cache của phụ đề phải là số.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="818392297325723982" datatype="html">
         <source>Signup limit is required.</source>
-        <target state="new">Signup limit is required.</target>
+        <target state="translated">Yêu cầu giới hạn đăng ký.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="5630311719329022718" datatype="html">
         <source>Signup limit must be greater than 1. Use -1 to disable it.</source>
-        <target state="new">Signup limit must be greater than 1. Use -1 to disable it.</target>
+        <target state="translated">Yêu cầu giới hạn đăng ký phải lớn hơn 1. Sử dụng -1 để tắt nó.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -8456,32 +8422,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2555843408410000965" datatype="html">
         <source>Signup limit must be a number.</source>
-        <target state="new">Signup limit must be a number.</target>
+        <target state="translated">Giới hạn đăng ký phải là số.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="240096858386658337" datatype="html">
         <source>Admin email is required.</source>
-        <target state="new">Admin email is required.</target>
+        <target state="translated">Yêu cầu email của quản trị viên</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="4392533896009432078" datatype="html">
         <source>Admin email must be valid.</source>
-        <target state="new">Admin email must be valid.</target>
+        <target state="translated">Email của admin phải sử dụng được.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="6172217783476989430" datatype="html">
         <source>Transcoding threads is required.</source>
-        <target state="new">Transcoding threads is required.</target>
+        <target state="translated">Yêu cầu chuyển mã chuỗi.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target state="new">Transcoding threads must be greater or equal to 0.</target>
+        <target state="translated">Chuyễn mã chuỗi phải lớn hơn hoặc bằng 0.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
-        <target state="new">Max live duration is required.</target>
+        <target state="translated">Yêu cầu độ dài tối đa của phát trực tiếp.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">71</context>
@@ -8489,7 +8455,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
-        <target state="new">Max live duration should be greater or equal to -1.</target>
+        <target state="translated">Độ dài tối đa của phát trực tiếp phải lớn hơn hoặc bằng -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -8497,7 +8463,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
-        <target state="new">Max instance lives is required.</target>
+        <target state="translated">Yêu cầu số buổi phát máy chủ tối đa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">79</context>
@@ -8505,7 +8471,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
-        <target state="new">Max instance lives should be greater or equal to -1.</target>
+        <target state="translated">Số buổi phát tối đa máy chủ phải lớn hơn hoặc bằng -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -8513,7 +8479,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="new">Max user lives is required.</target>
+        <target state="translated">Yêu cầu số lượng thành viên live tối đa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
@@ -8521,7 +8487,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
-        <target state="new">Max user lives should be greater or equal to -1.</target>
+        <target state="translated">Số lượng thành viên phát trực tiếp phải lớn hơn hoặc bằng -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -8529,7 +8495,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
-        <target state="new">Concurrency is required.</target>
+        <target state="translated">Yêu cầu đồng thời.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">95</context>
@@ -8537,7 +8503,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
-        <target state="new">Concurrency should be greater or equal to 1.</target>
+        <target state="translated">Đồng thời phải lớn hơn hoặc bằng 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">96</context>
@@ -8545,29 +8511,29 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="new">Index URL should be a URL</target>
+        <target state="translated">Chỉ mục URL phải là URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="new">Search index URL should be a URL</target>
+        <target state="translated">Tìm kiếm chỉ mục URL phải là URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
         <source>Email is required.</source>
-        <target state="new">Email is required.</target>
+        <target state="translated">Yêu cầu email.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="4591482207344282590" datatype="html">
         <source>Email must be valid.</source>
-        <target state="new">Email must be valid.</target>
+        <target state="translated">Email phải sử dụng được.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="new">Handle is required.</target>
+        <target state="translated">Yêu cầu Handle.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -8575,7 +8541,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="new">Handle must be valid (eg. chocobozzz@example.com).</target>
+        <target state="translated">Handle phải sử dụng được (eg. chocobozzz@example.com).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -8583,65 +8549,65 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
-        <target state="new">Your name is required.</target>
+        <target state="translated">Yêu cầu tên của bạn.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5799695548385507586" datatype="html">
         <source>Your name must be at least 1 character long.</source>
-        <target state="new">Your name must be at least 1 character long.</target>
+        <target state="translated">Tên của bạn phải ít nhất 1 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3600004643604731577" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
-        <target state="new">Your name cannot be more than 120 characters long.</target>
+        <target state="translated">Tên của bạn phải dài hơn 120 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
         <source>A subject is required.</source>
-        <target state="new">A subject is required.</target>
+        <target state="translated">Yêu cầu tựa đề.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target state="new">The subject must be at least 1 character long.</target>
+        <target state="translated">Tựa đề ít nhất phải có 1 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="5905189237950302829" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="new">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">Tựa đề không được dài hơn 120 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="847704400962945123" datatype="html">
         <source>A message is required.</source>
-        <target state="new">A message is required.</target>
+        <target state="translated">Yêu cầu tin nhắn.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3871842658394273178" datatype="html">
         <source>The message must be at least 3 characters long.</source>
-        <target state="new">The message must be at least 3 characters long.</target>
+        <target state="translated">Tin nhắn phải dài ít nhất 3 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3731145759205895653" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
-        <target state="new">The message cannot be more than 5000 characters long.</target>
+        <target state="translated">Tin nhắn không được dài hơn 5000 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="3868123820758341861" datatype="html">
         <source>Username is required.</source>
-        <target state="new">Username is required.</target>
+        <target state="translated">Yêu cầu tên tài khoản.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="3577237269587081090" datatype="html">
         <source>Password is required.</source>
-        <target state="new">Password is required.</target>
+        <target state="translated">Yêu cầu mật khẩu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">58</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="3152303769378345477" datatype="html">
         <source>Confirmation of the password is required.</source>
-        <target state="new">Confirmation of the password is required.</target>
+        <target state="translated">Yêu cầu xác nhận mật khẩu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/reset-password-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
@@ -8661,22 +8627,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
-        <target state="new">Channel name is required.</target>
+        <target state="translated">Yêu cầu tên kênh.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
         <source>Channel name must be at least 1 character long.</source>
-        <target state="new">Channel name must be at least 1 character long.</target>
+        <target state="translated">Tên kênh phải dài ít nhất 1 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="8602785819772117007" datatype="html">
         <source>Channel name cannot be more than 50 characters long.</source>
-        <target state="new">Channel name cannot be more than 50 characters long.</target>
+        <target state="translated">Tên kênh dài tối đa 50 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <target state="translated">Tên kênh phải viết thường và chỉ có thể chứa các ký tự chữ và số, dấu chấm và dấu gạch dưới.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
@@ -8703,22 +8669,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
         <source>Quota must be greater than -1.</source>
-        <target state="new">Quota must be greater than -1.</target>
+        <target state="translated">Quota phải lớn hơn -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
         <source>Daily upload limit is required.</source>
-        <target state="new">Daily upload limit is required.</target>
+        <target state="translated">Yêu cầu giới hạn đăng hằng ngày.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="8959404382357999234" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
-        <target state="new">Daily upload limit must be greater than -1.</target>
+        <target state="translated">Giới hạn đăng hàng ngày phải lớn hơn -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="4796798537475457493" datatype="html">
         <source>User role is required.</source>
-        <target state="new">User role is required.</target>
+        <target state="translated">Yêu cầu chức vụ thành viên.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="2761226139624435788">
@@ -8737,7 +8703,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="new">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">Bạn phải đồng ý quy tắc máy chủ mới có thể đăng ký.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="7803960725351649605">
@@ -8752,7 +8718,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
         <source>Display name is required.</source>
-        <target state="new">Display name is required.</target>
+        <target state="translated">Yêu cầu tên hiển thị.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">153</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group>
@@ -8772,77 +8738,77 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1000468652492651683" datatype="html">
         <source>Report reason is required.</source>
-        <target state="new">Report reason is required.</target>
+        <target state="translated">Yêu cầu lý do báo cáo.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="1109780973109145433" datatype="html">
         <source>Report reason must be at least 2 characters long.</source>
-        <target state="new">Report reason must be at least 2 characters long.</target>
+        <target state="translated">Lý do báo cáo phải ít nhất 2 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5414573937278525654" datatype="html">
         <source>Report reason cannot be more than 3000 characters long.</source>
-        <target state="new">Report reason cannot be more than 3000 characters long.</target>
+        <target state="translated">Lý do báo cáo tối đa 3000 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="8779567454442277762" datatype="html">
         <source>Moderation comment is required.</source>
-        <target state="new">Moderation comment is required.</target>
+        <target state="translated">Yêu cầu ghi chú kiểm duyệt.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8954765410376245909" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
-        <target state="new">Moderation comment must be at least 2 characters long.</target>
+        <target state="translated">Ghi chú kiểm duyệt ít nhất 2 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6316804467108244906" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation comment cannot be more than 3000 characters long.</target>
+        <target state="translated">Ghi chú kiểm duyệt tối đa 3000 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="new">Abuse message is required.</target>
+        <target state="translated">Yêu cầu thông điệp vi phạm.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="new">Abuse message must be at least 2 characters long.</target>
+        <target state="translated">Thông điệp vi phạm ít nhất 2 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="new">Abuse message cannot be more than 3000 characters long.</target>
+        <target state="translated">Thông điệp vi phạm tối đa 3000 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6700357678556223012" datatype="html">
         <source>The channel is required.</source>
-        <target state="new">The channel is required.</target>
+        <target state="translated">Yêu cầu kênh.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
-        <target state="new">Block reason must be at least 2 characters long.</target>
+        <target state="translated">Lý do khóa phải ít nhất 2 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="new">Block reason cannot be more than 300 characters long.</target>
+        <target state="translated">Lý do khóa tối đa 300 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
         <source>Video caption language is required.</source>
-        <target state="new">Video caption language is required.</target>
+        <target state="translated">Yêu cầu ngôn ngữ phụ đề.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3438639650276868976" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="new">Video caption file is required.</target>
+        <target state="translated">Yêu cầu tập tin phụ đề.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7365924714339585574" datatype="html">
         <source>The username is required.</source>
-        <target state="new">The username is required.</target>
+        <target state="translated">Yêu cầu tên thành viên.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
@@ -8852,32 +8818,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
         <source>Name is required.</source>
-        <target state="new">Name is required.</target>
+        <target state="translated">Yêu cầu tên.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="4006797705713167676" datatype="html">
         <source>Name must be at least 1 character long.</source>
-        <target state="new">Name must be at least 1 character long.</target>
+        <target state="translated">Tên ít nhất 1 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="2233809696503670883" datatype="html">
         <source>Name cannot be more than 50 characters long.</source>
-        <target state="new">Name cannot be more than 50 characters long.</target>
+        <target state="translated">Tên tối đa 50 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7915656854942800659" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Tên phải là chữ hoặc số viết thường; được phép sử dụng dấu chấm và dấu gạch dưới.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="6880459830525364741" datatype="html">
         <source>Support text must be at least 3 characters long.</source>
-        <target state="new">Support text must be at least 3 characters long.</target>
+        <target state="translated">Tin nhắn hỗ trợ ít nhất 3 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="6461548560008228165" datatype="html">
         <source>Support text cannot be more than 1000 characters long</source>
-        <target state="new">Support text cannot be more than 1000 characters long</target>
+        <target state="translated">Tin nhắn hỗ trợ tối đa 1000 ký tự</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="8c9434491bf113074890c9c975d89d5f7727d2d9" datatype="html">
@@ -8890,32 +8856,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4267638333776227701" datatype="html">
         <source>Comment is required.</source>
-        <target state="new">Comment is required.</target>
+        <target state="translated">Yêu cầu bình luận.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="71132671234491945" datatype="html">
         <source>Comment must be at least 2 characters long.</source>
-        <target state="new">Comment must be at least 2 characters long.</target>
+        <target state="translated">Bình luận phải ít nhất 2 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="4148250392704331190" datatype="html">
         <source>Comment cannot be more than 3000 characters long.</source>
-        <target state="new">Comment cannot be more than 3000 characters long.</target>
+        <target state="translated">Bình luận tối đa 3000 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6854100952145697527" datatype="html">
         <source>Display name cannot be more than 120 characters long.</source>
-        <target state="new">Display name cannot be more than 120 characters long.</target>
+        <target state="translated">Tên hiển thị tối đa 120 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="6198895122092095739" datatype="html">
         <source>Privacy is required.</source>
-        <target state="new">Privacy is required.</target>
+        <target state="translated">Yêu cầu chế độ đăng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
         <source>The channel is required when the playlist is public.</source>
-        <target state="new">The channel is required when the playlist is public.</target>
+        <target state="translated">Yêu cầu kênh khi danh sách phát công khai.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="d8ae45f6eb0e2d78efd70b4e80e132784aa65cf1" datatype="html">
@@ -8987,7 +8953,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7309902991450450996" datatype="html">
         <source>Video channel is required.</source>
-        <target state="new">Video channel is required.</target>
+        <target state="translated">Yêu cầu kênh video.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="3959376623771116873" datatype="html">
@@ -9022,12 +8988,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4806300480558315727" datatype="html">
         <source>Video support must be at least 3 characters long.</source>
-        <target state="new">Video support must be at least 3 characters long.</target>
+        <target state="translated">Hỗ trợ video ít nhất 3 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="6655773021893755977" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target state="new">Video support cannot be more than 1000 characters long.</target>
+        <target state="translated">Hỗ trợ video tối đa 1000 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="4246579596585402255">
@@ -9322,7 +9288,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
-        <target state="new">Instance languages</target>
+        <target state="translated">Ngôn ngữ máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
@@ -9379,17 +9345,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH"/> (channel page) </source>
-        <target state="new">
-          <x id="PH"/> (channel page)
-        </target>
+        <target state="translated"><x id="PH"/> (trang kênh) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
-        <target state="new">
-          <x id="PH"/> (account page)
-        </target>
+        <target state="translated"><x id="PH"/> (trang tài khoản) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-avatar-channel.component.ts</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-account-avatar/account-avatar.component.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
@@ -9468,9 +9430,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
         <source>User <x id="PH"/> email set as verified</source>
-        <target state="new">User 
-          <x id="PH"/> email set as verified
-        </target>
+        <target state="translated">Email thành viên <x id="PH"/> đã được xác thực</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528">
@@ -9483,9 +9443,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH"/> muted. </source>
-        <target state="new">Instance 
-          <x id="PH"/> muted.
-        </target>
+        <target state="translated">Đã ẩn máy chủ <x id="PH"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9493,93 +9451,83 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2558977494773636050" datatype="html">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target state="new">Account 
-          <x id="PH"/> muted by the instance.
-        </target>
+        <target state="translated">Thành viên <x id="PH"/> đã bị ẩn bởi máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">426</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="1595779426198793580" datatype="html">
         <source>Mute server</source>
-        <target state="new">Mute server</target>
+        <target state="translated">Ẩn máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">314</context></context-group>
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH"/> muted by the instance.</source>
-        <target state="new">Server 
-          <x id="PH"/> muted by the instance.
-        </target>
+        <target state="translated">Máy chủ <x id="PH"/> đã bị ẩn bởi máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">438</context></context-group>
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
         <source>Add a message to communicate with the reporter</source>
-        <target state="new">Add a message to communicate with the reporter</target>
+        <target state="translated">Thêm thông điệp để giao tiếp với người báo cáo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="new">Add a message to communicate with the moderation team</target>
+        <target state="translated">Thêm thông điệp để giao tiếp với đội ngũ kiểm duyệt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="3085641638748358969" datatype="html">
         <source>Account <x id="PH"/> unmuted by the instance.</source>
-        <target state="new">Account 
-          <x id="PH"/> unmuted by the instance.
-        </target>
+        <target state="translated">Tài khoản <x id="PH"/> đã bỏ ẩn bởi máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">190</context></context-group>
       </trans-unit>
       <trans-unit id="4991892477258601737" datatype="html">
         <source>Instance <x id="PH"/> muted by the instance.</source>
-        <target state="new">Instance 
-          <x id="PH"/> muted by the instance.
-        </target>
+        <target state="translated">Máy chủ <x id="PH"/> đã bị ẩn bởi máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="4379430340167561220" datatype="html">
         <source>Instance <x id="PH"/> unmuted by the instance.</source>
-        <target state="new">Instance 
-          <x id="PH"/> unmuted by the instance.
-        </target>
+        <target state="translated">Máy chủ <x id="PH"/> đã bỏ ẩn bởi máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">218</context></context-group>
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
         <source>Are you sure you want to remove all the comments of this account?</source>
-        <target state="new">Are you sure you want to remove all the comments of this account?</target>
+        <target state="translated">Bạn có chắc muốn xóa toàn bộ bình luận của người này?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
       <trans-unit id="6315346579373254461" datatype="html">
         <source>Delete account comments</source>
-        <target state="new">Delete account comments</target>
+        <target state="translated">Xóa bình luận của thành viên</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">230</context></context-group>
       </trans-unit>
       <trans-unit id="8559170154828316298" datatype="html">
         <source>Will remove comments of this account (may take several minutes).</source>
-        <target state="new">Will remove comments of this account (may take several minutes).</target>
+        <target state="translated">Sẽ xóa bỏ mọi bình luận của tài khoản này (mất thời gian vài phút).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">236</context></context-group>
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
         <source>Edit user</source>
-        <target state="new">Edit user</target>
+        <target state="translated">Sửa người dùng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="4728427543536046034" datatype="html">
         <source>Change quota, role, and more.</source>
-        <target state="new">Change quota, role, and more.</target>
+        <target state="translated">Thay quota, chức vụ và nhiều nữa.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">265</context></context-group>
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
         <source>Delete user</source>
-        <target state="new">Delete user</target>
+        <target state="translated">Xóa người dùng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">269</context></context-group>
       </trans-unit>
       <trans-unit id="7577876364431026966" datatype="html">
         <source>Unban user</source>
-        <target state="new">Unban user</target>
+        <target state="translated">Bỏ cấm người dùng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">280</context></context-group>
       </trans-unit>
       <trans-unit id="3508163549683020253" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="new">Allow the user to login and create videos/comments again</target>
+        <target state="translated">Cho phép thành viên đăng nhập và đăng video/bình luận trở lại</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">281</context></context-group>
       </trans-unit>
       <trans-unit id="1888272455383898478">
@@ -9589,7 +9537,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2365286519320230773" datatype="html">
         <source>Hide any content from that user from you.</source>
-        <target state="new">Hide any content from that user from you.</target>
+        <target state="translated">Ẩn bất cứ nội dung nào từ người đó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="4043508901590508211">
@@ -9599,7 +9547,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2843593344827160627" datatype="html">
         <source>Show back content from that user for you.</source>
-        <target state="new">Show back content from that user for you.</target>
+        <target state="translated">Hiện lại toàn bộ nội dung từ người đó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">305</context></context-group>
       </trans-unit>
       <trans-unit id="6198109035280957164">
@@ -9609,7 +9557,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4537735378779630558" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="new">Hide any content from that instance for you.</target>
+        <target state="translated">Ẩn bất cứ nội dung nào từ máy chủ đó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">311</context></context-group>
       </trans-unit>
       <trans-unit id="6247487021683085858">
@@ -9619,17 +9567,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4024846984475742259" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="new">Show back content from that instance for you.</target>
+        <target state="translated">Hiện lại nội dung từ máy chủ đó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">317</context></context-group>
       </trans-unit>
       <trans-unit id="3108200185023875257" datatype="html">
         <source>Remove comments from your videos</source>
-        <target state="new">Remove comments from your videos</target>
+        <target state="translated">Xóa bình luận khỏi video của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">322</context></context-group>
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
         <source>Remove comments made by this account on your videos.</source>
-        <target state="new">Remove comments made by this account on your videos.</target>
+        <target state="translated">Xóa bình luận của người này ra khỏi video của bạn.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">323</context></context-group>
       </trans-unit>
       <trans-unit id="81452583525574033">
@@ -9639,7 +9587,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
         <source>Hide any content from that user from you, your instance and its users.</source>
-        <target state="new">Hide any content from that user from you, your instance and its users.</target>
+        <target state="translated">Ẩn bất cứ nội dung nào từ người dùng đó, máy chủ của bạn và người dùng của nó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">335</context></context-group>
       </trans-unit>
       <trans-unit id="884942914962310163">
@@ -9649,7 +9597,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
         <source>Show this user's content to the users of this instance again.</source>
-        <target state="new">Show this user's content to the users of this instance again.</target>
+        <target state="translated">Hiện lại nội dung của người này đến thành viên máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">341</context></context-group>
       </trans-unit>
       <trans-unit id="3191211873505538654">
@@ -9659,7 +9607,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
         <source>Hide any content from that instance from you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance from you, your instance and its users.</target>
+        <target state="translated">Ẩn bất cứ nội dung nào từ máy chủ đó đến máy chủ của bạn và thành viên.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">353</context></context-group>
       </trans-unit>
       <trans-unit id="5325628963747139770">
@@ -9669,88 +9617,88 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="758471033841077314" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="new">Show back content from that instance for you, your instance and its users.</target>
+        <target state="translated">Hiện lại nội dung từ máy chủ đó đến bạn, máy chủ của bạn và thành viên.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">359</context></context-group>
       </trans-unit>
       <trans-unit id="3785095284194008197" datatype="html">
         <source>Remove comments from your instance</source>
-        <target state="new">Remove comments from your instance</target>
+        <target state="translated">Xóa bỏ bình luận từ máy chủ của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">369</context></context-group>
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target state="new">Remove comments made by this account from your instance.</target>
+        <target state="translated">Xóa bỏ bình luận của người này khỏi máy chủ của bạn.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">370</context></context-group>
       </trans-unit>
       <trans-unit id="6746743143272021955" datatype="html">
         <source>Violent or repulsive</source>
-        <target state="new">Violent or repulsive</target>
+        <target state="translated">Bạo lực hoặc ghê tởm</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="5272553814105457319" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
-        <target state="new">Contains offensive, violent, or coarse language or iconography.</target>
+        <target state="translated">Chứa ngôn ngữ xúc phạm, bạo lực hoặc thô tục hoặc hình tượng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="6979166468838302269" datatype="html">
         <source>Hateful or abusive</source>
-        <target state="new">Hateful or abusive</target>
+        <target state="translated">Căm thù hoặc quá lố</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="8006612645824137458" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
-        <target state="new">Contains abusive, racist or sexist language or iconography.</target>
+        <target state="translated">Chứa ngôn ngữ hoặc hình tượng quá lố, phân biệt chủng tộc hoặc phân biệt giới tính.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
         <source>Spam, ad or false news</source>
-        <target state="new">Spam, ad or false news</target>
+        <target state="translated">Spam, quảng cáo hoặc tin giả</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target state="new">Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</target>
+        <target state="translated">Chứa nội dung tiếp thị, thư rác, tin tức giả mạo có chủ đích hoặc hình thu nhỏ / văn bản / thẻ gây hiểu lầm. Vui lòng cung cấp các nguồn có uy tín để báo cáo các trò lừa bịp.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target state="new">Privacy breach or doxxing</target>
+        <target state="translated">Vi phạm quyền riêng tư hoặc doxxing</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="new">Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</target>
+        <target state="translated">Chứa thông tin cá nhân có thể được sử dụng để theo dõi, xác định, liên hệ hoặc mạo danh ai đó (ví dụ: tên, địa chỉ, số điện thoại, email hoặc chi tiết thẻ tín dụng).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
         <source>Infringes your copyright wrt. the regional laws with which the server must comply.</source>
-        <target state="new">Infringes your copyright wrt. the regional laws with which the server must comply.</target>
+        <target state="translated">Vi phạm bản quyền hoặc luật pháp ở khu vực mà máy chủ phải tuân thủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
         <source>Breaks server rules</source>
-        <target state="new">Breaks server rules</target>
+        <target state="translated">Vi phạm quy tắc máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">164</context></context-group>
       </trans-unit>
       <trans-unit id="7930601470861156366" datatype="html">
         <source>Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</source>
-        <target state="new">Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</target>
+        <target state="translated">Bất kỳ điều gì không có trong phần trên vi phạm các điều khoản dịch vụ, quy tắc ứng xử hoặc các quy tắc chung được áp dụng trên máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="8700771664729810984" datatype="html">
         <source>The above can only be seen in thumbnails.</source>
-        <target state="new">The above can only be seen in thumbnails.</target>
+        <target state="translated">Những điều trên chỉ có thể được nhìn thấy trong hình thu nhỏ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
         <source>Captions</source>
-        <target state="new">Captions</target>
+        <target state="translated">Phụ đề</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">178</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="5779804235244672536" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="new">The above can only be seen in captions (please describe which).</target>
+        <target state="translated">Những điều trên chỉ có thể được nhìn thấy trong chú thích (vui lòng mô tả cái nào).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="968295009933361070">
@@ -9772,16 +9720,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to all current channels of 
-          <x id="PH"/>. You will be notified of all their new videos.
-        </target>
+        <target state="translated">Đã đăng toàn bộ kênh gần đây của <x id="PH"/>. Bạn sẽ nhận được thông báo về video mới của họ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to 
-          <x id="PH"/>. You will be notified of all their new videos.
-        </target>
+        <target state="translated">Đã đăng ký <x id="PH"/>. Bạn sẽ nhận được thông báo về những video mới của họ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="7019115336138470191">
@@ -9791,9 +9735,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH"/> </source>
-        <target state="new">Unsubscribed from all channels of 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Đã hủy đăng ký toàn bộ kênh từ <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="9201562016527884133">
@@ -9810,7 +9752,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="0713f058de1d239f503a974e384eda384d35ad2b" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target state="new">Multiple ways to subscribe to the current channel</target>
+        <target state="translated">Có nhiều cách để đăng ký kênh này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">44</context>
@@ -9818,7 +9760,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="29e51bac84b50b9a58ba54122663f31c82a504d5" datatype="html">
         <source>Open subscription dropdown</source>
-        <target state="new">Open subscription dropdown</target>
+        <target state="translated">Mở hộp xổ xuống đăng ký</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">46</context>
@@ -9847,14 +9789,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7754186870520534716" datatype="html">
         <source>Video added in <x id="PH"/> </source>
-        <target state="new">Video added in 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Đã thêm video trong <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">378</context></context-group>
       </trans-unit>
       <trans-unit id="985751964589921228" datatype="html">
         <source>Timestamps updated</source>
-        <target state="new">Timestamps updated</target>
+        <target state="translated">Đã cập nhật thời gian</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
@@ -9876,54 +9816,54 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2909684945706361544" datatype="html">
         <source>Delete video</source>
-        <target state="new">Delete video</target>
+        <target state="translated">Xóa video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">363</context></context-group>
       </trans-unit>
       <trans-unit id="2210418817778733727" datatype="html">
         <source>Actions for the comment</source>
-        <target state="new">Actions for the comment</target>
+        <target state="translated">Hành động đối với bình luận</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">392</context></context-group>
       </trans-unit>
       <trans-unit id="7978668497183230348" datatype="html">
         <source>Delete comment</source>
-        <target state="new">Delete comment</target>
+        <target state="translated">Xóa bình luận</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">398</context></context-group>
       </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html">
         <source>Do you really want to delete this comment?</source>
-        <target state="new">Do you really want to delete this comment?</target>
+        <target state="translated">Bạn có chắc muốn xóa bình luận này?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.ts</context><context context-type="linenumber">172</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">402</context></context-group>
       </trans-unit>
       <trans-unit id="7837272126865175984" datatype="html">
         <source>Comment deleted.</source>
-        <target state="new">Comment deleted.</target>
+        <target state="translated">Đã xóa bình luận.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">410</context></context-group>
       </trans-unit>
       <trans-unit id="346270517625845962" datatype="html">
         <source>Encoder</source>
-        <target state="new">Encoder</target>
+        <target state="translated">Encoder</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="2331557444464201331" datatype="html">
         <source>Format name</source>
-        <target state="new">Format name</target>
+        <target state="translated">Tên định dạng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="45739481977493163" datatype="html">
         <source>Size</source>
-        <target state="new">Size</target>
+        <target state="translated">Dung lượng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="7742520815129539114" datatype="html">
         <source>Bitrate</source>
-        <target state="new">Bitrate</target>
+        <target state="translated">Bitrate</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">164</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="4094960161662677662" datatype="html">
         <source>Codec</source>
-        <target state="new">Codec</target>
+        <target state="translated">Codec</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">184</context></context-group>
       </trans-unit>
       <trans-unit id="2115592966120408375">
@@ -9958,12 +9898,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5072091387445907742" datatype="html">
         <source>Actions for the reporter</source>
-        <target state="new">Actions for the reporter</target>
+        <target state="translated">Hành động đối với người báo cáo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">302</context></context-group>
       </trans-unit>
       <trans-unit id="6599069899275412095" datatype="html">
         <source>Mute reporter</source>
-        <target state="new">Mute reporter</target>
+        <target state="translated">Ẩn người báo cáo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">308</context></context-group>
       </trans-unit>
       <trans-unit id="2990849907502572301" datatype="html">
@@ -10019,7 +9959,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
         <source>Remove</source>
-        <target state="new">Remove</target>
+        <target state="translated">Hủy bỏ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment.component.ts</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
@@ -10029,7 +9969,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="89f77b6d2638113698ddb2b8e656c1e776df23d3" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Bình luận} =1 {1 Bình luận} other {<x id="INTERPOLATION"/> Bình luận}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">4</context>
@@ -10043,7 +9983,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="9faa7899e515045c650407ca7263db6c7b6a90f9" datatype="html">
         <source>Open video actions</source>
-        <target state="new">Open video actions</target>
+        <target state="translated">Mở hành động video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -10055,7 +9995,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3719503424625455635" datatype="html">
         <source>Mute server account</source>
-        <target state="new">Mute server account</target>
+        <target state="translated">Ẩn tài khoản máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">290</context></context-group>
       </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a">
@@ -10065,7 +10005,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="08a52c67462389568cf14a021ddecc0aedaa9613" datatype="html">
         <source>Reported part</source>
-        <target state="new">Reported part</target>
+        <target state="translated">Phần đã báo cáo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="5c54befce78d70e20c215f10a00e617245f53bc9" datatype="html">
@@ -10085,12 +10025,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="91e073459fc31b0fc1f6384aa9ad816f9f796de8" datatype="html">
         <source>Messages with the reporter</source>
-        <target state="new">Messages with the reporter</target>
+        <target state="translated">Nhắn tin với người báo cáo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="f0327abdde923ab7f56cf036a5bf6bc2546126c0" datatype="html">
         <source>Messages with the moderation team</source>
-        <target state="new">Messages with the moderation team</target>
+        <target state="translated">Nhắn tin với đội ngũ kiểm duyệt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="158f56a96d95d4ddcfe506aca64f754d01fa11b6" datatype="html">
@@ -10120,12 +10060,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4517785179607945981" datatype="html">
         <source>To transcode</source>
-        <target state="new">To transcode</target>
+        <target state="translated">Để chuyển mã</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="3299576663551440736">
         <source>To import</source>
-        <target state="new">To import</target>
+        <target state="translated">Để nhập video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="1795705931707209785" datatype="html">
@@ -10180,7 +10120,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
+        <target state="translated">Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> của <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
@@ -10388,8 +10328,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1267976082314717617" datatype="html">
         <source>Your daily video quota is exceeded with this video ( video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="new">Your daily video quota is exceeded with this video (
-video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
+        <target state="translated">Video này đã vượt quá giới hạn đăng video hàng ngày của bạn (video size: <x id="PH"/>, đã dùng: <x id="PH_1"/>, giới hạn: <x id="PH_2"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">308</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119">
@@ -10409,7 +10348,7 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
         <source>The deletion will be sent to remote instances so they can reflect the change.</source>
-        <target state="new"> The deletion will be sent to remote instances so they can reflect the change.</target>
+        <target state="translated">Việc xóa sẽ được gửi đến các máy chủ từ xa để họ có thể phản ánh sự thay đổi.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.ts</context><context context-type="linenumber">175</context></context-group>
       </trans-unit>
       <trans-unit id="7321800851971795962" datatype="html">
@@ -10477,7 +10416,7 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
       </trans-unit>
       <trans-unit id="1755474755114288376" datatype="html">
         <source>Up Next</source>
-        <target state="new">Up Next</target>
+        <target state="translated">Tiếp Theo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">634</context></context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
@@ -10492,57 +10431,57 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
       </trans-unit>
       <trans-unit id="7895294730547405228" datatype="html">
         <source>Enter/exit fullscreen (requires player focus)</source>
-        <target state="new">Enter/exit fullscreen (requires player focus)</target>
+        <target state="translated">Mở/thoát toàn màn hình (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">933</context></context-group>
       </trans-unit>
       <trans-unit id="7618388257165864759" datatype="html">
         <source>Play/Pause the video (requires player focus)</source>
-        <target state="new">Play/Pause the video (requires player focus)</target>
+        <target state="translated">Phát/Ngừng video (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">934</context></context-group>
       </trans-unit>
       <trans-unit id="7761890399634216630" datatype="html">
         <source>Mute/unmute the video (requires player focus)</source>
-        <target state="new">Mute/unmute the video (requires player focus)</target>
+        <target state="translated">Ẩn/bỏ ẩn video (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">935</context></context-group>
       </trans-unit>
       <trans-unit id="5996585232248234904" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</source>
-        <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</target>
+        <target state="translated">Chuyển đến một mức phần trăm của video: 0 là 0% và 9 là 90% (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">937</context></context-group>
       </trans-unit>
       <trans-unit id="3748765405903319998" datatype="html">
         <source>Increase the volume (requires player focus)</source>
-        <target state="new">Increase the volume (requires player focus)</target>
+        <target state="translated">Tăng âm lượng (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">939</context></context-group>
       </trans-unit>
       <trans-unit id="5810704036407159982" datatype="html">
         <source>Decrease the volume (requires player focus)</source>
-        <target state="new">Decrease the volume (requires player focus)</target>
+        <target state="translated">Giảm âm lượng (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">940</context></context-group>
       </trans-unit>
       <trans-unit id="2622048822548065691" datatype="html">
         <source>Seek the video forward (requires player focus)</source>
-        <target state="new">Seek the video forward (requires player focus)</target>
+        <target state="translated">Tua tới video (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">942</context></context-group>
       </trans-unit>
       <trans-unit id="6540078205109221153" datatype="html">
         <source>Seek the video backward (requires player focus)</source>
-        <target state="new">Seek the video backward (requires player focus)</target>
+        <target state="translated">Tua lùi video (yêu cầu trọng tâm video)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">943</context></context-group>
       </trans-unit>
       <trans-unit id="1956491957766210808" datatype="html">
         <source>Increase playback rate (requires player focus)</source>
-        <target state="new">Increase playback rate (requires player focus)</target>
+        <target state="translated">Tăng tốc độ phát (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">945</context></context-group>
       </trans-unit>
       <trans-unit id="5495529997674803186" datatype="html">
         <source>Decrease playback rate (requires player focus)</source>
-        <target state="new">Decrease playback rate (requires player focus)</target>
+        <target state="translated">Giảm tốc độ phát (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">946</context></context-group>
       </trans-unit>
       <trans-unit id="3178343147230721210" datatype="html">
         <source>Navigate in the video frame by frame (requires player focus)</source>
-        <target state="new">Navigate in the video frame by frame (requires player focus)</target>
+        <target state="translated">Điều hướng trong từng khung hình video (yêu cầu trọng tâm trình phát)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">948</context></context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184">
@@ -10557,7 +10496,7 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
       </trans-unit>
       <trans-unit id="1729036051846673606" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="new">When active, the next video is automatically played after the current one.</target>
+        <target state="translated">Khi kích hoạt, video tiếp theo sẽ tự động phát sau video hiện tại.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/recommendations/recommended-videos.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
@@ -10582,7 +10521,7 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
       </trans-unit>
       <trans-unit id="1812379335568847528" datatype="html">
         <source>Subscriptions</source>
-        <target state="new">Subscriptions</target>
+        <target state="translated">Lượt đăng ký</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">66</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context><context context-type="linenumber">46</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">59</context></context-group>
@@ -10594,7 +10533,7 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
       </trans-unit>
       <trans-unit id="e40d752221cf8adc1941495c7c8dc1862bb0c248" datatype="html">
         <source>Open actions</source>
-        <target state="new">Open actions</target>
+        <target state="translated">Mở hành động</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -10608,17 +10547,17 @@ video size: <x id="PH"/>, used: <x id="PH_1"/>, quota: <x id="PH_2"/>)</target>
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
         <source>Discover videos</source>
-        <target state="new">Discover videos</target>
+        <target state="translated">Khám phá video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
-        <target state="new">Trending videos</target>
+        <target state="translated">Video thịnh hành</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
         <source>Recently added videos</source>
-        <target state="new">Recently added videos</target>
+        <target state="translated">Video gần đây nhất</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
