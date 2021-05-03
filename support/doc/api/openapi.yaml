@@ -3971,16 +3971,25 @@ components:
             moderator: Moderator scope
             user: User scope
   schemas:
-    VideoConstantNumber:
+    VideoConstantNumber-Category:
       properties:
         id:
           type: integer
+          description: category id of the video (see [/videos/categories](#tag/Video/paths/~1videos~1categories/get))
         label:
           type: string
-    VideoConstantString:
+    VideoConstantNumber-Licence:
+      properties:
+        id:
+          type: integer
+          description: licence id of the video (see [/videos/licences](#tag/Video/paths/~1videos~1licences/get))
+        label:
+          type: string
+    VideoConstantString-Language:
       properties:
         id:
           type: string
+          description: language id of the video (see [/videos/languages](#tag/Video/paths/~1videos~1languages/get))
         label:
           type: string
 
@@ -4250,11 +4259,11 @@ components:
           type: string
           format: date-time
         category:
-          $ref: '#/components/schemas/VideoConstantNumber'
+          $ref: '#/components/schemas/VideoConstantNumber-Category'
         licence:
-          $ref: '#/components/schemas/VideoConstantNumber'
+          $ref: '#/components/schemas/VideoConstantNumber-Licence'
         language:
-          $ref: '#/components/schemas/VideoConstantString'
+          $ref: '#/components/schemas/VideoConstantString-Language'
         privacy:
           $ref: '#/components/schemas/VideoPrivacyConstant'
         description:
@@ -4616,7 +4625,7 @@ components:
     VideoCaption:
       properties:
         language:
-          $ref: '#/components/schemas/VideoConstantString'
+          $ref: '#/components/schemas/VideoConstantString-Language'
         captionPath:
           type: string
     ActorImage:
