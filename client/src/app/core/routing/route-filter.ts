@@ -18,7 +18,7 @@ export abstract class RouteFilter {
 
     this.searchStream
       .pipe(
-        debounceTime(400),
+        debounceTime(200),
         distinctUntilChanged()
       )
       .subscribe(search => {
