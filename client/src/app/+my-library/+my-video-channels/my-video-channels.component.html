@@ -13,6 +13,8 @@
   </a>
 </div>
 
+<div class="no-results" i18n *ngIf="totalItems === 0">No channel found.</div>
+
 <div class="video-channels">
   <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
     <my-actor-avatar [channel]="videoChannel" [internalHref]="[ '/video-channels', videoChannel.nameWithHost ]"></my-actor-avatar>
