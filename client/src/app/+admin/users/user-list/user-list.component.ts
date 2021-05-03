@@ -1,5 +1,5 @@
 import { SortMeta } from 'primeng/api'
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService, UserService } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
@@ -19,7 +19,7 @@ type UserForList = User & {
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ]
 })
-export class UserListComponent extends RestTable implements OnInit, AfterViewInit {
+export class UserListComponent extends RestTable implements OnInit {
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
 
   users: User[] = []
@@ -78,7 +78,6 @@ export class UserListComponent extends RestTable implements OnInit, AfterViewIni
         .subscribe(config => this.serverConfig = config)
 
     this.initialize()
-    this.listenToSearchChange()
 
     this.bulkUserActions = [
       [
@@ -127,10 +126,6 @@ export class UserListComponent extends RestTable implements OnInit, AfterViewIni
     this.columns.push({ id: 'lastLoginDate', label: 'Last login' })
   }
 
-  ngAfterViewInit () {
-    if (this.search) this.setTableFilter(this.search, false)
-  }
-
   getIdentifier () {
     return 'UserListComponent'
   }
@@ -174,7 +169,7 @@ export class UserListComponent extends RestTable implements OnInit, AfterViewIni
   }
 
   onUserChanged () {
-    this.loadData()
+    this.reloadData()
   }
 
   async unbanUsers (users: User[]) {
@@ -185,7 +180,7 @@ export class UserListComponent extends RestTable implements OnInit, AfterViewIni
         .subscribe(
           () => {
             this.notifier.success($localize`${users.length} users unbanned.`)
-            this.loadData()
+            this.reloadData()
           },
 
           err => this.notifier.error(err.message)
@@ -207,7 +202,7 @@ export class UserListComponent extends RestTable implements OnInit, AfterViewIni
     this.userService.removeUser(users).subscribe(
       () => {
         this.notifier.success($localize`${users.length} users deleted.`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message)
@@ -218,7 +213,7 @@ export class UserListComponent extends RestTable implements OnInit, AfterViewIni
     this.userService.updateUsers(users, { emailVerified: true }).subscribe(
       () => {
         this.notifier.success($localize`${users.length} users email set as verified.`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message)
@@ -229,7 +224,7 @@ export class UserListComponent extends RestTable implements OnInit, AfterViewIni
     return this.selectedUsers.length !== 0
   }
 
-  protected loadData () {
+  protected reloadData () {
     this.selectedUsers = []
 
     this.userService.getUsers({

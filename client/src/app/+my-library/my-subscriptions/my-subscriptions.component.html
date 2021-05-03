@@ -7,12 +7,7 @@
 </h1>
 
 <div class="video-subscriptions-header">
-  <div class="has-feedback has-clear">
-    <input type="text" placeholder="Search your subscriptions" i18n-placeholder [(ngModel)]="subscriptionsSearch"
-      (ngModelChange)="onSubscriptionsSearchChanged()" />
-    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
-    <span class="sr-only" i18n>Clear filters</span>
-  </div>
+  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
 </div>
 
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">You don't have any subscription yet.</div>

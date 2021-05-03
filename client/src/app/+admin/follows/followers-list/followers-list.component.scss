@@ -1,14 +1,6 @@
 @import '_variables';
 @import '_mixins';
 
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
-  }
-}
-
 a {
   @include disable-default-a-behaviour;
   display: inline-block;

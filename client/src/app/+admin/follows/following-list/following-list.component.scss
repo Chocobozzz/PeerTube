@@ -16,14 +16,6 @@ a {
   }
 }
 
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
-  }
-}
-
 .follow-button {
   @include create-button;
 }

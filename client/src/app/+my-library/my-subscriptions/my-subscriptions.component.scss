@@ -58,6 +58,7 @@ input[type=text] {
 
 .video-subscriptions-header {
   margin-bottom: 30px;
+  display: flex;
 }
 
 @media screen and (max-width: $small-view) {

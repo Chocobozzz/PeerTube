@@ -5,12 +5,7 @@
 </h1>
 
 <div class="video-channels-header d-flex justify-content-between">
-  <div class="has-feedback has-clear">
-    <input type="text" placeholder="Search your channels" i18n-placeholder [(ngModel)]="channelsSearch"
-      (ngModelChange)="onChannelsSearchChanged()" />
-    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
-    <span class="sr-only" i18n>Clear filters</span>
-  </div>
+  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
 
   <a class="create-button" routerLink="create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>

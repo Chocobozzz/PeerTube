@@ -44,12 +44,12 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
             : $localize`Account ${blockedAccount.nameWithHost} unmuted by your instance.`
         )
 
-        this.loadData()
+        this.reloadData()
       }
     )
   }
 
-  protected loadData () {
+  protected reloadData () {
     const operation = this.mode === BlocklistComponentType.Account
       ? this.blocklistService.getUserAccountBlocklist({
         pagination: this.pagination,

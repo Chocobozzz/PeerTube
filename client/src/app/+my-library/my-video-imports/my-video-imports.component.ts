@@ -62,7 +62,7 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
     return '/videos/update/' + video.uuid
   }
 
-  protected loadData () {
+  protected reloadData () {
     this.videoImportService.getMyVideoImports(this.pagination, this.sort)
         .subscribe(
           resultList => {

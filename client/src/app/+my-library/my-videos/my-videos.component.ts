@@ -1,8 +1,8 @@
 import { concat, Observable } from 'rxjs'
 import { tap, toArray } from 'rxjs/operators'
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, RouteFilter, ScreenService, ServerService, User } from '@app/core'
+import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
@@ -16,7 +16,7 @@ import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.c
   templateUrl: './my-videos.component.html',
   styleUrls: [ './my-videos.component.scss' ]
 })
-export class MyVideosComponent extends RouteFilter implements OnInit, AfterViewInit, DisableForReuseHook {
+export class MyVideosComponent implements OnInit, DisableForReuseHook {
   @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
   @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
   @ViewChild('liveStreamInformationModal', { static: true }) liveStreamInformationModal: LiveStreamInformationComponent
@@ -42,6 +42,7 @@ export class MyVideosComponent extends RouteFilter implements OnInit, AfterViewI
 
   videos: Video[] = []
   getVideosObservableFunction = this.getVideosObservable.bind(this)
+
   sort: VideoSortField = '-publishedAt'
 
   user: User
@@ -53,6 +54,8 @@ export class MyVideosComponent extends RouteFilter implements OnInit, AfterViewI
     }
   ]
 
+  private search: string
+
   constructor (
     protected router: Router,
     protected serverService: ServerService,
@@ -63,8 +66,6 @@ export class MyVideosComponent extends RouteFilter implements OnInit, AfterViewI
     private confirmService: ConfirmService,
     private videoService: VideoService
   ) {
-    super()
-
     this.titlePage = $localize`My videos`
   }
 
@@ -72,16 +73,14 @@ export class MyVideosComponent extends RouteFilter implements OnInit, AfterViewI
     this.buildActions()
 
     this.user = this.authService.getUser()
-
-    this.initSearch()
-    this.listenToSearchChange()
   }
 
-  ngAfterViewInit () {
-    if (this.search) this.setTableFilter(this.search, false)
+  onSearch (search: string) {
+    this.search = search
+    this.reloadData()
   }
 
-  loadData () {
+  reloadData () {
     this.videosSelection.reloadVideos()
   }
 

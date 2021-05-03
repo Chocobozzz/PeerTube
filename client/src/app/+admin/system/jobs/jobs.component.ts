@@ -86,7 +86,7 @@ export class JobsComponent extends RestTable implements OnInit {
   onJobStateOrTypeChanged () {
     this.pagination.start = 0
 
-    this.loadData()
+    this.reloadData()
     this.saveJobStateAndType()
   }
 
@@ -104,10 +104,10 @@ export class JobsComponent extends RestTable implements OnInit {
     this.jobs = []
     this.totalRecords = 0
 
-    this.loadData()
+    this.reloadData()
   }
 
-  protected loadData () {
+  protected reloadData () {
     let jobState = this.jobState as JobState
     if (this.jobState === 'all') jobState = null
 

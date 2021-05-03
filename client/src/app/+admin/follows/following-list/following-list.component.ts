@@ -45,7 +45,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
     this.followService.follow(hosts).subscribe(
       () => {
         this.notifier.success($localize`Follow request(s) sent!`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message)
@@ -62,14 +62,14 @@ export class FollowingListComponent extends RestTable implements OnInit {
     this.followService.unfollow(follow).subscribe(
       () => {
         this.notifier.success($localize`You are not following ${follow.following.host} anymore.`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message)
     )
   }
 
-  protected loadData () {
+  protected reloadData () {
     this.followService.getFollowing({ pagination: this.pagination, sort: this.sort, search: this.search })
                       .subscribe(
                         resultList => {

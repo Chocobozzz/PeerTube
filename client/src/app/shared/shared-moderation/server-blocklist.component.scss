@@ -16,15 +16,6 @@ a {
   }
 }
 
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
-    flex-grow: 1;
-  }
-}
-
 .unblock-button {
   @include peertube-button;
   @include grey-button;
@@ -32,15 +23,6 @@ a {
 
 .block-button {
   @include create-button;
-}
-
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
-    flex-grow: 1;
-  }
 }
 
 .chip {

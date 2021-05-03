@@ -8,8 +8,9 @@
 <em i18n>This view also shows comments from muted accounts.</em>
 
 <p-table
-  [value]="comments" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [value]="comments" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} comments"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
@@ -26,7 +27,7 @@
       </div>
 
       <div class="ml-auto">
-        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)" (resetTableFilter)="resetTableFilter()"></my-advanced-input-filter>
+        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>

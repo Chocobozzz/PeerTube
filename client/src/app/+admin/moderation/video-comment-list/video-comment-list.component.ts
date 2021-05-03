@@ -13,9 +13,7 @@ import { FeedFormat, UserRight } from '@shared/models'
   templateUrl: './video-comment-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-comment-list.component.scss' ]
 })
-export class VideoCommentListComponent extends RestTable implements OnInit, AfterViewInit {
-  baseRoute = '/admin/moderation/video-comments/list'
-
+export class VideoCommentListComponent extends RestTable implements OnInit {
   comments: VideoCommentAdmin[]
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -91,7 +89,6 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
 
   ngOnInit () {
     this.initialize()
-    this.listenToSearchChange()
 
     this.bulkCommentActions = [
       {
@@ -101,10 +98,6 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
         iconName: 'delete'
       }
     ]
-  }
-
-  ngAfterViewInit () {
-    if (this.search) this.setTableFilter(this.search, false)
   }
 
   getIdentifier () {
@@ -119,7 +112,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
     return this.selectedComments.length !== 0
   }
 
-  protected loadData () {
+  protected reloadData () {
     this.videoCommentService.getAdminVideoComments({
       pagination: this.pagination,
       sort: this.sort,
@@ -147,7 +140,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
     this.videoCommentService.deleteVideoComments(commentArgs).subscribe(
       () => {
         this.notifier.success($localize`${commentArgs.length} comments deleted.`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message),
@@ -159,7 +152,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
   private deleteComment (comment: VideoCommentAdmin) {
     this.videoCommentService.deleteVideoComment(comment.video.id, comment.id)
       .subscribe(
-        () => this.loadData(),
+        () => this.reloadData(),
 
         err => this.notifier.error(err.message)
       )

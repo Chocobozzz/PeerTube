@@ -11,12 +11,12 @@
   }
 }
 
-::ng-deep .dropdown-toggle::after {
+.sub-menu ::ng-deep .dropdown-toggle::after {
   position: relative;
   top: 2px;
 }
 
-::ng-deep .dropdown-menu {
+.sub-menu ::ng-deep .dropdown-menu {
   margin-top: 0 !important;
 }
 

@@ -1,25 +1,22 @@
 import * as debug from 'debug'
 import { LazyLoadEvent, SortMeta } from 'primeng/api'
-import { Subject } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { RouteFilter } from '../routing'
 import { RestPagination } from './rest-pagination'
 
 const logger = debug('peertube:tables:RestTable')
 
-export abstract class RestTable extends RouteFilter {
+export abstract class RestTable {
 
   abstract totalRecords: number
   abstract sort: SortMeta
   abstract pagination: RestPagination
 
-  search: string
   rowsPerPageOptions = [ 10, 20, 50, 100 ]
   rowsPerPage = this.rowsPerPageOptions[0]
   expandedRows = {}
 
-  protected searchStream: Subject<string>
+  search: string
 
   protected route: ActivatedRoute
   protected router: Router
@@ -28,7 +25,6 @@ export abstract class RestTable extends RouteFilter {
 
   initialize () {
     this.loadSort()
-    this.initSearch()
   }
 
   loadSort () {
@@ -56,7 +52,7 @@ export abstract class RestTable extends RouteFilter {
       count: this.rowsPerPage
     }
 
-    this.loadData()
+    this.reloadData()
     this.saveSort()
   }
 
@@ -74,13 +70,18 @@ export abstract class RestTable extends RouteFilter {
         count: this.rowsPerPage
       }
 
-      this.loadData()
+      this.reloadData()
     }
 
     this.expandedRows = {}
   }
 
-  protected abstract loadData (): void
+  onSearch (search: string) {
+    this.search = search
+    this.reloadData()
+  }
+
+  protected abstract reloadData (): void
 
   private getSortLocalStorageKey () {
     return 'rest-table-sort-' + this.getIdentifier()

@@ -1,7 +1,7 @@
 <p-table
-  [value]="users" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
-  [(selection)]="selectedUsers"
+  [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order"  dataKey="id" [resizableColumns]="true" [(selection)]="selectedUsers"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
@@ -22,7 +22,7 @@
       </div>
 
       <div class="ml-auto">
-        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)" (resetTableFilter)="resetTableFilter()"></my-advanced-input-filter>
+        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
 
     </div>

@@ -4,8 +4,9 @@
 </h1>
 
 <p-table
-  [value]="blocklist" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [value]="blocklist" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} blocked videos"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
@@ -13,7 +14,7 @@
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="ml-auto">
-        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)" (resetTableFilter)="resetTableFilter()"></my-advanced-input-filter>
+        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>
