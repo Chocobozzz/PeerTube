@@ -320,13 +320,7 @@ export class UserService {
       const filters = this.restService.parseQueryStringFilter(search, {
         blocked: {
           prefix: 'banned:',
-          isBoolean: true,
-          handler: v => {
-            if (v === 'true') return v
-            if (v === 'false') return v
-
-            return undefined
-          }
+          isBoolean: true
         }
       })
 

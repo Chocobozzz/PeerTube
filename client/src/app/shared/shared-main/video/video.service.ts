@@ -129,13 +129,7 @@ export class VideoService implements VideosProvider {
       const filters = this.restService.parseQueryStringFilter(search, {
         isLive: {
           prefix: 'isLive:',
-          isBoolean: true,
-          handler: v => {
-            if (v === 'true') return v
-            if (v === 'false') return v
-
-            return undefined
-          }
+          isBoolean: true
         }
       })
 
