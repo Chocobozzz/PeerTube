@@ -19,12 +19,7 @@
 </h1>
 
 <div class="videos-header d-flex justify-content-between">
-  <div class="has-feedback has-clear">
-    <input type="text" placeholder="Search your videos" i18n-placeholder [(ngModel)]="videosSearch"
-      (ngModelChange)="onVideosSearchChanged()" />
-    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
-    <span class="sr-only" i18n>Clear filters</span>
-  </div>
+  <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)" (resetTableFilter)="resetTableFilter()"></my-advanced-input-filter>
 
   <div class="peertube-select-container peertube-select-button">
     <select [(ngModel)]="sort" (ngModelChange)="onChangeSortColumn()" class="form-control">

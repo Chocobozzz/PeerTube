@@ -19,10 +19,12 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getLive,
+  getMyVideosWithFilter,
   getPlaylist,
   getVideo,
   getVideoIdFromUUID,
   getVideosList,
+  getVideosWithFilters,
   killallServers,
   makeRawRequest,
   removeVideo,
@@ -37,6 +39,7 @@ import {
   testImage,
   updateCustomSubConfig,
   updateLive,
+  uploadVideoAndGetId,
   viewVideo,
   wait,
   waitJobs,
@@ -226,6 +229,68 @@ describe('Test live', function () {
         await getVideo(server.url, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
         await getLive(server.url, server.accessToken, liveVideoUUID, HttpStatusCode.NOT_FOUND_404)
       }
+    })
+  })
+
+  describe('Live filters', function () {
+    let command: any
+    let liveVideoId: string
+    let vodVideoId: string
+
+    before(async function () {
+      this.timeout(120000)
+
+      vodVideoId = (await uploadVideoAndGetId({ server: servers[0], videoName: 'vod video' })).uuid
+
+      const liveOptions = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: servers[0].videoChannel.id }
+      const resLive = await createLive(servers[0].url, servers[0].accessToken, liveOptions)
+      liveVideoId = resLive.body.video.uuid
+
+      command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLivePublishedOnAllServers(liveVideoId)
+      await waitJobs(servers)
+    })
+
+    it('Should only display lives', async function () {
+      const res = await getVideosWithFilters(servers[0].url, { isLive: true })
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('live')
+    })
+
+    it('Should not display lives', async function () {
+      const res = await getVideosWithFilters(servers[0].url, { isLive: false })
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('vod video')
+    })
+
+    it('Should display my lives', async function () {
+      this.timeout(60000)
+
+      await stopFfmpeg(command)
+      await waitJobs(servers)
+
+      const res = await getMyVideosWithFilter(servers[0].url, servers[0].accessToken, { isLive: true })
+      const videos = res.body.data as Video[]
+
+      const result = videos.every(v => v.isLive)
+      expect(result).to.be.true
+    })
+
+    it('Should not display my lives', async function () {
+      const res = await getMyVideosWithFilter(servers[0].url, servers[0].accessToken, { isLive: false })
+      const videos = res.body.data as Video[]
+
+      const result = videos.every(v => !v.isLive)
+      expect(result).to.be.true
+    })
+
+    after(async function () {
+      await removeVideo(servers[0].url, servers[0].accessToken, vodVideoId)
+      await removeVideo(servers[0].url, servers[0].accessToken, liveVideoId)
     })
   })
 

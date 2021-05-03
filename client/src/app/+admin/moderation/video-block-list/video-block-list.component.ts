@@ -6,6 +6,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
@@ -23,6 +24,17 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
   blocklistTypeFilter: VideoBlacklistType = undefined
 
   videoBlocklistActions: DropdownAction<VideoBlacklist>[][] = []
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'type:auto' },
+      label: $localize`Automatic blocks`
+    },
+    {
+      queryParams: { 'search': 'type:manual' },
+      label: $localize`Manual blocks`
+    }
+  ]
 
   constructor (
     protected route: ActivatedRoute,
@@ -110,25 +122,6 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
   ngAfterViewInit () {
     if (this.search) this.setTableFilter(this.search, false)
   }
-
-  /* Table filter functions */
-  onBlockSearch (event: Event) {
-    this.onSearch(event)
-    this.setQueryParams((event.target as HTMLInputElement).value)
-  }
-
-  setQueryParams (search: string) {
-    const queryParams: Params = {}
-    if (search) Object.assign(queryParams, { search })
-    this.router.navigate([ '/admin/moderation/video-blocks/list' ], { queryParams })
-  }
-
-  resetTableFilter () {
-    this.setTableFilter('')
-    this.setQueryParams('')
-    this.resetSearch()
-  }
-  /* END Table filter functions */
 
   getIdentifier () {
     return 'VideoBlockListComponent'

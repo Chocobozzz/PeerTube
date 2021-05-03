@@ -8,6 +8,7 @@ import * as request from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 import validator from 'validator'
 import { HttpStatusCode } from '@shared/core-utils'
+import { VideosCommonQuery } from '@shared/models'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
 import {
@@ -195,6 +196,18 @@ function getMyVideos (url: string, accessToken: string, start: number, count: nu
     .expect('Content-Type', /json/)
 }
 
+function getMyVideosWithFilter (url: string, accessToken: string, query: { isLive?: boolean }) {
+  const path = '/api/v1/users/me/videos'
+
+  return makeGetRequest({
+    url,
+    path,
+    token: accessToken,
+    query,
+    statusCodeExpected: HttpStatusCode.OK_200
+  })
+}
+
 function getAccountVideos (
   url: string,
   accessToken: string,
@@ -295,7 +308,7 @@ function getVideosListSort (url: string, sort: string) {
           .expect('Content-Type', /json/)
 }
 
-function getVideosWithFilters (url: string, query: { tagsAllOf: string[], categoryOneOf: number[] | number }) {
+function getVideosWithFilters (url: string, query: VideosCommonQuery) {
   const path = '/api/v1/videos'
 
   return request(url)
@@ -751,6 +764,7 @@ export {
   completeVideoCheck,
   checkVideoFilesWereRemoved,
   getPlaylistVideos,
+  getMyVideosWithFilter,
   uploadVideoAndGetId,
   getLocalIdByUUID,
   getVideoIdFromUUID

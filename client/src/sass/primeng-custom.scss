@@ -9,6 +9,10 @@ input[type=button] {
   border-radius: inherit;
 }
 
+p-table .p-datatable-header .caption {
+  margin-bottom: 15px;
+}
+
 // Taken from old nova light theme
 
 body .p-disabled {
@@ -511,10 +515,6 @@ p-table {
 
       .left-buttons {
         padding-left: 15px;
-      }
-
-      .input-group-text {
-        background-color: transparent;
       }
     }
   }

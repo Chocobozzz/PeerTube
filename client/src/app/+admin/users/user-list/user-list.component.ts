@@ -1,8 +1,9 @@
 import { SortMeta } from 'primeng/api'
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Params, Router } from '@angular/router'
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService, UserService } from '@app/core'
-import { Account, DropdownAction } from '@app/shared/shared-main'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
+import { DropdownAction } from '@app/shared/shared-main'
 import { UserBanModalComponent } from '@app/shared/shared-moderation'
 import { ServerConfig, User, UserRole } from '@shared/models'
 
@@ -18,18 +19,27 @@ type UserForList = User & {
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ]
 })
-export class UserListComponent extends RestTable implements OnInit {
+export class UserListComponent extends RestTable implements OnInit, AfterViewInit {
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
 
   users: User[] = []
+
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+
   highlightBannedUsers = false
 
   selectedUsers: User[] = []
   bulkUserActions: DropdownAction<User[]>[][] = []
   columns: { id: string, label: string }[]
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'banned:true' },
+      label: $localize`Banned users`
+    }
+  ]
 
   private _selectedColumns: string[]
   private serverConfig: ServerConfig
@@ -115,6 +125,10 @@ export class UserListComponent extends RestTable implements OnInit {
     this.columns.push({ id: 'quotaDaily', label: 'Daily quota' })
     this.columns.push({ id: 'pluginAuth', label: 'Auth plugin' })
     this.columns.push({ id: 'lastLoginDate', label: 'Last login' })
+  }
+
+  ngAfterViewInit () {
+    if (this.search) this.setTableFilter(this.search, false)
   }
 
   getIdentifier () {

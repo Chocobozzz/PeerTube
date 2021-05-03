@@ -14,6 +14,7 @@ import { AbuseState, AdminAbuse } from '@shared/models'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { ProcessedAbuse } from './processed-abuse.model'
+import { AdvancedInputFilter } from '../shared-forms'
 
 const logger = debug('peertube:moderation:AbuseListTableComponent')
 
@@ -24,7 +25,6 @@ const logger = debug('peertube:moderation:AbuseListTableComponent')
 })
 export class AbuseListTableComponent extends RestTable implements OnInit, AfterViewInit {
   @Input() viewType: 'admin' | 'user'
-  @Input() baseRoute: string
 
   @ViewChild('abuseMessagesModal', { static: true }) abuseMessagesModal: AbuseMessageModalComponent
   @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
@@ -35,6 +35,29 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   abuseActions: DropdownAction<ProcessedAbuse>[][] = []
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'state:pending' },
+      label: $localize`Unsolved reports`
+    },
+    {
+      queryParams: { 'search': 'state:accepted' },
+      label: $localize`Accepted reports`
+    },
+    {
+      queryParams: { 'search': 'state:rejected' },
+      label: $localize`Refused reports`
+    },
+    {
+      queryParams: { 'search': 'videoIs:blacklisted' },
+      label: $localize`Reports with blocked videos`
+    },
+    {
+      queryParams: { 'search': 'videoIs:deleted' },
+      label: $localize`Reports with deleted videos`
+    }
+  ]
 
   constructor (
     protected route: ActivatedRoute,

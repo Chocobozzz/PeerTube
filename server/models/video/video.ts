@@ -1021,14 +1021,28 @@ export class VideoModel extends Model {
     start: number
     count: number
     sort: string
+    isLive?: boolean
     search?: string
   }) {
-    const { accountId, start, count, sort, search } = options
+    const { accountId, start, count, sort, search, isLive } = options
 
     function buildBaseQuery (): FindOptions {
-      let baseQuery = {
+      const where: WhereOptions = {}
+
+      if (search) {
+        where.name = {
+          [Op.iLike]: '%' + search + '%'
+        }
+      }
+
+      if (isLive) {
+        where.isLive = isLive
+      }
+
+      const baseQuery = {
         offset: start,
         limit: count,
+        where,
         order: getVideoSort(sort),
         include: [
           {
@@ -1045,16 +1059,6 @@ export class VideoModel extends Model {
             ]
           }
         ]
-      }
-
-      if (search) {
-        baseQuery = Object.assign(baseQuery, {
-          where: {
-            name: {
-              [Op.iLike]: '%' + search + '%'
-            }
-          }
-        })
       }
 
       return baseQuery
@@ -1084,23 +1088,34 @@ export class VideoModel extends Model {
     start: number
     count: number
     sort: string
+
     nsfw: boolean
+    filter?: VideoFilter
+    isLive?: boolean
+
     includeLocalVideos: boolean
     withFiles: boolean
+
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
-    filter?: VideoFilter
+
     accountId?: number
     videoChannelId?: number
+
     followerActorId?: number
+
     videoPlaylistId?: number
+
     trendingDays?: number
+
     user?: MUserAccountId
     historyOfUser?: MUserId
+
     countVideos?: boolean
+
     search?: string
   }) {
     if ((options.filter === 'all-local' || options.filter === 'all') && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
@@ -1128,6 +1143,7 @@ export class VideoModel extends Model {
       followerActorId,
       serverAccountId: serverActor.Account.id,
       nsfw: options.nsfw,
+      isLive: options.isLive,
       categoryOneOf: options.categoryOneOf,
       licenceOneOf: options.licenceOneOf,
       languageOneOf: options.languageOneOf,
@@ -1160,6 +1176,7 @@ export class VideoModel extends Model {
     originallyPublishedStartDate?: string
     originallyPublishedEndDate?: string
     nsfw?: boolean
+    isLive?: boolean
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
@@ -1171,23 +1188,32 @@ export class VideoModel extends Model {
     filter?: VideoFilter
   }) {
     const serverActor = await getServerActor()
+
     const queryOptions = {
       followerActorId: serverActor.id,
       serverAccountId: serverActor.Account.id,
+
       includeLocalVideos: options.includeLocalVideos,
       nsfw: options.nsfw,
+      isLive: options.isLive,
+
       categoryOneOf: options.categoryOneOf,
       licenceOneOf: options.licenceOneOf,
       languageOneOf: options.languageOneOf,
+
       tagsOneOf: options.tagsOneOf,
       tagsAllOf: options.tagsAllOf,
+
       user: options.user,
       filter: options.filter,
+
       start: options.start,
       count: options.count,
       sort: options.sort,
+
       startDate: options.startDate,
       endDate: options.endDate,
+
       originallyPublishedStartDate: options.originallyPublishedStartDate,
       originallyPublishedEndDate: options.originallyPublishedEndDate,
 

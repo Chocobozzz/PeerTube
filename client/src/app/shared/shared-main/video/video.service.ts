@@ -124,7 +124,23 @@ export class VideoService implements VideosProvider {
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-    params = this.restService.addObjectParams(params, { search })
+
+    if (search) {
+      const filters = this.restService.parseQueryStringFilter(search, {
+        isLive: {
+          prefix: 'isLive:',
+          isBoolean: true,
+          handler: v => {
+            if (v === 'true') return v
+            if (v === 'false') return v
+
+            return undefined
+          }
+        }
+      })
+
+      params = this.restService.addObjectParams(params, filters)
+    }
 
     return this.authHttp
                .get<ResultList<Video>>(UserService.BASE_USERS_URL + 'me/videos', { params })

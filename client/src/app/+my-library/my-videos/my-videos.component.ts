@@ -1,10 +1,11 @@
-import { concat, Observable, Subject } from 'rxjs'
-import { debounceTime, tap, toArray } from 'rxjs/operators'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { concat, Observable } from 'rxjs'
+import { tap, toArray } from 'rxjs/operators'
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
+import { AuthService, ComponentPagination, ConfirmService, Notifier, RouteFilter, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign } from '@app/helpers'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
 import { MiniatureDisplayOptions, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
@@ -15,7 +16,7 @@ import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.c
   templateUrl: './my-videos.component.html',
   styleUrls: [ './my-videos.component.scss' ]
 })
-export class MyVideosComponent implements OnInit, DisableForReuseHook {
+export class MyVideosComponent extends RouteFilter implements OnInit, AfterViewInit, DisableForReuseHook {
   @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
   @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
   @ViewChild('liveStreamInformationModal', { static: true }) liveStreamInformationModal: LiveStreamInformationComponent
@@ -40,12 +41,17 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   videoActions: DropdownAction<{ video: Video }>[] = []
 
   videos: Video[] = []
-  videosSearch: string
-  videosSearchChanged = new Subject<string>()
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   sort: VideoSortField = '-publishedAt'
 
   user: User
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'isLive:true' },
+      label: $localize`Only live videos`
+    }
+  ]
 
   constructor (
     protected router: Router,
@@ -57,6 +63,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     private confirmService: ConfirmService,
     private videoService: VideoService
   ) {
+    super()
+
     this.titlePage = $localize`My videos`
   }
 
@@ -65,20 +73,16 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
     this.user = this.authService.getUser()
 
-    this.videosSearchChanged
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        this.videosSelection.reloadVideos()
-      })
+    this.initSearch()
+    this.listenToSearchChange()
   }
 
-  resetSearch () {
-    this.videosSearch = ''
-    this.onVideosSearchChanged()
+  ngAfterViewInit () {
+    if (this.search) this.setTableFilter(this.search, false)
   }
 
-  onVideosSearchChanged () {
-    this.videosSearchChanged.next()
+  loadData () {
+    this.videosSelection.reloadVideos()
   }
 
   onChangeSortColumn () {
@@ -96,7 +100,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getMyVideos(newPagination, this.sort, this.videosSearch)
+    return this.videoService.getMyVideos(newPagination, this.sort, this.search)
       .pipe(
         tap(res => this.pagination.totalItems = res.total)
       )

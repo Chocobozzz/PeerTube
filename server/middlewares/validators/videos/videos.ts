@@ -20,7 +20,7 @@ import {
   toIntOrNull,
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
-import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
+import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
 import {
   isScheduleVideoUpdatePrivacyValid,
@@ -439,7 +439,11 @@ const commonVideosFiltersValidator = [
     .custom(isStringArray).withMessage('Should have a valid all of tags array'),
   query('nsfw')
     .optional()
-    .custom(isNSFWQueryValid).withMessage('Should have a valid NSFW attribute'),
+    .custom(isBooleanBothQueryValid).withMessage('Should have a valid NSFW attribute'),
+  query('isLive')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid live boolean'),
   query('filter')
     .optional()
     .custom(isVideoFilterValid).withMessage('Should have a valid filter attribute'),

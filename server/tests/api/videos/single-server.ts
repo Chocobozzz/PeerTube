@@ -387,11 +387,11 @@ describe('Test a single server', function () {
   })
 
   it('Should filter by tags and category', async function () {
-    const res1 = await getVideosWithFilters(server.url, { tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: 4 })
+    const res1 = await getVideosWithFilters(server.url, { tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: [ 4 ] })
     expect(res1.body.total).to.equal(1)
     expect(res1.body.data[0].name).to.equal('my super video updated')
 
-    const res2 = await getVideosWithFilters(server.url, { tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: 3 })
+    const res2 = await getVideosWithFilters(server.url, { tagsAllOf: [ 'tagup1', 'tagup2' ], categoryOneOf: [ 3 ] })
     expect(res2.body.total).to.equal(0)
   })
 

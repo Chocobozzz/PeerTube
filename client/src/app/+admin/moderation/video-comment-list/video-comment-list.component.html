@@ -26,25 +26,7 @@
       </div>
 
       <div class="ml-auto">
-        <div class="input-group has-feedback has-clear">
-          <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
-            <div class="input-group-text" ngbDropdownToggle>
-              <span class="caret" aria-haspopup="menu" role="button"></span>
-            </div>
-
-            <div role="menu" ngbDropdownMenu>
-              <h6 class="dropdown-header" i18n>Advanced comments filters</h6>
-              <a [routerLink]="[ '/admin/moderation/video-comments/list' ]" [queryParams]="{ 'search': 'local:true' }" class="dropdown-item" i18n>Local comments</a>
-              <a [routerLink]="[ '/admin/moderation/video-comments/list' ]" [queryParams]="{ 'search': 'local:false' }" class="dropdown-item" i18n>Remote comments</a>
-            </div>
-          </div>
-          <input
-            type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-            (keyup)="onSearch($event)"
-          >
-          <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
-          <span class="sr-only" i18n>Clear filters</span>
-        </div>
+        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)" (resetTableFilter)="resetTableFilter()"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>

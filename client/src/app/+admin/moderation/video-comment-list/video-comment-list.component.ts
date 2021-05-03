@@ -2,6 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { AfterViewInit, Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction } from '@app/shared/shared-main'
 import { BulkService } from '@app/shared/shared-moderation'
 import { VideoCommentAdmin, VideoCommentService } from '@app/shared/shared-video-comment'
@@ -42,6 +43,17 @@ export class VideoCommentListComponent extends RestTable implements OnInit, Afte
 
   selectedComments: VideoCommentAdmin[] = []
   bulkCommentActions: DropdownAction<VideoCommentAdmin[]>[] = []
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'local:true' },
+      label: $localize`Local comments`
+    },
+    {
+      queryParams: { 'search': 'local:false' },
+      label: $localize`Remote comments`
+    }
+  ]
 
   get authUser () {
     return this.auth.getUser()
