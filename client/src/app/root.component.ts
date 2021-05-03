@@ -23,19 +23,21 @@ export class RootComponent implements OnInit {
         .pipe(
           map(params => params[ 'actorName' ]),
           distinctUntilChanged(),
-          switchMap(actorName => this.actorService.getActor(actorName)),
+          switchMap(actorName => this.actorService.getActorType(actorName)),
           catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
             HttpStatusCode.BAD_REQUEST_400,
             HttpStatusCode.NOT_FOUND_404
           ]))
         )
-        .subscribe(actor => {
-          if (/\/accounts\//.test(actor.url)) {
-            this.router.navigate([ `/a/${actor.name}` ], { state: { type: 'others', obj: { status: 200 } }, skipLocationChange: true })
+        .subscribe(actorType => {
+          const actorName = this.route.snapshot.params[ 'actorName' ]
+
+          if (actorType === 'Account') {
+            this.router.navigate([ `/a/${actorName}` ], { state: { type: 'others', obj: { status: 200 } }, skipLocationChange: true })
           }
 
-          if (/\/video-channels\//.test(actor.url)) {
-            this.router.navigate([ `/c/${actor.name}` ], { state: { type: 'others', obj: { status: 200 } }, skipLocationChange: true })
+          if (actorType === 'VideoChannel') {
+            this.router.navigate([ `/c/${actorName}` ], { state: { type: 'others', obj: { status: 200 } }, skipLocationChange: true })
           }
         })
   }
