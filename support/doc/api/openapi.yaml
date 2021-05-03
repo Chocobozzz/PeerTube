@@ -1226,6 +1226,8 @@ paths:
                 name:
                   description: Video name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Video tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1397,6 +1399,8 @@ paths:
                 name:
                   description: Video name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Video tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1523,6 +1527,8 @@ paths:
                 name:
                   description: Video name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Video tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1627,6 +1633,8 @@ paths:
                 name:
                   description: Live video/replay name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Live video/replay tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -2379,6 +2387,8 @@ paths:
                 displayName:
                   description: Video playlist display name
                   type: string
+                  minLength: 1
+                  maxLength: 120
                 thumbnailfile:
                   description: Video playlist thumbnail file
                   type: string
@@ -2432,6 +2442,8 @@ paths:
                 displayName:
                   description: Video playlist display name
                   type: string
+                  minLength: 1
+                  maxLength: 120
                 thumbnailfile:
                   description: Video playlist thumbnail file
                   type: string
@@ -4208,6 +4220,8 @@ components:
           example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
         name:
           type: string
+          minLength: 3
+          maxLength: 120
     Video:
       properties:
         id:
@@ -4249,6 +4263,8 @@ components:
         name:
           type: string
           example: What is PeerTube?
+          minLength: 3
+          maxLength: 120
         thumbnailPath:
           type: string
           example: /static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
@@ -4310,10 +4326,14 @@ components:
             account:
               $ref: '#/components/schemas/Account'
             tags:
+              example: [flowers, gardening]
               type: array
+              minItems: 1
+              maxItems: 5
               items:
                 type: string
-              example: [flowers, gardening]
+                minLength: 2
+                maxLength: 30
             files:
               type: array
               description: 'WebTorrent/raw video files. Can be empty if WebTorrent is disabled on the server. In this case, video files will be in the "streamingPlaylists[].files" property'
@@ -4438,16 +4458,7 @@ components:
           type: string
           example: Decided to ban the server since it spams us regularly
         video:
-          type: object
-          properties:
-            id:
-              type: integer
-            name:
-              type: string
-            uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/VideoInfo'
         createdAt:
           type: string
           format: date-time
