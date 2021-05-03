@@ -1824,10 +1824,10 @@ paths:
                 reason:
                   description: Reason why the user reports this video
                   type: string
-                  minLength: 4
+                  minLength: 2
+                  maxLength: 3000
                 predefinedReasons:
                   $ref: '#/components/schemas/PredefinedAbuseReasons'
-
                 video:
                   type: object
                   properties:
@@ -1883,6 +1883,8 @@ paths:
                 moderationComment:
                   type: string
                   description: Update the report comment visible only to the moderation team
+                  minLength: 2
+                  maxLength: 3000
       responses:
         '204':
           description: successful operation
@@ -1940,6 +1942,8 @@ paths:
                 message:
                   description: Message to send
                   type: string
+                  minLength: 2
+                  maxLength: 3000
               required:
                 - message
       responses:
@@ -4448,6 +4452,8 @@ components:
         reason:
           type: string
           example: The video is a spam
+          minLength: 2
+          maxLength: 3000
         predefinedReasons:
           $ref: '#/components/schemas/AbusePredefinedReasons'
         reporterAccount:
@@ -4457,6 +4463,8 @@ components:
         moderationComment:
           type: string
           example: Decided to ban the server since it spams us regularly
+          minLength: 2
+          maxLength: 3000
         video:
           $ref: '#/components/schemas/VideoInfo'
         createdAt:
@@ -4468,6 +4476,8 @@ components:
           type: integer
         message:
           type: string
+          minLength: 2
+          maxLength: 3000 
         byModerator:
           type: boolean
         createdAt:
@@ -4489,12 +4499,16 @@ components:
           format: date-time
         name:
           type: string
+          minLength: 3
+          maxLength: 120
         uuid:
           type: string
           format: uuid
           example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
         description:
           type: string
+          minLength: 3
+          maxLength: 10000
         duration:
           type: integer
         views:
@@ -4509,8 +4523,12 @@ components:
       properties:
         displayName:
           type: string
+          minLength: 1
+          maxLength: 120
         description:
           type: string
+          minLength: 3
+          maxLength: 1000
         isLocal:
           type: boolean
         ownerAccount:
@@ -4534,12 +4552,16 @@ components:
           format: date-time
         description:
           type: string
+          minLength: 3
+          maxLength: 1000
         uuid:
           type: string
           format: uuid
           example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
         displayName:
           type: string
+          minLength: 1
+          maxLength: 120
         isLocal:
           type: boolean
         videoLength:
@@ -4563,6 +4585,8 @@ components:
           format: url
         text:
           type: string
+          minLength: 1
+          maxLength: 10000
         threadId:
           type: integer
         inReplyToCommentId:
@@ -5381,34 +5405,41 @@ components:
         - username
         - password
         - email
-    VideoChannelCreate:
+
+    VideoChannelCommon:
       properties:
-        name:
-          type: string
         displayName:
           type: string
+          minLength: 1
+          maxLength: 120
         description:
           type: string
+          minLength: 3
+          maxLength: 1000
         support:
           type: string
           description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
           example: Please support my work on <insert crowdfunding plateform>! <3
+          minLength: 3
+          maxLength: 1000
+    VideoChannelCreate:
+      allOf:
+        - $ref: '#/components/schemas/VideoChannelCommon'
+        - properties:
+            name:
+              type: string
+              minLength: 1
+              maxLength: 120
       required:
         - name
         - displayName
     VideoChannelUpdate:
-      properties:
-        displayName:
-          type: string
-        description:
-          type: string
-        support:
-          type: string
-          description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
-          example: Please support my work on <insert crowdfunding plateform>! <3
-        bulkVideosSupportUpdate:
-          type: boolean
-          description: 'Update the support field for all videos of this channel'
+      allOf:
+        - $ref: '#/components/schemas/VideoChannelCommon'
+        - properties:
+            bulkVideosSupportUpdate:
+              type: boolean
+              description: 'Update the support field for all videos of this channel'
 
     MRSSPeerLink:
       type: object
