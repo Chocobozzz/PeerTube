@@ -1,7 +1,7 @@
 import * as debug from 'debug'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 
 export type AdvancedInputFilter = {
@@ -16,7 +16,7 @@ const logger = debug('peertube:AdvancedInputFilterComponent')
   templateUrl: './advanced-input-filter.component.html',
   styleUrls: [ './advanced-input-filter.component.scss' ]
 })
-export class AdvancedInputFilterComponent implements OnInit {
+export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   @Input() filters: AdvancedInputFilter[] = []
 
   @Output() search = new EventEmitter<string>()
@@ -24,6 +24,9 @@ export class AdvancedInputFilterComponent implements OnInit {
   searchValue: string
 
   private searchStream: Subject<string>
+
+  private viewInitialized = false
+  private emitSearchAfterViewInit = false
 
   constructor (
     private route: ActivatedRoute,
@@ -35,21 +38,35 @@ export class AdvancedInputFilterComponent implements OnInit {
     this.listenToRouteSearchChange()
   }
 
+  ngAfterViewInit () {
+    this.viewInitialized = true
+
+    // Init after view init to not send an event too early
+    if (this.emitSearchAfterViewInit) this.emitSearch()
+  }
+
   onInputSearch (event: Event) {
-    this.updateSearch((event.target as HTMLInputElement).value)
+    this.scheduleSearchUpdate((event.target as HTMLInputElement).value)
   }
 
   onResetTableFilter () {
-    this.updateSearch('')
+    this.immediateSearchUpdate('')
   }
 
   hasFilters () {
     return this.filters.length !== 0
   }
 
-  private updateSearch (value: string) {
+  private scheduleSearchUpdate (value: string) {
     this.searchValue = value
     this.searchStream.next(this.searchValue)
+  }
+
+  private immediateSearchUpdate (value: string) {
+    this.searchValue = value
+
+    this.setQueryParams(this.searchValue)
+    this.emitSearch()
   }
 
   private listenToRouteSearchChange () {
@@ -59,7 +76,8 @@ export class AdvancedInputFilterComponent implements OnInit {
 
         logger('On route search change "%s".', search)
 
-        this.updateSearch(search)
+        this.searchValue = search
+        this.emitSearch()
       })
   }
 
@@ -68,15 +86,25 @@ export class AdvancedInputFilterComponent implements OnInit {
 
     this.searchStream
       .pipe(
-        debounceTime(200),
+        debounceTime(300),
         distinctUntilChanged()
       )
       .subscribe(() => {
-        logger('On search "%s".', this.searchValue)
-
         this.setQueryParams(this.searchValue)
-        this.search.emit(this.searchValue)
+
+        this.emitSearch()
       })
+  }
+
+  private emitSearch () {
+    if (!this.viewInitialized) {
+      this.emitSearchAfterViewInit = true
+      return
+    }
+
+    logger('On search "%s".', this.searchValue)
+
+    this.search.emit(this.searchValue)
   }
 
   private setQueryParams (search: string) {
