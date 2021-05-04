@@ -193,7 +193,7 @@ class StatsCard extends Component {
 
     const duration = player.duration()
 
-    let volume = `${player.volume() * 100}`
+    let volume = `${Math.round(player.volume() * 100)}`
     if (player.muted()) volume += ' (muted)'
 
     const networkActivity = playerNetworkInfo.downloadSpeed
