@@ -2,8 +2,8 @@ import 'multer'
 import * as express from 'express'
 import { sendUndoFollow } from '@server/lib/activitypub/send'
 import { VideoChannelModel } from '@server/models/video/video-channel'
+import { VideosCommonQuery } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
-import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { WEBSERVER } from '../../../initializers/constants'
@@ -170,19 +170,20 @@ async function getUserSubscriptions (req: express.Request, res: express.Response
 async function getUserSubscriptionVideos (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const countVideos = getCountVideos(req)
+  const query = req.query as VideosCommonQuery
 
   const resultList = await VideoModel.listForApi({
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort,
+    start: query.start,
+    count: query.count,
+    sort: query.sort,
     includeLocalVideos: false,
-    categoryOneOf: req.query.categoryOneOf,
-    licenceOneOf: req.query.licenceOneOf,
-    languageOneOf: req.query.languageOneOf,
-    tagsOneOf: req.query.tagsOneOf,
-    tagsAllOf: req.query.tagsAllOf,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
-    filter: req.query.filter as VideoFilter,
+    categoryOneOf: query.categoryOneOf,
+    licenceOneOf: query.licenceOneOf,
+    languageOneOf: query.languageOneOf,
+    tagsOneOf: query.tagsOneOf,
+    tagsAllOf: query.tagsAllOf,
+    nsfw: buildNSFWFilter(res, query.nsfw),
+    filter: query.filter,
     withFiles: false,
     followerActorId: user.Account.Actor.id,
     user,

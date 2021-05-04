@@ -120,7 +120,7 @@ tags:
       Operations dealing with adding video or audio. PeerTube supports two upload modes, and three import modes.
 
       ### Upload
-        
+
       - [_legacy_](#tag/Video-Upload/paths/~1videos~1upload/post), where the video file is sent in a single request
       - [_resumable_](#tag/Video-Upload/paths/~1videos~1upload-resumable/post), where the video file is sent in chunks
 
@@ -148,7 +148,7 @@ tags:
     description: Operations dealing with the creation, modification and listing of videos within a channel.
   - name: Video Comments
     description: >
-      Operations dealing with comments to a video. Comments are organized in threads: adding a 
+      Operations dealing with comments to a video. Comments are organized in threads: adding a
       comment in response to the video starts a thread, adding a reply to a comment adds it to
       its root comment thread.
   - name: Video Blocks
@@ -239,6 +239,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -810,6 +811,7 @@ paths:
         - Videos
       parameters:
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -1115,6 +1117,7 @@ paths:
         - Video
       parameters:
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -1255,6 +1258,8 @@ paths:
                 name:
                   description: Video name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Video tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1456,7 +1461,7 @@ paths:
           description: created
           headers:
             Location:
-              schema: 
+              schema:
                 type: string
                 format: url
                 example: /api/v1/videos/upload-resumable?upload_id=471e97554f21dec3b8bb5d4602939c51
@@ -1533,7 +1538,7 @@ paths:
           description: resume incomplete
           headers:
             Range:
-              schema: 
+              schema:
                 type: string
                 example: bytes=0-262143
             Content-Length:
@@ -1642,6 +1647,8 @@ paths:
                 name:
                   description: Video name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Video tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1746,6 +1753,8 @@ paths:
                 name:
                   description: Live video/replay name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Live video/replay tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1935,10 +1944,10 @@ paths:
                 reason:
                   description: Reason why the user reports this video
                   type: string
-                  minLength: 4
+                  minLength: 2
+                  maxLength: 3000
                 predefinedReasons:
                   $ref: '#/components/schemas/PredefinedAbuseReasons'
-
                 video:
                   type: object
                   properties:
@@ -1994,6 +2003,8 @@ paths:
                 moderationComment:
                   type: string
                   description: Update the report comment visible only to the moderation team
+                  minLength: 2
+                  maxLength: 3000
       responses:
         '204':
           description: successful operation
@@ -2051,6 +2062,8 @@ paths:
                 message:
                   description: Message to send
                   type: string
+                  minLength: 2
+                  maxLength: 3000
               required:
                 - message
       responses:
@@ -2301,6 +2314,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/channelHandle'
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -2498,6 +2512,8 @@ paths:
                 displayName:
                   description: Video playlist display name
                   type: string
+                  minLength: 1
+                  maxLength: 120
                 thumbnailfile:
                   description: Video playlist thumbnail file
                   type: string
@@ -2551,6 +2567,8 @@ paths:
                 displayName:
                   description: Video playlist display name
                   type: string
+                  minLength: 1
+                  maxLength: 120
                 thumbnailfile:
                   description: Video playlist thumbnail file
                   type: string
@@ -2944,6 +2962,7 @@ paths:
           schema:
             type: string
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -3912,6 +3931,13 @@ components:
       description: The comment id
       schema:
         type: integer
+    isLive:
+      name: isLive
+      in: query
+      required: false
+      description: whether or not the video is a live
+      schema:
+        type: boolean
     categoryOneOf:
       name: categoryOneOf
       in: query
@@ -4075,16 +4101,25 @@ components:
             moderator: Moderator scope
             user: User scope
   schemas:
-    VideoConstantNumber:
+    VideoConstantNumber-Category:
       properties:
         id:
           type: integer
+          description: category id of the video (see [/videos/categories](#tag/Video/paths/~1videos~1categories/get))
         label:
           type: string
-    VideoConstantString:
+    VideoConstantNumber-Licence:
+      properties:
+        id:
+          type: integer
+          description: licence id of the video (see [/videos/licences](#tag/Video/paths/~1videos~1licences/get))
+        label:
+          type: string
+    VideoConstantString-Language:
       properties:
         id:
           type: string
+          description: language id of the video (see [/videos/languages](#tag/Video/paths/~1videos~1languages/get))
         label:
           type: string
 
@@ -4328,6 +4363,8 @@ components:
           example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
         name:
           type: string
+          minLength: 3
+          maxLength: 120
     Video:
       properties:
         id:
@@ -4352,11 +4389,11 @@ components:
           type: string
           format: date-time
         category:
-          $ref: '#/components/schemas/VideoConstantNumber'
+          $ref: '#/components/schemas/VideoConstantNumber-Category'
         licence:
-          $ref: '#/components/schemas/VideoConstantNumber'
+          $ref: '#/components/schemas/VideoConstantNumber-Licence'
         language:
-          $ref: '#/components/schemas/VideoConstantString'
+          $ref: '#/components/schemas/VideoConstantString-Language'
         privacy:
           $ref: '#/components/schemas/VideoPrivacyConstant'
         description:
@@ -4369,6 +4406,8 @@ components:
         name:
           type: string
           example: What is PeerTube?
+          minLength: 3
+          maxLength: 120
         thumbnailPath:
           type: string
           example: /static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
@@ -4430,10 +4469,14 @@ components:
             account:
               $ref: '#/components/schemas/Account'
             tags:
+              example: [flowers, gardening]
               type: array
+              minItems: 1
+              maxItems: 5
               items:
                 type: string
-              example: [flowers, gardening]
+                minLength: 2
+                maxLength: 30
             files:
               type: array
               description: 'WebTorrent/raw video files. Can be empty if WebTorrent is disabled on the server. In this case, video files will be in the "streamingPlaylists[].files" property'
@@ -4548,6 +4591,8 @@ components:
         reason:
           type: string
           example: The video is a spam
+          minLength: 2
+          maxLength: 3000
         predefinedReasons:
           $ref: '#/components/schemas/AbusePredefinedReasons'
         reporterAccount:
@@ -4557,17 +4602,10 @@ components:
         moderationComment:
           type: string
           example: Decided to ban the server since it spams us regularly
+          minLength: 2
+          maxLength: 3000
         video:
-          type: object
-          properties:
-            id:
-              type: integer
-            name:
-              type: string
-            uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/VideoInfo'
         createdAt:
           type: string
           format: date-time
@@ -4577,6 +4615,8 @@ components:
           type: integer
         message:
           type: string
+          minLength: 2
+          maxLength: 3000
         byModerator:
           type: boolean
         createdAt:
@@ -4598,12 +4638,16 @@ components:
           format: date-time
         name:
           type: string
+          minLength: 3
+          maxLength: 120
         uuid:
           type: string
           format: uuid
           example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
         description:
           type: string
+          minLength: 3
+          maxLength: 10000
         duration:
           type: integer
         views:
@@ -4618,8 +4662,12 @@ components:
       properties:
         displayName:
           type: string
+          minLength: 1
+          maxLength: 120
         description:
           type: string
+          minLength: 3
+          maxLength: 1000
         isLocal:
           type: boolean
         ownerAccount:
@@ -4643,12 +4691,16 @@ components:
           format: date-time
         description:
           type: string
+          minLength: 3
+          maxLength: 1000
         uuid:
           type: string
           format: uuid
           example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
         displayName:
           type: string
+          minLength: 1
+          maxLength: 120
         isLocal:
           type: boolean
         videoLength:
@@ -4672,6 +4724,8 @@ components:
           format: url
         text:
           type: string
+          minLength: 1
+          maxLength: 10000
         threadId:
           type: integer
         inReplyToCommentId:
@@ -4701,7 +4755,7 @@ components:
     VideoCaption:
       properties:
         language:
-          $ref: '#/components/schemas/VideoConstantString'
+          $ref: '#/components/schemas/VideoConstantString-Language'
         captionPath:
           type: string
     ActorImage:
@@ -5588,34 +5642,41 @@ components:
         - username
         - password
         - email
-    VideoChannelCreate:
+
+    VideoChannelCommon:
       properties:
-        name:
-          type: string
         displayName:
           type: string
+          minLength: 1
+          maxLength: 120
         description:
           type: string
+          minLength: 3
+          maxLength: 1000
         support:
           type: string
           description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
           example: Please support my work on <insert crowdfunding plateform>! <3
+          minLength: 3
+          maxLength: 1000
+    VideoChannelCreate:
+      allOf:
+        - $ref: '#/components/schemas/VideoChannelCommon'
+        - properties:
+            name:
+              type: string
+              minLength: 1
+              maxLength: 120
       required:
         - name
         - displayName
     VideoChannelUpdate:
-      properties:
-        displayName:
-          type: string
-        description:
-          type: string
-        support:
-          type: string
-          description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
-          example: Please support my work on <insert crowdfunding plateform>! <3
-        bulkVideosSupportUpdate:
-          type: boolean
-          description: 'Update the support field for all videos of this channel'
+      allOf:
+        - $ref: '#/components/schemas/VideoChannelCommon'
+        - properties:
+            bulkVideosSupportUpdate:
+              type: boolean
+              description: 'Update the support field for all videos of this channel'
 
     MRSSPeerLink:
       type: object

@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgSelectModule } from '@ng-select/ng-select'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
+import { AdvancedInputFilterComponent } from './advanced-input-filter.component'
 import { DynamicFormFieldComponent } from './dynamic-form-field.component'
 import { FormValidatorService } from './form-validator.service'
 import { InputSwitchComponent } from './input-switch.component'
@@ -52,7 +53,9 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectCheckboxComponent,
     SelectCustomValueComponent,
 
-    DynamicFormFieldComponent
+    DynamicFormFieldComponent,
+
+    AdvancedInputFilterComponent
   ],
 
   exports: [
@@ -78,7 +81,9 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectCheckboxComponent,
     SelectCustomValueComponent,
 
-    DynamicFormFieldComponent
+    DynamicFormFieldComponent,
+
+    AdvancedInputFilterComponent
   ],
 
   providers: [

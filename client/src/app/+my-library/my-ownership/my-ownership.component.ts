@@ -48,18 +48,18 @@ export class MyOwnershipComponent extends RestTable implements OnInit {
   }
 
   accepted () {
-    this.loadData()
+    this.reloadData()
   }
 
   refuse (videoChangeOwnership: VideoChangeOwnership) {
     this.videoOwnershipService.refuseOwnership(videoChangeOwnership.id)
       .subscribe(
-        () => this.loadData(),
+        () => this.reloadData(),
         err => this.notifier.error(err.message)
       )
   }
 
-  protected loadData () {
+  protected reloadData () {
     return this.videoOwnershipService.getOwnershipChanges(this.pagination, this.sort)
       .subscribe(
         resultList => {

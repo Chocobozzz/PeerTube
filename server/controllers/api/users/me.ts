@@ -111,7 +111,8 @@ async function getUserVideos (req: express.Request, res: express.Response) {
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    search: req.query.search
+    search: req.query.search,
+    isLive: req.query.isLive
   }, 'filter:api.user.me.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

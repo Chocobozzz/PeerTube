@@ -6,13 +6,13 @@ import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { LiveManager } from '@server/lib/live-manager'
-import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags, addOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { VideoState, VideoUpdate } from '../../../../shared'
-import { HttpStatusCode, HttpMethod } from '../../../../shared/core-utils/miscs'
-import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
+import { DiskStorageOptions, Metadata, uploadx } from '@uploadx/core'
+import { VideoCreate, VideosCommonQuery, VideoState, VideoUpdate } from '../../../../shared'
+import { HttpMethod, HttpStatusCode } from '../../../../shared/core-utils/miscs'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers/database-utils'
 import { buildNSFWFilter, createReqFiles, getCountVideos } from '../../../helpers/express-utils'
@@ -70,9 +70,6 @@ import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { watchingRouter } from './watching'
-import { DiskStorageOptions, Metadata, uploadx } from '@uploadx/core'
-import { VideoCreate } from '../../../../shared/models/videos/video-create.model'
-import { UploadVideoFiles } from 'express'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -545,20 +542,22 @@ async function getVideoFileMetadata (req: express.Request, res: express.Response
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
+  const query = req.query as VideosCommonQuery
   const countVideos = getCountVideos(req)
 
   const apiOptions = await Hooks.wrapObject({
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort,
+    start: query.start,
+    count: query.count,
+    sort: query.sort,
     includeLocalVideos: true,
-    categoryOneOf: req.query.categoryOneOf,
-    licenceOneOf: req.query.licenceOneOf,
-    languageOneOf: req.query.languageOneOf,
-    tagsOneOf: req.query.tagsOneOf,
-    tagsAllOf: req.query.tagsAllOf,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
-    filter: req.query.filter as VideoFilter,
+    categoryOneOf: query.categoryOneOf,
+    licenceOneOf: query.licenceOneOf,
+    languageOneOf: query.languageOneOf,
+    tagsOneOf: query.tagsOneOf,
+    tagsAllOf: query.tagsAllOf,
+    nsfw: buildNSFWFilter(res, query.nsfw),
+    isLive: query.isLive,
+    filter: query.filter,
     withFiles: false,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos

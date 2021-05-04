@@ -1,8 +1,9 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Params, Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService, UserService } from '@app/core'
-import { Account, DropdownAction } from '@app/shared/shared-main'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
+import { DropdownAction } from '@app/shared/shared-main'
 import { UserBanModalComponent } from '@app/shared/shared-moderation'
 import { ServerConfig, User, UserRole } from '@shared/models'
 
@@ -22,14 +23,23 @@ export class UserListComponent extends RestTable implements OnInit {
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
 
   users: User[] = []
+
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+
   highlightBannedUsers = false
 
   selectedUsers: User[] = []
   bulkUserActions: DropdownAction<User[]>[][] = []
   columns: { id: string, label: string }[]
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'banned:true' },
+      label: $localize`Banned users`
+    }
+  ]
 
   private _selectedColumns: string[]
   private serverConfig: ServerConfig
@@ -68,7 +78,6 @@ export class UserListComponent extends RestTable implements OnInit {
         .subscribe(config => this.serverConfig = config)
 
     this.initialize()
-    this.listenToSearchChange()
 
     this.bulkUserActions = [
       [
@@ -160,7 +169,7 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   onUserChanged () {
-    this.loadData()
+    this.reloadData()
   }
 
   async unbanUsers (users: User[]) {
@@ -171,7 +180,7 @@ export class UserListComponent extends RestTable implements OnInit {
         .subscribe(
           () => {
             this.notifier.success($localize`${users.length} users unbanned.`)
-            this.loadData()
+            this.reloadData()
           },
 
           err => this.notifier.error(err.message)
@@ -193,7 +202,7 @@ export class UserListComponent extends RestTable implements OnInit {
     this.userService.removeUser(users).subscribe(
       () => {
         this.notifier.success($localize`${users.length} users deleted.`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message)
@@ -204,7 +213,7 @@ export class UserListComponent extends RestTable implements OnInit {
     this.userService.updateUsers(users, { emailVerified: true }).subscribe(
       () => {
         this.notifier.success($localize`${users.length} users email set as verified.`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message)
@@ -215,7 +224,7 @@ export class UserListComponent extends RestTable implements OnInit {
     return this.selectedUsers.length !== 0
   }
 
-  protected loadData () {
+  protected reloadData () {
     this.selectedUsers = []
 
     this.userService.getUsers({

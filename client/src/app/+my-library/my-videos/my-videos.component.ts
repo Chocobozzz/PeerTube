@@ -1,10 +1,11 @@
-import { concat, Observable, Subject } from 'rxjs'
-import { debounceTime, tap, toArray } from 'rxjs/operators'
+import { concat, Observable } from 'rxjs'
+import { tap, toArray } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign } from '@app/helpers'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
 import { MiniatureDisplayOptions, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
@@ -40,12 +41,20 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   videoActions: DropdownAction<{ video: Video }>[] = []
 
   videos: Video[] = []
-  videosSearch: string
-  videosSearchChanged = new Subject<string>()
   getVideosObservableFunction = this.getVideosObservable.bind(this)
+
   sort: VideoSortField = '-publishedAt'
 
   user: User
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'isLive:true' },
+      label: $localize`Only live videos`
+    }
+  ]
+
+  private search: string
 
   constructor (
     protected router: Router,
@@ -64,21 +73,15 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     this.buildActions()
 
     this.user = this.authService.getUser()
-
-    this.videosSearchChanged
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        this.videosSelection.reloadVideos()
-      })
   }
 
-  resetSearch () {
-    this.videosSearch = ''
-    this.onVideosSearchChanged()
+  onSearch (search: string) {
+    this.search = search
+    this.reloadData()
   }
 
-  onVideosSearchChanged () {
-    this.videosSearchChanged.next()
+  reloadData () {
+    this.videosSelection.reloadVideos()
   }
 
   onChangeSortColumn () {
@@ -96,7 +99,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getMyVideos(newPagination, this.sort, this.videosSearch)
+    return this.videoService.getMyVideos(newPagination, this.sort, this.search)
       .pipe(
         tap(res => this.pagination.totalItems = res.total)
       )

@@ -3,7 +3,7 @@ import truncate from 'lodash-es/truncate'
 import { SortMeta } from 'primeng/api'
 import { buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
@@ -11,6 +11,7 @@ import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared
 import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoCommentService } from '@app/shared/shared-video-comment'
 import { AbuseState, AdminAbuse } from '@shared/models'
+import { AdvancedInputFilter } from '../shared-forms'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { ProcessedAbuse } from './processed-abuse.model'
@@ -22,9 +23,8 @@ const logger = debug('peertube:moderation:AbuseListTableComponent')
   templateUrl: './abuse-list-table.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ]
 })
-export class AbuseListTableComponent extends RestTable implements OnInit, AfterViewInit {
+export class AbuseListTableComponent extends RestTable implements OnInit {
   @Input() viewType: 'admin' | 'user'
-  @Input() baseRoute: string
 
   @ViewChild('abuseMessagesModal', { static: true }) abuseMessagesModal: AbuseMessageModalComponent
   @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
@@ -35,6 +35,29 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   abuseActions: DropdownAction<ProcessedAbuse>[][] = []
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'state:pending' },
+      label: $localize`Unsolved reports`
+    },
+    {
+      queryParams: { 'search': 'state:accepted' },
+      label: $localize`Accepted reports`
+    },
+    {
+      queryParams: { 'search': 'state:rejected' },
+      label: $localize`Refused reports`
+    },
+    {
+      queryParams: { 'search': 'videoIs:blacklisted' },
+      label: $localize`Reports with blocked videos`
+    },
+    {
+      queryParams: { 'search': 'videoIs:deleted' },
+      label: $localize`Reports with deleted videos`
+    }
+  ]
 
   constructor (
     protected route: ActivatedRoute,
@@ -66,11 +89,6 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
     ]
 
     this.initialize()
-    this.listenToSearchChange()
-  }
-
-  ngAfterViewInit () {
-    if (this.search) this.setTableFilter(this.search, false)
   }
 
   isAdminView () {
@@ -86,7 +104,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   }
 
   onModerationCommentUpdated () {
-    this.loadData()
+    this.reloadData()
   }
 
   isAbuseAccepted (abuse: AdminAbuse) {
@@ -129,7 +147,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
     this.abuseService.removeAbuse(abuse).subscribe(
       () => {
         this.notifier.success($localize`Abuse deleted.`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message)
@@ -139,7 +157,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
   updateAbuseState (abuse: AdminAbuse, state: AbuseState) {
     this.abuseService.updateAbuse(abuse, { state })
       .subscribe(
-        () => this.loadData(),
+        () => this.reloadData(),
 
         err => this.notifier.error(err.message)
       )
@@ -166,7 +184,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, AfterV
     return Actor.IS_LOCAL(abuse.reporterAccount.host)
   }
 
-  protected loadData () {
+  protected reloadData () {
     logger('Loading data.')
 
     const options = {

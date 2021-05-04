@@ -1,4 +1,4 @@
-import { NSFWQuery, SearchTargetType } from '@shared/models'
+import { BooleanBothQuery, SearchTargetType } from '@shared/models'
 
 export class AdvancedSearch {
   startDate: string // ISO 8601
@@ -7,7 +7,7 @@ export class AdvancedSearch {
   originallyPublishedStartDate: string // ISO 8601
   originallyPublishedEndDate: string // ISO 8601
 
-  nsfw: NSFWQuery
+  nsfw: BooleanBothQuery
 
   categoryOneOf: string
 
@@ -33,7 +33,7 @@ export class AdvancedSearch {
     endDate?: string
     originallyPublishedStartDate?: string
     originallyPublishedEndDate?: string
-    nsfw?: NSFWQuery
+    nsfw?: BooleanBothQuery
     categoryOneOf?: string
     licenceOneOf?: string
     languageOneOf?: string

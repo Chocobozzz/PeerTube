@@ -2,7 +2,7 @@ import * as express from 'express'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MChannelBannerAccountDefault } from '@server/types/models'
-import { ActorImageType, VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
+import { ActorImageType, VideoChannelCreate, VideoChannelUpdate, VideosCommonQuery } from '../../../shared'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
@@ -312,20 +312,21 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
   const videoChannelInstance = res.locals.videoChannel
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
   const countVideos = getCountVideos(req)
+  const query = req.query as VideosCommonQuery
 
   const apiOptions = await Hooks.wrapObject({
     followerActorId,
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort,
+    start: query.start,
+    count: query.count,
+    sort: query.sort,
     includeLocalVideos: true,
-    categoryOneOf: req.query.categoryOneOf,
-    licenceOneOf: req.query.licenceOneOf,
-    languageOneOf: req.query.languageOneOf,
-    tagsOneOf: req.query.tagsOneOf,
-    tagsAllOf: req.query.tagsAllOf,
-    filter: req.query.filter,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
+    categoryOneOf: query.categoryOneOf,
+    licenceOneOf: query.licenceOneOf,
+    languageOneOf: query.languageOneOf,
+    tagsOneOf: query.tagsOneOf,
+    tagsAllOf: query.tagsAllOf,
+    filter: query.filter,
+    nsfw: buildNSFWFilter(res, query.nsfw),
     withFiles: false,
     videoChannelId: videoChannelInstance.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,

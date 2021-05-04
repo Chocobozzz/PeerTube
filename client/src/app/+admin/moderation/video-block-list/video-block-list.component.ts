@@ -2,10 +2,11 @@ import { SortMeta } from 'primeng/api'
 import { switchMap } from 'rxjs/operators'
 import { buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
-import { AfterViewInit, Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
-import { ActivatedRoute, Params, Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
@@ -15,7 +16,7 @@ import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-block-list.component.scss' ]
 })
-export class VideoBlockListComponent extends RestTable implements OnInit, AfterViewInit {
+export class VideoBlockListComponent extends RestTable implements OnInit {
   blocklist: (VideoBlacklist & { reasonHtml?: string, embedHtml?: string })[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -23,6 +24,17 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
   blocklistTypeFilter: VideoBlacklistType = undefined
 
   videoBlocklistActions: DropdownAction<VideoBlacklist>[][] = []
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      queryParams: { 'search': 'type:auto' },
+      label: $localize`Automatic blocks`
+    },
+    {
+      queryParams: { 'search': 'type:manual' },
+      label: $localize`Manual blocks`
+    }
+  ]
 
   constructor (
     protected route: ActivatedRoute,
@@ -52,7 +64,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
             ).subscribe(
               () => {
                 this.notifier.success($localize`Video ${videoBlock.video.name} switched to manual block.`)
-                this.loadData()
+                this.reloadData()
               },
 
               err => this.notifier.error(err.message)
@@ -104,31 +116,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
         })
 
     this.initialize()
-    this.listenToSearchChange()
   }
-
-  ngAfterViewInit () {
-    if (this.search) this.setTableFilter(this.search, false)
-  }
-
-  /* Table filter functions */
-  onBlockSearch (event: Event) {
-    this.onSearch(event)
-    this.setQueryParams((event.target as HTMLInputElement).value)
-  }
-
-  setQueryParams (search: string) {
-    const queryParams: Params = {}
-    if (search) Object.assign(queryParams, { search })
-    this.router.navigate([ '/admin/moderation/video-blocks/list' ], { queryParams })
-  }
-
-  resetTableFilter () {
-    this.setTableFilter('')
-    this.setQueryParams('')
-    this.resetSearch()
-  }
-  /* END Table filter functions */
 
   getIdentifier () {
     return 'VideoBlockListComponent'
@@ -151,7 +139,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
     this.videoBlocklistService.unblockVideo(entry.video.id).subscribe(
       () => {
         this.notifier.success($localize`Video ${entry.video.name} unblocked.`)
-        this.loadData()
+        this.reloadData()
       },
 
       err => this.notifier.error(err.message)
@@ -169,7 +157,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
     )
   }
 
-  protected loadData () {
+  protected reloadData () {
     this.videoBlocklistService.listBlocks({
       pagination: this.pagination,
       sort: this.sort,

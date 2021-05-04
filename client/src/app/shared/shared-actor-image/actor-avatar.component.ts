@@ -98,7 +98,7 @@ export class ActorAvatarComponent {
       jkl: 'gray',
       mno: 'yellow',
       pqr: 'orange',
-      stv: 'red',
+      stvu: 'red',
       wxyz: 'dark-blue'
     }
 

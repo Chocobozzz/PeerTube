@@ -16,9 +16,11 @@ export type BuildVideosQueryOptions = {
   start: number
   sort: string
 
-  filter?: VideoFilter
-  categoryOneOf?: number[]
   nsfw?: boolean
+  filter?: VideoFilter
+  isLive?: boolean
+
+  categoryOneOf?: number[]
   licenceOneOf?: number[]
   languageOneOf?: string[]
   tagsOneOf?: string[]
@@ -199,10 +201,14 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
 
   if (options.nsfw === true) {
     and.push('"video"."nsfw" IS TRUE')
+  } else if (options.nsfw === false) {
+    and.push('"video"."nsfw" IS FALSE')
   }
 
-  if (options.nsfw === false) {
-    and.push('"video"."nsfw" IS FALSE')
+  if (options.isLive === true) {
+    and.push('"video"."isLive" IS TRUE')
+  } else if (options.isLive === false) {
+    and.push('"video"."isLive" IS FALSE')
   }
 
   if (options.categoryOneOf) {

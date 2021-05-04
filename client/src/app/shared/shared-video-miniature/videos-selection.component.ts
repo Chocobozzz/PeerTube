@@ -31,6 +31,9 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   @Input() pagination: ComponentPagination
   @Input() titlePage: string
   @Input() miniatureDisplayOptions: MiniatureDisplayOptions
+  @Input() noResultMessage = $localize`No results.`
+  @Input() enableSelection = true
+  @Input() loadOnInit = true
 
   @Input() getVideosObservableFunction: (page: number, sort?: VideoSortField) => Observable<ResultList<Video>>
 

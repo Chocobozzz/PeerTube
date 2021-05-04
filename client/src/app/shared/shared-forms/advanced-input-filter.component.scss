@@ -1,0 +1,10 @@
+@import '_variables';
+@import '_mixins';
+
+input {
+  @include peertube-input-text(250px);
+}
+
+.input-group-text {
+  background-color: transparent;
+}
