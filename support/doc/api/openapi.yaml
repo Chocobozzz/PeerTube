@@ -4208,14 +4208,21 @@ components:
           type: string
           format: url
     VideoStreamingPlaylists:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+            type:
+              type: integer
+              enum:
+                - 1
+              description: |
+                Playlist type:
+                - `1`: HLS
+        - $ref: '#/components/schemas/VideoStreamingPlaylists-HLS'
+    VideoStreamingPlaylists-HLS:
       properties:
-        id:
-          type: integer
-        type:
-          type: integer
-          enum:
-            - 1
-          description: 'Playlist type (HLS = `1`)'
         playlistUrl:
           type: string
           format: url
