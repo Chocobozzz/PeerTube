@@ -2385,7 +2385,7 @@ paths:
                       id:
                         type: integer
                       uuid:
-                        type: string
+                        $ref: '#/components/schemas/UUIDv4'
       requestBody:
         content:
           multipart/form-data:
@@ -3753,9 +3753,7 @@ components:
           - type: integer
             minimum: 0
             example: 42
-          - type: string
-            format: uuid
-            example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          - $ref: '#/components/schemas/UUIDv4'
     playlistElementId:
       name: playlistElementId
       in: path
@@ -3983,6 +3981,16 @@ components:
             moderator: Moderator scope
             user: User scope
   schemas:
+    UUIDv4:
+      type: string
+      format: uuid
+      example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+      # the regex above limits the length;
+      # however, some tools might require explicit settings:
+      minLength: 36
+      maxLength: 36
+
     VideoConstantNumber-Category:
       properties:
         id:
@@ -4250,9 +4258,7 @@ components:
         id:
           type: integer
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         name:
           type: string
           minLength: 3
@@ -4263,9 +4269,7 @@ components:
           type: integer
           example: 8
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         isLive:
           type: boolean
         createdAt:
@@ -4433,9 +4437,7 @@ components:
           type: string
           format: url
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         redundancies:
           type: object
           properties:
@@ -4544,9 +4546,7 @@ components:
           minLength: 3
           maxLength: 120
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         description:
           type: string
           minLength: 3
@@ -4579,9 +4579,7 @@ components:
             id:
               type: integer
             uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+              $ref: '#/components/schemas/UUIDv4'
     VideoPlaylist:
       properties:
         id:
@@ -4597,9 +4595,7 @@ components:
           minLength: 3
           maxLength: 1000
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         displayName:
           type: string
           minLength: 1
@@ -5196,9 +5192,7 @@ components:
               type: integer
               example: 8
             uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+              $ref: '#/components/schemas/UUIDv4'
     CommentThreadResponse:
       properties:
         total:
