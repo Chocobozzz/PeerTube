@@ -4275,15 +4275,23 @@ components:
         createdAt:
           type: string
           format: date-time
+          example: 2017-10-01T10:52:46.396Z
+          description: time at which the video object was first drafted
         publishedAt:
           type: string
           format: date-time
+          example: 2018-10-01T10:52:46.396Z
+          description: time at which the video was marked as ready for playback (with restrictions depending on `privacy`). Usually set after a `state` evolution.
         updatedAt:
           type: string
           format: date-time
+          example: 2021-05-04T08:01:01.502Z
+          description: last time the video's metadata was modified
         originallyPublishedAt:
           type: string
           format: date-time
+          example: 2010-10-01T10:52:46.396Z
+          description: used to represent a date of first publication, prior to the practical publication date of `publishedAt`
         category:
           $ref: '#/components/schemas/VideoConstantNumber-Category'
         licence:
@@ -4294,9 +4302,18 @@ components:
           $ref: '#/components/schemas/VideoPrivacyConstant'
         description:
           type: string
+          example: |
+            **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
+            **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network, based on fr...
+          minLength: 3
+          maxLength: 250
+          description: |
+            truncated description of the video, written in Markdown.
+            Resolve `descriptionPath` to get the full description of maximum `10000` characters.
         duration:
           type: integer
           example: 1419
+          description: duration of the video in seconds
         isLocal:
           type: boolean
         name:
@@ -4356,6 +4373,8 @@ components:
           properties:
             descriptionPath:
               type: string
+              example: /api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180a6d/description
+              description: path at which to get the full description of maximum `10000` characters
             support:
               type: string
               description: A text tell the audience how to support the video creator
