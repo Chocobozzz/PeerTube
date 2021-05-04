@@ -4224,7 +4224,10 @@ components:
           format: url
         files:
           type: array
-          description: 'Video files associated to this playlist. The difference with the root "files" property is that these files are fragmented, so they can be used in this streaming playlist (HLS etc)'
+          description: |
+            Video files associated to this playlist.
+
+            The difference with the root `files` property is that these files are fragmented, so they can be used in this streaming playlist (HLS, etc.)
           items:
             $ref: '#/components/schemas/VideoFile'
         redundancies:
@@ -4346,6 +4349,8 @@ components:
               type: string
               description: A text tell the audience how to support the video creator
               example: Please support my work on <insert crowdfunding plateform>! <3
+              minLength: 3
+              maxLength: 1000
             channel:
               $ref: '#/components/schemas/VideoChannel'
             account:
@@ -4359,11 +4364,6 @@ components:
                 type: string
                 minLength: 2
                 maxLength: 30
-            files:
-              type: array
-              description: 'WebTorrent/raw video files. Can be empty if WebTorrent is disabled on the server. In this case, video files will be in the "streamingPlaylists[].files" property'
-              items:
-                $ref: '#/components/schemas/VideoFile'
             commentsEnabled:
               type: boolean
             downloadEnabled:
@@ -4373,10 +4373,24 @@ components:
               items:
                 type: string
                 format: url
+            files:
+              type: array
+              items:
+                $ref: '#/components/schemas/VideoFile'
+              description: |
+                WebTorrent/raw video files. If WebTorrent is disabled on the server:
+
+                - field will be empty
+                - video files will be found in `streamingPlaylists[].files` field
             streamingPlaylists:
               type: array
               items:
                 $ref: '#/components/schemas/VideoStreamingPlaylists'
+              description: |
+                HLS playlists/manifest files. If HLS is disabled on the server:
+
+                - field will be empty
+                - video files will be found in `files` field
     FileRedundancyInformation:
       properties:
         id:
