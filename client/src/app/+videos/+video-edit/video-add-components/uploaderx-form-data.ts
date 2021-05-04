@@ -13,28 +13,36 @@ import { resolveUrl, UploaderX } from 'ngx-uploadx'
  *   };
  */
 export class UploaderXFormData extends UploaderX {
+
   async getFileUrl (): Promise<string> {
     const headers = {
       'X-Upload-Content-Length': this.size.toString(),
       'X-Upload-Content-Type': this.file.type || 'application/octet-stream'
     }
+
     const previewfile = this.metadata.previewfile as any as File
     delete this.metadata.previewfile
+
     const data = objectToFormData(this.metadata)
     if (previewfile !== undefined) {
       data.append('previewfile', previewfile, previewfile.name)
+      data.append('thumbnailfile', previewfile, previewfile.name)
     }
+
     await this.request({
       method: 'POST',
       body: data,
       url: this.endpoint,
       headers
     })
+
     const location = this.getValueFromResponse('location')
     if (!location) {
       throw new Error('Invalid or missing Location header')
     }
+
     this.offset = this.responseStatus === 201 ? 0 : undefined
+
     return resolveUrl(location, this.endpoint)
   }
 }

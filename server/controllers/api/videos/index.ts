@@ -2,6 +2,7 @@ import * as express from 'express'
 import { move } from 'fs-extra'
 import { extname } from 'path'
 import toInt from 'validator/lib/toInt'
+import { getResumableUploadPath } from '@server/helpers/upload'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
@@ -10,15 +11,15 @@ import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnail
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { DiskStorageOptions, Metadata, uploadx } from '@uploadx/core'
+import { uploadx } from '@uploadx/core'
 import { VideoCreate, VideosCommonQuery, VideoState, VideoUpdate } from '../../../../shared'
-import { HttpMethod, HttpStatusCode } from '../../../../shared/core-utils/miscs'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers/database-utils'
 import { buildNSFWFilter, createReqFiles, getCountVideos } from '../../../helpers/express-utils'
 import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { getFormattedObjects, getResumableUploadPath } from '../../../helpers/utils'
+import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import {
   DEFAULT_AUDIO_RESOLUTION,
@@ -43,8 +44,6 @@ import {
   authenticate,
   checkVideoFollowConstraints,
   commonVideosFiltersValidator,
-  executeIfPOST,
-  onlyAllowMethods,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -74,7 +73,7 @@ import { watchingRouter } from './watching'
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
-const uploadxOptions = { directory: getResumableUploadPath() } as DiskStorageOptions
+const uploadxMiddleware = uploadx.upload({ directory: getResumableUploadPath() })
 
 const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
@@ -135,12 +134,21 @@ videosRouter.post('/upload',
   asyncRetryTransactionMiddleware(addVideoLegacy)
 )
 
-videosRouter.all('/upload-resumable',
-  onlyAllowMethods([ HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT ]), // uploadx also allows GET and PATCH
+videosRouter.post('/upload-resumable',
   authenticate,
-  executeIfPOST(reqVideoFileAddResumable),
-  executeIfPOST(asyncMiddleware(videosAddResumableInitValidator)),
-  uploadx.upload(uploadxOptions), // uploadx doesn't use call next() before the file upload completes
+  reqVideoFileAddResumable,
+  asyncMiddleware(videosAddResumableInitValidator),
+  uploadxMiddleware
+)
+
+videosRouter.delete('/upload-resumable',
+  authenticate,
+  uploadxMiddleware
+)
+
+videosRouter.put('/upload-resumable',
+  authenticate,
+  uploadxMiddleware, // uploadx doesn't use call next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),
   asyncMiddleware(addVideoResumable)
 )
@@ -185,19 +193,19 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function listVideoCategories (req: express.Request, res: express.Response) {
+function listVideoCategories (_req: express.Request, res: express.Response) {
   res.json(VIDEO_CATEGORIES)
 }
 
-function listVideoLicences (req: express.Request, res: express.Response) {
+function listVideoLicences (_req: express.Request, res: express.Response) {
   res.json(VIDEO_LICENCES)
 }
 
-function listVideoLanguages (req: express.Request, res: express.Response) {
+function listVideoLanguages (_req: express.Request, res: express.Response) {
   res.json(VIDEO_LANGUAGES)
 }
 
-function listVideoPrivacies (req: express.Request, res: express.Response) {
+function listVideoPrivacies (_req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
@@ -213,29 +221,34 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
   const videoInfo: VideoCreate = req.body
   const files = req.files
 
-  return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
+  return addVideo({ res, videoPhysicalFile, videoInfo, files })
 }
 
-async function addVideoResumable (req: express.Request, res: express.Response) {
+async function addVideoResumable (_req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
-  const files = { previewfile: videoInfo.previewfile as Express.Multer.File[] }
+  const files = { previewfile: videoInfo.previewfile }
 
-  return addVideo(req, res, { videoPhysicalFile, videoInfo, files })
+  return addVideo({ res, videoPhysicalFile, videoInfo, files })
 }
 
-async function addVideo (req: express.Request, res: express.Response, parameters: {
-  videoPhysicalFile: { duration: number, filename: string, size: number, path: string }
-  videoInfo: VideoCreate | Metadata
-  files: UploadVideoFiles | Express.Multer.File[]
+async function addVideo (options: {
+  res: express.Response
+  videoPhysicalFile: express.VideoUploadFile
+  videoInfo: VideoCreate
+  files: express.UploadFiles
 }) {
-  const { videoPhysicalFile, videoInfo, files } = parameters
+  const { res, videoPhysicalFile, videoInfo, files } = options
   const videoChannel = res.locals.videoChannel
   const user = res.locals.oauth.token.User
 
-  const videoData = buildLocalVideoFromReq(videoInfo as VideoCreate, videoChannel.id)
-  videoData.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
-  videoData.duration = videoPhysicalFile['duration'] // duration was added by a previous middleware
+  const videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
+
+  videoData.state = CONFIG.TRANSCODING.ENABLED
+    ? VideoState.TO_TRANSCODE
+    : VideoState.PUBLISHED
+
+  videoData.duration = videoPhysicalFile.duration // duration was added by a previous middleware
 
   const video = new VideoModel(videoData) as MVideoFullLight
   video.VideoChannel = videoChannel

@@ -1,11 +1,12 @@
 import * as express from 'express'
-import { FileUploadMetadata } from 'express'
-import { stat } from 'fs-extra'
 import { body, header, param, query, ValidationChain } from 'express-validator'
+import { stat } from 'fs-extra'
+import { getResumableUploadPath } from '@server/helpers/upload'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
-import { MVideoWithRights } from '@server/types/models'
+import { MUserAccountId, MVideoWithRights } from '@server/types/models'
+import { DiskStorage } from '@uploadx/core'
 import { ServerErrorCode, UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
@@ -49,6 +50,7 @@ import {
   doesVideoExist,
   doesVideoFileOfVideoExist
 } from '../../../helpers/middlewares'
+import { deleteFileAndCatch } from '../../../helpers/utils'
 import { getVideoWithAttributes } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
@@ -58,8 +60,6 @@ import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
-import { getResumableUploadPath, deleteFileAsync as clearUploadFile } from '../../../helpers/utils'
-import { DiskStorage, File as UploadxFile } from '@uploadx/core'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -77,9 +77,8 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
-    if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
 
-    const videoFile: Express.Multer.File & { duration?: number } = req.files['videofile'][0]
+    const videoFile: express.VideoUploadFile = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files })) {
@@ -108,13 +107,13 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
-    const file: UploadxFile & { duration: number, path: string, filename: string } = req.body
-    file.path = getResumableUploadPath(file.id)
-    file.filename = file.metadata.filename
-    const cleanup = () => clearUploadFile(file.path)
+
+    const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
+    const file = { ...body, duration: undefined, path: getResumableUploadPath(body.id), filename: body.metadata.filename }
+
+    const cleanup = () => deleteFileAndCatch(file.path)
 
     if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
-    if (!await isVideoAccepted(req, res, file as any)) return cleanup()
 
     try {
       if (!file.duration) await addDurationToVideo(file)
@@ -126,23 +125,23 @@ const videosAddResumableValidator = [
       return cleanup()
     }
 
+    if (!await isVideoAccepted(req, res, file)) return cleanup()
+
     res.locals.videoFileResumable = file
 
     return next()
   }
 ]
 
-/* eslint-disable max-len */
 /**
  * File is created in POST initialisation, and its body is saved as a 'metadata' field is saved by uploadx for later use.
- * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/uploadx.ts#L41
+ * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/uploadx.ts
  *
  * Uploadx doesn't use next() until the upload completes, so this middleware has to be placed before uploadx
- * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts#L81-L93
+ * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts
  *
  * This validator is meant for POST requests only.
  */
-/* eslint-enable max-len */
 const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('filename')
     .isString()
@@ -167,10 +166,11 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const videoFileMetadata = {
-      mimetype: req.headers['x-upload-content-type'],
+      mimetype: req.headers['x-upload-content-type'] as string,
       size: +req.headers['x-upload-content-length'],
       originalname: req.body.name
-    } as express.FileUploadMetadata
+    }
+
     const user = res.locals.oauth.token.User
     const cleanup = () => cleanUpReqFiles(req)
 
@@ -181,7 +181,6 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     })
 
     if (areValidationErrors(req, res)) return cleanup()
-    if (areErrorsInScheduleUpdate(req, res)) return cleanup()
 
     const files = { videofile: [ videoFileMetadata ] }
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
@@ -563,6 +562,7 @@ export {
   videosAddLegacyValidator,
   videosAddResumableValidator,
   videosAddResumableInitValidator,
+
   videosUpdateValidator,
   videosGetValidator,
   videoFileMetadataGetValidator,
@@ -600,13 +600,15 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
 }
 
 async function commonVideoChecksPass (parameters: {
-  req
-  res
-  user
+  req: express.Request
+  res: express.Response
+  user: MUserAccountId
   videoFileSize: number
-  files: { [ fieldname: string ]: FileUploadMetadata[] } | FileUploadMetadata[]
+  files: express.UploadFilesForCheck
 }): Promise<boolean> {
   const { req, res, user, videoFileSize, files } = parameters
+
+  if (areErrorsInScheduleUpdate(req, res)) return false
 
   if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
 
@@ -640,7 +642,7 @@ async function commonVideoChecksPass (parameters: {
 export async function isVideoAccepted (
   req: express.Request,
   res: express.Response,
-  videoFile: Express.Multer.File & { duration?: number }
+  videoFile: express.VideoUploadFile
 ) {
   // Check we accept this video
   const acceptParameters = {
@@ -665,7 +667,7 @@ export async function isVideoAccepted (
   return true
 }
 
-async function addDurationToVideo (videoFile: any) {
+async function addDurationToVideo (videoFile: { path: string, duration?: number }) {
   const duration: number = await getDurationFromVideoFile(videoFile.path)
 
   if (isNaN(duration)) throw new Error(`Couldn't get video duration`)

@@ -1,3 +1,4 @@
+import { UploadFiles } from 'express'
 import { Transaction } from 'sequelize/types'
 import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
@@ -10,7 +11,6 @@ import { federateVideoIfNeeded } from './activitypub/videos'
 import { JobQueue } from './job-queue/job-queue'
 import { Notifier } from './notifier'
 import { createVideoMiniatureFromExisting } from './thumbnail'
-import { UploadVideoFiles } from 'express'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -33,7 +33,7 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
 
 async function buildVideoThumbnailsFromReq (options: {
   video: MVideoThumbnail
-  files: UploadVideoFiles | Express.Multer.File[]
+  files: UploadFiles
   fallback: (type: ThumbnailType) => Promise<MThumbnail>
   automaticallyGenerated?: boolean
 }) {

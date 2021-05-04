@@ -7,12 +7,7 @@ import { execPromise, execPromise2, randomBytesPromise, sha256 } from './core-ut
 import { logger } from './logger'
 import { RESUMABLE_UPLOAD_DIRECTORY } from '../initializers/constants'
 
-function deleteFile (path: string) {
-  return remove(path)
-    .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
-}
-
-function deleteFileAsync (path: string) {
+function deleteFileAndCatch (path: string) {
   remove(path)
     .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
 }
@@ -86,20 +81,14 @@ function getUUIDFromFilename (filename: string) {
   return result[0]
 }
 
-function getResumableUploadPath (filename?: string) {
-  return filename ? join(RESUMABLE_UPLOAD_DIRECTORY, filename) : RESUMABLE_UPLOAD_DIRECTORY
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  deleteFile,
-  deleteFileAsync,
+  deleteFileAndCatch,
   generateRandomString,
   getFormattedObjects,
   getSecureTorrentName,
   getServerCommit,
   generateVideoImportTmpPath,
-  getUUIDFromFilename,
-  getResumableUploadPath
+  getUUIDFromFilename
 }

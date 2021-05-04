@@ -24,7 +24,6 @@ import { makeGetRequest, makePutBodyRequest, makeRawRequest, makeUploadRequest }
 import { waitJobs } from '../server/jobs'
 import { ServerInfo } from '../server/servers'
 import { getMyUserInformation } from '../users/users'
-import { reject } from 'bluebird'
 
 loadLanguages()
 
@@ -43,6 +42,7 @@ type VideoAttributes = {
   channelId?: number
   privacy?: VideoPrivacy
   fixture?: string
+  support?: string
   thumbnailfile?: string
   previewfile?: string
   scheduleUpdate?: {
@@ -397,64 +397,9 @@ async function uploadVideo (
     fixture: 'video_short.webm'
   }, videoAttributesArg)
 
-  /* START part varying depending on selected mode */
-  let res
-  if (mode === 'legacy') {
-    const path = '/api/v1/videos/upload'
-    const req = request(url)
-                .post(path)
-                .set('Accept', 'application/json')
-                .set('Authorization', 'Bearer ' + accessToken)
-
-    buildUploadReq(req, attributes)
-    req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
-
-    res = await req.expect(specialStatus)
-  } else if (mode === 'resumable') {
-    let start = 0
-    const path = '/api/v1/videos/upload-resumable'
-    const videoFilePath = buildAbsoluteFixturePath(attributes.fixture)
-    const size = (await stat(videoFilePath)).size
-    const readable = createReadStream(videoFilePath)
-
-    const req = request(url)
-                .post(path)
-                .set('Authorization', 'Bearer ' + accessToken)
-                .set('X-Upload-Content-Type', 'video/mp4')
-                .set('X-Upload-Content-Length', size.toString())
-
-    buildUploadReq(req, attributes)
-    req.field('filename', attributes.fixture)
-
-    const initializeSession = await req.expect(HttpStatusCode.CREATED_201)
-                                       .expect(res => res.header['location'] !== undefined)
-    const pathUploadId = initializeSession.header['location'].split('?')[1]
-
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    res = await new Promise((resolve, _) => {
-      readable.on('data', async (chunk: { length: number }) => {
-        readable.pause()
-
-        const chunkResponse = await request(url)
-                                    .put(path + '?' + pathUploadId)
-                                    .redirects(0)
-                                    .set('Authorization', 'Bearer ' + accessToken)
-                                    .set('Content-Type', 'application/octet-stream')
-                                    .set('Content-Range', `bytes ${start}-${start + chunk.length - 1}/${size}`)
-                                    .send(chunk)
-        start += chunk.length
-
-        if (chunkResponse.status === HttpStatusCode.OK_200) {
-          resolve(chunkResponse)
-        } else if (chunkResponse.status !== HttpStatusCode.PERMANENT_REDIRECT_308) {
-          reject('incorrect transient behaviour sending intermediary chunks')
-        }
-
-        readable.resume()
-      })
-    })
-  }
-  /* END part varying depending on selected mode */
+  const res = mode === 'legacy'
+    ? await buildLegacyUpload(url, accessToken, attributes, specialStatus)
+    : await buildResumeUpload(url, accessToken, attributes, specialStatus)
 
   // Wait torrent generation
   if (specialStatus === HttpStatusCode.OK_200) {
@@ -468,6 +413,146 @@ async function uploadVideo (
   }
 
   return res
+}
+
+function checkUploadVideoParam (
+  url: string,
+  token: string,
+  attributes: Partial<VideoAttributes>,
+  specialStatus = HttpStatusCode.OK_200,
+  mode: 'legacy' | 'resumable' = 'legacy'
+) {
+  return mode === 'legacy'
+    ? buildLegacyUpload(url, token, attributes, specialStatus)
+    : buildResumeUpload(url, token, attributes, specialStatus)
+}
+
+async function buildLegacyUpload (url: string, token: string, attributes: VideoAttributes, specialStatus = HttpStatusCode.OK_200) {
+  const path = '/api/v1/videos/upload'
+  const req = request(url)
+              .post(path)
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + token)
+
+  buildUploadReq(req, attributes)
+
+  if (attributes.fixture !== undefined) {
+    req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
+  }
+
+  return req.expect(specialStatus)
+}
+
+async function buildResumeUpload (url: string, token: string, attributes: VideoAttributes, specialStatus = HttpStatusCode.OK_200) {
+  let size = 0
+  let videoFilePath: string
+  let mimetype = 'video/mp4'
+
+  if (attributes.fixture) {
+    videoFilePath = buildAbsoluteFixturePath(attributes.fixture)
+    size = (await stat(videoFilePath)).size
+
+    if (videoFilePath.endsWith('.mkv')) {
+      mimetype = 'video/x-matroska'
+    } else if (videoFilePath.endsWith('.webm')) {
+      mimetype = 'video/webm'
+    }
+  }
+
+  const initializeSessionRes = await prepareResumableUpload({ url, token, attributes, size, mimetype })
+  const initStatus = initializeSessionRes.status
+
+  if (videoFilePath && initStatus === HttpStatusCode.CREATED_201) {
+    const locationHeader = initializeSessionRes.header['location']
+    expect(locationHeader).to.not.be.undefined
+
+    const pathUploadId = locationHeader.split('?')[1]
+
+    return sendResumableChunks({ url, token, pathUploadId, videoFilePath, size, specialStatus })
+  }
+
+  const expectedInitStatus = specialStatus === HttpStatusCode.OK_200
+    ? HttpStatusCode.CREATED_201
+    : specialStatus
+
+  expect(initStatus).to.equal(expectedInitStatus)
+
+  return initializeSessionRes
+}
+
+async function prepareResumableUpload (options: {
+  url: string
+  token: string
+  attributes: VideoAttributes
+  size: number
+  mimetype: string
+}) {
+  const { url, token, attributes, size, mimetype } = options
+
+  const path = '/api/v1/videos/upload-resumable'
+
+  const req = request(url)
+              .post(path)
+              .set('Authorization', 'Bearer ' + token)
+              .set('X-Upload-Content-Type', mimetype)
+              .set('X-Upload-Content-Length', size.toString())
+
+  buildUploadReq(req, attributes)
+
+  if (attributes.fixture) {
+    req.field('filename', attributes.fixture)
+  }
+
+  return req
+}
+
+function sendResumableChunks (options: {
+  url: string
+  token: string
+  pathUploadId: string
+  videoFilePath: string
+  size: number
+  specialStatus?: HttpStatusCode
+}) {
+  const { url, token, pathUploadId, videoFilePath, size, specialStatus } = options
+
+  const expectedStatus = specialStatus || HttpStatusCode.OK_200
+
+  const path = '/api/v1/videos/upload-resumable'
+  let start = 0
+
+  const readable = createReadStream(videoFilePath)
+  return new Promise<request.Response>((resolve, reject) => {
+    readable.on('data', async (chunk: { length: number }) => {
+      readable.pause()
+
+      let chunkResponse: request.Response
+
+      try {
+        chunkResponse = await request(url)
+                                  .put(path + '?' + pathUploadId)
+                                  .redirects(0)
+                                  .set('Authorization', 'Bearer ' + token)
+                                  .set('Content-Type', 'application/octet-stream')
+                                  .set('Content-Range', `bytes ${start}-${start + chunk.length - 1}/${size}`)
+                                  .send(chunk)
+      } catch (err) {
+        return reject(err)
+      }
+
+      start += chunk.length
+
+      if (chunkResponse.status === expectedStatus) {
+        return resolve(chunkResponse)
+      }
+
+      if (chunkResponse.status !== HttpStatusCode.PERMANENT_REDIRECT_308) {
+        return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
+      }
+
+      readable.resume()
+    })
+  })
 }
 
 function updateVideo (
@@ -758,11 +843,13 @@ export {
   getVideoWithToken,
   getVideosList,
   removeAllVideos,
+  checkUploadVideoParam,
   getVideosListPagination,
   getVideosListSort,
   removeVideo,
   getVideosListWithToken,
   uploadVideo,
+  sendResumableChunks,
   getVideosWithFilters,
   uploadRandomVideoOnServers,
   updateVideo,
@@ -776,35 +863,30 @@ export {
   getMyVideosWithFilter,
   uploadVideoAndGetId,
   getLocalIdByUUID,
-  getVideoIdFromUUID
+  getVideoIdFromUUID,
+  prepareResumableUpload
 }
 
 // ---------------------------------------------------------------------------
 
-function buildUploadReq (req: request.Test, attributes: any) {
-  req.field('name', attributes.name)
-     .field('nsfw', JSON.stringify(attributes.nsfw))
-     .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
-     .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))
-     .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
-     .field('privacy', attributes.privacy.toString())
-     .field('channelId', attributes.channelId)
+function buildUploadReq (req: request.Test, attributes: VideoAttributes) {
 
-  if (attributes.support !== undefined) {
-    req.field('support', attributes.support)
+  for (const key of [ 'name', 'support', 'channelId', 'description', 'originallyPublishedAt' ]) {
+    if (attributes[key] !== undefined) {
+      req.field(key, attributes[key])
+    }
   }
 
-  if (attributes.description !== undefined) {
-    req.field('description', attributes.description)
+  for (const key of [ 'nsfw', 'commentsEnabled', 'downloadEnabled', 'waitTranscoding' ]) {
+    if (attributes[key] !== undefined) {
+      req.field(key, JSON.stringify(attributes[key]))
+    }
   }
-  if (attributes.language !== undefined) {
-    req.field('language', attributes.language.toString())
-  }
-  if (attributes.category !== undefined) {
-    req.field('category', attributes.category.toString())
-  }
-  if (attributes.licence !== undefined) {
-    req.field('licence', attributes.licence.toString())
+
+  for (const key of [ 'language', 'privacy', 'category', 'licence' ]) {
+    if (attributes[key] !== undefined) {
+      req.field(key, attributes[key].toString())
+    }
   }
 
   const tags = attributes.tags || []
@@ -812,22 +894,19 @@ function buildUploadReq (req: request.Test, attributes: any) {
     req.field('tags[' + i + ']', attributes.tags[i])
   }
 
-  if (attributes.thumbnailfile !== undefined) {
-    req.attach('thumbnailfile', buildAbsoluteFixturePath(attributes.thumbnailfile))
-  }
-  if (attributes.previewfile !== undefined) {
-    req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
+  for (const key of [ 'thumbnailfile', 'previewfile' ]) {
+    if (attributes[key] !== undefined) {
+      req.attach(key, buildAbsoluteFixturePath(attributes[key]))
+    }
   }
 
   if (attributes.scheduleUpdate) {
-    req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
+    if (attributes.scheduleUpdate.updateAt) {
+      req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
+    }
 
     if (attributes.scheduleUpdate.privacy) {
       req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
     }
-  }
-
-  if (attributes.originallyPublishedAt !== undefined) {
-    req.field('originallyPublishedAt', attributes.originallyPublishedAt)
   }
 }

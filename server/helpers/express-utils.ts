@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as multer from 'multer'
 import { REMOTE_SCHEME } from '../initializers/constants'
 import { logger } from './logger'
-import { deleteFileAsync, generateRandomString } from './utils'
+import { deleteFileAndCatch, generateRandomString } from './utils'
 import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
 import { CONFIG } from '../initializers/config'
@@ -36,15 +36,15 @@ function cleanUpReqFiles (req: { files: { [fieldname: string]: Express.Multer.Fi
   if (!files) return
 
   if (isArray(files)) {
-    (files as Express.Multer.File[]).forEach(f => deleteFileAsync(f.path))
+    (files as Express.Multer.File[]).forEach(f => deleteFileAndCatch(f.path))
     return
   }
 
   for (const key of Object.keys(files)) {
     const file = files[key]
 
-    if (isArray(file)) file.forEach(f => deleteFileAsync(f.path))
-    else deleteFileAsync(file.path)
+    if (isArray(file)) file.forEach(f => deleteFileAndCatch(f.path))
+    else deleteFileAndCatch(file.path)
   }
 }
 

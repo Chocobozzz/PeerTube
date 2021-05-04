@@ -1,9 +1,10 @@
 import { readdir, stat, Stats } from 'fs-extra'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { deleteFile, getResumableUploadPath } from '@server/helpers/utils'
+import { getResumableUploadPath } from '@server/helpers/upload'
+import { deleteFileAndCatch } from '@server/helpers/utils'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants'
-import { AbstractScheduler } from './abstract-scheduler'
 import { METAFILE_EXTNAME } from '@uploadx/core'
+import { AbstractScheduler } from './abstract-scheduler'
 
 const lTags = loggerTagsFactory('scheduler', 'resumable-upload', 'cleaner')
 
@@ -32,8 +33,8 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
 
     if (statResult.ctimeMs < limit) {
       await Promise.all([
-        deleteFile(filePath),
-        deleteFile(filePath + METAFILE_EXTNAME) // also delete the .META file, which was not updated since the initial POST request
+        deleteFileAndCatch(filePath),
+        deleteFileAndCatch(filePath + METAFILE_EXTNAME) // also delete the .META file, which was not updated since the initial POST request
       ])
     }
   }

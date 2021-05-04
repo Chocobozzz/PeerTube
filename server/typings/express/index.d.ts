@@ -20,7 +20,8 @@ import { MVideoImportDefault } from '@server/types/models/video/video-import'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate'
 import { HttpMethod } from '@shared/core-utils/miscs/http-methods'
-import { File as MResumableFile } from '@uploadx/core'
+import { VideoCreate } from '@shared/models'
+import { File as UploadXFile, Metadata } from '@uploadx/core'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
   MAccountDefault,
@@ -39,102 +40,125 @@ import {
   MVideoThumbnail,
   MVideoWithRights
 } from '../../types/models'
-
 declare module 'express' {
   export interface Request {
     query: any
     method: HttpMethod
   }
-  interface Response {
-    locals: PeerTubeLocals
-  }
-  export interface FileUploadMetadata {
-    mimetype: string
+
+  // Upload using multer or uploadx middleware
+  export type MulterOrUploadXFile = UploadXFile | Express.Multer.File
+
+  export type UploadFiles = {
+    [fieldname: string]: MulterOrUploadXFile[]
+  } | MulterOrUploadXFile[]
+
+  // Partial object used by some functions to check the file mimetype/extension
+  export type UploadFileForCheck = {
     originalname: string
-    size: number
+    mimetype: string
   }
 
-  export interface UploadVideoFiles {
-    [fieldname: string]: { path: string } | Express.Multer.File[]
+  export type UploadFilesForCheck = {
+    [fieldname: string]: UploadFileForCheck[]
+  } | UploadFileForCheck[]
+
+  // Upload file with a duration added by our middleware
+  export type VideoUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size'> & {
+    duration: number
   }
-}
 
-interface PeerTubeLocals {
-  videoAll?: MVideoFullLight
-  onlyImmutableVideo?: MVideoImmutable
-  onlyVideo?: MVideoThumbnail
-  onlyVideoWithRights?: MVideoWithRights
-  videoId?: MVideoIdThumbnail
+  // Extends Metadata property of UploadX object
+  export type UploadXFileMetadata = Metadata & VideoCreate & {
+    previewfile: Express.Multer.File[]
+    thumbnailfile: Express.Multer.File[]
+  }
 
-  videoLive?: MVideoLive
+  // Our custom UploadXFile object using our custom metadata
+  export type CustomUploadXFile <T extends Metadata> = UploadXFile & { metadata: T }
 
-  videoShare?: MVideoShareActor
-
-  videoFile?: MVideoFile
-
-  videoFileResumable?: MResumableFile & {
+  export type EnhancedUploadXFile = CustomUploadXFile<UploadXFileMetadata> & {
     duration: number
     path: string
     filename: string
   }
 
-  videoImport?: MVideoImportDefault
+  // Extends locals property from Response
+  interface Response {
+    locals: {
+      videoAll?: MVideoFullLight
+      onlyImmutableVideo?: MVideoImmutable
+      onlyVideo?: MVideoThumbnail
+      onlyVideoWithRights?: MVideoWithRights
+      videoId?: MVideoIdThumbnail
 
-  videoBlacklist?: MVideoBlacklist
+      videoLive?: MVideoLive
 
-  videoCaption?: MVideoCaptionVideo
+      videoShare?: MVideoShareActor
 
-  abuse?: MAbuseReporter
-  abuseMessage?: MAbuseMessage
+      videoFile?: MVideoFile
 
-  videoStreamingPlaylist?: MStreamingPlaylist
+      videoFileResumable?: EnhancedUploadXFile
 
-  videoChannel?: MChannelBannerAccountDefault
+      videoImport?: MVideoImportDefault
 
-  videoPlaylistFull?: MVideoPlaylistFull
-  videoPlaylistSummary?: MVideoPlaylistFullSummary
+      videoBlacklist?: MVideoBlacklist
 
-  videoPlaylistElement?: MVideoPlaylistElement
-  videoPlaylistElementAP?: MVideoPlaylistElementVideoUrlPlaylistPrivacy
+      videoCaption?: MVideoCaptionVideo
 
-  accountVideoRate?: MAccountVideoRateAccountVideo
+      abuse?: MAbuseReporter
+      abuseMessage?: MAbuseMessage
 
-  videoCommentFull?: MCommentOwnerVideoReply
-  videoCommentThread?: MComment
+      videoStreamingPlaylist?: MStreamingPlaylist
 
-  follow?: MActorFollowActorsDefault
-  subscription?: MActorFollowActorsDefaultSubscription
+      videoChannel?: MChannelBannerAccountDefault
 
-  nextOwner?: MAccountDefault
-  videoChangeOwnership?: MVideoChangeOwnershipFull
+      videoPlaylistFull?: MVideoPlaylistFull
+      videoPlaylistSummary?: MVideoPlaylistFullSummary
 
-  account?: MAccountDefault
+      videoPlaylistElement?: MVideoPlaylistElement
+      videoPlaylistElementAP?: MVideoPlaylistElementVideoUrlPlaylistPrivacy
 
-  actorUrl?: MActorUrl
-  actorFull?: MActorFull
+      accountVideoRate?: MAccountVideoRateAccountVideo
 
-  user?: MUserDefault
+      videoCommentFull?: MCommentOwnerVideoReply
+      videoCommentThread?: MComment
 
-  server?: MServer
+      follow?: MActorFollowActorsDefault
+      subscription?: MActorFollowActorsDefaultSubscription
 
-  videoRedundancy?: MVideoRedundancyVideo
+      nextOwner?: MAccountDefault
+      videoChangeOwnership?: MVideoChangeOwnershipFull
 
-  accountBlock?: MAccountBlocklist
-  serverBlock?: MServerBlocklist
+      account?: MAccountDefault
 
-  oauth?: {
-    token: MOAuthTokenUser
+      actorUrl?: MActorUrl
+      actorFull?: MActorFull
+
+      user?: MUserDefault
+
+      server?: MServer
+
+      videoRedundancy?: MVideoRedundancyVideo
+
+      accountBlock?: MAccountBlocklist
+      serverBlock?: MServerBlocklist
+
+      oauth?: {
+        token: MOAuthTokenUser
+      }
+
+      signature?: {
+        actor: MActorAccountChannelId
+      }
+
+      authenticated?: boolean
+
+      registeredPlugin?: RegisteredPlugin
+
+      externalAuth?: RegisterServerAuthExternalOptions
+
+      plugin?: MPlugin
+    }
   }
-
-  signature?: {
-    actor: MActorAccountChannelId
-  }
-
-  authenticated?: boolean
-
-  registeredPlugin?: RegisteredPlugin
-
-  externalAuth?: RegisterServerAuthExternalOptions
-
-  plugin?: MPlugin
 }

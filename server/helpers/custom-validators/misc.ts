@@ -1,7 +1,7 @@
 import 'multer'
-import validator from 'validator'
+import { UploadFilesForCheck } from 'express'
 import { sep } from 'path'
-import { FileUploadMetadata } from 'express'
+import validator from 'validator'
 
 function exists (value: any) {
   return value !== undefined && value !== null
@@ -109,7 +109,7 @@ function isFileFieldValid (
 }
 
 function isFileMimeTypeValid (
-  files: { [ fieldname: string ]: FileUploadMetadata[] } | FileUploadMetadata[],
+  files: UploadFilesForCheck,
   mimeTypeRegex: string,
   field: string,
   optional = false

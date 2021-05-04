@@ -181,7 +181,7 @@ describe('Test multiple servers', function () {
         thumbnailfile: 'thumbnail.jpg',
         previewfile: 'preview.jpg'
       }
-      await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
+      await uploadVideo(servers[1].url, userAccessToken, videoAttributes, HttpStatusCode.OK_200, 'resumable')
 
       // Transcoding
       await waitJobs(servers)
