@@ -1476,7 +1476,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> sur <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> de <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
