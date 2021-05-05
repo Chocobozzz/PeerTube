@@ -4668,7 +4668,7 @@
       </trans-unit>
       <trans-unit id="3097153cbaee3d44d0e298fbe9e8105b6e1fea0d" datatype="html">
         <source>Block new videos automatically</source>
-        <target state="translated">Block new videos automatically</target>
+        <target state="translated">Sewḥel tividyutin timaynutin s wudem awurman</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="7b6494fa44035831e1215cd4a0284aec00f8cbbd" datatype="html">
