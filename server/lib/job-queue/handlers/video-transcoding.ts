@@ -1,6 +1,5 @@
 import * as Bull from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
-import { JOB_PRIORITY } from '@server/initializers/constants'
 import { getTranscodingJobPriority, publishAndFederateIfNeeded } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { UserModel } from '@server/models/account/user'
