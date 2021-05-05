@@ -261,8 +261,8 @@ function register ({
   router.get('/ping', (req, res) => res.json({ message: 'pong' }))
 
   // Users are automatically authenticated
-  router.get('/auth', (res, res) => {
-    const user = peertubeHelpers.user.getAuthUser(res)
+  router.get('/auth', async (res, res) => {
+    const user = await peertubeHelpers.user.getAuthUser(res)
 
     const isAdmin = user.role === 0
     const isModerator = user.role === 1
