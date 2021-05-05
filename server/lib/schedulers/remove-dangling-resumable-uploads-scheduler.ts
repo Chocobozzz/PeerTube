@@ -17,7 +17,24 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
 
   private constructor () {
     super()
+
     this.lastExecutionTimeMs = new Date().getTime()
+  }
+
+  protected async internalExecute () {
+    const path = getResumableUploadPath()
+    const files = await readdir(path)
+      .then(files => files.filter(filename => !filename.includes(METAFILE_EXTNAME))) // exclude .META files, which are not updated at PUT
+
+    logger.debug('Reading resumable video upload folder %s with %d files', path, files.length, lTags())
+
+    try {
+      await Promise.all(files.map(file => this.deleteIfOlderThan(file, this.lastExecutionTimeMs)))
+    } catch (error) {
+      logger.error('Failed to handle file during resumable video upload folder cleanup', { error, ...lTags() })
+    } finally {
+      this.lastExecutionTimeMs = new Date().getTime()
+    }
   }
 
   private async deleteIfOlderThan (file: string, limit: number) {
@@ -36,22 +53,6 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
         deleteFileAndCatch(filePath),
         deleteFileAndCatch(filePath + METAFILE_EXTNAME) // also delete the .META file, which was not updated since the initial POST request
       ])
-    }
-  }
-
-  protected async internalExecute () {
-    const path = getResumableUploadPath()
-    const files = await readdir(path)
-      .then(files => files.filter(filename => !filename.includes(METAFILE_EXTNAME))) // exclude .META files, which are not updated at PUT
-
-    logger.debug('Reading resumable video upload folder %s with %d files', path, files.length, lTags())
-
-    try {
-      await Promise.all(files.map(file => this.deleteIfOlderThan(file, this.lastExecutionTimeMs)))
-    } catch (error) {
-      logger.error('Failed to handle file during resumable video upload folder cleanup', { error, ...lTags() })
-    } finally {
-      this.lastExecutionTimeMs = new Date().getTime()
     }
   }
 
