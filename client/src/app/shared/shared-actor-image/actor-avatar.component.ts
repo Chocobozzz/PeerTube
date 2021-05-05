@@ -9,6 +9,8 @@ type ActorInput = {
   url: string
 }
 
+export type ActorAvatarSize = '18' | '25' | '32' | '34' | '36' | '40' | '100' | '120'
+
 @Component({
   selector: 'my-actor-avatar',
   styleUrls: [ './actor-avatar.component.scss' ],
@@ -20,7 +22,7 @@ export class ActorAvatarComponent {
 
   @Input() previewImage: SafeResourceUrl
 
-  @Input() size: '18' | '25' | '32' | '34' | '36' | '40' | '100' | '120'
+  @Input() size: ActorAvatarSize
 
   // Use an external link
   @Input() href: string

@@ -50,11 +50,14 @@
   }
 }
 
-@mixin peertube-word-wrap {
+@mixin peertube-word-wrap ($with-hyphen: true) {
   word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  hyphens: auto;
+
+  @if $with-hyphen {
+    hyphens: auto;
+  }
 }
 
 @mixin apply-svg-color ($color) {
