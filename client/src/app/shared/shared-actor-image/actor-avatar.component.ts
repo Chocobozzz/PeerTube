@@ -55,8 +55,8 @@ export class ActorAvatarComponent {
 
     if (this.size) base.push(`avatar-${this.size}`)
 
-    if (this.account) base.push('account')
-    else base.push('channel')
+    if (this.channel) base.push('channel')
+    else base.push('account')
 
     if (type === 'initial' && this.initial) {
       base.push('initial')
@@ -67,10 +67,9 @@ export class ActorAvatarComponent {
   }
 
   get defaultAvatarUrl () {
-    if (this.account) Account.GET_DEFAULT_AVATAR_URL()
     if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL()
 
-    return ''
+    return Account.GET_DEFAULT_AVATAR_URL()
   }
 
   get avatarUrl () {
