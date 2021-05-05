@@ -721,12 +721,7 @@ describe('Test video transcoding', function () {
       expect(webtorrentJobs).to.have.lengthOf(6)
       expect(optimizeJobs).to.have.lengthOf(1)
 
-      for (const j of optimizeJobs) {
-        expect(j.priority).to.be.greaterThan(11)
-        expect(j.priority).to.be.lessThan(50)
-      }
-
-      for (const j of hlsJobs.concat(webtorrentJobs)) {
+      for (const j of optimizeJobs.concat(hlsJobs.concat(webtorrentJobs))) {
         expect(j.priority).to.be.greaterThan(100)
         expect(j.priority).to.be.lessThan(150)
       }

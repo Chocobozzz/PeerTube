@@ -121,19 +121,19 @@ async function addOptimizeOrMergeAudioJob (video: MVideo, videoFile: MVideoFile,
   }
 
   const jobOptions = {
-    priority: JOB_PRIORITY.TRANSCODING.OPTIMIZER + await getJobTranscodingPriorityMalus(user)
+    priority: await getTranscodingJobPriority(user)
   }
 
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput }, jobOptions)
 }
 
-async function getJobTranscodingPriorityMalus (user: MUserId) {
+async function getTranscodingJobPriority (user: MUserId) {
   const now = new Date()
   const lastWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)
 
   const videoUploadedByUser = await VideoModel.countVideosUploadedByUserSince(user.id, lastWeek)
 
-  return videoUploadedByUser
+  return JOB_PRIORITY.TRANSCODING + videoUploadedByUser
 }
 
 // ---------------------------------------------------------------------------
@@ -144,5 +144,5 @@ export {
   buildVideoThumbnailsFromReq,
   setVideoTags,
   addOptimizeOrMergeAudioJob,
-  getJobTranscodingPriorityMalus
+  getTranscodingJobPriority
 }
