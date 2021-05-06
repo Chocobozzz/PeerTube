@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { expect } from 'chai'
-import { pathExists, readdir, readFile, createReadStream, stat } from 'fs-extra'
+import { createReadStream, pathExists, readdir, readFile, stat } from 'fs-extra'
+import * as http from 'http'
 import * as parseTorrent from 'parse-torrent'
 import { extname, join } from 'path'
 import * as request from 'supertest'
@@ -513,44 +514,60 @@ function sendResumableChunks (options: {
   videoFilePath: string
   size: number
   specialStatus?: HttpStatusCode
+  contentLength?: number
+  contentRangeBuilder?: (start: number, chunk: any) => string
 }) {
-  const { url, token, pathUploadId, videoFilePath, size, specialStatus } = options
+  const { url, token, pathUploadId, videoFilePath, size, specialStatus, contentLength, contentRangeBuilder } = options
 
   const expectedStatus = specialStatus || HttpStatusCode.OK_200
 
   const path = '/api/v1/videos/upload-resumable'
   let start = 0
 
-  const readable = createReadStream(videoFilePath)
-  return new Promise<request.Response>((resolve, reject) => {
-    readable.on('data', async (chunk: { length: number }) => {
+  const readable = createReadStream(videoFilePath, { highWaterMark: 8 * 1024 })
+  return new Promise<any>((resolve, reject) => {
+    readable.on('data', async function onData (chunk) {
       readable.pause()
 
-      let chunkResponse: request.Response
+      const headers = {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/octet-stream',
+        'Content-Range': contentRangeBuilder
+          ? contentRangeBuilder(start, chunk)
+          : `bytes ${start}-${start + chunk.length - 1}/${size}`,
+        'Content-Length': contentLength ?? chunk.length
+      }
 
-      try {
-        chunkResponse = await request(url)
-                                  .put(path + '?' + pathUploadId)
-                                  .redirects(0)
-                                  .set('Authorization', 'Bearer ' + token)
-                                  .set('Content-Type', 'application/octet-stream')
-                                  .set('Content-Range', `bytes ${start}-${start + chunk.length - 1}/${size}`)
-                                  .send(chunk)
-      } catch (err) {
+      const parsed = new URL(url)
+
+      const req = http.request({
+        host: parsed.hostname,
+        port: parsed.port,
+        path: path + '?' + pathUploadId,
+        headers,
+        method: 'PUT'
+      }, res => {
+        start += chunk.length
+
+        if (res.statusCode === expectedStatus) {
+          return resolve(res)
+        }
+
+        if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
+          readable.off('data', onData)
+          return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
+        }
+
+        readable.resume()
+      })
+
+      req.on('error', err => {
+        readable.off('data', onData)
         return reject(err)
-      }
+      })
 
-      start += chunk.length
-
-      if (chunkResponse.status === expectedStatus) {
-        return resolve(chunkResponse)
-      }
-
-      if (chunkResponse.status !== HttpStatusCode.PERMANENT_REDIRECT_308) {
-        return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
-      }
-
-      readable.resume()
+      req.write(chunk)
+      req.end()
     })
   })
 }

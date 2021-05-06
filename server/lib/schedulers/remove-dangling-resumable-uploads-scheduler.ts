@@ -1,7 +1,7 @@
-import { readdir, stat, Stats } from 'fs-extra'
+import * as bluebird from 'bluebird'
+import { readdir, remove, stat } from 'fs-extra'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { getResumableUploadPath } from '@server/helpers/upload'
-import { deleteFileAndCatch } from '@server/helpers/utils'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants'
 import { METAFILE_EXTNAME } from '@uploadx/core'
 import { AbstractScheduler } from './abstract-scheduler'
@@ -24,12 +24,17 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
   protected async internalExecute () {
     const path = getResumableUploadPath()
     const files = await readdir(path)
-      .then(files => files.filter(filename => !filename.includes(METAFILE_EXTNAME))) // exclude .META files, which are not updated at PUT
 
-    logger.debug('Reading resumable video upload folder %s with %d files', path, files.length, lTags())
+    const metafiles = files.filter(f => f.endsWith(METAFILE_EXTNAME))
+
+    if (metafiles.length === 0) return
+
+    logger.debug('Reading resumable video upload folder %s with %d files', path, metafiles.length, lTags())
 
     try {
-      await Promise.all(files.map(file => this.deleteIfOlderThan(file, this.lastExecutionTimeMs)))
+      await bluebird.map(metafiles, metafile => {
+        return this.deleteIfOlderThan(metafile, this.lastExecutionTimeMs)
+      }, { concurrency: 5 })
     } catch (error) {
       logger.error('Failed to handle file during resumable video upload folder cleanup', { error, ...lTags() })
     } finally {
@@ -37,22 +42,16 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
     }
   }
 
-  private async deleteIfOlderThan (file: string, limit: number) {
-    const filePath = getResumableUploadPath(file)
-    let statResult: Stats
+  private async deleteIfOlderThan (metafile: string, olderThan: number) {
+    const metafilePath = getResumableUploadPath(metafile)
+    const statResult = await stat(metafilePath)
 
-    try {
-      statResult = await stat(filePath)
-    } catch (error) {
-      logger.error('Failed to run stat for %s', filePath, { error, ...lTags() })
-      return
-    }
+    // Delete uploads that started since a long time
+    if (statResult.ctimeMs < olderThan) {
+      await remove(metafilePath)
 
-    if (statResult.ctimeMs < limit) {
-      await Promise.all([
-        deleteFileAndCatch(filePath),
-        deleteFileAndCatch(filePath + METAFILE_EXTNAME) // also delete the .META file, which was not updated since the initial POST request
-      ])
+      const datafile = metafilePath.replace(new RegExp(`${METAFILE_EXTNAME}$`), '')
+      await remove(datafile)
     }
   }
 

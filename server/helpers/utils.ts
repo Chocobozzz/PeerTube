@@ -5,7 +5,6 @@ import { ResultList } from '../../shared'
 import { CONFIG } from '../initializers/config'
 import { execPromise, execPromise2, randomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
-import { RESUMABLE_UPLOAD_DIRECTORY } from '../initializers/constants'
 
 function deleteFileAndCatch (path: string) {
   remove(path)

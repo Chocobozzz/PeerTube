@@ -209,7 +209,7 @@ const SCHEDULER_INTERVALS_MS = {
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
   updateInboxStats: 1000 * 60, // 1 minute
-  removeDanglingResumableUploads: 60000 * 60 * 12 // 12 hours
+  removeDanglingResumableUploads: 60000 * 60 * 16 // 16 hours
 }
 
 // ---------------------------------------------------------------------------
@@ -774,7 +774,6 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
   SCHEDULER_INTERVALS_MS.updateInboxStats = 5000
   SCHEDULER_INTERVALS_MS.checkPeerTubeVersion = 2000
-  SCHEDULER_INTERVALS_MS.removeDanglingResumableUploads = 10000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
 
