@@ -307,7 +307,7 @@ brew services run redis
 ```
 
 On macOS, the `postgresql` user can be `_postgres` instead of `postgres`.
-If `sudo -u postgres createuser -P peertube` gives you an error, you can try `sudo -u _postgres createuser -U peertube`.
+If `sudo -u postgres createuser -P peertube` gives you an `unknown user: postgres` error, you can try `sudo -u _postgres createuser -U peertube`.
 
 ## Gentoo
 
