@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { createReadStream, pathExists, readdir, readFile, stat } from 'fs-extra'
-import * as http from 'http'
+import got, { Response as GotResponse } from 'got/dist/source'
 import * as parseTorrent from 'parse-torrent'
 import { extname, join } from 'path'
 import * as request from 'supertest'
@@ -525,7 +525,7 @@ function sendResumableChunks (options: {
   let start = 0
 
   const readable = createReadStream(videoFilePath, { highWaterMark: 8 * 1024 })
-  return new Promise<any>((resolve, reject) => {
+  return new Promise<GotResponse>((resolve, reject) => {
     readable.on('data', async function onData (chunk) {
       readable.pause()
 
@@ -535,39 +535,31 @@ function sendResumableChunks (options: {
         'Content-Range': contentRangeBuilder
           ? contentRangeBuilder(start, chunk)
           : `bytes ${start}-${start + chunk.length - 1}/${size}`,
-        'Content-Length': contentLength ?? chunk.length
+        'Content-Length': contentLength ? contentLength + '' : chunk.length + ''
       }
 
-      const parsed = new URL(url)
-
-      const req = http.request({
-        host: parsed.hostname,
-        port: parsed.port,
-        path: path + '?' + pathUploadId,
+      const res = await got({
+        url,
+        method: 'put',
         headers,
-        method: 'PUT'
-      }, res => {
-        start += chunk.length
-
-        if (res.statusCode === expectedStatus) {
-          return resolve(res)
-        }
-
-        if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
-          readable.off('data', onData)
-          return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
-        }
-
-        readable.resume()
+        path: path + '?' + pathUploadId,
+        body: chunk,
+        responseType: 'json',
+        throwHttpErrors: false
       })
 
-      req.on('error', err => {
+      start += chunk.length
+
+      if (res.statusCode === expectedStatus) {
+        return resolve(res)
+      }
+
+      if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
         readable.off('data', onData)
-        return reject(err)
-      })
+        return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
+      }
 
-      req.write(chunk)
-      req.end()
+      readable.resume()
     })
   })
 }
