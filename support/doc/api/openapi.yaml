@@ -2502,7 +2502,7 @@ paths:
                       id:
                         type: integer
                       uuid:
-                        type: string
+                        $ref: '#/components/schemas/UUIDv4'
       requestBody:
         content:
           multipart/form-data:
@@ -3870,9 +3870,7 @@ components:
           - type: integer
             minimum: 0
             example: 42
-          - type: string
-            format: uuid
-            example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          - $ref: '#/components/schemas/UUIDv4'
     playlistElementId:
       name: playlistElementId
       in: path
@@ -4101,6 +4099,16 @@ components:
             moderator: Moderator scope
             user: User scope
   schemas:
+    UUIDv4:
+      type: string
+      format: uuid
+      example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+      # the regex above limits the length;
+      # however, some tools might require explicit settings:
+      minLength: 36
+      maxLength: 36
+
     VideoConstantNumber-Category:
       properties:
         id:
@@ -4326,14 +4334,21 @@ components:
           type: string
           format: url
     VideoStreamingPlaylists:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+            type:
+              type: integer
+              enum:
+                - 1
+              description: |
+                Playlist type:
+                - `1`: HLS
+        - $ref: '#/components/schemas/VideoStreamingPlaylists-HLS'
+    VideoStreamingPlaylists-HLS:
       properties:
-        id:
-          type: integer
-        type:
-          type: integer
-          enum:
-            - 1
-          description: 'Playlist type (HLS = `1`)'
         playlistUrl:
           type: string
           format: url
@@ -4342,7 +4357,10 @@ components:
           format: url
         files:
           type: array
-          description: 'Video files associated to this playlist. The difference with the root "files" property is that these files are fragmented, so they can be used in this streaming playlist (HLS etc)'
+          description: |
+            Video files associated to this playlist.
+
+            The difference with the root `files` property is that these files are fragmented, so they can be used in this streaming playlist (HLS, etc.)
           items:
             $ref: '#/components/schemas/VideoFile'
         redundancies:
@@ -4358,9 +4376,7 @@ components:
         id:
           type: integer
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         name:
           type: string
           minLength: 3
@@ -4371,23 +4387,29 @@ components:
           type: integer
           example: 8
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         isLive:
           type: boolean
         createdAt:
           type: string
           format: date-time
+          example: 2017-10-01T10:52:46.396Z
+          description: time at which the video object was first drafted
         publishedAt:
           type: string
           format: date-time
+          example: 2018-10-01T10:52:46.396Z
+          description: time at which the video was marked as ready for playback (with restrictions depending on `privacy`). Usually set after a `state` evolution.
         updatedAt:
           type: string
           format: date-time
+          example: 2021-05-04T08:01:01.502Z
+          description: last time the video's metadata was modified
         originallyPublishedAt:
           type: string
           format: date-time
+          example: 2010-10-01T10:52:46.396Z
+          description: used to represent a date of first publication, prior to the practical publication date of `publishedAt`
         category:
           $ref: '#/components/schemas/VideoConstantNumber-Category'
         licence:
@@ -4398,9 +4420,18 @@ components:
           $ref: '#/components/schemas/VideoPrivacyConstant'
         description:
           type: string
+          example: |
+            **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
+            **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network, based on fr...
+          minLength: 3
+          maxLength: 250
+          description: |
+            truncated description of the video, written in Markdown.
+            Resolve `descriptionPath` to get the full description of maximum `10000` characters.
         duration:
           type: integer
           example: 1419
+          description: duration of the video in seconds
         isLocal:
           type: boolean
         name:
@@ -4460,10 +4491,14 @@ components:
           properties:
             descriptionPath:
               type: string
+              example: /api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180a6d/description
+              description: path at which to get the full description of maximum `10000` characters
             support:
               type: string
               description: A text tell the audience how to support the video creator
               example: Please support my work on <insert crowdfunding plateform>! <3
+              minLength: 3
+              maxLength: 1000
             channel:
               $ref: '#/components/schemas/VideoChannel'
             account:
@@ -4477,11 +4512,6 @@ components:
                 type: string
                 minLength: 2
                 maxLength: 30
-            files:
-              type: array
-              description: 'WebTorrent/raw video files. Can be empty if WebTorrent is disabled on the server. In this case, video files will be in the "streamingPlaylists[].files" property'
-              items:
-                $ref: '#/components/schemas/VideoFile'
             commentsEnabled:
               type: boolean
             downloadEnabled:
@@ -4491,10 +4521,24 @@ components:
               items:
                 type: string
                 format: url
+            files:
+              type: array
+              items:
+                $ref: '#/components/schemas/VideoFile'
+              description: |
+                WebTorrent/raw video files. If WebTorrent is disabled on the server:
+
+                - field will be empty
+                - video files will be found in `streamingPlaylists[].files` field
             streamingPlaylists:
               type: array
               items:
                 $ref: '#/components/schemas/VideoStreamingPlaylists'
+              description: |
+                HLS playlists/manifest files. If HLS is disabled on the server:
+
+                - field will be empty
+                - video files will be found in `files` field
     FileRedundancyInformation:
       properties:
         id:
@@ -4530,9 +4574,7 @@ components:
           type: string
           format: url
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         redundancies:
           type: object
           properties:
@@ -4641,9 +4683,7 @@ components:
           minLength: 3
           maxLength: 120
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         description:
           type: string
           minLength: 3
@@ -4676,9 +4716,7 @@ components:
             id:
               type: integer
             uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+              $ref: '#/components/schemas/UUIDv4'
     VideoPlaylist:
       properties:
         id:
@@ -4694,9 +4732,7 @@ components:
           minLength: 3
           maxLength: 1000
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         displayName:
           type: string
           minLength: 1
@@ -5391,9 +5427,7 @@ components:
               type: integer
               example: 8
             uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+              $ref: '#/components/schemas/UUIDv4'
     CommentThreadResponse:
       properties:
         total:

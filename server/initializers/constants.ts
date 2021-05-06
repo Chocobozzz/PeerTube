@@ -188,10 +188,7 @@ const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = 
   }
 }
 const JOB_PRIORITY = {
-  TRANSCODING: {
-    OPTIMIZER: 10,
-    NEW_RESOLUTION: 100
-  }
+  TRANSCODING: 100
 }
 
 const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job

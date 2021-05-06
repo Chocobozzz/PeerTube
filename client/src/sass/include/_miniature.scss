@@ -3,9 +3,8 @@
 
 @mixin miniature-name {
   @include ellipsis-multiline(1.1em, 2);
+  @include peertube-word-wrap(false);
 
-  word-break: break-all;
-  word-wrap: break-word;
   transition: color 0.2s;
   font-weight: $font-semibold;
   color: pvar(--mainForegroundColor);

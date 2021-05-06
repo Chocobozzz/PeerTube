@@ -17,6 +17,7 @@ import { VideoBlacklistCreate } from '@shared/models'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist'
 import { getServerConfig } from '../config'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist'
+import { UserModel } from '@server/models/account/user'
 
 function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
   const logger = buildPluginLogger(npmName)
@@ -163,6 +164,11 @@ function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
 
 function buildUserHelpers () {
   return {
-    getAuthUser: (res: express.Response) => res.locals.oauth?.token?.User
+    getAuthUser: (res: express.Response) => {
+      const user = res.locals.oauth?.token?.User
+      if (!user) return undefined
+
+      return UserModel.loadByIdFull(user.id)
+    }
   }
 }

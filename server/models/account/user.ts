@@ -565,6 +565,10 @@ export class UserModel extends Model {
     return UserModel.unscoped().findByPk(id)
   }
 
+  static loadByIdFull (id: number): Promise<MUserDefault> {
+    return UserModel.findByPk(id)
+  }
+
   static loadByIdWithChannels (id: number, withStats = false): Promise<MUserDefault> {
     const scopes = [
       ScopeNames.WITH_VIDEOCHANNELS

@@ -1,5 +1,127 @@
 # Changelog
 
+## v3.2.0-rc.1 (~ May)
+
+### IMPORTANT NOTES
+
+ * By default, HLS transcoding is now enabled and webtorrent is disabled. We suggest you to reflect this change.
+ See [the documentation](https://docs.joinpeertube.org/admin-configuration?id=webtorrent-transcoding-or-hls-transcoding) for more information
+ * PeerTube client now displays bigger video thumbnails.
+ To fix old thumbnails quality, run `regenerate-thumbnails` script after your PeerTube upgrade: https://docs.joinpeertube.org/maintain-tools?id=regenerate-thumbnailsjs
+
+### Maintenance
+
+ * Support `X-Frame-Options` header, enabled by default in the configuration
+ * Directly use `node` in [systemd template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/systemd/peertube.service)
+ * Check ffmpeg version at PeerTube startup
+
+### CLI tools
+
+ * Add `regenerate-thumbnails` script to regenerate thumbnails of local videos
+
+### Plugins/Themes/Embed API
+
+ * Theme:
+   * `--submenuColor` becomes `--submenuBackgroundColor`
+ * Support HTML placeholders for plugins. See [the documentation](https://docs.joinpeertube.org/contribute-plugins?id=html-placeholder-elements) for more information
+   * `player-next` next to the PeerTube player
+ * Support storing files for plugins in a dedicated directory. See [the documentation](https://docs.joinpeertube.org/contribute-plugins?id=storage) for more information
+ * Transcoding:
+   * Add `inputOptions` option support for transcoding profile [#3917](https://github.com/Chocobozzz/PeerTube/pull/3917)
+   * Add `scaleFilter.name` option support for transcoding profile [#3917](https://github.com/Chocobozzz/PeerTube/pull/3917)
+ * Plugin settings:
+   * Add ability to register `html` and `select` setting
+   * Add ability to hide a plugin setting depending on the form state
+ * Plugin form fields (to add inputs to video form...):
+   * Add ability to hide a plugin field depending on the form state using `.hidden` property
+ * Add client helpers:
+   * `getServerConfig()`
+   * `getAuthHeader()`
+ * Add server helpers:
+   * `config.getServerConfig()`
+   * `plugin.getBaseStaticRoute()`
+   * `plugin.getBaseRouterRoute()`
+   * `plugin.getDataDirectoryPath()`
+   * `user.getAuthUser()`
+ * Add client plugin hooks (https://docs.joinpeertube.org/api-plugins):
+   * `action:modal.video-download.shown`
+   * `action:video-upload.init`
+   * `action:video-url-import.init`
+   * `action:video-torrent-import.init`
+   * `action:go-live.init`
+   * `action:auth-user.logged-in` & `action:auth-user.logged-out`
+   * `action:auth-user.information-loaded`
+   * `action:admin-plugin-settings.init`
+ * Add server plugin hooks (https://docs.joinpeertube.org/api-plugins):
+   * `filter:api.download.video.allowed.result` & `filter:api.download.torrent.allowed.result` to forbid download
+   * `filter:html.embed.video-playlist.allowed.result` & `filter:html.embed.video.allowed.result` to forbid embed
+   * `filter:api.search.videos.local.list.params` & `filter:api.search.videos.local.list.result`
+   * `filter:api.search.videos.index.list.params` & `filter:api.search.videos.index.list.result`
+   * `filter:api.search.video-channels.local.list.params` & `filter:api.search.video-channels.local.list.result`
+   * `filter:api.search.video-channels.index.list.params` & `filter:api.search.video-channels.index.list.result`
+
+### Features
+
+ * Accessibility/UI:
+   * :tada: Redesign channel and account page
+   * :tada: Increase video miniature size
+   * :tada: Add channel banner support
+   * Use a square avatar for channels and a round avatar for accounts
+   * Use account initial as default account avatar [#4002](https://github.com/Chocobozzz/PeerTube/pull/4002)
+   * Prefer channel display in video miniature
+   * Add *support* button in channel page
+   * Set direct download as default in video download modal [#3880](https://github.com/Chocobozzz/PeerTube/pull/3880)
+   * Show less information in video download modal by default [#3890](https://github.com/Chocobozzz/PeerTube/pull/3890)
+   * Autofocus admin plugin search input
+   * Add `1.75` playback rate to player [#3888](https://github.com/Chocobozzz/PeerTube/pull/3888)
+   * Add `title` attribute to embed code [#3901](https://github.com/Chocobozzz/PeerTube/pull/3901)
+   * Don't pause player when opening a modal [#3909](https://github.com/Chocobozzz/PeerTube/pull/3909)
+   * Add link below the player to open the video on origin instance [#3624](https://github.com/Chocobozzz/PeerTube/issues/3624)
+ * Notify admins on new available PeerTube version
+ * Notify admins on new available plugin version
+ * Video player:
+  * Add loop toggle to context menu [#3949](https://github.com/Chocobozzz/PeerTube/pull/3949)
+  * Add icons to context menu [#3955](https://github.com/Chocobozzz/PeerTube/pull/3955)
+  * Add a *Previous* button in playlist watch page [#3485](https://github.com/Chocobozzz/PeerTube/pull/3485)
+  * Automatically close the settings menu when clicking outside the player
+  * Add "stats for nerds" panel in context menu [#3958](https://github.com/Chocobozzz/PeerTube/pull/3958)
+ * Add channel and playlist stats to stats endpoint [#3747](https://github.com/Chocobozzz/PeerTube/pull/3747)
+ * Support `playlistPosition=last` and negative index (`playlistPosition=-2`) URL query parameters for playlists [#3974](https://github.com/Chocobozzz/PeerTube/pull/3974)
+ * My videos:
+   * Add ability to sort videos (publication date, most viewed...)
+   * Add ability to only display live videos
+ * Automatically resume videos for non logged-in users [#3885](https://github.com/Chocobozzz/PeerTube/pull/3885)
+ * Admin plugins:
+   * Show a modal when upgrading a plugin to a major version
+   * Display a setting button after plugin installation
+ * Add ability to search live videos
+ * Use bigger thumbnails for feeds
+ * Parse video description markdown for Opengraph/Twitter/HTML elements
+ * Open the remote interaction modal when replying to a comment if we are logged-out
+ * Handle `.srt` captions with broken durations
+ * Performance:
+   * Player now lazy loads video captions
+   * Faster admin table filters
+
+### Bug fixes
+
+ * More robust comments fetcher of remote video
+ * Fix database ssl connection
+ * Remove unnecessary black border above and below video in player [#3920](https://github.com/Chocobozzz/PeerTube/pull/3920)
+ * Reduce tag input excessive padding [#3927](https://github.com/Chocobozzz/PeerTube/pull/3927)
+ * Fix disappearing hamburger menu for narrow screens [#3929](https://github.com/Chocobozzz/PeerTube/pull/3929)
+ * Fix Youtube subtitle import with some languages
+ * Fix transcoding profile update in admin config
+ * Fix outbox fetch with subtitled videos
+ * Correctly unload a plugin on update/uninstall [#3940](https://github.com/Chocobozzz/PeerTube/pull/3940)
+ * Ensure to install plugins that are supported by PeerTube
+ * Fix welcome/warning modal displaying twice
+ * Fix h265 video import using CLI
+ * Fix context menu when watching a playlist
+ * Fix transcoding job priority preventing video publication when there are many videos to transcode
+
+
+
 ## v3.1.0
 
 ### IMPORTANT NOTES

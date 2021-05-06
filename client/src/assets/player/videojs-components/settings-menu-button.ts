@@ -95,15 +95,18 @@ class SettingsButton extends Button {
       }
     }
 
-    document.removeEventListener('click', this.documentClickHandler)
-    if (this.isInIframe()) {
-      window.removeEventListener('blur', this.documentClickHandler)
-    }
-
     this.hideDialog()
 
     if (this.settingsButtonOptions.entries.length === 0) {
       this.addClass('vjs-hidden')
+    }
+  }
+
+  dispose () {
+    document.removeEventListener('click', this.documentClickHandler)
+
+    if (this.isInIframe()) {
+      window.removeEventListener('blur', this.documentClickHandler)
     }
   }
 

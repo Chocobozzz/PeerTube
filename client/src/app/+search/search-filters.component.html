@@ -18,6 +18,25 @@
 
       <div class="form-group">
         <div class="radio-label label-container">
+          <label i18n>Display only</label>
+          <button i18n class="reset-button reset-button-small" (click)="resetField('isLive')" *ngIf="advancedSearch.isLive !== undefined">
+            Reset
+          </button>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="isLive" id="isLiveTrue" value="true" [(ngModel)]="advancedSearch.isLive">
+          <label i18n for="isLiveTrue" class="radio">Live videos</label>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="isLive" id="isLiveFalse" value="false" [(ngModel)]="advancedSearch.isLive">
+          <label i18n for="isLiveFalse" class="radio">VOD videos</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="radio-label label-container">
           <label i18n>Display sensitive content</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch.nsfw !== undefined">
             Reset
@@ -44,7 +63,7 @@
         </div>
 
         <div class="peertube-radio-container" *ngFor="let date of publishedDateRanges">
-          <input type="radio" (change)="inputUpdated()" name="publishedDateRange" [id]="date.id" [value]="date.id" [(ngModel)]="publishedDateRange">
+          <input type="radio" (change)="onInputUpdated()" name="publishedDateRange" [id]="date.id" [value]="date.id" [(ngModel)]="publishedDateRange">
           <label [for]="date.id" class="radio">{{ date.label }}</label>
         </div>
       </div>
@@ -60,7 +79,7 @@
         <div class="row">
           <div class="pl-0 col-sm-6">
             <input
-              (change)="inputUpdated()"
+              (change)="onInputUpdated()"
               (keydown.enter)="$event.preventDefault()"
               type="text" id="original-publication-after" name="original-publication-after"
               i18n-placeholder placeholder="After..."
@@ -70,7 +89,7 @@
           </div>
           <div class="pr-0 col-sm-6">
             <input
-              (change)="inputUpdated()"
+              (change)="onInputUpdated()"
               (keydown.enter)="$event.preventDefault()"
               type="text" id="original-publication-before" name="original-publication-before"
               i18n-placeholder placeholder="Before..."
@@ -93,7 +112,7 @@
         </div>
 
         <div class="peertube-radio-container" *ngFor="let duration of durationRanges">
-          <input type="radio" (change)="inputUpdated()" name="durationRange" [id]="duration.id" [value]="duration.id" [(ngModel)]="durationRange">
+          <input type="radio" (change)="onInputUpdated()" name="durationRange" [id]="duration.id" [value]="duration.id" [(ngModel)]="durationRange">
           <label [for]="duration.id" class="radio">{{ duration.label }}</label>
         </div>
       </div>
