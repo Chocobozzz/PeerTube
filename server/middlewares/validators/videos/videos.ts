@@ -1,12 +1,10 @@
 import * as express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
-import { stat } from 'fs-extra'
 import { getResumableUploadPath } from '@server/helpers/upload'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId, MVideoWithRights } from '@server/types/models'
-import { DiskStorage } from '@uploadx/core'
 import { ServerErrorCode, UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
@@ -184,19 +182,6 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
 
     const files = { videofile: [ videoFileMetadata ] }
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
-
-    try {
-      const storage = new DiskStorage({ directory: getResumableUploadPath() })
-      const userPartiallyUploadedFiles = await storage.get(user.id + '') // uploadx's default naming uses req.user.id to prefix file names
-      const userPartiallyUploadedFilesSize = await Promise.all(userPartiallyUploadedFiles.map(f => stat(f.name).then(s => s.size)))
-      const userPartiallyUploadedFilesTotalSize = userPartiallyUploadedFilesSize.reduce((a, b) => a + b, 0) + videoFileMetadata.size
-      if (userPartiallyUploadedFilesTotalSize > CONSTRAINTS_FIELDS.VIDEOS.PARTIAL_UPLOAD_SIZE.max) throw new Error()
-    } catch (err) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-         .json({ error: 'This file is too large. It exceeds the partial uploads combined file size authorized.' })
-
-      return cleanup()
-    }
 
     // multer required unsetting the Content-Type, now we can set it for node-uploadx
     req.headers['content-type'] = 'application/json; charset=utf-8'
