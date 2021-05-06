@@ -321,7 +321,7 @@
       </trans-unit>
       <trans-unit id="9a9dcdc62c7e0048f4f4702b0327dda350341abc" datatype="html">
         <source>This instance is not following any other.</source>
-        <target/>
+        <target>এই ইন্সট্যান্স অন্য কোনোটাকে অনুসরণ করছে না।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">18</context>
@@ -329,7 +329,7 @@
       </trans-unit>
       <trans-unit id="ce301bc59085d13cf569fb7a97f073148435ec27" datatype="html">
         <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> সম্পর্কে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">5</context>
@@ -345,7 +345,7 @@
       </trans-unit>
       <trans-unit id="aaa2830aa30a5565ec06c852178ea7f181c693ea" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target/>
+        <target>এই ইন্সট্যান্স সংবেদনশীল/প্রাপ্তবয়স্ক তথ্যের জন্য আলাদাভাবে তৈরি।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">19</context>
