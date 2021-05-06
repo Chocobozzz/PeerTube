@@ -8,8 +8,10 @@ import { doesVideoExist } from '../../../helpers/middlewares'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videosShareValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('actorId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid actor id'),
+  param('id')
+    .custom(isIdOrUUIDValid),
+  param('actorId')
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoShare parameters', { parameters: req.params })

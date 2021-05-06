@@ -40,14 +40,22 @@ class PeerTubeSocket {
     this.liveVideosNamespace = io.of('/live-videos')
       .on('connection', socket => {
         socket.on('subscribe', ({ videoId }) => {
-          if (!isIdValid(videoId)) return
+          try {
+            isIdValid(videoId)
+          } catch {
+            return
+          }
 
           /* eslint-disable @typescript-eslint/no-floating-promises */
           socket.join(videoId)
         })
 
         socket.on('unsubscribe', ({ videoId }) => {
-          if (!isIdValid(videoId)) return
+          try {
+            isIdValid(videoId)
+          } catch {
+            return
+          }
 
           /* eslint-disable @typescript-eslint/no-floating-promises */
           socket.leave(videoId)

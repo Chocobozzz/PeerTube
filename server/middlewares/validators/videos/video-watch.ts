@@ -7,7 +7,9 @@ import { doesVideoExist } from '../../../helpers/middlewares'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videoWatchingValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('videoId')
+    .custom(isIdOrUUIDValid),
+
   body('currentTime')
     .customSanitizer(toIntOrNull)
     .isInt().withMessage('Should have correct current time'),

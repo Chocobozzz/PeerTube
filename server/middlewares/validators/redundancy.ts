@@ -11,7 +11,8 @@ import { isVideoRedundancyTarget } from '@server/helpers/custom-validators/video
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const videoFileRedundancyGetValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  param('videoId')
+    .custom(isIdOrUUIDValid),
   param('resolution')
     .customSanitizer(toIntOrNull)
     .custom(exists).withMessage('Should have a valid resolution'),
@@ -48,8 +49,7 @@ const videoFileRedundancyGetValidator = [
 
 const videoPlaylistRedundancyGetValidator = [
   param('videoId')
-    .custom(isIdOrUUIDValid)
-    .not().isEmpty().withMessage('Should have a valid video id'),
+    .custom(isIdOrUUIDValid),
   param('streamingPlaylistType')
     .customSanitizer(toIntOrNull)
     .custom(exists).withMessage('Should have a valid streaming playlist type'),
@@ -118,8 +118,7 @@ const listVideoRedundanciesValidator = [
 
 const addVideoRedundancyValidator = [
   body('videoId')
-    .custom(isIdValid)
-    .withMessage('Should have a valid video id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking addVideoRedundancyValidator parameters', { parameters: req.query })
@@ -150,8 +149,7 @@ const addVideoRedundancyValidator = [
 
 const removeVideoRedundancyValidator = [
   param('redundancyId')
-    .custom(isIdValid)
-    .withMessage('Should have a valid redundancy id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking removeVideoRedundancyValidator parameters', { parameters: req.query })

@@ -18,7 +18,7 @@ import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
   body('targetUrl')
     .optional()
     .custom(isVideoImportTargetUrlValid).withMessage('Should have a valid video import target URL'),
@@ -33,7 +33,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     ),
   body('name')
     .optional()
-    .custom(isVideoNameValid).withMessage('Should have a valid name'),
+    .custom(isVideoNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoImportAddValidator parameters', { parameters: req.body })

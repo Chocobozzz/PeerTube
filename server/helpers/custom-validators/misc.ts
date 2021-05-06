@@ -3,6 +3,27 @@ import { UploadFilesForCheck } from 'express'
 import { sep } from 'path'
 import validator from 'validator'
 
+function getError (fun: Function) {
+  return (...args): Error => {
+    try {
+      fun(...args)
+    } catch (error) {
+      return error
+    }
+  }
+}
+
+function catchError (fun: Function) {
+  return (...args): boolean => {
+    try {
+      fun(...args)
+    } catch (error) {
+      return false
+    }
+    return true
+  }
+}
+
 function exists (value: any) {
   return value !== undefined && value !== null
 }
@@ -26,20 +47,43 @@ function isArrayOf (value: any, validator: (value: any) => boolean) {
   return isArray(value) && value.every(v => validator(v))
 }
 
+/**
+ * @throws {Error}
+ */
 function isDateValid (value: string) {
-  return exists(value) && validator.isISO8601(value)
+  if (!exists(value)) throw new Error('Should have a date')
+  if (!validator.isISO8601(value)) throw new Error('Should have a date conforming to ISO8601')
+  return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isIdValid (value: string) {
-  return exists(value) && validator.isInt('' + value)
+  if (!exists(value)) throw new Error('Should have an id')
+  if (!validator.isInt('' + value)) throw new Error('Should have an integer id')
+  return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isUUIDValid (value: string) {
-  return exists(value) && validator.isUUID('' + value, 4)
+  if (!exists(value)) throw new Error('Should have a uuid')
+  if (!validator.isUUID('' + value, 4)) throw new Error('Should have a v4 uuid')
+  return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isIdOrUUIDValid (value: string) {
-  return isIdValid(value) || isUUIDValid(value)
+  const errors = [
+    getError(isIdValid)(value)?.message,
+    getError(isUUIDValid)(value)?.message
+  ].filter(v => v)
+  if (errors.length > 1) throw new Error(errors.join(' OR '))
+  return true
 }
 
 function isBooleanValid (value: any) {
@@ -87,25 +131,33 @@ function toIntArray (value: any) {
   return value.map(v => validator.toInt(v))
 }
 
+/**
+ * @throws {Error}
+ */
 function isFileFieldValid (
   files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
   field: string,
   optional = false
 ) {
-  // Should have files
-  if (!files) return optional
-  if (isArray(files)) return optional
+  const res = ((): [boolean, string?] => {
+    // Should have files
+    if (!files) return [ optional, 'Should have files' ]
+    if (isArray(files)) return [ optional, 'Should have a single file' ]
 
-  // Should have a file
-  const fileArray = files[field]
-  if (!fileArray || fileArray.length === 0) {
-    return optional
-  }
+    // Should have a file
+    const fileArray = files[field]
+    if (!fileArray || fileArray.length === 0) {
+      return [ optional, 'File array should contain a file' ]
+    }
 
-  // The file should exist
-  const file = fileArray[0]
-  if (!file || !file.originalname) return false
-  return file
+    // The file should exist
+    const file = fileArray[0]
+    if (!file || !file.originalname) return [ false, 'Should have a file with valid attributes' ]
+    return [ file ]
+  })()
+
+  if (res[0]) return true
+  throw new Error(res[1])
 }
 
 function isFileMimeTypeValid (
@@ -161,6 +213,8 @@ function isFileValid (
 // ---------------------------------------------------------------------------
 
 export {
+  getError,
+  catchError,
   exists,
   isArrayOf,
   isNotEmptyIntArray,

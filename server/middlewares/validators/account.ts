@@ -6,7 +6,8 @@ import { areValidationErrors } from './utils'
 import { doesAccountNameWithHostExist, doesLocalAccountNameExist } from '../../helpers/middlewares'
 
 const localAccountValidator = [
-  param('name').custom(isAccountNameValid).withMessage('Should have a valid account name'),
+  param('name')
+    .custom(isAccountNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking localAccountValidator parameters', { parameters: req.params })

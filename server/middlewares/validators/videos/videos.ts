@@ -61,15 +61,13 @@ import { areValidationErrors } from '../utils'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
-    .custom((value, { req }) => isFileFieldValid(req.files, 'videofile'))
-    .withMessage('Should have a file'),
+    .custom((value, { req }) => isFileFieldValid(req.files, 'videofile')),
   body('name')
     .trim()
-    .custom(isVideoNameValid)
-    .withMessage('Should have a valid name'),
+    .custom(isVideoNameValid),
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
@@ -192,15 +190,16 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
 ])
 
 const videosUpdateValidator = getCommonVideoEditAttributes().concat([
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdOrUUIDValid),
   body('name')
     .optional()
     .trim()
-    .custom(isVideoNameValid).withMessage('Should have a valid name'),
+    .custom(isVideoNameValid),
   body('channelId')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
@@ -251,7 +250,8 @@ const videosCustomGetValidator = (
   authenticateInQuery = false
 ) => {
   return [
-    param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+    param('id')
+      .custom(isIdOrUUIDValid),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking videosGet parameters', { parameters: req.params })
@@ -297,8 +297,10 @@ const videosGetValidator = videosCustomGetValidator('all')
 const videosDownloadValidator = videosCustomGetValidator('all', true)
 
 const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('videoFileId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoFileId'),
+  param('id')
+    .custom(isIdOrUUIDValid),
+  param('videoFileId')
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoFileMetadataGet parameters', { parameters: req.params })
@@ -311,7 +313,8 @@ const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
 ])
 
 const videosRemoveValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosRemove parameters', { parameters: req.params })
@@ -327,7 +330,8 @@ const videosRemoveValidator = [
 ]
 
 const videosChangeOwnershipValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('videoId')
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking changeOwnership parameters', { parameters: req.params })
@@ -352,7 +356,8 @@ const videosChangeOwnershipValidator = [
 ]
 
 const videosTerminateChangeOwnershipValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking changeOwnership parameters', { parameters: req.params })
@@ -447,15 +452,15 @@ function getCommonVideoEditAttributes () {
     body('description')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+      .custom(isVideoDescriptionValid),
     body('support')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
+      .custom(isVideoSupportValid),
     body('tags')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoTagsValid).withMessage('Should have correct tags'),
+      .custom(isVideoTagsValid),
     body('commentsEnabled')
       .optional()
       .customSanitizer(toBooleanOrNull)
@@ -467,17 +472,17 @@ function getCommonVideoEditAttributes () {
     body('originallyPublishedAt')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoOriginallyPublishedAtValid).withMessage('Should have a valid original publication date'),
+      .custom(isVideoOriginallyPublishedAtValid),
     body('scheduleUpdate')
       .optional()
       .customSanitizer(toValueOrNull),
     body('scheduleUpdate.updateAt')
       .optional()
-      .custom(isDateValid).withMessage('Should have a valid schedule update date'),
+      .custom(isDateValid),
     body('scheduleUpdate.privacy')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy')
+      .custom(isScheduleVideoUpdatePrivacyValid)
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 

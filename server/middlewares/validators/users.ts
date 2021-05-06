@@ -7,7 +7,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 import { UserRole } from '../../../shared/models/users'
 import { UserRegister } from '../../../shared/models/users/user-register.model'
 import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
-import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isNoInstanceConfigWarningModal,
@@ -54,16 +54,25 @@ const usersListValidator = [
 ]
 
 const usersAddValidator = [
-  body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
-  body('password').custom(isUserPasswordValidOrEmpty).withMessage('Should have a valid password'),
-  body('email').isEmail().withMessage('Should have a valid email'),
-  body('channelName').optional().custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
-  body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
-  body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
+  body('username')
+    .custom(isUserUsernameValid),
+  body('password')
+    .custom(isUserPasswordValidOrEmpty).withMessage('Should have a valid password'),
+  body('email')
+    .isEmail().withMessage('Should have a valid email'),
+  body('channelName')
+    .optional()
+    .custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
+  body('videoQuota')
+    .custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
+  body('videoQuotaDaily')
+    .custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role')
     .customSanitizer(toIntOrNull)
     .custom(isUserRoleValid).withMessage('Should have a valid role'),
-  body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
+  body('adminFlags')
+    .optional()
+    .custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersAdd parameters', { parameters: omit(req.body, 'password') })
@@ -98,13 +107,15 @@ const usersAddValidator = [
 ]
 
 const usersRegisterValidator = [
-  body('username').custom(isUserUsernameValid).withMessage('Should have a valid username'),
-  body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
-  body('email').isEmail().withMessage('Should have a valid email'),
+  body('username')
+    .custom(isUserUsernameValid),
+  body('password')
+    .custom(isUserPasswordValid).withMessage('Should have a valid password'),
+  body('email')
+    .isEmail().withMessage('Should have a valid email'),
   body('displayName')
     .optional()
     .custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
-
   body('channel.name')
     .optional()
     .custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
@@ -143,7 +154,8 @@ const usersRegisterValidator = [
 ]
 
 const usersRemoveValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRemove parameters', { parameters: req.params })
@@ -162,8 +174,12 @@ const usersRemoveValidator = [
 ]
 
 const usersBlockingValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
-  body('reason').optional().custom(isUserBlockedReasonValid).withMessage('Should have a valid blocking reason'),
+  param('id')
+    .custom(isIdValid),
+
+  body('reason')
+    .optional()
+    .custom(isUserBlockedReasonValid).withMessage('Should have a valid blocking reason'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersBlocking parameters', { parameters: req.params })
@@ -195,14 +211,26 @@ const deleteMeValidator = [
 ]
 
 const usersUpdateValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdValid),
 
-  body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
-  body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
-  body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),
-  body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
-  body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
-  body('pluginAuth').optional(),
+  body('password')
+    .optional()
+    .custom(isUserPasswordValid).withMessage('Should have a valid password'),
+  body('email')
+    .optional()
+    .isEmail().withMessage('Should have a valid email attribute'),
+  body('emailVerified')
+    .optional()
+    .isBoolean().withMessage('Should have a valid email verified attribute'),
+  body('videoQuota')
+    .optional()
+    .custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
+  body('videoQuotaDaily')
+    .optional()
+    .custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
+  body('pluginAuth')
+    .optional(),
   body('role')
     .optional()
     .customSanitizer(toIntOrNull)
@@ -295,8 +323,11 @@ const usersUpdateMeValidator = [
 ]
 
 const usersGetValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
-  query('withStats').optional().isBoolean().withMessage('Should have a valid stats flag'),
+  param('id')
+    .custom(isIdValid),
+  query('withStats')
+    .optional()
+    .isBoolean().withMessage('Should have a valid stats flag'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersGet parameters', { parameters: req.params })
@@ -309,7 +340,8 @@ const usersGetValidator = [
 ]
 
 const usersVideoRatingValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  param('videoId')
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
@@ -357,7 +389,8 @@ const ensureUserRegistrationAllowedForIP = [
 ]
 
 const usersAskResetPasswordValidator = [
-  body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
+  body('email')
+    .isEmail().not().isEmpty().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersAskResetPassword parameters', { parameters: req.body })
@@ -376,9 +409,13 @@ const usersAskResetPasswordValidator = [
 ]
 
 const usersResetPasswordValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
-  body('verificationString').not().isEmpty().withMessage('Should have a valid verification string'),
-  body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
+  param('id')
+    .custom(isIdValid),
+
+  body('verificationString')
+    .not().isEmpty().withMessage('Should have a valid verification string'),
+  body('password')
+    .custom(isUserPasswordValid).withMessage('Should have a valid password'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersResetPassword parameters', { parameters: req.params })
@@ -400,7 +437,8 @@ const usersResetPasswordValidator = [
 ]
 
 const usersAskSendVerifyEmailValidator = [
-  body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
+  body('email')
+    .isEmail().not().isEmpty().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking askUsersSendVerifyEmail parameters', { parameters: req.body })
@@ -419,7 +457,7 @@ const usersAskSendVerifyEmailValidator = [
 
 const usersVerifyEmailValidator = [
   param('id')
-    .isInt().not().isEmpty().withMessage('Should have a valid id'),
+    .custom(isIdValid),
 
   body('verificationString')
     .not().isEmpty().withMessage('Should have a valid verification string'),
@@ -447,7 +485,8 @@ const usersVerifyEmailValidator = [
 ]
 
 const userAutocompleteValidator = [
-  param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
+  param('search')
+    .isString().not().isEmpty().withMessage('Should have a search parameter')
 ]
 
 const ensureAuthUserOwnsAccountValidator = [

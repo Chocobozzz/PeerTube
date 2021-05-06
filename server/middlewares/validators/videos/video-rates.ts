@@ -12,8 +12,11 @@ import { doesVideoExist } from '../../../helpers/middlewares'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videoUpdateRateValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  body('rating').custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
+  param('id')
+    .custom(isIdOrUUIDValid),
+
+  body('rating')
+    .custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoRate parameters', { parameters: req.body })
@@ -27,8 +30,10 @@ const videoUpdateRateValidator = [
 
 const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
   return [
-    param('name').custom(isAccountNameValid).withMessage('Should have a valid account name'),
-    param('videoId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoId'),
+    param('name')
+      .custom(isAccountNameValid),
+    param('videoId')
+      .custom(isIdValid),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })
@@ -49,7 +54,9 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
 }
 
 const videoRatingValidator = [
-  query('rating').optional().custom(isRatingValid).withMessage('Value must be one of "like" or "dislike"'),
+  query('rating')
+    .optional()
+    .custom(isRatingValid).withMessage('Value must be one of "like" or "dislike"'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking rating parameter', { parameters: req.params })

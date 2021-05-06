@@ -1,8 +1,8 @@
 import { isUserDescriptionValid, isUserUsernameValid } from './users'
-import { exists } from './misc'
+import { catchError, exists } from './misc'
 
 function isAccountNameValid (value: string) {
-  return isUserUsernameValid(value)
+  return catchError(isUserUsernameValid)(value)
 }
 
 function isAccountIdValid (value: string) {

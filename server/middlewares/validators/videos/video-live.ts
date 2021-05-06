@@ -40,16 +40,13 @@ const videoLiveGetValidator = [
 const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
-
+    .custom(isIdValid),
   body('name')
-    .custom(isVideoNameValid).withMessage('Should have a valid name'),
-
+    .custom(isVideoNameValid),
   body('saveReplay')
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid saveReplay attribute'),
-
   body('permanentLive')
     .optional()
     .customSanitizer(toBooleanOrNull)

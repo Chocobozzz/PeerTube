@@ -26,10 +26,17 @@ function isUserVideoQuotaDailyValid (value: string) {
   return exists(value) && validator.isInt(value + '', USERS_CONSTRAINTS_FIELDS.VIDEO_QUOTA_DAILY)
 }
 
+/**
+ * @throws {Error}
+ */
 function isUserUsernameValid (value: string) {
+  if (!exists(value)) throw new Error('Should have a username')
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
-  return exists(value) && validator.matches(value, new RegExp(`^[a-z0-9._]{${min},${max}}$`))
+  if (!validator.matches(value, new RegExp(`^[a-z0-9._]{${min},${max}}$`))) {
+    throw new Error(`Should have a username between ${min} and ${max} alphanumeric characters long`)
+  }
+  return true
 }
 
 function isUserDisplayNameValid (value: string) {

@@ -38,36 +38,84 @@ function isVideoLanguageValid (value: any) {
     (typeof value === 'string' && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.LANGUAGE))
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoDurationValid (value: string) {
-  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
+  if (!exists(value)) throw new Error('Should have a video duration')
+  if (!validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)) throw new Error('Should have an integer video duration')
+  return true
 }
 
 function isVideoTruncatedDescriptionValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION)
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoDescriptionValid (value: string) {
-  return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION))
+  if (value === null) return true
+  if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION)) {
+    const min = VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION.min
+    const max = VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION.max
+    throw new Error(`Should have a video description between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoSupportValid (value: string) {
-  return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.SUPPORT))
+  if (value === null) return true
+  if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.SUPPORT)) {
+    const min = VIDEOS_CONSTRAINTS_FIELDS.SUPPORT.min
+    const max = VIDEOS_CONSTRAINTS_FIELDS.SUPPORT.max
+    throw new Error(`Should have a video support text between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoNameValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
+  if (!exists(value)) throw new Error('Should have a video name')
+  if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)) {
+    const min = VIDEOS_CONSTRAINTS_FIELDS.NAME.min
+    const max = VIDEOS_CONSTRAINTS_FIELDS.NAME.max
+    throw new Error(`Should have a video name between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoTagValid (tag: string) {
-  return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
+  if (!exists(tag)) throw new Error('Should have a video tag value')
+  if (!validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)) {
+    const min = VIDEOS_CONSTRAINTS_FIELDS.TAG.min
+    const max = VIDEOS_CONSTRAINTS_FIELDS.TAG.max
+    throw new Error(`Should have a video tag between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoTagsValid (tags: string[]) {
-  return tags === null || (
-    isArray(tags) &&
-    validator.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
-    tags.every(tag => isVideoTagValid(tag))
-  )
+  if (tags === null) return true
+  if (!isArray(tags)) throw new Error('Should have an array of tags')
+  if (!validator.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS)) {
+    const min = VIDEOS_CONSTRAINTS_FIELDS.TAGS.min
+    const max = VIDEOS_CONSTRAINTS_FIELDS.TAGS.max
+    throw new Error(`Should have between ${min} and ${max} tags`)
+  }
+  tags.forEach(tag => isVideoTagValid(tag)) // will throw with proper message
+  return true
 }
 
 function isVideoViewsValid (value: string) {
@@ -99,16 +147,30 @@ function isVideoPrivacyValid (value: number) {
   return VIDEO_PRIVACIES[value] !== undefined
 }
 
+/**
+ * @throws {Error}
+ */
 function isScheduleVideoUpdatePrivacyValid (value: number) {
-  return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
+  const valid = value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
+  if (!valid) throw new Error(`Should have a valid privacy: ${VideoPrivacy.UNLISTED}, ${VideoPrivacy.PUBLIC} or ${VideoPrivacy.INTERNAL}`)
+  return true
 }
 
 function isVideoOriginallyPublishedAtValid (value: string | null) {
   return value === null || isDateValid(value)
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoFileInfoHashValid (value: string | null | undefined) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
+  if (!exists(value)) throw new Error('Should have a video file infohash')
+  if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)) {
+    const min = VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH.min
+    const max = VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH.max
+    throw new Error(`Should have a video file infohash between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
 function isVideoFileResolutionValid (value: string) {

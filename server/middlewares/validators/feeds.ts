@@ -48,17 +48,12 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
 const videoFeedsValidator = [
   query('accountId')
     .optional()
-    .custom(isIdValid)
-    .withMessage('Should have a valid account id'),
-
+    .custom(isIdValid),
   query('accountName')
     .optional(),
-
   query('videoChannelId')
     .optional()
-    .custom(isIdValid)
-    .withMessage('Should have a valid channel id'),
-
+    .custom(isIdValid),
   query('videoChannelName')
     .optional(),
 
@@ -78,9 +73,7 @@ const videoFeedsValidator = [
 
 const videoSubscriptionFeedsValidator = [
   query('accountId')
-    .custom(isIdValid)
-    .withMessage('Should have a valid account id'),
-
+    .custom(isIdValid),
   query('token')
     .custom(exists)
     .withMessage('Should have a token'),
@@ -98,7 +91,9 @@ const videoSubscriptionFeedsValidator = [
 ]
 
 const videoCommentsFeedsValidator = [
-  query('videoId').optional().custom(isIdOrUUIDValid),
+  query('videoId')
+    .optional()
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking feeds parameters', { parameters: req.query })

@@ -1,4 +1,4 @@
-import { exists } from './misc'
+import { catchError, exists, isArrayOf, isIdValid } from './misc'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES } from '../../initializers/constants'
 
@@ -24,6 +24,10 @@ function isVideoPlaylistTypeValid (value: any) {
   return exists(value) && VIDEO_PLAYLIST_TYPES[value] !== undefined
 }
 
+function isVideoPlaylistVideoIdsValid (value: any) {
+  return isArrayOf(value, catchError(isIdValid))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -31,5 +35,6 @@ export {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistPrivacyValid,
   isVideoPlaylistTimestampValid,
-  isVideoPlaylistTypeValid
+  isVideoPlaylistTypeValid,
+  isVideoPlaylistVideoIdsValid
 }
