@@ -180,6 +180,9 @@ function genericUploadErrorHandler (parameters: {
   if (err instanceof ErrorEvent) { // network error
     message = $localize`The connection was interrupted`
     notifier.error(message, title, null, sticky)
+  } else if (err.status === HttpStatusCode.INTERNAL_SERVER_ERROR_500) {
+    message = $localize`The server encountered an error`
+    notifier.error(message, title, null, sticky)
   } else if (err.status === HttpStatusCode.REQUEST_TIMEOUT_408) {
     message = $localize`Your ${name} file couldn't be transferred before the set timeout (usually 10min)`
     notifier.error(message, title, null, sticky)

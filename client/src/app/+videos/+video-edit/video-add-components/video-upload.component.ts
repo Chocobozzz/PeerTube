@@ -51,6 +51,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   private uploadxOptions: UploadxOptions
   private isUpdatingVideo = false
+  private uploadingFile: File
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -71,7 +72,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       endpoint: this.BASE_VIDEO_UPLOAD_URL,
       multiple: false,
       token: this.authService.getAccessToken(),
-      uploaderClass: UploaderXFormData
+      uploaderClass: UploaderXFormData,
+      retryConfig: {
+        maxAttempts: 4
+      }
     }
   }
 
@@ -82,14 +86,16 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   onUploadVideoOngoing (state: UploadState) {
     switch (state.status) {
       case 'error':
+        const error = state.response?.error || 'Unknow error'
+
         this.handleUploadError({
-          error: new Error(state.response.error),
+          error: new Error(error),
           name: 'HttpErrorResponse',
-          message: state.response.error,
+          message: error,
           ok: false,
           headers: new HttpHeaders(state.responseHeaders),
           status: +state.responseStatus,
-          statusText: state.response.error,
+          statusText: error,
           type: HttpEventType.Response,
           url: state.url
         })
@@ -183,6 +189,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
 
     this.isUploadingVideo = true
+    this.uploadingFile = file
+
     this.uploadFile(file)
   }
 
@@ -193,6 +201,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   retryUpload () {
     this.enableRetryAfterError = false
     this.error = ''
+    this.uploadFile(this.uploadingFile)
   }
 
   cancelUpload () {
