@@ -32,32 +32,9 @@ function asyncRetryTransactionMiddleware (fun: (req: Request, res: Response, nex
   }
 }
 
-function executeIfMethod (fun: (req: Request, res: Response, next: NextFunction)
-=> void | Promise<void>, method: HttpMethod) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    return req.method === method
-      ? Promise.resolve((fun as RequestHandler)(req, res, next))
-      : next()
-  }
-}
-
-function executeIfPOST (fun) {
-  return executeIfMethod(fun, HttpMethod.POST)
-}
-
-function onlyAllowMethods (methods: HttpMethod[]) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (!methods.includes(req.method)) return res.status(HttpStatusCode.METHOD_NOT_ALLOWED_405)
-
-    next()
-  }
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   asyncMiddleware,
-  asyncRetryTransactionMiddleware,
-  executeIfPOST,
-  onlyAllowMethods
+  asyncRetryTransactionMiddleware
 }
