@@ -13,7 +13,8 @@ import {
   VIDEO_RATE_TYPES,
   VIDEO_STATES
 } from '../../initializers/constants'
-import { exists, isArray, isDateValid, isFileMimeTypeValid, isFileValid } from './misc'
+import { EtoB, exists, isArray, isDateValid, isFileMimeTypeValid, isFileValid } from './misc'
+import * as magnetUtil from 'magnet-uri'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
@@ -131,7 +132,7 @@ function isVideoFileExtnameValid (value: string) {
 }
 
 function isVideoFileMimeTypeValid (files: UploadFilesForCheck) {
-  return isFileMimeTypeValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
+  return EtoB(isFileMimeTypeValid)(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
 }
 
 const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
@@ -139,6 +140,9 @@ const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
                                           .join('|')
 const videoImageTypesRegex = `image/(${videoImageTypes})`
 
+/**
+ * @throws {Error}
+ */
 function isVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[], field: string) {
   return isFileValid(files, videoImageTypesRegex, field, CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max, true)
 }

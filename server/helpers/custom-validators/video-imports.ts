@@ -28,6 +28,10 @@ const videoTorrentImportRegex = Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT)
                                       .concat([ 'application/octet-stream' ]) // MacOS sends application/octet-stream
                                       .map(m => `(${m})`)
                                       .join('|')
+
+/**
+ * @throws {Error}
+ */
 function isVideoImportTorrentFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
   return isFileValid(files, videoTorrentImportRegex, 'torrentfile', CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max, true)
 }

@@ -3,26 +3,30 @@ import { UploadFilesForCheck } from 'express'
 import { sep } from 'path'
 import validator from 'validator'
 
-function getError (fun: Function) {
-  return (...args): Error => {
+// ---------------------------------------------------------------------------
+// UTILS
+
+/**
+ * Handle errors thrown by non-pure boolean validators as boolean
+ *
+ * @param fun Function that might throw an Error
+ * @returns boolean matching no error = `true`, error = `false`
+ */
+function EtoB (fun: Function, asError?: false): (...args: any[]) => boolean
+function EtoB (fun: Function, asError: true): (...args: any[]) => Error
+function EtoB (fun: Function, asError = false): (...args: any[]) => boolean | Error {
+  return (...args) => {
     try {
       fun(...args)
     } catch (error) {
-      return error
+      return asError ? error : false
     }
+    return asError ? undefined : true
   }
 }
 
-function catchError (fun: Function) {
-  return (...args): boolean => {
-    try {
-      fun(...args)
-    } catch (error) {
-      return false
-    }
-    return true
-  }
-}
+// ---------------------------------------------------------------------------
+// VALIDATORS
 
 function exists (value: any) {
   return value !== undefined && value !== null
@@ -79,8 +83,8 @@ function isUUIDValid (value: string) {
  */
 function isIdOrUUIDValid (value: string) {
   const errors = [
-    getError(isIdValid)(value)?.message,
-    getError(isUUIDValid)(value)?.message
+    EtoB(isIdValid, true)(value)?.message,
+    EtoB(isUUIDValid, true)(value)?.message
   ].filter(v => v)
   if (errors.length > 1) throw new Error(errors.join(' OR '))
   return true
@@ -93,6 +97,104 @@ function isBooleanValid (value: any) {
 function isIntOrNull (value: any) {
   return value === null || validator.isInt('' + value)
 }
+
+/**
+ * @throws {Error}
+ */
+function isFileFieldValid (
+  files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
+  field: string,
+  optional = false
+) {
+  const res = ((): [boolean, string?] => {
+    // Should have files
+    if (!files) return [ optional, 'Should have files' ]
+    if (isArray(files)) return [ optional, 'Should have a single file' ]
+
+    // Should have a file
+    const fileArray = files[field]
+    if (!fileArray || fileArray.length === 0) {
+      return [ optional, 'File array should contain a file' ]
+    }
+
+    // The file should exist
+    const file = fileArray[0]
+    if (!file || !file.originalname) return [ false, 'Should have a file with valid attributes' ]
+    return [ file ]
+  })()
+
+  if (res[0]) return true
+  throw new Error(res[1])
+}
+
+/**
+ * @throws {Error}
+ */
+function isFileMimeTypeValid (
+  files: UploadFilesForCheck,
+  mimeTypeRegex: string,
+  field: string,
+  optional = false
+) {
+  const res = ((): [boolean, string?] => {
+    // Should have files
+    if (!files) return [ optional, 'Should have files' ]
+    if (isArray(files)) return [ optional, 'Should have a single file' ]
+
+    // Should have a file
+    const fileArray = files[field]
+    if (!fileArray || fileArray.length === 0) {
+      return [ optional, 'File array should contain a file' ]
+    }
+
+    // The file should exist
+    const file = fileArray[0]
+    if (!file || !file.originalname) return [ false, 'Should have a file with valid attributes' ]
+
+    return [ new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype), `Should have a file mimetype matching ^${mimeTypeRegex}$` ]
+  })()
+
+  if (res[0]) return true
+  throw new Error(res[1])
+}
+
+/**
+ * @throws {Error}
+ */
+function isFileValid (
+  files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
+  mimeTypeRegex: string,
+  field: string,
+  maxSize: number | null,
+  optional = false
+) {
+  const res = ((): [boolean, string?] => {
+    // Should have files
+    if (!files) return [ optional, 'Should have files' ]
+    if (isArray(files)) return [ optional, 'Should have a single file' ]
+
+    // Should have a file
+    const fileArray = files[field]
+    if (!fileArray || fileArray.length === 0) {
+      return [ optional, 'File array should contain a file' ]
+    }
+
+    // The file should exist
+    const file = fileArray[0]
+    if (!file || !file.originalname) return [ false, 'Should have a file with valid attributes' ]
+
+    // Check size
+    if ((maxSize !== null) && file.size > maxSize) return [ false, `Should have a file with a maximum size of ${maxSize} bytes` ]
+
+    return [ new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype), `Should have a file mimetype matching ^${mimeTypeRegex}$` ]
+  })()
+
+  if (res[0]) return true
+  throw new Error(res[1])
+}
+
+// ---------------------------------------------------------------------------
+// SANITIZERS
 
 function toIntOrNull (value: string) {
   const v = toValueOrNull(value)
@@ -131,90 +233,10 @@ function toIntArray (value: any) {
   return value.map(v => validator.toInt(v))
 }
 
-/**
- * @throws {Error}
- */
-function isFileFieldValid (
-  files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
-  field: string,
-  optional = false
-) {
-  const res = ((): [boolean, string?] => {
-    // Should have files
-    if (!files) return [ optional, 'Should have files' ]
-    if (isArray(files)) return [ optional, 'Should have a single file' ]
-
-    // Should have a file
-    const fileArray = files[field]
-    if (!fileArray || fileArray.length === 0) {
-      return [ optional, 'File array should contain a file' ]
-    }
-
-    // The file should exist
-    const file = fileArray[0]
-    if (!file || !file.originalname) return [ false, 'Should have a file with valid attributes' ]
-    return [ file ]
-  })()
-
-  if (res[0]) return true
-  throw new Error(res[1])
-}
-
-function isFileMimeTypeValid (
-  files: UploadFilesForCheck,
-  mimeTypeRegex: string,
-  field: string,
-  optional = false
-) {
-  // Should have files
-  if (!files) return optional
-  if (isArray(files)) return optional
-
-  // Should have a file
-  const fileArray = files[field]
-  if (!fileArray || fileArray.length === 0) {
-    return optional
-  }
-
-  // The file should exist
-  const file = fileArray[0]
-  if (!file || !file.originalname) return false
-
-  return new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype)
-}
-
-function isFileValid (
-  files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
-  mimeTypeRegex: string,
-  field: string,
-  maxSize: number | null,
-  optional = false
-) {
-  // Should have files
-  if (!files) return optional
-  if (isArray(files)) return optional
-
-  // Should have a file
-  const fileArray = files[field]
-  if (!fileArray || fileArray.length === 0) {
-    return optional
-  }
-
-  // The file should exist
-  const file = fileArray[0]
-  if (!file || !file.originalname) return false
-
-  // Check size
-  if ((maxSize !== null) && file.size > maxSize) return false
-
-  return new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype)
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  getError,
-  catchError,
+  EtoB,
   exists,
   isArrayOf,
   isNotEmptyIntArray,

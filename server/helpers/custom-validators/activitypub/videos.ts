@@ -4,7 +4,7 @@ import { ActivityTrackerUrlObject, ActivityVideoFileMetadataUrlObject } from '@s
 import { VideoState } from '../../../../shared/models/videos'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { peertubeTruncate } from '../../core-utils'
-import { catchError, exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
+import { EtoB, exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
 import {
   isVideoDurationValid,
   isVideoNameValid,
@@ -67,17 +67,17 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   if (!isBooleanValid(video.permanentLive)) video.permanentLive = false
 
   return isActivityPubUrlValid(video.id) &&
-    catchError(isVideoNameValid)(video.name) &&
+    EtoB(isVideoNameValid)(video.name) &&
     isActivityPubVideoDurationValid(video.duration) &&
-    catchError(isUUIDValid)(video.uuid) &&
+    EtoB(isUUIDValid)(video.uuid) &&
     (!video.category || isRemoteNumberIdentifierValid(video.category)) &&
     (!video.licence || isRemoteNumberIdentifierValid(video.licence)) &&
     (!video.language || isRemoteStringIdentifierValid(video.language)) &&
     isVideoViewsValid(video.views) &&
     isBooleanValid(video.sensitive) &&
-    catchError(isDateValid)(video.published) &&
-    catchError(isDateValid)(video.updated) &&
-    (!video.originallyPublishedAt || catchError(isDateValid)(video.originallyPublishedAt)) &&
+    EtoB(isDateValid)(video.published) &&
+    EtoB(isDateValid)(video.updated) &&
+    (!video.originallyPublishedAt || EtoB(isDateValid)(video.originallyPublishedAt)) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
     video.attributedTo.length !== 0
 }
@@ -145,7 +145,7 @@ function setValidRemoteTags (video: any) {
 
   video.tag = video.tag.filter(t => {
     return t.type === 'Hashtag' &&
-      catchError(isVideoTagValid)(t.name)
+      EtoB(isVideoTagValid)(t.name)
   })
 
   return true

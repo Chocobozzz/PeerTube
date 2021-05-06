@@ -1,8 +1,8 @@
 import { isUserDescriptionValid, isUserUsernameValid } from './users'
-import { catchError, exists } from './misc'
+import { EtoB, exists } from './misc'
 
 function isAccountNameValid (value: string) {
-  return catchError(isUserUsernameValid)(value)
+  return EtoB(isUserUsernameValid)(value)
 }
 
 function isAccountIdValid (value: string) {

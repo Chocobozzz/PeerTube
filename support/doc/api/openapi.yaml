@@ -45,7 +45,7 @@ info:
     Content-Type: application/json
 
     {
-      "errorCode": 1
+      "errorCode": 1,
       "error": "Account not found"
     }
     ```

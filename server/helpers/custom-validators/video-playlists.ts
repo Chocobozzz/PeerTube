@@ -1,4 +1,4 @@
-import { catchError, exists, isArrayOf, isIdValid } from './misc'
+import { EtoB, exists, isArrayOf, isIdValid } from './misc'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES } from '../../initializers/constants'
 
@@ -25,7 +25,7 @@ function isVideoPlaylistTypeValid (value: any) {
 }
 
 function isVideoPlaylistVideoIdsValid (value: any) {
-  return isArrayOf(value, catchError(isIdValid))
+  return isArrayOf(value, EtoB(isIdValid))
 }
 
 // ---------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 import { isActivityPubUrlValid } from './misc'
 import { isRemoteVideoUrlValid } from './videos'
-import { catchError, exists, isDateValid } from '../misc'
+import { EtoB, exists, isDateValid } from '../misc'
 import { CacheFileObject } from '../../../../shared/models/activitypub/objects'
 
 function isCacheFileObjectValid (object: CacheFileObject) {
   return exists(object) &&
     object.type === 'CacheFile' &&
-    (object.expires === null || catchError(isDateValid)(object.expires)) &&
+    (object.expires === null || EtoB(isDateValid)(object.expires)) &&
     isActivityPubUrlValid(object.object) &&
     (isRemoteVideoUrlValid(object.url) || isPlaylistRedundancyUrlValid(object.url))
 }
