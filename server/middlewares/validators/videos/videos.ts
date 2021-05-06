@@ -138,7 +138,6 @@ const videosAddResumableValidator = [
  * Uploadx doesn't use next() until the upload completes, so this middleware has to be placed before uploadx
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts
  *
- * This validator is meant for POST requests only.
  */
 const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('filename')

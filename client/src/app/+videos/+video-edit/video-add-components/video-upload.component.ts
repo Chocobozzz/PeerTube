@@ -51,7 +51,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   private uploadxOptions: UploadxOptions
   private isUpdatingVideo = false
-  private uploadingFile: File
+  private fileToUpload: File
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -189,7 +189,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
 
     this.isUploadingVideo = true
-    this.uploadingFile = file
+    this.fileToUpload = file
 
     this.uploadFile(file)
   }
@@ -201,7 +201,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   retryUpload () {
     this.enableRetryAfterError = false
     this.error = ''
-    this.uploadFile(this.uploadingFile)
+    this.uploadFile(this.fileToUpload)
   }
 
   cancelUpload () {
