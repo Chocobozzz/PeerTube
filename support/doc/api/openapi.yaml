@@ -12,8 +12,6 @@ info:
     url: 'https://joinpeertube.org/img/brand.png'
     altText: PeerTube Project Homepage
   description: |
-    # Introduction
-
     The PeerTube API is built on HTTP(S) and is RESTful. You can use your favorite
     HTTP/REST library for your programming language to use PeerTube. The spec API is fully compatible with
     [openapi-generator](https://github.com/OpenAPITools/openapi-generator/wiki/API-client-generator-HOWTO)
@@ -23,13 +21,14 @@ info:
     - [Go](https://framagit.org/framasoft/peertube/clients/go)
     - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
 
-    See the [Quick Start guide](https://docs.joinpeertube.org/api-rest-getting-started) so you can play with the PeerTube API.
+    See the [REST API quick start](https://docs.joinpeertube.org/api-rest-getting-started) for a few
+    examples of using with the PeerTube API.
 
     # Authentication
 
-    When you sign up for an account, you are given the possibility to generate
-    sessions, and authenticate using this session token. One session token can
-    currently be used at a time.
+    When you sign up for an account on a PeerTube instance, you are given the possibility
+    to generate sessions on it, and authenticate there using a session token. Only __one
+    session token can currently be used at a time__.
 
     ## Roles
 
@@ -48,6 +47,29 @@ info:
       "error": "Token is invalid." // example exposed error message
     }
     ```
+
+    # Rate limits
+
+    We are rate-limiting all endpoints of PeerTube's API. Here is how it is configured by default:
+
+    | Endpoint                | Calls            | Time frame                |
+    |-------------------------|------------------|---------------------------|
+    | `/*`                    | 50               | 10 seconds                |
+    | `POST /users/token`     | 15               | 5 minutes                 |
+    | `POST /users/register`  | 2¹               | 5 minutes                 |
+    | `POST /users/ask-send-verify-email` | 3    | 5 minutes                 |
+
+    Depending on the endpoint, ¹failed requests are not taken into account. A service
+    limit is announced by a `429 Too Many Requests` status code.
+
+    You can get details about how your rate limit is going by reading following headers:
+
+    | Header                  | Description                                                |
+    |-------------------------|------------------------------------------------------------|
+    | X-RateLimit-Limit       | Number of max requests allowed in the current time period  |
+    | X-RateLimit-Remaining   | Number of remaining requests in the current time period    |
+    | X-RateLimit-Reset       | Timestamp of end of current time period as UNIX timestamp  |
+    | Retry-After             | Seconds to delay after the first `429` is received         |
 externalDocs:
   url: https://docs.joinpeertube.org/api-rest-reference.html
 tags:
@@ -3959,19 +3981,16 @@ components:
           - video-live-ending
   securitySchemes:
     OAuth2:
-      description: >
-        In the header: *Authorization: Bearer <token\>*
-
-
+      description: |
         Authenticating via OAuth requires the following steps:
-
-
-        - Have an account with sufficient authorization levels
-
+        - Have an activated account
         - [Generate](https://docs.joinpeertube.org/api-rest-getting-started) a
-        Bearer Token
+        Bearer Token for that account at `/api/v1/users/token`
+        - Make authenticated requests, putting *Authorization: Bearer <token\>*
+        - Profit, depending on the role assigned to the account
 
-        - Make Authenticated Requests
+        Note that the __access token is valid for 1 day__ and, and is given
+        along with a __refresh token valid for 2 weeks__.
       type: oauth2
       flows:
         password:
