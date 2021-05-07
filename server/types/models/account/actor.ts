@@ -150,7 +150,7 @@ export type MActorSummaryFormattable =
 
 export type MActorFormattable =
   MActorSummaryFormattable &
-  Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt' | 'bannerId' | 'avatarId'> &
+  Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt' | 'remoteCreatedAt' | 'bannerId' | 'avatarId'> &
   Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>> &
   UseOpt<'Banner', MActorImageFormattable>
 

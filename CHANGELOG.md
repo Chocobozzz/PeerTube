@@ -4,6 +4,7 @@
 
 ### IMPORTANT NOTES
 
+ * **Important:** Due to a bug in ffmpeg, PeerTube is not compatible with ffmpeg 4.4. See https://github.com/Chocobozzz/PeerTube/issues/3990
  * By default, HLS transcoding is now enabled and webtorrent is disabled. We suggest you to reflect this change.
  See [the documentation](https://docs.joinpeertube.org/admin-configuration?id=webtorrent-transcoding-or-hls-transcoding) for more information
  * PeerTube client now displays bigger video thumbnails.

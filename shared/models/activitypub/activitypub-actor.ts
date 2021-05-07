@@ -29,4 +29,6 @@ export interface ActivityPubActor {
 
   icon?: ActivityIconObject
   image?: ActivityIconObject
+
+  published?: string
 }

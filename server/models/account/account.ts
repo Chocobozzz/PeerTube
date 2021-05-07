@@ -411,8 +411,6 @@ export class AccountModel extends Model {
       id: this.id,
       displayName: this.getDisplayName(),
       description: this.description,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
       userId: this.userId ? this.userId : undefined
     }
 
