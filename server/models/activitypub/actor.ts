@@ -557,8 +557,7 @@ export class ActorModel extends Model {
       followingCount: this.followingCount,
       followersCount: this.followersCount,
       banner,
-      createdAt: this.getCreatedAt(),
-      updatedAt: this.updatedAt
+      createdAt: this.getCreatedAt()
     })
   }
 

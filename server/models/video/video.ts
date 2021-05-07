@@ -24,6 +24,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live-manager'
@@ -2053,11 +2054,7 @@ export class VideoModel extends Model {
   }
 
   setAsRefreshed () {
-    const options = {
-      where: { id: this.id }
-    }
-
-    return VideoModel.update({ updatedAt: new Date() }, options)
+    return setAsUpdated('video', this.id)
   }
 
   requiresAuth () {

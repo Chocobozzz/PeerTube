@@ -154,8 +154,6 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   const followersCount = await fetchActorTotalItems(attributes.followers)
   const followingCount = await fetchActorTotalItems(attributes.following)
 
-  logger.info('coucou', { attributes })
-
   actorInstance.type = attributes.type
   actorInstance.preferredUsername = attributes.preferredUsername
   actorInstance.url = attributes.id

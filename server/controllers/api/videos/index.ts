@@ -248,6 +248,9 @@ async function addVideo (req: express.Request, res: express.Response) {
       }, { transaction: t })
     }
 
+    // Channel has a new content, set as updated
+    await videoCreated.VideoChannel.setAsUpdated(t)
+
     await autoBlacklistVideoIfNeeded({
       video,
       user: res.locals.oauth.token.User,

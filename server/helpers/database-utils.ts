@@ -1,8 +1,9 @@
 import * as retry from 'async/retry'
 import * as Bluebird from 'bluebird'
+import { QueryTypes, Transaction } from 'sequelize'
 import { Model } from 'sequelize-typescript'
+import { sequelizeTypescript } from '@server/initializers/database'
 import { logger } from './logger'
-import { Transaction } from 'sequelize'
 
 function retryTransactionWrapper <T, A, B, C, D> (
   functionToRetry: (arg1: A, arg2: B, arg3: C, arg4: D) => Promise<T> | Bluebird<T>,
@@ -96,6 +97,18 @@ function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): 
               .map(f => f.destroy({ transaction: t }))
 }
 
+// Sequelize always skip the update if we only update updatedAt field
+function setAsUpdated (table: string, id: number, transaction?: Transaction) {
+  return sequelizeTypescript.query(
+    `UPDATE "${table}" SET "updatedAt" = :updatedAt WHERE id = :id`,
+    {
+      replacements: { table, id, updatedAt: new Date() },
+      type: QueryTypes.UPDATE,
+      transaction
+    }
+  )
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -104,5 +117,6 @@ export {
   transactionRetryer,
   updateInstanceWithAnother,
   afterCommitIfTransaction,
-  deleteNonExistingModels
+  deleteNonExistingModels,
+  setAsUpdated
 }

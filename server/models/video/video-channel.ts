@@ -1,4 +1,4 @@
-import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions } from 'sequelize'
+import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -17,6 +17,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { setAsUpdated } from '@server/helpers/database-utils'
 import { MAccountActor } from '@server/types/models'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
@@ -653,6 +654,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
+      updatedAt: this.updatedAt,
       ownerAccount: undefined,
       videosCount,
       viewsPerDay
@@ -688,5 +690,9 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
 
   isOutdated () {
     return this.Actor.isOutdated()
+  }
+
+  setAsUpdated (transaction: Transaction) {
+    return setAsUpdated('videoChannel', this.id, transaction)
   }
 }

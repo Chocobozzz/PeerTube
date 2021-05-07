@@ -697,6 +697,9 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
         videoCreated.VideoLive = await videoLive.save({ transaction: t })
       }
 
+      // We added a video in this channel, set it as updated
+      await channel.setAsUpdated(t)
+
       const autoBlacklisted = await autoBlacklistVideoIfNeeded({
         video: videoCreated,
         user: undefined,
