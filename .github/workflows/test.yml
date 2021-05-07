@@ -44,7 +44,7 @@ jobs:
     env:
       PGUSER: peertube
       PGHOST: localhost
-      NODE_PENDING_JOB_WAIT: 500
+      NODE_PENDING_JOB_WAIT: 250
 
     steps:
       - uses: actions/checkout@v2

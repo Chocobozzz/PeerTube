@@ -55,7 +55,7 @@ function getJobsListPaginationAndSort (options: {
 async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
     ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
-    : 500
+    : 250
 
   let servers: ServerInfo[]
 
@@ -115,7 +115,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
     }
 
     if (pendingRequests) {
-      await wait(1000)
+      await wait(pendingJobWait)
     }
   } while (pendingRequests)
 }
