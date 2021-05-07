@@ -55,7 +55,7 @@ describe('Test plugin filter hooks', function () {
   let threadId: number
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)
