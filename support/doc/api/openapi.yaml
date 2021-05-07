@@ -3190,13 +3190,6 @@ paths:
       tags:
         - Feeds
       summary: List comments on videos
-      servers:
-        - url: 'https://peertube2.cpy.re'
-          description: Live Test Server (live data - latest nightly version)
-        - url: 'https://peertube3.cpy.re'
-          description: Live Test Server (live data - latest RC version)
-        - url: 'https://peertube.cpy.re'
-          description: Live Test Server (live data - stable version)
       parameters:
         - name: format
           in: path
@@ -3249,18 +3242,33 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?filter=local
             application/rss+xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.rss?filter=local
             text/xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?filter=local
             application/atom+xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.atom?filter=local
             application/json:
               schema:
                 type: object
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.json?filter=local
         '400':
           x-summary: field inconsistencies
           description: >
@@ -3275,13 +3283,6 @@ paths:
       tags:
         - Feeds
       summary: List videos
-      servers:
-        - url: 'https://peertube2.cpy.re'
-          description: Live Test Server (live data - latest nightly version)
-        - url: 'https://peertube3.cpy.re'
-          description: Live Test Server (live data - latest RC version)
-        - url: 'https://peertube.cpy.re'
-          description: Live Test Server (live data - stable version)
       parameters:
         - name: format
           in: path
@@ -3338,6 +3339,82 @@ paths:
             application/rss+xml:
               schema:
                 $ref: '#/components/schemas/VideosForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/videos.rss?filter=local
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/videos.xml?filter=local
+            application/atom+xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/videos.atom?filter=local
+            application/json:
+              schema:
+                type: object
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/videos.json?filter=local
+        '404':
+          description: video channel or account not found
+        '406':
+          description: accept header unsupported
+  '/feeds/subscriptions.{format}':
+    get:
+      tags:
+        - Feeds
+        - Account
+      summary: List videos of subscriptions tied to a token
+      parameters:
+        - name: format
+          in: path
+          required: true
+          description: 'format expected (we focus on making `rss` the most featureful ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
+          schema:
+            type: string
+            enum:
+              - xml
+              - rss
+              - rss2
+              - atom
+              - atom1
+              - json
+              - json1
+        - name: accountId
+          in: query
+          description: limit listing to a specific account
+          schema:
+            type: string
+          required: true
+        - name: token
+          in: query
+          description: private token allowing access
+          schema:
+            type: string
+          required: true
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/filter'
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                default: 'max-age=900' # 15 min cache
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+            application/rss+xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
             text/xml:
               schema:
                 $ref: '#/components/schemas/VideosForXML'
@@ -3347,8 +3424,6 @@ paths:
             application/json:
               schema:
                 type: object
-        '404':
-          description: video channel or account not found
         '406':
           description: accept header unsupported
   /plugins:
