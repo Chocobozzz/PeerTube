@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { AuthService } from '@app/core'
 import { MiniatureDisplayOptions } from '../shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '../shared-video-playlist'
 
@@ -29,7 +28,6 @@ export class PlaylistMiniatureMarkupComponent implements OnInit {
   }
 
   constructor (
-    private auth: AuthService,
     private playlistService: VideoPlaylistService
   ) { }
 
