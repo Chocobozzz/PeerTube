@@ -69,9 +69,7 @@ export const unusedActorAttributesForAPI = [
   'outboxUrl',
   'sharedInboxUrl',
   'followersUrl',
-  'followingUrl',
-  'createdAt',
-  'updatedAt'
+  'followingUrl'
 ]
 
 @DefaultScope(() => ({
@@ -221,6 +219,10 @@ export class ActorModel extends Model {
   @Is('ActorFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followingUrl: string
+
+  @AllowNull(true)
+  @Column
+  remoteCreatedAt: Date
 
   @CreatedAt
   createdAt: Date
@@ -555,7 +557,7 @@ export class ActorModel extends Model {
       followingCount: this.followingCount,
       followersCount: this.followersCount,
       banner,
-      createdAt: this.createdAt,
+      createdAt: this.getCreatedAt(),
       updatedAt: this.updatedAt
     })
   }
@@ -608,6 +610,7 @@ export class ActorModel extends Model {
         owner: this.url,
         publicKeyPem: this.publicKey
       },
+      published: this.getCreatedAt().toISOString(),
       icon,
       image
     }
@@ -689,5 +692,9 @@ export class ActorModel extends Model {
     if (this.isOwned()) return false
 
     return isOutdated(this, ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL)
+  }
+
+  getCreatedAt (this: MActorAPChannel | MActorAPAccount | MActorFormattable) {
+    return this.remoteCreatedAt || this.createdAt
   }
 }

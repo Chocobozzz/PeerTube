@@ -653,8 +653,6 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
       ownerAccount: undefined,
       videosCount,
       viewsPerDay
