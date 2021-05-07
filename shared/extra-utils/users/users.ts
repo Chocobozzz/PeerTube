@@ -1,5 +1,6 @@
 import { omit } from 'lodash'
 import * as request from 'supertest'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { UserUpdateMe } from '../../models/users'
 import { UserAdminFlag } from '../../models/users/user-flag.model'
 import { UserRegister } from '../../models/users/user-register.model'
@@ -7,9 +8,8 @@ import { UserRole } from '../../models/users/user-role'
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, updateImageRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
 import { userLogin } from './login'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-type CreateUserArgs = {
+function createUser (parameters: {
   url: string
   accessToken: string
   username: string
@@ -19,8 +19,7 @@ type CreateUserArgs = {
   role?: UserRole
   adminFlags?: UserAdminFlag
   specialStatus?: number
-}
-function createUser (parameters: CreateUserArgs) {
+}) {
   const {
     url,
     accessToken,
@@ -50,6 +49,21 @@ function createUser (parameters: CreateUserArgs) {
           .set('Authorization', 'Bearer ' + accessToken)
           .send(body)
           .expect(specialStatus)
+}
+
+async function generateUser (server: ServerInfo, username: string) {
+  const password = 'my super password'
+  const resCreate = await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
+
+  const token = await userLogin(server, { username, password })
+
+  const resMe = await getMyUserInformation(server.url, token)
+
+  return {
+    token,
+    userId: resCreate.body.user.id,
+    userChannelId: resMe.body.videoChannels[0].id
+  }
 }
 
 async function generateUserAccessToken (server: ServerInfo, username: string) {
@@ -393,6 +407,7 @@ export {
   resetPassword,
   renewUserScopedTokens,
   updateMyAvatar,
+  generateUser,
   askSendVerifyEmail,
   generateUserAccessToken,
   verifyEmail,
