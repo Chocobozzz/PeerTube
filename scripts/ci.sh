@@ -44,7 +44,7 @@ if [ "$1" = "misc" ]; then
     pluginsFiles=$(findTestFiles server/tests/plugins)
     miscFiles="server/tests/client.ts server/tests/misc-endpoints.ts"
 
-    TS_NODE_FILES=true runTest "$1" 1 $feedsFiles $helperFiles $pluginsFiles $miscFiles
+    MOCHA_PARALLEL=true TS_NODE_FILES=true runTest "$1" 2 $feedsFiles $helperFiles $pluginsFiles $miscFiles
 elif [ "$1" = "cli" ]; then
     npm run build:server
     npm run setup:cli
