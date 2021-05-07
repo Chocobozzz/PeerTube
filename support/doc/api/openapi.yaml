@@ -50,7 +50,8 @@ info:
 
     # Rate limits
 
-    We are rate-limiting all endpoints of PeerTube's API. Here is how it is configured by default:
+    We are rate-limiting all endpoints of PeerTube's API. Custom values can be configured
+    by administrators:
 
     | Endpoint                | Calls            | Time frame                |
     |-------------------------|------------------|---------------------------|
@@ -62,7 +63,8 @@ info:
     Depending on the endpoint, ¹failed requests are not taken into account. A service
     limit is announced by a `429 Too Many Requests` status code.
 
-    You can get details about how your rate limit is going by reading following headers:
+    You can get details about the current state of your rate limit by reading the
+    following headers:
 
     | Header                  | Description                                                |
     |-------------------------|------------------------------------------------------------|
