@@ -24,6 +24,12 @@
     "rule-empty-line-before": null,
     "selector-max-id": null,
     "scss/at-function-pattern": null,
-    "function-parentheses-space-inside": "never-single-line"
+    "function-parentheses-space-inside": "never-single-line",
+    "property-no-vendor-prefix": [
+      true,
+      {
+        "ignoreProperties": [ "mask-image" ]
+      }
+    ]
   }
 }
