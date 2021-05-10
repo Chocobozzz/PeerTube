@@ -1867,6 +1867,7 @@ paths:
   /users/me/abuses:
     get:
       summary: List my abuses
+      operationId: getMyAbuses
       security:
         - OAuth2: []
       tags:
@@ -1882,22 +1883,29 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/AbuseStateSet'
+        - $ref: '#/components/parameters/abusesSort'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/abusesSort'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Abuse'
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Abuse'
 
   /abuses:
     get:
       summary: List abuses
+      operationId: getAbuses
       security:
         - OAuth2:
           - admin
@@ -1970,9 +1978,15 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Abuse'
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Abuse'
 
     post:
       summary: Report an abuse
