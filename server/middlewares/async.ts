@@ -3,7 +3,6 @@ import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ValidationChain } from 'express-validator'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { retryTransactionWrapper } from '../helpers/database-utils'
-import { HttpMethod, HttpStatusCode } from '@shared/core-utils'
 
 // Syntactic sugar to avoid try/catch in express controllers
 // Thanks: https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016
