@@ -804,6 +804,10 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoChannelList'
     post:
       tags:
         - My Subscriptions
@@ -2301,15 +2305,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                    example: 1
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/VideoChannel'
+                $ref: '#/components/schemas/VideoChannelList'
     post:
       summary: Create a video channel
       security:
@@ -2846,14 +2842,7 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  total:
-                    type: integer
-                    example: 1
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/VideoChannel'
+                $ref: '#/components/schemas/VideoChannelList'
   '/accounts/{name}/ratings':
     get:
       summary: List ratings of an account
@@ -3111,9 +3100,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/VideoChannel'
+                $ref: '#/components/schemas/VideoChannelList'
         '500':
           description: search index unavailable
   /blocklist/accounts:
@@ -4993,6 +4980,8 @@ components:
         host:
           type: string
           format: hostname
+        hostRedundancyAllowed:
+          type: boolean
         followingCount:
           type: integer
         followersCount:
@@ -5919,6 +5908,17 @@ components:
             bulkVideosSupportUpdate:
               type: boolean
               description: 'Update the support field for all videos of this channel'
+    VideoChannelList:
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/VideoChannel'
+              - $ref: '#/components/schemas/Actor'
 
     MRSSPeerLink:
       type: object
