@@ -1,8 +1,8 @@
-import { RegisterServerSettingOptions } from "./register-server-setting.model"
+import { RegisterClientFormFieldOptions } from "./register-client-form-field.model"
 
 export interface RegisterClientSettingsScript {
   isSettingHidden (options: {
-    setting: RegisterServerSettingOptions
+    setting: RegisterClientFormFieldOptions
     formValues: { [name: string]: any }
   }): boolean
 }
