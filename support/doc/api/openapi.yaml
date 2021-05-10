@@ -125,7 +125,7 @@ tags:
       Redundancy is part of the inter-server solidarity that PeerTube fosters.
       Manage the list of instances you wish to help by seeding their videos according
       to the policy of video selection of your choice. Note that you have a similar functionality
-      to mirror individual videos, see `Video Mirroring`.
+      to mirror individual videos, see [video mirroring](#tag/Video-Mirroring).
     externalDocs:
       url: https://docs.joinpeertube.org/admin-following-instances?id=instances-redundancy
   - name: Plugins
@@ -139,6 +139,50 @@ tags:
   - name: Video
     description: |
       Operations dealing with listing, uploading, fetching or modifying videos.
+  - name: Video Upload
+    description: |
+      Operations dealing with adding video or audio. PeerTube supports two upload modes, and three import modes.
+
+      ### Upload
+
+      - [_legacy_](#tag/Video-Upload/paths/~1videos~1upload/post), where the video file is sent in a single request
+      - [_resumable_](#tag/Video-Upload/paths/~1videos~1upload-resumable/post), where the video file is sent in chunks
+
+      You can upload videos more reliably by using the resumable variant. Its protocol lets
+      you resume an upload operation after a network interruption or other transmission failure,
+      saving time and bandwidth in the event of network failures.
+
+      Favor using resumable uploads in any of the following cases:
+      - You are transferring large files
+      - The likelihood of a network interruption is high
+      - Uploads are originating from a device with a low-bandwidth or unstable Internet connection,
+        such as a mobile device
+
+      ### Import
+
+      - _URL_-based: where the URL points to any service supported by [youtube-dl](https://ytdl-org.github.io/youtube-dl/)
+      - _magnet_-based: where the URI resolves to a BitTorrent ressource containing a single supported video file
+      - _torrent_-based: where the metainfo file resolves to a BitTorrent ressource containing a single supported video file
+
+      The import function is practical when the desired video/audio is available online. It makes PeerTube
+      download it for you, saving you as much bandwidth and avoiding any instability or limitation your network might have.
+  - name: Video Captions
+    description: Operations dealing with listing, adding and removing closed captions of a video.
+  - name: Video Channels
+    description: Operations dealing with the creation, modification and listing of videos within a channel.
+  - name: Video Comments
+    description: >
+      Operations dealing with comments to a video. Comments are organized in threads: adding a
+      comment in response to the video starts a thread, adding a reply to a comment adds it to
+      its root comment thread.
+  - name: Video Blocks
+    description: Operations dealing with blocking videos (removing them from view and preventing interactions).
+  - name: Video Rates
+    description: Like/dislike a video.
+  - name: Video Playlists
+    description: Operations dealing with playlists of videos. Playlists are bound to users and/or channels.
+  - name: Feeds
+    description: Server syndication feeds
   - name: Search
     description: |
       The search helps to find _videos_ or _channels_ from within the instance and beyond.
@@ -148,27 +192,11 @@ tags:
 
       Administrators can also enable the use of a remote search system, indexing
       videos and channels not could be not federated by the instance.
-  - name: Video Comments
-    description: >
-      Operations dealing with comments to a video. Comments are organized in
-      threads.
-  - name: Video Playlists
-    description: >
-      Operations dealing with playlists of videos. Playlists are bound to users
-      and/or channels.
-  - name: Video Channels
-    description: >
-      Operations dealing with the creation, modification and listing of videos within a channel.
-  - name: Video Blocks
-    description: >
-      Operations dealing with blocking videos (removing them from view and
-      preventing interactions).
-  - name: Video Rates
-    description: >
-      Like/dislike a video.
-  - name: Feeds
-    description: >
-      Server syndication feeds
+  - name: Video Mirroring
+    description: |
+      PeerTube instances can mirror videos from one another, and help distribute some videos.
+
+      For importing videos as your own, refer to [video imports](#tag/Video-Upload/paths/~1videos~1imports/post).
 x-tagGroups:
   - name: Accounts
     tags:
@@ -181,6 +209,7 @@ x-tagGroups:
   - name: Videos
     tags:
       - Video
+      - Video Upload
       - Video Captions
       - Video Channels
       - Video Comments
@@ -1347,10 +1376,12 @@ paths:
   /videos/upload:
     post:
       summary: Upload a video
+      description: Uses a single request to upload a video.
       security:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
       responses:
         '200':
           description: successful operation
@@ -1380,80 +1411,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                videofile:
-                  description: Video file
-                  type: string
-                  format: binary
-                channelId:
-                  description: Channel id that will contain this video
-                  type: integer
-                thumbnailfile:
-                  description: Video thumbnail file
-                  type: string
-                  format: binary
-                previewfile:
-                  description: Video preview file
-                  type: string
-                  format: binary
-                privacy:
-                  $ref: '#/components/schemas/VideoPrivacySet'
-                category:
-                  description: Video category
-                  type: integer
-                  example: 4
-                licence:
-                  description: Video licence
-                  type: integer
-                  example: 2
-                language:
-                  description: Video language
-                  type: string
-                description:
-                  description: Video description
-                  type: string
-                waitTranscoding:
-                  description: Whether or not we wait transcoding before publish the video
-                  type: boolean
-                support:
-                  description: A text tell the audience how to support the video creator
-                  example: Please support my work on <insert crowdfunding plateform>! <3
-                  type: string
-                nsfw:
-                  description: Whether or not this video contains sensitive content
-                  type: boolean
-                name:
-                  description: Video name
-                  type: string
-                  minLength: 3
-                  maxLength: 120
-                tags:
-                  description: Video tags (maximum 5 tags each between 2 and 30 characters)
-                  type: array
-                  minItems: 1
-                  maxItems: 5
-                  uniqueItems: true
-                  items:
-                    type: string
-                    minLength: 2
-                    maxLength: 30
-                commentsEnabled:
-                  description: Enable or disable comments for this video
-                  type: boolean
-                downloadEnabled:
-                  description: Enable or disable downloading for this video
-                  type: boolean
-                originallyPublishedAt:
-                  description: Date when the content was originally published
-                  type: string
-                  format: date-time
-                scheduleUpdate:
-                  $ref: '#/components/schemas/VideoScheduledUpdate'
-              required:
-                - videofile
-                - channelId
-                - name
+              $ref: '#/components/schemas/VideoUploadRequestLegacy'
             encoding:
               videofile:
                 contentType: video/mp4, video/webm, video/ogg, video/avi, video/quicktime, video/x-msvideo, video/x-flv, video/x-matroska, application/octet-stream
@@ -1490,6 +1448,164 @@ paths:
               --form videofile=@"$FILE_PATH" \
               --form channelId=$CHANNEL_ID \
               --form name="$NAME"
+  /videos/upload-resumable:
+    post:
+      summary: Initialize the resumable upload of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the upload of a video
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
+      parameters:
+        - name: X-Upload-Content-Length
+          in: header
+          schema:
+            type: number
+            example: 2469036
+          required: true
+          description: Number of bytes that will be uploaded in subsequent requests. Set this value to the size of the file you are uploading.
+        - name: X-Upload-Content-Type
+          in: header
+          schema:
+            type: string
+            format: mimetype
+            example: video/mp4
+          required: true
+          description: MIME type of the file that you are uploading. Depending on your instance settings, acceptable values might vary.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoUploadRequestResumable'
+      responses:
+        '200':
+          description: file already exists, send a [`resume`](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) request instead
+        '201':
+          description: created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: url
+                example: /api/v1/videos/upload-resumable?upload_id=471e97554f21dec3b8bb5d4602939c51
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+        '400':
+          description: invalid file field, schedule date or parameter
+        '413':
+          description: video file too large, due to quota, absolute max file size or concurrent partial upload limit
+        '415':
+          description: video type unsupported
+    put:
+      summary: Send chunk for the resumable upload of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the upload of a video
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
+      parameters:
+        - name: upload_id
+          in: path
+          required: true
+          description: |
+            Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
+            not valid anymore and you need to initialize a new upload.
+          schema:
+            type: string
+        - name: Content-Range
+          in: header
+          schema:
+            type: string
+            example: bytes 0-262143/2469036
+          required: true
+          description: |
+            Specifies the bytes in the file that the request is uploading.
+
+            For example, a value of `bytes 0-262143/1000000` shows that the request is sending the first
+            262144 bytes (256 x 1024) in a 2,469,036 byte file.
+        - name: Content-Length
+          in: header
+          schema:
+            type: number
+            example: 262144
+          required: true
+          description: |
+            Size of the chunk that the request is sending.
+
+            The chunk size __must be a multiple of 256 KB__, and unlike [Google Resumable](https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol)
+            doesn't mandate for chunks to have the same size throughout the upload sequence.
+
+            Remember that larger chunks are more efficient. PeerTube's web client uses chunks varying from
+            1048576 bytes (~1MB) and increases or reduces size depending on connection health.
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: last chunk received
+          headers:
+            Content-Length:
+              schema:
+                type: number
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+        '308':
+          description: resume incomplete
+          headers:
+            Range:
+              schema:
+                type: string
+                example: bytes=0-262143
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+        '403':
+          description: video didn't pass upload filter
+        '413':
+          description: video file too large, due to quota or max body size limit set by the reverse-proxy
+        '422':
+          description: video unreadable
+    delete:
+      summary: Cancel the resumable upload of a video, deleting any data uploaded so far
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
+      parameters:
+        - name: upload_id
+          in: path
+          required: true
+          description: |
+            Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
+            not valid anymore and the upload session has already been deleted with its data ;-)
+          schema:
+            type: string
+        - name: Content-Length
+          in: header
+          required: true
+          schema:
+            type: number
+            example: 0
+      responses:
+        '204':
+          description: upload cancelled
+          headers:
+            Content-Length:
+              schema:
+                type: number
+                example: 0
   /videos/imports:
     post:
       summary: Import a video
@@ -1498,6 +1614,7 @@ paths:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
       requestBody:
         content:
           multipart/form-data:
@@ -1688,7 +1805,7 @@ paths:
 
   /videos/live/{id}:
     get:
-      summary: Get a live information
+      summary: Get information about a live
       security:
         - OAuth2: []
       tags:
@@ -1704,7 +1821,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LiveVideoResponse'
     put:
-      summary: Update a live information
+      summary: Update information about a live
       security:
         - OAuth2: []
       tags:
@@ -3940,6 +4057,7 @@ components:
         oneOf:
         - type: string
         - type: array
+          maxItems: 5
           items:
             type: string
       style: form
@@ -4636,7 +4754,7 @@ components:
         message:
           type: string
           minLength: 2
-          maxLength: 3000 
+          maxLength: 3000
         byModerator:
           type: boolean
         createdAt:
@@ -5229,6 +5347,7 @@ components:
     PredefinedAbuseReasons:
       description: Reason categories that help triage reports
       type: array
+      maxItems: 8
       items:
         type: string
         enum:
@@ -5298,6 +5417,103 @@ components:
                 id:
                   type: integer
                   example: 37
+    VideoUploadRequestCommon:
+      properties:
+        name:
+          description: Video name
+          type: string
+        channelId:
+          description: Channel id that will contain this video
+          type: integer
+        privacy:
+          $ref: '#/components/schemas/VideoPrivacySet'
+        category:
+          description: Video category
+          type: integer
+          example: 4
+        licence:
+          description: Video licence
+          type: integer
+          example: 2
+        language:
+          description: Video language
+          type: string
+        description:
+          description: Video description
+          type: string
+        waitTranscoding:
+          description: Whether or not we wait transcoding before publish the video
+          type: boolean
+        support:
+          description: A text tell the audience how to support the video creator
+          example: Please support my work on <insert crowdfunding plateform>! <3
+          type: string
+        nsfw:
+          description: Whether or not this video contains sensitive content
+          type: boolean
+        tags:
+          description: Video tags (maximum 5 tags each between 2 and 30 characters)
+          type: array
+          minItems: 1
+          maxItems: 5
+          uniqueItems: true
+          items:
+            type: string
+            minLength: 2
+            maxLength: 30
+        commentsEnabled:
+          description: Enable or disable comments for this video
+          type: boolean
+        downloadEnabled:
+          description: Enable or disable downloading for this video
+          type: boolean
+        originallyPublishedAt:
+          description: Date when the content was originally published
+          type: string
+          format: date-time
+        scheduleUpdate:
+          $ref: '#/components/schemas/VideoScheduledUpdate'
+        thumbnailfile:
+          description: Video thumbnail file
+          type: string
+          format: binary
+        previewfile:
+          description: Video preview file
+          type: string
+          format: binary
+      required:
+        - channelId
+        - name
+    VideoUploadRequestLegacy:
+      allOf:
+        - $ref: '#/components/schemas/VideoUploadRequestCommon'
+        - type: object
+          required:
+            - videofile
+          properties:
+            videofile:
+              description: Video file
+              type: string
+              format: binary
+    VideoUploadRequestResumable:
+      allOf:
+        - $ref: '#/components/schemas/VideoUploadRequestCommon'
+        - type: object
+          required:
+            - filename
+          properties:
+            filename:
+              description: Video filename including extension
+              type: string
+              format: filename
+            thumbnailfile:
+              description: Video thumbnail file
+              type: string
+              format: binary
+            previewfile:
+              description: Video preview file
+              type: string
+              format: binary
     VideoUploadResponse:
       properties:
         video:
