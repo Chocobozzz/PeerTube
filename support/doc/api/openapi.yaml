@@ -707,7 +707,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoImport'
+                $ref: '#/components/schemas/VideoImportsList'
   /users/me/video-quota-used:
     get:
       summary: Get my user used quota
@@ -4727,6 +4727,16 @@ components:
           format: date-time
         video:
           $ref: '#/components/schemas/Video'
+    VideoImportsList:
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/VideoImport'
     Abuse:
       properties:
         id:
