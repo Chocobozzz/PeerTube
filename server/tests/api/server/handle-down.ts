@@ -143,7 +143,7 @@ describe('Test handle downs', function () {
       await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
     }
 
-    await waitJobs(servers[0])
+    await waitJobs([ servers[0], servers[2] ])
 
     // Kill server 3
     killallServers([ servers[2] ])
