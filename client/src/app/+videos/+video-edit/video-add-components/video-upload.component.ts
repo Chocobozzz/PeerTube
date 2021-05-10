@@ -74,7 +74,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       token: this.authService.getAccessToken(),
       uploaderClass: UploaderXFormData,
       retryConfig: {
-        maxAttempts: 4
+        maxAttempts: 6,
+        shouldRetry: (code: number) => {
+          return code < 400 || code >= 501
+        }
       }
     }
   }

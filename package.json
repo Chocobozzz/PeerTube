@@ -76,7 +76,7 @@
     "swagger-cli": "swagger-cli"
   },
   "dependencies": {
-    "@uploadx/core": "^4.3.0",
+    "@uploadx/core": "^4.4.0",
     "apicache": "1.6.2",
     "async": "^3.0.1",
     "async-lru": "^1.1.1",
