@@ -6,10 +6,7 @@
   "licence": "AGPL-3.0",
   "engines": {
     "node": ">=12.x",
-    "yarn": ">=1.x",
-    "postgres": ">=10.x",
-    "redis-server": ">=2.8.18",
-    "ffmpeg": ">=4.1"
+    "yarn": ">=1.x"
   },
   "bin": {
     "peertube": "dist/server/tools/peertube.js"
