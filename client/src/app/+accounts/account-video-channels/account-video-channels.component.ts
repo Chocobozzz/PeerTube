@@ -79,7 +79,13 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   loadMoreChannels () {
-    this.videoChannelService.listAccountVideoChannels(this.account, this.channelPagination)
+    const options = {
+      account: this.account,
+      componentPagination: this.channelPagination,
+      sort: '-updatedAt'
+    }
+
+    this.videoChannelService.listAccountVideoChannels(options)
       .pipe(
         tap(res => this.channelPagination.totalItems = res.total),
         switchMap(res => from(res.data)),

@@ -30,12 +30,18 @@ function listUserChannels (authService: AuthService) {
       const videoChannels = user.videoChannels
       if (Array.isArray(videoChannels) === false) return undefined
 
-      return videoChannels.map(c => ({
-        id: c.id,
-        label: c.displayName,
-        support: c.support,
-        avatarPath: c.avatar?.path
-      }) as SelectChannelItem)
+      return videoChannels
+        .sort((a, b) => {
+          if (a.updatedAt < b.updatedAt) return 1
+          if (a.updatedAt > b.updatedAt) return -1
+          return 0
+        })
+        .map(c => ({
+          id: c.id,
+          label: c.displayName,
+          support: c.support,
+          avatarPath: c.avatar?.path
+        }) as SelectChannelItem)
     }))
 }
 

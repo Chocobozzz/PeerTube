@@ -2,7 +2,9 @@ import { forkJoin, of } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router'
-import { VideoCaptionService, VideoChannelService, VideoDetails, VideoService } from '@app/shared/shared-main'
+import { AuthService } from '@app/core'
+import { listUserChannels } from '@app/helpers'
+import { VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 
 @Injectable()
@@ -10,7 +12,7 @@ export class VideoUpdateResolver implements Resolve<any> {
   constructor (
     private videoService: VideoService,
     private liveVideoService: LiveVideoService,
-    private videoChannelService: VideoChannelService,
+    private authService: AuthService,
     private videoCaptionService: VideoCaptionService
   ) {
   }
@@ -31,17 +33,7 @@ export class VideoUpdateResolver implements Resolve<any> {
         .loadCompleteDescription(video.descriptionPath)
         .pipe(map(description => Object.assign(video, { description }))),
 
-      this.videoChannelService
-        .listAccountVideoChannels(video.account)
-        .pipe(
-          map(result => result.data),
-          map(videoChannels => videoChannels.map(c => ({
-            id: c.id,
-            label: c.displayName,
-            support: c.support,
-            avatarPath: c.avatar?.path
-          })))
-        ),
+      listUserChannels(this.authService),
 
       this.videoCaptionService
         .listCaptions(video.id)

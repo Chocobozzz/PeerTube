@@ -8,13 +8,8 @@
   <div class="modal-body" [formGroup]="form">
     <div class="form-group">
       <label i18n for="channel">Select a channel to receive the video</label>
-      <div class="peertube-select-container">
-        <select formControlName="channel" id="channel" class="form-control">
-          <option i18n value="undefined" disabled>Channel that will receive the video</option>
-          <option *ngFor="let channel of videoChannels" [value]="channel.id">{{ channel.displayName }}
-          </option>
-        </select>
-      </div>
+      <my-select-channel labelForId="channel" formControlName="channel" [items]="videoChannels"></my-select-channel>
+
       <div *ngIf="formErrors.channel" class="form-error">{{ formErrors.channel }}</div>
     </div>
   </div>
