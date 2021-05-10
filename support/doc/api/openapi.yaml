@@ -1679,14 +1679,13 @@ paths:
                   type: string
                   format: binary
                 targetUrl:
-                  description: HTTP target URL
-                  type: string
+                  $ref: '#/components/schemas/VideoImport/properties/targetUrl'
                 magnetUri:
-                  description: Magnet URI
-                  type: string
+                  $ref: '#/components/schemas/VideoImport/properties/magnetUri'
                 channelId:
                   description: Channel id that will contain this video
-                  type: integer
+                  allOf:
+                    - $ref: '#/components/schemas/VideoChannel/properties/id'
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
@@ -4425,6 +4424,7 @@ components:
         `0` is used as a special value for stillimage videos dedicated to audio, a.k.a. audio-only videos.
       example: 240
     VideoResolutionConstant:
+      description: resolutions and their labels for the video
       properties:
         id:
           $ref: '#/components/schemas/VideoResolutionSet'
@@ -4490,14 +4490,19 @@ components:
           allOf:
             - $ref: '#/components/schemas/Video'
     VideoFile:
+      readOnly: true
       properties:
         magnetUri:
           type: string
+          format: uri
+          description: magnet URI allowing to resolve the video via BitTorrent without a metainfo file
+          example: magnet:?xs=https%3A%2F%2Fframatube.org%2Fstatic%2Ftorrents%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.torrent&xt=urn:btih:38b4747ff788b30bf61f59d1965cd38f9e48e01f&dn=What+is+PeerTube%3F&tr=wss%3A%2F%2Fframatube.org%2Ftracker%2Fsocket&tr=https%3A%2F%2Fframatube.org%2Ftracker%2Fannounce&ws=https%3A%2F%2Fframatube.org%2Fstatic%2Fwebseed%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.mp4
+          pattern: /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
         resolution:
           $ref: '#/components/schemas/VideoResolutionConstant'
         size:
           type: integer
-          description: 'Video file size in bytes'
+          description: Video file size in bytes
         torrentUrl:
           type: string
           description: Direct URL of the torrent file
@@ -4516,9 +4521,11 @@ components:
           format: url
         fps:
           type: number
+          description: Frames per second of the video file
         metadataUrl:
           type: string
           format: url
+          description: URL dereferencing the output of ffprobe on the file
     VideoStreamingPlaylists:
       allOf:
         - type: object
@@ -4719,6 +4726,9 @@ components:
               items:
                 type: string
                 format: url
+              example:
+                - https://peertube2.cpy.re/tracker/announce
+                - wss://peertube2.cpy.re/tracker/socket
             files:
               type: array
               items:
@@ -4803,11 +4813,14 @@ components:
         targetUrl:
           type: string
           format: url
+          description: remote URL where to find the import's source video
           example: https://framatube.org/videos/watch/9c9de5e8-0a1e-484a-b099-e80766180a6d
         magnetUri:
           type: string
           format: uri
+          description: magnet URI allowing to resolve the import's source video
           example: magnet:?xs=https%3A%2F%2Fframatube.org%2Fstatic%2Ftorrents%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.torrent&xt=urn:btih:38b4747ff788b30bf61f59d1965cd38f9e48e01f&dn=What+is+PeerTube%3F&tr=wss%3A%2F%2Fframatube.org%2Ftracker%2Fsocket&tr=https%3A%2F%2Fframatube.org%2Ftracker%2Fannounce&ws=https%3A%2F%2Fframatube.org%2Fstatic%2Fwebseed%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.mp4
+          pattern: /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
         torrentName:
           type: string
         state:
@@ -4821,7 +4834,9 @@ components:
           type: string
           format: date-time
         video:
-          $ref: '#/components/schemas/Video'
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Video'
     VideoImportsList:
       properties:
         total:
@@ -5020,16 +5035,24 @@ components:
           type: string
           format: url
         name:
-          type: string
+          description: immutable name of the actor
+          allOf:
+            - $ref: '#/components/schemas/username'
         host:
           type: string
           format: hostname
+          description: server on which the actor is resident
         hostRedundancyAllowed:
           type: boolean
+          description: whether this actor's host allows redundancy of its videos
         followingCount:
           type: integer
+          minimum: 0
+          description: number of actors subscribed to by this actor, as seen by this instance
         followersCount:
           type: integer
+          minimum: 0
+          description: number of followers of this actor, as seen by this instance
         createdAt:
           type: string
           format: date-time
@@ -5043,11 +5066,15 @@ components:
         - $ref: '#/components/schemas/Actor'
         - properties:
             userId:
-              $ref: '#/components/schemas/id'
+              description: object id for the user tied to this account
+              allOf:
+                - $ref: '#/components/schemas/User/properties/id'
             displayName:
               type: string
+              description: name displayed on the account's profile
             description:
               type: string
+              description: text or bio displayed on the account's profile
     UserWatchingVideo:
       properties:
         currentTime:
@@ -5698,7 +5725,8 @@ components:
           type: boolean
           description: Has the user confirmed their email address?
         id:
-          type: integer
+          allOf:
+            - $ref: '#/components/schemas/id'
           readOnly: true
         pluginAuth:
           type: string
@@ -6225,9 +6253,7 @@ components:
               type: string
               nullable: true
             magnetUri:
-              type: string
-              format: uri
-              nullable: true
+              $ref: '#/components/schemas/VideoImport/properties/magnetUri'
             targetUri:
               type: string
               format: uri
