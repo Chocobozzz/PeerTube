@@ -50,8 +50,7 @@ info:
 
     # Rate limits
 
-    We are rate-limiting all endpoints of PeerTube's API. Custom values can be configured
-    by administrators:
+    We are rate-limiting all endpoints of PeerTube's API. Custom values can be set by administrators:
 
     | Endpoint                | Calls            | Time frame                |
     |-------------------------|------------------|---------------------------|
@@ -723,7 +722,14 @@ paths:
           content:
             application/json:
               schema:
-                type: number
+                type: object
+                properties:
+                  videoQuotaUsed:
+                    type: number
+                    example: 16810141515
+                  videoQuotaUsedDaily:
+                    type: number
+                    example: 1681014151
   '/users/me/videos/{videoId}/rating':
     get:
       summary: Get rate of my user for a video
@@ -5718,7 +5724,11 @@ components:
           type: string
           description: Id of the video
         rating:
-          type: number
+          type: string
+          enum:
+            - like
+            - dislike
+            - none
           description: Rating of the video
       required:
         - id
@@ -5728,8 +5738,12 @@ components:
         video:
           $ref: '#/components/schemas/Video'
         rating:
-          type: number
-          description: 'Rating of the video'
+          type: string
+          enum:
+            - like
+            - dislike
+            - none
+          description: Rating of the video
       required:
         - video
         - rating
