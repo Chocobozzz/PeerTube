@@ -95,6 +95,7 @@ my-actor-avatar {
   .video-bottom {
     display: flex;
     width: 100%;
+    min-width: 1px;
   }
 
   .video-miniature-name {
@@ -145,6 +146,7 @@ my-actor-avatar {
 
   .video-bottom {
     display: flex;
+    min-width: 1px;
   }
 
   // We don't display avatar in row mode
