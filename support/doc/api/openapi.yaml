@@ -618,13 +618,24 @@ paths:
       tags:
         - Users
       operationId: getUserId
+      parameters:
+        - name: withStats
+          in: query
+          description: include statistics about the user (only available as a moderator/admin)
+          schema:
+            type: boolean
       responses:
         '200':
-          description: successful operation
+          x-summary: successful operation
+          description: |
+            As an admin/moderator, you can request a response augmented with statistics about the user's
+            moderation relations and videos usage, by using the `withStats` parameter.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                oneOf:
+                  - $ref: '#/components/schemas/User'
+                  - $ref: '#/components/schemas/UserWithStats'
     put:
       summary: Update a user
       security:
@@ -5566,35 +5577,45 @@ components:
             $ref: '#/components/schemas/Video'
     User:
       properties:
-        id:
-          type: integer
-          readOnly: true
-        username:
+        account:
+          $ref: '#/components/schemas/Account'
+        autoPlayNextVideo:
+          type: boolean
+          description: Automatically start playing the upcoming video after the currently playing video
+        autoPlayNextVideoPlaylist:
+          type: boolean
+          description: Automatically start playing the video on the playlist after the currently playing video
+        autoPlayVideo:
+          type: boolean
+          description: Automatically start playing the video on the watch page
+        blocked:
+          type: boolean
+        blockedReason:
           type: string
-          description: The user username
-          minLength: 1
-          maxLength: 50
+        createdAt:
+          type: string
         email:
           type: string
           format: email
           description: The user email
-        pluginAuth:
-          type: string
-          description: Auth plugin to use to authenticate the user
-        theme:
-          type: string
-          description: Theme enabled by this user
         emailVerified:
           type: boolean
           description: Has the user confirmed their email address?
+        id:
+          type: integer
+          readOnly: true
+        pluginAuth:
+          type: string
+          description: Auth plugin to use to authenticate the user
+        lastLoginDate:
+          type: string
+          format: date-time
+        noInstanceConfigWarningModal:
+          type: boolean
+        noWelcomeModal:
+          type: boolean
         nsfwPolicy:
           $ref: '#/components/schemas/NSFWPolicy'
-        webtorrentEnabled:
-          type: boolean
-          description: Enable P2P in the player
-        autoPlayVideo:
-          type: boolean
-          description: Automatically start playing the video on the watch page
         role:
           $ref: '#/components/schemas/UserRole'
         roleLabel:
@@ -5603,38 +5624,49 @@ components:
             - User
             - Moderator
             - Administrator
-        videoQuota:
-          type: integer
-          description: The user video quota
-        videoQuotaDaily:
-          type: integer
-          description: The user daily video quota
-        videosCount:
-          type: integer
-        abusesCount:
-          type: integer
-        abusesAcceptedCount:
-          type: integer
-        abusesCreatedCount:
-          type: integer
-        videoCommentsCount:
-          type: integer
-        noInstanceConfigWarningModal:
-          type: boolean
-        noWelcomeModal:
-          type: boolean
-        blocked:
-          type: boolean
-        blockedReason:
+        theme:
           type: string
-        createdAt:
+          description: Theme enabled by this user
+        username:
           type: string
-        account:
-          $ref: '#/components/schemas/Account'
+          description: The user username
+          minLength: 1
+          maxLength: 50
         videoChannels:
           type: array
           items:
             $ref: '#/components/schemas/VideoChannel'
+        videoQuota:
+          type: integer
+          description: The user video quota in bytes
+          example: -1
+        videoQuotaDaily:
+          type: integer
+          description: The user daily video quota in bytes
+          example: -1
+        webtorrentEnabled:
+          type: boolean
+          description: Enable P2P in the player
+    UserWithStats:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - properties:
+            # optionally present fields: they require WITH_STATS scope
+            videosCount:
+              type: integer
+              description: Count of videos published 
+            abusesCount:
+              type: integer
+              description: Count of reports/abuses of which the user is a target
+            abusesAcceptedCount:
+              type: integer
+              description: Count of reports/abuses created by the user and accepted/acted upon by the moderation team
+            abusesCreatedCount:
+              type: integer
+              description: Count of reports/abuses created by the user
+            videoCommentsCount:
+              type: integer
+              description: Count of comments published
     AddUser:
       properties:
         username:
