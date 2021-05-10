@@ -5,7 +5,7 @@
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
-    "node": ">=10.x",
+    "node": ">=12.x",
     "yarn": ">=1.x",
     "postgres": ">=10.x",
     "redis-server": ">=2.8.18",
