@@ -260,7 +260,7 @@
       </trans-unit>
       <trans-unit id="92cbef230d42e96998ae110038c05440047ed06c" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ file.resolution.label }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ file.resolution.label }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.resolution.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">39</context>
@@ -315,7 +315,7 @@
       </trans-unit>
       <trans-unit id="42ce5b30c01142177da7812981bcd4e6e4a88a4a" datatype="html">
         <source>Simple</source>
-        <target state="new"> Simple </target>
+        <target state="translated">Simple</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">125,126</context>
@@ -329,7 +329,7 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="new">Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Votre quota est dépassé avec cette vidéo (taille de la vidéo : <x id="PH" equiv-text="videoSizeBytes"/>, utilisé : <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota : <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">324</context>
@@ -337,7 +337,7 @@
       </trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="new">Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
+        <target state="translated">Votre quota journalier est dépassé avec cette vidéo (taille de la vidéo : <x id="PH" equiv-text="videoSizeBytes"/>, utilisé : <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota : <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">342</context>
@@ -843,7 +843,7 @@
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
-        <target state="new">The server encountered an error</target>
+        <target state="translated">Le serveur a rencontré une erreur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">193</context>
@@ -1748,7 +1748,7 @@
       </trans-unit>
       <trans-unit id="85ce0c3f75f6f05879794192af7c337a996efd99" datatype="html">
         <source>Display only</source>
-        <target state="new">Display only</target>
+        <target state="translated">Ne montrer que</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1756,7 +1756,7 @@
       </trans-unit>
       <trans-unit id="f71ccc9a9b723f96baecf70c5b52119def9fbd91" datatype="html">
         <source>Live videos</source>
-        <target state="new">Live videos</target>
+        <target state="translated">Directs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1764,7 +1764,7 @@
       </trans-unit>
       <trans-unit id="f4078d69c6d43cd2dd840b85c87292a0d652b128" datatype="html">
         <source>VOD videos</source>
-        <target state="new">VOD videos</target>
+        <target state="translated">Vidéos VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">34</context>
@@ -2534,7 +2534,7 @@
       </trans-unit>
       <trans-unit id="bc4f2d8347e3288b5d583897682e3d8a50cfd960" datatype="html">
         <source>Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></source>
-        <target state="new">Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
+        <target state="translated">Supportez <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-support-modal/support-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3177,7 +3177,7 @@
       </trans-unit>
       <trans-unit id="1bd5e17c9582661e20763a7634ef07881e33bbd7" datatype="html">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">Action</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">22</context></context-group>
@@ -3959,7 +3959,7 @@
       </trans-unit>
       <trans-unit id="10bad6557272f424b12a06c21081609fe7442a9a" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> pour "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">22,24</context>
@@ -8237,7 +8237,7 @@
       </trans-unit>
       <trans-unit id="2392481201920342009" datatype="html">
         <source>VOD videos</source>
-        <target state="new">VOD videos</target>
+        <target state="translated">vidéos VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -8245,7 +8245,7 @@
       </trans-unit>
       <trans-unit id="2180217594100853008" datatype="html">
         <source>Live videos</source>
-        <target state="new">Live videos</target>
+        <target state="translated">Directs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -8302,7 +8302,7 @@
       </trans-unit>
       <trans-unit id="3c2c6b17d0326ab344e194b17abbee201d58dbea" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {résultat} other {résultats}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -9435,7 +9435,7 @@
       </trans-unit>
       <trans-unit id="e9abd493f850e5584b70e865c91a953ffbcf86ba" datatype="html">
         <source>Close search</source>
-        <target state="needs-translation">Recherche approchée</target>
+        <target state="translated">Fermer la recherche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/simple-search-input.component.html</context>
           <context context-type="linenumber">14</context>
@@ -10114,7 +10114,7 @@
       </trans-unit>
       <trans-unit id="bb6dfd59adaf5b4a06fd7618089d46cdc5c9132e" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context>
           <context context-type="linenumber">1</context>
