@@ -3,25 +3,27 @@
  * Chocobozzz
  * Rigel Kent
  * Filip Bengtsson
- * kimsible
  * josé m
+ * kimsible
  * Simon Brosdetzko
  * Александр
- * Clemens Schielicke
  * Berto Te
+ * Clemens Schielicke
  * Jeff Huang
  * kontrollanten
- * Phongpanot
  * Laurent Ettouati
  * Racida S
- * Kim
+ * Phongpanot
  * Marcin Mikołajczak
+ * Kim
  * Tirifto
- * Felix Ableitner
  * Vodoyo Kamal
+ * Felix Ableitner
  * Gérald Niel
- * Zet
+ * Duy
  * GunChleoc
+ * Slimane Selyan AMIRI
+ * Zet
  * x
  * Frank Sträter
  * Julien Maulny
@@ -29,12 +31,11 @@
  * Jorropo
  * Josh Morel
  * BO41
- * Slimane Selyan AMIRI
- * Francesc
- * mando laress
  * Balázs Meskó
- * Duy
+ * Francesc
  * John Livingston
+ * mando laress
+ * Eivind Ødegård
  * Quentin PAGÈS
  * Besnik Bleta
  * Ihor Hordiichuk
@@ -53,7 +54,6 @@
  * Thomas Citharel
  * Agron Selimaj
  * Benjamin Bouvier
- * Eivind Ødegård
  * Joe Bill
  * Kemal Oktay Aktoğan
  * Luc Didry
@@ -66,6 +66,7 @@
  * David Libeau
  * Ewald Arnold
  * Florent F
+ * Florian CUNY
  * Nassim Bounouas
  * NorbiPeti
  * Rafael Fontenelle
@@ -81,7 +82,6 @@
  * David Soh
  * Dimitri Gilbert
  * Florent Poinsaut
- * Florian CUNY
  * Frank Chang
  * Green-Star
  * Micah Elizabeth Scott
@@ -94,6 +94,7 @@
  * test2a
  * 路过是好事
  * Ajeje Brazorf
+ * Andrey
  * Angristan
  * Ch
  * Chris Sakura 佐倉くりす on Youtube
@@ -103,6 +104,7 @@
  * Mildred
  * Okhin
  * Pierre-Alain TORET
+ * Poslovitch
  * Serge Victor
  * Théo Le Calvar
  * Ugaitz
@@ -115,7 +117,6 @@
  * Ahsan Haris Ahmed
  * Alberto Teira
  * Aliaksandr Hrankin
- * Andrey
  * Andréas Livet
  * Andrés Maldonado
  * Arco
@@ -133,6 +134,7 @@
  * Kiro
  * LecygneNoir
  * Leopere
+ * Loukas Stamellos
  * Lukas Winkler
  * Manuel Viens
  * Manuela Silva
@@ -250,6 +252,7 @@
  * Fabio Agreles Bezerra
  * Fernandez, ReK2
  * Florent
+ * Gabriel Scherer
  * Glandos
  * Guillaume Pérution-Kihli
  * Gérald CHATAGNON
@@ -265,6 +268,7 @@
  * Jacob
  * Jacques Foucry
  * Jagannath Bhat
+ * Jan Prunk
  * Janey Muñoz
  * Jarosław Maciejewski
  * Jeena
@@ -315,6 +319,7 @@
  * PhieF
  * Philip Durbin
  * Philipp Fischbeck
+ * Philo van Kemenade
  * Pierre-Jean
  * Predatorix Phoenix
  * Quentin Dupont
@@ -361,6 +366,7 @@
  * bikepunk
  * bsky
  * ctlaltdefeat
+ * decentral1se
  * dingycle
  * eduard pintilie
  * gillux
