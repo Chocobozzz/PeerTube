@@ -196,6 +196,7 @@ const deleteMeValidator = [
 
 const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+
   body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),
