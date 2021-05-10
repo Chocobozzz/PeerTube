@@ -5642,6 +5642,7 @@ components:
           description: The user username
           minLength: 1
           maxLength: 50
+          pattern: '/^[a-z0-9._]{1,50}$/'
         password:
           type: string
           format: password
@@ -5661,6 +5662,7 @@ components:
         channelName:
           type: string
           description: The user default channel username
+          pattern: '/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]+$/'
         role:
           $ref: '#/components/schemas/UserRole'
         adminFlags:
