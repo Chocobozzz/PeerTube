@@ -39,12 +39,25 @@ info:
 
     The API uses standard HTTP status codes to indicate the success or failure
     of the API call. The body of the response will be JSON in the following
-    format.
+    formats.
 
     ```
     {
-      "code": "unauthorized_request", // example inner error code
-      "error": "Token is invalid." // example exposed error message
+      "error": "Account not found" // error debug message
+    }
+    ```
+
+    Some errors benefit from a more detailed message:
+    ```
+    {
+      "errors": {
+        "id": { // where 'id' is the name of the parameter concerned by the error.
+          "value": "a117eb-c6a9-4756-bb09-2a956239f", // value that triggered the error.
+          "msg": "Should have an valid id",  // error debug message
+          "param": "id",
+          "location": "params" // 'params', 'body', 'header', 'query' or 'cookies'
+        }
+      }
     }
     ```
 
