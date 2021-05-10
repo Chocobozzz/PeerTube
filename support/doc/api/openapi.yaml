@@ -144,8 +144,8 @@ tags:
 
       ### Upload
 
-      - [_legacy_](#tag/Video-Upload/paths/~1videos~1upload/post), where the video file is sent in a single request
-      - [_resumable_](#tag/Video-Upload/paths/~1videos~1upload-resumable/post), where the video file is sent in chunks
+      - [_legacy_](#operation/uploadLegacy), where the video file is sent in a single request
+      - [_resumable_](#operation/uploadResumableInit), where the video file is sent in chunks
 
       You can upload videos more reliably by using the resumable variant. Its protocol lets
       you resume an upload operation after a network interruption or other transmission failure,
@@ -280,7 +280,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
-      x-code-samples:
+      x-codeSamples:
         - lang: JavaScript
           source: |
             fetch('https://peertube2.cpy.re/api/v1/accounts/{name}/videos')
@@ -344,6 +344,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerConfig'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/api/v1/config
   /config/about:
     get:
       summary: Get instance "About" information
@@ -356,6 +359,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerConfigAbout'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/api/v1/config/about
   /config/custom:
     get:
       summary: Get instance runtime configuration
@@ -1179,6 +1185,7 @@ paths:
   /videos/categories:
     get:
       summary: List available video categories
+      operationId: getCategories
       tags:
         - Video
       responses:
@@ -1196,6 +1203,7 @@ paths:
   /videos/licences:
     get:
       summary: List available video licences
+      operationId: getLicences
       tags:
         - Video
       responses:
@@ -1213,6 +1221,7 @@ paths:
   /videos/languages:
     get:
       summary: List available video languages
+      operationId: getLanguages
       tags:
         - Video
       responses:
@@ -1229,7 +1238,8 @@ paths:
                   externalValue: https://peertube2.cpy.re/api/v1/videos/languages
   /videos/privacies:
     get:
-      summary: List available video privacies
+      summary: List available video privacy policies
+      operationId: getPrivacyPolicies
       tags:
         - Video
       responses:
@@ -1271,16 +1281,11 @@ paths:
                   type: string
                   format: binary
                 category:
-                  description: Video category
-                  type: integer
-                  example: 4
+                  $ref: '#/components/schemas/VideoCategorySet'
                 licence:
-                  description: Video licence
-                  type: integer
-                  example: 2
+                  $ref: '#/components/schemas/VideoLicenceSet'
                 language:
-                  description: Video language
-                  type: string
+                  $ref: '#/components/schemas/VideoLanguageSet'
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 description:
@@ -1394,6 +1399,7 @@ paths:
     post:
       summary: Upload a video
       description: Uses a single request to upload a video.
+      operationId: uploadLegacy
       security:
         - OAuth2: []
       tags:
@@ -1436,7 +1442,7 @@ paths:
                 contentType: image/jpeg
               previewfile:
                 contentType: image/jpeg
-      x-code-samples:
+      x-codeSamples:
         - lang: Shell
           source: |
             ## DEPENDENCIES: jq
@@ -1469,6 +1475,7 @@ paths:
     post:
       summary: Initialize the resumable upload of a video
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the upload of a video
+      operationId: uploadResumableInit
       security:
         - OAuth2: []
       tags:
@@ -1519,6 +1526,7 @@ paths:
     put:
       summary: Send chunk for the resumable upload of a video
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the upload of a video
+      operationId: uploadResumable
       security:
         - OAuth2: []
       tags:
@@ -1595,6 +1603,7 @@ paths:
     delete:
       summary: Cancel the resumable upload of a video, deleting any data uploaded so far
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
+      operationId: uploadResumableCancel
       security:
         - OAuth2: []
       tags:
@@ -1627,6 +1636,7 @@ paths:
     post:
       summary: Import a video
       description: Import a torrent or magnetURI or HTTP resource (if enabled by the instance administrator)
+      operationId: importVideo
       security:
         - OAuth2: []
       tags:
@@ -1662,16 +1672,11 @@ paths:
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
-                  description: Video category
-                  type: integer
-                  example: 4
+                  $ref: '#/components/schemas/VideoCategorySet'
                 licence:
-                  description: Video licence
-                  type: integer
-                  example: 2
+                  $ref: '#/components/schemas/VideoLicenceSet'
                 language:
-                  description: Video language
-                  type: string
+                  $ref: '#/components/schemas/VideoLanguageSet'
                 description:
                   description: Video description
                   type: string
@@ -1734,6 +1739,7 @@ paths:
   /videos/live:
     post:
       summary: Create a live
+      operationId: createLive
       security:
         - OAuth2: []
       tags:
@@ -1773,14 +1779,11 @@ paths:
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
-                  description: Live video/replay category
-                  type: string
+                  $ref: '#/components/schemas/VideoCategorySet'
                 licence:
-                  description: Live video/replay licence
-                  type: string
+                  $ref: '#/components/schemas/VideoLicenceSet'
                 language:
-                  description: Live video/replay language
-                  type: string
+                  $ref: '#/components/schemas/VideoLanguageSet'
                 description:
                   description: Live video/replay description
                   type: string
@@ -1823,6 +1826,7 @@ paths:
   /videos/live/{id}:
     get:
       summary: Get information about a live
+      operationId: getLiveId
       security:
         - OAuth2: []
       tags:
@@ -1839,6 +1843,7 @@ paths:
                 $ref: '#/components/schemas/LiveVideoResponse'
     put:
       summary: Update information about a live
+      operationId: updateLiveId
       security:
         - OAuth2: []
       tags:
@@ -2482,7 +2487,8 @@ paths:
 
   /video-playlists/privacies:
     get:
-      summary: List available playlist privacies
+      summary: List available playlist privacy policies
+      operationId: getPlaylistPrivacyPolicies
       tags:
         - Video Playlists
       responses:
@@ -2501,6 +2507,7 @@ paths:
   /video-playlists:
     get:
       summary: List video playlists
+      operationId: getPlaylists
       tags:
         - Video Playlists
       parameters:
@@ -2525,6 +2532,7 @@ paths:
     post:
       summary: Create a video playlist
       description: 'If the video playlist is set as public, the videoChannelId is mandatory.'
+      operationId: createPlaylist
       security:
         - OAuth2: []
       tags:
@@ -4056,7 +4064,7 @@ components:
       name: categoryOneOf
       in: query
       required: false
-      description: category id of the video (see [/videos/categories](#tag/Video/paths/~1videos~1categories/get))
+      description: category id of the video (see [/videos/categories](#operation/getCategories))
       schema:
         oneOf:
         - type: integer
@@ -4096,7 +4104,7 @@ components:
       name: languageOneOf
       in: query
       required: false
-      description: language id of the video (see [/videos/languages](#tag/Video/paths/~1videos~1languages/get)). Use `_unknown` to filter on videos that don't have a video language
+      description: language id of the video (see [/videos/languages](#operation/getLanguages)). Use `_unknown` to filter on videos that don't have a video language
       schema:
         oneOf:
         - type: string
@@ -4109,7 +4117,7 @@ components:
       name: licenceOneOf
       in: query
       required: false
-      description: licence id of the video (see [/videos/licences](#tag/Video/paths/~1videos~1licences/get))
+      description: licence id of the video (see [/videos/licences](#operation/getLicences))
       schema:
         oneOf:
         - type: integer
@@ -4222,25 +4230,33 @@ components:
       minLength: 36
       maxLength: 36
 
+    VideoCategorySet:
+      type: integer
+      description: category id of the video (see [/videos/categories](#operation/getCategories))
     VideoConstantNumber-Category:
       properties:
         id:
-          type: integer
-          description: category id of the video (see [/videos/categories](#tag/Video/paths/~1videos~1categories/get))
+          $ref: '#/components/schemas/VideoCategorySet'
         label:
           type: string
+
+    VideoLicenceSet:
+      type: integer
+      description: licence id of the video (see [/videos/licences](#operation/getLicences))
     VideoConstantNumber-Licence:
       properties:
         id:
-          type: integer
-          description: licence id of the video (see [/videos/licences](#tag/Video/paths/~1videos~1licences/get))
+          $ref: '#/components/schemas/VideoLicenceSet'
         label:
           type: string
+    
+    VideoLanguageSet:
+      type: string
+      description: language id of the video (see [/videos/languages](#operation/getLanguages))
     VideoConstantString-Language:
       properties:
         id:
-          type: string
-          description: language id of the video (see [/videos/languages](#tag/Video/paths/~1videos~1languages/get))
+          $ref: '#/components/schemas/VideoLanguageSet'
         label:
           type: string
 
@@ -4250,7 +4266,7 @@ components:
         - 1
         - 2
         - 3
-      description: 'The video playlist privacy (Public = `1`, Unlisted = `2`, Private = `3`)'
+      description: Video playlist privacy policy (see [/video-playlists/privacies])
     VideoPlaylistPrivacyConstant:
       properties:
         id:
@@ -4263,7 +4279,7 @@ components:
       enum:
         - 1
         - 2
-      description: 'The video playlist type (Regular = `1`, Watch Later = `2`)'
+      description: The video playlist type (Regular = `1`, Watch Later = `2`)
     VideoPlaylistTypeConstant:
       properties:
         id:
@@ -4278,7 +4294,7 @@ components:
         - 2
         - 3
         - 4
-      description: 'The video privacy (Public = `1`, Unlisted = `2`, Private = `3`, Internal = `4`)'
+      description: privacy id of the video (see [/videos/privacies](#operation/getPrivacyPolicies))
     VideoPrivacyConstant:
       properties:
         id:
@@ -4349,12 +4365,17 @@ components:
         - captions
       example: [spamOrMisleading]
 
+    VideoResolutionSet:
+      type: integer
+      description: |
+        Video resolution (`0`, `240`, `360`, `720`, `1080`, `1440` or `2160`)
+
+        `0` is used as a special value for stillimage videos dedicated to audio, a.k.a. audio-only videos.
+      example: 240
     VideoResolutionConstant:
       properties:
         id:
-          type: integer
-          description: 'Video resolution (240, 360, 720, 1080, 1440 or 2160)'
-          example: 240
+          $ref: '#/components/schemas/VideoResolutionSet'
         label:
           type: string
           example: 240p
@@ -5072,7 +5093,7 @@ components:
             enabledResolutions:
               type: array
               items:
-                type: integer
+                $ref: '#/components/schemas/VideoResolutionSet'
         import:
           type: object
           properties:
@@ -5273,6 +5294,7 @@ components:
               type: boolean
         user:
           type: object
+          description: Settings that apply to new users, if registration is enabled
           properties:
             videoQuota:
               type: integer
@@ -5280,18 +5302,34 @@ components:
               type: integer
         transcoding:
           type: object
+          description: Settings pertaining to transcoding jobs
           properties:
             enabled:
               type: boolean
             allowAdditionalExtensions:
               type: boolean
+              description: Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
             allowAudioFiles:
               type: boolean
+              description: If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
             threads:
               type: integer
+              description: Amount of threads used by ffmpeg for 1 transcoding job
+            concurrency:
+              type: number
+              description: Amount of transcoding jobs to execute in parallel
+            profile:
+              type: string
+              enum:
+                - default
+              description: |
+                New profiles can be added by plugins ; available in core PeerTube: 'default'.
             resolutions:
               type: object
+              description: Resolutions to transcode _new videos_ to
               properties:
+                0p:
+                  type: boolean
                 240p:
                   type: boolean
                 360p:
@@ -5306,8 +5344,15 @@ components:
                   type: boolean
                 2160p:
                   type: boolean
+            webtorrent:
+              type: object
+              description: WebTorrent-specific settings
+              properties:
+                enabled:
+                  type: boolean
             hls:
               type: object
+              description: HLS-specific settings
               properties:
                 enabled:
                   type: boolean
@@ -5455,16 +5500,11 @@ components:
         privacy:
           $ref: '#/components/schemas/VideoPrivacySet'
         category:
-          description: Video category
-          type: integer
-          example: 4
+          $ref: '#/components/schemas/VideoCategorySet'
         licence:
-          description: Video licence
-          type: integer
-          example: 2
+          $ref: '#/components/schemas/VideoLicenceSet'
         language:
-          description: Video language
-          type: string
+          $ref: '#/components/schemas/VideoLanguageSet'
         description:
           description: Video description
           type: string
