@@ -346,10 +346,12 @@ describe('Test handle downs', function () {
     // Wait video expiration
     await wait(11000)
 
-    for (let i = 0; i < 3; i++) {
-      await getVideo(servers[1].url, videoIdsServer1[i])
-      await waitJobs([ servers[1] ])
-      await wait(1500)
+    for (let i = 0; i < 5; i++) {
+      try {
+        await getVideo(servers[1].url, videoIdsServer1[i])
+        await waitJobs([ servers[1] ])
+        await wait(1500)
+      } catch {}
     }
 
     for (const id of videoIdsServer1) {

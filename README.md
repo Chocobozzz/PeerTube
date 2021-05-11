@@ -6,7 +6,7 @@
 
 <p align=center>
   <strong><a href="https://joinpeertube.org">Website</a></strong>
-  | <strong><a href="https://instances.joinpeertube.org">Join an instance</a></strong>
+  | <strong><a href="https://joinpeertube.org/instances">Join an instance</a></strong>
   | <strong><a href="#package-create-your-own-instance">Create an instance</a></strong>
   | <strong><a href="#contact">Chat with us</a></strong>
   | <strong><a href="https://framasoft.org/en/#soutenir">Donate</a></strong>
@@ -67,22 +67,23 @@ Introduction
 
 PeerTube is a free, decentralized and federated video platform developed as an alternative to other platforms that centralize our data and attention, such as YouTube, Dailymotion or Vimeo. :clapper:
 
-But one organization hosting PeerTube alone may not have enough money to pay for bandwidth and video storage of its servers,
-all servers of PeerTube are interoperable as a federated network, and non-PeerTube servers can be part of the larger Vidiverse
-(federated video network) by talking our implementation of ActivityPub.
-Video load is reduced thanks to P2P in the web browser using <a href="https://github.com/webtorrent/webtorrent">WebTorrent</a> or <a href="https://github.com/novage/p2p-media-loader">p2p-media-loader</a>.
-
-To learn more, see:
+To learn more:
 * This [two-minute video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) (hosted on PeerTube) explaining what PeerTube is and how it works
 * PeerTube's project homepage, [joinpeertube.org](https://joinpeertube.org)
 * Demonstration instances:
-  * [peertube.cpy.re](https://peertube.cpy.re)
-  * [peertube2.cpy.re](https://peertube2.cpy.re)
-  * [peertube3.cpy.re](https://peertube3.cpy.re)
+  * [peertube.cpy.re](https://peertube.cpy.re) (stable)
+  * [peertube2.cpy.re](https://peertube2.cpy.re) (Nightly)
+  * [peertube3.cpy.re](https://peertube3.cpy.re) (RC)
 * This [video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) demonstrating the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon) (a decentralized Twitter alternative)
 
 :sparkles: Features
 ----------------------------------------------------------------
+
+<p align=center>
+  <strong><a href="https://joinpeertube.org/faq#what-are-the-peertube-features-for-viewers">All features for viewers</a></strong>
+  | <strong><a href="https://joinpeertube.org/faq#what-are-the-peertube-features-for-content-creators">All features for content creators</a></strong>
+  | <strong><a href="https://joinpeertube.org/faq#what-are-the-peertube-features-for-administrators">All features for administrators</a></strong>
+</p>
 
 <img src="https://lutim.cpy.re/AHbctLjn.png" align="left" height="300px"/>
 <h3 align="left">Video streaming, even in live!</h3>
@@ -120,6 +121,8 @@ In addition to visitors using WebTorrent to share the load among them, instances
 <p align="right">
 Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md">FAQ</a>).
 </p>
+
+
 
 :raised_hands: Contributing
 ----------------------------------------------------------------
