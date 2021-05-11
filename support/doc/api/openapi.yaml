@@ -69,10 +69,10 @@ info:
     |-------------------------|------------------|---------------------------|
     | `/*`                    | 50               | 10 seconds                |
     | `POST /users/token`     | 15               | 5 minutes                 |
-    | `POST /users/register`  | 2¹               | 5 minutes                 |
+    | `POST /users/register`  | 2<sup>*</sup>    | 5 minutes                 |
     | `POST /users/ask-send-verify-email` | 3    | 5 minutes                 |
 
-    Depending on the endpoint, ¹failed requests are not taken into account. A service
+    Depending on the endpoint, <sup>*</sup>failed requests are not taken into account. A service
     limit is announced by a `429 Too Many Requests` status code.
 
     You can get details about the current state of your rate limit by reading the
@@ -2875,8 +2875,10 @@ paths:
               type: object
               properties:
                 text:
-                  type: string
-                  description: 'Text comment'
+                  allOf:
+                    - $ref: '#/components/schemas/VideoComment/properties/text'
+                  format: markdown
+                  maxLength: 10000
               required:
                 - text
 
@@ -2921,7 +2923,10 @@ paths:
               type: object
               properties:
                 text:
-                  $ref: '#/components/schemas/VideoComment/properties/text'
+                  allOf:
+                    - $ref: '#/components/schemas/VideoComment/properties/text'
+                  format: markdown
+                  maxLength: 10000
               required:
                 - text
 
@@ -4931,13 +4936,16 @@ components:
           format: url
         text:
           type: string
-          description: Text of the comment in Markdown
+          format: html
+          description: Text of the comment
           minLength: 1
-          maxLength: 10000
+          example: This video is wonderful!
         threadId:
-          type: integer
-        inReplyToCommentId:
           $ref: '#/components/schemas/id'
+        inReplyToCommentId:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/id'
         videoId:
           $ref: '#/components/schemas/Video/properties/id'
         createdAt:
@@ -4946,6 +4954,14 @@ components:
         updatedAt:
           type: string
           format: date-time
+        deletedAt:
+          nullable: true
+          type: string
+          format: date-time
+          default: null
+        isDeleted:
+          type: boolean
+          default: false
         totalRepliesFromVideoAuthor:
           type: integer
           minimum: 0
