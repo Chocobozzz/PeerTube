@@ -122,7 +122,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         break
 
       case 'paused':
-        this.notifier.info($localize`Upload cancelled`)
+        this.notifier.info($localize`Upload on hold`)
         break
 
       case 'complete':
