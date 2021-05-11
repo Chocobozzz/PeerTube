@@ -34,8 +34,8 @@ import { doesVideoExist } from '../../helpers/middlewares'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { Redis } from '../../lib/redis'
-import { UserModel } from '../../models/account/user'
-import { ActorModel } from '../../models/activitypub/actor'
+import { UserModel } from '../../models/user/user'
+import { ActorModel } from '../../models/actor/actor'
 import { areValidationErrors } from './utils'
 
 const usersListValidator = [

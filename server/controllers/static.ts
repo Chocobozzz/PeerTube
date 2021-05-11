@@ -20,7 +20,7 @@ import {
 import { getThemeOrDefault } from '../lib/plugins/theme-utils'
 import { asyncMiddleware } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache'
-import { UserModel } from '../models/account/user'
+import { UserModel } from '../models/user/user'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
 

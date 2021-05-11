@@ -45,7 +45,7 @@ import {
   usersResetPasswordValidator,
   usersVerifyEmailValidator
 } from '../../../middlewares/validators'
-import { UserModel } from '../../../models/account/user'
+import { UserModel } from '../../../models/user/user'
 import { meRouter } from './me'
 import { myAbusesRouter } from './my-abuses'
 import { myBlocklistRouter } from './my-blocklist'

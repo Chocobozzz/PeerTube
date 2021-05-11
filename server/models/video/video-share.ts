@@ -4,7 +4,7 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { MActorDefault } from '../../types/models'
 import { MVideoShareActor, MVideoShareFull } from '../../types/models/video'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { buildLocalActorIdsIn, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 

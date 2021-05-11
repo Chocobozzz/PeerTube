@@ -29,7 +29,7 @@ import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validato
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { ServerModel } from '../server/server'
 import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../utils'
 import { ScheduleVideoUpdateModel } from '../video/schedule-video-update'

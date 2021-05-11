@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import { UserModel } from '@server/models/account/user'
+import { UserModel } from '@server/models/user/user'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { AccountModel } from '../../models/account/account'
 import { MAccountDefault } from '../../types/models'

@@ -1,10 +1,10 @@
 import * as WebFinger from 'webfinger.js'
 import { WebFingerData } from '../../shared'
-import { ActorModel } from '../models/activitypub/actor'
+import { WEBSERVER } from '../initializers/constants'
+import { ActorModel } from '../models/actor/actor'
+import { MActorFull } from '../types/models'
 import { isTestInstance } from './core-utils'
 import { isActivityPubUrlValid } from './custom-validators/activitypub/misc'
-import { WEBSERVER } from '../initializers/constants'
-import { MActorFull } from '../types/models'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,

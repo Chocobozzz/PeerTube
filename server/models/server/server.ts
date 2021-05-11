@@ -1,7 +1,7 @@
 import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServer, MServerFormattable } from '@server/types/models/server'
 import { isHostValid } from '../../helpers/custom-validators/servers'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { throwIfNotValid } from '../utils'
 import { ServerBlocklistModel } from './server-blocklist'
 

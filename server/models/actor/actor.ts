@@ -51,12 +51,12 @@ import {
   MActorWithInboxes
 } from '../../types/models'
 import { AccountModel } from '../account/account'
-import { ActorImageModel } from '../account/actor-image'
 import { ServerModel } from '../server/server'
 import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
+import { ActorImageModel } from './actor-image'
 
 enum ScopeNames {
   FULL = 'FULL'

@@ -1,9 +1,8 @@
-
 import { FunctionProperties, PickWith, PickWithOpt } from '@shared/core-utils'
-import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorModel } from '../../../models/actor/actor'
+import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from '../account'
 import { MServer, MServerHost, MServerHostBlocks, MServerRedundancyAllowed } from '../server'
 import { MChannel, MChannelAccountActor, MChannelAccountDefault, MChannelId, MChannelIdActor } from '../video'
-import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
 import { MActorImage, MActorImageFormattable } from './actor-image'
 
 type Use<K extends keyof ActorModel, M> = PickWith<ActorModel, K, M>

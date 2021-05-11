@@ -1,7 +1,5 @@
 import { FunctionProperties, PickWith } from '@shared/core-utils'
 import { AccountModel } from '../../../models/account/account'
-import { MChannelDefault } from '../video/video-channels'
-import { MAccountBlocklistId } from './account-blocklist'
 import {
   MActor,
   MActorAPAccount,
@@ -15,7 +13,9 @@ import {
   MActorSummary,
   MActorSummaryFormattable,
   MActorUrl
-} from './actor'
+} from '../actor'
+import { MChannelDefault } from '../video/video-channels'
+import { MAccountBlocklistId } from './account-blocklist'
 
 type Use<K extends keyof AccountModel, M> = PickWith<AccountModel, K, M>
 

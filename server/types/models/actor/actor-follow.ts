@@ -1,5 +1,5 @@
 import { PickWith } from '@shared/core-utils'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import {
   MActor,
   MActorChannelAccountActor,

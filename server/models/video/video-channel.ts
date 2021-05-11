@@ -36,9 +36,9 @@ import {
   MChannelSummaryFormattable
 } from '../../types/models/video'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
-import { ActorImageModel } from '../account/actor-image'
-import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { ActorFollowModel } from '../activitypub/actor-follow'
+import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
+import { ActorFollowModel } from '../actor/actor-follow'
+import { ActorImageModel } from '../actor/actor-image'
 import { ServerModel } from '../server/server'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'

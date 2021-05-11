@@ -30,19 +30,19 @@ import {
   MAccountSummaryFormattable,
   MChannelActor
 } from '../../types/models'
-import { ActorModel } from '../activitypub/actor'
-import { ActorFollowModel } from '../activitypub/actor-follow'
+import { ActorModel } from '../actor/actor'
+import { ActorFollowModel } from '../actor/actor-follow'
+import { ActorImageModel } from '../actor/actor-image'
 import { ApplicationModel } from '../application/application'
-import { ActorImageModel } from './actor-image'
 import { ServerModel } from '../server/server'
 import { ServerBlocklistModel } from '../server/server-blocklist'
+import { UserModel } from '../user/user'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { AccountBlocklistModel } from './account-blocklist'
-import { UserModel } from './user'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'

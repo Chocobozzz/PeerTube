@@ -2,9 +2,9 @@ import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
 import { WEBSERVER } from '../server/initializers/constants'
-import { ActorFollowModel } from '../server/models/activitypub/actor-follow'
+import { ActorFollowModel } from '../server/models/actor/actor-follow'
 import { VideoModel } from '../server/models/video/video'
-import { ActorModel } from '../server/models/activitypub/actor'
+import { ActorModel } from '../server/models/actor/actor'
 import {
   getLocalAccountActivityPubUrl,
   getLocalVideoActivityPubUrl,

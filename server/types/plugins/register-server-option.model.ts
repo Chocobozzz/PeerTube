@@ -1,6 +1,6 @@
-import { Router, Response } from 'express'
+import { Response, Router } from 'express'
 import { Logger } from 'winston'
-import { ActorModel } from '@server/models/activitypub/actor'
+import { ActorModel } from '@server/models/actor/actor'
 import {
   PluginPlaylistPrivacyManager,
   PluginSettingsManager,

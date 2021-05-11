@@ -28,7 +28,7 @@ import { deleteMeValidator, videoImportsSortValidator, videosSortValidator } fro
 import { updateAvatarValidator } from '../../../middlewares/validators/actor-image'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { UserModel } from '../../../models/account/user'
+import { UserModel } from '../../../models/user/user'
 import { VideoModel } from '../../../models/video/video'
 import { VideoImportModel } from '../../../models/video/video-import'
 

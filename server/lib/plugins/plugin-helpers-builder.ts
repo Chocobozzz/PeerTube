@@ -17,7 +17,7 @@ import { VideoBlacklistCreate } from '@shared/models'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist'
 import { getServerConfig } from '../config'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist'
-import { UserModel } from '@server/models/account/user'
+import { UserModel } from '@server/models/user/user'
 
 function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
   const logger = buildPluginLogger(npmName)

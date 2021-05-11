@@ -60,8 +60,10 @@ import {
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
-import { ActorModel } from '../activitypub/actor'
-import { ActorFollowModel } from '../activitypub/actor-follow'
+import { AccountModel } from '../account/account'
+import { ActorModel } from '../actor/actor'
+import { ActorFollowModel } from '../actor/actor-follow'
+import { ActorImageModel } from '../actor/actor-image'
 import { OAuthTokenModel } from '../oauth/oauth-token'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
@@ -69,9 +71,7 @@ import { VideoChannelModel } from '../video/video-channel'
 import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
-import { AccountModel } from './account'
 import { UserNotificationSettingModel } from './user-notification-setting'
-import { ActorImageModel } from './actor-image'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',

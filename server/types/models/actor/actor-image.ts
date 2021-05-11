@@ -1,5 +1,5 @@
-import { ActorImageModel } from '../../../models/account/actor-image'
 import { FunctionProperties } from '@shared/core-utils'
+import { ActorImageModel } from '../../../models/actor/actor-image'
 
 export type MActorImage = ActorImageModel
 

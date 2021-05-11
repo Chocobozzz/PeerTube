@@ -39,7 +39,7 @@ import {
 } from '../../types/models/video'
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { AccountModel } from '../account/account'
-import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
+import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
 import {
   buildBlockedAccountSQL,
   buildBlockedAccountSQLOptimized,

@@ -17,8 +17,8 @@ import { MUserAccountId } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { logger } from '../../helpers/logger'
 import { AccountModel } from '../account/account'
-import { UserModel } from '../account/user'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
+import { UserModel } from '../user/user'
 import { OAuthClientModel } from './oauth-client'
 
 export type OAuthTokenInfo = {
