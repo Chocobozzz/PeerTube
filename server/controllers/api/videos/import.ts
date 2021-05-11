@@ -16,13 +16,13 @@ import {
   MVideoWithBlacklistLight
 } from '@server/types/models'
 import { MVideoImport, MVideoImportFormattable } from '@server/types/models/video/video-import'
-import { VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
+import { ServerErrorCode, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { isArray } from '../../../helpers/custom-validators/misc'
-import { createReqFiles } from '../../../helpers/express-utils'
+import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { YoutubeDL, YoutubeDLInfo } from '../../../helpers/youtube-dl'
@@ -86,13 +86,23 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
 
     // Rename the torrent to a secured name
     const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, getSecureTorrentName(torrentName))
-    await move(torrentfile.path, newTorrentPath)
+    await move(torrentfile.path, newTorrentPath, { overwrite: true })
     torrentfile.path = newTorrentPath
 
     const buf = await readFile(torrentfile.path)
-    const parsedTorrent = parseTorrent(buf)
+    const parsedTorrent = parseTorrent(buf) as parseTorrent.Instance
 
-    videoName = isArray(parsedTorrent.name) ? parsedTorrent.name[0] : parsedTorrent.name as string
+    if (parsedTorrent.files.length !== 1) {
+      cleanUpReqFiles(req)
+
+      return res.status(HttpStatusCode.BAD_REQUEST_400)
+        .json({
+          code: ServerErrorCode.INCORRECT_FILES_IN_TORRENT,
+          error: 'Torrents with only 1 file are supported.'
+        })
+    }
+
+    videoName = isArray(parsedTorrent.name) ? parsedTorrent.name[0] : parsedTorrent.name
   } else {
     magnetUri = body.magnetUri
 
