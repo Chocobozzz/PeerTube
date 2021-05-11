@@ -4196,20 +4196,19 @@ components:
       maxLength: 36
     username:
       type: string
-      description: The username of the user
+      description: immutable name of the user, used to find or mention its actor
       example: chocobozzz
       pattern: '/^[a-z0-9._]{1,50}$/'
       minLength: 1
       maxLength: 50
     usernameChannel:
       type: string
-      description: The username for the default channel
+      description: immutable name of the channel, used to interact with its actor
       example: The Capybara Channel
       pattern: '/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]+$/'
     password:
       type: string
       format: password
-      description: The password of the user
       minLength: 6
       maxLength: 255
 
@@ -5019,7 +5018,7 @@ components:
           type: string
           format: url
         name:
-          description: immutable name of the actor
+          description: immutable name of the actor, used to find or mention it
           allOf:
             - $ref: '#/components/schemas/username'
         host:
@@ -5055,7 +5054,9 @@ components:
                 - $ref: '#/components/schemas/User/properties/id'
             displayName:
               type: string
-              description: name displayed on the account's profile
+              description: editable name of the account, displayed in its representations
+              minLength: 3
+              maxLength: 120
             description:
               type: string
               description: text or bio displayed on the account's profile
@@ -5806,9 +5807,9 @@ components:
     UpdateUser:
       properties:
         email:
-          type: string
-          format: email
           description: The updated email of the user
+          allOf:
+            - $ref: '#/components/schemas/User/properties/email'
         emailVerified:
           type: boolean
           description: Set the email as verified
@@ -5828,28 +5829,54 @@ components:
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
     UpdateMe:
+      # see shared/models/users/user-update-me.model.ts:
       properties:
         password:
           $ref: '#/components/schemas/password'
+        currentPassword:
+          $ref: '#/components/schemas/password'
         email:
+          description: new email used for login and service communications
+          allOf:
+            - $ref: '#/components/schemas/User/properties/email'
+        displayName:
           type: string
-          format: email
-          description: Your new email
+          description: new name of the user in its representations
+          minLength: 3
+          maxLength: 120
         displayNSFW:
           type: string
-          description: Your new displayNSFW
+          description: new NSFW display policy
           enum:
             - 'true'
             - 'false'
             - both
+        webTorrentEnabled:
+          type: boolean
+          description: whether to enable P2P in the player or not
         autoPlayVideo:
           type: boolean
-          description: Your new autoPlayVideo
-      required:
-        - password
-        - email
-        - displayNSFW
-        - autoPlayVideo
+          description: new preference regarding playing videos automatically
+        autoPlayNextVideo:
+          type: boolean
+          description: new preference regarding playing following videos automatically
+        autoPlayNextVideoPlaylist:
+          type: boolean
+          description: new preference regarding playing following playlist videos automatically
+        videosHistoryEnabled:
+          type: boolean
+          description: whether to keep track of watched history or not
+        videoLanguages:
+          type: array
+          items:
+            type: string
+          description: list of languages to filter videos down to
+        theme:
+          type: string
+        noInstanceConfigWarningModal:
+          type: boolean
+        noWelcomeModal:
+          type: boolean
     GetMeVideoRating:
       properties:
         id:
@@ -5881,28 +5908,28 @@ components:
     RegisterUser:
       properties:
         username:
-          $ref: '#/components/schemas/username'
+          description: immutable name of the user, used to find or mention its actor
+          allOf:
+            - $ref: '#/components/schemas/username'
         password:
           $ref: '#/components/schemas/password'
         email:
           type: string
           format: email
-          description: The email of the user
+          description: email of the user, used for login or service communications
         displayName:
           type: string
-          description: The user display name
+          description: editable name of the user, displayed in its representations
           minLength: 1
           maxLength: 120
         channel:
           type: object
+          description: channel base information used to create the first channel of the user
           properties:
             name:
               $ref: '#/components/schemas/usernameChannel'
             displayName:
-              type: string
-              description: The display name for the default channel
-              minLength: 1
-              maxLength: 120
+              $ref: '#/components/schemas/VideoChannel/properties/displayName'
       required:
         - username
         - password
@@ -5913,6 +5940,7 @@ components:
         # GET/POST/PUT properties
         displayName:
           type: string
+          description: editable name of the channel, displayed in its representations
           example: Videos of Framasoft
           minLength: 1
           maxLength: 120
