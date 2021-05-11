@@ -2957,6 +2957,17 @@ paths:
         - Video Rates
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: string
+                  enum:
+                    - like
+                    - dislike
       responses:
         '204':
           description: successful operation
