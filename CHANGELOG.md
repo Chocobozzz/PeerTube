@@ -67,7 +67,7 @@
 
 ### Features
 
- * :tada: Most robust uploads using a resumable upload endpoint [#3933](https://github.com/Chocobozzz/PeerTube/pull/3933)
+ * :tada: More robust uploads using a resumable upload endpoint [#3933](https://github.com/Chocobozzz/PeerTube/pull/3933)
  * Accessibility/UI:
    * :tada: Redesign channel and account page
    * :tada: Increase video miniature size
