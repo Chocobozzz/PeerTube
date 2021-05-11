@@ -1,5 +1,5 @@
-import { Account } from '../actors'
-import { Video } from './video.model'
+import { Account } from '../../actors'
+import { Video } from '../video.model'
 
 export interface VideoChangeOwnership {
   id: number

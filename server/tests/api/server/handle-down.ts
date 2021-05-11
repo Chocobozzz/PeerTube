@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { JobState, Video } from '../../../../shared/models'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import { VideoCommentThreadTree } from '../../../../shared/models/videos/comment/video-comment.model'
 
 import {
   cleanupTests,

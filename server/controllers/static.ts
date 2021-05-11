@@ -4,7 +4,7 @@ import { join } from 'path'
 import { serveIndexHTML } from '@server/lib/client-html'
 import { getEnabledResolutions, getRegisteredPlugins, getRegisteredThemes } from '@server/lib/config'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
+import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo/nodeinfo.model'
 import { root } from '../helpers/core-utils'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import {

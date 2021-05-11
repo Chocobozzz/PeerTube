@@ -2,12 +2,14 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoComment } from '@shared/models/videos/video-comment.model'
+import { Video, VideoComment } from '@shared/models'
 import {
+  addVideoCommentReply,
   addVideoCommentThread,
   bulkRemoveCommentsOf,
   cleanupTests,
   createUser,
+  doubleFollow,
   flushAndRunMultipleServers,
   getVideoCommentThreads,
   getVideosList,
@@ -15,11 +17,8 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin,
-  waitJobs,
-  addVideoCommentReply
+  waitJobs
 } from '../../../../shared/extra-utils/index'
-import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
-import { Video } from '@shared/models'
 
 const expect = chai.expect
 

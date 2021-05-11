@@ -1,4 +1,4 @@
-import { Account } from '../actors'
+import { Account } from '../../actors'
 
 export interface VideoComment {
   id: number

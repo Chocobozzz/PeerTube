@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import { join } from 'path'
 import * as request from 'supertest'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
   checkTmpIsEmpty,
@@ -32,16 +31,16 @@ import {
   wait,
   webtorrentAdd
 } from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   deleteVideoComment,
+  findCommentId,
   getVideoCommentThreads,
-  getVideoThreadComments,
-  findCommentId
+  getVideoThreadComments
 } from '../../../../shared/extra-utils/videos/video-comments'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { VideoComment, VideoCommentThreadTree, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 

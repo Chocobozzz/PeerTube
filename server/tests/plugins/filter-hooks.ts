@@ -38,6 +38,7 @@ import {
 import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 import { getGoodVideoUrl, getMyVideoImports, importVideo } from '../../../shared/extra-utils/videos/video-imports'
 import {
+  VideoCommentThreadTree,
   VideoDetails,
   VideoImport,
   VideoImportState,
@@ -45,7 +46,6 @@ import {
   VideoPlaylistPrivacy,
   VideoPrivacy
 } from '../../../shared/models/videos'
-import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 
 const expect = chai.expect
 
