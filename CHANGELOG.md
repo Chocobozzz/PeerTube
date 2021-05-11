@@ -87,11 +87,11 @@
  * Notify admins on new available plugin version
  * Sort channels by last uploaded videos
  * Video player:
-  * Add loop toggle to context menu [#3949](https://github.com/Chocobozzz/PeerTube/pull/3949)
-  * Add icons to context menu [#3955](https://github.com/Chocobozzz/PeerTube/pull/3955)
-  * Add a *Previous* button in playlist watch page [#3485](https://github.com/Chocobozzz/PeerTube/pull/3485)
-  * Automatically close the settings menu when clicking outside the player
-  * Add "stats for nerds" panel in context menu [#3958](https://github.com/Chocobozzz/PeerTube/pull/3958)
+   * Add loop toggle to context menu [#3949](https://github.com/Chocobozzz/PeerTube/pull/3949)
+   * Add icons to context menu [#3955](https://github.com/Chocobozzz/PeerTube/pull/3955)
+   * Add a *Previous* button in playlist watch page [#3485](https://github.com/Chocobozzz/PeerTube/pull/3485)
+   * Automatically close the settings menu when clicking outside the player
+   * Add "stats for nerds" panel in context menu [#3958](https://github.com/Chocobozzz/PeerTube/pull/3958)
  * Add channel and playlist stats to stats endpoint [#3747](https://github.com/Chocobozzz/PeerTube/pull/3747)
  * Support `playlistPosition=last` and negative index (`playlistPosition=-2`) URL query parameters for playlists [#3974](https://github.com/Chocobozzz/PeerTube/pull/3974)
  * My videos:
