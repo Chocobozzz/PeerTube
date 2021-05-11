@@ -4,12 +4,12 @@ import { expect } from 'chai'
 import { readJSON, writeJSON } from 'fs-extra'
 import { join } from 'path'
 import { RegisteredServerSettings } from '@shared/models'
-import { PeertubePluginIndexList } from '../../models/plugins/peertube-plugin-index-list.model'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { PeertubePluginIndexList } from '../../models/plugins/plugin-index/peertube-plugin-index-list.model'
 import { PluginType } from '../../models/plugins/plugin.type'
 import { buildServerDirectory, root } from '../miscs/miscs'
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 import { ServerInfo } from './servers'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function listPlugins (parameters: {
   url: string

@@ -1,4 +1,4 @@
-import { PluginType } from './plugin.type'
+import { PluginType } from '../plugin.type'
 
 export interface PeertubePluginIndexList {
   start: number

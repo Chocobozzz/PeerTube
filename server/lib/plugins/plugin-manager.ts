@@ -4,16 +4,11 @@ import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir, outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'
 import { MOAuthTokenUser, MUser } from '@server/types/models'
-import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
+import { getCompleteLocale } from '@shared/core-utils'
+import { ClientScript, PluginPackageJson, PluginTranslation, PluginTranslationPaths, RegisterServerHookOptions } from '@shared/models'
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
-import {
-  ClientScript,
-  PluginPackageJson,
-  PluginTranslationPaths as PackagePluginTranslations
-} from '../../../shared/models/plugins/plugin-package-json.model'
-import { PluginTranslation } from '../../../shared/models/plugins/plugin-translation.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
-import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server-hook.model'
+import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server/server-hook.model'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
@@ -23,7 +18,6 @@ import { PluginLibrary, RegisterServerAuthExternalOptions, RegisterServerAuthPas
 import { ClientHtml } from '../client-html'
 import { RegisterHelpers } from './register-helpers'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
-import { getCompleteLocale } from '@shared/core-utils'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -443,7 +437,7 @@ export class PluginManager implements ServerHook {
 
   // ###################### Translations ######################
 
-  private async addTranslations (plugin: PluginModel, npmName: string, translationPaths: PackagePluginTranslations) {
+  private async addTranslations (plugin: PluginModel, npmName: string, translationPaths: PluginTranslationPaths) {
     for (const locale of Object.keys(translationPaths)) {
       const path = translationPaths[locale]
       const json = await readJSON(join(this.getPluginPath(plugin.name, plugin.type), path))

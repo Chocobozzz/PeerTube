@@ -1,4 +1,4 @@
-import { EncoderOptionsBuilder } from '../videos/video-transcoding.model'
+import { EncoderOptionsBuilder } from '../../../videos/video-transcoding.model'
 
 export interface PluginTranscodingManager {
   addLiveProfile (encoder: string, profile: string, builder: EncoderOptionsBuilder): boolean

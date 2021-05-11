@@ -1,4 +1,4 @@
-import { RegisterClientFormFieldOptions } from './register-client-form-field.model'
+import { RegisterClientFormFieldOptions } from '../../client'
 
 export type RegisterServerSettingOptions = RegisterClientFormFieldOptions & {
   // If the setting is not private, anyone can view its value (client code included)

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -11,14 +11,14 @@ import {
   flushAndRunServer,
   immutableAssign,
   installPlugin,
-  makeGetRequest, makePostBodyRequest, makePutBodyRequest,
+  makeGetRequest,
+  makePostBodyRequest,
+  makePutBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../../../shared/extra-utils'
-import { PluginType } from '../../../../shared/models/plugins/plugin.type'
-import { PeerTubePlugin } from '../../../../shared/models/plugins/peertube-plugin.model'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { PeerTubePlugin, PluginType } from '@shared/models'
 
 describe('Test server plugins API validators', function () {
   let server: ServerInfo

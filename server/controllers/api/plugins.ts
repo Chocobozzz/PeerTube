@@ -1,16 +1,18 @@
 import * as express from 'express'
-import { getFormattedObjects } from '../../helpers/utils'
+import { logger } from '@server/helpers/logger'
+import { getFormattedObjects } from '@server/helpers/utils'
+import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index'
+import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import {
   asyncMiddleware,
   authenticate,
+  availablePluginsSortValidator,
   ensureUserHasRight,
   paginationValidator,
+  pluginsSortValidator,
   setDefaultPagination,
   setDefaultSort
-} from '../../middlewares'
-import { availablePluginsSortValidator, pluginsSortValidator } from '../../middlewares/validators'
-import { PluginModel } from '../../models/server/plugin'
-import { UserRight } from '../../../shared/models/users'
+} from '@server/middlewares'
 import {
   existingPluginValidator,
   installOrUpdatePluginValidator,
@@ -18,16 +20,17 @@ import {
   listPluginsValidator,
   uninstallPluginValidator,
   updatePluginSettingsValidator
-} from '../../middlewares/validators/plugins'
-import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-plugin.model'
-import { ManagePlugin } from '../../../shared/models/plugins/manage-plugin.model'
-import { logger } from '../../helpers/logger'
-import { listAvailablePluginsFromIndex } from '../../lib/plugins/plugin-index'
-import { PeertubePluginIndexList } from '../../../shared/models/plugins/peertube-plugin-index-list.model'
-import { RegisteredServerSettings } from '../../../shared/models/plugins/register-server-setting.model'
-import { PublicServerSetting } from '../../../shared/models/plugins/public-server.setting'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+} from '@server/middlewares/validators/plugins'
+import { PluginModel } from '@server/models/server/plugin'
+import { HttpStatusCode } from '@shared/core-utils'
+import {
+  InstallOrUpdatePlugin,
+  ManagePlugin,
+  PeertubePluginIndexList,
+  PublicServerSetting,
+  RegisteredServerSettings,
+  UserRight
+} from '@shared/models'
 
 const pluginRouter = express.Router()
 

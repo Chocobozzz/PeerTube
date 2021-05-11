@@ -5,8 +5,7 @@ import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { compareSemVer } from '@shared/core-utils/miscs/miscs'
-import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
-import { PluginType } from '@shared/models/plugins/plugin.type'
+import { PeerTubePlugin, PluginType } from '@shared/models'
 
 @Component({
   selector: 'my-plugin-list-installed',

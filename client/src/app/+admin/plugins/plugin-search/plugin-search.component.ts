@@ -4,8 +4,7 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
-import { PeerTubePluginIndex } from '@shared/models/plugins/peertube-plugin-index.model'
-import { PluginType } from '@shared/models/plugins/plugin.type'
+import { PeerTubePluginIndex, PluginType } from '@shared/models'
 
 @Component({
   selector: 'my-plugin-search',

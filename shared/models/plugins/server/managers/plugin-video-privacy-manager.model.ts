@@ -1,4 +1,4 @@
-import { VideoPrivacy } from '../videos/video-privacy.enum'
+import { VideoPrivacy } from '../../../videos/video-privacy.enum'
 
 export interface PluginVideoPrivacyManager {
   // PUBLIC = 1
