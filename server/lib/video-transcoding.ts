@@ -215,16 +215,6 @@ function generateHlsPlaylistResolution (options: {
   })
 }
 
-function getEnabledResolutions (type: 'vod' | 'live') {
-  const transcoding = type === 'vod'
-    ? CONFIG.TRANSCODING
-    : CONFIG.LIVE.TRANSCODING
-
-  return Object.keys(transcoding.RESOLUTIONS)
-               .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
-               .map(r => parseInt(r, 10))
-}
-
 // ---------------------------------------------------------------------------
 
 export {
@@ -232,8 +222,7 @@ export {
   generateHlsPlaylistResolutionFromTS,
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution,
-  mergeAudioVideofile,
-  getEnabledResolutions
+  mergeAudioVideofile
 }
 
 // ---------------------------------------------------------------------------

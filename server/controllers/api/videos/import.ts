@@ -3,6 +3,7 @@ import { move, readFile } from 'fs-extra'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
+import { getEnabledResolutions } from '@server/lib/config'
 import { setVideoTags } from '@server/lib/video'
 import {
   MChannelAccountDefault,
@@ -24,7 +25,7 @@ import { isArray } from '../../../helpers/custom-validators/misc'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { getYoutubeDLInfo, getYoutubeDLSubs, YoutubeDLInfo } from '../../../helpers/youtube-dl'
+import { YoutubeDL, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -139,10 +140,12 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const targetUrl = body.targetUrl
   const user = res.locals.oauth.token.User
 
+  const youtubeDL = new YoutubeDL(targetUrl, getEnabledResolutions('vod'))
+
   // Get video infos
   let youtubeDLInfo: YoutubeDLInfo
   try {
-    youtubeDLInfo = await getYoutubeDLInfo(targetUrl)
+    youtubeDLInfo = await youtubeDL.getYoutubeDLInfo()
   } catch (err) {
     logger.info('Cannot fetch information from import for URL %s.', targetUrl, { err })
 
@@ -188,7 +191,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
 
   // Get video subtitles
   try {
-    const subtitles = await getYoutubeDLSubs(targetUrl)
+    const subtitles = await youtubeDL.getYoutubeDLSubs()
 
     logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
 

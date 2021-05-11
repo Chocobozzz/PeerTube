@@ -23,7 +23,6 @@ import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } fro
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
-import { downloadYoutubeDLVideo } from '../../../helpers/youtube-dl'
 import { CONFIG } from '../../../initializers/config'
 import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -34,6 +33,8 @@ import { MThumbnail } from '../../../types/models/video/thumbnail'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
+import { YoutubeDL } from '@server/helpers/youtube-dl'
+import { getEnabledResolutions } from '@server/lib/config'
 
 async function processVideoImport (job: Bull.Job) {
   const payload = job.data as VideoImportPayload
@@ -75,8 +76,10 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
     videoImportId: videoImport.id
   }
 
+  const youtubeDL = new YoutubeDL(videoImport.targetUrl, getEnabledResolutions('vod'))
+
   return processFile(
-    () => downloadYoutubeDLVideo(videoImport.targetUrl, payload.fileExt, VIDEO_IMPORT_TIMEOUT),
+    () => youtubeDL.downloadYoutubeDLVideo(payload.fileExt, VIDEO_IMPORT_TIMEOUT),
     videoImport,
     options
   )

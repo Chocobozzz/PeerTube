@@ -6,7 +6,6 @@ import { RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConf
 import { Hooks } from './plugins/hooks'
 import { PluginManager } from './plugins/plugin-manager'
 import { getThemeOrDefault } from './plugins/theme-utils'
-import { getEnabledResolutions } from './video-transcoding'
 import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
 
 let serverCommit: string
@@ -208,11 +207,22 @@ function getRegisteredPlugins () {
                       }))
 }
 
+function getEnabledResolutions (type: 'vod' | 'live') {
+  const transcoding = type === 'vod'
+    ? CONFIG.TRANSCODING
+    : CONFIG.LIVE.TRANSCODING
+
+  return Object.keys(transcoding.RESOLUTIONS)
+               .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
+               .map(r => parseInt(r, 10))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getServerConfig,
   getRegisteredThemes,
+  getEnabledResolutions,
   getRegisteredPlugins
 }
 
