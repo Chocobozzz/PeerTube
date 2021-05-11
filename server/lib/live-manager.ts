@@ -23,9 +23,9 @@ import { buildSha256Segment } from './hls'
 import { JobQueue } from './job-queue'
 import { cleanupLive } from './job-queue/handlers/video-live-ending'
 import { PeerTubeSocket } from './peertube-socket'
+import { VideoTranscodingProfilesManager } from './transcoding/video-transcoding-profiles'
 import { isAbleToUploadVideo } from './user'
 import { getHLSDirectory } from './video-paths'
-import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
 
 import memoizee = require('memoizee')
 const NodeRtmpSession = require('node-media-server/node_rtmp_session')

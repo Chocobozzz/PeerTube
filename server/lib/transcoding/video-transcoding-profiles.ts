@@ -1,6 +1,6 @@
 import { logger } from '@server/helpers/logger'
-import { AvailableEncoders, EncoderOptionsBuilder, getTargetBitrate, VideoResolution } from '../../shared/models/videos'
-import { buildStreamSuffix, resetSupportedEncoders } from '../helpers/ffmpeg-utils'
+import { AvailableEncoders, EncoderOptionsBuilder, getTargetBitrate, VideoResolution } from '../../../shared/models/videos'
+import { buildStreamSuffix, resetSupportedEncoders } from '../../helpers/ffmpeg-utils'
 import {
   canDoQuickAudioTranscode,
   ffprobePromise,
@@ -8,8 +8,8 @@ import {
   getMaxAudioBitrate,
   getVideoFileBitrate,
   getVideoStreamFromFile
-} from '../helpers/ffprobe-utils'
-import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
+} from '../../helpers/ffprobe-utils'
+import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 
 /**
  *

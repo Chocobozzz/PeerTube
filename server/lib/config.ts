@@ -6,7 +6,7 @@ import { RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConf
 import { Hooks } from './plugins/hooks'
 import { PluginManager } from './plugins/plugin-manager'
 import { getThemeOrDefault } from './plugins/theme-utils'
-import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from './transcoding/video-transcoding-profiles'
 
 let serverCommit: string
 

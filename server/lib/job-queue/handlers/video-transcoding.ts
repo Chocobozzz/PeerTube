@@ -24,7 +24,7 @@ import {
   mergeAudioVideofile,
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution
-} from '../../video-transcoding'
+} from '../../transcoding/video-transcoding'
 import { JobQueue } from '../job-queue'
 
 type HandlerFunction = (job: Bull.Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<any>
