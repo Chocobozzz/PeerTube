@@ -1,10 +1,13 @@
 # Changelog
 
-## v3.2.0-rc.1 (~ May)
+## v3.2.0-rc.1
 
 ### IMPORTANT NOTES
 
+ * **Important:** You must update your nginx configuration to add the `upload-resumable` endpoint: https://github.com/Chocobozzz/PeerTube/blob/develop/support/nginx/peertube#L81
  * **Important:** Due to a bug in ffmpeg, PeerTube is not compatible with ffmpeg 4.4. See https://github.com/Chocobozzz/PeerTube/issues/3990
+ * **Important:** Drop NodeJS 10 support
+ * PeerTube is not compatible with NodeJS 16 yet
  * By default, HLS transcoding is now enabled and webtorrent is disabled. We suggest you to reflect this change.
  See [the documentation](https://docs.joinpeertube.org/admin-configuration?id=webtorrent-transcoding-or-hls-transcoding) for more information
  * PeerTube client now displays bigger video thumbnails.
@@ -15,6 +18,7 @@
  * Support `X-Frame-Options` header, enabled by default in the configuration
  * Directly use `node` in [systemd template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/systemd/peertube.service)
  * Check ffmpeg version at PeerTube startup
+ * Add `upload-resumable` nginx endpoint: https://github.com/Chocobozzz/PeerTube/blob/develop/support/nginx/peertube#L81
 
 ### CLI tools
 
@@ -63,6 +67,7 @@
 
 ### Features
 
+ * :tada: Most robust uploads using a resumable upload endpoint [#3933](https://github.com/Chocobozzz/PeerTube/pull/3933)
  * Accessibility/UI:
    * :tada: Redesign channel and account page
    * :tada: Increase video miniature size
@@ -80,6 +85,7 @@
    * Add link below the player to open the video on origin instance [#3624](https://github.com/Chocobozzz/PeerTube/issues/3624)
  * Notify admins on new available PeerTube version
  * Notify admins on new available plugin version
+ * Sort channels by last uploaded videos
  * Video player:
   * Add loop toggle to context menu [#3949](https://github.com/Chocobozzz/PeerTube/pull/3949)
   * Add icons to context menu [#3955](https://github.com/Chocobozzz/PeerTube/pull/3955)
@@ -103,6 +109,7 @@
  * Performance:
    * Player now lazy loads video captions
    * Faster admin table filters
+   * Optimize feed endpoint
 
 ### Bug fixes
 
@@ -120,6 +127,8 @@
  * Fix h265 video import using CLI
  * Fix context menu when watching a playlist
  * Fix transcoding job priority preventing video publication when there are many videos to transcode
+ * Fix remote account/channel "joined at"
+ * Fix CLI plugins list command options [#4055](https://github.com/Chocobozzz/PeerTube/pull/4055)
 
 
 
