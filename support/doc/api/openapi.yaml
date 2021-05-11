@@ -1672,74 +1672,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                torrentfile:
-                  description: Torrent File
-                  type: string
-                  format: binary
-                targetUrl:
-                  $ref: '#/components/schemas/VideoImport/properties/targetUrl'
-                magnetUri:
-                  $ref: '#/components/schemas/VideoImport/properties/magnetUri'
-                channelId:
-                  description: Channel id that will contain this video
-                  allOf:
-                    - $ref: '#/components/schemas/VideoChannel/properties/id'
-                thumbnailfile:
-                  description: Video thumbnail file
-                  type: string
-                  format: binary
-                previewfile:
-                  description: Video preview file
-                  type: string
-                  format: binary
-                privacy:
-                  $ref: '#/components/schemas/VideoPrivacySet'
-                category:
-                  $ref: '#/components/schemas/VideoCategorySet'
-                licence:
-                  $ref: '#/components/schemas/VideoLicenceSet'
-                language:
-                  $ref: '#/components/schemas/VideoLanguageSet'
-                description:
-                  description: Video description
-                  type: string
-                waitTranscoding:
-                  description: Whether or not we wait transcoding before publish the video
-                  type: boolean
-                support:
-                  description: A text tell the audience how to support the video creator
-                  example: Please support my work on <insert crowdfunding plateform>! <3
-                  type: string
-                nsfw:
-                  description: Whether or not this video contains sensitive content
-                  type: boolean
-                name:
-                  description: Video name
-                  type: string
-                  minLength: 3
-                  maxLength: 120
-                tags:
-                  description: Video tags (maximum 5 tags each between 2 and 30 characters)
-                  type: array
-                  minItems: 1
-                  maxItems: 5
-                  items:
-                    type: string
-                    minLength: 2
-                    maxLength: 30
-                commentsEnabled:
-                  description: Enable or disable comments for this video
-                  type: boolean
-                downloadEnabled:
-                  description: Enable or disable downloading for this video
-                  type: boolean
-                scheduleUpdate:
-                  $ref: '#/components/schemas/VideoScheduledUpdate'
-              required:
-                - channelId
-                - name
+              $ref: '#/components/schemas/VideoCreateImport'
             encoding:
               torrentfile:
                 contentType: application/x-bittorrent
@@ -4806,10 +4739,33 @@ components:
         label:
           type: string
           example: Pending
+    VideoCreateImport:
+      allOf:
+        - type: object
+          additionalProperties: false
+          oneOf:
+            - properties:
+                targetUrl:
+                  $ref: '#/components/schemas/VideoImport/properties/targetUrl'
+              required: [targetUrl]
+            - properties:
+                magnetUri:
+                  $ref: '#/components/schemas/VideoImport/properties/magnetUri'
+              required: [magnetUri]
+            - properties:
+                torrentfile:
+                  $ref: '#/components/schemas/VideoImport/properties/torrentfile'
+              required: [torrentfile]
+        - $ref: '#/components/schemas/VideoUploadRequestCommon'
+      required:
+        - channelId
+        - name
     VideoImport:
       properties:
         id:
-          $ref: '#/components/schemas/id'
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/id'
         targetUrl:
           type: string
           format: url
@@ -4821,19 +4777,31 @@ components:
           description: magnet URI allowing to resolve the import's source video
           example: magnet:?xs=https%3A%2F%2Fframatube.org%2Fstatic%2Ftorrents%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.torrent&xt=urn:btih:38b4747ff788b30bf61f59d1965cd38f9e48e01f&dn=What+is+PeerTube%3F&tr=wss%3A%2F%2Fframatube.org%2Ftracker%2Fsocket&tr=https%3A%2F%2Fframatube.org%2Ftracker%2Fannounce&ws=https%3A%2F%2Fframatube.org%2Fstatic%2Fwebseed%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.mp4
           pattern: /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
+        torrentfile:
+          writeOnly: true
+          type: string
+          format: binary
+          description: Torrent file containing only the video file
         torrentName:
+          readOnly: true
           type: string
         state:
-          $ref: '#/components/schemas/VideoImportStateConstant'
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/VideoImportStateConstant'
         error:
+          readOnly: true
           type: string
         createdAt:
+          readOnly: true
           type: string
           format: date-time
         updatedAt:
+          readOnly: true
           type: string
           format: date-time
         video:
+          readOnly: true
           nullable: true
           allOf:
             - $ref: '#/components/schemas/Video'
