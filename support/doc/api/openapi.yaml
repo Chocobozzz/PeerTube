@@ -4,12 +4,12 @@ info:
   version: 3.2.0-rc.1
   contact:
     name: PeerTube Community
-    url: 'https://joinpeertube.org'
+    url: https://joinpeertube.org
   license:
     name: AGPLv3.0
-    url: 'https://github.com/Chocobozzz/PeerTube/blob/master/LICENSE'
+    url: https://github.com/Chocobozzz/PeerTube/blob/master/LICENSE
   x-logo:
-    url: 'https://joinpeertube.org/img/brand.png'
+    url: https://joinpeertube.org/img/brand.png
     altText: PeerTube Project Homepage
   description: |
     The PeerTube API is built on HTTP(S) and is RESTful. You can use your favorite
@@ -27,8 +27,8 @@ info:
     # Authentication
 
     When you sign up for an account on a PeerTube instance, you are given the possibility
-    to generate sessions on it, and authenticate there using a session token. Only __one
-    session token can currently be used at a time__.
+    to generate sessions on it, and authenticate there using an access token. Only __one
+    access token can currently be used at a time__.
 
     ## Roles
 
@@ -91,18 +91,27 @@ info:
     This API features [Cross-Origin Resource Sharing (CORS)](https://fetch.spec.whatwg.org/),
     allowing cross-domain communication from the browser for some routes:
     
-    | Endpoint                    | Origin |
-    |------------------------- ---|--------|
-    | `/api/*`                    | *      |
-    | `/download/*`               | *      |
-    | `/lazy-static/*`            | *      |
-    | `/live/segments-sha256/*`   | *      |
-    | `/.well-known/webfinger`    | *      |
+    | Endpoint                    |
+    |------------------------- ---|
+    | `/api/*`                    |
+    | `/download/*`               |
+    | `/lazy-static/*`            |
+    | `/live/segments-sha256/*`   |
+    | `/.well-known/webfinger`    |
 
     In addition, all routes serving ActivityPub are CORS-enabled for all origins.
 externalDocs:
   url: https://docs.joinpeertube.org/api-rest-reference.html
 tags:
+  - name: Register
+    description: |
+      As a visitor, you can use this API to open an account (if registrations are open on
+      that PeerTube instance). As an admin, you should use the dedicated [User creation 
+      API](#operation/createUser) instead.
+  - name: Session
+    x-displayName: Login/Logout
+    description: |
+      Sessions deal with access tokens over time. Only __one session token can currently be used at a time__.
   - name: Accounts
     description: >
       Accounts encompass remote accounts discovered across the federation,
@@ -226,6 +235,10 @@ tags:
 
       For importing videos as your own, refer to [video imports](#operation/importVideo).
 x-tagGroups:
+  - name: Auth
+    tags:
+      - Register
+      - Session
   - name: Accounts
     tags:
       - Accounts
@@ -573,6 +586,7 @@ paths:
   /users:
     post:
       summary: Create a user
+      operationId: createUser
       security:
         - OAuth2:
           - admin
@@ -689,11 +703,92 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUser'
         required: true
+
+  /oauth-clients/local:
+    get:
+      summary: Login prerequisite
+      description: You need to retrieve a client id and secret before [logging in](#operation/getOauthToken).
+      operationId: getOAuthClient
+      tags:
+        - Session
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthClient'
+          links:
+            UseOAuthClientToLogin:
+              operationId: getOAuthToken
+              parameters:
+                client_id: '$response.body#/client_id'
+                client_secret: '$response.body#/client_secret'
+  /users/token:
+    post:
+      summary: Login
+      operationId: getOAuthToken
+      description: With your [client id and secret](#operation/getOAuthClient), you can retrieve an access and refresh tokens.
+      tags:
+        - Session
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/OAuthToken-password'
+                - $ref: '#/components/schemas/OAuthToken-refresh_token'
+              discriminator:
+                propertyName: grant_type
+                mapping:
+                  password: '#/components/schemas/OAuthToken-password'
+                  refresh_token: '#/components/schemas/OAuthToken-refresh_token'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token_type:
+                    type: string
+                    example: Bearer
+                  access_token:
+                    type: string
+                    example: 90286a0bdf0f7315d9d3fe8dabf9e1d2be9c97d0
+                    description: valid for 1 day
+                  refresh_token:
+                    type: string
+                    example: 2e0d675df9fc96d2e4ec8a3ebbbf45eca9137bb7
+                    description: valid for 2 weeks
+                  expires_in:
+                    type: integer
+                    minimum: 0
+                    example: 14399
+                  refresh_token_expires_in:
+                    type: integer
+                    minimum: 0
+                    example: 1209600
+  /users/revoke-token:
+    post:
+      summary: Logout
+      description: Revokes your access token and its associated refresh token, destroying your current session.
+      operationId: revokeOAuthToken
+      tags:
+        - Session
+      security:
+        - OAuth2: []
+      responses:
+        '200':
+          description: successful operation
+
   /users/register:
     post:
       summary: Register a user
       tags:
         - Users
+        - Register
       responses:
         '204':
           description: successful operation
@@ -703,6 +798,47 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterUser'
         required: true
+  /users/{id}/verify-email:
+    post:
+      summary: Verify a user
+      description: |
+        Following a user registration, the new user will receive an email asking to click a link
+        containing a secret. 
+      tags:
+        - Users
+        - Register
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verificationString:
+                  type: string
+                  format: url
+                isPendingEmail:
+                  type: boolean
+              required:
+                - verificationString
+      responses:
+        '204':
+          description: successful operation
+        '403':
+          description: invalid verification string
+        '404':
+          description: user not found
+  /users/ask-send-verify-email:
+    post:
+      summary: Resend user verification link
+      tags:
+        - Users
+        - Register
+      responses:
+        '204':
+          description: successful operation
+
   /users/me:
     get:
       summary: Get my user information
@@ -4225,17 +4361,18 @@ components:
       description: |
         Authenticating via OAuth requires the following steps:
         - Have an activated account
-        - [Generate](https://docs.joinpeertube.org/api-rest-getting-started) a
-        Bearer Token for that account at `/api/v1/users/token`
-        - Make authenticated requests, putting *Authorization: Bearer <token\>*
+        - [Generate] an access token for that account at `/api/v1/users/token`.
+        - Make requests with the *Authorization: Bearer <token\>* header
         - Profit, depending on the role assigned to the account
 
-        Note that the __access token is valid for 1 day__ and, and is given
+        Note that the __access token is valid for 1 day__ and is given
         along with a __refresh token valid for 2 weeks__.
+
+        [Generate]: https://docs.joinpeertube.org/api-rest-getting-started
       type: oauth2
       flows:
         password:
-          tokenUrl: 'https://peertube.example.com/api/v1/users/token'
+          tokenUrl: /api/v1/users/token
           scopes:
             admin: Admin scope
             moderator: Moderator scope
@@ -4257,14 +4394,16 @@ components:
       type: string
       description: immutable name of the user, used to find or mention its actor
       example: chocobozzz
-      pattern: '/^[a-z0-9._]{1,50}$/'
+      pattern: '/^[a-z0-9._]+$/'
       minLength: 1
       maxLength: 50
     usernameChannel:
       type: string
       description: immutable name of the channel, used to interact with its actor
       example: framasoft_videos
-      pattern: '/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]+$/'
+      pattern: '/^[a-zA-Z0-9\\-_.:]+$/'
+      minLength: 1
+      maxLength: 50
     password:
       type: string
       format: password
@@ -5997,6 +6136,61 @@ components:
         - username
         - password
         - email
+
+    OAuthClient:
+      properties:
+        client_id:
+          type: string
+          pattern: /^[a-z0-9]$/
+          maxLength: 32
+          minLength: 32
+          example: v1ikx5hnfop4mdpnci8nsqh93c45rldf
+        client_secret:
+          type: string
+          pattern: /^[a-zA-Z0-9]$/
+          maxLength: 32
+          minLength: 32
+          example: AjWiOapPltI6EnsWQwlFarRtLh4u8tDt
+    OAuthToken-password:
+      allOf:
+        - $ref: '#/components/schemas/OAuthClient'
+        - type: object
+          properties:
+            grant_type:
+              type: string
+              enum:
+                - password
+                - refresh_token
+              default: password
+            username:
+              $ref: '#/components/schemas/User/properties/username'
+            password:
+              $ref: '#/components/schemas/password'
+      required:
+        - client_id
+        - client_secret
+        - grant_type
+        - username
+        - password
+    OAuthToken-refresh_token:
+      allOf:
+        - $ref: '#/components/schemas/OAuthClient'
+        - type: object
+          properties:
+            grant_type:
+              type: string
+              enum:
+                - password
+                - refresh_token
+              default: password
+            refresh_token:
+              type: string
+              example: 2e0d675df9fc96d2e4ec8a3ebbbf45eca9137bb7
+      required:
+        - client_id
+        - client_secret
+        - grant_type
+        - refresh_token
 
     VideoChannel:
       properties:
