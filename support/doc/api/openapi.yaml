@@ -47,7 +47,8 @@ info:
     }
     ```
 
-    Some errors benefit from a more detailed message:
+    Validation errors benefit from a more detailed error type and return the HTTP `400 Bad Request` status code.
+
     ```
     {
       "errors": {
@@ -80,10 +81,10 @@ info:
 
     | Header                  | Description                                                |
     |-------------------------|------------------------------------------------------------|
-    | X-RateLimit-Limit       | Number of max requests allowed in the current time period  |
-    | X-RateLimit-Remaining   | Number of remaining requests in the current time period    |
-    | X-RateLimit-Reset       | Timestamp of end of current time period as UNIX timestamp  |
-    | Retry-After             | Seconds to delay after the first `429` is received         |
+    | `X-RateLimit-Limit`     | Number of max requests allowed in the current time period  |
+    | `X-RateLimit-Remaining` | Number of remaining requests in the current time period    |
+    | `X-RateLimit-Reset`     | Timestamp of end of current time period as UNIX timestamp  |
+    | `Retry-After`           | Seconds to delay after the first `429` is received         |
 externalDocs:
   url: https://docs.joinpeertube.org/api-rest-reference.html
 tags:
@@ -1317,7 +1318,7 @@ paths:
                   type: string
                 support:
                   description: A text tell the audience how to support the video creator
-                  example: Please support my work on <insert crowdfunding plateform>! <3
+                  example: Please support our work on https://soutenir.framasoft.org/en/ <3
                   type: string
                 nsfw:
                   description: Whether or not this video contains sensitive content
@@ -1747,7 +1748,7 @@ paths:
                   type: string
                 support:
                   description: A text tell the audience how to support the creator
-                  example: Please support my work on <insert crowdfunding plateform>! <3
+                  example: Please support our work on https://soutenir.framasoft.org/en/ <3
                   type: string
                 nsfw:
                   description: Whether or not this live video/replay contains sensitive content
@@ -2249,6 +2250,7 @@ paths:
   /video-channels:
     get:
       summary: List video channels
+      operationId: getVideoChannels
       tags:
         - Video Channels
       parameters:
@@ -2264,6 +2266,7 @@ paths:
                 $ref: '#/components/schemas/VideoChannelList'
     post:
       summary: Create a video channel
+      operationId: createVideoChannel
       security:
         - OAuth2: []
       tags:
@@ -2271,6 +2274,16 @@ paths:
       responses:
         '204':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videoChannel:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/VideoChannel/properties/id'
       requestBody:
         content:
           application/json:
@@ -2279,6 +2292,7 @@ paths:
   '/video-channels/{channelHandle}':
     get:
       summary: Get a video channel
+      operationId: getVideoChannel
       tags:
         - Video Channels
       parameters:
@@ -2968,6 +2982,8 @@ paths:
                   enum:
                     - like
                     - dislike
+              required:
+                - rating
       responses:
         '204':
           description: successful operation
@@ -4215,7 +4231,7 @@ components:
     usernameChannel:
       type: string
       description: immutable name of the channel, used to interact with its actor
-      example: The Capybara Channel
+      example: framasoft_videos
       pattern: '/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]+$/'
     password:
       type: string
@@ -4649,7 +4665,7 @@ components:
             support:
               type: string
               description: A text tell the audience how to support the video creator
-              example: Please support my work on <insert crowdfunding plateform>! <3
+              example: Please support our work on https://soutenir.framasoft.org/en/ <3
               minLength: 3
               maxLength: 1000
             channel:
@@ -5589,7 +5605,7 @@ components:
           type: boolean
         support:
           description: A text tell the audience how to support the video creator
-          example: Please support my work on <insert crowdfunding plateform>! <3
+          example: Please support our work on https://soutenir.framasoft.org/en/ <3
           type: string
         nsfw:
           description: Whether or not this video contains sensitive content
@@ -5963,7 +5979,7 @@ components:
         support:
           type: string
           description: text shown by default on all videos of this channel, to tell the audience how to support it
-          example: Please support my work on <insert crowdfunding plateform>! <3
+          example: Please support our work on https://soutenir.framasoft.org/en/ <3
           minLength: 3
           maxLength: 1000
         # GET-only properties
