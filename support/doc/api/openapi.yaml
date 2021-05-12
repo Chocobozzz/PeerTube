@@ -66,12 +66,12 @@ info:
 
     We are rate-limiting all endpoints of PeerTube's API. Custom values can be set by administrators:
 
-    | Endpoint                | Calls            | Time frame                |
-    |-------------------------|------------------|---------------------------|
-    | `/*`                    | 50               | 10 seconds                |
-    | `POST /users/token`     | 15               | 5 minutes                 |
-    | `POST /users/register`  | 2<sup>*</sup>    | 5 minutes                 |
-    | `POST /users/ask-send-verify-email` | 3    | 5 minutes                 |
+    | Endpoint (prefix: `/api/v1`) | Calls         | Time frame   |
+    |------------------------------|---------------|--------------|
+    | `/*`                         | 50            | 10 seconds   |
+    | `POST /users/token`          | 15            | 5 minutes    |
+    | `POST /users/register`       | 2<sup>*</sup> | 5 minutes    |
+    | `POST /users/ask-send-verify-email` | 3      | 5 minutes    |
 
     Depending on the endpoint, <sup>*</sup>failed requests are not taken into account. A service
     limit is announced by a `429 Too Many Requests` status code.
@@ -85,6 +85,21 @@ info:
     | `X-RateLimit-Remaining` | Number of remaining requests in the current time period    |
     | `X-RateLimit-Reset`     | Timestamp of end of current time period as UNIX timestamp  |
     | `Retry-After`           | Seconds to delay after the first `429` is received         |
+
+    # CORS
+
+    This API features [Cross-Origin Resource Sharing (CORS)](https://fetch.spec.whatwg.org/),
+    allowing cross-domain communication from the browser for some routes:
+    
+    | Endpoint                    | Origin |
+    |------------------------- ---|--------|
+    | `/api/*`                    | *      |
+    | `/download/*`               | *      |
+    | `/lazy-static/*`            | *      |
+    | `/live/segments-sha256/*`   | *      |
+    | `/.well-known/webfinger`    | *      |
+
+    In addition, all routes serving ActivityPub are CORS-enabled for all origins.
 externalDocs:
   url: https://docs.joinpeertube.org/api-rest-reference.html
 tags:
