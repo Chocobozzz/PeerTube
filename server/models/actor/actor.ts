@@ -18,6 +18,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { ModelCache } from '@server/models/model-cache'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActorImage } from '../../../shared/models/actors/actor-image.model'
 import { activityPubContextify } from '../../helpers/activitypub'
@@ -159,7 +160,7 @@ export const unusedActorAttributesForAPI = [
     }
   ]
 })
-export class ActorModel extends Model {
+export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...values(ACTIVITY_PUB_ACTOR_TYPES)))

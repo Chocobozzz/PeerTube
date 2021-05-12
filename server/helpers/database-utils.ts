@@ -68,7 +68,7 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
   })
 }
 
-function updateInstanceWithAnother <T extends Model<T>> (instanceToUpdate: Model<T>, baseInstance: Model<T>) {
+function updateInstanceWithAnother <M, T extends U, U extends Model<M>> (instanceToUpdate: T, baseInstance: U) {
   const obj = baseInstance.toJSON()
 
   for (const key of Object.keys(obj)) {
@@ -88,7 +88,7 @@ function afterCommitIfTransaction (t: Transaction, fn: Function) {
   return fn()
 }
 
-function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Model<T>> (
+function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Pick<Model, 'destroy'>> (
   fromDatabase: T[],
   newModels: T[],
   t: Transaction

@@ -132,12 +132,11 @@ async function getOrCreateActorAndServerAndModel (
   return actorRefreshed
 }
 
-function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
+function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string) {
   return new ActorModel({
     type,
     url,
     preferredUsername,
-    uuid,
     publicKey: null,
     privateKey: null,
     followersCount: 0,

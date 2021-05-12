@@ -1,6 +1,7 @@
 import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MPlugin, MPluginFormattable } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { PeerTubePlugin, PluginType, RegisterServerSettingOptions } from '../../../shared/models'
 import {
   isPluginDescriptionValid,
@@ -26,7 +27,7 @@ import { getSort, throwIfNotValid } from '../utils'
     }
   ]
 })
-export class PluginModel extends Model {
+export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
   @AllowNull(false)
   @Is('PluginName', value => throwIfNotValid(value, isPluginNameValid, 'name'))

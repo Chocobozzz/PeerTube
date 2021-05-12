@@ -7,6 +7,7 @@ import {
   MAccountVideoRateAccountVideo,
   MAccountVideoRateFormattable
 } from '@server/types/models/video/video-rate'
+import { AttributesOnly } from '@shared/core-utils'
 import { AccountVideoRate } from '../../../shared'
 import { VideoRateType } from '../../../shared/models/videos'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -42,7 +43,7 @@ import { AccountModel } from './account'
     }
   ]
 })
-export class AccountVideoRateModel extends Model {
+export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountVideoRateModel>>> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...values(VIDEO_RATE_TYPES)))

@@ -31,6 +31,7 @@ import {
   MUserWithNotificationSetting,
   MVideoWithRights
 } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { hasUserRight, USER_ROLE_LABELS } from '../../../shared/core-utils/users'
 import { AbuseState, MyUser, UserRight, VideoPlaylistType, VideoPrivacy } from '../../../shared/models'
 import { User, UserRole } from '../../../shared/models/users'
@@ -233,7 +234,7 @@ enum ScopeNames {
     }
   ]
 })
-export class UserModel extends Model {
+export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
   @AllowNull(true)
   @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password', true))

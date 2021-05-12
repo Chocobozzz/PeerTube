@@ -14,6 +14,7 @@ import {
 } from 'sequelize-typescript'
 import { TokensCache } from '@server/lib/auth/tokens-cache'
 import { MNotificationSettingFormattable } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
 import { throwIfNotValid } from '../utils'
@@ -28,7 +29,7 @@ import { UserModel } from './user'
     }
   ]
 })
-export class UserNotificationSettingModel extends Model {
+export class UserNotificationSettingModel extends Model<Partial<AttributesOnly<UserNotificationSettingModel>>> {
 
   @AllowNull(false)
   @Default(null)

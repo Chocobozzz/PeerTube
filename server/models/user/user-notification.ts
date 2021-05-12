@@ -1,6 +1,7 @@
 import { FindOptions, ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user'
+import { AttributesOnly } from '@shared/core-utils'
 import { UserNotification, UserNotificationType } from '../../../shared'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import { isUserNotificationTypeValid } from '../../helpers/custom-validators/user-notifications'
@@ -286,7 +287,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
     }
   ] as (ModelIndexesOptions & { where?: WhereOptions })[]
 })
-export class UserNotificationModel extends Model {
+export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNotificationModel>>> {
 
   @AllowNull(false)
   @Default(null)

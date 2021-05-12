@@ -31,6 +31,7 @@ import { LiveManager } from '@server/lib/live-manager'
 import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
@@ -489,7 +490,7 @@ export type AvailableForListIDsOptions = {
     }
   ]
 })
-export class VideoModel extends Model {
+export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
@@ -1617,7 +1618,7 @@ export class VideoModel extends Model {
       includeLocalVideos: true
     }
 
-    const { query, replacements } = buildListQuery(VideoModel, queryOptions)
+    const { query, replacements } = buildListQuery(VideoModel.sequelize, queryOptions)
 
     return this.sequelize.query<any>(query, { replacements, type: QueryTypes.SELECT })
         .then(rows => rows.map(r => r[field]))
@@ -1645,7 +1646,7 @@ export class VideoModel extends Model {
       if (countVideos !== true) return Promise.resolve(undefined)
 
       const countOptions = Object.assign({}, options, { isCount: true })
-      const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel, countOptions)
+      const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel.sequelize, countOptions)
 
       return VideoModel.sequelize.query<any>(queryCount, { replacements: replacementsCount, type: QueryTypes.SELECT })
           .then(rows => rows.length !== 0 ? rows[0].total : 0)
@@ -1654,7 +1655,7 @@ export class VideoModel extends Model {
     function getModels () {
       if (options.count === 0) return Promise.resolve([])
 
-      const { query, replacements, order } = buildListQuery(VideoModel, options)
+      const { query, replacements, order } = buildListQuery(VideoModel.sequelize, options)
       const queryModels = wrapForAPIResults(query, replacements, options, order)
 
       return VideoModel.sequelize.query<any>(queryModels, { replacements, type: QueryTypes.SELECT, nest: true })

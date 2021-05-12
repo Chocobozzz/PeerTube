@@ -5,6 +5,7 @@ import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import { getEnabledResolutions } from '@server/lib/config'
 import { setVideoTags } from '@server/lib/video'
+import { FilteredModelAttributes } from '@server/types'
 import {
   MChannelAccountDefault,
   MThumbnail,
@@ -15,7 +16,7 @@ import {
   MVideoThumbnail,
   MVideoWithBlacklistLight
 } from '@server/types/models'
-import { MVideoImport, MVideoImportFormattable } from '@server/types/models/video/video-import'
+import { MVideoImportFormattable } from '@server/types/models/video/video-import'
 import { ServerErrorCode, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
@@ -253,7 +254,9 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
     privacy: body.privacy || VideoPrivacy.PRIVATE,
     duration: 0, // duration will be set by the import job
     channelId: channelId,
-    originallyPublishedAt: body.originallyPublishedAt || importData.originallyPublishedAt
+    originallyPublishedAt: body.originallyPublishedAt
+      ? new Date(body.originallyPublishedAt)
+      : importData.originallyPublishedAt
   }
   const video = new VideoModel(videoData)
   video.url = getLocalVideoActivityPubUrl(video)
@@ -317,7 +320,7 @@ async function insertIntoDB (parameters: {
   previewModel: MThumbnail
   videoChannel: MChannelAccountDefault
   tags: string[]
-  videoImportAttributes: Partial<MVideoImport>
+  videoImportAttributes: FilteredModelAttributes<VideoImportModel>
   user: MUser
 }): Promise<MVideoImportFormattable> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters

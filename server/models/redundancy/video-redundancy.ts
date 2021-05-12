@@ -16,6 +16,7 @@ import {
 } from 'sequelize-typescript'
 import { getServerActor } from '@server/models/application/application'
 import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoRedundanciesTarget } from '@shared/models/redundancy/video-redundancies-filters.model'
 import {
   FileRedundancyInformation,
@@ -84,7 +85,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoRedundancyModel extends Model {
+export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedundancyModel>>> {
 
   @CreatedAt
   createdAt: Date

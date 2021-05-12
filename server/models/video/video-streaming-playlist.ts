@@ -13,6 +13,7 @@ import { CONSTRAINTS_FIELDS, MEMOIZE_LENGTH, MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
+import { AttributesOnly } from '@shared/core-utils'
 
 @Table({
   tableName: 'videoStreamingPlaylist',
@@ -30,7 +31,7 @@ import { VideoModel } from './video'
     }
   ]
 })
-export class VideoStreamingPlaylistModel extends Model {
+export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<VideoStreamingPlaylistModel>>> {
   @CreatedAt
   createdAt: Date
 

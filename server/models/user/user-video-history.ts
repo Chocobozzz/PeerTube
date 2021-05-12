@@ -1,8 +1,9 @@
+import { DestroyOptions, Op, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, IsInt, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { MUserAccountId, MUserId } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoModel } from '../video/video'
 import { UserModel } from './user'
-import { DestroyOptions, Op, Transaction } from 'sequelize'
-import { MUserAccountId, MUserId } from '@server/types/models'
 
 @Table({
   tableName: 'userVideoHistory',
@@ -19,7 +20,7 @@ import { MUserAccountId, MUserId } from '@server/types/models'
     }
   ]
 })
-export class UserVideoHistoryModel extends Model {
+export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVideoHistoryModel>>> {
   @CreatedAt
   createdAt: Date
 

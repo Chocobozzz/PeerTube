@@ -19,6 +19,7 @@ import {
 } from 'sequelize-typescript'
 import { setAsUpdated } from '@server/helpers/database-utils'
 import { MAccountActor } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
@@ -246,7 +247,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class VideoChannelModel extends Model {
+export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
 
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))

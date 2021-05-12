@@ -28,6 +28,8 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
     privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,
     channelId: channelId,
     originallyPublishedAt: videoInfo.originallyPublishedAt
+      ? new Date(videoInfo.originallyPublishedAt)
+      : null
   }
 }
 

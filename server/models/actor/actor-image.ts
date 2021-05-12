@@ -2,6 +2,7 @@ import { remove } from 'fs-extra'
 import { join } from 'path'
 import { AfterDestroy, AllowNull, Column, CreatedAt, Default, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MActorImageFormattable } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActorImageType } from '@shared/models'
 import { ActorImage } from '../../../shared/models/actors/actor-image.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -19,7 +20,7 @@ import { throwIfNotValid } from '../utils'
     }
   ]
 })
-export class ActorImageModel extends Model {
+export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageModel>>> {
 
   @AllowNull(false)
   @Column

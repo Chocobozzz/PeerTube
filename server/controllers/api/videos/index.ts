@@ -308,7 +308,7 @@ async function addVideo (options: {
     if (videoInfo.scheduleUpdate) {
       await ScheduleVideoUpdateModel.create({
         videoId: video.id,
-        updateAt: videoInfo.scheduleUpdate.updateAt,
+        updateAt: new Date(videoInfo.scheduleUpdate.updateAt),
         privacy: videoInfo.scheduleUpdate.privacy || null
       }, { transaction: t })
     }
@@ -435,7 +435,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.scheduleUpdate) {
         await ScheduleVideoUpdateModel.upsert({
           videoId: videoInstanceUpdated.id,
-          updateAt: videoInfoToUpdate.scheduleUpdate.updateAt,
+          updateAt: new Date(videoInfoToUpdate.scheduleUpdate.updateAt),
           privacy: videoInfoToUpdate.scheduleUpdate.privacy || null
         }, { transaction: t })
       } else if (videoInfoToUpdate.scheduleUpdate === null) {

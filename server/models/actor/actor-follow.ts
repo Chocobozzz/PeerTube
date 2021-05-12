@@ -28,6 +28,7 @@ import {
   MActorFollowFormattable,
   MActorFollowSubscriptions
 } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActivityPubActorType } from '@shared/models'
 import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
@@ -61,7 +62,7 @@ import { ActorModel, unusedActorAttributesForAPI } from './actor'
     }
   ]
 })
-export class ActorFollowModel extends Model {
+export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowModel>>> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...values(FOLLOW_STATES)))
@@ -619,7 +620,7 @@ export class ActorFollowModel extends Model {
     if (serverIds.length === 0) return
 
     const me = await getServerActor()
-    const serverIdsString = createSafeIn(ActorFollowModel, serverIds)
+    const serverIdsString = createSafeIn(ActorFollowModel.sequelize, serverIds)
 
     const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +

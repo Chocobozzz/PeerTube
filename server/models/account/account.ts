@@ -17,6 +17,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { ModelCache } from '@server/models/model-cache'
+import { AttributesOnly } from '@shared/core-utils'
 import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
 import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
@@ -141,7 +142,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class AccountModel extends Model {
+export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
 
   @AllowNull(false)
   @Column
