@@ -15,21 +15,76 @@ StandardError=syslog
 SyslogIdentifier=peertube
 Restart=always
 
-; Some security directives.
-; Mount /usr, /boot, and /etc as read-only for processes invoked by this service.
-ProtectSystem=full
-; Sets up a new /dev mount for the process and only adds API pseudo devices
-; like /dev/null, /dev/zero or /dev/random but not physical devices. Disabled
-; by default because it may not work on devices like the Raspberry Pi.
-PrivateDevices=false
-; Ensures that the service process and all its children can never gain new
-; privileges through execve().
+## Security directives
+## Proc filesystem
+# All files and directories not directly associated with process management and introspection are made
+# invisible in the /proc/ file system configured for the unit's processes.
+ProcSubset=pid
+# Hide processes owned by other users are on /proc/
+ProtectProc=invisible
+
+## Access write directories
+# Create file and folders with access only peertube group
+UMask=0027
+
+## Capabilities
+# Disable all capabilities for the executed process
+CapabilityBoundingSet=
+## Security
+# Ensures that the service process and all its children can never gain new privileges through execve()
 NoNewPrivileges=true
-; This makes /home, /root, and /run/user inaccessible and empty for processes invoked
-; by this unit. Make sure that you do not depend on data inside these folders.
+
+## Sandboxing
+# The entire file system hierarchy is mounted read-only, except for the API file system
+# subtrees /dev/, /proc/ and /sys/
+ProtectSystem=strict
+# This makes /home, /root, and /run/user inaccessible and empty for processes invoked
+# by this unit. Make sure that you do not depend on data inside these folders
 ProtectHome=true
-; Drops the sys admin capability from the daemon.
-CapabilityBoundingSet=~CAP_SYS_ADMIN
+# Sets up a new /dev mount for the process and only adds API pseudo devices
+# like /dev/null, /dev/zero or /dev/random but not physical devices. Disabled
+# by default because it may not work on devices like the Raspberry Pi.
+PrivateDevices=false
+# Sets up a new user namespace for the executed processes and configures a minimal user and group mapping
+PrivateUsers=true
+# Disable writes to the hardware clock or system clock
+ProtectClock=true
+# Sets up a new UTS namespace for the executed processes and disable changing hostname or domainname
+ProtectHostname=true
+# Disable access to the kernel log ring buffer
+ProtectKernelLogs=true
+# Disable explicit kernel module loading
+ProtectKernelModules=true
+# Disable change kernel variables accessible through /proc/sys/, /sys/, /proc/sysrq-trigger,
+# /proc/latency_stats, /proc/acpi, /proc/timer_stats, /proc/fs and /proc/irq
+ProtectKernelTunables=true
+# Disable change cgroups accessible through /sys/fs/cgroup/
+ProtectControlGroups=true
+# Allow acces only address families accessible AF_UNIX, AF_INET, AF_INET6 and AF_NETLINK
+RestrictAddressFamilies=AF_UNIX
+RestrictAddressFamilies=AF_INET
+RestrictAddressFamilies=AF_INET6
+RestrictAddressFamilies=AF_NETLINK
+# Restricts access to Linux namespace functionality for the processes
+RestrictNamespaces=true
+# Locks down the personality system call so that the kernel execution domain may not be changed from the default
+LockPersonality=true
+# Disable any attempts to enable realtime scheduling
+RestrictRealtime=true
+# Disable any attempts to set the set-user-ID (SUID) or set-group-ID (SGID) bits on files or directories
+RestrictSUIDSGID=true
+# Remove all System V and POSIX IPC objects
+RemoveIPC=true
+# The processes of this unit will be run in their own private mount namespace
+PrivateMounts=true
+
+## System Call Filtering
+# Disable non-native syscalls
+SystemCallArchitectures=native
+# Disable some syscalls
+SystemCallFilter=~@cpu-emulation @debug @keyring @ipc @memlock @mount @obsolete @privileged @setuid
+SystemCallFilter=pipe
+SystemCallFilter=pipe2
 
 [Install]
 WantedBy=multi-user.target
