@@ -21,7 +21,7 @@ import { AttributesOnly } from '@shared/core-utils'
 import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
 import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
-import { sendDeleteActor } from '../../lib/activitypub/send'
+import { sendDeleteActor } from '../../lib/activitypub/send/send-delete'
 import {
   MAccount,
   MAccountActor,

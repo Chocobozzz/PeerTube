@@ -18,6 +18,7 @@ const configRouter = express.Router()
 const auditLogger = auditLoggerFactory('config')
 
 configRouter.get('/about', getAbout)
+
 configRouter.get('/',
   asyncMiddleware(getConfig)
 )
@@ -27,12 +28,14 @@ configRouter.get('/custom',
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   getCustomConfig
 )
+
 configRouter.put('/custom',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   customConfigUpdateValidator,
   asyncMiddleware(updateCustomConfig)
 )
+
 configRouter.delete('/custom',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -67,13 +70,13 @@ function getAbout (req: express.Request, res: express.Response) {
     }
   }
 
-  return res.json(about).end()
+  return res.json(about)
 }
 
 function getCustomConfig (req: express.Request, res: express.Response) {
   const data = customConfig()
 
-  return res.json(data).end()
+  return res.json(data)
 }
 
 async function deleteCustomConfig (req: express.Request, res: express.Response) {

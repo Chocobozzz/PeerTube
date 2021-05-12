@@ -83,32 +83,15 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
   let magnetUri: string
 
   if (torrentfile) {
-    torrentName = torrentfile.originalname
+    const result = await processTorrentOrAbortRequest(req, res, torrentfile)
+    if (!result) return
 
-    // Rename the torrent to a secured name
-    const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, getSecureTorrentName(torrentName))
-    await move(torrentfile.path, newTorrentPath, { overwrite: true })
-    torrentfile.path = newTorrentPath
-
-    const buf = await readFile(torrentfile.path)
-    const parsedTorrent = parseTorrent(buf) as parseTorrent.Instance
-
-    if (parsedTorrent.files.length !== 1) {
-      cleanUpReqFiles(req)
-
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-        .json({
-          code: ServerErrorCode.INCORRECT_FILES_IN_TORRENT,
-          error: 'Torrents with only 1 file are supported.'
-        })
-    }
-
-    videoName = isArray(parsedTorrent.name) ? parsedTorrent.name[0] : parsedTorrent.name
+    videoName = result.name
+    torrentName = result.torrentName
   } else {
-    magnetUri = body.magnetUri
-
-    const parsed = magnetUtil.decode(magnetUri)
-    videoName = isArray(parsed.name) ? parsed.name[0] : parsed.name as string
+    const result = processMagnetURI(body)
+    magnetUri = result.magnetUri
+    videoName = result.name
   }
 
   const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName })
@@ -116,26 +99,26 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
   const thumbnailModel = await processThumbnail(req, video)
   const previewModel = await processPreview(req, video)
 
-  const tags = body.tags || undefined
-  const videoImportAttributes = {
-    magnetUri,
-    torrentName,
-    state: VideoImportState.PENDING,
-    userId: user.id
-  }
   const videoImport = await insertIntoDB({
     video,
     thumbnailModel,
     previewModel,
     videoChannel: res.locals.videoChannel,
-    tags,
-    videoImportAttributes,
-    user
+    tags: body.tags || undefined,
+    user,
+    videoImportAttributes: {
+      magnetUri,
+      torrentName,
+      state: VideoImportState.PENDING,
+      userId: user.id
+    }
   })
 
   // Create job to import the video
   const payload = {
-    type: torrentfile ? 'torrent-file' as 'torrent-file' : 'magnet-uri' as 'magnet-uri',
+    type: torrentfile
+      ? 'torrent-file' as 'torrent-file'
+      : 'magnet-uri' as 'magnet-uri',
     videoImportId: videoImport.id,
     magnetUri
   }
@@ -184,45 +167,22 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     previewModel = await processPreviewFromUrl(youtubeDLInfo.thumbnailUrl, video)
   }
 
-  const tags = body.tags || youtubeDLInfo.tags
-  const videoImportAttributes = {
-    targetUrl,
-    state: VideoImportState.PENDING,
-    userId: user.id
-  }
   const videoImport = await insertIntoDB({
     video,
     thumbnailModel,
     previewModel,
     videoChannel: res.locals.videoChannel,
-    tags,
-    videoImportAttributes,
-    user
+    tags: body.tags || youtubeDLInfo.tags,
+    user,
+    videoImportAttributes: {
+      targetUrl,
+      state: VideoImportState.PENDING,
+      userId: user.id
+    }
   })
 
   // Get video subtitles
-  try {
-    const subtitles = await youtubeDL.getYoutubeDLSubs()
-
-    logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
-
-    for (const subtitle of subtitles) {
-      const videoCaption = new VideoCaptionModel({
-        videoId: video.id,
-        language: subtitle.language,
-        filename: VideoCaptionModel.generateCaptionName(subtitle.language)
-      }) as MVideoCaption
-
-      // Move physical file
-      await moveAndProcessCaptionFile(subtitle, videoCaption)
-
-      await sequelizeTypescript.transaction(async t => {
-        await VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
-      })
-    }
-  } catch (err) {
-    logger.warn('Cannot get video subtitles.', { err })
-  }
+  await processYoutubeSubtitles(youtubeDL, targetUrl, video.id)
 
   // Create job to import the video
   const payload = {
@@ -357,4 +317,72 @@ async function insertIntoDB (parameters: {
   })
 
   return videoImport
+}
+
+async function processTorrentOrAbortRequest (req: express.Request, res: express.Response, torrentfile: Express.Multer.File) {
+  const torrentName = torrentfile.originalname
+
+  // Rename the torrent to a secured name
+  const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, getSecureTorrentName(torrentName))
+  await move(torrentfile.path, newTorrentPath, { overwrite: true })
+  torrentfile.path = newTorrentPath
+
+  const buf = await readFile(torrentfile.path)
+  const parsedTorrent = parseTorrent(buf) as parseTorrent.Instance
+
+  if (parsedTorrent.files.length !== 1) {
+    cleanUpReqFiles(req)
+
+    res.status(HttpStatusCode.BAD_REQUEST_400)
+      .json({
+        code: ServerErrorCode.INCORRECT_FILES_IN_TORRENT,
+        error: 'Torrents with only 1 file are supported.'
+      })
+
+    return undefined
+  }
+
+  return {
+    name: extractNameFromArray(parsedTorrent.name),
+    torrentName
+  }
+}
+
+function processMagnetURI (body: VideoImportCreate) {
+  const magnetUri = body.magnetUri
+  const parsed = magnetUtil.decode(magnetUri)
+
+  return {
+    name: extractNameFromArray(parsed.name),
+    magnetUri
+  }
+}
+
+function extractNameFromArray (name: string | string[]) {
+  return isArray(name) ? name[0] : name
+}
+
+async function processYoutubeSubtitles (youtubeDL: YoutubeDL, targetUrl: string, videoId: number) {
+  try {
+    const subtitles = await youtubeDL.getYoutubeDLSubs()
+
+    logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
+
+    for (const subtitle of subtitles) {
+      const videoCaption = new VideoCaptionModel({
+        videoId,
+        language: subtitle.language,
+        filename: VideoCaptionModel.generateCaptionName(subtitle.language)
+      }) as MVideoCaption
+
+      // Move physical file
+      await moveAndProcessCaptionFile(subtitle, videoCaption)
+
+      await sequelizeTypescript.transaction(async t => {
+        await VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
+      })
+    }
+  } catch (err) {
+    logger.warn('Cannot get video subtitles.', { err })
+  }
 }

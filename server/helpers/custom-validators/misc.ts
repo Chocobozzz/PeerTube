@@ -14,7 +14,7 @@ function isSafePath (p: string) {
     })
 }
 
-function isArray (value: any) {
+function isArray (value: any): value is any[] {
   return Array.isArray(value)
 }
 
