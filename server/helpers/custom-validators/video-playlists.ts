@@ -1,40 +1,75 @@
-import { EtoB, exists, isArrayOf, isIdValid } from './misc'
+import { catchErrorAsBoolean, exists, isArrayOf, checkId } from './misc'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES } from '../../initializers/constants'
 
 const PLAYLISTS_CONSTRAINT_FIELDS = CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS
 
-function isVideoPlaylistNameValid (value: any) {
-  return exists(value) && validator.isLength(value, PLAYLISTS_CONSTRAINT_FIELDS.NAME)
+/**
+ * @throws {Error}
+ */
+function checkVideoPlaylistName (value: any) {
+  if (!exists(value)) throw new Error('Should have a non-null playlist name')
+  if (!validator.isLength(value, PLAYLISTS_CONSTRAINT_FIELDS.NAME)) {
+    const min = PLAYLISTS_CONSTRAINT_FIELDS.NAME.min
+    const max = PLAYLISTS_CONSTRAINT_FIELDS.NAME.max
+    throw new Error(`Should have a video playlist name between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
-function isVideoPlaylistDescriptionValid (value: any) {
-  return value === null || (exists(value) && validator.isLength(value, PLAYLISTS_CONSTRAINT_FIELDS.DESCRIPTION))
+/**
+ * @throws {Error}
+ */
+function checkVideoPlaylistDescription (value: any) {
+  if (value === null) return true
+  if (!exists(value)) throw new Error('Should have a non-null playlist description')
+  if (!validator.isLength(value, PLAYLISTS_CONSTRAINT_FIELDS.DESCRIPTION)) {
+    const min = PLAYLISTS_CONSTRAINT_FIELDS.DESCRIPTION.min
+    const max = PLAYLISTS_CONSTRAINT_FIELDS.DESCRIPTION.max
+    throw new Error(`Should have a video playlist description text between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
-function isVideoPlaylistPrivacyValid (value: number) {
-  return validator.isInt(value + '') && VIDEO_PLAYLIST_PRIVACIES[value] !== undefined
+/**
+ * @throws {Error}
+ */
+function checkVideoPlaylistPrivacy (value: number) {
+  if (!validator.isInt(value + '')) throw new Error('Should have a privacy policy that is an integer')
+  if (VIDEO_PLAYLIST_PRIVACIES[value] === undefined) throw new Error('Should have a privacy policy that corresponds to a known value')
+  return true
 }
 
-function isVideoPlaylistTimestampValid (value: any) {
-  return value === null || (exists(value) && validator.isInt('' + value, { min: 0 }))
+/**
+ * @throws {Error}
+ */
+function checkVideoPlaylistTimestamp (value: any) {
+  if (value === null) return true
+  if (!exists(value)) throw new Error('Should have a non-null timestamp')
+  if (!validator.isInt('' + value, { min: 0 })) throw new Error('Should have a timestamp that is a positive integer')
+  return true
 }
 
-function isVideoPlaylistTypeValid (value: any) {
-  return exists(value) && VIDEO_PLAYLIST_TYPES[value] !== undefined
+/**
+ * @throws {Error}
+ */
+function checkVideoPlaylistType (value: any) {
+  if (!exists(value)) throw new Error('Should have a non-null type')
+  if (VIDEO_PLAYLIST_TYPES[value] === undefined) throw new Error('Should have a known playlist type')
+  return true
 }
 
 function isVideoPlaylistVideoIdsValid (value: any) {
-  return isArrayOf(value, EtoB(isIdValid))
+  return isArrayOf(value, catchErrorAsBoolean(checkId))
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoPlaylistNameValid,
-  isVideoPlaylistDescriptionValid,
-  isVideoPlaylistPrivacyValid,
-  isVideoPlaylistTimestampValid,
-  isVideoPlaylistTypeValid,
+  checkVideoPlaylistName,
+  checkVideoPlaylistDescription,
+  checkVideoPlaylistPrivacy,
+  checkVideoPlaylistTimestamp,
+  checkVideoPlaylistType,
   isVideoPlaylistVideoIdsValid
 }

@@ -3,7 +3,7 @@ import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedA
 import { MTag } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
-import { isVideoTagValid } from '../../helpers/custom-validators/videos'
+import { checkVideoTag } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoTagModel } from './video-tag'
@@ -25,7 +25,7 @@ import { VideoTagModel } from './video-tag'
 export class TagModel extends Model<Partial<AttributesOnly<TagModel>>> {
 
   @AllowNull(false)
-  @Is('VideoTag', value => throwIfNotValid(value, isVideoTagValid, 'tag'))
+  @Is('VideoTag', value => throwIfNotValid(value, checkVideoTag, 'tag'))
   @Column
   name: string
 

@@ -5,7 +5,7 @@ import { UserNotificationModelForApi } from '@server/types/models/user'
 import { LiveVideoEventPayload, LiveVideoEventType } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { authenticateSocket } from '../middlewares'
-import { isIdValid } from '@server/helpers/custom-validators/misc'
+import { checkId } from '@server/helpers/custom-validators/misc'
 
 class PeerTubeSocket {
 
@@ -41,7 +41,7 @@ class PeerTubeSocket {
       .on('connection', socket => {
         socket.on('subscribe', ({ videoId }) => {
           try {
-            isIdValid(videoId)
+            checkId(videoId)
           } catch {
             return
           }
@@ -52,7 +52,7 @@ class PeerTubeSocket {
 
         socket.on('unsubscribe', ({ videoId }) => {
           try {
-            isIdValid(videoId)
+            checkId(videoId)
           } catch {
             return
           }

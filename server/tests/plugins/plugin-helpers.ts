@@ -184,7 +184,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should mute account of server 2', async function () {
-      await postCommand(servers[0], 'blockAccount', { handleToBlock: `root@localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'blockAccount', { handlcatchErrorAsBooleanlock: `root@localhost:${servers[1].port}` })
 
       const res = await getVideosList(servers[0].url)
       const videos = res.body.data

@@ -4,7 +4,7 @@ import {
   isSignatureCreatorValid, isSignatureTypeValid,
   isSignatureValueValid
 } from '../../../helpers/custom-validators/activitypub/signature'
-import { isDateValid } from '../../../helpers/custom-validators/misc'
+import { checkDate } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 
@@ -14,7 +14,7 @@ const signatureValidator = [
     .custom(isSignatureTypeValid).withMessage('Should have a valid signature type'),
   body('signature.created')
     .optional()
-    .custom(isDateValid).withMessage('Should have a valid signature created date'),
+    .custom(checkDate).withMessage('Should have a valid signature created date'),
   body('signature.creator')
     .optional()
     .custom(isSignatureCreatorValid).withMessage('Should have a valid signature creator'),

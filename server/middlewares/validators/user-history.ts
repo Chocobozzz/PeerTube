@@ -2,7 +2,7 @@ import * as express from 'express'
 import { body, query } from 'express-validator'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
-import { exists, isDateValid } from '../../helpers/custom-validators/misc'
+import { exists, checkDate } from '../../helpers/custom-validators/misc'
 
 const userHistoryListValidator = [
   query('search')
@@ -21,7 +21,7 @@ const userHistoryListValidator = [
 const userHistoryRemoveValidator = [
   body('beforeDate')
     .optional()
-    .custom(isDateValid).withMessage('Should have a valid before date'),
+    .custom(checkDate).withMessage('Should have a valid before date'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking userHistoryRemoveValidator parameters', { parameters: req.body })

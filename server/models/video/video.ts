@@ -44,14 +44,14 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoCategoryValid,
-  isVideoDescriptionValid,
-  isVideoDurationValid,
+  checkVideoDescription,
+  checkVideoDuration,
   isVideoLanguageValid,
   isVideoLicenceValid,
-  isVideoNameValid,
+  checkVideoName,
   isVideoPrivacyValid,
   isVideoStateValid,
-  isVideoSupportValid
+  checkVideoSupport
 } from '../../helpers/custom-validators/videos'
 import { getVideoFileResolution } from '../../helpers/ffprobe-utils'
 import { logger } from '../../helpers/logger'
@@ -499,7 +499,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   uuid: string
 
   @AllowNull(false)
-  @Is('VideoName', value => throwIfNotValid(value, isVideoNameValid, 'name'))
+  @Is('VideoName', value => throwIfNotValid(value, checkVideoName, 'name'))
   @Column
   name: string
 
@@ -533,18 +533,18 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoDescription', value => throwIfNotValid(value, isVideoDescriptionValid, 'description', true))
+  @Is('VideoDescription', value => throwIfNotValid(value, checkVideoDescription, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max))
   description: string
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoSupport', value => throwIfNotValid(value, isVideoSupportValid, 'support', true))
+  @Is('VideoSupport', value => throwIfNotValid(value, checkVideoSupport, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.SUPPORT.max))
   support: string
 
   @AllowNull(false)
-  @Is('VideoDuration', value => throwIfNotValid(value, isVideoDurationValid, 'duration'))
+  @Is('VideoDuration', value => throwIfNotValid(value, checkVideoDuration, 'duration'))
   @Column
   duration: number
 

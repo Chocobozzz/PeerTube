@@ -3,9 +3,9 @@ import { body } from 'express-validator'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoImportCreate } from '@shared/models/videos/import/video-import-create.model'
-import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import { checkId, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
-import { isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
+import { isVideoMagnetUriValid, checkVideoName } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
@@ -18,7 +18,7 @@ import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid),
+    .custom(checkId),
   body('targetUrl')
     .optional()
     .custom(isVideoImportTargetUrlValid).withMessage('Should have a valid video import target URL'),
@@ -33,7 +33,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     ),
   body('name')
     .optional()
-    .custom(isVideoNameValid),
+    .custom(checkVideoName),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoImportAddValidator parameters', { parameters: req.body })

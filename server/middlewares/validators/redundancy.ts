@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { exists, isBooleanValid, checkIdOrUUID, checkId, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
@@ -12,7 +12,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 
 const videoFileRedundancyGetValidator = [
   param('videoId')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
   param('resolution')
     .customSanitizer(toIntOrNull)
     .custom(exists).withMessage('Should have a valid resolution'),
@@ -49,7 +49,7 @@ const videoFileRedundancyGetValidator = [
 
 const videoPlaylistRedundancyGetValidator = [
   param('videoId')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
   param('streamingPlaylistType')
     .customSanitizer(toIntOrNull)
     .custom(exists).withMessage('Should have a valid streaming playlist type'),
@@ -118,7 +118,7 @@ const listVideoRedundanciesValidator = [
 
 const addVideoRedundancyValidator = [
   body('videoId')
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking addVideoRedundancyValidator parameters', { parameters: req.query })
@@ -149,7 +149,7 @@ const addVideoRedundancyValidator = [
 
 const removeVideoRedundancyValidator = [
   param('redundancyId')
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking removeVideoRedundancyValidator parameters', { parameters: req.query })

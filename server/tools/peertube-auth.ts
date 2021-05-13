@@ -9,7 +9,7 @@ import { getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
 import { getAccessToken } from '../../shared/extra-utils'
 import * as CliTable3 from 'cli-table3'
-import { EtoB } from '@server/helpers/custom-validators/misc'
+import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
 
 async function delInstance (url: string) {
   const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
@@ -80,7 +80,7 @@ program
           required: true
         },
         username: {
-          conform: (value) => EtoB(isUserUsernameValid)(value),
+          conform: (value) => catchErrorAsBoolean(isUserUsernameValid)(value),
           message: 'Name must be only letters, spaces, or dashes',
           required: true
         },

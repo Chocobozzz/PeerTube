@@ -1,6 +1,6 @@
 import { body, param } from 'express-validator'
 import * as express from 'express'
-import { isIdOrUUIDValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import { checkIdOrUUID, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { areValidationErrors } from '../utils'
 import { logger } from '../../../helpers/logger'
 import { doesVideoExist } from '../../../helpers/middlewares'
@@ -8,7 +8,7 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 
 const videoWatchingValidator = [
   param('videoId')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
 
   body('currentTime')
     .customSanitizer(toIntOrNull)

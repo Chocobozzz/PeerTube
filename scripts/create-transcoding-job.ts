@@ -8,7 +8,7 @@ import { JobQueue } from '../server/lib/job-queue'
 import { computeResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
 import { VideoTranscodingPayload } from '@shared/models'
 import { CONFIG } from '@server/initializers/config'
-import { isUUIDValid } from '@server/helpers/custom-validators/misc'
+import { catchErrorAsBoolean, checkUUID } from '@server/helpers/custom-validators/misc'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
@@ -38,7 +38,7 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  if (isUUIDValid(options.video) === false) {
+  if (catchErrorAsBoolean(checkUUID)(options.video) === false) {
     console.error('%s is not a valid video UUID.', options.video)
     return
   }

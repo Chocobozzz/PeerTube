@@ -28,7 +28,7 @@ import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/m
 import { AttributesOnly } from '@shared/core-utils'
 import {
   isVideoFileExtnameValid,
-  isVideoFileInfoHashValid,
+  checkVideoFileInfoHash,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
   isVideoFPSResolutionValid
@@ -173,7 +173,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   extname: string
 
   @AllowNull(true)
-  @Is('VideoFileInfohash', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash', true))
+  @Is('VideoFileInfohash', value => throwIfNotValid(value, checkVideoFileInfoHash, 'info hash', true))
   @Column
   infoHash: string
 

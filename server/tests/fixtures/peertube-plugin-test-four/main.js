@@ -134,7 +134,7 @@ async function unblockServer (peertubeHelpers, body) {
 async function blockAccount (peertubeHelpers, body) {
   const serverActor = await peertubeHelpers.server.getServerActor()
 
-  await peertubeHelpers.moderation.blockAccount({ byAccountId: serverActor.Account.id, handleToBlock: body.handleToBlock })
+  await peertubeHelpers.moderation.blockAccount({ byAccountId: serverActor.Account.id, handlcatchErrorAsBooleanlock: body.handlcatchErrorAsBooleanlock })
 }
 
 async function unblockAccount (peertubeHelpers, body) {

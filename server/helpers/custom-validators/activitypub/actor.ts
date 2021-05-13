@@ -1,6 +1,6 @@
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { exists, isArray, isDateValid } from '../misc'
+import { exists, isArray, checkDate } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { isHostValid } from '../servers'
 import { peertubeTruncate } from '@server/helpers/core-utils'
@@ -91,7 +91,7 @@ function normalizeActor (actor: any) {
     actor.url = actor.url.href || actor.url.url
   }
 
-  if (!isDateValid(actor.published)) actor.published = undefined
+  if (!checkDate(actor.published)) actor.published = undefined
 
   if (actor.summary && typeof actor.summary === 'string') {
     actor.summary = peertubeTruncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })

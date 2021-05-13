@@ -28,9 +28,9 @@ import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-play
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
-  isVideoPlaylistDescriptionValid,
-  isVideoPlaylistNameValid,
-  isVideoPlaylistPrivacyValid
+  checkVideoPlaylistDescription,
+  checkVideoPlaylistName,
+  checkVideoPlaylistPrivacy
 } from '../../helpers/custom-validators/video-playlists'
 import {
   ACTIVITY_PUB,
@@ -230,17 +230,17 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   updatedAt: Date
 
   @AllowNull(false)
-  @Is('VideoPlaylistName', value => throwIfNotValid(value, isVideoPlaylistNameValid, 'name'))
+  @Is('VideoPlaylistName', value => throwIfNotValid(value, checkVideoPlaylistName, 'name'))
   @Column
   name: string
 
   @AllowNull(true)
-  @Is('VideoPlaylistDescription', value => throwIfNotValid(value, isVideoPlaylistDescriptionValid, 'description', true))
+  @Is('VideoPlaylistDescription', value => throwIfNotValid(value, checkVideoPlaylistDescription, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.DESCRIPTION.max))
   description: string
 
   @AllowNull(false)
-  @Is('VideoPlaylistPrivacy', value => throwIfNotValid(value, isVideoPlaylistPrivacyValid, 'privacy'))
+  @Is('VideoPlaylistPrivacy', value => throwIfNotValid(value, checkVideoPlaylistPrivacy, 'privacy'))
   @Column
   privacy: VideoPlaylistPrivacy
 

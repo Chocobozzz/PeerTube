@@ -46,7 +46,7 @@ export type PeerTubeHelpers = {
   moderation: {
     blockServer: (options: { byAccountId: number, hostToBlock: string }) => Promise<void>
     unblockServer: (options: { byAccountId: number, hostToUnblock: string }) => Promise<void>
-    blockAccount: (options: { byAccountId: number, handleToBlock: string }) => Promise<void>
+    blockAccount: (options: { byAccountId: number, handlcatchErrorAsBooleanlock: string }) => Promise<void>
     unblockAccount: (options: { byAccountId: number, handleToUnblock: string }) => Promise<void>
 
     blacklistVideo: (options: { videoIdOrUUID: number | string, createOptions: VideoBlacklistCreate }) => Promise<void>

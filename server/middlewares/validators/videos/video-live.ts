@@ -3,8 +3,8 @@ import { body, param } from 'express-validator'
 import { checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '@server/helpers/middlewares/videos'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { ServerErrorCode, UserRight, VideoState } from '@shared/models'
-import { isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { isVideoNameValid } from '../../../helpers/custom-validators/videos'
+import { isBooleanValid, checkIdOrUUID, checkId, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import { checkVideoName } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
@@ -16,7 +16,7 @@ import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const videoLiveGetValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params, user: res.locals.oauth.token.User.username })
@@ -40,9 +40,9 @@ const videoLiveGetValidator = [
 const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid),
+    .custom(checkId),
   body('name')
-    .custom(isVideoNameValid),
+    .custom(checkVideoName),
   body('saveReplay')
     .optional()
     .customSanitizer(toBooleanOrNull)

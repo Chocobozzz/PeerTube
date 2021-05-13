@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { param } from 'express-validator'
-import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
+import { checkIdOrUUID, checkId } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { areValidationErrors } from '../utils'
@@ -9,9 +9,9 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 
 const videosShareValidator = [
   param('id')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
   param('actorId')
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoShare parameters', { parameters: req.params })

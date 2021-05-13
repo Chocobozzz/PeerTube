@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { areValidationErrors } from '../utils'
-import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
+import { checkIdOrUUID } from '../../../helpers/custom-validators/misc'
 import { body, param } from 'express-validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants'
 import { UserRight } from '../../../../shared'
@@ -10,7 +10,7 @@ import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { checkUserCanManageVideo, doesVideoCaptionExist, doesVideoExist } from '../../../helpers/middlewares'
 
 const addVideoCaptionValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid video id'),
   param('captionLanguage').custom(isVideoCaptionLanguageValid).not().isEmpty().withMessage('Should have a valid caption language'),
   body('captionfile')
     .custom((_, { req }) => isVideoCaptionFile(req.files, 'captionfile'))
@@ -35,7 +35,7 @@ const addVideoCaptionValidator = [
 ]
 
 const deleteVideoCaptionValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid video id'),
   param('captionLanguage').custom(isVideoCaptionLanguageValid).not().isEmpty().withMessage('Should have a valid caption language'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -54,7 +54,7 @@ const deleteVideoCaptionValidator = [
 ]
 
 const listVideoCaptionsValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid video id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking listVideoCaptions parameters', { parameters: req.params })

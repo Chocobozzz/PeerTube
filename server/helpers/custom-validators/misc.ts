@@ -2,6 +2,7 @@ import 'multer'
 import { UploadFilesForCheck } from 'express'
 import { sep } from 'path'
 import validator from 'validator'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 
 // ---------------------------------------------------------------------------
 // UTILS
@@ -12,9 +13,9 @@ import validator from 'validator'
  * @param fun Function that might throw an Error
  * @returns boolean matching no error = `true`, error = `false`
  */
-function EtoB (fun: Function, asError?: false): (...args: any[]) => boolean
-function EtoB (fun: Function, asError: true): (...args: any[]) => Error
-function EtoB (fun: Function, asError = false): (...args: any[]) => boolean | Error {
+function catchErrorAsBoolean (fun: Function, asError?: false): (...args: any[]) => boolean
+function catchErrorAsBoolean (fun: Function, asError: true): (...args: any[]) => Error
+function catchErrorAsBoolean (fun: Function, asError = false): (...args: any[]) => boolean | Error {
   return (...args) => {
     try {
       fun(...args)
@@ -26,7 +27,7 @@ function EtoB (fun: Function, asError = false): (...args: any[]) => boolean | Er
 }
 
 // ---------------------------------------------------------------------------
-// VALIDATORS
+// VALIDATORS - Boolean
 
 function exists (value: any) {
   return value !== undefined && value !== null
@@ -51,10 +52,26 @@ function isArrayOf (value: any, validator: (value: any) => boolean) {
   return isArray(value) && value.every(v => validator(v))
 }
 
+// ---------------------------------------------------------------------------
+// VALIDATORS - Throwables
+
 /**
  * @throws {Error}
  */
-function isDateValid (value: string) {
+function checkSafePath (value: string) {
+  if (!exists(value)) throw new Error('Should have a path')
+  if (
+    !(value + '').split(sep).every(part => {
+      return [ '..' ].includes(part) === false
+    })
+  ) throw new Error(`Should have a safe path, which ${value} isn't`)
+  return true
+}
+
+/**
+ * @throws {Error}
+ */
+function checkDate (value: string) {
   if (!exists(value)) throw new Error('Should have a date')
   if (!validator.isISO8601(value)) throw new Error('Should have a date conforming to ISO8601')
   return true
@@ -63,7 +80,7 @@ function isDateValid (value: string) {
 /**
  * @throws {Error}
  */
-function isIdValid (value: string) {
+function checkId (value: string) {
   if (!exists(value)) throw new Error('Should have an id')
   if (!validator.isInt('' + value)) throw new Error('Should have an integer id')
   return true
@@ -72,7 +89,7 @@ function isIdValid (value: string) {
 /**
  * @throws {Error}
  */
-function isUUIDValid (value: string) {
+function checkUUID (value: string) {
   if (!exists(value)) throw new Error('Should have a uuid')
   if (!validator.isUUID('' + value, 4)) throw new Error('Should have a v4 uuid')
   return true
@@ -81,10 +98,10 @@ function isUUIDValid (value: string) {
 /**
  * @throws {Error}
  */
-function isIdOrUUIDValid (value: string) {
+function checkIdOrUUID (value: string) {
   const errors = [
-    EtoB(isIdValid, true)(value)?.message,
-    EtoB(isUUIDValid, true)(value)?.message
+    catchErrorAsBoolean(checkId, true)(value)?.message,
+    catchErrorAsBoolean(checkUUID, true)(value)?.message
   ].filter(v => v)
   if (errors.length > 1) throw new Error(errors.join(' OR '))
   return true
@@ -120,7 +137,7 @@ function isFileFieldValid (
     // The file should exist
     const file = fileArray[0]
     if (!file || !file.originalname) return [ false, 'Should have a file with valid attributes' ]
-    return [ file ]
+    return [ true ]
   })()
 
   if (res[0]) return true
@@ -151,7 +168,11 @@ function isFileMimeTypeValid (
     const file = fileArray[0]
     if (!file || !file.originalname) return [ false, 'Should have a file with valid attributes' ]
 
-    return [ new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype), `Should have a file mimetype matching ^${mimeTypeRegex}$` ]
+    return [
+      new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype),
+      'This file is not supported. Please, make sure it is of the following type: ' +
+      CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
+    ]
   })()
 
   if (res[0]) return true
@@ -186,7 +207,11 @@ function isFileValid (
     // Check size
     if ((maxSize !== null) && file.size > maxSize) return [ false, `Should have a file with a maximum size of ${maxSize} bytes` ]
 
-    return [ new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype), `Should have a file mimetype matching ^${mimeTypeRegex}$` ]
+    return [
+      new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype),
+      'This file is not supported or too large. Please, make sure it is of the following type: ' +
+      CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+    ]
   })()
 
   if (res[0]) return true
@@ -236,17 +261,18 @@ function toIntArray (value: any) {
 // ---------------------------------------------------------------------------
 
 export {
-  EtoB,
+  catchErrorAsBoolean,
   exists,
   isArrayOf,
   isNotEmptyIntArray,
   isArray,
   isIntOrNull,
-  isIdValid,
   isSafePath,
-  isUUIDValid,
-  isIdOrUUIDValid,
-  isDateValid,
+  checkId,
+  checkSafePath,
+  checkUUID,
+  checkIdOrUUID,
+  checkDate,
   toValueOrNull,
   toBooleanOrNull,
   isBooleanValid,

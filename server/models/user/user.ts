@@ -73,7 +73,7 @@ import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { UserNotificationSettingModel } from './user-notification-setting'
-import { EtoB, catchError } from '@server/helpers/custom-validators/misc'
+import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -243,7 +243,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   password: string
 
   @AllowNull(false)
-  @Is('UserUsername', value => throwIfNotValid(value, EtoB(isUserUsernameValid), 'user name'))
+  @Is('UserUsername', value => throwIfNotValid(value, catchErrorAsBoolean(isUserUsernameValid), 'user name'))
   @Column
   username: string
 

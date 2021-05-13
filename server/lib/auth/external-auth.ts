@@ -1,5 +1,5 @@
 
-import { EtoB } from '@server/helpers/custom-validators/misc'
+import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
 import { isUserDisplayNameValid, isUserRoleValid, isUserUsernameValid } from '@server/helpers/custom-validators/users'
 import { logger } from '@server/helpers/logger'
 import { generateRandomString } from '@server/helpers/utils'
@@ -173,7 +173,7 @@ function getBypassFromExternalAuth (username: string, externalAuthToken: string)
 }
 
 function isAuthResultValid (npmName: string, authName: string, result: RegisterServerAuthenticatedResult) {
-  if (!EtoB(isUserUsernameValid)(result.username)) {
+  if (!catchErrorAsBoolean(isUserUsernameValid)(result.username)) {
     logger.error('Auth method %s of plugin %s did not provide a valid username.', authName, npmName, { username: result.username })
     return false
   }

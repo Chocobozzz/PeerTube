@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { param, query } from 'express-validator'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
-import { exists, isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
+import { exists, checkIdOrUUID, checkId } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import {
   doesAccountIdExist,
@@ -48,12 +48,12 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
 const videoFeedsValidator = [
   query('accountId')
     .optional()
-    .custom(isIdValid),
+    .custom(checkId),
   query('accountName')
     .optional(),
   query('videoChannelId')
     .optional()
-    .custom(isIdValid),
+    .custom(checkId),
   query('videoChannelName')
     .optional(),
 
@@ -73,7 +73,7 @@ const videoFeedsValidator = [
 
 const videoSubscriptionFeedsValidator = [
   query('accountId')
-    .custom(isIdValid),
+    .custom(checkId),
   query('token')
     .custom(exists)
     .withMessage('Should have a token'),
@@ -93,7 +93,7 @@ const videoSubscriptionFeedsValidator = [
 const videoCommentsFeedsValidator = [
   query('videoId')
     .optional()
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking feeds parameters', { parameters: req.query })

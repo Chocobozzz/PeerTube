@@ -104,8 +104,8 @@ function buildModerationHelpers () {
       await removeServerFromBlocklist(serverBlock)
     },
 
-    blockAccount: async (options: { byAccountId: number, handleToBlock: string }) => {
-      const accountToBlock = await AccountModel.loadByNameWithHost(options.handleToBlock)
+    blockAccount: async (options: { byAccountId: number, handlcatchErrorAsBooleanlock: string }) => {
+      const accountToBlock = await AccountModel.loadByNameWithHost(options.handlcatchErrorAsBooleanlock)
       if (!accountToBlock) return
 
       await addAccountInBlocklist(options.byAccountId, accountToBlock.id)

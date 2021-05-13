@@ -4,13 +4,13 @@ import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { isSafePath } from '../../helpers/custom-validators/misc'
+import { checkSafePath } from '../../helpers/custom-validators/misc'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const serveThemeCSSValidator = [
   param('themeName').custom(isPluginNameValid).withMessage('Should have a valid theme name'),
   param('themeVersion').custom(isPluginVersionValid).withMessage('Should have a valid theme version'),
-  param('staticEndpoint').custom(isSafePath).withMessage('Should have a valid static endpoint'),
+  param('staticEndpoint').custom(checkSafePath).withMessage('Should have a valid static endpoint'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking serveThemeCSS parameters', { parameters: req.params })

@@ -7,7 +7,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 import { UserRole } from '../../../shared/models/users'
 import { UserRegister } from '../../../shared/models/users/user-register.model'
 import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
-import { isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { checkIdOrUUID, checkId, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isNoInstanceConfigWarningModal,
@@ -155,7 +155,7 @@ const usersRegisterValidator = [
 
 const usersRemoveValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRemove parameters', { parameters: req.params })
@@ -175,7 +175,7 @@ const usersRemoveValidator = [
 
 const usersBlockingValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
 
   body('reason')
     .optional()
@@ -212,7 +212,7 @@ const deleteMeValidator = [
 
 const usersUpdateValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
 
   body('password')
     .optional()
@@ -324,7 +324,7 @@ const usersUpdateMeValidator = [
 
 const usersGetValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
   query('withStats')
     .optional()
     .isBoolean().withMessage('Should have a valid stats flag'),
@@ -341,7 +341,7 @@ const usersGetValidator = [
 
 const usersVideoRatingValidator = [
   param('videoId')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
@@ -410,7 +410,7 @@ const usersAskResetPasswordValidator = [
 
 const usersResetPasswordValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
 
   body('verificationString')
     .not().isEmpty().withMessage('Should have a valid verification string'),
@@ -457,7 +457,7 @@ const usersAskSendVerifyEmailValidator = [
 
 const usersVerifyEmailValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
 
   body('verificationString')
     .not().isEmpty().withMessage('Should have a valid verification string'),

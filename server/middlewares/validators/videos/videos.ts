@@ -11,11 +11,11 @@ import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/cha
 import {
   exists,
   isBooleanValid,
-  isDateValid,
+  checkDate,
   isFileFieldValid,
-  isIdOrUUIDValid,
-  isIdValid,
-  isUUIDValid,
+  checkIdOrUUID,
+  checkId,
+  checkUUID,
   toArray,
   toBooleanOrNull,
   toIntOrNull,
@@ -24,20 +24,20 @@ import {
 import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
 import {
-  isScheduleVideoUpdatePrivacyValid,
+  checkScheduleVideoUpdatePrivacy,
   isVideoCategoryValid,
-  isVideoDescriptionValid,
+  checkVideoDescription,
   isVideoFileMimeTypeValid,
   isVideoFileSizeValid,
   isVideoFilterValid,
-  isVideoImage,
+  checkVideoImage,
   isVideoLanguageValid,
   isVideoLicenceValid,
-  isVideoNameValid,
-  isVideoOriginallyPublishedAtValid,
+  checkVideoName,
+  checkVideoOriginallyPublishedAt,
   isVideoPrivacyValid,
-  isVideoSupportValid,
-  isVideoTagsValid
+  checkVideoSupport,
+  checkVideoTags
 } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { getDurationFromVideoFile } from '../../../helpers/ffprobe-utils'
@@ -51,7 +51,7 @@ import {
 import { deleteFileAndCatch } from '../../../helpers/utils'
 import { getVideoWithAttributes } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
-import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
+import { OVERVIEWS } from '../../../initializers/constants'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { AccountModel } from '../../../models/account/account'
@@ -64,10 +64,10 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .custom((value, { req }) => isFileFieldValid(req.files, 'videofile')),
   body('name')
     .trim()
-    .custom(isVideoNameValid),
+    .custom(checkVideoName),
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
@@ -144,11 +144,11 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .withMessage('Should have a valid filename'),
   body('name')
     .trim()
-    .custom(isVideoNameValid)
+    .custom(checkVideoName)
     .withMessage('Should have a valid name'),
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(checkId).withMessage('Should have correct video channel id'),
 
   header('x-upload-content-length')
     .isNumeric()
@@ -191,15 +191,15 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
 
 const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   param('id')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
   body('name')
     .optional()
     .trim()
-    .custom(isVideoNameValid),
+    .custom(checkVideoName),
   body('channelId')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
@@ -251,7 +251,7 @@ const videosCustomGetValidator = (
 ) => {
   return [
     param('id')
-      .custom(isIdOrUUIDValid),
+      .custom(checkIdOrUUID),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking videosGet parameters', { parameters: req.params })
@@ -284,7 +284,7 @@ const videosCustomGetValidator = (
 
       // Video is unlisted, check we used the uuid to fetch it
       if (video.privacy === VideoPrivacy.UNLISTED) {
-        if (isUUIDValid(req.params.id)) return next()
+        if (checkUUID(req.params.id)) return next()
 
         // Don't leak this unlisted video
         return res.status(HttpStatusCode.NOT_FOUND_404).end()
@@ -298,9 +298,9 @@ const videosDownloadValidator = videosCustomGetValidator('all', true)
 
 const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
   param('id')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
   param('videoFileId')
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoFileMetadataGet parameters', { parameters: req.params })
@@ -314,7 +314,7 @@ const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
 
 const videosRemoveValidator = [
   param('id')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosRemove parameters', { parameters: req.params })
@@ -331,7 +331,7 @@ const videosRemoveValidator = [
 
 const videosChangeOwnershipValidator = [
   param('videoId')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking changeOwnership parameters', { parameters: req.params })
@@ -357,7 +357,7 @@ const videosChangeOwnershipValidator = [
 
 const videosTerminateChangeOwnershipValidator = [
   param('id')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking changeOwnership parameters', { parameters: req.params })
@@ -415,28 +415,22 @@ const videosOverviewValidator = [
 function getCommonVideoEditAttributes () {
   return [
     body('thumbnailfile')
-      .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-        'This thumbnail file is not supported or too large. Please, make sure it is of the following type: ' +
-        CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-      ),
+      .custom((value, { req }) => checkVideoImage(req.files, 'thumbnailfile')),
     body('previewfile')
-      .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
-        'This preview file is not supported or too large. Please, make sure it is of the following type: ' +
-        CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-      ),
+      .custom((value, { req }) => checkVideoImage(req.files, 'previewfile')),
 
     body('category')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isVideoCategoryValid).withMessage('Should have a valid category'),
+      .custom(isVideoCategoryValid),
     body('licence')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
+      .custom(isVideoLicenceValid),
     body('language')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
+      .custom(isVideoLanguageValid),
     body('nsfw')
       .optional()
       .customSanitizer(toBooleanOrNull)
@@ -448,19 +442,19 @@ function getCommonVideoEditAttributes () {
     body('privacy')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
+      .custom(isVideoPrivacyValid),
     body('description')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoDescriptionValid),
+      .custom(checkVideoDescription),
     body('support')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoSupportValid),
+      .custom(checkVideoSupport),
     body('tags')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoTagsValid),
+      .custom(checkVideoTags),
     body('commentsEnabled')
       .optional()
       .customSanitizer(toBooleanOrNull)
@@ -472,17 +466,17 @@ function getCommonVideoEditAttributes () {
     body('originallyPublishedAt')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoOriginallyPublishedAtValid),
+      .custom(checkVideoOriginallyPublishedAt),
     body('scheduleUpdate')
       .optional()
       .customSanitizer(toValueOrNull),
     body('scheduleUpdate.updateAt')
       .optional()
-      .custom(isDateValid),
+      .custom(checkDate),
     body('scheduleUpdate.privacy')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isScheduleVideoUpdatePrivacyValid)
+      .custom(checkScheduleVideoUpdatePrivacy)
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
@@ -516,7 +510,7 @@ const commonVideosFiltersValidator = [
     .custom(isBooleanValid).withMessage('Should have a valid live boolean'),
   query('filter')
     .optional()
-    .custom(isVideoFilterValid).withMessage('Should have a valid filter attribute'),
+    .custom(isVideoFilterValid),
   query('skipCount')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -601,20 +595,19 @@ async function commonVideoChecksPass (parameters: {
 
   if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
 
-  if (!isVideoFileMimeTypeValid(files)) {
+  try {
+    isVideoFileMimeTypeValid(files)
+  } catch (error) {
     res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
-        .json({
-          error: 'This file is not supported. Please, make sure it is of the following type: ' +
-                CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
-        })
-
+       .json({ error })
     return false
   }
 
-  if (!isVideoFileSizeValid(videoFileSize.toString())) {
+  try {
+    isVideoFileSizeValid(videoFileSize.toString())
+  } catch (error) {
     res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-        .json({ error: 'This file is too large. It exceeds the maximum file size authorized.' })
-
+        .json({ error })
     return false
   }
 

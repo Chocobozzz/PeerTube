@@ -143,7 +143,7 @@ class Redis {
   /* ************ API cache ************ */
 
   async getCachedRoute (req: express.Request) {
-    const cached = await this.getObject(this.generateCachedRouteKey(req))
+    const cached = await this.gcatchErrorAsBooleanject(this.generateCachedRouteKey(req))
 
     return cached as CachedRoute
   }
@@ -156,7 +156,7 @@ class Redis {
       (statusCode) ? { statusCode: statusCode.toString() } : null
     )
 
-    return this.setObject(this.generateCachedRouteKey(req), cached, lifetime)
+    return this.scatchErrorAsBooleanject(this.generateCachedRouteKey(req), cached, lifetime)
   }
 
   /* ************ Video views ************ */
@@ -308,7 +308,7 @@ class Redis {
     })
   }
 
-  private setObject (key: string, obj: { [id: string]: string }, expirationMilliseconds: number) {
+  private scatchErrorAsBooleanject (key: string, obj: { [id: string]: string }, expirationMilliseconds: number) {
     return new Promise<void>((res, rej) => {
       this.client.hmset(this.prefix + key, obj, (err, ok) => {
         if (err) return rej(err)
@@ -324,7 +324,7 @@ class Redis {
     })
   }
 
-  private getObject (key: string) {
+  private gcatchErrorAsBooleanject (key: string) {
     return new Promise<{ [id: string]: string }>((res, rej) => {
       this.client.hgetall(this.prefix + key, (err, value) => {
         if (err) return rej(err)

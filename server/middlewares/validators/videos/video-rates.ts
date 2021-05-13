@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
+import { checkIdOrUUID, checkId } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
@@ -13,10 +13,10 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 
 const videoUpdateRateValidator = [
   param('id')
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
 
   body('rating')
-    .custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
+    .custom(isVideoRatingTypeValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoRate parameters', { parameters: req.body })
@@ -33,7 +33,7 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
     param('name')
       .custom(isAccountNameValid),
     param('videoId')
-      .custom(isIdValid),
+      .custom(checkId),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })

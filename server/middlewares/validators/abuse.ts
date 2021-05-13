@@ -12,7 +12,7 @@ import {
   isAbuseTimestampValid,
   isAbuseVideoIsValid
 } from '@server/helpers/custom-validators/abuses'
-import { exists, isIdOrUUIDValid, isIdValid, toIntOrNull } from '@server/helpers/custom-validators/misc'
+import { exists, checkIdOrUUID, checkId, toIntOrNull } from '@server/helpers/custom-validators/misc'
 import { doesCommentIdExist } from '@server/helpers/custom-validators/video-comments'
 import { logger } from '@server/helpers/logger'
 import { doesAbuseExist, doesAccountIdExist, doesVideoExist } from '@server/helpers/middlewares'
@@ -24,11 +24,11 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 const abuseReportValidator = [
   body('account.id')
     .optional()
-    .custom(isIdValid),
+    .custom(checkId),
 
   body('video.id')
     .optional()
-    .custom(isIdOrUUIDValid),
+    .custom(checkIdOrUUID),
   body('video.startAt')
     .optional()
     .customSanitizer(toIntOrNull)
@@ -45,7 +45,7 @@ const abuseReportValidator = [
 
   body('comment.id')
     .optional()
-    .custom(isIdValid),
+    .custom(checkId),
   body('reason')
     .custom(isAbuseReasonValid)
     .withMessage('Should have a valid reason'),
@@ -79,7 +79,7 @@ const abuseReportValidator = [
 
 const abuseGetValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking abuseGetValidator parameters', { parameters: req.body })
@@ -93,7 +93,7 @@ const abuseGetValidator = [
 
 const abuseUpdateValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
 
   body('state')
     .optional()
@@ -115,7 +115,7 @@ const abuseUpdateValidator = [
 const abuseListForAdminsValidator = [
   query('id')
     .optional()
-    .custom(isIdValid),
+    .custom(checkId),
   query('filter')
     .optional()
     .custom(isAbuseFilterValid)
@@ -158,7 +158,7 @@ const abuseListForAdminsValidator = [
 const abuseListForUserValidator = [
   query('id')
     .optional()
-    .custom(isIdValid),
+    .custom(checkId),
   query('search')
     .optional()
     .custom(exists).withMessage('Should have a valid search'),
@@ -177,7 +177,7 @@ const abuseListForUserValidator = [
 
 const getAbuseValidator = [
   param('id')
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking getAbuseValidator parameters', { parameters: req.body })
@@ -230,7 +230,7 @@ const addAbuseMessageValidator = [
 
 const deleteAbuseMessageValidator = [
   param('messageId')
-    .custom(isIdValid),
+    .custom(checkId),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking deleteAbuseMessageValidator parameters', { parameters: req.body })

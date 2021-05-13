@@ -5,7 +5,7 @@ import { fetchVideo } from '@server/helpers/video'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { isTestInstance } from '../../helpers/core-utils'
-import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
+import { checkIdOrUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { areValidationErrors } from './utils'
@@ -64,7 +64,7 @@ const oembedValidator = [
 
     const elementId = matches[1]
     try {
-      isIdOrUUIDValid(elementId)
+      checkIdOrUUID(elementId)
     } catch (error) {
       return res.status(HttpStatusCode.BAD_REQUEST_400).json({ error })
     }

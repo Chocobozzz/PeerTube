@@ -4,13 +4,13 @@ import { ActivityTrackerUrlObject, ActivityVideoFileMetadataUrlObject } from '@s
 import { VideoState } from '../../../../shared/models/videos'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { peertubeTruncate } from '../../core-utils'
-import { EtoB, exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
+import { catchErrorAsBoolean, exists, isArray, isBooleanValid, checkDate, checkUUID } from '../misc'
 import {
-  isVideoDurationValid,
-  isVideoNameValid,
+  checkVideoDuration,
+  checkVideoName,
   isVideoStateValid,
-  isVideoTagValid,
-  isVideoTruncatedDescriptionValid,
+  checkVideoTag,
+  checkVideoTruncatedDescription,
   isVideoViewsValid
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
@@ -26,7 +26,7 @@ function isActivityPubVideoDurationValid (value: string) {
     typeof value === 'string' &&
     value.startsWith('PT') &&
     value.endsWith('S') &&
-    isVideoDurationValid(value.replace(/[^0-9]+/g, ''))
+    checkVideoDuration(value.replace(/[^0-9]+/g, ''))
 }
 
 function sanitizeAndCheckVideoTorrentObject (video: any) {
@@ -67,17 +67,17 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   if (!isBooleanValid(video.permanentLive)) video.permanentLive = false
 
   return isActivityPubUrlValid(video.id) &&
-    EtoB(isVideoNameValid)(video.name) &&
+    catchErrorAsBoolean(checkVideoName)(video.name) &&
     isActivityPubVideoDurationValid(video.duration) &&
-    EtoB(isUUIDValid)(video.uuid) &&
+    catchErrorAsBoolean(checkUUID)(video.uuid) &&
     (!video.category || isRemoteNumberIdentifierValid(video.category)) &&
     (!video.licence || isRemoteNumberIdentifierValid(video.licence)) &&
     (!video.language || isRemoteStringIdentifierValid(video.language)) &&
     isVideoViewsValid(video.views) &&
     isBooleanValid(video.sensitive) &&
-    EtoB(isDateValid)(video.published) &&
-    EtoB(isDateValid)(video.updated) &&
-    (!video.originallyPublishedAt || EtoB(isDateValid)(video.originallyPublishedAt)) &&
+    catchErrorAsBoolean(checkDate)(video.published) &&
+    catchErrorAsBoolean(checkDate)(video.updated) &&
+    (!video.originallyPublishedAt || catchErrorAsBoolean(checkDate)(video.originallyPublishedAt)) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
     video.attributedTo.length !== 0
 }
@@ -145,7 +145,7 @@ function setValidRemoteTags (video: any) {
 
   video.tag = video.tag.filter(t => {
     return t.type === 'Hashtag' &&
-      EtoB(isVideoTagValid)(t.name)
+      catchErrorAsBoolean(checkVideoTag)(t.name)
   })
 
   return true
@@ -174,7 +174,7 @@ function isRemoteStringIdentifierValid (data: any) {
 }
 
 function isRemoteVideoContentValid (mediaType: string, content: string) {
-  return mediaType === 'text/markdown' && isVideoTruncatedDescriptionValid(content)
+  return mediaType === 'text/markdown' && checkVideoTruncatedDescription(content)
 }
 
 function setValidRemoteIcon (video: any) {

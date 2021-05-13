@@ -3,7 +3,7 @@ import { body, param, query, ValidationChain } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/server/api/install-plugin.model'
-import { exists, isBooleanValid, isSafePath, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { exists, isBooleanValid, checkSafePath, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
@@ -62,7 +62,7 @@ const getExternalAuthValidator = [
 ]
 
 const pluginStaticDirectoryValidator = [
-  param('staticEndpoint').custom(isSafePath).withMessage('Should have a valid static endpoint'),
+  param('staticEndpoint').custom(checkSafePath).withMessage('Should have a valid static endpoint'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking pluginStaticDirectoryValidator parameters', { parameters: req.params })
@@ -98,7 +98,7 @@ const installOrUpdatePluginValidator = [
     .custom(isNpmPluginNameValid).withMessage('Should have a valid npm name'),
   body('path')
     .optional()
-    .custom(isSafePath).withMessage('Should have a valid safe path'),
+    .custom(checkSafePath).withMessage('Should have a valid safe path'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking installOrUpdatePluginValidator parameters', { parameters: req.body })
