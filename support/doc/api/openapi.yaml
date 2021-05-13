@@ -505,31 +505,15 @@ paths:
                     maxItems: 100
                     items:
                       $ref: '#/components/schemas/Job'
-  '/server/following/{host}':
-    delete:
-      security:
-        - OAuth2:
-          - admin
-      tags:
-        - Instance Follows
-      summary: Unfollow a server
-      parameters:
-        - name: host
-          in: path
-          required: true
-          description: 'The host to unfollow '
-          schema:
-            type: string
-            format: hostname
-      responses:
-        '201':
-          description: successful operation
+
   /server/followers:
     get:
       tags:
         - Instance Follows
-      summary: List instance followers
+      summary: List instances following the server
       parameters:
+        - $ref: '#/components/parameters/followState'
+        - $ref: '#/components/parameters/actorType'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -539,32 +523,87 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Follow'
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Follow'
+  '/server/followers/{nameWithHost}':
+    delete:
+      summary: Remove or reject a follower to your server
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Instance Follows
+      parameters:
+        - name: nameWithHost
+          in: path
+          required: true
+          description: The remote actor handle to remove from your followers
+          schema:
+            type: string
+            format: email
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: follower not found
+  '/server/followers/{nameWithHost}/reject':
+    post:
+      summary: Reject a pending follower to your server
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Instance Follows
+      parameters:
+        - name: nameWithHost
+          in: path
+          required: true
+          description: The remote actor handle to remove from your followers
+          schema:
+            type: string
+            format: email
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: follower not found
+  '/server/followers/{nameWithHost}/accept':
+    post:
+      summary: Accept a pending follower to your server
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Instance Follows
+      parameters:
+        - name: nameWithHost
+          in: path
+          required: true
+          description: The remote actor handle to remove from your followers
+          schema:
+            type: string
+            format: email
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: follower not found
+
   /server/following:
     get:
       tags:
         - Instance Follows
       summary: List instances followed by the server
       parameters:
-        - name: state
-          in: query
-          schema:
-            type: string
-            enum:
-              - pending
-              - accepted
-        - name: actorType
-          in: query
-          schema:
-            type: string
-            enum:
-              - Person
-              - Application
-              - Group
-              - Service
-              - Organization
+        - $ref: '#/components/parameters/followState'
+        - $ref: '#/components/parameters/actorType'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -574,16 +613,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Follow'
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Follow'
     post:
       security:
         - OAuth2:
           - admin
       tags:
         - Instance Follows
-      summary: Follow a server
+      summary: Follow a list of servers
       responses:
         '204':
           description: successful operation
@@ -601,6 +646,28 @@ paths:
                     type: string
                     format: hostname
                   uniqueItems: true
+  '/server/following/{host}':
+    delete:
+      summary: Unfollow a server
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Instance Follows
+      parameters:
+        - name: host
+          in: path
+          required: true
+          description: The host to unfollow
+          schema:
+            type: string
+            format: hostname
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: host not found
+
   /users:
     post:
       summary: Create a user
@@ -4378,6 +4445,25 @@ components:
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
+    followState:
+      name: state
+      in: query
+      schema:
+        type: string
+        enum:
+          - pending
+          - accepted
+    actorType:
+      name: actorType
+      in: query
+      schema:
+        type: string
+        enum:
+          - Person
+          - Application
+          - Group
+          - Service
+          - Organization
   securitySchemes:
     OAuth2:
       description: |
