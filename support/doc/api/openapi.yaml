@@ -3274,7 +3274,8 @@ paths:
                 $ref: '#/components/schemas/VideoChannelList'
         '500':
           description: search index unavailable
-  /blocklist/accounts:
+
+  /server/blocklist/accounts:
     get:
       tags:
         - Account Blocks
@@ -3313,7 +3314,7 @@ paths:
           description: successful operation
         '409':
           description: self-blocking forbidden
-  '/blocklist/accounts/{accountName}':
+  '/server/blocklist/accounts/{accountName}':
     delete:
       tags:
         - Account Blocks
@@ -3333,7 +3334,8 @@ paths:
           description: successful operation
         '404':
           description: account or account block does not exist
-  /blocklist/servers:
+
+  /server/blocklist/servers:
     get:
       tags:
         - Server Blocks
@@ -3372,7 +3374,7 @@ paths:
           description: successful operation
         '409':
           description: self-blocking forbidden
-  '/blocklist/servers/{host}':
+  '/server/blocklist/servers/{host}':
     delete:
       tags:
         - Server Blocks
@@ -3393,6 +3395,7 @@ paths:
           description: successful operation
         '404':
           description: account block does not exist
+
   /server/redundancy/{host}:
     put:
       tags:
@@ -3501,6 +3504,7 @@ paths:
           description: successful operation
         '404':
           description: video redundancy not found
+
   '/feeds/video-comments.{format}':
     get:
       tags:
