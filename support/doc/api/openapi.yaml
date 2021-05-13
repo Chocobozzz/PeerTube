@@ -3437,7 +3437,7 @@ paths:
               required:
                 - host
       responses:
-        '200':
+        '204':
           description: successful operation
         '409':
           description: self-blocking forbidden
@@ -3458,7 +3458,7 @@ paths:
             type: string
             format: hostname
       responses:
-        '201':
+        '204':
           description: successful operation
         '404':
           description: account block does not exist
