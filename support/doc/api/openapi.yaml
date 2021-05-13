@@ -2236,8 +2236,18 @@ paths:
               required:
                 - reason
       responses:
-        '204':
+        '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  abuse:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/id'
         '400':
           description: incorrect request parameters
   '/abuses/{abuseId}':
