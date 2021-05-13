@@ -3393,7 +3393,7 @@ paths:
           description: successful operation
         '404':
           description: account block does not exist
-  /redundancy/{host}:
+  /server/redundancy/{host}:
     put:
       tags:
         - Instance Redundancy
@@ -3425,7 +3425,7 @@ paths:
           description: successful operation
         '404':
           description: server is not already known
-  /redundancy/videos:
+  /server/redundancy/videos:
     get:
       tags:
         - Video Mirroring
@@ -3481,7 +3481,7 @@ paths:
           description: video does not exist
         '409':
           description: video is already mirrored
-  /redundancy/videos/{redundancyId}:
+  /server/redundancy/videos/{redundancyId}:
     delete:
       tags:
         - Video Mirroring
