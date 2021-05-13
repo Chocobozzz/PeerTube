@@ -1,12 +1,12 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
+import { checkFollowState } from '@server/helpers/custom-validators/follows'
 import { getServerActor } from '@server/models/application/application'
 import { MActorFollowActorsDefault } from '@server/types/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
-import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
+import { isEachUniqueHostValid, checkHost } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
@@ -17,7 +17,7 @@ import { areValidationErrors } from './utils'
 const listFollowsValidator = [
   query('state')
     .optional()
-    .custom(isFollowStateValid).withMessage('Should have a valid follow state'),
+    .custom(checkFollowState),
   query('actorType')
     .optional()
     .custom(isActorTypeValid).withMessage('Should have a valid actor type'),
@@ -52,7 +52,8 @@ const followValidator = [
 ]
 
 const removeFollowingValidator = [
-  param('host').custom(isHostValid).withMessage('Should have a valid host'),
+  param('host')
+    .custom(checkHost),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unfollowing parameters', { parameters: req.params })

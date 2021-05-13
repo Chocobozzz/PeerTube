@@ -23,7 +23,7 @@ import { AttributesOnly } from '@shared/core-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
-  isVideoChannelDescriptionValid,
+  checkVideoChannelDescription,
   isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
@@ -256,7 +256,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description', true))
+  @Is('VideoChannelDescription', value => throwIfNotValid(value, checkVideoChannelDescription, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.DESCRIPTION.max))
   description: string
 

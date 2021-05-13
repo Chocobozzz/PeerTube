@@ -1,8 +1,8 @@
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { exists, isArray, checkDate } from '../misc'
+import { exists, isArray, checkDate, catchErrorAsBoolean } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
-import { isHostValid } from '../servers'
+import { checkHost } from '../servers'
 import { peertubeTruncate } from '@server/helpers/core-utils'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
@@ -108,7 +108,7 @@ function isValidActorHandle (handle: string) {
   const parts = handle.split('@')
   if (parts.length !== 2) return false
 
-  return isHostValid(parts[1])
+  return catchErrorAsBoolean(checkHost)(parts[1])
 }
 
 function areValidActorHandles (handles: string[]) {

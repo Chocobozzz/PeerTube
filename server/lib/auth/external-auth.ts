@@ -1,6 +1,6 @@
 
 import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
-import { isUserDisplayNameValid, isUserRoleValid, isUserUsernameValid } from '@server/helpers/custom-validators/users'
+import { checkUserDisplayName, isUserRoleValid, isUserUsernameValid } from '@server/helpers/custom-validators/users'
 import { logger } from '@server/helpers/logger'
 import { generateRandomString } from '@server/helpers/utils'
 import { PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants'
@@ -190,7 +190,7 @@ function isAuthResultValid (npmName: string, authName: string, result: RegisterS
   }
 
   // display name is optional
-  if (result.displayName && !isUserDisplayNameValid(result.displayName)) {
+  if (result.displayName && !catchErrorAsBoolean(checkUserDisplayName)(result.displayName)) {
     logger.error(
       'Auth method %s of plugin %s did not provide a valid display name.',
       authName, npmName, { displayName: result.displayName }

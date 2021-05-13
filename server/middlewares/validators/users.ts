@@ -16,8 +16,8 @@ import {
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
-  isUserDescriptionValid,
-  isUserDisplayNameValid,
+  checkUserDescription,
+  checkUserDisplayName,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserPasswordValidOrEmpty,
@@ -115,13 +115,13 @@ const usersRegisterValidator = [
     .isEmail().withMessage('Should have a valid email'),
   body('displayName')
     .optional()
-    .custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
+    .custom(checkUserDisplayName),
   body('channel.name')
     .optional()
     .custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
   body('channel.displayName')
     .optional()
-    .custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
+    .custom(isVideoChannelNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })
@@ -256,10 +256,10 @@ const usersUpdateValidator = [
 const usersUpdateMeValidator = [
   body('displayName')
     .optional()
-    .custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
+    .custom(checkUserDisplayName),
   body('description')
     .optional()
-    .custom(isUserDescriptionValid).withMessage('Should have a valid description'),
+    .custom(checkUserDescription),
   body('currentPassword')
     .optional()
     .custom(isUserPasswordValid).withMessage('Should have a valid current password'),

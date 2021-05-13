@@ -5,13 +5,15 @@ import { body, param } from 'express-validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants'
 import { UserRight } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
+import { isVideoCaptionFile, checkVideoCaptionLanguage } from '../../../helpers/custom-validators/video-captions'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { checkUserCanManageVideo, doesVideoCaptionExist, doesVideoExist } from '../../../helpers/middlewares'
 
 const addVideoCaptionValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid video id'),
-  param('captionLanguage').custom(isVideoCaptionLanguageValid).not().isEmpty().withMessage('Should have a valid caption language'),
+  param('videoId')
+    .custom(checkIdOrUUID).not().isEmpty(),
+  param('captionLanguage')
+    .custom(checkVideoCaptionLanguage).not().isEmpty(),
   body('captionfile')
     .custom((_, { req }) => isVideoCaptionFile(req.files, 'captionfile'))
     .withMessage(
@@ -35,8 +37,10 @@ const addVideoCaptionValidator = [
 ]
 
 const deleteVideoCaptionValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid video id'),
-  param('captionLanguage').custom(isVideoCaptionLanguageValid).not().isEmpty().withMessage('Should have a valid caption language'),
+  param('videoId')
+    .custom(checkIdOrUUID).not().isEmpty(),
+  param('captionLanguage')
+    .custom(checkVideoCaptionLanguage).not().isEmpty(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking deleteVideoCaption parameters', { parameters: req.params })

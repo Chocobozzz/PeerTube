@@ -7,8 +7,17 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 
 const VIDEO_COMMENTS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_COMMENTS
 
-function isValidVideoCommentText (value: string) {
-  return value === null || validator.isLength(value, VIDEO_COMMENTS_CONSTRAINTS_FIELDS.TEXT)
+/**
+ * @throws {Error}
+ */
+function checkVideoCommentText (value: string) {
+  if (value === null) return true
+  if (!validator.isLength(value, VIDEO_COMMENTS_CONSTRAINTS_FIELDS.TEXT)) {
+    const min = VIDEO_COMMENTS_CONSTRAINTS_FIELDS.TEXT.min
+    const max = VIDEO_COMMENTS_CONSTRAINTS_FIELDS.TEXT.max
+    throw new Error(`Should have a video comment text between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
 async function doesVideoCommentThreadExist (idArg: number | string, video: MVideoId, res: express.Response) {
@@ -86,7 +95,7 @@ async function doesCommentIdExist (idArg: number | string, res: express.Response
 // ---------------------------------------------------------------------------
 
 export {
-  isValidVideoCommentText,
+  checkVideoCommentText,
   doesVideoCommentThreadExist,
   doesVideoCommentExist,
   doesCommentIdExist

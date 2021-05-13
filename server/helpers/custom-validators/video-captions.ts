@@ -1,8 +1,13 @@
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_LANGUAGES } from '../../initializers/constants'
 import { exists, isFileValid } from './misc'
 
-function isVideoCaptionLanguageValid (value: any) {
-  return exists(value) && VIDEO_LANGUAGES[value] !== undefined
+/**
+ * @throws {Error}
+ */
+function checkVideoCaptionLanguage (value: any) {
+  if (!exists(value)) throw new Error('Should have a video caption language')
+  if (VIDEO_LANGUAGES[value] === undefined) throw new Error('Should have a known video caption language')
+  return true
 }
 
 const videoCaptionTypesRegex = Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
@@ -21,5 +26,5 @@ function isVideoCaptionFile (files: { [ fieldname: string ]: Express.Multer.File
 
 export {
   isVideoCaptionFile,
-  isVideoCaptionLanguageValid
+  checkVideoCaptionLanguage
 }

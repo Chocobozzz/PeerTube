@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { isBooleanValid, checkIdOrUUID, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../../helpers/custom-validators/video-blacklist'
+import { checkVideoBlacklistReason, isVideoBlacklistTypeValid } from '../../../helpers/custom-validators/video-blacklist'
 import { logger } from '../../../helpers/logger'
 import { doesVideoBlacklistExist, doesVideoExist } from '../../../helpers/middlewares'
 import { areValidationErrors } from '../utils'
@@ -22,14 +22,15 @@ const videosBlacklistRemoveValidator = [
 ]
 
 const videosBlacklistAddValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('videoId')
+    .custom(checkIdOrUUID).not().isEmpty(),
   body('unfederate')
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid unfederate boolean'),
   body('reason')
     .optional()
-    .custom(isVideoBlacklistReasonValid).withMessage('Should have a valid reason'),
+    .custom(checkVideoBlacklistReason),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosBlacklistAdd parameters', { parameters: req.params })
@@ -50,10 +51,11 @@ const videosBlacklistAddValidator = [
 ]
 
 const videosBlacklistUpdateValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('videoId')
+    .custom(checkIdOrUUID).not().isEmpty(),
   body('reason')
     .optional()
-    .custom(isVideoBlacklistReasonValid).withMessage('Should have a valid reason'),
+    .custom(checkVideoBlacklistReason),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosBlacklistUpdate parameters', { parameters: req.params })

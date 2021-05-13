@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { param, query } from 'express-validator'
-import { isValidJobState, isValidJobType } from '../../helpers/custom-validators/jobs'
+import { checkJobState, checkJobType } from '../../helpers/custom-validators/jobs'
 import { logger, loggerTagsFactory } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 
@@ -9,11 +9,11 @@ const lTags = loggerTagsFactory('validators', 'jobs')
 const listJobsValidator = [
   param('state')
   .optional()
-  .custom(isValidJobState).not().isEmpty().withMessage('Should have a valid job state'),
+  .custom(checkJobState),
 
   query('jobType')
     .optional()
-    .custom(isValidJobType).withMessage('Should have a valid job state'),
+    .custom(checkJobType),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking listJobsValidator parameters.', { parameters: req.params, ...lTags() })

@@ -1,14 +1,18 @@
 import { exists } from './misc'
 import { FollowState } from '@shared/models'
 
-function isFollowStateValid (value: FollowState) {
-  if (!exists(value)) return false
-
-  return value === 'pending' || value === 'accepted'
+/**
+ * @throws {Error}
+ */
+function checkFollowState (value: FollowState) {
+  if (!exists(value)) throw new Error('Should have a follow state')
+  const possibleValues = [ 'pending', 'accepted' ]
+  if (!possibleValues.includes(value)) throw new Error('Should have a follow state among ' + possibleValues.join(', '))
+  return true
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isFollowStateValid
+  checkFollowState
 }

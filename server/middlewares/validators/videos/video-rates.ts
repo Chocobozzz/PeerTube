@@ -1,13 +1,13 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { checkIdOrUUID, checkId } from '../../../helpers/custom-validators/misc'
-import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
+import { checkVideoRating } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { VideoRateType } from '../../../../shared/models/videos'
-import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
+import { checkAccountName } from '../../../helpers/custom-validators/accounts'
 import { doesVideoExist } from '../../../helpers/middlewares'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
@@ -31,7 +31,7 @@ const videoUpdateRateValidator = [
 const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
   return [
     param('name')
-      .custom(isAccountNameValid),
+      .custom(checkAccountName),
     param('videoId')
       .custom(checkId),
 
@@ -56,7 +56,7 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
 const videoRatingValidator = [
   query('rating')
     .optional()
-    .custom(isRatingValid).withMessage('Value must be one of "like" or "dislike"'),
+    .custom(checkVideoRating),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking rating parameter', { parameters: req.params })

@@ -1,13 +1,13 @@
 import * as express from 'express'
 import { param } from 'express-validator'
-import { isAccountNameValid } from '../../helpers/custom-validators/accounts'
+import { checkAccountName } from '../../helpers/custom-validators/accounts'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { doesAccountNameWithHostExist, doesLocalAccountNameExist } from '../../helpers/middlewares'
 
 const localAccountValidator = [
   param('name')
-    .custom(isAccountNameValid),
+    .custom(checkAccountName),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking localAccountValidator parameters', { parameters: req.params })
@@ -20,7 +20,8 @@ const localAccountValidator = [
 ]
 
 const accountNameWithHostGetValidator = [
-  param('accountName').exists().withMessage('Should have an account name with host'),
+  param('accountName')
+    .exists().withMessage('Should have an account name with host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking accountsNameWithHostGetValidator parameters', { parameters: req.params })

@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { param, query } from 'express-validator'
-import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
+import { checkRSSFeedFormat } from '../../helpers/custom-validators/feeds'
 import { exists, checkIdOrUUID, checkId } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import {
@@ -15,8 +15,10 @@ import { areValidationErrors } from './utils'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const feedsFormatValidator = [
-  param('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
-  query('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)')
+  param('format')
+    .optional().custom(checkRSSFeedFormat),
+  query('format')
+    .optional().custom(checkRSSFeedFormat)
 ]
 
 function setFeedFormatContentType (req: express.Request, res: express.Response, next: express.NextFunction) {

@@ -3,14 +3,14 @@ import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { checkDate } from '../../helpers/custom-validators/misc'
 import { query } from 'express-validator'
-import { isValidLogLevel } from '../../helpers/custom-validators/logs'
+import { checkLogLevel } from '../../helpers/custom-validators/logs'
 
 const getLogsValidator = [
   query('startDate')
-    .custom(checkDate).withMessage('Should have a valid start date'),
+    .custom(checkDate),
   query('level')
     .optional()
-    .custom(isValidLogLevel).withMessage('Should have a valid level'),
+    .custom(checkLogLevel),
   query('endDate')
     .optional()
     .custom(checkDate).withMessage('Should have a valid end date'),

@@ -19,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { MVideo, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
-import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
+import { checkVideoCaptionLanguage } from '../../helpers/custom-validators/video-captions'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants'
@@ -66,7 +66,7 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
   updatedAt: Date
 
   @AllowNull(false)
-  @Is('VideoCaptionLanguage', value => throwIfNotValid(value, isVideoCaptionLanguageValid, 'language'))
+  @Is('VideoCaptionLanguage', value => throwIfNotValid(value, checkVideoCaptionLanguage, 'language'))
   @Column
   language: string
 

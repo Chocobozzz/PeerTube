@@ -1,16 +1,22 @@
-import { isUserDescriptionValid, isUserUsernameValid } from './users'
-import { catchErrorAsBoolean, exists } from './misc'
+import { checkUserDescription, isUserUsernameValid } from './users'
+import { exists } from './misc'
 
-function isAccountNameValid (value: string) {
-  return catchErrorAsBoolean(isUserUsernameValid)(value)
+/**
+ * @throws {Error}
+ */
+function checkAccountName (value: string) {
+  return isUserUsernameValid(value)
 }
 
 function isAccountIdValid (value: string) {
   return exists(value)
 }
 
+/**
+ * @throws {Error}
+ */
 function isAccountDescriptionValid (value: string) {
-  return isUserDescriptionValid(value)
+  return checkUserDescription(value)
 }
 
 // ---------------------------------------------------------------------------
@@ -18,5 +24,5 @@ function isAccountDescriptionValid (value: string) {
 export {
   isAccountIdValid,
   isAccountDescriptionValid,
-  isAccountNameValid
+  checkAccountName
 }

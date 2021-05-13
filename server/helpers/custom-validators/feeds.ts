@@ -1,7 +1,10 @@
 import { exists } from './misc'
 
-function isValidRSSFeed (value: string) {
-  if (!exists(value)) return false
+/**
+ * @throws {Error}
+ */
+function checkRSSFeedFormat (value: string) {
+  if (!exists(value)) throw new Error('Should have a format')
 
   const feedExtensions = [
     'xml',
@@ -13,11 +16,12 @@ function isValidRSSFeed (value: string) {
     'atom1'
   ]
 
-  return feedExtensions.includes(value)
+  if (!feedExtensions.includes(value)) throw new Error('Should have a feed format among ' + feedExtensions.join(', '))
+  return true
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isValidRSSFeed
+  checkRSSFeedFormat
 }

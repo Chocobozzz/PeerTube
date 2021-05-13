@@ -4,13 +4,12 @@ import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoImportCreate } from '@shared/models/videos/import/video-import-create.model'
 import { checkId, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
+import { checkVideoImportTargetUrl, checkVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
 import { isVideoMagnetUriValid, checkVideoName } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
 import { CONFIG } from '../../../initializers/config'
-import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { areValidationErrors } from '../utils'
 import { getCommonVideoEditAttributes } from './videos'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
@@ -21,16 +20,12 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     .custom(checkId),
   body('targetUrl')
     .optional()
-    .custom(isVideoImportTargetUrlValid).withMessage('Should have a valid video import target URL'),
+    .custom(checkVideoImportTargetUrl),
   body('magnetUri')
     .optional()
-    .custom(isVideoMagnetUriValid).withMessage('Should have a valid video magnet URI'),
+    .custom(isVideoMagnetUriValid),
   body('torrentfile')
-    .custom((value, { req }) => isVideoImportTorrentFile(req.files))
-    .withMessage(
-      'This torrent file is not supported or too large. Please, make sure it is of the following type: ' +
-      CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.EXTNAME.join(', ')
-    ),
+    .custom((value, { req }) => checkVideoImportTorrentFile(req.files)),
   body('name')
     .optional()
     .custom(checkVideoName),

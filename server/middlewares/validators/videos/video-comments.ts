@@ -6,7 +6,7 @@ import { exists, isBooleanValid, checkIdOrUUID, checkId, toBooleanOrNull } from 
 import {
   doesVideoCommentExist,
   doesVideoCommentThreadExist,
-  isValidVideoCommentText
+  checkVideoCommentText
 } from '../../../helpers/custom-validators/video-comments'
 import { logger } from '../../../helpers/logger'
 import { doesVideoExist } from '../../../helpers/middlewares'
@@ -75,8 +75,10 @@ const listVideoThreadCommentsValidator = [
 ]
 
 const addVideoCommentThreadValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
-  body('text').custom(isValidVideoCommentText).not().isEmpty().withMessage('Should have a valid comment text'),
+  param('videoId')
+    .custom(checkIdOrUUID).not().isEmpty(),
+  body('text')
+    .custom(checkVideoCommentText).not().isEmpty(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking addVideoCommentThread parameters.', { parameters: req.params, body: req.body })
@@ -95,7 +97,8 @@ const addVideoCommentReplyValidator = [
     .custom(checkIdOrUUID),
   param('commentId')
     .custom(checkId),
-  body('text').custom(isValidVideoCommentText).not().isEmpty().withMessage('Should have a valid comment text'),
+  body('text')
+    .custom(checkVideoCommentText).not().isEmpty(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking addVideoCommentReply parameters.', { parameters: req.params, body: req.body })

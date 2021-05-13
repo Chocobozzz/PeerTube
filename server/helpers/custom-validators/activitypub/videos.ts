@@ -73,12 +73,12 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     (!video.category || isRemoteNumberIdentifierValid(video.category)) &&
     (!video.licence || isRemoteNumberIdentifierValid(video.licence)) &&
     (!video.language || isRemoteStringIdentifierValid(video.language)) &&
-    isVideoViewsValid(video.views) &&
+    catchErrorAsBoolean(isVideoViewsValid)(video.views) &&
     isBooleanValid(video.sensitive) &&
     catchErrorAsBoolean(checkDate)(video.published) &&
     catchErrorAsBoolean(checkDate)(video.updated) &&
     (!video.originallyPublishedAt || catchErrorAsBoolean(checkDate)(video.originallyPublishedAt)) &&
-    (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
+    (!video.content || catchErrorAsBoolean(isRemoteVideoContentValid)(video.mediaType, video.content)) &&
     video.attributedTo.length !== 0
 }
 

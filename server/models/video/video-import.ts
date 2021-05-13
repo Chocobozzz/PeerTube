@@ -17,7 +17,7 @@ import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoImport, VideoImportState } from '../../../shared'
-import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
+import { checkVideoImportState, checkVideoImportTargetUrl } from '../../helpers/custom-validators/video-imports'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { UserModel } from '../user/user'
@@ -62,7 +62,7 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoImportTargetUrl', value => throwIfNotValid(value, isVideoImportTargetUrlValid, 'targetUrl', true))
+  @Is('VideoImportTargetUrl', value => throwIfNotValid(value, checkVideoImportTargetUrl, 'targetUrl', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max))
   targetUrl: string
 
@@ -79,7 +79,7 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
 
   @AllowNull(false)
   @Default(null)
-  @Is('VideoImportState', value => throwIfNotValid(value, isVideoImportStateValid, 'state'))
+  @Is('VideoImportState', value => throwIfNotValid(value, checkVideoImportState, 'state'))
   @Column
   state: VideoImportState
 

@@ -30,21 +30,41 @@ function isUserVideoQuotaDailyValid (value: string) {
  * @throws {Error}
  */
 function isUserUsernameValid (value: string) {
-  if (!exists(value)) throw new Error('Should have a username')
+  if (!exists(value)) throw new Error('Should have a name')
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
   if (!validator.matches(value, new RegExp(`^[a-z0-9._]{${min},${max}}$`))) {
-    throw new Error(`Should have a username between ${min} and ${max} alphanumeric characters long`)
+    throw new Error(`Should have a name between ${min} and ${max} alphanumeric characters long`)
   }
   return true
 }
 
-function isUserDisplayNameValid (value: string) {
-  return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.NAME))
+/**
+ * @throws {Error}
+ */
+function checkUserDisplayName (value: string) {
+  if (value === null) return true
+  if (!exists(value)) throw new Error('Should have a user display name')
+  if (!validator.isLength(value, CONSTRAINTS_FIELDS.USERS.NAME)) {
+    const min = CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min
+    const max = CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max
+    throw new Error(`Should have a user display name between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
-function isUserDescriptionValid (value: string) {
-  return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.DESCRIPTION))
+/**
+ * @throws {Error}
+ */
+function checkUserDescription (value: string) {
+  if (value === null) return true
+  if (!exists(value)) throw new Error('Should have a user description')
+  if (!validator.isLength(value, CONSTRAINTS_FIELDS.USERS.DESCRIPTION)) {
+    const min = CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min
+    const max = CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max
+    throw new Error(`Should have a user description between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
 function isUserEmailVerifiedValid (value: any) {
@@ -124,8 +144,8 @@ export {
   isUserAutoPlayVideoValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayNextVideoPlaylistValid,
-  isUserDisplayNameValid,
-  isUserDescriptionValid,
+  checkUserDisplayName,
+  checkUserDescription,
   isNoInstanceConfigWarningModal,
   isNoWelcomeModal
 }

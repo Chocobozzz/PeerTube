@@ -1,9 +1,12 @@
 import validator from 'validator'
-import { exists, isArray } from './misc'
+import { catchErrorAsBoolean, exists, isArray } from './misc'
 import { isTestInstance } from '../core-utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
-function isHostValid (host: string) {
+/**
+ * @throws {Error}
+ */
+function checkHost (host: string) {
   const isURLOptions = {
     require_host: true,
     require_tld: true
@@ -14,30 +17,53 @@ function isHostValid (host: string) {
     isURLOptions.require_tld = false
   }
 
-  return exists(host) && validator.isURL(host, isURLOptions) && host.split('://').length === 1
+  if (!exists(host)) throw new Error('Should have a host')
+  if (!validator.isURL(host, isURLOptions)) {
+    throw new Error('Should have a host with a top-level domain')
+  }
+  if (host.split('://').length !== 1) throw new Error('Should have a host with no protocol prefix')
+  return true
 }
 
 function isEachUniqueHostValid (hosts: string[]) {
   return isArray(hosts) &&
     hosts.length !== 0 &&
     hosts.every(host => {
-      return isHostValid(host) && hosts.indexOf(host) === hosts.lastIndexOf(host)
+      return catchErrorAsBoolean(checkHost)(host) && hosts.indexOf(host) === hosts.lastIndexOf(host)
     })
 }
 
-function isValidContactBody (value: any) {
-  return exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.BODY)
+/**
+ * @throws {Error}
+ */
+function checkContactBody (value: any) {
+  if (!exists(value)) throw new Error('Should have a contact text')
+  if (!validator.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.BODY)) {
+    const min = CONSTRAINTS_FIELDS.CONTACT_FORM.BODY.min
+    const max = CONSTRAINTS_FIELDS.CONTACT_FORM.BODY.max
+    throw new Error(`Should have a contact text between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
-function isValidContactFromName (value: any) {
-  return exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.FROM_NAME)
+/**
+ * @throws {Error}
+ */
+function checkContactFromName (value: any) {
+  if (!exists(value)) throw new Error('Should have a contact From name')
+  if (!validator.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.FROM_NAME)) {
+    const min = CONSTRAINTS_FIELDS.CONTACT_FORM.FROM_NAME.min
+    const max = CONSTRAINTS_FIELDS.CONTACT_FORM.FROM_NAME.max
+    throw new Error(`Should have a contact From name between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isValidContactBody,
-  isValidContactFromName,
+  checkContactBody,
+  checkContactFromName,
   isEachUniqueHostValid,
-  isHostValid
+  checkHost
 }

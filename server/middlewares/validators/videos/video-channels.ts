@@ -7,7 +7,7 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
 import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
-  isVideoChannelDescriptionValid,
+  checkVideoChannelDescription,
   isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../../helpers/custom-validators/video-channels'
@@ -18,10 +18,16 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors } from '../utils'
 
 const videoChannelsAddValidator = [
-  body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
-  body('displayName').custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
-  body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
-  body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
+  body('name')
+    .custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
+  body('displayName')
+    .custom(isVideoChannelNameValid),
+  body('description')
+    .optional()
+    .custom(checkVideoChannelDescription),
+  body('support')
+    .optional()
+    .custom(isVideoChannelSupportValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsAdd parameters', { parameters: req.body })
@@ -52,13 +58,13 @@ const videoChannelsUpdateValidator = [
   param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
   body('displayName')
     .optional()
-    .custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
+    .custom(isVideoChannelNameValid),
   body('description')
     .optional()
-    .custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
+    .custom(checkVideoChannelDescription),
   body('support')
     .optional()
-    .custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
+    .custom(isVideoChannelSupportValid),
   body('bulkVideosSupportUpdate')
     .optional()
     .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),
@@ -115,7 +121,8 @@ const videoChannelsNameWithHostValidator = [
 ]
 
 const localVideoChannelValidator = [
-  param('name').custom(isVideoChannelNameValid).withMessage('Should have a valid video channel name'),
+  param('name')
+    .custom(isVideoChannelNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking localVideoChannelValidator parameters', { parameters: req.params })

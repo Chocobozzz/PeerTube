@@ -3,7 +3,7 @@ import * as express from 'express'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { AccountBlocklistModel } from '../../models/account/account-blocklist'
-import { isHostValid } from '../../helpers/custom-validators/servers'
+import { checkHost } from '../../helpers/custom-validators/servers'
 import { ServerBlocklistModel } from '../../models/server/server-blocklist'
 import { ServerModel } from '../../models/server/server'
 import { WEBSERVER } from '../../initializers/constants'
@@ -69,7 +69,8 @@ const unblockAccountByServerValidator = [
 ]
 
 const blockServerValidator = [
-  body('host').custom(isHostValid).withMessage('Should have a valid host'),
+  body('host')
+    .custom(checkHost),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking serverGetValidator parameters', { parameters: req.body })
@@ -92,7 +93,8 @@ const blockServerValidator = [
 ]
 
 const unblockServerByAccountValidator = [
-  param('host').custom(isHostValid).withMessage('Should have an account name with host'),
+  param('host')
+    .custom(checkHost),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unblockServerByAccountValidator parameters', { parameters: req.params })
@@ -107,7 +109,8 @@ const unblockServerByAccountValidator = [
 ]
 
 const unblockServerByServerValidator = [
-  param('host').custom(isHostValid).withMessage('Should have an account name with host'),
+  param('host')
+    .custom(checkHost),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unblockServerByServerValidator parameters', { parameters: req.params })

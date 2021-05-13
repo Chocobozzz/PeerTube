@@ -4,10 +4,10 @@ import { exists, isBooleanValid, checkIdOrUUID, checkId, toBooleanOrNull, toIntO
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
-import { isHostValid } from '../../helpers/custom-validators/servers'
+import { checkHost } from '../../helpers/custom-validators/servers'
 import { ServerModel } from '../../models/server/server'
 import { doesVideoExist } from '../../helpers/middlewares'
-import { isVideoRedundancyTarget } from '@server/helpers/custom-validators/video-redundancies'
+import { checkVideoRedundancyTarget } from '@server/helpers/custom-validators/video-redundancies'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const videoFileRedundancyGetValidator = [
@@ -77,7 +77,8 @@ const videoPlaylistRedundancyGetValidator = [
 ]
 
 const updateServerRedundancyValidator = [
-  param('host').custom(isHostValid).withMessage('Should have a valid host'),
+  param('host')
+    .custom(checkHost),
   body('redundancyAllowed')
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid redundancyAllowed attribute'),
@@ -105,7 +106,7 @@ const updateServerRedundancyValidator = [
 
 const listVideoRedundanciesValidator = [
   query('target')
-    .custom(isVideoRedundancyTarget).withMessage('Should have a valid video redundancies target'),
+    .custom(checkVideoRedundancyTarget),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking listVideoRedundanciesValidator parameters', { parameters: req.query })

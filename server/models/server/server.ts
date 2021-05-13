@@ -1,7 +1,7 @@
 import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServer, MServerFormattable } from '@server/types/models/server'
 import { AttributesOnly } from '@shared/core-utils'
-import { isHostValid } from '../../helpers/custom-validators/servers'
+import { checkHost } from '../../helpers/custom-validators/servers'
 import { ActorModel } from '../actor/actor'
 import { throwIfNotValid } from '../utils'
 import { ServerBlocklistModel } from './server-blocklist'
@@ -18,7 +18,7 @@ import { ServerBlocklistModel } from './server-blocklist'
 export class ServerModel extends Model<Partial<AttributesOnly<ServerModel>>> {
 
   @AllowNull(false)
-  @Is('Host', value => throwIfNotValid(value, isHostValid, 'valid host'))
+  @Is('Host', value => throwIfNotValid(value, checkHost, 'valid host'))
   @Column
   host: string
 

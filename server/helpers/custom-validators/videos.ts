@@ -75,8 +75,17 @@ function checkVideoDuration (value: string) {
   return true
 }
 
+/**
+ * @throws {Error}
+ */
 function checkVideoTruncatedDescription (value: string) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION)
+  if (!exists(value)) throw new Error('Should have a video truncated description')
+  if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION)) {
+    const min = VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION.min
+    const max = VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION.max
+    throw new Error(`Should have a video truncated description between ${min} and ${max} characters long`)
+  }
+  return true
 }
 
 /**
@@ -146,8 +155,15 @@ function checkVideoTags (tags: string[]) {
   return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoViewsValid (value: string) {
-  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
+  if (!exists(value)) throw new Error('Should have a video views count')
+  if (!validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)) {
+    throw new Error(`Should have a positive video view count`)
+  }
+  return true
 }
 
 /**
@@ -219,12 +235,22 @@ function checkVideoFileInfoHash (value: string | null | undefined) {
   return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoFileResolutionValid (value: string) {
-  return exists(value) && validator.isInt(value + '')
+  if (!exists(value)) throw new Error('Should have a video file resolution')
+  if (!validator.isInt(value + '')) throw new Error('Should have a video file resolution that is an integer')
+  return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoFPSResolutionValid (value: string) {
-  return value === null || validator.isInt(value + '')
+  if (value === null) return true
+  if (!validator.isInt(value + '')) throw new Error('Should have a video file resolution that is an integer')
+  return true
 }
 
 /**
@@ -238,11 +264,16 @@ function isVideoFileSizeValid (value: string) {
   return true
 }
 
+/**
+ * @throws {Error}
+ */
 function isVideoMagnetUriValid (value: string) {
-  if (!exists(value)) return false
+  if (!exists(value)) throw new Error('Should have a video magnetUri')
 
   const parsed = magnetUtil.decode(value)
-  return parsed && checkVideoFileInfoHash(parsed.infoHash)
+  if (parsed && checkVideoFileInfoHash(parsed.infoHash)) {
+    return true
+  }
 }
 
 // ---------------------------------------------------------------------------

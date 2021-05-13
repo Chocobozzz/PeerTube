@@ -3,7 +3,7 @@ import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey,
 import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
-import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
+import { checkVideoBlacklistReason, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { getBlacklistSort, searchAttribute, SortType, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from './thumbnail'
@@ -22,7 +22,7 @@ import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel
 export class VideoBlacklistModel extends Model<Partial<AttributesOnly<VideoBlacklistModel>>> {
 
   @AllowNull(true)
-  @Is('VideoBlacklistReason', value => throwIfNotValid(value, isVideoBlacklistReasonValid, 'reason', true))
+  @Is('VideoBlacklistReason', value => throwIfNotValid(value, checkVideoBlacklistReason, 'reason', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_BLACKLIST.REASON.max))
   reason: string
 
