@@ -809,6 +809,13 @@ paths:
               parameters:
                 client_id: '$response.body#/client_id'
                 client_secret: '$response.body#/client_secret'
+      x-codeSamples:
+        - lang: Shell
+          source: |
+            API="https://peertube2.cpy.re/api/v1"
+
+            ## AUTH
+            curl -s "$API/oauth-clients/local"
   /users/token:
     post:
       summary: Login
@@ -855,6 +862,24 @@ paths:
                     type: integer
                     minimum: 0
                     example: 1209600
+      x-codeSamples:
+        - lang: Shell
+          source: |
+            ## DEPENDENCIES: jq
+            API="https://peertube2.cpy.re/api/v1"
+            USERNAME="<your_username>"
+            PASSWORD="<your_password>"
+
+            ## AUTH
+            client_id=$(curl -s "$API/oauth-clients/local" | jq -r ".client_id")
+            client_secret=$(curl -s "$API/oauth-clients/local" | jq -r ".client_secret")
+            curl -s "$API/users/token" \
+              --data client_id="$client_id" \
+              --data client_secret="$client_secret" \
+              --data grant_type=password \
+              --data username="$USERNAME" \
+              --data password="$PASSWORD" \
+              | jq -r ".access_token"
   /users/revoke-token:
     post:
       summary: Logout
@@ -1714,21 +1739,21 @@ paths:
             FILE_PATH="<your_file_path>"
             CHANNEL_ID="<your_channel_id>"
             NAME="<video_name>"
+            API="https://peertube2.cpy.re/api/v1"
 
-            API_PATH="https://peertube2.cpy.re/api/v1"
             ## AUTH
-            client_id=$(curl -s "$API_PATH/oauth-clients/local" | jq -r ".client_id")
-            client_secret=$(curl -s "$API_PATH/oauth-clients/local" | jq -r ".client_secret")
-            token=$(curl -s "$API_PATH/users/token" \
+            client_id=$(curl -s "$API/oauth-clients/local" | jq -r ".client_id")
+            client_secret=$(curl -s "$API/oauth-clients/local" | jq -r ".client_secret")
+            token=$(curl -s "$API/users/token" \
               --data client_id="$client_id" \
               --data client_secret="$client_secret" \
               --data grant_type=password \
-              --data response_type=code \
               --data username="$USERNAME" \
               --data password="$PASSWORD" \
               | jq -r ".access_token")
+
             ## VIDEO UPLOAD
-            curl -s "$API_PATH/videos/upload" \
+            curl -s "$API/videos/upload" \
               -H "Authorization: Bearer $token" \
               --max-time 600 \
               --form videofile=@"$FILE_PATH" \
