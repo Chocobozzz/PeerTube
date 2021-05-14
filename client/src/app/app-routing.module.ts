@@ -3,7 +3,7 @@ import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 import { MenuGuards } from '@app/core/routing/menu-guard.service'
 import { POSSIBLE_LOCALES } from '@shared/core-utils/i18n'
-import { PreloadSelectedModulesList } from './core'
+import { MetaGuard, PreloadSelectedModulesList } from './core'
 import { EmptyComponent } from './empty.component'
 
 const routes: Routes = [
@@ -11,7 +11,8 @@ const routes: Routes = [
     path: 'admin',
     canActivate: [ MenuGuards.close() ],
     canDeactivate: [ MenuGuards.open() ],
-    loadChildren: () => import('./+admin/admin.module').then(m => m.AdminModule)
+    loadChildren: () => import('./+admin/admin.module').then(m => m.AdminModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'home',
@@ -19,51 +20,63 @@ const routes: Routes = [
   },
   {
     path: 'my-account',
-    loadChildren: () => import('./+my-account/my-account.module').then(m => m.MyAccountModule)
+    loadChildren: () => import('./+my-account/my-account.module').then(m => m.MyAccountModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'my-library',
-    loadChildren: () => import('./+my-library/my-library.module').then(m => m.MyLibraryModule)
+    loadChildren: () => import('./+my-library/my-library.module').then(m => m.MyLibraryModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'verify-account',
-    loadChildren: () => import('./+signup/+verify-account/verify-account.module').then(m => m.VerifyAccountModule)
+    loadChildren: () => import('./+signup/+verify-account/verify-account.module').then(m => m.VerifyAccountModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'accounts',
-    loadChildren: () => import('./+accounts/accounts.module').then(m => m.AccountsModule)
+    loadChildren: () => import('./+accounts/accounts.module').then(m => m.AccountsModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'video-channels',
-    loadChildren: () => import('./+video-channels/video-channels.module').then(m => m.VideoChannelsModule)
+    loadChildren: () => import('./+video-channels/video-channels.module').then(m => m.VideoChannelsModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'about',
-    loadChildren: () => import('./+about/about.module').then(m => m.AboutModule)
+    loadChildren: () => import('./+about/about.module').then(m => m.AboutModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'signup',
-    loadChildren: () => import('./+signup/+register/register.module').then(m => m.RegisterModule)
+    loadChildren: () => import('./+signup/+register/register.module').then(m => m.RegisterModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'reset-password',
-    loadChildren: () => import('./+reset-password/reset-password.module').then(m => m.ResetPasswordModule)
+    loadChildren: () => import('./+reset-password/reset-password.module').then(m => m.ResetPasswordModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'login',
-    loadChildren: () => import('./+login/login.module').then(m => m.LoginModule)
+    loadChildren: () => import('./+login/login.module').then(m => m.LoginModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'search',
-    loadChildren: () => import('./+search/search.module').then(m => m.SearchModule)
+    loadChildren: () => import('./+search/search.module').then(m => m.SearchModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'videos',
-    loadChildren: () => import('./+videos/videos.module').then(m => m.VideosModule)
+    loadChildren: () => import('./+videos/videos.module').then(m => m.VideosModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'remote-interaction',
-    loadChildren: () => import('./+remote-interaction/remote-interaction.module').then(m => m.RemoteInteractionModule)
+    loadChildren: () => import('./+remote-interaction/remote-interaction.module').then(m => m.RemoteInteractionModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'video-playlists/watch',

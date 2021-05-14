@@ -51,7 +51,6 @@
     "@ngx-loading-bar/core": "^5.0.0",
     "@ngx-loading-bar/http-client": "^5.0.0",
     "@ngx-loading-bar/router": "^5.0.0",
-    "@ngx-meta/core": "^9.0.0",
     "@types/chart.js": "^2.9.16",
     "@types/core-js": "^2.5.2",
     "@types/debug": "^4.1.5",

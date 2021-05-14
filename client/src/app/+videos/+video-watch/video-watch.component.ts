@@ -9,6 +9,7 @@ import {
   AuthUser,
   ConfirmService,
   MarkdownService,
+  MetaService,
   Notifier,
   PeerTubeSocket,
   RestExtractor,
@@ -25,7 +26,6 @@ import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { MetaService } from '@ngx-meta/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'

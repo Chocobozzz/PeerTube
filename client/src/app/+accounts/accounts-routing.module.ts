@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MetaGuard } from '@ngx-meta/core'
 import { AccountSearchComponent } from './account-search/account-search.component'
 import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
 import { AccountVideosComponent } from './account-videos/account-videos.component'
@@ -14,7 +13,6 @@ const accountsRoutes: Routes = [
   {
     path: ':accountId',
     component: AccountsComponent,
-    canActivateChild: [ MetaGuard ],
     children: [
       {
         path: '',
