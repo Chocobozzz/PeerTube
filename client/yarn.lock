@@ -1468,11 +1468,6 @@
   dependencies:
     tslib "^1.10.0"
 
-"@ngx-meta/core@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@ngx-meta/core/-/core-9.0.0.tgz#2c3b27bd32d41f7aaf0712d4007e0afed8e5dd3f"
-  integrity sha512-WL/HyKM+4gJPS3TNTO0M+46LlIvGTSyofL//8hxoozAyRPsiMyR0xrwUvPBJkVqFyD6j0iI5FaNcQ9d0JCVJhg==
-
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"

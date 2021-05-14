@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MetaGuard } from '@ngx-meta/core'
 import { VideoChannelPlaylistsComponent } from './video-channel-playlists/video-channel-playlists.component'
 import { VideoChannelVideosComponent } from './video-channel-videos/video-channel-videos.component'
 import { VideoChannelsComponent } from './video-channels.component'
@@ -9,7 +8,6 @@ const videoChannelsRoutes: Routes = [
   {
     path: ':videoChannelName',
     component: VideoChannelsComponent,
-    canActivateChild: [ MetaGuard ],
     children: [
       {
         path: '',

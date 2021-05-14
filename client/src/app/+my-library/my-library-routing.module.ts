@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MetaGuard } from '@ngx-meta/core'
 import { LoginGuard } from '../core'
 import { MyHistoryComponent } from './my-history/my-history.component'
 import { MyLibraryComponent } from './my-library.component'
@@ -17,7 +16,7 @@ const myLibraryRoutes: Routes = [
   {
     path: '',
     component: MyLibraryComponent,
-    canActivateChild: [ MetaGuard, LoginGuard ],
+    canActivateChild: [ LoginGuard ],
     children: [
       {
         path: '',
