@@ -89,9 +89,9 @@ class StatsCard extends Component {
     this.container.style.display = 'block'
     this.updateInterval = setInterval(async () => {
       try {
-        const options = this.mode === 'webtorrent'
-          ? await this.buildWebTorrentOptions()
-          : await this.buildHLSOptions()
+        const options = this.mode === 'p2p-media-loader'
+          ? await this.buildHLSOptions()
+          : await this.buildWebTorrentOptions() // Default
 
         this.list.innerHTML = this.getListTemplate(options)
       } catch (err) {
@@ -212,7 +212,7 @@ class StatsCard extends Component {
       : undefined
 
     return `
-      ${this.buildElement(player.localize('Player mode'), this.options_.mode)}
+      ${this.buildElement(player.localize('Player mode'), this.mode || 'HTTP')}
 
       ${this.buildElement(player.localize('Video UUID'), this.options_.videoUUID)}
 

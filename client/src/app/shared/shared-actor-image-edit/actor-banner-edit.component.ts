@@ -42,7 +42,7 @@ export class ActorBannerEditComponent implements OnInit {
           this.bannerExtensions = config.banner.file.extensions.join(', ')
 
           // tslint:disable:max-line-length
-          this.bannerFormat = $localize`ratio 6/1, recommended size: 1600x266, max size: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
+          this.bannerFormat = $localize`ratio 6/1, recommended size: 1920x317, max size: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
         })
   }
 
