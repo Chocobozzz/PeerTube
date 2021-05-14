@@ -474,7 +474,7 @@ theme:
 broadcast_message:
   enabled: false
   message: '' # Support markdown
-  level: 'info' # 'info' | 'warning' | 'error'
+  level: 'info' # 'info' | 'warn' | 'error'
   dismissable: false
 
 search:
