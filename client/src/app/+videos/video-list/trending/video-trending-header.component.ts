@@ -31,7 +31,8 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
     private route: ActivatedRoute,
     private router: Router,
     private auth: AuthService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private redirectService: RedirectService
   ) {
     super(data)
 
@@ -84,12 +85,7 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
 
     this.algorithmChangeSub = this.route.queryParams.subscribe(
       queryParams => {
-        const algorithm = queryParams['alg']
-        if (algorithm) {
-          this.data.model = algorithm
-        } else {
-          this.data.model = RedirectService.DEFAULT_TRENDING_ALGORITHM
-        }
+        this.data.model = queryParams['alg'] || this.redirectService.getDefaultTrendingAlgorithm()
       }
     )
   }
@@ -99,7 +95,7 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
   }
 
   setSort () {
-    const alg = this.data.model !== RedirectService.DEFAULT_TRENDING_ALGORITHM
+    const alg = this.data.model !== this.redirectService.getDefaultTrendingAlgorithm()
       ? this.data.model
       : undefined
 

@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   goToDefaultRoute () {
-    return this.router.navigateByUrl(RedirectService.DEFAULT_ROUTE)
+    return this.router.navigateByUrl(this.redirectService.getDefaultRoute())
   }
 
   ngOnInit () {
