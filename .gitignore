@@ -15,7 +15,7 @@ yarn-error.log
 /server/tests/fixtures/video_59fps.mp4
 
 # Production
-/storage/
+/storage
 /config/production.yaml
 /config/local*
 /ffmpeg/

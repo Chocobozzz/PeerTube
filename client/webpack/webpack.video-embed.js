@@ -4,6 +4,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
+const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = function () {
@@ -29,6 +30,15 @@ module.exports = function () {
         '@root-helpers': path.resolve('src/root-helpers'),
         '@shared/models': path.resolve('../shared/models'),
         '@shared/core-utils': path.resolve('../shared/core-utils')
+      },
+
+      fallback: {
+        fs: [ path.resolve('src/shims/noop.ts') ],
+        http: [ path.resolve('src/shims/http.ts') ],
+        https: [ path.resolve('src/shims/https.ts') ],
+        path: [ path.resolve('src/shims/path.ts') ],
+        stream: [ path.resolve('src/shims/noop.ts') ],
+        crypto: [ path.resolve('src/shims/noop.ts') ]
       }
     },
 
@@ -37,13 +47,13 @@ module.exports = function () {
 
       filename: process.env.ANALYZE_BUNDLE === 'true'
         ? '[name].bundle.js'
-        : '[name].[hash].bundle.js',
+        : '[name].[contenthash].bundle.js',
 
       sourceMapFilename: '[file].map',
 
       chunkFilename: process.env.ANALYZE_BUNDLE === 'true'
         ? '[name].chunk.js'
-        : '[id].[hash].chunk.js',
+        : '[id].[contenthash].chunk.js',
 
       publicPath: '/client/standalone/videos/'
     },
@@ -114,10 +124,15 @@ module.exports = function () {
     },
 
     plugins: [
+      new ProvidePlugin({
+        process: 'process/browser',
+        Buffer: [ 'buffer', 'Buffer' ]
+      }),
+
       new MiniCssExtractPlugin({
         filename: process.env.ANALYZE_BUNDLE === 'true'
           ? '[name].css'
-          : '[name].[hash].css'
+          : '[name].[contenthash].css'
       }),
 
       new HtmlWebpackPlugin({
@@ -126,7 +141,7 @@ module.exports = function () {
         title: 'PeerTube',
         chunksSortMode: 'auto',
         inject: 'body',
-        chunks: ['video-embed'],
+        chunks: [ 'video-embed' ],
         minify: {
           collapseWhitespace: true,
           removeComments: false,
@@ -143,7 +158,7 @@ module.exports = function () {
         title: 'PeerTube',
         chunksSortMode: 'auto',
         inject: 'body',
-        chunks: ['test-embed']
+        chunks: [ 'test-embed' ]
       }),
 
       /**
@@ -188,13 +203,7 @@ module.exports = function () {
     },
 
     node: {
-      global: true,
-      crypto: 'empty',
-      fs: 'empty',
-      process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false
+      global: true
     }
   }
 

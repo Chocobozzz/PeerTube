@@ -137,6 +137,8 @@
             "main": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "baseHref": "/",
+            "deployUrl": "client/",
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/sass/include"
@@ -255,8 +257,6 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "baseHref": "/",
-            "deployUrl": "client/",
             "browserTarget": "PeerTube:build",
             "proxyConfig": "proxy.config.json"
           },
