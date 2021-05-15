@@ -53,7 +53,10 @@ export const clientFilterHookObject = {
   'filter:internal.common.svg-icons.get-content.result': true,
 
   // Filter left menu links
-  'filter:left-menu.links.create.result': true
+  'filter:left-menu.links.create.result': true,
+
+  // Filter videojs options built for PeerTube player
+  'filter:internal.player.videojs.options.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject

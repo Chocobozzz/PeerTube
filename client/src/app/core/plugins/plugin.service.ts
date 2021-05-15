@@ -1,6 +1,5 @@
-import * as debug from 'debug'
-import { Observable, of, ReplaySubject } from 'rxjs'
-import { catchError, first, map, shareReplay } from 'rxjs/operators'
+import { Observable, of } from 'rxjs'
+import { catchError, map, shareReplay } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core'
 import { VideoEditType } from '@app/+videos/+video-edit/shared/video-edit.type'
@@ -11,7 +10,7 @@ import { RestExtractor } from '@app/core/rest'
 import { ServerService } from '@app/core/server/server.service'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
-import { FormFields, Hooks, loadPlugin, PluginInfo, runHook } from '@root-helpers/plugins'
+import { PluginInfo, PluginsManager } from '@root-helpers/plugins-manager'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   ClientHook,
@@ -20,48 +19,38 @@ import {
   PluginTranslation,
   PluginType,
   PublicServerSetting,
+  RegisterClientFormFieldOptions,
   RegisterClientSettingsScript,
+  RegisterClientVideoFieldOptions,
   ServerConfigPlugin
 } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
 
-const logger = debug('peertube:plugins')
+type FormFields = {
+  video: {
+    commonOptions: RegisterClientFormFieldOptions
+    videoFormOptions: RegisterClientVideoFieldOptions
+  }[]
+}
 
 @Injectable()
 export class PluginService implements ClientHook {
   private static BASE_PLUGIN_API_URL = environment.apiUrl + '/api/v1/plugins'
   private static BASE_PLUGIN_URL = environment.apiUrl + '/plugins'
 
-  pluginsLoaded: { [ scope in PluginClientScope ]: ReplaySubject<boolean> } = {
-    common: new ReplaySubject<boolean>(1),
-    'admin-plugin': new ReplaySubject<boolean>(1),
-    search: new ReplaySubject<boolean>(1),
-    'video-watch': new ReplaySubject<boolean>(1),
-    signup: new ReplaySubject<boolean>(1),
-    login: new ReplaySubject<boolean>(1),
-    'video-edit': new ReplaySubject<boolean>(1),
-    embed: new ReplaySubject<boolean>(1)
-  }
-
   translationsObservable: Observable<PluginTranslation>
 
   customModal: CustomModalComponent
 
-  private plugins: ServerConfigPlugin[] = []
   private helpers: { [ npmName: string ]: RegisterClientHelpers } = {}
 
-  private scopes: { [ scopeName: string ]: PluginInfo[] } = {}
-
-  private loadedScripts: { [ script: string ]: boolean } = {}
-  private loadedScopes: PluginClientScope[] = []
-  private loadingScopes: { [id in PluginClientScope]?: boolean } = {}
-
-  private hooks: Hooks = {}
   private formFields: FormFields = {
     video: []
   }
   private settingsScripts: { [ npmName: string ]: RegisterClientSettingsScript } = {}
+
+  private pluginsManager: PluginsManager
 
   constructor (
     private authService: AuthService,
@@ -74,111 +63,48 @@ export class PluginService implements ClientHook {
     @Inject(LOCALE_ID) private localeId: string
   ) {
     this.loadTranslations()
+
+    this.pluginsManager = new PluginsManager({
+      peertubeHelpersFactory: this.buildPeerTubeHelpers.bind(this),
+      onFormFields: this.onFormFields.bind(this),
+      onSettingsScripts: this.onSettingsScripts.bind(this)
+    })
   }
 
   initializePlugins () {
-    const config = this.server.getHTMLConfig()
-    this.plugins = config.plugin.registered
+    this.pluginsManager.loadPluginsList(this.server.getHTMLConfig())
 
-    this.buildScopeStruct()
-
-    this.ensurePluginsAreLoaded('common')
+    this.pluginsManager.ensurePluginsAreLoaded('common')
   }
 
   initializeCustomModal (customModal: CustomModalComponent) {
     this.customModal = customModal
   }
 
-  ensurePluginsAreLoaded (scope: PluginClientScope) {
-    this.loadPluginsByScope(scope)
+  runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T> {
+    return this.zone.runOutsideAngular(() => {
+      return this.pluginsManager.runHook(hookName, result, params)
+    })
+  }
 
-    return this.pluginsLoaded[scope].asObservable()
-               .pipe(first(), shareReplay())
-               .toPromise()
+  ensurePluginsAreLoaded (scope: PluginClientScope) {
+    return this.pluginsManager.ensurePluginsAreLoaded(scope)
+  }
+
+  reloadLoadedScopes () {
+    return this.pluginsManager.reloadLoadedScopes()
+  }
+
+  getPluginsManager () {
+    return this.pluginsManager
   }
 
   addPlugin (plugin: ServerConfigPlugin, isTheme = false) {
-    const pathPrefix = this.getPluginPathPrefix(isTheme)
-
-    for (const key of Object.keys(plugin.clientScripts)) {
-      const clientScript = plugin.clientScripts[key]
-
-      for (const scope of clientScript.scopes) {
-        if (!this.scopes[scope]) this.scopes[scope] = []
-
-        this.scopes[scope].push({
-          plugin,
-          clientScript: {
-            script: `${pathPrefix}/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`,
-            scopes: clientScript.scopes
-          },
-          pluginType: isTheme ? PluginType.THEME : PluginType.PLUGIN,
-          isTheme
-        })
-
-        this.loadedScripts[clientScript.script] = false
-      }
-    }
+    return this.pluginsManager.addPlugin(plugin, isTheme)
   }
 
   removePlugin (plugin: ServerConfigPlugin) {
-    for (const key of Object.keys(this.scopes)) {
-      this.scopes[key] = this.scopes[key].filter(o => o.plugin.name !== plugin.name)
-    }
-  }
-
-  async reloadLoadedScopes () {
-    for (const scope of this.loadedScopes) {
-      await this.loadPluginsByScope(scope, true)
-    }
-  }
-
-  async loadPluginsByScope (scope: PluginClientScope, isReload = false) {
-    if (this.loadingScopes[scope]) return
-    if (!isReload && this.loadedScopes.includes(scope)) return
-
-    this.loadingScopes[scope] = true
-
-    logger('Loading scope %s', scope)
-
-    try {
-      if (!isReload) this.loadedScopes.push(scope)
-
-      const toLoad = this.scopes[ scope ]
-      if (!Array.isArray(toLoad)) {
-        this.loadingScopes[scope] = false
-        this.pluginsLoaded[scope].next(true)
-
-        logger('Nothing to load for scope %s', scope)
-        return
-      }
-
-      const promises: Promise<any>[] = []
-      for (const pluginInfo of toLoad) {
-        const clientScript = pluginInfo.clientScript
-
-        if (this.loadedScripts[ clientScript.script ]) continue
-
-        promises.push(this.loadPlugin(pluginInfo))
-
-        this.loadedScripts[ clientScript.script ] = true
-      }
-
-      await Promise.all(promises)
-
-      this.pluginsLoaded[scope].next(true)
-      this.loadingScopes[scope] = false
-
-      logger('Scope %s loaded', scope)
-    } catch (err) {
-      console.error('Cannot load plugins by scope %s.', scope, err)
-    }
-  }
-
-  runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T> {
-    return this.zone.runOutsideAngular(() => {
-      return runHook(this.hooks, hookName, result, params)
-    })
+    return this.pluginsManager.removePlugin(plugin)
   }
 
   nameToNpmName (name: string, type: PluginType) {
@@ -187,12 +113,6 @@ export class PluginService implements ClientHook {
       : 'peertube-theme-'
 
     return prefix + name
-  }
-
-  pluginTypeFromNpmName (npmName: string) {
-    return npmName.startsWith('peertube-plugin-')
-      ? PluginType.PLUGIN
-      : PluginType.THEME
   }
 
   getRegisteredVideoFormFields (type: VideoEditType) {
@@ -213,27 +133,17 @@ export class PluginService implements ClientHook {
     return helpers.translate(toTranslate)
   }
 
-  private loadPlugin (pluginInfo: PluginInfo) {
-    return this.zone.runOutsideAngular(() => {
-      const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
-
-      const helpers = this.buildPeerTubeHelpers(pluginInfo)
-      this.helpers[npmName] = helpers
-
-      return loadPlugin({
-        hooks: this.hooks,
-        formFields: this.formFields,
-        onSettingsScripts: options => this.settingsScripts[npmName] = options,
-        pluginInfo,
-        peertubeHelpersFactory: () => helpers
-      })
+  private onFormFields (commonOptions: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) {
+    this.formFields.video.push({
+      commonOptions,
+      videoFormOptions
     })
   }
 
-  private buildScopeStruct () {
-    for (const plugin of this.plugins) {
-      this.addPlugin(plugin)
-    }
+  private onSettingsScripts (pluginInfo: PluginInfo, options: RegisterClientSettingsScript) {
+    const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
+
+    this.settingsScripts[npmName] = options
   }
 
   private buildPeerTubeHelpers (pluginInfo: PluginInfo): RegisterClientHelpers {
@@ -242,12 +152,12 @@ export class PluginService implements ClientHook {
 
     return {
       getBaseStaticRoute: () => {
-        const pathPrefix = this.getPluginPathPrefix(pluginInfo.isTheme)
+        const pathPrefix = PluginsManager.getPluginPathPrefix(pluginInfo.isTheme)
         return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/static`
       },
 
       getBaseRouterRoute: () => {
-        const pathPrefix = this.getPluginPathPrefix(pluginInfo.isTheme)
+        const pathPrefix = PluginsManager.getPluginPathPrefix(pluginInfo.isTheme)
         return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/router`
       },
 
@@ -323,9 +233,5 @@ export class PluginService implements ClientHook {
     this.translationsObservable = this.authHttp
         .get<PluginTranslation>(PluginService.BASE_PLUGIN_URL + '/translations/' + completeLocale + '.json')
         .pipe(shareReplay())
-  }
-
-  private getPluginPathPrefix (isTheme: boolean) {
-    return isTheme ? '/themes' : '/plugins'
   }
 }
