@@ -12,6 +12,7 @@ import {
   MetaService,
   Notifier,
   PeerTubeSocket,
+  PluginService,
   RestExtractor,
   ScreenService,
   ServerService,
@@ -146,6 +147,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private videoCaptionService: VideoCaptionService,
     private hotkeysService: HotkeysService,
     private hooks: HooksService,
+    private pluginService: PluginService,
     private peertubeSocket: PeerTubeSocket,
     private screenService: ScreenService,
     private location: PlatformLocation,
@@ -859,7 +861,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       webtorrent: {
         videoFiles: video.files
-      }
+      },
+
+      pluginsManager: this.pluginService.getPluginsManager()
     }
 
     // Only set this if we're in a playlist

@@ -114,6 +114,7 @@ export class ThemeService {
     const theme = this.getTheme(currentTheme)
     if (theme) {
       console.log('Adding scripts of theme %s.', currentTheme)
+
       this.pluginService.addPlugin(theme, true)
 
       this.pluginService.reloadLoadedScopes()
