@@ -284,7 +284,7 @@ export class PluginModel extends Model {
     for (const r of registeredSettings) {
       if (r.private !== false) continue
 
-      result[r.name] = settings[r.name] || r.default || null
+      result[r.name] = settings[r.name] ?? r.default ?? null
     }
 
     return result
