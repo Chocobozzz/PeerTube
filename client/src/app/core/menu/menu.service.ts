@@ -12,6 +12,7 @@ export type MenuLink = {
   menuLabel: string
   path: string
   priority: number
+  isHidden?: boolean
 }
 
 @Injectable()

@@ -21,8 +21,15 @@ import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.com
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
+import { GlobalIconName } from '../shared/shared-icons/global-icon.component'
 
 const logger = debug('peertube:menu:MenuComponent')
+
+interface MenuItem {
+  key: string
+  title: string
+  children: MenuLink[]
+}
 
 @Component({
   selector: 'my-menu',
@@ -44,6 +51,7 @@ export class MenuComponent implements OnInit {
   nsfwPolicy: string
 
   currentInterfaceLanguage: string
+  menuItems: MenuItem[]
 
   commonMenuLinks: MenuLink[] = []
 
@@ -86,7 +94,7 @@ export class MenuComponent implements OnInit {
   }
 
   get instanceName () {
-    return this.serverConfig.instance.name
+    return this.serverConfig?.instance.name || ''
   }
 
   ngOnInit () {
@@ -95,11 +103,15 @@ export class MenuComponent implements OnInit {
       .subscribe(config => {
         this.serverConfig = config
         this.buildMenuLinks()
+        this.setMenuItems()
       })
+
+    this.setMenuItems()
 
     this.isLoggedIn = this.authService.isLoggedIn()
     if (this.isLoggedIn === true) {
       this.user = this.authService.getUser()
+      this.setMenuItems()
 
       this.computeNSFWPolicy()
       this.computeVideosLink()
@@ -114,6 +126,7 @@ export class MenuComponent implements OnInit {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true
           this.user = this.authService.getUser()
+          this.setMenuItems()
 
           this.computeAdminAccess()
           this.computeVideosLink()
@@ -145,6 +158,51 @@ export class MenuComponent implements OnInit {
 
     this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
+  }
+
+  setMenuItems () {
+    this.menuItems = [
+      {
+        key: 'in-my-library',
+        title: 'In my library',
+        children: [
+          {
+            path: '/my-library/videos',
+            isHidden: !this.user?.canSeeVideosLink,
+            icon: 'videos' as GlobalIconName,
+            menuLabel: $localize`Videos`,
+            label: $localize`Videos`,
+            priority: 100
+          },
+          {
+            path: '/my-library/video-playlists',
+            icon: 'playlists' as GlobalIconName,
+            menuLabel: $localize`Playlists`,
+            label: $localize`Playlists`,
+            priority: 110
+          },
+          {
+            path: '/videos/subscriptions',
+            icon: 'subscriptions' as GlobalIconName,
+            menuLabel: $localize`Subscriptions`,
+            label: $localize`Subscriptions`,
+            priority: 120
+          },
+          {
+            path: '/my-library/history/videos',
+            icon: 'history' as GlobalIconName,
+            menuLabel: $localize`History`,
+            label: $localize`History`,
+            priority: 130
+          }
+        ].filter(({ isHidden }) => isHidden !== false)
+      },
+      {
+        key: 'on-instance',
+        title: `On ${this.instanceName || 'instance'}`,
+        children: this.commonMenuLinks
+      }
+    ]
   }
 
   isRegistrationAllowed () {
