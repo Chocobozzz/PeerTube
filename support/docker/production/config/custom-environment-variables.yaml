@@ -19,6 +19,7 @@ database:
   suffix: "PEERTUBE_DB_SUFFIX"
   username: "PEERTUBE_DB_USERNAME"
   password: "PEERTUBE_DB_PASSWORD"
+  ssl: "PEERTUBE_DB_SSL"
 
 redis:
   hostname: "PEERTUBE_REDIS_HOSTNAME"
