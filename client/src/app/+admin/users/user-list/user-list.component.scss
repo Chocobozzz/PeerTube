@@ -11,6 +11,7 @@ tr.banned > td {
 
 .table-email {
   @include disable-default-a-behaviour;
+
   color: pvar(--mainForegroundColor);
 }
 
@@ -24,16 +25,8 @@ tr.banned > td {
 
 .user-table-primary-text .glyphicon {
   font-size: 80%;
-  color: gray;
+  color: #808080;
   margin-left: 0.1rem;
-}
-
-.caption {
-  justify-content: space-between;
-
-  input {
-    @include peertube-input-text(250px);
-  }
 }
 
 p-tableCheckbox {
@@ -55,18 +48,7 @@ my-global-icon {
 
 .progress {
   @include progressbar($small: true);
+
   width: auto;
   max-width: 100%;
-}
-
-.input-group {
-  @include peertube-input-group(300px);
-
-  input {
-    flex: 1;
-  }
-
-  .dropdown-toggle::after {
-    margin-left: 0;
-  }
 }

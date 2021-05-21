@@ -2,20 +2,25 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, getVideoCommentThreads, getVideoThreadComments, updateMyUser } from '../../../../shared/extra-utils'
-import { ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { addAccountToAccountBlocklist, removeAccountFromAccountBlocklist } from '../../../../shared/extra-utils/users/blocklist'
 import {
+  addAccountToAccountBlocklist,
+  addVideoCommentReply,
+  addVideoCommentThread,
   checkCommentMention,
   CheckerBaseParams,
   checkNewCommentOnMyVideo,
-  prepareNotificationsTest
-} from '../../../../shared/extra-utils/users/user-notifications'
-import { addVideoCommentReply, addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
-import { UserNotification } from '../../../../shared/models/users'
-import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+  cleanupTests,
+  getVideoCommentThreads,
+  getVideoThreadComments,
+  MockSmtpServer,
+  prepareNotificationsTest,
+  removeAccountFromAccountBlocklist,
+  ServerInfo,
+  updateMyUser,
+  uploadVideo,
+  waitJobs
+} from '@shared/extra-utils'
+import { UserNotification, VideoCommentThreadTree } from '@shared/models'
 
 const expect = chai.expect
 

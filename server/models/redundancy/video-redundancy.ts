@@ -16,6 +16,7 @@ import {
 } from 'sequelize-typescript'
 import { getServerActor } from '@server/models/application/application'
 import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoRedundanciesTarget } from '@shared/models/redundancy/video-redundancies-filters.model'
 import {
   FileRedundancyInformation,
@@ -29,9 +30,10 @@ import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validato
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { ServerModel } from '../server/server'
 import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../utils'
+import { ScheduleVideoUpdateModel } from '../video/schedule-video-update'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoFileModel } from '../video/video-file'
@@ -83,7 +85,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoRedundancyModel extends Model {
+export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedundancyModel>>> {
 
   @CreatedAt
   createdAt: Date
@@ -374,7 +376,13 @@ export class VideoRedundancyModel extends Model {
         ...this.buildVideoIdsForDuplication(peertubeActor)
       },
       include: [
-        VideoRedundancyModel.buildServerRedundancyInclude()
+        VideoRedundancyModel.buildServerRedundancyInclude(),
+
+        // Required by publishedAt sort
+        {
+          model: ScheduleVideoUpdateModel.unscoped(),
+          required: false
+        }
       ]
     }
 

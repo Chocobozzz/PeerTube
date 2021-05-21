@@ -152,11 +152,12 @@ function makeHTMLRequest (url: string, path: string) {
     .expect(HttpStatusCode.OK_200)
 }
 
-function updateAvatarRequest (options: {
+function updateImageRequest (options: {
   url: string
   path: string
   accessToken: string
   fixture: string
+  fieldname: string
 }) {
   let filePath = ''
   if (isAbsolute(options.fixture)) {
@@ -170,7 +171,7 @@ function updateAvatarRequest (options: {
     path: options.path,
     token: options.accessToken,
     fields: {},
-    attaches: { avatarfile: filePath },
+    attaches: { [options.fieldname]: filePath },
     statusCodeExpected: HttpStatusCode.OK_200
   })
 }
@@ -191,5 +192,5 @@ export {
   makePutBodyRequest,
   makeDeleteRequest,
   makeRawRequest,
-  updateAvatarRequest
+  updateImageRequest
 }

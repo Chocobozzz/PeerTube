@@ -71,12 +71,12 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Remind me later" class="action-button action-button-understood"
+      type="button" role="button" i18n-value value="Remind me later" class="peertube-button grey-button"
       (click)="hide()" (key.enter)="hide()"
     >
 
     <a i18n (click)="doNotOpenAgain(); hide()" (key.enter)="doNotOpenAgain(); hide()"
-       class="configure-instance-button" href="/admin/config/edit-custom" target="_blank"
+       class="peertube-button-link orange-button" href="/admin/config/edit-custom" target="_blank"
        rel="noopener noreferrer" ngbAutofocus>
       Configure my instance
     </a>

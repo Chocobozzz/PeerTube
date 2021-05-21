@@ -4,27 +4,23 @@
 </h1>
 
 <p-table
-  [value]="followers" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" (onPage)="onPage($event)"
+  [value]="followers" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onPage)="onPage($event)"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} followers"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div class="ml-auto has-feedback has-clear">
-        <input
-          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-          (keyup)="onSearch($event)"
-        >
-        <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
-        <span class="sr-only" i18n>Clear filters</span>
+      <div class="ml-auto">
+        <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 150px;">Actions</th>
+      <th style="width: 150px;" i18n>Actions</th>
       <th i18n>Follower handle</th>
       <th style="width: 100px;" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
       <th style="width: 100px;" i18n pSortableColumn="score">Score <p-sortIcon field="score"></p-sortIcon></th>

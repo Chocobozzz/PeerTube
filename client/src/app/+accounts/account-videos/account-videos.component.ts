@@ -16,6 +16,7 @@ import { VideoFilter } from '@shared/models'
   ]
 })
 export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
+  // No value because we don't want a page title
   titlePage: string
   loadOnInit = false
   loadUserVideoPreferences = true
@@ -77,11 +78,6 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
 
     return this.videoService
                .getAccountVideos(options)
-               .pipe(
-                 tap(({ total }) => {
-                   this.titlePage = $localize`Published ${total} videos`
-                 })
-               )
   }
 
   toggleModerationDisplay () {
@@ -92,5 +88,9 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
 
   generateSyndicationList () {
     this.syndicationItems = this.videoService.getAccountFeedUrls(this.account.id)
+  }
+
+  displayAsRow () {
+    return this.screenService.isInMobileView()
   }
 }

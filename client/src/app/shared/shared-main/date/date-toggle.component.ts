@@ -1,5 +1,4 @@
-import { DatePipe } from '@angular/common'
-import { Component, Input, OnChanges, OnInit } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 import { FromNowPipe } from '../angular/from-now.pipe'
 
 @Component({
@@ -14,10 +13,7 @@ export class DateToggleComponent implements OnChanges {
   dateRelative: string
   dateAbsolute: string
 
-  constructor (
-    private datePipe: DatePipe,
-    private fromNowPipe: FromNowPipe
-  ) { }
+  constructor (private fromNowPipe: FromNowPipe) { }
 
   ngOnChanges () {
     this.updateDates()

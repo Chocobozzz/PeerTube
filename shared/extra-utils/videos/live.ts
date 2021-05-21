@@ -119,7 +119,7 @@ async function testFfmpegStreamError (command: ffmpeg.FfmpegCommand, shouldHaveE
   let error: Error
 
   try {
-    await waitFfmpegUntilError(command, 25000)
+    await waitFfmpegUntilError(command, 35000)
   } catch (err) {
     error = err
   }

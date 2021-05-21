@@ -7,21 +7,16 @@
       <span class="col-3 moderation-expanded-label" i18n>Reporter</span>
 
       <span class="col-9 moderation-expanded-text">
-        <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
+        <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
           class="chip"
         >
-          <img
-            class="avatar"
-            [src]="abuse.reporterAccount.avatar?.path"
-            (error)="switchToDefaultAvatar($event)"
-            alt="Avatar"
-          >
+          <my-actor-avatar size="18" [account]="abuse.reporterAccount"></my-actor-avatar>
           <div>
             <span class="text-muted">{{ abuse.reporterAccount.nameWithHost }}</span>
           </div>
         </a>
 
-        <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
+        <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
           class="ml-auto text-muted abuse-details-links" i18n
         >
           {abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
@@ -32,21 +27,16 @@
     <div class="d-flex" *ngIf="abuse.flaggedAccount">
       <span class="col-3 moderation-expanded-label" i18n>Reportee</span>
       <span class="col-9 moderation-expanded-text">
-        <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
+        <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
           class="chip"
         >
-          <img
-            class="avatar"
-            [src]="abuse.flaggedAccount?.avatar?.path"
-            (error)="switchToDefaultAvatar($event)"
-            alt="Avatar"
-          >
+          <my-actor-avatar size="18" [account]="abuse.flaggedAccount"></my-actor-avatar>
           <div>
             <span class="text-muted">{{ abuse.flaggedAccount ? abuse.flaggedAccount.nameWithHost : '' }}</span>
           </div>
         </a>
 
-        <a *ngIf="isAdminView" [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
+        <a *ngIf="isAdminView" [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
           class="ml-auto text-muted abuse-details-links" i18n
         >
           {abuse.countReportsForReportee, plural, =1 {1 report} other {{{ abuse.countReportsForReportee }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
@@ -63,7 +53,7 @@
     <div class="mt-3 d-flex">
       <span class="col-3 moderation-expanded-label">
         <ng-container i18n>Report</ng-container>
-        <a [routerLink]="[ baseRoute ]" [queryParams]="{ 'search': '#' + abuse.id  }" class="ml-1 text-muted">#{{ abuse.id }}</a>
+        <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': '#' + abuse.id  }" class="ml-1 text-muted">#{{ abuse.id }}</a>
       </span>
       <span class="col-9 moderation-expanded-text" [innerHTML]="abuse.reasonHtml"></span>
     </div>
@@ -71,7 +61,7 @@
     <div *ngIf="getPredefinedReasons()" class="mt-2 d-flex">
       <span class="col-3"></span>
       <span class="col-9">
-        <a *ngFor="let reason of getPredefinedReasons()"  [routerLink]="[ baseRoute ]"
+        <a *ngFor="let reason of getPredefinedReasons()"  [routerLink]="[ '.' ]"
           [queryParams]="{ 'search': 'tag:' + reason.id  }" class="chip rectangular bg-secondary text-light"
         >
           <div>{{ reason.label }}</div>

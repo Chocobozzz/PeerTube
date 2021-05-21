@@ -1,10 +1,11 @@
 import * as express from 'express'
+import { randomInt } from '@shared/core-utils'
 
 export class MockInstancesIndex {
   private readonly indexInstances: { host: string, createdAt: string }[] = []
 
   initialize () {
-    return new Promise<void>(res => {
+    return new Promise<number>(res => {
       const app = express()
 
       app.use('/', (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -28,7 +29,8 @@ export class MockInstancesIndex {
         })
       })
 
-      app.listen(42101, () => res())
+      const port = 42101 + randomInt(1, 100)
+      app.listen(port, () => res(port))
     })
   }
 

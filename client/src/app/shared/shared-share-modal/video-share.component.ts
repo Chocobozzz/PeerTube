@@ -86,14 +86,14 @@ export class VideoShareComponent {
     const options = this.getVideoOptions(this.video.embedUrl)
 
     const embedUrl = buildVideoLink(options)
-    return buildVideoOrPlaylistEmbed(embedUrl)
+    return buildVideoOrPlaylistEmbed(embedUrl, this.video.name)
   }
 
   getPlaylistIframeCode () {
     const options = this.getPlaylistOptions(this.playlist.embedUrl)
 
     const embedUrl = buildPlaylistLink(options)
-    return buildVideoOrPlaylistEmbed(embedUrl)
+    return buildVideoOrPlaylistEmbed(embedUrl, this.playlist.displayName)
   }
 
   getVideoUrl () {

@@ -1,18 +1,11 @@
 <h1>
-  <span>
-    <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>My channels</ng-container>
-    <span class="badge badge-secondary">{{ totalItems }}</span>
-  </span>
+  <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>My channels</ng-container>
+  <span class="badge badge-secondary">{{ totalItems }}</span>
 </h1>
 
 <div class="video-channels-header d-flex justify-content-between">
-  <div class="has-feedback has-clear">
-    <input type="text" placeholder="Search your channels" i18n-placeholder [(ngModel)]="channelsSearch"
-      (ngModelChange)="onChannelsSearchChanged()" />
-    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
-    <span class="sr-only" i18n>Clear filters</span>
-  </div>
+  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
 
   <a class="create-button" routerLink="create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
@@ -20,11 +13,11 @@
   </a>
 </div>
 
+<div class="no-results" i18n *ngIf="totalItems === 0">No channel found.</div>
+
 <div class="video-channels">
   <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
-    <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]">
-      <img [src]="videoChannel.avatarUrl" alt="Avatar" />
-    </a>
+    <my-actor-avatar [channel]="videoChannel" [internalHref]="[ '/video-channels', videoChannel.nameWithHost ]"></my-actor-avatar>
 
     <div class="video-channel-info">
       <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Channel page">

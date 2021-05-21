@@ -1,0 +1,5 @@
+node: ">=12.x"
+yarn: ">=1.x"
+postgres: ">=10.x"
+redis-server: ">=2.8.18"
+ffmpeg: ">=4.1"

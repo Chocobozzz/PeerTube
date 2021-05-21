@@ -258,10 +258,10 @@ export class UserNotification implements UserNotificationServer {
   }
 
   private setAccountAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = Account.GET_ACTOR_AVATAR_URL(actor)
+    actor.avatarUrl = Account.GET_ACTOR_AVATAR_URL(actor) || Account.GET_DEFAULT_AVATAR_URL()
   }
 
   private setVideoChannelAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor)
+    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor) || VideoChannel.GET_DEFAULT_AVATAR_URL()
   }
 }

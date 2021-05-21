@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import { join } from 'path'
 import * as request from 'supertest'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
   checkTmpIsEmpty,
@@ -32,16 +31,16 @@ import {
   wait,
   webtorrentAdd
 } from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   deleteVideoComment,
+  findCommentId,
   getVideoCommentThreads,
-  getVideoThreadComments,
-  findCommentId
+  getVideoThreadComments
 } from '../../../../shared/extra-utils/videos/video-comments'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { VideoComment, VideoCommentThreadTree, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -181,7 +180,7 @@ describe('Test multiple servers', function () {
         thumbnailfile: 'thumbnail.jpg',
         previewfile: 'preview.jpg'
       }
-      await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
+      await uploadVideo(servers[1].url, userAccessToken, videoAttributes, HttpStatusCode.OK_200, 'resumable')
 
       // Transcoding
       await waitJobs(servers)
@@ -577,7 +576,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should like and dislikes videos on different services', async function () {
-      this.timeout(30000)
+      this.timeout(50000)
 
       await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like')
       await wait(500)

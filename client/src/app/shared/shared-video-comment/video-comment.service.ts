@@ -190,13 +190,7 @@ export class VideoCommentService {
     const filters = this.restService.parseQueryStringFilter(search, {
       isLocal: {
         prefix: 'local:',
-        isBoolean: true,
-        handler: v => {
-          if (v === 'true') return v
-          if (v === 'false') return v
-
-          return undefined
-        }
+        isBoolean: true
       },
 
       searchAccount: { prefix: 'account:' },

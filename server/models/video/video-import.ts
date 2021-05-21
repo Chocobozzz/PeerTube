@@ -13,15 +13,16 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoImport, VideoImportState } from '../../../shared'
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
-import { UserModel } from '../account/user'
+import { UserModel } from '../user/user'
 import { getSort, throwIfNotValid } from '../utils'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
-import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 
 @DefaultScope(() => ({
   include: [
@@ -52,7 +53,7 @@ import { afterCommitIfTransaction } from '@server/helpers/database-utils'
     }
   ]
 })
-export class VideoImportModel extends Model {
+export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportModel>>> {
   @CreatedAt
   createdAt: Date
 

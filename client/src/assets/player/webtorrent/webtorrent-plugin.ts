@@ -506,7 +506,8 @@ class WebTorrentPlugin extends Plugin {
           uploadSpeed: this.torrent.uploadSpeed,
           downloaded: this.torrent.downloaded,
           uploaded: this.torrent.uploaded
-        }
+        },
+        bandwidthEstimate: this.webtorrent.downloadSpeed
       } as PlayerNetworkInfo)
     }, this.CONSTANTS.INFO_SCHEDULER)
   }
@@ -556,7 +557,8 @@ class WebTorrentPlugin extends Plugin {
   private pickAverageVideoFile () {
     if (this.videoFiles.length === 1) return this.videoFiles[0]
 
-    return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
+    const files = this.videoFiles.filter(f => f.resolution.id !== 0)
+    return files[Math.floor(files.length / 2)]
   }
 
   private stopTorrent (torrent: WebTorrent.Torrent) {

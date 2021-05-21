@@ -20,7 +20,7 @@
     <my-global-icon iconName="search"></my-global-icon>
 
     <ng-container i18n>
-      {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for {{ search }}"
+      {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for "{{ search }}"
     </ng-container>
   </ng-container>
 </div>
@@ -48,8 +48,15 @@
         <span *ngIf="plugin.installed" class="badge badge-success">Installed</span>
 
         <div class="buttons">
-          <my-button class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)" [loading]="isInstalling(plugin)"
-                     label="Install" icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
+          <my-edit-button
+            *ngIf="plugin.installed === true && !isThemeSearch()" [routerLink]="getShowRouterLink(plugin)"
+            label="Settings" i18n-label [responsiveLabel]="true"
+          ></my-edit-button>
+
+          <my-button
+            class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)"
+            [loading]="isInstalling(plugin)" label="Install" [responsiveLabel]="true"
+            icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
           ></my-button>
         </div>
       </div>

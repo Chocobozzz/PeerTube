@@ -19,6 +19,7 @@ import {
 } from 'sequelize-typescript'
 import { v4 as uuidv4 } from 'uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -50,6 +51,7 @@ import {
   MVideoPlaylistIdWithElements
 } from '../../types/models/video/video-playlist'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
+import { ActorModel } from '../actor/actor'
 import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getPlaylistSort, isOutdated, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from './thumbnail'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
@@ -65,7 +67,7 @@ enum ScopeNames {
 }
 
 type AvailableForListOptions = {
-  followerActorId: number
+  followerActorId?: number
   type?: VideoPlaylistType
   accountId?: number
   videoChannelId?: number
@@ -134,20 +136,26 @@ type AvailableForListOptions = {
         privacy: VideoPlaylistPrivacy.PUBLIC
       })
 
-      // Only list local playlists OR playlists that are on an instance followed by actorId
-      const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
+      // Only list local playlists
+      const whereActorOr: WhereOptions[] = [
+        {
+          serverId: null
+        }
+      ]
+
+      // … OR playlists that are on an instance followed by actorId
+      if (options.followerActorId) {
+        const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
+
+        whereActorOr.push({
+          serverId: {
+            [Op.in]: literal(inQueryInstanceFollow)
+          }
+        })
+      }
 
       whereActor = {
-        [Op.or]: [
-          {
-            serverId: null
-          },
-          {
-            serverId: {
-              [Op.in]: literal(inQueryInstanceFollow)
-            }
-          }
-        ]
+        [Op.or]: whereActorOr
       }
     }
 
@@ -214,7 +222,7 @@ type AvailableForListOptions = {
     }
   ]
 })
-export class VideoPlaylistModel extends Model {
+export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlaylistModel>>> {
   @CreatedAt
   createdAt: Date
 
@@ -493,6 +501,33 @@ export class VideoPlaylistModel extends Model {
 
   getEmbedStaticPath () {
     return '/video-playlists/embed/' + this.uuid
+  }
+
+  static async getStats () {
+    const totalLocalPlaylists = await VideoPlaylistModel.count({
+      include: [
+        {
+          model: AccountModel,
+          required: true,
+          include: [
+            {
+              model: ActorModel,
+              required: true,
+              where: {
+                serverId: null
+              }
+            }
+          ]
+        }
+      ],
+      where: {
+        privacy: VideoPlaylistPrivacy.PUBLIC
+      }
+    })
+
+    return {
+      totalLocalPlaylists
+    }
   }
 
   setAsRefreshed () {

@@ -2,13 +2,13 @@ import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
 import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
 import { ApplicationModel } from '@server/models/application/application'
 import { PluginModel } from '@server/models/server/plugin'
+import { UserNotificationModel } from '@server/models/user/user-notification'
 import { PickWith, PickWithOpt } from '@shared/core-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
 import { AccountModel } from '../../../models/account/account'
-import { UserNotificationModel } from '../../../models/account/user-notification'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { AvatarModel } from '../../../models/avatar/avatar'
+import { ActorModel } from '../../../models/actor/actor'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
+import { ActorImageModel } from '../../../models/actor/actor-image'
 import { ServerModel } from '../../../models/server/server'
 import { VideoModel } from '../../../models/video/video'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
@@ -29,7 +29,7 @@ export module UserNotificationIncludes {
 
   export type ActorInclude =
     Pick<ActorModel, 'preferredUsername' | 'getHost'> &
-    PickWith<ActorModel, 'Avatar', Pick<AvatarModel, 'filename' | 'getStaticPath'>> &
+    PickWith<ActorModel, 'Avatar', Pick<ActorImageModel, 'filename' | 'getStaticPath'>> &
     PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>>
 
   export type VideoChannelInclude = Pick<VideoChannelModel, 'id' | 'name' | 'getDisplayName'>
@@ -75,7 +75,7 @@ export module UserNotificationIncludes {
     Pick<ActorModel, 'preferredUsername' | 'getHost'> &
     PickWith<ActorModel, 'Account', AccountInclude> &
     PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>> &
-    PickWithOpt<ActorModel, 'Avatar', Pick<AvatarModel, 'filename' | 'getStaticPath'>>
+    PickWithOpt<ActorModel, 'Avatar', Pick<ActorImageModel, 'filename' | 'getStaticPath'>>
 
   export type ActorFollowing =
     Pick<ActorModel, 'preferredUsername' | 'type' | 'getHost'> &

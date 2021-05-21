@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-
+import { VideoComment, VideoCommentAdmin, VideoCommentThreadTree } from '@shared/models'
 import { cleanupTests, testImage } from '../../../../shared/extra-utils'
 import {
   createUser,
@@ -22,7 +22,6 @@ import {
   getVideoCommentThreads,
   getVideoThreadComments
 } from '../../../../shared/extra-utils/videos/video-comments'
-import { VideoComment, VideoCommentAdmin, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 
 const expect = chai.expect
 

@@ -1,5 +1,4 @@
 import { browser } from 'protractor'
-import { AppPage } from './po/app.po'
 import { LoginPage } from './po/login.po'
 import { MyAccountPage } from './po/my-account'
 import { PlayerPage } from './po/player.po'
@@ -23,7 +22,6 @@ describe('Videos workflow', () => {
   let videoUpdatePage: VideoUpdatePage
   let myAccountPage: MyAccountPage
   let loginPage: LoginPage
-  let appPage: AppPage
   let playerPage: PlayerPage
 
   let videoName = new Date().getTime() + ' video'
@@ -37,7 +35,6 @@ describe('Videos workflow', () => {
     videoUpdatePage = new VideoUpdatePage()
     myAccountPage = new MyAccountPage()
     loginPage = new LoginPage()
-    appPage = new AppPage()
     playerPage = new PlayerPage()
 
     if (await isIOS()) {
@@ -64,12 +61,6 @@ describe('Videos workflow', () => {
     }
 
     return loginPage.loginAsRootUser()
-  })
-
-  it('Should close the welcome modal', async () => {
-    if (await skipIfUploadNotSupported()) return
-
-    await appPage.closeWelcomeModal()
   })
 
   it('Should upload a video', async () => {

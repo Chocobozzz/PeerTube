@@ -1,29 +1,26 @@
 import { ChartData } from 'chart.js'
 import { max, maxBy, min, minBy } from 'lodash-es'
-import { Subject } from 'rxjs'
-import { debounceTime, mergeMap } from 'rxjs/operators'
-import { Component, OnInit } from '@angular/core'
-import { AuthService, ConfirmService, Notifier, ScreenService, User } from '@app/core'
+import { mergeMap } from 'rxjs/operators'
+import { Component } from '@angular/core'
+import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 
 @Component({
   templateUrl: './my-video-channels.component.html',
   styleUrls: [ './my-video-channels.component.scss' ]
 })
-export class MyVideoChannelsComponent implements OnInit {
+export class MyVideoChannelsComponent {
   totalItems: number
 
   videoChannels: VideoChannel[] = []
+
   videoChannelsChartData: ChartData[]
   videoChannelsMinimumDailyViews = 0
   videoChannelsMaximumDailyViews: number
 
-  channelsSearch: string
-  channelsSearchChanged = new Subject<string>()
-
   chartOptions: any
 
-  private user: User
+  search: string
 
   constructor (
     private authService: AuthService,
@@ -31,31 +28,15 @@ export class MyVideoChannelsComponent implements OnInit {
     private confirmService: ConfirmService,
     private videoChannelService: VideoChannelService,
     private screenService: ScreenService
-    ) {}
-
-  ngOnInit () {
-    this.user = this.authService.getUser()
-
-    this.loadVideoChannels()
-
-    this.channelsSearchChanged
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        this.loadVideoChannels()
-      })
-  }
+  ) {}
 
   get isInSmallView () {
     return this.screenService.isInSmallView()
   }
 
-  resetSearch () {
-    this.channelsSearch = ''
-    this.onChannelsSearchChanged()
-  }
-
-  onChannelsSearchChanged () {
-    this.channelsSearchChanged.next()
+  onSearch (search: string) {
+    this.search = search
+    this.loadVideoChannels()
   }
 
   async deleteVideoChannel (videoChannel: VideoChannel) {
@@ -85,8 +66,17 @@ channel with the same name (${videoChannel.name})!`,
 
   private loadVideoChannels () {
     this.authService.userInformationLoaded
-        .pipe(mergeMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account, null, true, this.channelsSearch)))
-        .subscribe(res => {
+        .pipe(mergeMap(() => {
+          const user = this.authService.getUser()
+          const options = {
+            account: user.account,
+            withStats: true,
+            search: this.search,
+            sort: '-updatedAt'
+          }
+
+          return this.videoChannelService.listAccountVideoChannels(options)
+        })).subscribe(res => {
           this.videoChannels = res.data
           this.totalItems = res.total
 

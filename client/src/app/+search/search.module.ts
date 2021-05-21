@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { SharedActorImageModule } from '@app/shared/shared-actor-image/shared-actor-image.module'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedSearchModule } from '@app/shared/shared-search'
@@ -18,6 +19,7 @@ import { VideoLazyLoadResolver } from './video-lazy-load.resolver'
     SharedMainModule,
     SharedSearchModule,
     SharedFormModule,
+    SharedActorImageModule,
     SharedUserSubscriptionModule,
     SharedVideoMiniatureModule
   ],

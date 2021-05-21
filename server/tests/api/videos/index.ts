@@ -1,5 +1,6 @@
 import './audio-only'
 import './multiple-servers'
+import './resumable-upload'
 import './single-server'
 import './video-captions'
 import './video-change-ownership'

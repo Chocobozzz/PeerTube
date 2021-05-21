@@ -28,7 +28,7 @@ export class MyAccountPage {
   }
 
   validRemove () {
-    return element(by.css('.action-button-submit')).click()
+    return element(by.css('input[type=submit]')).click()
   }
 
   countVideos (names: string[]) {

@@ -1,4 +1,4 @@
-import { UserVideoHistoryModel } from '../../../models/account/user-video-history'
+import { UserVideoHistoryModel } from '../../../models/user/user-video-history'
 
 export type MUserVideoHistory = Omit<UserVideoHistoryModel, 'Video' | 'User'>
 

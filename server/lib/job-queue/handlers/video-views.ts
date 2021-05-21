@@ -38,8 +38,8 @@ async function processVideosViewsForHour (date) {
 
           const videoView = await VideoViewModel.findOne({
             where: {
-              startDate,
-              endDate,
+              startDate: new Date(startDate),
+              endDate: new Date(endDate),
               videoId
             }
           })
@@ -57,8 +57,8 @@ async function processVideosViewsForHour (date) {
             logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
 
             await VideoViewModel.create({
-              startDate,
-              endDate,
+              startDate: new Date(startDate),
+              endDate: new Date(endDate),
               views,
               videoId
             })

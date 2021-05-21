@@ -151,6 +151,15 @@ export interface ServerConfig {
     }
   }
 
+  banner: {
+    file: {
+      size: {
+        max: number
+      }
+      extensions: string[]
+    }
+  }
+
   video: {
     image: {
       size: {
@@ -206,3 +215,5 @@ export interface ServerConfig {
     dismissable: boolean
   }
 }
+
+export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

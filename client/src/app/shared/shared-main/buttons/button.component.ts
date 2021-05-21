@@ -3,7 +3,7 @@ import { GlobalIconName } from '@app/shared/shared-icons'
 
 @Component({
   selector: 'my-button',
-  styleUrls: ['./button.component.scss'],
+  styleUrls: [ './button.component.scss' ],
   templateUrl: './button.component.html'
 })
 
@@ -14,6 +14,7 @@ export class ButtonComponent {
   @Input() title: string = undefined
   @Input() loading = false
   @Input() disabled = false
+  @Input() responsiveLabel = false
 
   getTitle () {
     return this.title || this.label
@@ -22,7 +23,8 @@ export class ButtonComponent {
   getClasses () {
     return {
       [this.className]: true,
-      disabled: this.disabled
+      disabled: this.disabled,
+      'responsive-label': this.responsiveLabel
     }
   }
 }

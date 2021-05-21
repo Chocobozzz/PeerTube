@@ -1,4 +1,4 @@
-import { map } from 'rxjs/operators'
+import { first, map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { DatePipe } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
@@ -23,20 +23,29 @@ function getParameterByName (name: string, url: string) {
 
 function listUserChannels (authService: AuthService) {
   return authService.userInformationLoaded
-    .pipe(map(() => {
-      const user = authService.getUser()
-      if (!user) return undefined
+    .pipe(
+      first(),
+      map(() => {
+        const user = authService.getUser()
+        if (!user) return undefined
 
-      const videoChannels = user.videoChannels
-      if (Array.isArray(videoChannels) === false) return undefined
+        const videoChannels = user.videoChannels
+        if (Array.isArray(videoChannels) === false) return undefined
 
-      return videoChannels.map(c => ({
-        id: c.id,
-        label: c.displayName,
-        support: c.support,
-        avatarPath: c.avatar?.path
-      }) as SelectChannelItem)
-    }))
+        return videoChannels
+          .sort((a, b) => {
+            if (a.updatedAt < b.updatedAt) return 1
+            if (a.updatedAt > b.updatedAt) return -1
+            return 0
+          })
+          .map(c => ({
+            id: c.id,
+            label: c.displayName,
+            support: c.support,
+            avatarPath: c.avatar?.path
+          }) as SelectChannelItem)
+      })
+    )
 }
 
 function getAbsoluteAPIUrl () {
@@ -167,8 +176,8 @@ function isXPercentInViewport (el: HTMLElement, percentVisible: number) {
   )
 }
 
-function uploadErrorHandler (parameters: {
-  err: HttpErrorResponse
+function genericUploadErrorHandler (parameters: {
+  err: Pick<HttpErrorResponse, 'message' | 'status' | 'headers'>
   name: string
   notifier: Notifier
   sticky?: boolean
@@ -179,6 +188,9 @@ function uploadErrorHandler (parameters: {
 
   if (err instanceof ErrorEvent) { // network error
     message = $localize`The connection was interrupted`
+    notifier.error(message, title, null, sticky)
+  } else if (err.status === HttpStatusCode.INTERNAL_SERVER_ERROR_500) {
+    message = $localize`The server encountered an error`
     notifier.error(message, title, null, sticky)
   } else if (err.status === HttpStatusCode.REQUEST_TIMEOUT_408) {
     message = $localize`Your ${name} file couldn't be transferred before the set timeout (usually 10min)`
@@ -210,5 +222,5 @@ export {
   isInViewport,
   isXPercentInViewport,
   listUserChannels,
-  uploadErrorHandler
+  genericUploadErrorHandler
 }

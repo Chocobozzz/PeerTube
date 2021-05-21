@@ -1,4 +1,4 @@
-<div class="miniature" [ngClass]="{ 'no-videos': playlist.videosLength === 0, 'to-manage': toManage }">
+<div class="miniature" [ngClass]="{ 'no-videos': playlist.videosLength === 0, 'to-manage': toManage, 'display-as-row': displayAsRow }">
   <a
     [routerLink]="getPlaylistUrl()" [attr.title]="playlist.description"
     class="miniature-thumbnail"

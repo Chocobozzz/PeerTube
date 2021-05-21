@@ -2,11 +2,11 @@ import * as passwordGenerator from 'password-generator'
 import { UserRole } from '../../shared'
 import { logger } from '../helpers/logger'
 import { createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
-import { UserModel } from '../models/account/user'
+import { UserModel } from '../models/user/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
-import { FILES_CACHE, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
+import { FILES_CACHE, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION, RESUMABLE_UPLOAD_DIRECTORY } from './constants'
 import { sequelizeTypescript } from './database'
 import { ensureDir, remove } from 'fs-extra'
 import { CONFIG } from './config'
@@ -78,6 +78,9 @@ function createDirectoriesIfNotExist () {
 
   // Playlist directories
   tasks.push(ensureDir(HLS_STREAMING_PLAYLIST_DIRECTORY))
+
+  // Resumable upload directory
+  tasks.push(ensureDir(RESUMABLE_UPLOAD_DIRECTORY))
 
   return Promise.all(tasks)
 }

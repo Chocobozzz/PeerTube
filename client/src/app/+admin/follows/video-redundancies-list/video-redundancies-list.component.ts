@@ -78,7 +78,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     this.pagination.start = 0
     this.saveSelectLocalStorage()
 
-    this.loadData()
+    this.reloadData()
   }
 
   getRedundancyStrategy (redundancy: VideoRedundancy) {
@@ -145,7 +145,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
       .subscribe(
         () => {
           this.notifier.success($localize`Video redundancies removed!`)
-          this.loadData()
+          this.reloadData()
         },
 
         err => this.notifier.error(err.message)
@@ -153,7 +153,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
   }
 
-  protected loadData () {
+  protected reloadData () {
     const options = {
       pagination: this.pagination,
       sort: this.sort,

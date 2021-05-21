@@ -1,6 +1,11 @@
 @import '_variables';
 @import '_mixins';
 
+h1 my-global-icon {
+  position: relative;
+  top: -2px;
+}
+
 .create-button {
   @include create-button;
 }
@@ -9,50 +14,49 @@ input[type=text] {
   @include peertube-input-text(300px);
 }
 
-::ng-deep .action-button {
-  &.action-button-edit {
-    margin-right: 10px;
-  }
+my-edit-button {
+  margin-right: 10px;
 }
 
 .video-channel {
   @include row-blocks;
+
   padding-bottom: 0;
 
-  img {
-    @include avatar(80px);
+  my-actor-avatar {
+    @include actor-avatar-size(80px);
 
     margin-right: 10px;
   }
+}
 
-  .video-channel-info {
-    flex-grow: 1;
+.video-channel-info {
+  flex-grow: 1;
+}
 
-    a.video-channel-names {
-      @include disable-default-a-behaviour;
+.video-channel-names {
+  @include disable-default-a-behaviour;
 
-      width: fit-content;
-      display: flex;
-      align-items: baseline;
-      color: pvar(--mainForegroundColor);
+  width: fit-content;
+  display: flex;
+  align-items: baseline;
+  color: pvar(--mainForegroundColor);
+}
 
-      .video-channel-display-name {
-        font-weight: $font-semibold;
-        font-size: 18px;
-      }
+.video-channel-display-name {
+  font-weight: $font-semibold;
+  font-size: 18px;
+}
 
-      .video-channel-name {
-        font-size: 14px;
-        color: $grey-actor-name;
-        margin-left: 5px;
-      }
-    }
-  }
+.video-channel-name {
+  font-size: 14px;
+  color: $grey-actor-name;
+  margin-left: 5px;
+}
 
-  .video-channel-buttons {
-    margin-top: 10px;
-    min-width: 190px;
-  }
+.video-channel-buttons {
+  margin-top: 10px;
+  min-width: 190px;
 }
 
 ::ng-deep .chartjs-render-monitor {
@@ -72,21 +76,6 @@ input[type=text] {
   .video-channel {
     padding-bottom: 10px;
 
-    .video-channel-info {
-      padding-bottom: 10px;
-      text-align: center;
-
-      .video-channel-names {
-        flex-direction: column;
-        align-items: center !important;
-        margin: auto;
-
-        .video-channel-name {
-          margin-left: 0px !important;
-        }
-      }
-    }
-
     img {
       margin-right: 0;
     }
@@ -94,6 +83,21 @@ input[type=text] {
     .video-channel-buttons {
       align-self: center;
     }
+  }
+
+  .video-channel-info {
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+  .video-channel-names {
+    flex-direction: column;
+    align-items: center !important;
+    margin: auto;
+  }
+
+  .video-channel-name {
+    margin-left: 0 !important;
   }
 }
 

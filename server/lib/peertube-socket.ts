@@ -42,12 +42,14 @@ class PeerTubeSocket {
         socket.on('subscribe', ({ videoId }) => {
           if (!isIdValid(videoId)) return
 
+          /* eslint-disable @typescript-eslint/no-floating-promises */
           socket.join(videoId)
         })
 
         socket.on('unsubscribe', ({ videoId }) => {
           if (!isIdValid(videoId)) return
 
+          /* eslint-disable @typescript-eslint/no-floating-promises */
           socket.leave(videoId)
         })
       })

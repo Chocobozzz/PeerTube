@@ -17,9 +17,9 @@ a {
   justify-content: flex-start;
 }
 
-.showMore {
+.show-more {
   @include peertube-button-link;
   @include grey-button;
-  
+
   margin-top: 1%;
 }

@@ -9,7 +9,7 @@ import {
   userHistoryRemoveValidator
 } from '../../../middlewares'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { UserVideoHistoryModel } from '../../../models/account/user-video-history'
+import { UserVideoHistoryModel } from '../../../models/user/user-video-history'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 

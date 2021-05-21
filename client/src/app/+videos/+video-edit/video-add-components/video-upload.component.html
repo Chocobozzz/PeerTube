@@ -1,12 +1,17 @@
-<div *ngIf="!isUploadingVideo" class="upload-video-container" dragDrop (fileDropped)="setVideoFile($event)">
+<div *ngIf="!isUploadingVideo" class="upload-video-container" dragDrop (fileDropped)="onFileDropped($event)">
   <div class="first-step-block">
     <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
 
     <div class="button-file form-control" [ngbTooltip]="'(extensions: ' + videoExtensions + ')'">
       <span i18n>Select the file to upload</span>
       <input
-        aria-label="Select the file to upload" i18n-aria-label
-        #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" autofocus
+        aria-label="Select the file to upload"
+        i18n-aria-label
+        #videofileInput
+        [accept]="videoExtensions"
+        (change)="onFileChange($event)"
+        id="videofile"
+        type="file"
       />
     </div>
 
@@ -41,7 +46,13 @@
       </div>
 
       <div class="form-group upload-audio-button">
-        <my-button className="orange-button" i18n-label [label]="getAudioUploadLabel()" icon="upload" (click)="uploadFirstStep(true)"></my-button>
+        <my-button
+          className="orange-button"
+          [label]="getAudioUploadLabel()"
+          icon="upload"
+          (click)="uploadAudio()"
+        >
+        </my-button>
       </div>
     </ng-container>
   </div>
@@ -64,6 +75,7 @@
       <span>{{ error }}</span>
     </div>
   </div>
+
   <div class="btn-group" role="group">
     <input type="button" class="btn" i18n-value="Retry failed upload of a video" value="Retry" (click)="retryUpload()" />
     <input type="button" class="btn" i18n-value="Cancel ongoing upload of a video" value="Cancel" (click)="cancelUpload()" />

@@ -52,11 +52,11 @@ body {
   }
 
   .vjs-big-play-button {
-    outline: 0;
-    font-size: 6em;
-
     $big-play-width: 1.2em;
     $big-play-height: 1.2em;
+
+    outline: 0;
+    font-size: 6em;
 
     border: 2px solid #fff;
     border-radius: 100%;
@@ -72,7 +72,7 @@ body {
 
     &::-moz-focus-inner {
       border: 0;
-      padding: 0
+      padding: 0;
     }
 
     .vjs-icon-placeholder::before {
@@ -82,8 +82,9 @@ body {
       background-image: url('#{$assets-path}/player/images/big-play-button.svg');
     }
 
-    &.focus-visible, &:hover {
-      background-color: var(--mainColor, dimgray);
+    &.focus-visible,
+    &:hover {
+      background-color: var(--mainColor, #696969);
     }
 
   }
@@ -91,16 +92,19 @@ body {
   // Small effect when we click on the play button
   &.vjs-has-big-play-button-clicked {
 
-    .vjs-big-play-button, .vjs-poster {
+    .vjs-big-play-button,
+    .vjs-poster {
       display: block;
       visibility: hidden;
 
-      &.vjs-big-play-button, &.vjs-big-play-button::before {
+      &.vjs-big-play-button,
+      &.vjs-big-play-button::before {
         opacity: 0;
         transition: visibility 0.2s, opacity 0.2s;
       }
 
-      &.vjs-poster, &.vjs-poster::before {
+      &.vjs-poster,
+      &.vjs-poster::before {
         opacity: 0;
         transition: visibility 0.3s, opacity 0.3s;
         transition-delay: 0.05s;
@@ -165,8 +169,7 @@ body {
     .vjs-fullscreen-control,
     .vjs-peertube-link,
     .vjs-theater-control,
-    .vjs-settings
-    {
+    .vjs-settings {
       color: pvar(--embedForegroundColor) !important;
 
       opacity: $primary-foreground-opacity;
@@ -217,7 +220,8 @@ body {
         }
 
         .vjs-load-progress {
-          &, & div {
+          &,
+          div {
             background: rgba(255, 255, 255, .2);
           }
         }
@@ -266,7 +270,7 @@ body {
           line-height: calc(#{$control-bar-height} - 1px);
 
           &::after {
-            content: "/";
+            content: '/';
             margin: 0 1px 0 2px;
           }
         }
@@ -308,11 +312,17 @@ body {
         display: none;
       }
 
-      .download-speed-number, .upload-speed-number, .peers-number, .http-fallback {
+      .download-speed-number,
+      .upload-speed-number,
+      .peers-number,
+      .http-fallback {
         font-weight: $font-semibold;
       }
 
-      .download-speed-text, .upload-speed-text, .peers-text, .http-fallback {
+      .download-speed-text,
+      .upload-speed-text,
+      .peers-text,
+      .http-fallback {
         margin-right: 15px;
       }
 
@@ -337,9 +347,9 @@ body {
         &.icon-previous {
           mask-image: url('#{$assets-path}/player/images/next.svg');
           -webkit-mask-image: url('#{$assets-path}/player/images/next.svg');
-          background-color: white;
+
+          background-color: #fff;
           mask-size: cover;
-          -webkit-mask-size: cover;
           width: 11px;
           height: 11px;
           margin-top: -2px;
@@ -410,7 +420,7 @@ body {
     }
 
     .vjs-volume-bar {
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcCAQAAACw95UnAAAAMElEQVRIx2NgoBL4n4YKGUYNHkEG4zJg1OCRYDCpBowaPJwMppbLRg0eNXjUYBLEAXWNUA6QNm1lAAAAAElFTkSuQmCC) no-repeat;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcCAQAAACw95UnAAAAMElEQVRIx2NgoBL4n4YKGUYNHkEG4zJg1OCRYDCpBowaPJwMppbLRg0eNXjUYBLEAXWNUA6QNm1lAAAAAElFTkSuQmCC') no-repeat;
       background-size: 22px 14px;
       height: 100%;
       width: 100%;
@@ -421,7 +431,7 @@ body {
       top: 3px;
 
       .vjs-volume-level {
-        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcAQAAAAAyhWABAAAAAnRSTlMAAHaTzTgAAAAZSURBVHgBYwAB/g9EUv+JokCqiaT+U4MCAPKPS7WUUOc1AAAAAElFTkSuQmCC) no-repeat;
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcAQAAAAAyhWABAAAAAnRSTlMAAHaTzTgAAAAZSURBVHgBYwAB/g9EUv+JokCqiaT+U4MCAPKPS7WUUOc1AAAAAElFTkSuQmCC') no-repeat;
         background-size: 22px 14px;
         max-width: 22px;
         max-height: 14px;

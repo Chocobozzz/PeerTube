@@ -1,4 +1,4 @@
-import { FindOptions, Includeable, literal, Op, ScopeOptions } from 'sequelize'
+import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -17,7 +17,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { setAsUpdated } from '@server/helpers/database-utils'
 import { MAccountActor } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
@@ -28,17 +30,16 @@ import {
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import {
-  MChannelAccountDefault,
   MChannelActor,
-  MChannelActorAccountDefaultVideos,
   MChannelAP,
+  MChannelBannerAccountDefault,
   MChannelFormattable,
   MChannelSummaryFormattable
 } from '../../types/models/video'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
-import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { ActorFollowModel } from '../activitypub/actor-follow'
-import { AvatarModel } from '../avatar/avatar'
+import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
+import { ActorFollowModel } from '../actor/actor-follow'
+import { ActorImageModel } from '../actor/actor-image'
 import { ServerModel } from '../server/server'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -49,6 +50,7 @@ export enum ScopeNames {
   SUMMARY = 'SUMMARY',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACTOR = 'WITH_ACTOR',
+  WITH_ACTOR_BANNER = 'WITH_ACTOR_BANNER',
   WITH_VIDEOS = 'WITH_VIDEOS',
   WITH_STATS = 'WITH_STATS'
 }
@@ -99,7 +101,14 @@ export type SummaryOptions = {
                 }
               }
             ]
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              as: 'Banner',
+              required: false
+            }
+          ]
         },
         {
           model: AccountModel,
@@ -130,7 +139,8 @@ export type SummaryOptions = {
             required: false
           },
           {
-            model: AvatarModel.unscoped(),
+            model: ActorImageModel.unscoped(),
+            as: 'Avatar',
             required: false
           }
         ]
@@ -165,6 +175,20 @@ export type SummaryOptions = {
   [ScopeNames.WITH_ACTOR]: {
     include: [
       ActorModel
+    ]
+  },
+  [ScopeNames.WITH_ACTOR_BANNER]: {
+    include: [
+      {
+        model: ActorModel,
+        include: [
+          {
+            model: ActorImageModel,
+            required: false,
+            as: 'Banner'
+          }
+        ]
+      }
     ]
   },
   [ScopeNames.WITH_VIDEOS]: {
@@ -223,7 +247,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class VideoChannelModel extends Model {
+export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
 
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))
@@ -314,6 +338,47 @@ export class VideoChannelModel extends Model {
     }
 
     return VideoChannelModel.count(query)
+  }
+
+  static async getStats () {
+
+    function getActiveVideoChannels (days: number) {
+      const options = {
+        type: QueryTypes.SELECT as QueryTypes.SELECT,
+        raw: true
+      }
+
+      const query = `
+SELECT          COUNT(DISTINCT("VideoChannelModel"."id")) AS "count"
+FROM            "videoChannel"                            AS "VideoChannelModel"
+INNER JOIN      "video"                                   AS "Videos"
+ON              "VideoChannelModel"."id" = "Videos"."channelId"
+AND             ("Videos"."publishedAt" > Now() - interval '${days}d')
+INNER JOIN      "account" AS "Account"
+ON              "VideoChannelModel"."accountId" = "Account"."id"
+INNER JOIN      "actor" AS "Account->Actor"
+ON              "Account"."actorId" = "Account->Actor"."id"
+AND             "Account->Actor"."serverId" IS NULL
+LEFT OUTER JOIN "server" AS "Account->Actor->Server"
+ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
+
+      return VideoChannelModel.sequelize.query<{ count: string }>(query, options)
+                              .then(r => parseInt(r[0].count, 10))
+    }
+
+    const totalLocalVideoChannels = await VideoChannelModel.count()
+    const totalLocalDailyActiveVideoChannels = await getActiveVideoChannels(1)
+    const totalLocalWeeklyActiveVideoChannels = await getActiveVideoChannels(7)
+    const totalLocalMonthlyActiveVideoChannels = await getActiveVideoChannels(30)
+    const totalHalfYearActiveVideoChannels = await getActiveVideoChannels(180)
+
+    return {
+      totalLocalVideoChannels,
+      totalLocalDailyActiveVideoChannels,
+      totalLocalWeeklyActiveVideoChannels,
+      totalLocalMonthlyActiveVideoChannels,
+      totalHalfYearActiveVideoChannels
+    }
   }
 
   static listForApi (parameters: {
@@ -441,7 +506,7 @@ export class VideoChannelModel extends Model {
       where
     }
 
-    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR ]
+    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR_BANNER ]
 
     if (options.withStats === true) {
       scopes.push({
@@ -457,32 +522,13 @@ export class VideoChannelModel extends Model {
       })
   }
 
-  static loadByIdAndPopulateAccount (id: number): Promise<MChannelAccountDefault> {
+  static loadAndPopulateAccount (id: number): Promise<MChannelBannerAccountDefault> {
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACTOR_BANNER, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
   }
 
-  static loadByIdAndAccount (id: number, accountId: number): Promise<MChannelAccountDefault> {
-    const query = {
-      where: {
-        id,
-        accountId
-      }
-    }
-
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findOne(query)
-  }
-
-  static loadAndPopulateAccount (id: number): Promise<MChannelAccountDefault> {
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findByPk(id)
-  }
-
-  static loadByUrlAndPopulateAccount (url: string): Promise<MChannelAccountDefault> {
+  static loadByUrlAndPopulateAccount (url: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -490,7 +536,14 @@ export class VideoChannelModel extends Model {
           required: true,
           where: {
             url
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
+            }
+          ]
         }
       ]
     }
@@ -508,7 +561,7 @@ export class VideoChannelModel extends Model {
     return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
-  static loadLocalByNameAndPopulateAccount (name: string): Promise<MChannelAccountDefault> {
+  static loadLocalByNameAndPopulateAccount (name: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -517,17 +570,24 @@ export class VideoChannelModel extends Model {
           where: {
             preferredUsername: name,
             serverId: null
-          }
+          },
+          include: [
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
+            }
+          ]
         }
       ]
     }
 
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
   }
 
-  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Promise<MChannelAccountDefault> {
+  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Promise<MChannelBannerAccountDefault> {
     const query = {
       include: [
         {
@@ -541,6 +601,11 @@ export class VideoChannelModel extends Model {
               model: ServerModel,
               required: true,
               where: { host }
+            },
+            {
+              model: ActorImageModel,
+              required: false,
+              as: 'Banner'
             }
           ]
         }
@@ -548,20 +613,8 @@ export class VideoChannelModel extends Model {
     }
 
     return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
-  }
-
-  static loadAndPopulateAccountAndVideos (id: number): Promise<MChannelActorAccountDefaultVideos> {
-    const options = {
-      include: [
-        VideoModel
-      ]
-    }
-
-    return VideoChannelModel.unscoped()
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
-      .findByPk(id, options)
   }
 
   toFormattedSummaryJSON (this: MChannelSummaryFormattable): VideoChannelSummary {
@@ -602,7 +655,6 @@ export class VideoChannelModel extends Model {
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
-      createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       ownerAccount: undefined,
       videosCount,
@@ -639,5 +691,9 @@ export class VideoChannelModel extends Model {
 
   isOutdated () {
     return this.Actor.isOutdated()
+  }
+
+  setAsUpdated (transaction: Transaction) {
+    return setAsUpdated('videoChannel', this.id, transaction)
   }
 }

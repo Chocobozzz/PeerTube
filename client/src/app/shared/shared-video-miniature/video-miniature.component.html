@@ -1,4 +1,4 @@
-<div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow, 'fit-width': fitWidth }" (mouseenter)="loadActions()">
+<div class="video-miniature" [ngClass]="getClasses()" (mouseenter)="loadActions()">
   <my-video-thumbnail
     [video]="video" [nsfw]="isVideoBlur" [videoRouterLink]="videoRouterLink" [videoHref]="videoHref" [videoTarget]="videoTarget"
     [displayWatchLaterPlaylist]="isWatchLaterPlaylistDisplayed()" [inWatchLaterPlaylist]="inWatchLaterPlaylist" (watchLaterClick)="onWatchLaterClick($event)"
@@ -9,10 +9,16 @@
 
   <div class="video-bottom">
     <div class="video-miniature-information">
-      <div class="d-inline-flex video-miniature-meta">
-        <a *ngIf="displayOptions.avatar" class="avatar" [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
-          <img [src]="getAvatarUrl()" alt="" />
-        </a>
+      <div class="d-flex video-miniature-meta">
+        <my-actor-avatar
+          *ngIf="displayOptions.avatar && displayOwnerVideoChannel()" [title]="channelLinkTitle"
+          [channel]="video.channel" [size]="actorImageSize" [internalHref]="[ '/video-channels', video.byVideoChannel ]"
+        ></my-actor-avatar>
+
+        <my-actor-avatar
+          *ngIf="displayOptions.avatar && displayOwnerAccount()" [title]="channelLinkTitle"
+          [account]="video.account" [size]="actorImageSize" [internalHref]="[ '/video-channels', video.byVideoChannel ]"
+        ></my-actor-avatar>
 
         <div class="w-100 d-flex flex-column">
           <a *ngIf="!videoHref" tabindex="-1" class="video-miniature-name"
@@ -33,7 +39,7 @@
             </span>
           </span>
 
-          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
+          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
             {{ video.byAccount }}
           </a>
           <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">

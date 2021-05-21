@@ -1,12 +1,34 @@
 @import 'variables';
 @import 'mixins';
 
+.nav-content {
+  margin-top: 30px;
+}
+
+.advanced-filters-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  .nav-tabs {
+    margin-top: 10x;
+  }
+
+  .glyphicon {
+    margin-right: 5px;
+  }
+}
+
 .peertube-select-container {
   @include peertube-select-container(85px);
 
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  border-right: none;
+  border-right: 0;
 
   select {
     height: inherit;
@@ -15,12 +37,12 @@
   }
 }
 
-#dropdownDownloadType {
+#dropdown-download-type {
   cursor: pointer;
 }
 
 .download-type {
-  margin-top: 30px;
+  margin-top: 20px;
 
   .peertube-radio-container {
     @include peertube-radio-container;
@@ -28,6 +50,10 @@
     display: inline-block;
     margin-right: 30px;
   }
+}
+
+.nav-metadata {
+  margin-top: 20px;
 }
 
 .file-metadata {
@@ -59,7 +85,7 @@
   &.metadata-attribute-tags {
     .metadata-attribute-value:not(:nth-child(2)) {
       &::before {
-        content: ', '
+        content: ', ';
       }
     }
   }

@@ -1,8 +1,9 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { ScopeNames as VideoScopeNames, VideoModel } from './video'
-import { VideoPrivacy } from '../../../shared/models/videos'
 import { Op, Transaction } from 'sequelize'
+import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
+import { VideoPrivacy } from '../../../shared/models/videos'
+import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 
 @Table({
   tableName: 'scheduleVideoUpdate',
@@ -16,7 +17,7 @@ import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@
     }
   ]
 })
-export class ScheduleVideoUpdateModel extends Model {
+export class ScheduleVideoUpdateModel extends Model<Partial<AttributesOnly<ScheduleVideoUpdateModel>>> {
 
   @AllowNull(false)
   @Default(null)

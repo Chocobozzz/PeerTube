@@ -2,7 +2,7 @@ import 'multer'
 import * as express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
+import { ActorImageType, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -11,7 +11,7 @@ import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
-import { deleteLocalActorAvatarFile, updateLocalActorAvatarFile } from '../../../lib/avatar'
+import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../../lib/actor-image'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
@@ -25,12 +25,13 @@ import {
   usersVideoRatingValidator
 } from '../../../middlewares'
 import { deleteMeValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
-import { updateAvatarValidator } from '../../../middlewares/validators/avatar'
+import { updateAvatarValidator } from '../../../middlewares/validators/actor-image'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { UserModel } from '../../../models/account/user'
+import { UserModel } from '../../../models/user/user'
 import { VideoModel } from '../../../models/video/video'
 import { VideoImportModel } from '../../../models/video/video-import'
+import { AttributesOnly } from '@shared/core-utils'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -111,7 +112,8 @@ async function getUserVideos (req: express.Request, res: express.Response) {
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    search: req.query.search
+    search: req.query.search,
+    isLive: req.query.isLive
   }, 'filter:api.user.me.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
@@ -190,17 +192,23 @@ async function updateMe (req: express.Request, res: express.Response) {
 
   const user = res.locals.oauth.token.user
 
-  if (body.password !== undefined) user.password = body.password
-  if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
-  if (body.webTorrentEnabled !== undefined) user.webTorrentEnabled = body.webTorrentEnabled
-  if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
-  if (body.autoPlayNextVideo !== undefined) user.autoPlayNextVideo = body.autoPlayNextVideo
-  if (body.autoPlayNextVideoPlaylist !== undefined) user.autoPlayNextVideoPlaylist = body.autoPlayNextVideoPlaylist
-  if (body.videosHistoryEnabled !== undefined) user.videosHistoryEnabled = body.videosHistoryEnabled
-  if (body.videoLanguages !== undefined) user.videoLanguages = body.videoLanguages
-  if (body.theme !== undefined) user.theme = body.theme
-  if (body.noInstanceConfigWarningModal !== undefined) user.noInstanceConfigWarningModal = body.noInstanceConfigWarningModal
-  if (body.noWelcomeModal !== undefined) user.noWelcomeModal = body.noWelcomeModal
+  const keysToUpdate: (keyof UserUpdateMe & keyof AttributesOnly<UserModel>)[] = [
+    'password',
+    'nsfwPolicy',
+    'webTorrentEnabled',
+    'autoPlayVideo',
+    'autoPlayNextVideo',
+    'autoPlayNextVideoPlaylist',
+    'videosHistoryEnabled',
+    'videoLanguages',
+    'theme',
+    'noInstanceConfigWarningModal',
+    'noWelcomeModal'
+  ]
+
+  for (const key of keysToUpdate) {
+    if (body[key] !== undefined) user.set(key, body[key])
+  }
 
   if (body.email !== undefined) {
     if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
@@ -214,15 +222,15 @@ async function updateMe (req: express.Request, res: express.Response) {
   await sequelizeTypescript.transaction(async t => {
     await user.save({ transaction: t })
 
-    if (body.displayName !== undefined || body.description !== undefined) {
-      const userAccount = await AccountModel.load(user.Account.id, t)
+    if (body.displayName === undefined && body.description === undefined) return
 
-      if (body.displayName !== undefined) userAccount.name = body.displayName
-      if (body.description !== undefined) userAccount.description = body.description
-      await userAccount.save({ transaction: t })
+    const userAccount = await AccountModel.load(user.Account.id, t)
 
-      await sendUpdateActor(userAccount, t)
-    }
+    if (body.displayName !== undefined) userAccount.name = body.displayName
+    if (body.description !== undefined) userAccount.description = body.description
+    await userAccount.save({ transaction: t })
+
+    await sendUpdateActor(userAccount, t)
   })
 
   if (sendVerificationEmail === true) {
@@ -238,7 +246,7 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatar = await updateLocalActorAvatarFile(userAccount, avatarPhysicalFile)
+  const avatar = await updateLocalActorImageFile(userAccount, avatarPhysicalFile, ActorImageType.AVATAR)
 
   return res.json({ avatar: avatar.toFormattedJSON() })
 }
@@ -247,7 +255,7 @@ async function deleteMyAvatar (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
 
   const userAccount = await AccountModel.load(user.Account.id)
-  await deleteLocalActorAvatarFile(userAccount)
+  await deleteLocalActorImageFile(userAccount, ActorImageType.AVATAR)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

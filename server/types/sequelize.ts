@@ -1,4 +1,5 @@
-import { Model } from 'sequelize-typescript'
+import { AttributesOnly } from '@shared/core-utils'
+import { Model } from 'sequelize'
 
 // Thanks to sequelize-typescript: https://github.com/RobinBuschmann/sequelize-typescript
 
@@ -9,7 +10,7 @@ export type Omit<T, K extends keyof T> = { [P in Diff<keyof T, K>]: T[P] }
 
 export type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]> }
 
-export type FilteredModelAttributes<T extends Model<T>> = RecursivePartial<Omit<T, keyof Model<any>>> & {
+export type FilteredModelAttributes<T extends Model<any>> = Partial<AttributesOnly<T>> & {
   id?: number | any
   createdAt?: Date | any
   updatedAt?: Date | any

@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 import { Notifier, User } from '@app/core'
 import { VIDEO_COMMENT_TEXT_VALIDATOR } from '@app/shared/form-validators/video-comment-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { Video, Account } from '@app/shared/shared-main'
+import { Video } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCommentCreate } from '@shared/models'
@@ -141,11 +141,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   getUri () {
     return window.location.href
-  }
-
-  getAvatarUrl () {
-    if (this.user) return this.user.accountAvatarUrl
-    return Account.GET_DEFAULT_AVATAR_URL()
   }
 
   gotoLogin () {

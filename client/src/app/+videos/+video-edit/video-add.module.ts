@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CanDeactivateGuard } from '@app/core'
+import { UploadxModule } from 'ngx-uploadx'
 import { VideoEditModule } from './shared/video-edit.module'
 import { DragDropDirective } from './video-add-components/drag-drop.directive'
 import { VideoImportTorrentComponent } from './video-add-components/video-import-torrent.component'
@@ -13,7 +14,9 @@ import { VideoAddComponent } from './video-add.component'
   imports: [
     VideoAddRoutingModule,
 
-    VideoEditModule
+    VideoEditModule,
+
+    UploadxModule
   ],
 
   declarations: [

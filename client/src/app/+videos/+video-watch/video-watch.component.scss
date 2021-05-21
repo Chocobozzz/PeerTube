@@ -3,15 +3,15 @@
 @import '_bootstrap-variables';
 @import '_miniature';
 
-$player-factor: 1.7; // 16/9
+$player-factor: 16/9;
 $video-info-margin-left: 44px;
 
-@function getPlayerHeight($width){
-  @return calc(#{$width} / #{$player-factor})
+@function getPlayerHeight ($width) {
+  @return calc(#{$width} / #{$player-factor});
 }
 
-@function getPlayerWidth($height){
-  @return calc(#{$height} * #{$player-factor})
+@function getPlayerWidth ($height) {
+  @return calc(#{$height} * #{$player-factor});
 }
 
 @mixin playlist-below-player {
@@ -24,10 +24,10 @@ $video-info-margin-left: 44px;
 
 .root {
   &.theater-enabled #video-wrapper {
+    $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+
     flex-direction: column;
     justify-content: center;
-
-    $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
 
     #videojs-wrapper {
       width: 100%;
@@ -141,7 +141,7 @@ $video-info-margin-left: 44px;
     .video-info-first-row {
       display: flex;
 
-      & > div:first-child {
+      > div:first-child {
         flex-grow: 1;
       }
 
@@ -179,12 +179,6 @@ $video-info-margin-left: 44px;
           &:hover {
             opacity: 0.8;
           }
-
-          img {
-            @include avatar(18px);
-
-            margin: -2px 5px 0 0;
-          }
         }
 
         .video-info-channel-left {
@@ -212,13 +206,8 @@ $video-info-margin-left: 44px;
         }
       }
 
-      my-feed {
-        margin-left: 5px;
-        margin-top: 1px;
-      }
-
       .video-actions-rates {
-        margin: 0 0 10px 0;
+        margin: 0 0 10px;
         align-items: start;
         width: max-content;
         margin-left: auto;
@@ -242,7 +231,7 @@ $video-info-margin-left: 44px;
             font-size: 100%;
             font-weight: $font-semibold;
             display: inline-block;
-            padding: 0 10px 0 10px;
+            padding: 0 10px;
             white-space: nowrap;
             background-color: transparent !important;
             color: pvar(--actionButtonColor);
@@ -357,7 +346,8 @@ $video-info-margin-left: 44px;
         }
       }
 
-      .glyphicon, .description-loading {
+      .glyphicon,
+      .description-loading {
         margin-left: 3px;
       }
 
@@ -407,43 +397,18 @@ $video-info-margin-left: 44px;
       &.video-attribute-tags {
         .video-attribute-value:not(:nth-child(2)) {
           &::before {
-            content: ', '
+            content: ', ';
           }
         }
       }
     }
   }
+}
 
-  ::ng-deep .other-videos {
-    padding-left: 15px;
-    min-width: $video-miniature-width;
-
-    @media screen and (min-width: 1800px - (3* $video-miniature-width)) {
-      width: min-content;
-    }
-
-    .title-page {
-      margin: 0 !important;
-    }
-
-    .video-miniature {
-      display: flex;
-      width: max-content;
-      height: 100%;
-      padding-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .video-bottom {
-      @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
-        margin-left: 1rem;
-      }
-      @media screen and (max-width: 500px) {
-        margin-left: 0;
-        margin-top: .5rem;
-      }
-    }
-  }
+my-recommended-videos {
+  display: block;
+  padding-left: 15px;
+  min-width: 250px;
 }
 
 my-video-comments {
@@ -537,6 +502,7 @@ my-video-comments {
   }
 }
 
+// Use the same breakpoint than in the typescript component to display the other video miniatures as row
 @media screen and (max-width: 1100px) {
   #video-wrapper {
     flex-direction: column;
@@ -549,15 +515,10 @@ my-video-comments {
 
   .video-bottom {
     flex-direction: column;
+  }
 
-    ::ng-deep .other-videos {
-      padding-left: 0 !important;
-
-      ::ng-deep .video-miniature  {
-        flex-direction: row;
-        width: auto;
-      }
-    }
+  my-recommended-videos {
+    padding-left: 0;
   }
 }
 
@@ -577,10 +538,6 @@ my-video-comments {
         }
       }
     }
-  }
-
-  ::ng-deep .other-videos .video-miniature  {
-    flex-direction: column;
   }
 
   .privacy-concerns {

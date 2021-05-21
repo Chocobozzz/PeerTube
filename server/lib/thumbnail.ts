@@ -1,7 +1,8 @@
 import { join } from 'path'
+
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
-import { processImage } from '../helpers/image-utils'
+import { generateImageFilename, processImage } from '../helpers/image-utils'
 import { downloadImage } from '../helpers/requests'
 import { CONFIG } from '../initializers/config'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
@@ -11,7 +12,7 @@ import { MThumbnail } from '../types/models/video/thumbnail'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
 import { getVideoFilePath } from './video-paths'
 
-type ImageSize = { height: number, width: number }
+type ImageSize = { height?: number, width?: number }
 
 function createPlaylistMiniatureFromExisting (options: {
   inputPath: string
@@ -200,7 +201,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
     : undefined
 
   if (type === ThumbnailType.MINIATURE) {
-    const filename = video.generateThumbnailName()
+    const filename = generateImageFilename()
     const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 
     return {
@@ -214,7 +215,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
   }
 
   if (type === ThumbnailType.PREVIEW) {
-    const filename = video.generatePreviewName()
+    const filename = generateImageFilename()
     const basePath = CONFIG.STORAGE.PREVIEWS_DIR
 
     return {

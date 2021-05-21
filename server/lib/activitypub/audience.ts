@@ -1,7 +1,7 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience } from '../../../shared/models/activitypub'
 import { ACTIVITY_PUB } from '../../initializers/constants'
-import { ActorModel } from '../../models/activitypub/actor'
+import { ActorModel } from '../../models/actor/actor'
 import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
 import { MActorFollowersUrl, MActorLight, MActorUrl, MCommentOwner, MCommentOwnerVideo, MVideoId } from '../../types/models'

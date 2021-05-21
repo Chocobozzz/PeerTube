@@ -24,13 +24,14 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { v4 as uuidv4 } from 'uuid'
+import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live-manager'
 import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
@@ -100,14 +101,14 @@ import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models
 import { VideoAbuseModel } from '../abuse/video-abuse'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
-import { UserModel } from '../account/user'
-import { UserVideoHistoryModel } from '../account/user-video-history'
-import { ActorModel } from '../activitypub/actor'
-import { AvatarModel } from '../avatar/avatar'
+import { ActorModel } from '../actor/actor'
+import { ActorImageModel } from '../actor/actor-image'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { ServerModel } from '../server/server'
 import { TrackerModel } from '../server/tracker'
 import { VideoTrackerModel } from '../server/video-tracker'
+import { UserModel } from '../user/user'
+import { UserVideoHistoryModel } from '../user/user-video-history'
 import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { TagModel } from './tag'
@@ -286,7 +287,8 @@ export type AvailableForListIDsOptions = {
                 required: false
               },
               {
-                model: AvatarModel.unscoped(),
+                model: ActorImageModel.unscoped(),
+                as: 'Avatar',
                 required: false
               }
             ]
@@ -308,7 +310,8 @@ export type AvailableForListIDsOptions = {
                     required: false
                   },
                   {
-                    model: AvatarModel.unscoped(),
+                    model: ActorImageModel.unscoped(),
+                    as: 'Avatar',
                     required: false
                   }
                 ]
@@ -487,7 +490,7 @@ export type AvailableForListIDsOptions = {
     }
   ]
 })
-export class VideoModel extends Model {
+export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
@@ -916,7 +919,7 @@ export class VideoModel extends Model {
       },
       include: [
         {
-          attributes: [ 'language', 'fileUrl' ],
+          attributes: [ 'filename', 'language', 'fileUrl' ],
           model: VideoCaptionModel.unscoped(),
           required: false
         },
@@ -1020,14 +1023,28 @@ export class VideoModel extends Model {
     start: number
     count: number
     sort: string
+    isLive?: boolean
     search?: string
   }) {
-    const { accountId, start, count, sort, search } = options
+    const { accountId, start, count, sort, search, isLive } = options
 
     function buildBaseQuery (): FindOptions {
-      let baseQuery = {
+      const where: WhereOptions = {}
+
+      if (search) {
+        where.name = {
+          [Op.iLike]: '%' + search + '%'
+        }
+      }
+
+      if (isLive) {
+        where.isLive = isLive
+      }
+
+      const baseQuery = {
         offset: start,
         limit: count,
+        where,
         order: getVideoSort(sort),
         include: [
           {
@@ -1044,16 +1061,6 @@ export class VideoModel extends Model {
             ]
           }
         ]
-      }
-
-      if (search) {
-        baseQuery = Object.assign(baseQuery, {
-          where: {
-            name: {
-              [Op.iLike]: '%' + search + '%'
-            }
-          }
-        })
       }
 
       return baseQuery
@@ -1083,23 +1090,34 @@ export class VideoModel extends Model {
     start: number
     count: number
     sort: string
+
     nsfw: boolean
+    filter?: VideoFilter
+    isLive?: boolean
+
     includeLocalVideos: boolean
     withFiles: boolean
+
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
-    filter?: VideoFilter
+
     accountId?: number
     videoChannelId?: number
+
     followerActorId?: number
+
     videoPlaylistId?: number
+
     trendingDays?: number
+
     user?: MUserAccountId
     historyOfUser?: MUserId
+
     countVideos?: boolean
+
     search?: string
   }) {
     if ((options.filter === 'all-local' || options.filter === 'all') && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
@@ -1127,6 +1145,7 @@ export class VideoModel extends Model {
       followerActorId,
       serverAccountId: serverActor.Account.id,
       nsfw: options.nsfw,
+      isLive: options.isLive,
       categoryOneOf: options.categoryOneOf,
       licenceOneOf: options.licenceOneOf,
       languageOneOf: options.languageOneOf,
@@ -1159,6 +1178,7 @@ export class VideoModel extends Model {
     originallyPublishedStartDate?: string
     originallyPublishedEndDate?: string
     nsfw?: boolean
+    isLive?: boolean
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
@@ -1170,23 +1190,32 @@ export class VideoModel extends Model {
     filter?: VideoFilter
   }) {
     const serverActor = await getServerActor()
+
     const queryOptions = {
       followerActorId: serverActor.id,
       serverAccountId: serverActor.Account.id,
+
       includeLocalVideos: options.includeLocalVideos,
       nsfw: options.nsfw,
+      isLive: options.isLive,
+
       categoryOneOf: options.categoryOneOf,
       licenceOneOf: options.licenceOneOf,
       languageOneOf: options.languageOneOf,
+
       tagsOneOf: options.tagsOneOf,
       tagsAllOf: options.tagsAllOf,
+
       user: options.user,
       filter: options.filter,
+
       start: options.start,
       count: options.count,
       sort: options.sort,
+
       startDate: options.startDate,
       endDate: options.endDate,
+
       originallyPublishedStartDate: options.originallyPublishedStartDate,
       originallyPublishedEndDate: options.originallyPublishedEndDate,
 
@@ -1589,7 +1618,7 @@ export class VideoModel extends Model {
       includeLocalVideos: true
     }
 
-    const { query, replacements } = buildListQuery(VideoModel, queryOptions)
+    const { query, replacements } = buildListQuery(VideoModel.sequelize, queryOptions)
 
     return this.sequelize.query<any>(query, { replacements, type: QueryTypes.SELECT })
         .then(rows => rows.map(r => r[field]))
@@ -1617,7 +1646,7 @@ export class VideoModel extends Model {
       if (countVideos !== true) return Promise.resolve(undefined)
 
       const countOptions = Object.assign({}, options, { isCount: true })
-      const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel, countOptions)
+      const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel.sequelize, countOptions)
 
       return VideoModel.sequelize.query<any>(queryCount, { replacements: replacementsCount, type: QueryTypes.SELECT })
           .then(rows => rows.length !== 0 ? rows[0].total : 0)
@@ -1626,7 +1655,7 @@ export class VideoModel extends Model {
     function getModels () {
       if (options.count === 0) return Promise.resolve([])
 
-      const { query, replacements, order } = buildListQuery(VideoModel, options)
+      const { query, replacements, order } = buildListQuery(VideoModel.sequelize, options)
       const queryModels = wrapForAPIResults(query, replacements, options, order)
 
       return VideoModel.sequelize.query<any>(queryModels, { replacements, type: QueryTypes.SELECT, nest: true })
@@ -1703,7 +1732,7 @@ export class VideoModel extends Model {
 
     function buildActor (rowActor: any) {
       const avatarModel = rowActor.Avatar.id !== null
-        ? new AvatarModel(pick(rowActor.Avatar, avatarKeys), buildOpts)
+        ? new ActorImageModel(pick(rowActor.Avatar, avatarKeys), buildOpts)
         : null
 
       const serverModel = rowActor.Server.id !== null
@@ -1869,18 +1898,10 @@ export class VideoModel extends Model {
     this.Thumbnails.push(savedThumbnail)
   }
 
-  generateThumbnailName () {
-    return uuidv4() + '.jpg'
-  }
-
   getMiniature () {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
     return this.Thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
-  }
-
-  generatePreviewName () {
-    return uuidv4() + '.jpg'
   }
 
   hasPreview () {
@@ -2034,9 +2055,7 @@ export class VideoModel extends Model {
   }
 
   setAsRefreshed () {
-    this.changed('updatedAt', true)
-
-    return this.save()
+    return setAsUpdated('video', this.id)
   }
 
   requiresAuth () {

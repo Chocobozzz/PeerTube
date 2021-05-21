@@ -32,7 +32,8 @@ my-user-notifications {
   .header {
     flex-direction: column;
 
-    & >:first-child, .peertube-select-container {
+    > :first-child,
+    .peertube-select-container {
       margin-bottom: 15px;
     }
 

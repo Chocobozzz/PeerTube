@@ -293,7 +293,7 @@
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target/>
+        <target>এই ইন্সট্যান্সে, ইন্সট্যান্স অনুসরণকারী নেই।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
@@ -301,7 +301,7 @@
       </trans-unit>
       <trans-unit id="144d423719b19c9f99ee6aaff85aed693d5cdd97" datatype="html">
         <source>Show full list</source>
-        <target/>
+        <target>সম্পূর্ণ তালিকা দেখাও</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">12</context>
@@ -313,7 +313,7 @@
       </trans-unit>
       <trans-unit id="aed1bb4393932c974d4347ff743a2253cc64ef02" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target/>
+        <target>অনুসৃত ইন্সট্যান্স (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -321,7 +321,7 @@
       </trans-unit>
       <trans-unit id="9a9dcdc62c7e0048f4f4702b0327dda350341abc" datatype="html">
         <source>This instance is not following any other.</source>
-        <target/>
+        <target>এই ইন্সট্যান্স অন্য কোনোটাকে অনুসরণ করছে না।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">18</context>
@@ -329,7 +329,7 @@
       </trans-unit>
       <trans-unit id="ce301bc59085d13cf569fb7a97f073148435ec27" datatype="html">
         <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> সম্পর্কে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">5</context>
@@ -345,7 +345,7 @@
       </trans-unit>
       <trans-unit id="aaa2830aa30a5565ec06c852178ea7f181c693ea" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target/>
+        <target>এই ইন্সট্যান্স সংবেদনশীল/প্রাপ্তবয়স্ক তথ্যের জন্য আলাদাভাবে তৈরি।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">19</context>
@@ -361,7 +361,7 @@
       </trans-unit>
       <trans-unit id="f6a8cb2287c0c738d3d02ca36e145830c9734db5" datatype="html">
         <source>Who we are</source>
-        <target/>
+        <target>আমরা কে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">44</context>
@@ -461,7 +461,7 @@
       </trans-unit>
       <trans-unit id="2c88654dd44fe8477ce6f85c1081cd24a590701b" datatype="html">
         <source>Code of conduct</source>
-        <target/>
+        <target>আচরণের বিধি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">154</context>
@@ -497,7 +497,7 @@
       </trans-unit>
       <trans-unit id="e00d53801f276434a03bbfd4a8443651f46ef91a" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target/>
+        <target>অন্যান্য তথ্য</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">183,184</context>
@@ -529,7 +529,7 @@
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
         <source>Link copied</source>
-        <target/>
+        <target>সংযোগ অনুলিপিত</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -545,7 +545,7 @@
       </trans-unit>
       <trans-unit id="533b2b9a76ee1335cb44c01f0bfd50d43e9400b0" datatype="html">
         <source>Your name</source>
-        <target/>
+        <target>তোমার নাম</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">11</context>
@@ -553,7 +553,7 @@
       </trans-unit>
       <trans-unit id="0b892c7805a1c5afc0b7c21c3449760860fe7f3d" datatype="html">
         <source>Your email</source>
-        <target/>
+        <target>তোমার ইমেইল</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -569,7 +569,7 @@
       </trans-unit>
       <trans-unit id="d2815c9b510b8172d8cac4008b9709df69d636df" datatype="html">
         <source>Your message</source>
-        <target/>
+        <target>তোমার বার্তা</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">38</context>

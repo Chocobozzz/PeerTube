@@ -8,8 +8,8 @@
   float: right;
   padding: 0;
 
-  & > .btn,
-  & > .dropdown > .dropdown-toggle {
+  > .btn,
+  > .dropdown > .dropdown-toggle {
     font-size: 15px;
   }
 
@@ -20,7 +20,7 @@
   &.big {
     height: 35px;
 
-    & > button:first-child {
+    > button:first-child {
       width: max-content;
       min-width: 175px;
     }
@@ -29,7 +29,7 @@
       span:first-child {
         line-height: 80%;
       }
-    
+
       span:not(:first-child) {
         font-size: 75%;
       }
@@ -37,15 +37,15 @@
   }
 
   // Unlogged
-  & > .dropdown > .dropdown-toggle span {
+  > .dropdown > .dropdown-toggle span {
     padding-right: 3px;
   }
 
   // Logged
-  & > .btn {
+  > .btn {
     padding-right: 4px;
 
-    & + .dropdown > button {
+    + .dropdown > button {
       padding-left: 2px;
 
       &::after {

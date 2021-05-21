@@ -90,14 +90,20 @@ export class RestService {
 
       const matchedTokens = tokens.filter(t => t.startsWith(prefix))
                                   .map(t => t.slice(prefix.length)) // Keep the value filter
-                                  .map(t => t.replace(/^"|"$/g, ''))
+                                  .map(t => t.replace(/^"|"$/g, '')) // Remove ""
                                   .map(t => {
                                     if (prefixObj.handler) return prefixObj.handler(t)
 
+                                    if (prefixObj.isBoolean) {
+                                      if (t === 'true') return true
+                                      if (t === 'false') return false
+
+                                      return undefined
+                                    }
+
                                     return t
                                   })
-                                  .filter(t => !!t || t === 0)
-                                  .map(t => prefixObj.isBoolean ? t === 'true' : t)
+                                  .filter(t => t !== null && t !== undefined)
 
       if (matchedTokens.length === 0) continue
 

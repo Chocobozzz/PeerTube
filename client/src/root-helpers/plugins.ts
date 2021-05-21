@@ -1,12 +1,14 @@
 import { RegisterClientHelpers } from 'src/types/register-client-option.model'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
-import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
 import {
   ClientHookName,
   clientHookObject,
   ClientScript,
   PluginType,
+  RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
+  RegisterClientSettingsScript,
+  RegisterClientVideoFieldOptions,
   ServerConfigPlugin
 } from '../../../shared/models'
 import { ClientScript as ClientScriptModule } from '../types/client-script.model'
@@ -54,8 +56,9 @@ function loadPlugin (options: {
   pluginInfo: PluginInfo
   peertubeHelpersFactory: (pluginInfo: PluginInfo) => RegisterClientHelpers
   formFields?: FormFields
+  onSettingsScripts?: (options: RegisterClientSettingsScript) => void
 }) {
-  const { hooks, pluginInfo, peertubeHelpersFactory, formFields } = options
+  const { hooks, pluginInfo, peertubeHelpersFactory, formFields, onSettingsScripts } = options
   const { plugin, clientScript } = pluginInfo
 
   const registerHook = (options: RegisterClientHookOptions) => {
@@ -86,12 +89,20 @@ function loadPlugin (options: {
     })
   }
 
+  const registerSettingsScript = (options: RegisterClientSettingsScript) => {
+    if (!onSettingsScripts) {
+      throw new Error('Registering settings script is not supported')
+    }
+
+    return onSettingsScripts(options)
+  }
+
   const peertubeHelpers = peertubeHelpersFactory(pluginInfo)
 
   console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
   return importModule(clientScript.script)
-    .then((script: ClientScriptModule) => script.register({ registerHook, registerVideoField, peertubeHelpers }))
+    .then((script: ClientScriptModule) => script.register({ registerHook, registerVideoField, registerSettingsScript, peertubeHelpers }))
     .then(() => sortHooksByPriority(hooks))
     .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
 }

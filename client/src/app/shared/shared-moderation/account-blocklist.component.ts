@@ -30,10 +30,6 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
     this.initialize()
   }
 
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
-  }
-
   unblockAccount (accountBlock: AccountBlock) {
     const blockedAccount = accountBlock.blockedAccount
     const operation = this.mode === BlocklistComponentType.Account
@@ -48,12 +44,12 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
             : $localize`Account ${blockedAccount.nameWithHost} unmuted by your instance.`
         )
 
-        this.loadData()
+        this.reloadData()
       }
     )
   }
 
-  protected loadData () {
+  protected reloadData () {
     const operation = this.mode === BlocklistComponentType.Account
       ? this.blocklistService.getUserAccountBlocklist({
         pagination: this.pagination,

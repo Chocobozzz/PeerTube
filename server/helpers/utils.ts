@@ -6,7 +6,7 @@ import { CONFIG } from '../initializers/config'
 import { execPromise, execPromise2, randomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
 
-function deleteFileAsync (path: string) {
+function deleteFileAndCatch (path: string) {
   remove(path)
     .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
 }
@@ -83,7 +83,7 @@ function getUUIDFromFilename (filename: string) {
 // ---------------------------------------------------------------------------
 
 export {
-  deleteFileAsync,
+  deleteFileAndCatch,
   generateRandomString,
   getFormattedObjects,
   getSecureTorrentName,

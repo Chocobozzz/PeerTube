@@ -12,6 +12,7 @@ import {
   createLive,
   doubleFollow,
   flushAndRunMultipleServers,
+  getCustomConfigResolutions,
   getVideo,
   getVideosList,
   removeVideo,
@@ -108,15 +109,7 @@ describe('Save replay setting', function () {
         maxDuration: -1,
         transcoding: {
           enabled: false,
-          resolutions: {
-            '240p': true,
-            '360p': true,
-            '480p': true,
-            '720p': true,
-            '1080p': true,
-            '1440p': true,
-            '2160p': true
-          }
+          resolutions: getCustomConfigResolutions(true)
         }
       }
     })

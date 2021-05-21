@@ -8,74 +8,76 @@ input[type=text] {
 .video-channel {
   @include row-blocks;
 
-  img {
-    @include avatar(80px);
+  > my-actor-avatar {
+    @include actor-avatar-size(80px);
 
     margin-right: 10px;
   }
+}
 
-  .video-channel-info {
-    flex-grow: 1;
+.video-channel-info {
+  flex-grow: 1;
 
-    a.video-channel-names {
-      @include disable-default-a-behaviour;
+  a.video-channel-names {
+    @include disable-default-a-behaviour;
 
-      width: fit-content;
-      display: flex;
-      align-items: baseline;
-      color: pvar(--mainForegroundColor);
+    width: fit-content;
+    display: flex;
+    align-items: baseline;
+    color: pvar(--mainForegroundColor);
 
-      .video-channel-display-name {
-        font-weight: $font-semibold;
-        font-size: 18px;
-      }
+    .video-channel-display-name {
+      font-weight: $font-semibold;
+      font-size: 18px;
+    }
 
-      .video-channel-name {
-        font-size: 14px;
-        color: $grey-actor-name;
-        margin-left: 5px;
-      }
+    .video-channel-name {
+      font-size: 14px;
+      color: $grey-actor-name;
+      margin-left: 5px;
     }
   }
+}
 
-  .actor-owner {
-    @include actor-owner;
+.actor-owner {
+  @include disable-default-a-behaviour;
 
-    margin-top: 0;
+  font-size: 13px;
+  color: pvar(--mainForegroundColor);
+
+  span:hover {
+    opacity: 0.8;
+  }
+
+  my-actor-avatar {
+    margin-left: 7px;
+    display: inline-block;
+    vertical-align: top;
   }
 }
 
 .video-subscriptions-header {
   margin-bottom: 30px;
+  display: flex;
 }
 
 @media screen and (max-width: $small-view) {
-  .video-channel {
-    .video-channel-info {
-      padding-bottom: 10px;
-      text-align: center;
+  .video-subscriptions-header input[type=text] {
+    width: 100% !important;
+  }
 
-      .video-channel-names {
-        flex-direction: column;
-        align-items: center !important;
-        margin: auto;
-      }
-    }
+  .video-channel-info {
+    padding-bottom: 10px;
+    text-align: center;
 
-    img {
-      margin-right: 0;
+    .video-channel-names {
+      flex-direction: column;
+      align-items: center !important;
+      margin: auto;
     }
   }
-}
 
-@media screen and (max-width: $mobile-view) {
-  .video-subscriptions-header {
-    flex-direction: column;
-
-    input[type=text] {
-      width: 100% !important;
-    }
+  img {
+    margin-right: 0;
   }
 }
-
-

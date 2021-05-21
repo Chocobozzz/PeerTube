@@ -27,5 +27,8 @@ export interface ActivityPubActor {
     publicKeyPem: string
   }
 
-  icon: ActivityIconObject
+  icon?: ActivityIconObject
+  image?: ActivityIconObject
+
+  published?: string
 }

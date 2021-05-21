@@ -2,12 +2,20 @@ import { ActivityDelete } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorModel } from '../../../models/actor/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
-import { MAccountActor, MActor, MActorSignature, MChannelActor, MChannelActorAccountActor, MCommentOwnerVideo } from '../../../types/models'
+import {
+  MAccountActor,
+  MActor,
+  MActorFull,
+  MActorSignature,
+  MChannelAccountActor,
+  MChannelActor,
+  MCommentOwnerVideo
+} from '../../../types/models'
 import { markCommentAsDeleted } from '../../video-comment'
 import { forwardVideoRelatedActivity } from '../send/utils'
 
@@ -30,9 +38,8 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
     } else if (byActorFull.type === 'Group') {
       if (!byActorFull.VideoChannel) throw new Error('Actor ' + byActorFull.url + ' is a group but we cannot find it in database.')
 
-      const channelToDelete = byActorFull.VideoChannel as MChannelActorAccountActor
+      const channelToDelete = byActorFull.VideoChannel as MChannelAccountActor & { Actor: MActorFull }
       channelToDelete.Actor = byActorFull
-
       return retryTransactionWrapper(processDeleteVideoChannel, channelToDelete)
     }
   }

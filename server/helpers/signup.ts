@@ -1,4 +1,4 @@
-import { UserModel } from '../models/account/user'
+import { UserModel } from '../models/user/user'
 import * as ipaddr from 'ipaddr.js'
 import { CONFIG } from '../initializers/config'
 
@@ -20,6 +20,8 @@ async function isSignupAllowed (): Promise<{ allowed: boolean, errorMessage?: st
 }
 
 function isSignupAllowedForCurrentIP (ip: string) {
+  if (!ip) return false
+
   const addr = ipaddr.parse(ip)
   const excludeList = [ 'blacklist' ]
   let matched = ''

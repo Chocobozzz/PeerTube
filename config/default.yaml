@@ -153,6 +153,11 @@ csp:
   report_only: true # CSP directives are still being tested, so disable the report only mode at your own risk!
   report_uri:
 
+security:
+  # Set the X-Frame-Options header to help to mitigate clickjacking attacks
+  frameguard:
+    enabled: true
+
 tracker:
   # If you disable the tracker, you disable the P2P aspect of PeerTube
   enabled: true
@@ -274,7 +279,7 @@ transcoding:
   # If you also enabled the hls format, it will multiply videos storage by 2
   # If disabled, breaks federation with PeerTube instances < 2.1
   webtorrent:
-    enabled: true
+    enabled: false
 
   # /!\ Requires ffmpeg >= 4.1
   # Generate HLS playlists and fragmented MP4 files. Better playback than with WebTorrent:
@@ -283,7 +288,7 @@ transcoding:
   #     * More stable playback (less bugs/infinite loading)
   # If you also enabled the webtorrent format, it will multiply videos storage by 2
   hls:
-    enabled: false
+    enabled: true
 
 live:
   enabled: false
@@ -471,7 +476,7 @@ theme:
 broadcast_message:
   enabled: false
   message: '' # Support markdown
-  level: 'info' # 'info' | 'warning' | 'error'
+  level: 'info' # 'info' | 'warn' | 'error'
   dismissable: false
 
 search:

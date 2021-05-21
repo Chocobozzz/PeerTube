@@ -34,8 +34,8 @@ import { doesVideoExist } from '../../helpers/middlewares'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { Redis } from '../../lib/redis'
-import { UserModel } from '../../models/account/user'
-import { ActorModel } from '../../models/activitypub/actor'
+import { UserModel } from '../../models/user/user'
+import { ActorModel } from '../../models/actor/actor'
 import { areValidationErrors } from './utils'
 
 const usersListValidator = [
@@ -196,6 +196,7 @@ const deleteMeValidator = [
 
 const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+
   body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),

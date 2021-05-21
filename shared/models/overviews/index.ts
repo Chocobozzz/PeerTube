@@ -1,1 +1,1 @@
-export * from './videos-overview'
+export * from './videos-overview.model'

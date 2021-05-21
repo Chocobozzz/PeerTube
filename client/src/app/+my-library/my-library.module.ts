@@ -26,6 +26,7 @@ import { MyVideoPlaylistUpdateComponent } from './my-video-playlists/my-video-pl
 import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlists.component'
 import { VideoChangeOwnershipComponent } from './my-videos/modals/video-change-ownership.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
+import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { MyVideosComponent } from './my-videos/my-videos.component'
     SharedGlobalIconModule,
     SharedAbuseListModule,
     SharedShareModal,
-    SharedVideoLiveModule
+    SharedVideoLiveModule,
+    SharedActorImageModule
   ],
 
   declarations: [

@@ -8,16 +8,9 @@ label {
   display: block;
 }
 
-input:not([type=submit]) {
+input[type=text],
+input[type=email] {
   @include peertube-input-text(340px);
-  display: inline-block;
-  margin-right: 5px;
-
-}
-
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
 }
 
 .modal-body {
@@ -28,13 +21,6 @@ input[type=submit] {
   }
 }
 
-.modal-footer.inputs {
-  .action-button.action-button-cancel {
-    width: auto !important;
-    display: inline-block;
-  }
-}
-
 @media screen and (max-width: #{map-get($container-max-widths, sm)}) {
   .modal-body {
     #forgot-password-email {
@@ -42,14 +28,13 @@ input[type=submit] {
     }
   }
 
-  .modal-footer.inputs {
-    .action-button.action-button-cancel {
-      display: none;
-    }
+  .modal-footer .grey-button {
+    display: none;
   }
 }
 
-.create-an-account, .forgot-password-button {
+.create-an-account,
+.forgot-password-button {
   color: pvar(--mainForegroundColor);
   cursor: pointer;
   transition: opacity cubic-bezier(0.39, 0.575, 0.565, 1);
@@ -65,7 +50,7 @@ input[type=submit] {
   justify-content: space-around;
   flex-wrap: wrap;
 
-  & > div {
+  > div {
     flex: 1 1;
   }
 
@@ -81,7 +66,8 @@ input[type=submit] {
     form {
       margin: 0;
 
-      &, input {
+      &,
+      input {
         width: 100%;
       }
 
@@ -98,7 +84,8 @@ input[type=submit] {
 
           color: var(--mainColor);
 
-          &:hover, &:active {
+          &:hover,
+          &:active {
             color: var(--mainHoverColor);
           }
         }
@@ -127,7 +114,7 @@ input[type=submit] {
         min-width: 100px;
 
         &:hover {
-          background-color: rgba(209, 215, 224, 0.5)
+          background-color: rgba(209, 215, 224, 0.5);
         }
       }
     }
@@ -154,7 +141,7 @@ input[type=submit] {
   }
 }
 
-@mixin columnReverseDisplay {
+@mixin column-reverse-display {
   flex-direction: column-reverse;
 
   .login-form-and-externals,
@@ -184,14 +171,14 @@ input[type=submit] {
 
 @media screen and (max-width: breakpoint(md)) {
   .wrapper {
-    @include columnReverseDisplay();
+    @include column-reverse-display();
   }
 }
 
 @media screen and (max-width: breakpoint(md) + $menu-width) {
   :host-context(.main-col:not(.expanded)) {
     .wrapper {
-      @include columnReverseDisplay();
+      @include column-reverse-display();
     }
   }
 }

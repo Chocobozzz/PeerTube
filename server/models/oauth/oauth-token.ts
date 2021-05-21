@@ -15,10 +15,11 @@ import {
 import { TokensCache } from '@server/lib/auth/tokens-cache'
 import { MUserAccountId } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
+import { AttributesOnly } from '@shared/core-utils'
 import { logger } from '../../helpers/logger'
 import { AccountModel } from '../account/account'
-import { UserModel } from '../account/user'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
+import { UserModel } from '../user/user'
 import { OAuthClientModel } from './oauth-client'
 
 export type OAuthTokenInfo = {
@@ -78,7 +79,7 @@ enum ScopeNames {
     }
   ]
 })
-export class OAuthTokenModel extends Model {
+export class OAuthTokenModel extends Model<Partial<AttributesOnly<OAuthTokenModel>>> {
 
   @AllowNull(false)
   @Column

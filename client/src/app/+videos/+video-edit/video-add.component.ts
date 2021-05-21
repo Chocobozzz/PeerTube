@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, AuthUser, CanComponentDeactivate, ServerService } from '@app/core'
 import { ServerConfig } from '@shared/models'
 import { VideoEditType } from './shared/video-edit.type'
@@ -22,11 +23,16 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
 
   secondStepType: VideoEditType
   videoName: string
-  serverConfig: ServerConfig
+
+  activeNav: string
+
+  private serverConfig: ServerConfig
 
   constructor (
     private auth: AuthService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   get userInformationLoaded () {
@@ -42,6 +48,16 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
       .subscribe(config => this.serverConfig = config)
 
     this.user = this.auth.getUser()
+
+    if (this.route.snapshot.fragment) {
+      this.onNavChange(this.route.snapshot.fragment)
+    }
+  }
+
+  onNavChange (newActiveNav: string) {
+    this.activeNav = newActiveNav
+
+    this.router.navigate([], { fragment: this.activeNav })
   }
 
   onFirstStepDone (type: VideoEditType, videoName: string) {

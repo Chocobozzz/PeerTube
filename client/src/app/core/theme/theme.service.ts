@@ -82,7 +82,19 @@ export class ThemeService {
       : this.userService.getAnonymousUser().theme
 
     if (theme !== 'instance-default') return theme
-    return this.serverConfig.theme.default
+
+    const instanceTheme = this.serverConfig.theme.default
+    if (instanceTheme !== 'default') return instanceTheme
+
+    // Default to dark theme if available and wanted by the user
+    if (
+      this.themes.find(t => t.name === 'dark') &&
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+      return 'dark'
+    }
+
+    return instanceTheme
   }
 
   private loadTheme (name: string) {

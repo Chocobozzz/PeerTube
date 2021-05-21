@@ -1,6 +1,5 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
-import { getMaxBitrate, VideoResolution } from '../../shared/models/videos'
+import { getMaxBitrate, VideoFileMetadata, VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
 import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { logger } from './logger'
@@ -92,6 +91,7 @@ async function getVideoStreamCodec (path: string) {
   const videoCodec = videoStream.codec_tag_string
 
   if (videoCodec === 'vp09') return 'vp09.00.50.08'
+  if (videoCodec === 'hev1') return 'hev1.1.6.L93.B0'
 
   const baseProfileMatrix = {
     avc1: {

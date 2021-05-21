@@ -7,7 +7,7 @@ import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isProdInstance, isTestInstance, parseSemVersion } from '../helpers/core-utils'
 import { isArray } from '../helpers/custom-validators/misc'
 import { logger } from '../helpers/logger'
-import { UserModel } from '../models/account/user'
+import { UserModel } from '../models/user/user'
 import { ApplicationModel, getServerActor } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { CONFIG, isEmailEnabled } from './config'
@@ -132,7 +132,7 @@ function checkConfig () {
   // Broadcast message
   if (CONFIG.BROADCAST_MESSAGE.ENABLED) {
     const currentLevel = CONFIG.BROADCAST_MESSAGE.LEVEL
-    const available = [ 'info', 'warning', 'error' ]
+    const available = [ 'info', 'warn', 'error' ]
 
     if (available.includes(currentLevel) === false) {
       return 'Broadcast message level should be ' + available.join(' or ') + ' instead of ' + currentLevel

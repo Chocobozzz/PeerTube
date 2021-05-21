@@ -4,10 +4,9 @@ import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
 import * as program from 'commander'
-import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { installPlugin, listPlugins, uninstallPlugin, updatePlugin } from '../../shared/extra-utils/server/plugins'
 import { getAdminTokenOrDie, getServerCredentials } from './cli'
-import { PeerTubePlugin } from '../../shared/models/plugins/peertube-plugin.model'
+import { PeerTubePlugin, PluginType } from '../../shared/models'
 import { isAbsolute } from 'path'
 import * as CliTable3 from 'cli-table3'
 import commander = require('commander')
@@ -24,7 +23,7 @@ program
   .option('-p, --password <token>', 'Password')
   .option('-t, --only-themes', 'List themes only')
   .option('-P, --only-plugins', 'List plugins only')
-  .action(() => pluginsListCLI())
+  .action((options, command) => pluginsListCLI(command, options))
 
 program
   .command('install')
@@ -61,12 +60,10 @@ if (!process.argv.slice(2).length) {
 
 program.parse(process.argv)
 
-const options = program.opts()
-
 // ----------------------------------------------------------------------------
 
-async function pluginsListCLI () {
-  const { url, username, password } = await getServerCredentials(program)
+async function pluginsListCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+  const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
   let pluginType: PluginType

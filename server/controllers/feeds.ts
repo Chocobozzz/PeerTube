@@ -167,7 +167,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     videoChannelId: videoChannel ? videoChannel.id : null
   }
 
-  const resultList = await VideoModel.listForApi({
+  const { data } = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
@@ -175,10 +175,11 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     nsfw,
     filter: req.query.filter as VideoFilter,
     withFiles: true,
+    countVideos: false,
     ...options
   })
 
-  addVideosToFeed(feed, resultList.data)
+  addVideosToFeed(feed, data)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -198,20 +199,22 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
 
-  const resultList = await VideoModel.listForApi({
+  const { data } = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
     includeLocalVideos: false,
     nsfw,
     filter: req.query.filter as VideoFilter,
+
     withFiles: true,
+    countVideos: false,
 
     followerActorId: res.locals.user.Account.Actor.id,
     user: res.locals.user
   })
 
-  addVideosToFeed(feed, resultList.data)
+  addVideosToFeed(feed, data)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)

@@ -1,9 +1,9 @@
-import { VideoFilter, VideoPrivacy, VideoState } from '@shared/models'
-import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
-import { Model } from 'sequelize-typescript'
-import { MUserAccountId, MUserId } from '@server/types/models'
+import { Sequelize } from 'sequelize/types'
 import validator from 'validator'
 import { exists } from '@server/helpers/custom-validators/misc'
+import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
+import { MUserAccountId, MUserId } from '@server/types/models'
+import { VideoFilter, VideoPrivacy, VideoState } from '@shared/models'
 
 export type BuildVideosQueryOptions = {
   attributes?: string[]
@@ -16,9 +16,11 @@ export type BuildVideosQueryOptions = {
   start: number
   sort: string
 
-  filter?: VideoFilter
-  categoryOneOf?: number[]
   nsfw?: boolean
+  filter?: VideoFilter
+  isLive?: boolean
+
+  categoryOneOf?: number[]
   licenceOneOf?: number[]
   languageOneOf?: string[]
   tagsOneOf?: string[]
@@ -53,7 +55,7 @@ export type BuildVideosQueryOptions = {
   having?: string
 }
 
-function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) {
+function buildListQuery (sequelize: Sequelize, options: BuildVideosQueryOptions) {
   const and: string[] = []
   const joins: string[] = []
   const replacements: any = {}
@@ -75,7 +77,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
     const blockerIds = [ options.serverAccountId ]
     if (options.user) blockerIds.push(options.user.Account.id)
 
-    const inClause = createSafeIn(model, blockerIds)
+    const inClause = createSafeIn(sequelize, blockerIds)
 
     and.push(
       'NOT EXISTS (' +
@@ -177,7 +179,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
       'EXISTS (' +
       '  SELECT 1 FROM "videoTag" ' +
       '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-      '  WHERE lower("tag"."name") IN (' + createSafeIn(model, tagsOneOfLower) + ') ' +
+      '  WHERE lower("tag"."name") IN (' + createSafeIn(sequelize, tagsOneOfLower) + ') ' +
       '  AND "video"."id" = "videoTag"."videoId"' +
       ')'
     )
@@ -190,7 +192,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
       'EXISTS (' +
       '  SELECT 1 FROM "videoTag" ' +
       '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-      '  WHERE lower("tag"."name") IN (' + createSafeIn(model, tagsAllOfLower) + ') ' +
+      '  WHERE lower("tag"."name") IN (' + createSafeIn(sequelize, tagsAllOfLower) + ') ' +
       '  AND "video"."id" = "videoTag"."videoId" ' +
       '  GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + tagsAllOfLower.length +
       ')'
@@ -199,10 +201,14 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
 
   if (options.nsfw === true) {
     and.push('"video"."nsfw" IS TRUE')
+  } else if (options.nsfw === false) {
+    and.push('"video"."nsfw" IS FALSE')
   }
 
-  if (options.nsfw === false) {
-    and.push('"video"."nsfw" IS FALSE')
+  if (options.isLive === true) {
+    and.push('"video"."isLive" IS TRUE')
+  } else if (options.isLive === false) {
+    and.push('"video"."isLive" IS FALSE')
   }
 
   if (options.categoryOneOf) {
@@ -226,7 +232,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
       languagesQueryParts.push(
         'EXISTS (' +
         '  SELECT 1 FROM "videoCaption" WHERE "videoCaption"."language" ' +
-        '  IN (' + createSafeIn(model, languages) + ') AND ' +
+        '  IN (' + createSafeIn(sequelize, languages) + ') AND ' +
         '  "videoCaption"."videoId" = "video"."id"' +
         ')'
       )
@@ -339,8 +345,8 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
   }
 
   if (options.search) {
-    const escapedSearch = model.sequelize.escape(options.search)
-    const escapedLikeSearch = model.sequelize.escape('%' + options.search + '%')
+    const escapedSearch = sequelize.escape(options.search)
+    const escapedLikeSearch = sequelize.escape('%' + options.search + '%')
 
     cte.push(
       '"trigramSearch" AS (' +
@@ -490,12 +496,13 @@ function wrapForAPIResults (baseQuery: string, replacements: any, options: Build
     'INNER JOIN "actor" AS "VideoChannel->Account->Actor" ON "VideoChannel->Account"."actorId" = "VideoChannel->Account->Actor"."id"',
 
     'LEFT OUTER JOIN "server" AS "VideoChannel->Actor->Server" ON "VideoChannel->Actor"."serverId" = "VideoChannel->Actor->Server"."id"',
-    'LEFT OUTER JOIN "avatar" AS "VideoChannel->Actor->Avatar" ON "VideoChannel->Actor"."avatarId" = "VideoChannel->Actor->Avatar"."id"',
+    'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Actor->Avatar" ' +
+      'ON "VideoChannel->Actor"."avatarId" = "VideoChannel->Actor->Avatar"."id"',
 
     'LEFT OUTER JOIN "server" AS "VideoChannel->Account->Actor->Server" ' +
       'ON "VideoChannel->Account->Actor"."serverId" = "VideoChannel->Account->Actor->Server"."id"',
 
-    'LEFT OUTER JOIN "avatar" AS "VideoChannel->Account->Actor->Avatar" ' +
+    'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatar" ' +
       'ON "VideoChannel->Account->Actor"."avatarId" = "VideoChannel->Account->Actor->Avatar"."id"',
 
     'LEFT OUTER JOIN "thumbnail" AS "Thumbnails" ON "video"."id" = "Thumbnails"."videoId"'

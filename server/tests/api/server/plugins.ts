@@ -28,14 +28,8 @@ import {
   updatePluginSettings,
   wait,
   waitUntilLog
-} from '../../../../shared/extra-utils'
-import { PeerTubePluginIndex } from '../../../../shared/models/plugins/peertube-plugin-index.model'
-import { PeerTubePlugin } from '../../../../shared/models/plugins/peertube-plugin.model'
-import { PluginPackageJson } from '../../../../shared/models/plugins/plugin-package-json.model'
-import { PluginType } from '../../../../shared/models/plugins/plugin.type'
-import { PublicServerSetting } from '../../../../shared/models/plugins/public-server.setting'
-import { ServerConfig } from '../../../../shared/models/server'
-import { User } from '../../../../shared/models/users'
+} from '@shared/extra-utils'
+import { PeerTubePlugin, PeerTubePluginIndex, PluginPackageJson, PluginType, PublicServerSetting, ServerConfig, User } from '@shared/models'
 
 const expect = chai.expect
 

@@ -26,10 +26,10 @@ import {
   PluginVideoLicenceManager,
   PluginVideoPrivacyManager,
   RegisterServerHookOptions,
-  RegisterServerSettingOptions
+  RegisterServerSettingOptions,
+  serverHookObject
 } from '@shared/models'
-import { serverHookObject } from '@shared/models/plugins/server-hook.model'
-import { VideoTranscodingProfilesManager } from '../video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from '../transcoding/video-transcoding-profiles'
 import { buildPluginHelpers } from './plugin-helpers-builder'
 
 type AlterableVideoConstant = 'language' | 'licence' | 'category' | 'privacy' | 'playlistPrivacy'
@@ -73,7 +73,7 @@ export class RegisterHelpers {
   private idAndPassAuths: RegisterServerAuthPassOptions[] = []
   private externalAuths: RegisterServerAuthExternalOptions[] = []
 
-  private readonly onSettingsChangeCallbacks: ((settings: any) => void)[] = []
+  private readonly onSettingsChangeCallbacks: ((settings: any) => Promise<any>)[] = []
 
   private readonly router: express.Router
 
@@ -109,7 +109,7 @@ export class RegisterHelpers {
     const unregisterIdAndPassAuth = this.buildUnregisterIdAndPassAuth()
     const unregisterExternalAuth = this.buildUnregisterExternalAuth()
 
-    const peertubeHelpers = buildPluginHelpers(this.npmName)
+    const peertubeHelpers = buildPluginHelpers(this.plugin, this.npmName)
 
     return {
       registerHook,
@@ -277,7 +277,7 @@ export class RegisterHelpers {
 
       setSetting: (name: string, value: string) => PluginModel.setSetting(this.plugin.name, this.plugin.type, name, value),
 
-      onSettingsChange: (cb: (settings: any) => void) => this.onSettingsChangeCallbacks.push(cb)
+      onSettingsChange: (cb: (settings: any) => Promise<any>) => this.onSettingsChangeCallbacks.push(cb)
     }
   }
 

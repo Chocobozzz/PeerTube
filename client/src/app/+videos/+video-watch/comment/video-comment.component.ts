@@ -131,15 +131,15 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     )
   }
 
-  switchToDefaultAvatar ($event: Event) {
-    ($event.target as HTMLImageElement).src = Account.GET_DEFAULT_AVATAR_URL()
-  }
-
   isCommentDisplayed () {
     // Not deleted
     return !this.comment.isDeleted ||
       this.comment.totalReplies !== 0 || // Or root comment thread has replies
       (this.commentTree?.hasDisplayedChildren) // Or this is a reply that have other replies
+  }
+
+  isChild () {
+    return this.parentComments.length !== 0
   }
 
   private getUserIfNeeded (account: Account) {

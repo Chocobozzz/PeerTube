@@ -15,6 +15,7 @@ import {
   sendRTMPStreamInVideo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
+  testFfmpegStreamError,
   uninstallPlugin,
   updateCustomSubConfig,
   uploadVideoAndGetId,
@@ -119,8 +120,8 @@ describe('Test transcoding plugins', function () {
       const res = await getConfig(server.url)
       const config = res.body as ServerConfig
 
-      expect(config.transcoding.availableProfiles).to.have.members([ 'default', 'low-vod' ])
-      expect(config.live.transcoding.availableProfiles).to.have.members([ 'default', 'low-live' ])
+      expect(config.transcoding.availableProfiles).to.have.members([ 'default', 'low-vod', 'input-options-vod', 'bad-scale-vod' ])
+      expect(config.live.transcoding.availableProfiles).to.have.members([ 'default', 'low-live', 'input-options-live', 'bad-scale-live' ])
     })
 
     it('Should not use the plugin profile if not chosen by the admin', async function () {
@@ -141,6 +142,33 @@ describe('Test transcoding plugins', function () {
       await waitJobs([ server ])
 
       await checkVideoFPS(videoUUID, 'below', 12)
+    })
+
+    it('Should apply input options in vod profile', async function () {
+      this.timeout(120000)
+
+      await updateConf(server, 'input-options-vod', 'default')
+
+      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      await waitJobs([ server ])
+
+      await checkVideoFPS(videoUUID, 'below', 6)
+    })
+
+    it('Should apply the scale filter in vod profile', async function () {
+      this.timeout(120000)
+
+      await updateConf(server, 'bad-scale-vod', 'default')
+
+      const videoUUID = (await uploadVideoAndGetId({ server, videoName: 'video' })).uuid
+      await waitJobs([ server ])
+
+      // Transcoding failed
+      const res = await getVideo(server.url, videoUUID)
+      const video: VideoDetails = res.body
+
+      expect(video.files).to.have.lengthOf(1)
+      expect(video.streamingPlaylists).to.have.lengthOf(0)
     })
 
     it('Should not use the plugin profile if not chosen by the admin', async function () {
@@ -167,6 +195,31 @@ describe('Test transcoding plugins', function () {
       await waitJobs([ server ])
 
       await checkLiveFPS(liveVideoId, 'below', 12)
+    })
+
+    it('Should apply the input options on live profile', async function () {
+      this.timeout(120000)
+
+      await updateConf(server, 'low-vod', 'input-options-live')
+
+      const liveVideoId = await createLiveWrapper(server)
+
+      await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId, 'video_short2.webm')
+      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+      await waitJobs([ server ])
+
+      await checkLiveFPS(liveVideoId, 'below', 6)
+    })
+
+    it('Should apply the scale filter name on live profile', async function () {
+      this.timeout(120000)
+
+      await updateConf(server, 'low-vod', 'bad-scale-live')
+
+      const liveVideoId = await createLiveWrapper(server)
+
+      const command = await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId, 'video_short2.webm')
+      await testFfmpegStreamError(command, true)
     })
 
     it('Should default to the default profile if the specified profile does not exist', async function () {

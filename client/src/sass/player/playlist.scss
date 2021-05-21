@@ -5,7 +5,8 @@ $playlist-menu-width: 350px;
   right: 0;
   height: 100%;
   width: $playlist-menu-width;
-  background: rgba(0, 0, 0, 0.8);
+  // !important to prevent none background set on focus
+  background: rgba(0, 0, 0, 0.8) !important;
   z-index: 101;
   transition: right 0.2s;
   overflow-y: scroll;
@@ -39,14 +40,14 @@ $playlist-menu-width: 350px;
     }
 
     .cross {
+      mask-image: url('#{$assets-path}/images/feather/x.svg');
+      -webkit-mask-image: url('#{$assets-path}/images/feather/x.svg');
+
       cursor: pointer;
       width: 20px;
       height: 20px;
-      mask-image: url('#{$assets-path}/images/feather/x.svg');
-      -webkit-mask-image: url('#{$assets-path}/images/feather/x.svg');
-      background-color: white;
+      background-color: #fff;
       mask-size: cover;
-      -webkit-mask-size: cover;
     }
   }
 }
@@ -86,13 +87,13 @@ $playlist-menu-width: 350px;
 }
 
 .vjs-playlist-icon {
-  width: 22px;
-  height: 22px;
   mask-image: url('#{$assets-path}/images/feather/list.svg');
   -webkit-mask-image: url('#{$assets-path}/images/feather/list.svg');
-  background-color: white;
+
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
   mask-size: cover;
-  -webkit-mask-size: cover;
   margin-bottom: 3px;
 }
 
@@ -132,9 +133,9 @@ $playlist-menu-width: 350px;
   }
 
   .item-player {
-    display: none;
-
     @include play-icon(20px, 16px);
+
+    display: none;
   }
 
   &.vjs-selected {

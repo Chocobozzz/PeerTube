@@ -3,13 +3,16 @@ import { TableModule } from 'primeng/table'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
+import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedShareModal } from '@app/shared/shared-share-modal'
 import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-settings'
+import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
 import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
+import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-blocklist.component'
 import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-account-server-blocklist.component'
 import { MyAccountNotificationsComponent } from './my-account-notifications/my-account-notifications.component'
@@ -20,7 +23,6 @@ import { MyAccountDangerZoneComponent } from './my-account-settings/my-account-d
 import { MyAccountNotificationPreferencesComponent } from './my-account-settings/my-account-notification-preferences'
 import { MyAccountProfileComponent } from './my-account-settings/my-account-profile/my-account-profile.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
-import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountComponent } from './my-account.component'
 
 @NgModule({
@@ -37,7 +39,9 @@ import { MyAccountComponent } from './my-account.component'
     SharedUserInterfaceSettingsModule,
     SharedGlobalIconModule,
     SharedAbuseListModule,
-    SharedShareModal
+    SharedShareModal,
+    SharedActorImageModule,
+    SharedActorImageEditModule
   ],
 
   declarations: [

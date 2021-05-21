@@ -3,6 +3,7 @@
 import 'mocha'
 import { expect } from 'chai'
 import { MockJoinPeerTubeVersions } from '@shared/extra-utils/mock-servers/joinpeertube-versions'
+import { PluginType } from '@shared/models'
 import { cleanupTests, installPlugin, setPluginLatestVersion, setPluginVersion, wait } from '../../../../shared/extra-utils'
 import { ServerInfo } from '../../../../shared/extra-utils/index'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
@@ -13,7 +14,6 @@ import {
   prepareNotificationsTest
 } from '../../../../shared/extra-utils/users/user-notifications'
 import { UserNotification, UserNotificationType } from '../../../../shared/models/users'
-import { PluginType } from '@shared/models'
 
 describe('Test admin notifications', function () {
   let server: ServerInfo
@@ -26,11 +26,14 @@ describe('Test admin notifications', function () {
   before(async function () {
     this.timeout(120000)
 
+    joinPeerTubeServer = new MockJoinPeerTubeVersions()
+    const port = await joinPeerTubeServer.initialize()
+
     const config = {
       peertube: {
         check_latest_version: {
           enabled: true,
-          url: 'http://localhost:42102/versions.json'
+          url: `http://localhost:${port}/versions.json`
         }
       },
       plugins: {
@@ -66,9 +69,6 @@ describe('Test admin notifications', function () {
       accessToken: server.accessToken,
       npmName: 'peertube-theme-background-red'
     })
-
-    joinPeerTubeServer = new MockJoinPeerTubeVersions()
-    await joinPeerTubeServer.initialize()
   })
 
   describe('Latest PeerTube version notification', function () {
