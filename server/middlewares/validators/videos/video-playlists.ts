@@ -20,7 +20,7 @@ import {
   checkVideoPlaylistPrivacy,
   checkVideoPlaylistTimestamp,
   checkVideoPlaylistType,
-  isVideoPlaylistVideoIdsValid
+  checkVideoPlaylistVideoIds
 } from '../../../helpers/custom-validators/video-playlists'
 import { checkVideoImage } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
@@ -347,7 +347,7 @@ const commonVideoPlaylistFiltersValidator = [
 const doVideosInPlaylistExistValidator = [
   query('videoIds')
     .customSanitizer(toIntArray)
-    .custom(isVideoPlaylistVideoIdsValid).withMessage('Should have a valid video ids array'),
+    .custom(checkVideoPlaylistVideoIds),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking areVideosInPlaylistExistValidator parameters', { parameters: req.query })

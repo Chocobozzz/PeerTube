@@ -1,6 +1,6 @@
 
 import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
-import { checkUserDisplayName, isUserRoleValid, checkUserUsername } from '@server/helpers/custom-validators/users'
+import { checkUserDisplayName, checkUserRole, checkUserUsername } from '@server/helpers/custom-validators/users'
 import { logger } from '@server/helpers/logger'
 import { generateRandomString } from '@server/helpers/utils'
 import { PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants'
@@ -184,7 +184,7 @@ function isAuthResultValid (npmName: string, authName: string, result: RegisterS
   }
 
   // role is optional
-  if (result.role && !isUserRoleValid(result.role)) {
+  if (result.role && !catchErrorAsBoolean(checkUserRole)(result.role)) {
     logger.error('Auth method %s of plugin %s did not provide a valid role.', authName, npmName, { role: result.role })
     return false
   }

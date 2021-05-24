@@ -128,16 +128,23 @@ function checkVideoViews (value: string) {
 }
 
 function checkVideoRatingType (value: string) {
-  if (value === 'none') return
+  if (value === 'none') return true
   if (!values(VIDEO_RATE_TYPES).includes(value as VideoRateType)) throw new Error('Should have a known video rate')
   return true
 }
 
-function isVideoFileExtnameValid (value: string) {
-  return exists(value) && (value === VIDEO_LIVE.EXTENSION || MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined)
+function checkVideoFileExtname (value: string) {
+  if (!exists(value)) throw new Error('Should have a video file extension')
+  if (value !== VIDEO_LIVE.EXTENSION && MIMETYPES.VIDEO.EXT_MIMETYPE[value] === undefined) {
+    throw new Error(
+      `Should have a ${values(MIMETYPES.VIDEO.EXT_MIMETYPE).join(',')} extension for regular videos ` +
+      `or a ${VIDEO_LIVE.EXTENSION} extension for lives`
+    )
+  }
+  return true
 }
 
-function isVideoFileMimeTypeValid (files: UploadFilesForCheck) {
+function checkVideoFileMimeType (files: UploadFilesForCheck) {
   return checkFileMimeType(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
 }
 
@@ -225,8 +232,8 @@ export {
   checkVideoState,
   checkVideoViews,
   checkVideoRatingType,
-  isVideoFileExtnameValid,
-  isVideoFileMimeTypeValid,
+  checkVideoFileExtname,
+  checkVideoFileMimeType,
   checkVideoDuration,
   checkVideoTag,
   checkVideoPrivacy,

@@ -3,7 +3,7 @@ import { body, query } from 'express-validator'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
-import { isNotEmptyIntArray, toBooleanOrNull } from '../../helpers/custom-validators/misc'
+import { checkNotEmptyIntArray, toBooleanOrNull } from '../../helpers/custom-validators/misc'
 
 const listUserNotificationsValidator = [
   query('unread')
@@ -58,7 +58,7 @@ const updateNotificationSettingsValidator = [
 const markAsReadUserNotificationsValidator = [
   body('ids')
     .optional()
-    .custom(isNotEmptyIntArray).withMessage('Should have a valid notification ids to mark as read'),
+    .custom(checkNotEmptyIntArray),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking markAsReadUserNotificationsValidator parameters', { parameters: req.body })

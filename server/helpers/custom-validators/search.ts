@@ -11,20 +11,31 @@ function isStringArray (value: any) {
   return isArray(value) && value.every(v => typeof v === 'string')
 }
 
-function isBooleanBothQueryValid (value: any) {
-  return value === 'true' || value === 'false' || value === 'both'
+function checkBooleanBothQuery (value: any) {
+  const acceptableValues = [ 'true', 'false', 'both' ]
+  if (!acceptableValues.includes(value)) throw new Error('Should have the NSFW policy that is one of ' + acceptableValues.join(', '))
+  return true
 }
 
-function isSearchTargetValid (value: SearchTargetType) {
+function checkSearchTarget (value: SearchTargetType) {
   if (!exists(value)) return true
 
   const searchIndexConfig = CONFIG.SEARCH.SEARCH_INDEX
 
-  if (value === 'local' && (!searchIndexConfig.ENABLED || !searchIndexConfig.DISABLE_LOCAL_SEARCH)) return true
+  switch (value) {
+    case 'local':
+      if (searchIndexConfig.ENABLED && searchIndexConfig.DISABLE_LOCAL_SEARCH) {
+        throw new Error('Should target search-index since local search is disabled')
+      }
+      break
+    case 'search-index':
+      if (!searchIndexConfig.ENABLED) throw new Error('Should target local since search-index is disabled')
+      break
+    default:
+      throw new Error('Should have a known search target: local or search-index')
+  }
 
-  if (value === 'search-index' && searchIndexConfig.ENABLED) return true
-
-  return false
+  return true
 }
 
 // ---------------------------------------------------------------------------
@@ -32,6 +43,6 @@ function isSearchTargetValid (value: SearchTargetType) {
 export {
   isNumberArray,
   isStringArray,
-  isBooleanBothQueryValid,
-  isSearchTargetValid
+  checkBooleanBothQuery,
+  checkSearchTarget
 }

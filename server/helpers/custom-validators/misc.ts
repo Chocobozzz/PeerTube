@@ -44,16 +44,20 @@ function isArray (value: any): value is any[] {
   return Array.isArray(value)
 }
 
-function isNotEmptyIntArray (value: any) {
-  return Array.isArray(value) && value.every(v => validator.isInt('' + v)) && value.length !== 0
-}
-
-function isArrayOf (value: any, validator: (value: any) => boolean) {
-  return isArray(value) && value.every(v => validator(v))
-}
-
 // ---------------------------------------------------------------------------
 // VALIDATORS - Throwables
+
+function checkArrayWith (value: any, validator: (value: any) => boolean) {
+  if (!isArray(value)) throw new Error('Should be an array')
+  return value.every(v => validator(v))
+}
+
+function checkNotEmptyIntArray (value: any) {
+  if (!Array.isArray(value)) throw new Error('Should be an array')
+  if (value.length === 0) throw new Error('Should be a non-empty array')
+  if (!value.every(v => validator.isInt('' + v))) throw new Error('Should have every value of the array be an integer')
+  return true
+}
 
 function checkSafePath (value: string) {
   if (!exists(value)) throw new Error('Should have a path')
@@ -239,8 +243,8 @@ function toIntArray (value: any) {
 export {
   catchErrorAsBoolean,
   exists,
-  isArrayOf,
-  isNotEmptyIntArray,
+  checkArrayWith,
+  checkNotEmptyIntArray,
   isArray,
   isIntOrNull,
   isSafePath,

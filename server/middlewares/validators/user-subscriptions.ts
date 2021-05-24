@@ -9,7 +9,9 @@ import { ActorFollowModel } from '../../models/actor/actor-follow'
 import { areValidationErrors } from './utils'
 
 const userSubscriptionListValidator = [
-  query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
+  query('search')
+    .optional()
+    .not().isEmpty().withMessage('Should have a valid search'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking userSubscriptionListValidator parameters', { parameters: req.query })
@@ -21,7 +23,8 @@ const userSubscriptionListValidator = [
 ]
 
 const userSubscriptionAddValidator = [
-  body('uri').custom(isValidActorHandle).withMessage('Should have a valid URI to follow (username@domain)'),
+  body('uri')
+    .custom(isValidActorHandle).withMessage('Should have a valid URI to follow (username@domain)'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking userSubscriptionAddValidator parameters', { parameters: req.body })
@@ -47,7 +50,8 @@ const areSubscriptionsExistValidator = [
 ]
 
 const userSubscriptionGetValidator = [
-  param('uri').custom(isValidActorHandle).withMessage('Should have a valid URI to unfollow'),
+  param('uri')
+    .custom(isValidActorHandle).withMessage('Should have a valid URI to unfollow'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking userSubscriptionGetValidator parameters', { parameters: req.params })

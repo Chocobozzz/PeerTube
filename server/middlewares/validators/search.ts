@@ -3,7 +3,7 @@ import { areValidationErrors } from './utils'
 import { logger } from '../../helpers/logger'
 import { query } from 'express-validator'
 import { checkDate } from '../../helpers/custom-validators/misc'
-import { isSearchTargetValid } from '@server/helpers/custom-validators/search'
+import { checkSearchTarget } from '@server/helpers/custom-validators/search'
 
 const videosSearchValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
@@ -17,7 +17,9 @@ const videosSearchValidator = [
   query('durationMin').optional().isInt().withMessage('Should have a valid min duration'),
   query('durationMax').optional().isInt().withMessage('Should have a valid max duration'),
 
-  query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
+  query('searchTarget')
+    .optional()
+    .custom(checkSearchTarget),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videos search query', { parameters: req.query })
@@ -30,7 +32,9 @@ const videosSearchValidator = [
 
 const videoChannelsListSearchValidator = [
   query('search').not().isEmpty().withMessage('Should have a valid search'),
-  query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
+  query('searchTarget')
+    .optional()
+    .custom(checkSearchTarget),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking video channels search query', { parameters: req.query })

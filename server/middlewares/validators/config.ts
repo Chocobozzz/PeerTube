@@ -5,7 +5,7 @@ import { isEmailEnabled } from '@server/initializers/config'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
-import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
+import { isUserNSFWPolicyValid, checkUserVideoQuotaDaily, checkUserVideoQuota } from '../../helpers/custom-validators/users'
 import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { areValidationErrors } from './utils'
@@ -34,8 +34,8 @@ const customConfigUpdateValidator = [
   body('admin.email').isEmail().withMessage('Should have a valid administrator email'),
   body('contactForm.enabled').isBoolean().withMessage('Should have a valid contact form enabled boolean'),
 
-  body('user.videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid video quota'),
-  body('user.videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily video quota'),
+  body('user.videoQuota').custom(checkUserVideoQuota),
+  body('user.videoQuotaDaily').custom(checkUserVideoQuotaDaily),
 
   body('transcoding.enabled').isBoolean().withMessage('Should have a valid transcoding enabled boolean'),
   body('transcoding.allowAdditionalExtensions').isBoolean().withMessage('Should have a valid additional extensions boolean'),

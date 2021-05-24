@@ -16,7 +16,8 @@ import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const videoLiveGetValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('videoId')
+    .custom(checkIdOrUUID),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params, user: res.locals.oauth.token.User.username })

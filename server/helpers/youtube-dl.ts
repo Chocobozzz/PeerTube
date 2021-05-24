@@ -7,7 +7,7 @@ import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { VideoResolution } from '../../shared/models/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../initializers/constants'
 import { peertubeTruncate, pipelinePromise, root } from './core-utils'
-import { isVideoFileExtnameValid } from './custom-validators/videos'
+import { checkVideoFileExtname } from './custom-validators/videos'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 
@@ -207,9 +207,7 @@ class YoutubeDL {
   }
 
   private async guessVideoPathWithExtension (tmpPath: string, sourceExt: string) {
-    if (!isVideoFileExtnameValid(sourceExt)) {
-      throw new Error('Invalid video extension ' + sourceExt)
-    }
+    checkVideoFileExtname(sourceExt)
 
     const extensions = [ sourceExt, '.mp4', '.mkv', '.webm' ]
 

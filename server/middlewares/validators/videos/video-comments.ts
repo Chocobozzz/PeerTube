@@ -45,7 +45,7 @@ const listVideoCommentsValidator = [
 ]
 
 const listVideoCommentThreadsValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('videoId').custom(checkIdOrUUID).withMessage('Should have a valid videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking listVideoCommentThreads parameters.', { parameters: req.params })
@@ -76,7 +76,7 @@ const listVideoThreadCommentsValidator = [
 
 const addVideoCommentThreadValidator = [
   param('videoId')
-    .custom(checkIdOrUUID).not().isEmpty(),
+    .custom(checkIdOrUUID),
   body('text')
     .custom(checkVideoCommentText).not().isEmpty(),
 

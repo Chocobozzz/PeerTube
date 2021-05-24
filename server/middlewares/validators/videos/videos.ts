@@ -21,13 +21,13 @@ import {
   toIntOrNull,
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
-import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
+import { checkBooleanBothQuery, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
 import {
   checkScheduleVideoUpdatePrivacy,
   checkVideoCategory,
   checkVideoDescription,
-  isVideoFileMimeTypeValid,
+  checkVideoFileMimeType,
   checkVideoFileSize,
   checkVideoFilter,
   checkVideoImage,
@@ -507,7 +507,7 @@ const commonVideosFiltersValidator = [
     .custom(isStringArray).withMessage('Should have a valid all of tags array'),
   query('nsfw')
     .optional()
-    .custom(isBooleanBothQueryValid).withMessage('Should have a valid NSFW attribute'),
+    .custom(checkBooleanBothQuery).withMessage('Should have a valid NSFW attribute'),
   query('isLive')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -600,7 +600,7 @@ async function commonVideoChecksPass (parameters: {
   if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
 
   try {
-    isVideoFileMimeTypeValid(files)
+    checkVideoFileMimeType(files)
   } catch (error) {
     res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
        .json({ error })

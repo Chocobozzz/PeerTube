@@ -3,14 +3,11 @@ import { body } from 'express-validator'
 import { checkActorImageFile } from '@server/helpers/custom-validators/actor-images'
 import { cleanUpReqFiles } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
-import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { areValidationErrors } from './utils'
 
 const updateActorImageValidatorFactory = (fieldname: string) => ([
-  body(fieldname).custom((value, { req }) => checkActorImageFile(req.files, fieldname)).withMessage(
-    'This file is not supported or too large. Please, make sure it is of the following type : ' +
-    CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME.join(', ')
-  ),
+  body(fieldname)
+    .custom((value, { req }) => checkActorImageFile(req.files, fieldname)),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking updateActorImageValidator parameters', { files: req.files })

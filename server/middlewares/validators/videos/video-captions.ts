@@ -11,7 +11,7 @@ import { checkUserCanManageVideo, doesVideoCaptionExist, doesVideoExist } from '
 
 const addVideoCaptionValidator = [
   param('videoId')
-    .custom(checkIdOrUUID).not().isEmpty(),
+    .custom(checkIdOrUUID),
   param('captionLanguage')
     .custom(checkVideoCaptionLanguage).not().isEmpty(),
   body('captionfile')
@@ -38,7 +38,7 @@ const addVideoCaptionValidator = [
 
 const deleteVideoCaptionValidator = [
   param('videoId')
-    .custom(checkIdOrUUID).not().isEmpty(),
+    .custom(checkIdOrUUID),
   param('captionLanguage')
     .custom(checkVideoCaptionLanguage).not().isEmpty(),
 
@@ -58,7 +58,8 @@ const deleteVideoCaptionValidator = [
 ]
 
 const listVideoCaptionsValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid video id'),
+  param('videoId')
+    .custom(checkIdOrUUID),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking listVideoCaptions parameters', { parameters: req.params })

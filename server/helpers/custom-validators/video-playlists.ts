@@ -1,4 +1,4 @@
-import { catchErrorAsBoolean, exists, isArrayOf, checkId } from './misc'
+import { exists, checkArrayWith, checkId } from './misc'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES } from '../../initializers/constants'
 
@@ -44,8 +44,8 @@ function checkVideoPlaylistType (value: any) {
   return true
 }
 
-function isVideoPlaylistVideoIdsValid (value: any) {
-  return isArrayOf(value, catchErrorAsBoolean(checkId))
+function checkVideoPlaylistVideoIds (value: any) {
+  return checkArrayWith(value, checkId)
 }
 
 // ---------------------------------------------------------------------------
@@ -56,5 +56,5 @@ export {
   checkVideoPlaylistPrivacy,
   checkVideoPlaylistTimestamp,
   checkVideoPlaylistType,
-  isVideoPlaylistVideoIdsValid
+  checkVideoPlaylistVideoIds
 }

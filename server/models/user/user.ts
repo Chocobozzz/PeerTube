@@ -41,20 +41,20 @@ import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isNoInstanceConfigWarningModal,
   isNoWelcomeModal,
-  isUserAdminFlagsValid,
+  checkUserAdminFlags,
   isUserAutoPlayNextVideoPlaylistValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
-  isUserBlockedReasonValid,
+  checkUserBlockedReason,
   isUserBlockedValid,
   isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,
-  isUserPasswordValid,
-  isUserRoleValid,
+  checkUserPassword,
+  checkUserRole,
   checkUserUsername,
-  isUserVideoLanguages,
-  isUserVideoQuotaDailyValid,
-  isUserVideoQuotaValid,
+  checkUserVideoLanguages,
+  checkUserVideoQuotaDaily,
+  checkUserVideoQuota,
   isUserVideosHistoryEnabledValid,
   isUserWebTorrentEnabledValid
 } from '../../helpers/custom-validators/users'
@@ -238,7 +238,7 @@ enum ScopeNames {
 export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
   @AllowNull(true)
-  @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password', true))
+  @Is('UserPassword', value => throwIfNotValid(value, catchErrorAsBoolean(checkUserPassword), 'user password', true))
   @Column
   password: string
 
@@ -303,13 +303,13 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('UserVideoLanguages', value => throwIfNotValid(value, isUserVideoLanguages, 'video languages'))
+  @Is('UserVideoLanguages', value => throwIfNotValid(value, catchErrorAsBoolean(checkUserVideoLanguages), 'video languages'))
   @Column(DataType.ARRAY(DataType.STRING))
   videoLanguages: string[]
 
   @AllowNull(false)
   @Default(UserAdminFlag.NONE)
-  @Is('UserAdminFlags', value => throwIfNotValid(value, isUserAdminFlagsValid, 'user admin flags'))
+  @Is('UserAdminFlags', value => throwIfNotValid(value, catchErrorAsBoolean(checkUserAdminFlags), 'user admin flags'))
   @Column
   adminFlags?: UserAdminFlag
 
@@ -321,22 +321,22 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('UserBlockedReason', value => throwIfNotValid(value, isUserBlockedReasonValid, 'blocked reason', true))
+  @Is('UserBlockedReason', value => throwIfNotValid(value, checkUserBlockedReason, 'blocked reason', true))
   @Column
   blockedReason: string
 
   @AllowNull(false)
-  @Is('UserRole', value => throwIfNotValid(value, isUserRoleValid, 'role'))
+  @Is('UserRole', value => throwIfNotValid(value, catchErrorAsBoolean(checkUserRole), 'role'))
   @Column
   role: number
 
   @AllowNull(false)
-  @Is('UserVideoQuota', value => throwIfNotValid(value, isUserVideoQuotaValid, 'video quota'))
+  @Is('UserVideoQuota', value => throwIfNotValid(value, catchErrorAsBoolean(checkUserVideoQuota), 'video quota'))
   @Column(DataType.BIGINT)
   videoQuota: number
 
   @AllowNull(false)
-  @Is('UserVideoQuotaDaily', value => throwIfNotValid(value, isUserVideoQuotaDailyValid, 'video quota daily'))
+  @Is('UserVideoQuotaDaily', value => throwIfNotValid(value, catchErrorAsBoolean(checkUserVideoQuotaDaily), 'video quota daily'))
   @Column(DataType.BIGINT)
   videoQuotaDaily: number
 

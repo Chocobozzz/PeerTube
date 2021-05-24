@@ -4,7 +4,7 @@ registerTSPaths()
 import * as program from 'commander'
 import { initDatabaseModels } from '../server/initializers/database'
 import { UserModel } from '../server/models/user/user'
-import { isUserPasswordValid } from '../server/helpers/custom-validators/users'
+import { checkUserPassword } from '../server/helpers/custom-validators/users'
 
 program
   .option('-u, --user [user]', 'User')
@@ -42,7 +42,9 @@ initDatabaseModels(true)
 
     console.log('New password?')
     rl.on('line', function (password) {
-      if (!isUserPasswordValid(password)) {
+      try {
+        checkUserPassword(password)
+      } catch (error) {
         console.error('New password is invalid.')
         process.exit(-1)
       }

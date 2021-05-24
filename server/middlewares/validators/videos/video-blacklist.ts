@@ -9,7 +9,7 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 
 const videosBlacklistRemoveValidator = [
   param('videoId')
-    .custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
+    .custom(checkIdOrUUID),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking blacklistRemove parameters.', { parameters: req.params })
@@ -24,7 +24,7 @@ const videosBlacklistRemoveValidator = [
 
 const videosBlacklistAddValidator = [
   param('videoId')
-    .custom(checkIdOrUUID).not().isEmpty(),
+    .custom(checkIdOrUUID),
   body('unfederate')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -53,7 +53,7 @@ const videosBlacklistAddValidator = [
 
 const videosBlacklistUpdateValidator = [
   param('videoId')
-    .custom(checkIdOrUUID).not().isEmpty(),
+    .custom(checkIdOrUUID),
   body('reason')
     .optional()
     .custom(checkVideoBlacklistReason),
@@ -76,8 +76,7 @@ const videosBlacklistFiltersValidator = [
     .custom(isVideoBlacklistTypeValid).withMessage('Should have a valid video blacklist type attribute'),
   query('search')
     .optional()
-    .not()
-    .isEmpty().withMessage('Should have a valid search'),
+    .not().isEmpty().withMessage('Should have a valid search'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videos blacklist filters query', { parameters: req.query })

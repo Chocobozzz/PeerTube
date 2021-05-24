@@ -55,7 +55,9 @@ const videoChannelsAddValidator = [
 ]
 
 const videoChannelsUpdateValidator = [
-  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
+  param('nameWithHost')
+    .exists().withMessage('Should have an video channel name with host'),
+
   body('displayName')
     .optional()
     .custom(checkVideoChannelName),
@@ -91,7 +93,8 @@ const videoChannelsUpdateValidator = [
 ]
 
 const videoChannelsRemoveValidator = [
-  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
+  param('nameWithHost')
+    .exists().withMessage('Should have an video channel name with host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsRemove parameters', { parameters: req.params })
@@ -107,7 +110,8 @@ const videoChannelsRemoveValidator = [
 ]
 
 const videoChannelsNameWithHostValidator = [
-  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
+  param('nameWithHost')
+    .exists().withMessage('Should have an video channel name with host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsNameWithHostValidator parameters', { parameters: req.params })
