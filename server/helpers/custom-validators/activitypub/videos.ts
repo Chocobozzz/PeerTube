@@ -8,10 +8,10 @@ import { catchErrorAsBoolean, exists, isArray, isBooleanValid, checkDate, checkU
 import {
   checkVideoDuration,
   checkVideoName,
-  isVideoStateValid,
+  checkVideoState,
   checkVideoTag,
   checkVideoTruncatedDescription,
-  isVideoViewsValid
+  checkVideoViews
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 
@@ -26,7 +26,7 @@ function isActivityPubVideoDurationValid (value: string) {
     typeof value === 'string' &&
     value.startsWith('PT') &&
     value.endsWith('S') &&
-    checkVideoDuration(value.replace(/[^0-9]+/g, ''))
+    catchErrorAsBoolean(checkVideoDuration)(value.replace(/[^0-9]+/g, ''))
 }
 
 function sanitizeAndCheckVideoTorrentObject (video: any) {
@@ -58,7 +58,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   }
 
   // Default attributes
-  if (!isVideoStateValid(video.state)) video.state = VideoState.PUBLISHED
+  if (!catchErrorAsBoolean(checkVideoState)(video.state)) video.state = VideoState.PUBLISHED
   if (!isBooleanValid(video.waitTranscoding)) video.waitTranscoding = false
   if (!isBooleanValid(video.downloadEnabled)) video.downloadEnabled = true
   if (!isBooleanValid(video.commentsEnabled)) video.commentsEnabled = false
@@ -73,7 +73,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     (!video.category || isRemoteNumberIdentifierValid(video.category)) &&
     (!video.licence || isRemoteNumberIdentifierValid(video.licence)) &&
     (!video.language || isRemoteStringIdentifierValid(video.language)) &&
-    catchErrorAsBoolean(isVideoViewsValid)(video.views) &&
+    catchErrorAsBoolean(checkVideoViews)(video.views) &&
     isBooleanValid(video.sensitive) &&
     catchErrorAsBoolean(checkDate)(video.published) &&
     catchErrorAsBoolean(checkDate)(video.updated) &&
@@ -174,7 +174,7 @@ function isRemoteStringIdentifierValid (data: any) {
 }
 
 function isRemoteVideoContentValid (mediaType: string, content: string) {
-  return mediaType === 'text/markdown' && checkVideoTruncatedDescription(content)
+  return mediaType === 'text/markdown' && catchErrorAsBoolean(checkVideoTruncatedDescription)(content)
 }
 
 function setValidRemoteIcon (video: any) {

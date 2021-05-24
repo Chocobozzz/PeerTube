@@ -5,9 +5,6 @@ import { VideoBlacklistType } from '../../../shared/models/videos'
 
 const VIDEO_BLACKLIST_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_BLACKLIST
 
-/**
- * @throws {Error}
- */
 function checkVideoBlacklistReason (value: string) {
   if (value === null) return true
   if (!validator.isLength(value, VIDEO_BLACKLIST_CONSTRAINTS_FIELDS.REASON)) {

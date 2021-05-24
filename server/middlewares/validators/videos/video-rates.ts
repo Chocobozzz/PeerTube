@@ -2,7 +2,7 @@ import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { checkIdOrUUID, checkId } from '../../../helpers/custom-validators/misc'
 import { checkVideoRating } from '../../../helpers/custom-validators/video-rates'
-import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
+import { checkVideoRatingType } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
@@ -16,7 +16,7 @@ const videoUpdateRateValidator = [
     .custom(checkIdOrUUID),
 
   body('rating')
-    .custom(isVideoRatingTypeValid),
+    .custom(checkVideoRatingType),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoRate parameters', { parameters: req.body })

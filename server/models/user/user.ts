@@ -51,7 +51,7 @@ import {
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
-  isUserUsernameValid,
+  checkUserUsername,
   isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
@@ -243,7 +243,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   password: string
 
   @AllowNull(false)
-  @Is('UserUsername', value => throwIfNotValid(value, catchErrorAsBoolean(isUserUsernameValid), 'user name'))
+  @Is('UserUsername', value => throwIfNotValid(value, catchErrorAsBoolean(checkUserUsername), 'user name'))
   @Column
   username: string
 

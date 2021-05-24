@@ -1,4 +1,4 @@
-import { exists, checkDate } from '../misc'
+import { exists, checkDate, catchErrorAsBoolean } from '../misc'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import validator from 'validator'
 import { PlaylistElementObject } from '../../../../shared/models/activitypub/objects/playlist-element-object'
@@ -8,8 +8,8 @@ function isPlaylistObjectValid (object: PlaylistObject) {
   return exists(object) &&
     object.type === 'Playlist' &&
     validator.isInt(object.totalItems + '') &&
-    checkDate(object.published) &&
-    checkDate(object.updated)
+    catchErrorAsBoolean(checkDate)(object.published) &&
+    catchErrorAsBoolean(checkDate)(object.updated)
 }
 
 function isPlaylistElementObjectValid (object: PlaylistElementObject) {

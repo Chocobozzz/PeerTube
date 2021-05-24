@@ -8,8 +8,8 @@ import { isActorPreferredUsernameValid } from '../../../helpers/custom-validator
 import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
   checkVideoChannelDescription,
-  isVideoChannelNameValid,
-  isVideoChannelSupportValid
+  checkVideoChannelName,
+  checkVideoChannelSupport
 } from '../../../helpers/custom-validators/video-channels'
 import { logger } from '../../../helpers/logger'
 import { doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../../../helpers/middlewares'
@@ -21,13 +21,13 @@ const videoChannelsAddValidator = [
   body('name')
     .custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
   body('displayName')
-    .custom(isVideoChannelNameValid),
+    .custom(checkVideoChannelName),
   body('description')
     .optional()
     .custom(checkVideoChannelDescription),
   body('support')
     .optional()
-    .custom(isVideoChannelSupportValid),
+    .custom(checkVideoChannelSupport),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsAdd parameters', { parameters: req.body })
@@ -58,13 +58,13 @@ const videoChannelsUpdateValidator = [
   param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
   body('displayName')
     .optional()
-    .custom(isVideoChannelNameValid),
+    .custom(checkVideoChannelName),
   body('description')
     .optional()
     .custom(checkVideoChannelDescription),
   body('support')
     .optional()
-    .custom(isVideoChannelSupportValid),
+    .custom(checkVideoChannelSupport),
   body('bulkVideosSupportUpdate')
     .optional()
     .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),
@@ -122,7 +122,7 @@ const videoChannelsNameWithHostValidator = [
 
 const localVideoChannelValidator = [
   param('name')
-    .custom(isVideoChannelNameValid),
+    .custom(checkVideoChannelName),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking localVideoChannelValidator parameters', { parameters: req.params })

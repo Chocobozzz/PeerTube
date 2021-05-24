@@ -55,9 +55,6 @@ function isArrayOf (value: any, validator: (value: any) => boolean) {
 // ---------------------------------------------------------------------------
 // VALIDATORS - Throwables
 
-/**
- * @throws {Error}
- */
 function checkSafePath (value: string) {
   if (!exists(value)) throw new Error('Should have a path')
   if (
@@ -68,36 +65,24 @@ function checkSafePath (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkDate (value: string) {
   if (!exists(value)) throw new Error('Should have a date')
   if (!validator.isISO8601(value)) throw new Error('Should have a date conforming to ISO8601')
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkId (value: string) {
   if (!exists(value)) throw new Error('Should have an id')
   if (!validator.isInt('' + value)) throw new Error('Should have an integer id')
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkUUID (value: string) {
   if (!exists(value)) throw new Error('Should have a uuid')
   if (!validator.isUUID('' + value, 4)) throw new Error('Should have a v4 uuid')
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkIdOrUUID (value: string) {
   const errors = [
     catchErrorAsBoolean(checkId, true)(value)?.message,
@@ -115,10 +100,7 @@ function isIntOrNull (value: any) {
   return value === null || validator.isInt('' + value)
 }
 
-/**
- * @throws {Error}
- */
-function isFileFieldValid (
+function checkFileField (
   files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
   field: string,
   optional = false
@@ -144,10 +126,7 @@ function isFileFieldValid (
   throw new Error(res[1])
 }
 
-/**
- * @throws {Error}
- */
-function isFileMimeTypeValid (
+function checkFileMimeType (
   files: UploadFilesForCheck,
   mimeTypeRegex: string,
   field: string,
@@ -179,10 +158,7 @@ function isFileMimeTypeValid (
   throw new Error(res[1])
 }
 
-/**
- * @throws {Error}
- */
-function isFileValid (
+function checkFileValid (
   files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
   mimeTypeRegex: string,
   field: string,
@@ -279,7 +255,7 @@ export {
   toIntOrNull,
   toArray,
   toIntArray,
-  isFileFieldValid,
-  isFileMimeTypeValid,
-  isFileValid
+  checkFileField,
+  checkFileMimeType,
+  checkFileValid
 }

@@ -13,49 +13,34 @@ import {
   VIDEO_RATE_TYPES,
   VIDEO_STATES
 } from '../../initializers/constants'
-import { exists, isArray, checkDate, isFileMimeTypeValid, isFileValid } from './misc'
+import { exists, isArray, checkDate, checkFileMimeType, checkFileValid } from './misc'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
-/**
- * @throws {Error}
- */
-function isVideoFilterValid (filter: VideoFilter) {
+function checkVideoFilter (filter: VideoFilter) {
   if (![ 'local', 'all-local', 'all' ].includes(filter)) throw new Error('Should have a known video filter')
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoCategoryValid (value: any) {
+function checkVideoCategory (value: any) {
   if (value === null) return true
   if (VIDEO_CATEGORIES[value] === undefined) throw new Error('Should have a known video category')
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoStateValid (value: any) {
+function checkVideoState (value: any) {
   if (!exists(value)) throw new Error('Should have a video state')
   if (VIDEO_STATES[value] === undefined) throw new Error('Should have a known video state')
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoLicenceValid (value: any) {
+function checkVideoLicence (value: any) {
   if (value === null) return true
   if (VIDEO_LICENCES[value] === undefined) throw new Error('Should have a known video licence')
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoLanguageValid (value: any) {
+function checkVideoLanguage (value: any) {
   if (value === null) return true
   if (typeof value !== 'string') throw new Error('Should have a video language that is a string')
   if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.LANGUAGE)) {
@@ -66,18 +51,12 @@ function isVideoLanguageValid (value: any) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoDuration (value: string) {
   if (!exists(value)) throw new Error('Should have a video duration')
   if (!validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)) throw new Error('Should have an integer video duration')
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoTruncatedDescription (value: string) {
   if (!exists(value)) throw new Error('Should have a video truncated description')
   if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION)) {
@@ -88,9 +67,6 @@ function checkVideoTruncatedDescription (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoDescription (value: string) {
   if (value === null) return true
   if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION)) {
@@ -101,9 +77,6 @@ function checkVideoDescription (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoSupport (value: string) {
   if (value === null) return true
   if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.SUPPORT)) {
@@ -114,9 +87,6 @@ function checkVideoSupport (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoName (value: string) {
   if (!exists(value)) throw new Error('Should have a video name')
   if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)) {
@@ -127,9 +97,6 @@ function checkVideoName (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoTag (tag: string) {
   if (!exists(tag)) throw new Error('Should have a video tag value')
   if (!validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)) {
@@ -140,9 +107,6 @@ function checkVideoTag (tag: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoTags (tags: string[]) {
   if (tags === null) return true
   if (!isArray(tags)) throw new Error('Should have an array of tags')
@@ -155,10 +119,7 @@ function checkVideoTags (tags: string[]) {
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoViewsValid (value: string) {
+function checkVideoViews (value: string) {
   if (!exists(value)) throw new Error('Should have a video views count')
   if (!validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)) {
     throw new Error(`Should have a positive video view count`)
@@ -166,11 +127,8 @@ function isVideoViewsValid (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoRatingTypeValid (value: string) {
-  if (value === 'none') return true
+function checkVideoRatingType (value: string) {
+  if (value === 'none') return
   if (!values(VIDEO_RATE_TYPES).includes(value as VideoRateType)) throw new Error('Should have a known video rate')
   return true
 }
@@ -179,11 +137,8 @@ function isVideoFileExtnameValid (value: string) {
   return exists(value) && (value === VIDEO_LIVE.EXTENSION || MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined)
 }
 
-/**
- * @throws {Error}
- */
 function isVideoFileMimeTypeValid (files: UploadFilesForCheck) {
-  return isFileMimeTypeValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
+  return checkFileMimeType(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
 }
 
 const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
@@ -191,40 +146,27 @@ const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
                                           .join('|')
 const videoImageTypesRegex = `image/(${videoImageTypes})`
 
-/**
- * @throws {Error}
- */
 function checkVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[], field: string) {
-  return isFileValid(files, videoImageTypesRegex, field, CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max, true)
+  return checkFileValid(files, videoImageTypesRegex, field, CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max, true)
 }
 
-/**
- * @throws {Error}
- */
-function isVideoPrivacyValid (value: number) {
+function checkVideoPrivacy (value: number) {
   if (VIDEO_PRIVACIES[value] === undefined) throw new Error('Should have a known video privacy policy')
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkScheduleVideoUpdatePrivacy (value: number) {
   const valid = value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
   if (!valid) throw new Error(`Should have a valid privacy: ${VideoPrivacy.UNLISTED}, ${VideoPrivacy.PUBLIC} or ${VideoPrivacy.INTERNAL}`)
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoOriginallyPublishedAt (value: string | null) {
-  return value === null || checkDate(value)
+  if (value === null) return true
+  checkDate(value)
+  return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoFileInfoHash (value: string | null | undefined) {
   if (!exists(value)) throw new Error('Should have a video file infohash')
   if (!validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)) {
@@ -235,73 +177,62 @@ function checkVideoFileInfoHash (value: string | null | undefined) {
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoFileResolutionValid (value: string) {
+function checkVideoFileResolution (value: string) {
   if (!exists(value)) throw new Error('Should have a video file resolution')
   if (!validator.isInt(value + '')) throw new Error('Should have a video file resolution that is an integer')
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoFPSResolutionValid (value: string) {
+function checkVideoFPSResolution (value: string) {
   if (value === null) return true
   if (!validator.isInt(value + '')) throw new Error('Should have a video file resolution that is an integer')
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoFileSizeValid (value: string) {
-  if (!exists(value)) throw new Error('')
+function checkVideoFileSize (value: string) {
+  if (!exists(value)) throw new Error('Should have a video file size')
   if (!validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)) {
     throw new Error('This file is too large. It exceeds the maximum file size authorized.')
   }
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoMagnetUriValid (value: string) {
+function checkVideoMagnetUri (value: string) {
   if (!exists(value)) throw new Error('Should have a video magnetUri')
 
   const parsed = magnetUtil.decode(value)
-  if (parsed && checkVideoFileInfoHash(parsed.infoHash)) {
-    return true
-  }
+  if (!parsed) throw new Error('Should have a parsed infohash')
+
+  checkVideoFileInfoHash(parsed.infoHash)
+  return true
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoCategoryValid,
-  isVideoLicenceValid,
-  isVideoLanguageValid,
+  checkVideoCategory,
+  checkVideoLicence,
+  checkVideoLanguage,
   checkVideoTruncatedDescription,
   checkVideoDescription,
   checkVideoFileInfoHash,
   checkVideoName,
   checkVideoTags,
-  isVideoFPSResolutionValid,
+  checkVideoFPSResolution,
   checkScheduleVideoUpdatePrivacy,
   checkVideoOriginallyPublishedAt,
-  isVideoMagnetUriValid,
-  isVideoStateValid,
-  isVideoViewsValid,
-  isVideoRatingTypeValid,
+  checkVideoMagnetUri,
+  checkVideoState,
+  checkVideoViews,
+  checkVideoRatingType,
   isVideoFileExtnameValid,
   isVideoFileMimeTypeValid,
   checkVideoDuration,
   checkVideoTag,
-  isVideoPrivacyValid,
-  isVideoFileResolutionValid,
-  isVideoFileSizeValid,
+  checkVideoPrivacy,
+  checkVideoFileResolution,
+  checkVideoFileSize,
   checkVideoImage,
   checkVideoSupport,
-  isVideoFilterValid
+  checkVideoFilter
 }

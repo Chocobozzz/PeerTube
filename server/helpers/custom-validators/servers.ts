@@ -3,9 +3,6 @@ import { catchErrorAsBoolean, exists, isArray } from './misc'
 import { isTestInstance } from '../core-utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
-/**
- * @throws {Error}
- */
 function checkHost (host: string) {
   const isURLOptions = {
     require_host: true,
@@ -33,9 +30,6 @@ function isEachUniqueHostValid (hosts: string[]) {
     })
 }
 
-/**
- * @throws {Error}
- */
 function checkContactBody (value: any) {
   if (!exists(value)) throw new Error('Should have a contact text')
   if (!validator.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.BODY)) {
@@ -46,9 +40,6 @@ function checkContactBody (value: any) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkContactFromName (value: any) {
   if (!exists(value)) throw new Error('Should have a contact From name')
   if (!validator.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.FROM_NAME)) {

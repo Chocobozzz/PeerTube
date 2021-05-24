@@ -4,9 +4,6 @@ import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES } fr
 
 const PLAYLISTS_CONSTRAINT_FIELDS = CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS
 
-/**
- * @throws {Error}
- */
 function checkVideoPlaylistName (value: any) {
   if (!exists(value)) throw new Error('Should have a non-null playlist name')
   if (!validator.isLength(value, PLAYLISTS_CONSTRAINT_FIELDS.NAME)) {
@@ -17,9 +14,6 @@ function checkVideoPlaylistName (value: any) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoPlaylistDescription (value: any) {
   if (value === null) return true
   if (!exists(value)) throw new Error('Should have a non-null playlist description')
@@ -31,18 +25,12 @@ function checkVideoPlaylistDescription (value: any) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoPlaylistPrivacy (value: number) {
   if (!validator.isInt(value + '')) throw new Error('Should have a privacy policy that is an integer')
   if (VIDEO_PLAYLIST_PRIVACIES[value] === undefined) throw new Error('Should have a privacy policy that corresponds to a known value')
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoPlaylistTimestamp (value: any) {
   if (value === null) return true
   if (!exists(value)) throw new Error('Should have a non-null timestamp')
@@ -50,9 +38,6 @@ function checkVideoPlaylistTimestamp (value: any) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoPlaylistType (value: any) {
   if (!exists(value)) throw new Error('Should have a non-null type')
   if (VIDEO_PLAYLIST_TYPES[value] === undefined) throw new Error('Should have a known playlist type')

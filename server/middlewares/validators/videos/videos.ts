@@ -12,7 +12,7 @@ import {
   exists,
   isBooleanValid,
   checkDate,
-  isFileFieldValid,
+  checkFileField,
   checkIdOrUUID,
   checkId,
   checkUUID,
@@ -25,17 +25,17 @@ import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
 import {
   checkScheduleVideoUpdatePrivacy,
-  isVideoCategoryValid,
+  checkVideoCategory,
   checkVideoDescription,
   isVideoFileMimeTypeValid,
-  isVideoFileSizeValid,
-  isVideoFilterValid,
+  checkVideoFileSize,
+  checkVideoFilter,
   checkVideoImage,
-  isVideoLanguageValid,
-  isVideoLicenceValid,
+  checkVideoLanguage,
+  checkVideoLicence,
   checkVideoName,
   checkVideoOriginallyPublishedAt,
-  isVideoPrivacyValid,
+  checkVideoPrivacy,
   checkVideoSupport,
   checkVideoTags
 } from '../../../helpers/custom-validators/videos'
@@ -61,7 +61,7 @@ import { areValidationErrors } from '../utils'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
-    .custom((value, { req }) => isFileFieldValid(req.files, 'videofile')),
+    .custom((value, { req }) => checkFileField(req.files, 'videofile')),
   body('name')
     .trim()
     .custom(checkVideoName),
@@ -284,10 +284,14 @@ const videosCustomGetValidator = (
 
       // Video is unlisted, check we used the uuid to fetch it
       if (video.privacy === VideoPrivacy.UNLISTED) {
-        if (checkUUID(req.params.id)) return next()
+        try {
+          checkUUID(req.params.id)
+        } catch {
+          // Don't leak this unlisted video
+          return res.status(HttpStatusCode.NOT_FOUND_404).end()
+        }
 
-        // Don't leak this unlisted video
-        return res.status(HttpStatusCode.NOT_FOUND_404).end()
+        return next()
       }
     }
   ]
@@ -422,15 +426,15 @@ function getCommonVideoEditAttributes () {
     body('category')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isVideoCategoryValid),
+      .custom(checkVideoCategory),
     body('licence')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isVideoLicenceValid),
+      .custom(checkVideoLicence),
     body('language')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoLanguageValid),
+      .custom(checkVideoLanguage),
     body('nsfw')
       .optional()
       .customSanitizer(toBooleanOrNull)
@@ -442,7 +446,7 @@ function getCommonVideoEditAttributes () {
     body('privacy')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoPrivacyValid),
+      .custom(checkVideoPrivacy),
     body('description')
       .optional()
       .customSanitizer(toValueOrNull)
@@ -510,7 +514,7 @@ const commonVideosFiltersValidator = [
     .custom(isBooleanValid).withMessage('Should have a valid live boolean'),
   query('filter')
     .optional()
-    .custom(isVideoFilterValid),
+    .custom(checkVideoFilter),
   query('skipCount')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -604,7 +608,7 @@ async function commonVideoChecksPass (parameters: {
   }
 
   try {
-    isVideoFileSizeValid(videoFileSize.toString())
+    checkVideoFileSize(videoFileSize.toString())
   } catch (error) {
     res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
         .json({ error })

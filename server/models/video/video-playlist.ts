@@ -56,6 +56,7 @@ import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getPlaylistSort, isOutdat
 import { ThumbnailModel } from './thumbnail'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
 import { VideoPlaylistElementModel } from './video-playlist-element'
+import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -230,17 +231,17 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   updatedAt: Date
 
   @AllowNull(false)
-  @Is('VideoPlaylistName', value => throwIfNotValid(value, checkVideoPlaylistName, 'name'))
+  @Is('VideoPlaylistName', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoPlaylistName), 'name'))
   @Column
   name: string
 
   @AllowNull(true)
-  @Is('VideoPlaylistDescription', value => throwIfNotValid(value, checkVideoPlaylistDescription, 'description', true))
+  @Is('VideoPlaylistDescription', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoPlaylistDescription), 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.DESCRIPTION.max))
   description: string
 
   @AllowNull(false)
-  @Is('VideoPlaylistPrivacy', value => throwIfNotValid(value, checkVideoPlaylistPrivacy, 'privacy'))
+  @Is('VideoPlaylistPrivacy', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoPlaylistPrivacy), 'privacy'))
   @Column
   privacy: VideoPlaylistPrivacy
 

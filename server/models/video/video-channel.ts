@@ -24,8 +24,8 @@ import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
   checkVideoChannelDescription,
-  isVideoChannelNameValid,
-  isVideoChannelSupportValid
+  checkVideoChannelName,
+  checkVideoChannelSupport
 } from '../../helpers/custom-validators/video-channels'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send'
@@ -250,7 +250,7 @@ export type SummaryOptions = {
 export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
 
   @AllowNull(false)
-  @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))
+  @Is('VideoChannelName', value => throwIfNotValid(value, checkVideoChannelName, 'name'))
   @Column
   name: string
 
@@ -262,7 +262,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support', true))
+  @Is('VideoChannelSupport', value => throwIfNotValid(value, checkVideoChannelSupport, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   support: string
 

@@ -8,7 +8,8 @@ import { areValidationErrors } from '../utils'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videosBlacklistRemoveValidator = [
-  param('videoId').custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('videoId')
+    .custom(checkIdOrUUID).not().isEmpty().withMessage('Should have a valid videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking blacklistRemove parameters.', { parameters: req.params })

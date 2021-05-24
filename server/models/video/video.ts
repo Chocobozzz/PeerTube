@@ -41,16 +41,16 @@ import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { isBooleanValid } from '../../helpers/custom-validators/misc'
+import { catchErrorAsBoolean, isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
-  isVideoCategoryValid,
+  checkVideoCategory,
   checkVideoDescription,
   checkVideoDuration,
-  isVideoLanguageValid,
-  isVideoLicenceValid,
+  checkVideoLanguage,
+  checkVideoLicence,
   checkVideoName,
-  isVideoPrivacyValid,
-  isVideoStateValid,
+  checkVideoPrivacy,
+  checkVideoState,
   checkVideoSupport
 } from '../../helpers/custom-validators/videos'
 import { getVideoFileResolution } from '../../helpers/ffprobe-utils'
@@ -499,30 +499,30 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   uuid: string
 
   @AllowNull(false)
-  @Is('VideoName', value => throwIfNotValid(value, checkVideoName, 'name'))
+  @Is('VideoName', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoName), 'name'))
   @Column
   name: string
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoCategory', value => throwIfNotValid(value, isVideoCategoryValid, 'category', true))
+  @Is('VideoCategory', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoCategory), 'category', true))
   @Column
   category: number
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoLicence', value => throwIfNotValid(value, isVideoLicenceValid, 'licence', true))
+  @Is('VideoLicence', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoLicence), 'licence', true))
   @Column
   licence: number
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoLanguage', value => throwIfNotValid(value, isVideoLanguageValid, 'language', true))
+  @Is('VideoLanguage', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoLanguage), 'language', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.LANGUAGE.max))
   language: string
 
   @AllowNull(false)
-  @Is('VideoPrivacy', value => throwIfNotValid(value, isVideoPrivacyValid, 'privacy'))
+  @Is('VideoPrivacy', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoPrivacy), 'privacy'))
   @Column
   privacy: VideoPrivacy
 
@@ -533,18 +533,18 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoDescription', value => throwIfNotValid(value, checkVideoDescription, 'description', true))
+  @Is('VideoDescription', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoDescription), 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max))
   description: string
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoSupport', value => throwIfNotValid(value, checkVideoSupport, 'support', true))
+  @Is('VideoSupport', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoSupport), 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.SUPPORT.max))
   support: string
 
   @AllowNull(false)
-  @Is('VideoDuration', value => throwIfNotValid(value, checkVideoDuration, 'duration'))
+  @Is('VideoDuration', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoDuration), 'duration'))
   @Column
   duration: number
 
@@ -597,7 +597,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   @AllowNull(false)
   @Default(null)
-  @Is('VideoState', value => throwIfNotValid(value, isVideoStateValid, 'state'))
+  @Is('VideoState', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoState), 'state'))
   @Column
   state: VideoState
 

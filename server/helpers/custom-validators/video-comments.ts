@@ -7,9 +7,6 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 
 const VIDEO_COMMENTS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_COMMENTS
 
-/**
- * @throws {Error}
- */
 function checkVideoCommentText (value: string) {
   if (value === null) return true
   if (!validator.isLength(value, VIDEO_COMMENTS_CONSTRAINTS_FIELDS.TEXT)) {

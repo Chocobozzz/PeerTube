@@ -26,10 +26,7 @@ function isUserVideoQuotaDailyValid (value: string) {
   return exists(value) && validator.isInt(value + '', USERS_CONSTRAINTS_FIELDS.VIDEO_QUOTA_DAILY)
 }
 
-/**
- * @throws {Error}
- */
-function isUserUsernameValid (value: string) {
+function checkUserUsername (value: string) {
   if (!exists(value)) throw new Error('Should have a name')
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
@@ -39,9 +36,6 @@ function isUserUsernameValid (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkUserDisplayName (value: string) {
   if (value === null) return true
   if (!exists(value)) throw new Error('Should have a user display name')
@@ -53,9 +47,6 @@ function checkUserDisplayName (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkUserDescription (value: string) {
   if (value === null) return true
   if (!exists(value)) throw new Error('Should have a user description')
@@ -136,7 +127,7 @@ export {
   isUserRoleValid,
   isUserVideoQuotaValid,
   isUserVideoQuotaDailyValid,
-  isUserUsernameValid,
+  checkUserUsername,
   isUserAdminFlagsValid,
   isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,

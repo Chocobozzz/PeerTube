@@ -19,7 +19,7 @@ import {
 import { ModelCache } from '@server/models/model-cache'
 import { AttributesOnly } from '@shared/core-utils'
 import { Account, AccountSummary } from '../../../shared/models/actors'
-import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
+import { checkAccountDescription } from '../../helpers/custom-validators/accounts'
 import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send/send-delete'
 import {
@@ -150,7 +150,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('AccountDescription', value => throwIfNotValid(value, isAccountDescriptionValid, 'description', true))
+  @Is('AccountDescription', value => throwIfNotValid(value, checkAccountDescription, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max))
   description: string
 

@@ -1,6 +1,6 @@
 import validator from 'validator'
 import { ACTIVITY_PUB } from '../../../initializers/constants'
-import { exists, isArray, checkDate } from '../misc'
+import { exists, isArray, checkDate, catchErrorAsBoolean } from '../misc'
 import { isActivityPubUrlValid } from './misc'
 
 function sanitizeAndCheckVideoCommentObject (comment: any) {
@@ -12,15 +12,15 @@ function sanitizeAndCheckVideoCommentObject (comment: any) {
 
   if (comment.type === 'Tombstone') {
     return isActivityPubUrlValid(comment.id) &&
-      checkDate(comment.published) &&
-      checkDate(comment.deleted) &&
+      catchErrorAsBoolean(checkDate)(comment.published) &&
+      catchErrorAsBoolean(checkDate)(comment.deleted) &&
       isActivityPubUrlValid(comment.url)
   }
 
   return isActivityPubUrlValid(comment.id) &&
     isCommentContentValid(comment.content) &&
     isActivityPubUrlValid(comment.inReplyTo) &&
-    checkDate(comment.published) &&
+    catchErrorAsBoolean(checkDate)(comment.published) &&
     isActivityPubUrlValid(comment.url) &&
     isArray(comment.to) &&
     (

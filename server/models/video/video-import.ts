@@ -18,11 +18,12 @@ import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/mode
 import { AttributesOnly } from '@shared/core-utils'
 import { VideoImport, VideoImportState } from '../../../shared'
 import { checkVideoImportState, checkVideoImportTargetUrl } from '../../helpers/custom-validators/video-imports'
-import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
+import { checkVideoMagnetUri } from '../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { UserModel } from '../user/user'
 import { getSort, throwIfNotValid } from '../utils'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
+import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
 
 @DefaultScope(() => ({
   include: [
@@ -62,13 +63,13 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoImportTargetUrl', value => throwIfNotValid(value, checkVideoImportTargetUrl, 'targetUrl', true))
+  @Is('VideoImportTargetUrl', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoImportTargetUrl), 'targetUrl', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max))
   targetUrl: string
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoImportMagnetUri', value => throwIfNotValid(value, isVideoMagnetUriValid, 'magnetUri', true))
+  @Is('VideoImportMagnetUri', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoMagnetUri), 'magnetUri', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max)) // Use the same constraints than URLs
   magnetUri: string
 
@@ -79,7 +80,7 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
 
   @AllowNull(false)
   @Default(null)
-  @Is('VideoImportState', value => throwIfNotValid(value, checkVideoImportState, 'state'))
+  @Is('VideoImportState', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoImportState), 'state'))
   @Column
   state: VideoImportState
 

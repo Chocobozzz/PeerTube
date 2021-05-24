@@ -4,9 +4,6 @@ import { exists } from './misc'
 
 const VIDEO_CHANNELS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_CHANNELS
 
-/**
- * @throws {Error}
- */
 function checkVideoChannelDescription (value: string) {
   if (value === null) return true
   if (!validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.DESCRIPTION)) {
@@ -17,7 +14,7 @@ function checkVideoChannelDescription (value: string) {
   return true
 }
 
-function isVideoChannelNameValid (value: string) {
+function checkVideoChannelName (value: string) {
   if (!exists(value)) throw new Error('Should have a video channel name')
   if (!validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.NAME)) {
     const min = VIDEO_CHANNELS_CONSTRAINTS_FIELDS.NAME.min
@@ -27,10 +24,7 @@ function isVideoChannelNameValid (value: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
-function isVideoChannelSupportValid (value: string) {
+function checkVideoChannelSupport (value: string) {
   if (value === null) return true
   if (!exists(value)) throw new Error('Should have a video channel support')
   if (!validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.SUPPORT)) {
@@ -45,6 +39,6 @@ function isVideoChannelSupportValid (value: string) {
 
 export {
   checkVideoChannelDescription,
-  isVideoChannelNameValid,
-  isVideoChannelSupportValid
+  checkVideoChannelName,
+  checkVideoChannelSupport
 }

@@ -26,7 +26,7 @@ import {
   isAPVideoTrackerUrlObject,
   sanitizeAndCheckVideoTorrentObject
 } from '../../helpers/custom-validators/activitypub/videos'
-import { isArray } from '../../helpers/custom-validators/misc'
+import { catchErrorAsBoolean, isArray } from '../../helpers/custom-validators/misc'
 import { checkVideoFileInfoHash } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
@@ -804,7 +804,7 @@ function videoFileActivityUrlToDBAttributes (
     if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
 
     const parsed = magnetUtil.decode(magnet.href)
-    if (!parsed || checkVideoFileInfoHash(parsed.infoHash) === false) {
+    if (!parsed || catchErrorAsBoolean(checkVideoFileInfoHash)(parsed.infoHash) === false) {
       throw new Error('Cannot parse magnet URI ' + magnet.href)
     }
 

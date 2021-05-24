@@ -7,7 +7,7 @@ import { MStreamingPlaylist } from '@server/types/models'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { sha1 } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { isArrayOf } from '../../helpers/custom-validators/misc'
+import { catchErrorAsBoolean, isArrayOf } from '../../helpers/custom-validators/misc'
 import { checkVideoFileInfoHash } from '../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS, MEMOIZE_LENGTH, MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, STATIC_PATHS } from '../../initializers/constants'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
@@ -48,7 +48,9 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   playlistUrl: string
 
   @AllowNull(false)
-  @Is('VideoStreamingPlaylistInfoHashes', value => throwIfNotValid(value, v => isArrayOf(v, checkVideoFileInfoHash), 'info hashes'))
+  @Is('VideoStreamingPlaylistInfoHashes', value => {
+    throwIfNotValid(value, v => isArrayOf(v, catchErrorAsBoolean(checkVideoFileInfoHash)), 'info hashes')
+  })
   @Column(DataType.ARRAY(DataType.STRING))
   p2pMediaLoaderInfohashes: string[]
 

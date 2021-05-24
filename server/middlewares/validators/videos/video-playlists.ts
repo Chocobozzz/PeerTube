@@ -7,7 +7,6 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 import {
-  catchErrorAsBoolean,
   checkIdOrUUID,
   checkId,
   checkUUID,
@@ -142,9 +141,14 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
 
       // Video is unlisted, check we used the uuid to fetch it
       if (videoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED) {
-        if (catchErrorAsBoolean(checkUUID)(req.params.playlistId)) return next()
+        try {
+          checkUUID(req.params.playlistId)
+        } catch {
+          // Don't leak this unlisted video
+          return res.status(HttpStatusCode.NOT_FOUND_404).end()
+        }
 
-        return res.status(HttpStatusCode.NOT_FOUND_404).end()
+        return next()
       }
 
       if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {

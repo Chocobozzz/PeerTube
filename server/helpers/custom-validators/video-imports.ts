@@ -1,14 +1,11 @@
 import 'multer'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_IMPORT_STATES } from '../../initializers/constants'
-import { exists, isFileValid } from './misc'
+import { exists, checkFileValid } from './misc'
 import * as express from 'express'
 import { VideoImportModel } from '../../models/video/video-import'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-/**
- * @throws {Error}
- */
 function checkVideoImportTargetUrl (url: string) {
   const isURLOptions = {
     require_host: true,
@@ -30,9 +27,6 @@ function checkVideoImportTargetUrl (url: string) {
   return true
 }
 
-/**
- * @throws {Error}
- */
 function checkVideoImportState (value: any) {
   if (!exists(value)) throw new Error('Should have a video import state')
   if (VIDEO_IMPORT_STATES[value] === undefined) throw new Error('Should have a known video import')
@@ -44,11 +38,8 @@ const videoTorrentImportRegex = Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT)
                                       .map(m => `(${m})`)
                                       .join('|')
 
-/**
- * @throws {Error}
- */
 function checkVideoImportTorrentFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  return isFileValid(files, videoTorrentImportRegex, 'torrentfile', CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max, true)
+  return checkFileValid(files, videoTorrentImportRegex, 'torrentfile', CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max, true)
 }
 
 async function doesVideoImportExist (id: number, res: express.Response) {

@@ -22,13 +22,13 @@ import {
   isUserPasswordValid,
   isUserPasswordValidOrEmpty,
   isUserRoleValid,
-  isUserUsernameValid,
+  checkUserUsername,
   isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
-import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
+import { checkVideoChannelName } from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
 import { doesVideoExist } from '../../helpers/middlewares'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
@@ -55,7 +55,7 @@ const usersListValidator = [
 
 const usersAddValidator = [
   body('username')
-    .custom(isUserUsernameValid),
+    .custom(checkUserUsername),
   body('password')
     .custom(isUserPasswordValidOrEmpty).withMessage('Should have a valid password'),
   body('email')
@@ -108,7 +108,7 @@ const usersAddValidator = [
 
 const usersRegisterValidator = [
   body('username')
-    .custom(isUserUsernameValid),
+    .custom(checkUserUsername),
   body('password')
     .custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email')
@@ -121,7 +121,7 @@ const usersRegisterValidator = [
     .custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
   body('channel.displayName')
     .optional()
-    .custom(isVideoChannelNameValid),
+    .custom(checkVideoChannelName),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })

@@ -5,7 +5,7 @@ import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoImportCreate } from '@shared/models/videos/import/video-import-create.model'
 import { checkId, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { checkVideoImportTargetUrl, checkVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
-import { isVideoMagnetUriValid, checkVideoName } from '../../../helpers/custom-validators/videos'
+import { checkVideoMagnetUri, checkVideoName } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
@@ -23,7 +23,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     .custom(checkVideoImportTargetUrl),
   body('magnetUri')
     .optional()
-    .custom(isVideoMagnetUriValid),
+    .custom(checkVideoMagnetUri),
   body('torrentfile')
     .custom((value, { req }) => checkVideoImportTorrentFile(req.files)),
   body('name')

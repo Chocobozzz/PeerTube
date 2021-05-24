@@ -1,9 +1,6 @@
 import { exists } from './misc'
 import { FollowState } from '@shared/models'
 
-/**
- * @throws {Error}
- */
 function checkFollowState (value: FollowState) {
   if (!exists(value)) throw new Error('Should have a follow state')
   const possibleValues = [ 'pending', 'accepted' ]

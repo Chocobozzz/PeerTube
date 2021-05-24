@@ -6,7 +6,7 @@ registerTSPaths()
 import * as program from 'commander'
 import * as prompt from 'prompt'
 import { getNetrc, getSettings, writeSettings } from './cli'
-import { isUserUsernameValid } from '../helpers/custom-validators/users'
+import { checkUserUsername } from '../helpers/custom-validators/users'
 import { getAccessToken } from '../../shared/extra-utils'
 import * as CliTable3 from 'cli-table3'
 import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
@@ -80,7 +80,7 @@ program
           required: true
         },
         username: {
-          conform: (value) => catchErrorAsBoolean(isUserUsernameValid)(value),
+          conform: (value) => catchErrorAsBoolean(checkUserUsername)(value),
           message: 'Name must be only letters, spaces, or dashes',
           required: true
         },

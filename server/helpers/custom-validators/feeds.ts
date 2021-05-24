@@ -1,8 +1,5 @@
 import { exists } from './misc'
 
-/**
- * @throws {Error}
- */
 function checkRSSFeedFormat (value: string) {
   if (!exists(value)) throw new Error('Should have a format')
 

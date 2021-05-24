@@ -29,9 +29,9 @@ import { AttributesOnly } from '@shared/core-utils'
 import {
   isVideoFileExtnameValid,
   checkVideoFileInfoHash,
-  isVideoFileResolutionValid,
-  isVideoFileSizeValid,
-  isVideoFPSResolutionValid
+  checkVideoFileResolution,
+  checkVideoFileSize,
+  checkVideoFPSResolution
 } from '../../helpers/custom-validators/videos'
 import {
   LAZY_STATIC_PATHS,
@@ -47,6 +47,7 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
@@ -158,12 +159,12 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   updatedAt: Date
 
   @AllowNull(false)
-  @Is('VideoFileResolution', value => throwIfNotValid(value, isVideoFileResolutionValid, 'resolution'))
+  @Is('VideoFileResolution', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoFileResolution), 'resolution'))
   @Column
   resolution: number
 
   @AllowNull(false)
-  @Is('VideoFileSize', value => throwIfNotValid(value, isVideoFileSizeValid, 'size'))
+  @Is('VideoFileSize', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoFileSize), 'size'))
   @Column(DataType.BIGINT)
   size: number
 
@@ -173,13 +174,13 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   extname: string
 
   @AllowNull(true)
-  @Is('VideoFileInfohash', value => throwIfNotValid(value, checkVideoFileInfoHash, 'info hash', true))
+  @Is('VideoFileInfohash', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoFileInfoHash), 'info hash', true))
   @Column
   infoHash: string
 
   @AllowNull(false)
   @Default(-1)
-  @Is('VideoFileFPS', value => throwIfNotValid(value, isVideoFPSResolutionValid, 'fps'))
+  @Is('VideoFileFPS', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoFPSResolution), 'fps'))
   @Column
   fps: number
 

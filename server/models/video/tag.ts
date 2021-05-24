@@ -7,6 +7,7 @@ import { checkVideoTag } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoTagModel } from './video-tag'
+import { catchErrorAsBoolean } from '@server/helpers/custom-validators/misc'
 
 @Table({
   tableName: 'tag',
@@ -25,7 +26,7 @@ import { VideoTagModel } from './video-tag'
 export class TagModel extends Model<Partial<AttributesOnly<TagModel>>> {
 
   @AllowNull(false)
-  @Is('VideoTag', value => throwIfNotValid(value, checkVideoTag, 'tag'))
+  @Is('VideoTag', value => throwIfNotValid(value, catchErrorAsBoolean(checkVideoTag), 'tag'))
   @Column
   name: string
 
