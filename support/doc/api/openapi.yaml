@@ -22,7 +22,7 @@ info:
     - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
 
     See the [REST API quick start](https://docs.joinpeertube.org/api-rest-getting-started) for a few
-    examples of using with the PeerTube API.
+    examples of using the PeerTube API.
 
     # Authentication
 
@@ -125,7 +125,7 @@ tags:
     description: |
       As a visitor, you can use this API to open an account (if registrations are open on
       that PeerTube instance). As an admin, you should use the dedicated [User creation 
-      API](#operation/createUser) instead.
+      API](#operation/addUser) instead.
   - name: Session
     x-displayName: Login/Logout
     description: |
@@ -690,7 +690,7 @@ paths:
   /users:
     post:
       summary: Create a user
-      operationId: createUser
+      operationId: addUser
       security:
         - OAuth2:
           - admin
@@ -705,18 +705,18 @@ paths:
                 $ref: '#/components/schemas/AddUserResponse'
           links:
             # GET /users/{id}
-            GetUserId:
-              operationId: getUserId
+            GetUser:
+              operationId: getUser
               parameters:
                 id: '$response.body#/user/id'
             # PUT /users/{id}
-            PutUserId:
-              operationId: putUserId
+            PutUser:
+              operationId: putUser
               parameters:
                 id: '$response.body#/user/id'
             # DELETE /users/{id}
-            DelUserId:
-              operationId: delUserId
+            DelUser:
+              operationId: delUser
               parameters:
                 id: '$response.body#/user/id'
         '403':
@@ -764,7 +764,7 @@ paths:
           - admin
       tags:
         - Users
-      operationId: delUserId
+      operationId: delUser
       responses:
         '204':
           description: successful operation
@@ -774,7 +774,7 @@ paths:
         - OAuth2: []
       tags:
         - Users
-      operationId: getUserId
+      operationId: getUser
       parameters:
         - name: withStats
           in: query
@@ -799,7 +799,7 @@ paths:
         - OAuth2: []
       tags:
         - Users
-      operationId: putUserId
+      operationId: putUser
       responses:
         '204':
           description: successful operation
@@ -1493,6 +1493,7 @@ paths:
   /videos:
     get:
       summary: List videos
+      operationId: getVideos
       tags:
         - Video
       parameters:
@@ -2024,7 +2025,7 @@ paths:
   /videos/live:
     post:
       summary: Create a live
-      operationId: createLive
+      operationId: addLive
       security:
         - OAuth2: []
       tags:
@@ -2874,7 +2875,7 @@ paths:
     post:
       summary: Create a video playlist
       description: If the video playlist is set as public, `videoChannelId` is mandatory.
-      operationId: createPlaylist
+      operationId: addPlaylist
       security:
         - OAuth2: []
       tags:
@@ -2994,6 +2995,7 @@ paths:
   /video-playlists/{playlistId}/videos:
     get:
       summary: 'List videos of a playlist'
+      operationId: getVideoPlaylistVideos
       tags:
         - Videos
         - Video Playlists
@@ -3008,6 +3010,7 @@ paths:
                 $ref: '#/components/schemas/VideoListResponse'
     post:
       summary: Add a video in a playlist
+      operationId: addVideoPlaylistVideo
       security:
         - OAuth2: []
       tags:
@@ -3054,6 +3057,7 @@ paths:
   /video-playlists/{playlistId}/videos/reorder:
     post:
       summary: 'Reorder a playlist'
+      operationId: reorderVideoPlaylist
       security:
         - OAuth2: []
       tags:
@@ -3088,6 +3092,7 @@ paths:
   /video-playlists/{playlistId}/videos/{playlistElementId}:
     put:
       summary: Update a playlist element
+      operationId: putVideoPlaylistVideo
       security:
         - OAuth2: []
       tags:
@@ -3114,6 +3119,7 @@ paths:
                   description: Stop the video at this specific timestamp
     delete:
       summary: Delete an element from a playlist
+      operationId: delVideoPlaylistVideo
       security:
         - OAuth2: []
       tags:
@@ -3368,6 +3374,7 @@ paths:
       tags:
         - Search
       summary: Search videos
+      operationId: searchVideos
       parameters:
         - name: search
           in: query
@@ -3444,6 +3451,7 @@ paths:
       tags:
         - Search
       summary: Search channels
+      operationId: searchChannels
       parameters:
         - name: search
           in: query
@@ -3632,6 +3640,7 @@ paths:
       tags:
         - Video Mirroring
       summary: List videos being mirrored
+      operationId: getMirroredVideos
       security:
         - OAuth2:
           - admin
@@ -3661,6 +3670,7 @@ paths:
       tags:
         - Video Mirroring
       summary: Mirror a video
+      operationId: putMirroredVideo
       security:
         - OAuth2:
           - admin
@@ -3689,6 +3699,7 @@ paths:
       tags:
         - Video Mirroring
       summary: Delete a mirror done on a video
+      operationId: delMirroredVideo
       security:
         - OAuth2:
           - admin
@@ -3710,6 +3721,7 @@ paths:
       tags:
         - Feeds
       summary: List comments on videos
+      operationId: getSyndicatedComments
       parameters:
         - name: format
           in: path
@@ -3804,6 +3816,7 @@ paths:
       tags:
         - Feeds
       summary: List videos
+      operationId: getSyndicatedVideos
       parameters:
         - name: format
           in: path
@@ -3892,6 +3905,7 @@ paths:
         - Feeds
         - Account
       summary: List videos of subscriptions tied to a token
+      operationId: getSyndicatedSubscriptionVideos
       parameters:
         - name: format
           in: path
@@ -3954,6 +3968,7 @@ paths:
       tags:
         - Plugins
       summary: List plugins
+      operationId: getPlugins
       security:
         - OAuth2:
           - admin
@@ -3982,6 +3997,7 @@ paths:
       tags:
         - Plugins
       summary: List available plugins
+      operationId: getAvailablePlugins
       security:
         - OAuth2:
           - admin
@@ -4016,6 +4032,7 @@ paths:
       tags:
         - Plugins
       summary: Install a plugin
+      operationId: addPlugin
       security:
         - OAuth2:
           - admin
@@ -4050,6 +4067,7 @@ paths:
       tags:
         - Plugins
       summary: Update a plugin
+      operationId: updatePlugin
       security:
         - OAuth2:
           - admin
@@ -4086,6 +4104,7 @@ paths:
       tags:
         - Plugins
       summary: Uninstall a plugin
+      operationId: uninstallPlugin
       security:
         - OAuth2:
           - admin
@@ -4112,6 +4131,7 @@ paths:
       tags:
         - Plugins
       summary: Get a plugin
+      operationId: getPlugin
       security:
         - OAuth2:
           - admin
