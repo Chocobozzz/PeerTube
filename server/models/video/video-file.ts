@@ -402,6 +402,10 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return VideoFileModel.destroy(options)
   }
 
+  hasTorrent () {
+    return this.infoHash && this.torrentFilename
+  }
+
   getVideoOrStreamingPlaylist (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo | MStreamingPlaylistVideo {
     if (this.videoId) return (this as MVideoFileVideo).Video
 
