@@ -236,7 +236,6 @@ async function getLiveTranscodingCommand (options: {
     }
   ]
 
-  command.outputOption('-preset superfast')
   command.outputOption('-sc_threshold 0')
 
   addDefaultEncoderGlobalParams({ command })
