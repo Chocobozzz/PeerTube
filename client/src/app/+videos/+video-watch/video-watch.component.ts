@@ -674,7 +674,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.one('ended', () => {
         if (this.video.isLive) {
-          this.video.state.id = VideoState.LIVE_ENDED
+          this.zone.run(() => this.video.state.id = VideoState.LIVE_ENDED)
         }
       })
 
