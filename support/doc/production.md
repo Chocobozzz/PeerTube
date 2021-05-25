@@ -38,6 +38,7 @@ or use `adduser` to create it interactively.
 Create the production database and a peertube user inside PostgreSQL:
 
 ```
+$ cd /var/www/peertube
 $ sudo -u postgres createuser -P peertube
 ```
 
