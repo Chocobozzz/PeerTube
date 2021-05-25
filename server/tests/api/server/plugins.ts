@@ -290,7 +290,7 @@ describe('Test plugins', function () {
   })
 
   it('Should update the plugin and the theme', async function () {
-    this.timeout(30000)
+    this.timeout(90000)
 
     // Wait the scheduler that get the latest plugins versions
     await wait(6000)

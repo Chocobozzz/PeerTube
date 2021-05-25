@@ -132,7 +132,7 @@ function checkConfig () {
   // Broadcast message
   if (CONFIG.BROADCAST_MESSAGE.ENABLED) {
     const currentLevel = CONFIG.BROADCAST_MESSAGE.LEVEL
-    const available = [ 'info', 'warn', 'error' ]
+    const available = [ 'info', 'warning', 'error' ]
 
     if (available.includes(currentLevel) === false) {
       return 'Broadcast message level should be ' + available.join(' or ') + ' instead of ' + currentLevel
