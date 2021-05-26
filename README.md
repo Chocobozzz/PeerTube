@@ -135,8 +135,8 @@ guide](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.
 You can also join the cheerful bunch that makes our community:
 
 * Chat<a name="contact"></a>:
-  * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
   * Matrix (bridged on IRC and [Discord](https://discord.gg/wj8DDUT)) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
+  * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
 * Forum:
   * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
 
