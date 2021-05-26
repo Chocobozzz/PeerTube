@@ -1008,6 +1008,7 @@ export class VideoModel extends Model {
       attributes: [ 'id' ],
       where: {
         isLive: true,
+        remote: false,
         state: VideoState.PUBLISHED
       }
     }
