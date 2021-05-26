@@ -1,5 +1,5 @@
 import { sample } from 'lodash'
-import { FindOptions, literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
+import { literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
