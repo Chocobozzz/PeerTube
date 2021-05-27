@@ -22,6 +22,7 @@ import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/pee
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
 import { GlobalIconName } from '../shared/shared-icons/global-icon.component'
+import { HooksService } from '../core/plugins/hooks.service'
 
 const logger = debug('peertube:menu:MenuComponent')
 
@@ -71,8 +72,6 @@ export class MenuComponent implements OnInit {
   currentInterfaceLanguage: string
   menuItems: MenuItem[]
 
-  commonMenuLinks: MenuLink[] = []
-
   private languages: VideoConstant<string>[] = []
   private serverConfig: ServerConfig
   private routesPerRight: { [role in UserRight]?: string } = {
@@ -94,7 +93,8 @@ export class MenuComponent implements OnInit {
     private screenService: ScreenService,
     private menuService: MenuService,
     private modalService: PeertubeModalService,
-    private router: Router
+    private router: Router,
+    private hooks: HooksService
   ) { }
 
   ngOnInit () {
@@ -102,14 +102,14 @@ export class MenuComponent implements OnInit {
     this.serverService.getConfig()
       .subscribe(config => {
         this.serverConfig = config
-        this.buildMenuLinks()
-        this.setMenuItems()
+
+        this.computeMenuItems()
       })
 
     this.isLoggedIn = this.authService.isLoggedIn()
     if (this.isLoggedIn === true) {
       this.user = this.authService.getUser()
-      this.setMenuItems()
+      this.computeMenuItems()
 
       this.computeNSFWPolicy()
       this.computeVideosLink()
@@ -124,7 +124,7 @@ export class MenuComponent implements OnInit {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true
           this.user = this.authService.getUser()
-          this.setMenuItems()
+          this.computeMenuItems()
 
           this.computeAdminAccess()
           this.computeVideosLink()
@@ -156,51 +156,6 @@ export class MenuComponent implements OnInit {
 
     this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
-  }
-
-  setMenuItems () {
-    this.menuItems = [
-      {
-        key: 'in-my-library',
-        title: 'In my library',
-        children: [
-          {
-            path: '/my-library/videos',
-            isHidden: !this.user?.canSeeVideosLink,
-            icon: 'videos' as GlobalIconName,
-            menuLabel: $localize`Videos`,
-            label: $localize`Videos`,
-            priority: 100
-          },
-          {
-            path: '/my-library/video-playlists',
-            icon: 'playlists' as GlobalIconName,
-            menuLabel: $localize`Playlists`,
-            label: $localize`Playlists`,
-            priority: 110
-          },
-          {
-            path: '/videos/subscriptions',
-            icon: 'subscriptions' as GlobalIconName,
-            menuLabel: $localize`Subscriptions`,
-            label: $localize`Subscriptions`,
-            priority: 120
-          },
-          {
-            path: '/my-library/history/videos',
-            icon: 'history' as GlobalIconName,
-            menuLabel: $localize`History`,
-            label: $localize`History`,
-            priority: 130
-          }
-        ].filter(({ isHidden }) => isHidden !== false)
-      },
-      {
-        key: 'on-instance',
-        title: `On ${this.instanceName}`,
-        children: this.commonMenuLinks
-      }
-    ]
   }
 
   isRegistrationAllowed () {
@@ -312,8 +267,47 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  private buildMenuLinks () {
-    this.commonMenuLinks = this.menuService.buildCommonLinks(this.serverConfig)
+  private setMenuItems = (items: MenuItem[]) => {
+    this.menuItems = items
+  }
+
+  private computeMenuItems () {
+    const menuItems = [
+      {
+        key: 'in-my-library',
+        title: 'In my library',
+        children: [
+          {
+            path: '/my-library/videos',
+            isHidden: !this.user?.canSeeVideosLink,
+            icon: 'videos' as GlobalIconName,
+            menuLabel: 'Videos'
+          },
+          {
+            path: '/my-library/video-playlists',
+            icon: 'playlists' as GlobalIconName,
+            menuLabel: 'Playlists'
+          },
+          {
+            path: '/videos/subscriptions',
+            icon: 'subscriptions' as GlobalIconName,
+            menuLabel: 'Subscriptions'
+          },
+          {
+            path: '/my-library/history/videos',
+            icon: 'history' as GlobalIconName,
+            menuLabel: 'History'
+          }
+        ].filter(({ isHidden }) => isHidden !== false)
+      },
+      {
+        key: 'on-instance',
+        title: `On ${this.instanceName}`,
+        children: this.menuService.buildCommonLinks(this.serverConfig)
+      }
+    ]
+
+    this.hooks.wrapFun(this.setMenuItems, menuItems, 'top-menu', 'filter:top-menu.params', 'filter:top-menu.result')
   }
 
   private buildUserLanguages () {

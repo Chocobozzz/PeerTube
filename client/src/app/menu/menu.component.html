@@ -95,11 +95,11 @@
         <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button">Create an account</a>
       </div>
 
-      <div *ngFor="let menuItem of menuItems" [class]="menuItem.key">
+      <div *ngFor="let menuItem of menuItems" [class]="menuItem.key + ' menu-block'">
         <div i18n class="block-title">{{menuItem.title}}</div>
 
         <a *ngFor="let menuLink of menuItem.children" class="menu-link" [routerLink]="menuLink.path" routerLinkActive="active">
-          <my-global-icon [iconName]="menuLink.icon" aria-hidden="true"></my-global-icon>
+          <my-global-icon *ngIf="menuLink.icon" [iconName]="menuLink.icon" aria-hidden="true"></my-global-icon>
           <ng-container i18n>{{menuLink.menuLabel}}</ng-container>
         </a>
       </div>
