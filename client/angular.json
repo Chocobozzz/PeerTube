@@ -160,6 +160,7 @@
               "debug",
               "p2p-media-loader-hlsjs",
               "video.js",
+              "sha1",
               "postcss"
             ],
             "scripts": [],
