@@ -1,4 +1,5 @@
-@use '_variables';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 @mixin section-label-responsive {
   color: pvar(--mainColor);

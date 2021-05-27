@@ -1,3 +1,5 @@
+@use '_mixins' as *;
+
 @keyframes bezels-fadeout {
   from {
     opacity: 1;

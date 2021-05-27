@@ -1,4 +1,5 @@
-@use '_variables';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $ng-select-highlight: #f2690d;
 // $ng-select-primary-text: #333 !default;

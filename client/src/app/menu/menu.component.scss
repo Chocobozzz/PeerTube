@@ -1,5 +1,6 @@
-@use '_variables';
-@use '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $menu-link-icon-size: 22px;
 $menu-link-icon-margin-right: 18px;
@@ -220,7 +221,7 @@ my-actor-avatar {
 
   a {
     $icon-size: 13px;
-    $additional-margin: ($menu-link-icon-size - $icon-size) / 2;
+    $additional-margin: math.div($menu-link-icon-size - $icon-size, 2);
 
     font-size: 14px;
     width: 100%;

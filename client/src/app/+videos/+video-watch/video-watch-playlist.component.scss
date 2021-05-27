@@ -1,7 +1,7 @@
-@use '_variables';
-@use '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 @use '_bootstrap-variables';
-@use '_miniature';
+@use '_miniature' as *;
 
 .playlist {
   min-width: 200px;

@@ -1,6 +1,7 @@
-@use '_variables';
-@use '_mixins';
-@use '_miniature';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .margin-content {
   @include grid-videos-miniature-margins;
@@ -100,7 +101,7 @@ my-subscribe-button {
   position: absolute;
   right: 0;
   background: linear-gradient(90deg, transparent 0, pvar(--channelBackgroundColor) 45px);
-  padding: ($video-thumbnail-medium-height / 2 - 10px) 15px 0 60px;
+  padding: (math.div($video-thumbnail-medium-height, 2) - 10px) 15px 0 60px;
   z-index: z(miniature) + 1;
 
   a {

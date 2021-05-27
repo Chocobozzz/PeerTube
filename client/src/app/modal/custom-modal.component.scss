@@ -1,5 +1,5 @@
-@use '_mixins';
-@use '_variables';
+@use '_mixins' as *;
+@use '_variables' as *;
 
 .modal-body {
   font-size: 15px;

@@ -1,8 +1,7 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
-@use '_bootstrap-variables';
-@use '_variables';
-@use '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 @use '_fonts';
 

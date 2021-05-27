@@ -1,4 +1,4 @@
-@use '_mixins';
+@use '_mixins' as *;
 
 @mixin main {
   @include actor-avatar-size(35px);

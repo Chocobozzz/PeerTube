@@ -1,5 +1,5 @@
-@use '_variables';
-@use '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 input[type=text] {
   @include peertube-input-text(300px);

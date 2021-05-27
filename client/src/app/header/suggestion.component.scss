@@ -1,4 +1,5 @@
-@use '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 a {
   @include disable-default-a-behaviour;

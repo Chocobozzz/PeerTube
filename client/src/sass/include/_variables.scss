@@ -1,5 +1,4 @@
 @use 'sass:math';
-@use '_bootstrap-variables';
 
 $small-view: 800px;
 $mobile-view: 500px;
@@ -54,7 +53,8 @@ $sub-menu-height: 81px;
 
 $channel-background-color: #f6ede8;
 
-$banner-inverted-ratio: #{math.div(1, 6)};
+// FIXME: cannot use math.div here because of compilation error
+$banner-inverted-ratio: 0.1666666666;
 
 $max-channels-width: 1200px;
 

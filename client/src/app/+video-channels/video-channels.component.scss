@@ -1,7 +1,7 @@
-@use '_variables';
-@use '_mixins';
-@use '_actor';
-@use '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_actor' as *;
+@use '_miniature' as *;
 
 .root {
   --myGlobalTopPadding: 60px;

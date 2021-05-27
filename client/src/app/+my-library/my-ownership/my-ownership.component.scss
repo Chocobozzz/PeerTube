@@ -1,5 +1,6 @@
-@use '_miniature';
-@use '_mixins';
+@use 'sass:math';
+@use '_miniature' as *;
+@use '_mixins' as *;
 
 .chip {
   @include chip;
@@ -19,7 +20,7 @@
     @include margin-right(0.5rem);
 
     height: $image-height;
-    width: #{(16/9) * $image-height};
+    width: #{math.div(16, 9) * $image-height};
     border-radius: 2px;
     border: 0;
     background: transparent;

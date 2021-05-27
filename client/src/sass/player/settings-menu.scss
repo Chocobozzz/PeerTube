@@ -1,6 +1,6 @@
-@use '_variables';
-@use '_mixins';
-@use './_player-variables';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
 
 $setting-transition-duration: 0.15s;
 $setting-transition-easing: ease-out;

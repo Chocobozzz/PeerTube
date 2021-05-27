@@ -1,5 +1,5 @@
-@use '_variables';
-@use '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 my-search-typeahead {
   @include margin-right(15px);

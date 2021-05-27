@@ -1,6 +1,6 @@
-@use '_variables';
-@use '_mixins';
-@use '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 $thumbnail-width: 130px;
 $thumbnail-height: 72px;

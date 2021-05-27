@@ -1,6 +1,7 @@
-@use '_variables';
-@use '_mixins';
-@use '_miniature';
+@use 'sass:math';
+@use '_mixins' as *;
+@use '_variables' as *;
+@use '_miniature' as *;
 
 .moderation-expanded {
   font-size: 90%;
@@ -82,7 +83,7 @@ my-action-dropdown.show {
     @include margin-right(0.5rem);
 
     height: $image-height;
-    width: #{(16/9) * $image-height};
+    width: #{math.div(16, 9) * $image-height};
     border-radius: 2px;
     border: 0;
     background: transparent;

@@ -1,6 +1,6 @@
-@use '_variables';
-@use '_mixins';
-@use '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .section-title {
   // make the element span a full grid row within .videos grid

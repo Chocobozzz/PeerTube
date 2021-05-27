@@ -1,9 +1,10 @@
-@use '_variables';
-@use '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
 @use '_bootstrap-variables';
-@use '_miniature';
+@use '_miniature' as *;
 
-$player-factor: 16/9;
+$player-factor: math.div(16, 9);
 $video-info-margin-left: 44px;
 
 @function getPlayerHeight ($width) {

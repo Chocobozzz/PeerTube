@@ -1,3 +1,7 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
+
 $playlist-menu-width: 350px;
 
 .vjs-playlist-menu {
