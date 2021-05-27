@@ -127,6 +127,7 @@ import { PluginManager } from './server/lib/plugins/plugin-manager'
 import { LiveManager } from './server/lib/live-manager'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 
 // ----------- Command line -----------
 
@@ -262,7 +263,8 @@ async function startApplication () {
 
   await Promise.all([
     Emailer.Instance.checkConnection(),
-    JobQueue.Instance.init()
+    JobQueue.Instance.init(),
+    ServerConfigManager.Instance.init()
   ])
 
   // Caches initializations

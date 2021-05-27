@@ -14,6 +14,6 @@ export class AboutPeertubeContributorsComponent implements OnInit {
   constructor (private markdownService: MarkdownService) { }
 
   async ngOnInit () {
-    this.creditsHtml = await this.markdownService.completeMarkdownToHTML(this.markdown)
+    this.creditsHtml = await this.markdownService.unsafeMarkdownToHTML(this.markdown, true)
   }
 }

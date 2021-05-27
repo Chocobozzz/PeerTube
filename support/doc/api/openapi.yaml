@@ -247,6 +247,8 @@ tags:
 
       Administrators can also enable the use of a remote search system, indexing
       videos and channels not could be not federated by the instance.
+  - name: Homepage
+    description: Get and update the custom homepage
   - name: Video Mirroring
     description: |
       PeerTube instances can mirror videos from one another, and help distribute some videos.
@@ -281,6 +283,9 @@ x-tagGroups:
   - name: Search
     tags:
       - Search
+  - name: Custom pages
+    tags:
+      - Homepage
   - name: Moderation
     tags:
       - Abuses
@@ -475,6 +480,40 @@ paths:
           - admin
       responses:
         '200':
+          description: successful operation
+
+  /custom-pages/homepage/instance:
+    get:
+      summary: Get instance custom homepage
+      tags:
+        - Homepage
+      responses:
+        '404':
+          description: No homepage set
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomHomepage'
+    put:
+      summary: Set instance custom homepage
+      tags:
+        - Homepage
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: content of the homepage, that will be injected in the client
+      responses:
+        '204':
           description: successful operation
 
   /jobs/{state}:
@@ -5740,6 +5779,12 @@ components:
                     indexUrl:
                       type: string
                       format: url
+        homepage:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+
     ServerConfigAbout:
       properties:
         instance:
@@ -5930,6 +5975,12 @@ components:
                   type: boolean
                 manualApproval:
                   type: boolean
+
+    CustomHomepage:
+      properties:
+        content:
+          type: string
+
     Follow:
       properties:
         id:

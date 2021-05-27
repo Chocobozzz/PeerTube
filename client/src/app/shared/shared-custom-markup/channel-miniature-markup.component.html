@@ -1,0 +1,8 @@
+<div *ngIf="channel" class="channel">
+  <my-actor-avatar [channel]="channel" size="34"></my-actor-avatar>
+
+  <div class="display-name">{{ channel.displayName }}</div>
+  <div class="username">{{ channel.name }}</div>
+
+  <div class="description">{{ channel.description }}</div>
+</div>

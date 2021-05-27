@@ -1,0 +1,7 @@
+@import '_variables';
+@import '_mixins';
+
+my-video-miniature {
+  display: inline-block;
+  width: $video-thumbnail-width;
+}

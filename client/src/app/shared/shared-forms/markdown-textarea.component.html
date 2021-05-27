@@ -19,6 +19,7 @@
       <a ngbNavLink i18n>Complete preview</a>
 
       <ng-template ngbNavContent>
+        <div #previewElement></div>
         <div [innerHTML]="previewHTML"></div>
       </ng-template>
     </ng-container>

@@ -1,7 +1,18 @@
 import { fromEvent } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
+import { GlobalIconName } from '@app/shared/shared-icons'
+import { sortObjectComparator } from '@shared/core-utils/miscs/miscs'
+import { ServerConfig } from '@shared/models/server'
 import { ScreenService } from '../wrappers'
+
+export type MenuLink = {
+  icon: GlobalIconName
+  label: string
+  menuLabel: string
+  path: string
+  priority: number
+}
 
 @Injectable()
 export class MenuService {
@@ -46,6 +57,53 @@ export class MenuService {
 
   onResize () {
     this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
+  }
+
+  buildCommonLinks (config: ServerConfig) {
+    let entries: MenuLink[] = [
+      {
+        icon: 'globe' as 'globe',
+        label: $localize`Discover videos`,
+        menuLabel: $localize`Discover`,
+        path: '/videos/overview',
+        priority: 150
+      },
+      {
+        icon: 'trending' as 'trending',
+        label: $localize`Trending videos`,
+        menuLabel: $localize`Trending`,
+        path: '/videos/trending',
+        priority: 140
+      },
+      {
+        icon: 'recently-added' as 'recently-added',
+        label: $localize`Recently added videos`,
+        menuLabel: $localize`Recently added`,
+        path: '/videos/recently-added',
+        priority: 130
+      },
+      {
+        icon: 'octagon' as 'octagon',
+        label: $localize`Local videos`,
+        menuLabel: $localize`Local videos`,
+        path: '/videos/local',
+        priority: 120
+      }
+    ]
+
+    if (config.homepage.enabled) {
+      entries.push({
+        icon: 'home' as 'home',
+        label: $localize`Home`,
+        menuLabel: $localize`Home`,
+        path: '/home',
+        priority: 160
+      })
+    }
+
+    entries = entries.sort(sortObjectComparator('priority', 'desc'))
+
+    return entries
   }
 
   private handleWindowResize () {

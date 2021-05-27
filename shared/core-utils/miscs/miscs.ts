@@ -28,9 +28,24 @@ function isCatchable (value: any) {
   return value && typeof value.catch === 'function'
 }
 
+function sortObjectComparator (key: string, order: 'asc' | 'desc') {
+  return (a: any, b: any) => {
+    if (a[key] < b[key]) {
+      return order === 'asc' ? -1 : 1
+    }
+
+    if (a[key] > b[key]) {
+      return order === 'asc' ? 1 : -1
+    }
+
+    return 0
+  }
+}
+
 export {
   randomInt,
   compareSemVer,
   isPromise,
-  isCatchable
+  isCatchable,
+  sortObjectComparator
 }
