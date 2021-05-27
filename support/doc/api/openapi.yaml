@@ -1926,7 +1926,7 @@ paths:
         - Video Upload
       parameters:
         - name: upload_id
-          in: path
+          in: query
           required: true
           description: |
             Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
@@ -2003,7 +2003,7 @@ paths:
         - Video Upload
       parameters:
         - name: upload_id
-          in: path
+          in: query
           required: true
           description: |
             Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
