@@ -269,6 +269,8 @@ export class MenuComponent implements OnInit {
 
   private setMenuItems = (items: MenuItem[]) => {
     this.menuItems = items
+
+    return this.menuItems
   }
 
   private computeMenuItems () {
