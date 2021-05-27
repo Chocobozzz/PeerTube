@@ -106,8 +106,6 @@ export class MenuComponent implements OnInit {
         this.setMenuItems()
       })
 
-    this.setMenuItems()
-
     this.isLoggedIn = this.authService.isLoggedIn()
     if (this.isLoggedIn === true) {
       this.user = this.authService.getUser()
@@ -199,7 +197,7 @@ export class MenuComponent implements OnInit {
       },
       {
         key: 'on-instance',
-        title: `On ${this.instanceName || 'instance'}`,
+        title: `On ${this.instanceName}`,
         children: this.commonMenuLinks
       }
     ]
