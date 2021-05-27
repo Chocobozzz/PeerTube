@@ -7,7 +7,6 @@ import {
   VideoMiniatureMarkupData,
   VideosListMarkupData
 } from '@shared/models'
-import { ButtonComponent, DateToggleComponent } from '../shared-main'
 import { ChannelMiniatureMarkupComponent } from './channel-miniature-markup.component'
 import { DynamicElementService } from './dynamic-element.service'
 import { EmbedMarkupComponent } from './embed-markup.component'
@@ -20,8 +19,6 @@ type BuilderFunction = (el: HTMLElement) => ComponentRef<any>
 @Injectable()
 export class CustomMarkupService {
   private builders: { [ selector: string ]: BuilderFunction } = {
-    'peertube-button': el => this.buttonBuilder(el),
-    'peertube-date': el => this.dateBuilder(el),
     'peertube-video-embed': el => this.embedBuilder(el, 'video'),
     'peertube-playlist-embed': el => this.embedBuilder(el, 'playlist'),
     'peertube-video-miniature': el => this.videoMiniatureBuilder(el),
@@ -70,22 +67,6 @@ export class CustomMarkupService {
     const component = this.dynamicElementService.createElement(EmbedMarkupComponent)
 
     this.dynamicElementService.setModel(component, { uuid: data.uuid, type })
-
-    return component
-  }
-
-  private buttonBuilder (_el: HTMLElement) {
-    const component = this.dynamicElementService.createElement(ButtonComponent)
-
-    this.dynamicElementService.setModel(component, { loading: true, label: 'toto' })
-
-    return component
-  }
-
-  private dateBuilder (_el: HTMLElement) {
-    const component = this.dynamicElementService.createElement(DateToggleComponent)
-
-    this.dynamicElementService.setModel(component, { date: new Date() })
 
     return component
   }
