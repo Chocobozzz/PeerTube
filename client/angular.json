@@ -138,7 +138,7 @@
             "tsConfig": "tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "baseHref": "/",
-            "deployUrl": "client/",
+            "deployUrl": "",
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/sass/include"
@@ -161,7 +161,8 @@
               "p2p-media-loader-hlsjs",
               "video.js",
               "sha1",
-              "postcss"
+              "postcss",
+              "core-js/features/reflect"
             ],
             "scripts": [],
             "vendorChunk": true,
