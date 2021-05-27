@@ -1,46 +1,50 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { AccountBlock, ServerBlock, Video, UserNotification, UserNotificationType } from '../../../../shared/index'
-import {
-  cleanupTests,
-  createUser,
-  deleteVideoComment,
-  doubleFollow,
-  flushAndRunMultipleServers,
-  ServerInfo,
-  uploadVideo,
-  userLogin,
-  follow,
-  unfollow
-} from '../../../../shared/extra-utils/index'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { getVideosList, getVideosListWithToken } from '../../../../shared/extra-utils/videos/videos'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  getVideoCommentThreads,
-  getVideoThreadComments,
-  findCommentId
-} from '../../../../shared/extra-utils/videos/video-comments'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import * as chai from 'chai'
 import {
   addAccountToAccountBlocklist,
   addAccountToServerBlocklist,
   addServerToAccountBlocklist,
   addServerToServerBlocklist,
+  addVideoCommentReply,
+  addVideoCommentThread,
+  cleanupTests,
+  createUser,
+  deleteVideoComment,
+  doubleFollow,
+  findCommentId,
+  flushAndRunMultipleServers,
+  follow,
   getAccountBlocklistByAccount,
   getAccountBlocklistByServer,
   getServerBlocklistByAccount,
   getServerBlocklistByServer,
+  getUserNotifications,
+  getVideoCommentThreads,
+  getVideosList,
+  getVideosListWithToken,
+  getVideoThreadComments,
   removeAccountFromAccountBlocklist,
   removeAccountFromServerBlocklist,
   removeServerFromAccountBlocklist,
-  removeServerFromServerBlocklist
-} from '../../../../shared/extra-utils/users/blocklist'
-import { getUserNotifications } from '../../../../shared/extra-utils/users/user-notifications'
+  removeServerFromServerBlocklist,
+  ServerInfo,
+  setAccessTokensToServers,
+  unfollow,
+  uploadVideo,
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import {
+  AccountBlock,
+  ServerBlock,
+  UserNotification,
+  UserNotificationType,
+  Video,
+  VideoComment,
+  VideoCommentThreadTree
+} from '@shared/models'
 
 const expect = chai.expect
 

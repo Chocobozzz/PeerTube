@@ -146,6 +146,8 @@ $video-info-margin-left: 44px;
       }
 
       .video-info-name {
+        @include peertube-word-wrap;
+
         margin-right: 30px;
         min-height: 40px; // Align with the action buttons
         font-size: 27px;
@@ -173,6 +175,7 @@ $video-info-margin-left: 44px;
 
         a {
           @include disable-default-a-behaviour;
+          @include peertube-word-wrap;
 
           color: pvar(--mainForegroundColor);
 

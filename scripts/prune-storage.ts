@@ -11,7 +11,7 @@ import { VideoRedundancyModel } from '../server/models/redundancy/video-redundan
 import * as Bluebird from 'bluebird'
 import { getUUIDFromFilename } from '../server/helpers/utils'
 import { ThumbnailModel } from '../server/models/video/thumbnail'
-import { ActorImageModel } from '../server/models/account/actor-image'
+import { ActorImageModel } from '../server/models/actor/actor-image'
 import { uniq, values } from 'lodash'
 import { ThumbnailType } from '@shared/models'
 

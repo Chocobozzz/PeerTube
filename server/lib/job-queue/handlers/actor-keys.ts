@@ -1,6 +1,6 @@
 import * as Bull from 'bull'
 import { generateAndSaveActorKeys } from '@server/lib/activitypub/actor'
-import { ActorModel } from '@server/models/activitypub/actor'
+import { ActorModel } from '@server/models/actor/actor'
 import { ActorKeysPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 

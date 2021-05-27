@@ -5,6 +5,8 @@ export interface Account extends Actor {
   displayName: string
   description: string
 
+  updatedAt: Date | string
+
   userId?: number
 }
 

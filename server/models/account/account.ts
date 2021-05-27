@@ -17,10 +17,11 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { ModelCache } from '@server/models/model-cache'
+import { AttributesOnly } from '@shared/core-utils'
 import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
 import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
-import { sendDeleteActor } from '../../lib/activitypub/send'
+import { sendDeleteActor } from '../../lib/activitypub/send/send-delete'
 import {
   MAccount,
   MAccountActor,
@@ -30,19 +31,19 @@ import {
   MAccountSummaryFormattable,
   MChannelActor
 } from '../../types/models'
-import { ActorModel } from '../activitypub/actor'
-import { ActorFollowModel } from '../activitypub/actor-follow'
+import { ActorModel } from '../actor/actor'
+import { ActorFollowModel } from '../actor/actor-follow'
+import { ActorImageModel } from '../actor/actor-image'
 import { ApplicationModel } from '../application/application'
-import { ActorImageModel } from './actor-image'
 import { ServerModel } from '../server/server'
 import { ServerBlocklistModel } from '../server/server-blocklist'
+import { UserModel } from '../user/user'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { AccountBlocklistModel } from './account-blocklist'
-import { UserModel } from './user'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
@@ -141,7 +142,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class AccountModel extends Model {
+export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
 
   @AllowNull(false)
   @Column
@@ -411,7 +412,6 @@ export class AccountModel extends Model {
       id: this.id,
       displayName: this.getDisplayName(),
       description: this.description,
-      createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       userId: this.userId ? this.userId : undefined
     }

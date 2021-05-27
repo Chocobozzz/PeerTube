@@ -1,14 +1,15 @@
 import { RegisterClientHelpers } from 'src/types/register-client-option.model'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
-import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
 import {
   ClientHookName,
   clientHookObject,
   ClientScript,
   PluginType,
+  RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
-  ServerConfigPlugin,
-  RegisterClientSettingsScript
+  RegisterClientSettingsScript,
+  RegisterClientVideoFieldOptions,
+  ServerConfigPlugin
 } from '../../../shared/models'
 import { ClientScript as ClientScriptModule } from '../types/client-script.model'
 import { importModule } from './utils'

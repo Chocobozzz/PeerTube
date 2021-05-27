@@ -40,8 +40,10 @@
   }
 
   .icon-menu {
-    background-color: pvar(--mainForegroundColor);
     mask-image: url('../assets/images/misc/menu.svg');
+    -webkit-mask-image: url('../assets/images/misc/menu.svg');
+
+    background-color: pvar(--mainForegroundColor);
     margin: 0 18px 0 20px;
 
     @media screen and (max-width: $mobile-view) {

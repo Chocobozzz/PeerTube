@@ -9,7 +9,9 @@ import {
   MAccountSummaryBlocks,
   MAccountSummaryFormattable,
   MAccountUrl,
-  MAccountUserId,
+  MAccountUserId
+} from '../account'
+import {
   MActor,
   MActorAccountChannelId,
   MActorAPChannel,
@@ -23,7 +25,7 @@ import {
   MActorSummary,
   MActorSummaryFormattable,
   MActorUrl
-} from '../account'
+} from '../actor'
 import { MVideo } from './video'
 
 type Use<K extends keyof VideoChannelModel, M> = PickWith<VideoChannelModel, K, M>

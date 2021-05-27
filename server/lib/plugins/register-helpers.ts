@@ -26,10 +26,10 @@ import {
   PluginVideoLicenceManager,
   PluginVideoPrivacyManager,
   RegisterServerHookOptions,
-  RegisterServerSettingOptions
+  RegisterServerSettingOptions,
+  serverHookObject
 } from '@shared/models'
-import { serverHookObject } from '@shared/models/plugins/server-hook.model'
-import { VideoTranscodingProfilesManager } from '../video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from '../transcoding/video-transcoding-profiles'
 import { buildPluginHelpers } from './plugin-helpers-builder'
 
 type AlterableVideoConstant = 'language' | 'licence' | 'category' | 'privacy' | 'playlistPrivacy'

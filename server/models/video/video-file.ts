@@ -25,6 +25,7 @@ import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
 import { getTorrentFilePath } from '@server/lib/video-paths'
 import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import {
   isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
@@ -149,7 +150,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoFileModel extends Model {
+export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>>> {
   @CreatedAt
   createdAt: Date
 
@@ -399,6 +400,10 @@ export class VideoFileModel extends Model {
     }
 
     return VideoFileModel.destroy(options)
+  }
+
+  hasTorrent () {
+    return this.infoHash && this.torrentFilename
   }
 
   getVideoOrStreamingPlaylist (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo | MStreamingPlaylistVideo {

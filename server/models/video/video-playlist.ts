@@ -19,6 +19,7 @@ import {
 } from 'sequelize-typescript'
 import { v4 as uuidv4 } from 'uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -50,11 +51,11 @@ import {
   MVideoPlaylistIdWithElements
 } from '../../types/models/video/video-playlist'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
+import { ActorModel } from '../actor/actor'
 import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getPlaylistSort, isOutdated, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from './thumbnail'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
 import { VideoPlaylistElementModel } from './video-playlist-element'
-import { ActorModel } from '../activitypub/actor'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -221,7 +222,7 @@ type AvailableForListOptions = {
     }
   ]
 })
-export class VideoPlaylistModel extends Model {
+export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlaylistModel>>> {
   @CreatedAt
   createdAt: Date
 

@@ -1,6 +1,6 @@
-import { Router, Response } from 'express'
+import { Response, Router } from 'express'
 import { Logger } from 'winston'
-import { ActorModel } from '@server/models/activitypub/actor'
+import { ActorModel } from '@server/models/actor/actor'
 import {
   PluginPlaylistPrivacyManager,
   PluginSettingsManager,
@@ -70,13 +70,13 @@ export type PeerTubeHelpers = {
 
   user: {
     // PeerTube >= 3.2
-    getAuthUser: (response: Response) => {
+    getAuthUser: (response: Response) => Promise<{
       id?: string
       username: string
       email: string
       blocked: boolean
       role: UserRole
-    } | undefined
+    } | undefined>
   }
 }
 

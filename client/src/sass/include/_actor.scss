@@ -44,6 +44,8 @@
   }
 
   .actor-display-name {
+    @include peertube-word-wrap;
+
     display: flex;
     flex-wrap: wrap;
   }

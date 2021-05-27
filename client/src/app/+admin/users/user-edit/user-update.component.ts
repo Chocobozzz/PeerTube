@@ -81,6 +81,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     userUpdate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
     userUpdate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
+    if (userUpdate.pluginAuth === 'null') userUpdate.pluginAuth = null
+
     this.userService.updateUser(this.user.id, userUpdate).subscribe(
       () => {
         this.notifier.success($localize`User ${this.user.username} updated.`)

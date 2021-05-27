@@ -1,12 +1,11 @@
 import { forkJoin, of, Subscription } from 'rxjs'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ComponentPagination, HooksService, Notifier, ServerService, User, UserService } from '@app/core'
+import { AuthService, ComponentPagination, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
 import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions, VideoLinkType } from '@app/shared/shared-video-miniature'
-import { MetaService } from '@ngx-meta/core'
 import { SearchTargetType, ServerConfig } from '@shared/models'
 
 @Component({
@@ -238,7 +237,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private updateTitle () {
-    const suffix = this.currentSearch ? ' ' + this.currentSearch : ''
+    const suffix = this.currentSearch
+      ? ' ' + this.currentSearch
+      : ''
+
     this.metaService.setTitle($localize`Search` + suffix)
   }
 

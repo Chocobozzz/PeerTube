@@ -123,24 +123,9 @@
       <div class="on-instance">
         <div i18n class="block-title">ON {{instanceName}}</div>
 
-        <a class="menu-link" routerLink="/videos/overview" routerLinkActive="active">
-          <my-global-icon iconName="globe" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Discover</ng-container>
-        </a>
-
-        <a class="menu-link" routerLink="/videos/trending" routerLinkActive="active">
-          <my-global-icon iconName="trending" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Trending</ng-container>
-        </a>
-
-        <a class="menu-link" routerLink="/videos/recently-added" routerLinkActive="active">
-          <my-global-icon iconName="recently-added" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Recently added</ng-container>
-        </a>
-
-        <a class="menu-link" routerLink="/videos/local" routerLinkActive="active">
-          <my-global-icon iconName="home" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Local videos</ng-container>
+        <a class="menu-link" *ngFor="let commonLink of commonMenuLinks" [routerLink]="commonLink.path" routerLinkActive="active">
+          <my-global-icon [iconName]="commonLink.icon" aria-hidden="true"></my-global-icon>
+          <ng-container>{{ commonLink.menuLabel }}</ng-container>
         </a>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import 'multer'
 import * as express from 'express'
 import { logger } from '@server/helpers/logger'
-import { UserNotificationModel } from '@server/models/account/user-notification'
+import { UserNotificationModel } from '@server/models/user/user-notification'
 import { getServerActor } from '@server/models/application/application'
 import { UserRight } from '../../../../shared/models/users'
 import { getFormattedObjects } from '../../../helpers/utils'

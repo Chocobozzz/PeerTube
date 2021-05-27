@@ -1,6 +1,5 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
-import { getMaxBitrate, VideoResolution } from '../../shared/models/videos'
+import { getMaxBitrate, VideoFileMetadata, VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
 import { VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { logger } from './logger'

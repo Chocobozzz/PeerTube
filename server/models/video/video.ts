@@ -24,12 +24,14 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live-manager'
 import { getHLSDirectory, getVideoFilePath } from '@server/lib/video-paths'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoObject } from '../../../shared/models/activitypub/objects'
@@ -99,14 +101,14 @@ import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models
 import { VideoAbuseModel } from '../abuse/video-abuse'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
-import { ActorImageModel } from '../account/actor-image'
-import { UserModel } from '../account/user'
-import { UserVideoHistoryModel } from '../account/user-video-history'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
+import { ActorImageModel } from '../actor/actor-image'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { ServerModel } from '../server/server'
 import { TrackerModel } from '../server/tracker'
 import { VideoTrackerModel } from '../server/video-tracker'
+import { UserModel } from '../user/user'
+import { UserVideoHistoryModel } from '../user/user-video-history'
 import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { TagModel } from './tag'
@@ -488,7 +490,7 @@ export type AvailableForListIDsOptions = {
     }
   ]
 })
-export class VideoModel extends Model {
+export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
@@ -1007,6 +1009,7 @@ export class VideoModel extends Model {
       attributes: [ 'id' ],
       where: {
         isLive: true,
+        remote: false,
         state: VideoState.PUBLISHED
       }
     }
@@ -1616,7 +1619,7 @@ export class VideoModel extends Model {
       includeLocalVideos: true
     }
 
-    const { query, replacements } = buildListQuery(VideoModel, queryOptions)
+    const { query, replacements } = buildListQuery(VideoModel.sequelize, queryOptions)
 
     return this.sequelize.query<any>(query, { replacements, type: QueryTypes.SELECT })
         .then(rows => rows.map(r => r[field]))
@@ -1644,7 +1647,7 @@ export class VideoModel extends Model {
       if (countVideos !== true) return Promise.resolve(undefined)
 
       const countOptions = Object.assign({}, options, { isCount: true })
-      const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel, countOptions)
+      const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel.sequelize, countOptions)
 
       return VideoModel.sequelize.query<any>(queryCount, { replacements: replacementsCount, type: QueryTypes.SELECT })
           .then(rows => rows.length !== 0 ? rows[0].total : 0)
@@ -1653,7 +1656,7 @@ export class VideoModel extends Model {
     function getModels () {
       if (options.count === 0) return Promise.resolve([])
 
-      const { query, replacements, order } = buildListQuery(VideoModel, options)
+      const { query, replacements, order } = buildListQuery(VideoModel.sequelize, options)
       const queryModels = wrapForAPIResults(query, replacements, options, order)
 
       return VideoModel.sequelize.query<any>(queryModels, { replacements, type: QueryTypes.SELECT, nest: true })
@@ -2053,11 +2056,7 @@ export class VideoModel extends Model {
   }
 
   setAsRefreshed () {
-    const options = {
-      where: { id: this.id }
-    }
-
-    return VideoModel.update({ updatedAt: new Date() }, options)
+    return setAsUpdated('video', this.id)
   }
 
   requiresAuth () {

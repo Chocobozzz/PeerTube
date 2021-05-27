@@ -7,7 +7,7 @@ import * as winston from 'winston'
 import { AUDIT_LOG_FILENAME } from '@server/initializers/constants'
 import { AdminAbuse, User, VideoChannel, VideoDetails, VideoImport } from '../../shared'
 import { CustomConfig } from '../../shared/models/server/custom-config.model'
-import { VideoComment } from '../../shared/models/videos/video-comment.model'
+import { VideoComment } from '../../shared/models/videos/comment/video-comment.model'
 import { CONFIG } from '../initializers/config'
 import { jsonLoggerFormat, labelFormatter } from './logger'
 

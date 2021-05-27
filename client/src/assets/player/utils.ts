@@ -95,7 +95,7 @@ function buildVideoLink (options: {
 function buildPlaylistLink (options: {
   baseUrl?: string
 
-  playlistPosition: number
+  playlistPosition?: number
 }) {
   const { baseUrl } = options
 

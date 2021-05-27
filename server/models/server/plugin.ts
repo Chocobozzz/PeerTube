@@ -1,9 +1,8 @@
 import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MPlugin, MPluginFormattable } from '@server/types/models'
-import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
-import { PluginType } from '../../../shared/models/plugins/plugin.type'
-import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
+import { AttributesOnly } from '@shared/core-utils'
+import { PeerTubePlugin, PluginType, RegisterServerSettingOptions } from '../../../shared/models'
 import {
   isPluginDescriptionValid,
   isPluginHomepage,
@@ -28,7 +27,7 @@ import { getSort, throwIfNotValid } from '../utils'
     }
   ]
 })
-export class PluginModel extends Model {
+export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
   @AllowNull(false)
   @Is('PluginName', value => throwIfNotValid(value, isPluginNameValid, 'name'))
@@ -284,7 +283,7 @@ export class PluginModel extends Model {
     for (const r of registeredSettings) {
       if (r.private !== false) continue
 
-      result[r.name] = settings[r.name] || r.default || null
+      result[r.name] = settings[r.name] ?? r.default ?? null
     }
 
     return result

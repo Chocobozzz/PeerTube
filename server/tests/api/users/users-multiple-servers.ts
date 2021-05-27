@@ -130,26 +130,32 @@ describe('Test users with multiple servers', function () {
   })
 
   it('Should have updated my profile on other servers too', async function () {
+    let createdAt: string | Date
+
     for (const server of servers) {
       const resAccounts = await getAccountsList(server.url, '-createdAt')
 
-      const rootServer1List = resAccounts.body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port) as Account
-      expect(rootServer1List).not.to.be.undefined
+      const resList = resAccounts.body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port) as Account
+      expect(resList).not.to.be.undefined
 
-      const resAccount = await getAccount(server.url, rootServer1List.name + '@' + rootServer1List.host)
-      const rootServer1Get = resAccount.body as Account
-      expect(rootServer1Get.name).to.equal('root')
-      expect(rootServer1Get.host).to.equal('localhost:' + servers[0].port)
-      expect(rootServer1Get.displayName).to.equal('my super display name')
-      expect(rootServer1Get.description).to.equal('my super description updated')
+      const resAccount = await getAccount(server.url, resList.name + '@' + resList.host)
+      const account = resAccount.body as Account
+
+      if (!createdAt) createdAt = account.createdAt
+
+      expect(account.name).to.equal('root')
+      expect(account.host).to.equal('localhost:' + servers[0].port)
+      expect(account.displayName).to.equal('my super display name')
+      expect(account.description).to.equal('my super description updated')
+      expect(createdAt).to.equal(account.createdAt)
 
       if (server.serverNumber === 1) {
-        expect(rootServer1Get.userId).to.be.a('number')
+        expect(account.userId).to.be.a('number')
       } else {
-        expect(rootServer1Get.userId).to.be.undefined
+        expect(account.userId).to.be.undefined
       }
 
-      await testImage(server.url, 'avatar2-resized', rootServer1Get.avatar.path, '.png')
+      await testImage(server.url, 'avatar2-resized', account.avatar.path, '.png')
     }
   })
 

@@ -1,4 +1,4 @@
-import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions } from 'sequelize'
+import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -17,7 +17,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { setAsUpdated } from '@server/helpers/database-utils'
 import { MAccountActor } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
@@ -35,9 +37,9 @@ import {
   MChannelSummaryFormattable
 } from '../../types/models/video'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
-import { ActorImageModel } from '../account/actor-image'
-import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { ActorFollowModel } from '../activitypub/actor-follow'
+import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
+import { ActorFollowModel } from '../actor/actor-follow'
+import { ActorImageModel } from '../actor/actor-image'
 import { ServerModel } from '../server/server'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -245,7 +247,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class VideoChannelModel extends Model {
+export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
 
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))
@@ -653,7 +655,6 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
-      createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       ownerAccount: undefined,
       videosCount,
@@ -690,5 +691,9 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
 
   isOutdated () {
     return this.Actor.isOutdated()
+  }
+
+  setAsUpdated (transaction: Transaction) {
+    return setAsUpdated('videoChannel', this.id, transaction)
   }
 }

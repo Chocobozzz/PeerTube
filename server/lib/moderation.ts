@@ -1,6 +1,8 @@
+import { VideoUploadFile } from 'express'
 import { PathLike } from 'fs-extra'
 import { Transaction } from 'sequelize/types'
 import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { AbuseModel } from '@server/models/abuse/abuse'
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
@@ -21,14 +23,13 @@ import { ActivityCreate } from '../../shared/models/activitypub'
 import { VideoObject } from '../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
 import { LiveVideoCreate, VideoCreate, VideoImportCreate } from '../../shared/models/videos'
-import { VideoCommentCreate } from '../../shared/models/videos/video-comment.model'
-import { UserModel } from '../models/account/user'
-import { ActorModel } from '../models/activitypub/actor'
+import { VideoCommentCreate } from '../../shared/models/videos/comment/video-comment.model'
+import { ActorModel } from '../models/actor/actor'
+import { UserModel } from '../models/user/user'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { sendAbuse } from './activitypub/send/send-flag'
 import { Notifier } from './notifier'
-import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 
 export type AcceptResult = {
   accepted: boolean
@@ -38,7 +39,7 @@ export type AcceptResult = {
 // Can be filtered by plugins
 function isLocalVideoAccepted (object: {
   videoBody: VideoCreate
-  videoFile: Express.Multer.File & { duration?: number }
+  videoFile: VideoUploadFile
   user: UserModel
 }): AcceptResult {
   return { accepted: true }

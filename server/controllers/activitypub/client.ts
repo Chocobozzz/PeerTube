@@ -30,7 +30,7 @@ import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } 
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
-import { ActorFollowModel } from '../../models/activitypub/actor-follow'
+import { ActorFollowModel } from '../../models/actor/actor-follow'
 import { VideoModel } from '../../models/video/video'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { VideoCommentModel } from '../../models/video/video-comment'

@@ -99,7 +99,7 @@ async function listVideoOwnership (req: express.Request, res: express.Response) 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function acceptOwnership (req: express.Request, res: express.Response) {
+function acceptOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
     const channel = res.locals.videoChannel
@@ -126,7 +126,7 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
   })
 }
 
-async function refuseOwnership (req: express.Request, res: express.Response) {
+function refuseOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
 

@@ -1,8 +1,8 @@
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 import * as express from 'express'
 import { remove, writeJSON } from 'fs-extra'
 import { snakeCase } from 'lodash'
 import validator from 'validator'
-import { getServerConfig } from '@server/lib/config'
 import { UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
@@ -18,6 +18,7 @@ const configRouter = express.Router()
 const auditLogger = auditLoggerFactory('config')
 
 configRouter.get('/about', getAbout)
+
 configRouter.get('/',
   asyncMiddleware(getConfig)
 )
@@ -27,12 +28,14 @@ configRouter.get('/custom',
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   getCustomConfig
 )
+
 configRouter.put('/custom',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   customConfigUpdateValidator,
   asyncMiddleware(updateCustomConfig)
 )
+
 configRouter.delete('/custom',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -40,7 +43,7 @@ configRouter.delete('/custom',
 )
 
 async function getConfig (req: express.Request, res: express.Response) {
-  const json = await getServerConfig(req.ip)
+  const json = await ServerConfigManager.Instance.getServerConfig(req.ip)
 
   return res.json(json)
 }
@@ -67,13 +70,13 @@ function getAbout (req: express.Request, res: express.Response) {
     }
   }
 
-  return res.json(about).end()
+  return res.json(about)
 }
 
 function getCustomConfig (req: express.Request, res: express.Response) {
   const data = customConfig()
 
-  return res.json(data).end()
+  return res.json(data)
 }
 
 async function deleteCustomConfig (req: express.Request, res: express.Response) {

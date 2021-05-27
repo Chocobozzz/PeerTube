@@ -50,13 +50,12 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
     let line = `#EXT-X-STREAM-INF:${bandwidth},${resolution}`
     if (file.fps) line += ',FRAME-RATE=' + file.fps
 
-    const videoCodec = await getVideoStreamCodec(videoFilePath)
-    line += `,CODECS="${videoCodec}`
+    const codecs = await Promise.all([
+      getVideoStreamCodec(videoFilePath),
+      getAudioStreamCodec(videoFilePath)
+    ])
 
-    const audioCodec = await getAudioStreamCodec(videoFilePath)
-    if (audioCodec) line += `,${audioCodec}`
-
-    line += '"'
+    line += `,CODECS="${codecs.filter(c => !!c).join(',')}"`
 
     masterPlaylists.push(line)
     masterPlaylists.push(VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution))

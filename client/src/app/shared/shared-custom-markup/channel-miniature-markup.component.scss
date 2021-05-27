@@ -1,0 +1,9 @@
+@import '_variables';
+@import '_mixins';
+
+.channel {
+  border-radius: 15px;
+  padding: 10px;
+  width: min-content;
+  border: 1px solid pvar(--mainColor);
+}

@@ -11,7 +11,7 @@ import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution 
 import { logger } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME, WEBSERVER } from '@server/initializers/constants'
-import { UserModel } from '@server/models/account/user'
+import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -23,9 +23,9 @@ import { buildSha256Segment } from './hls'
 import { JobQueue } from './job-queue'
 import { cleanupLive } from './job-queue/handlers/video-live-ending'
 import { PeerTubeSocket } from './peertube-socket'
+import { VideoTranscodingProfilesManager } from './transcoding/video-transcoding-profiles'
 import { isAbleToUploadVideo } from './user'
 import { getHLSDirectory } from './video-paths'
-import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
 
 import memoizee = require('memoizee')
 const NodeRtmpSession = require('node-media-server/node_rtmp_session')

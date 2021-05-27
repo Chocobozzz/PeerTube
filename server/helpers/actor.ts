@@ -1,5 +1,5 @@
 
-import { ActorModel } from '../models/activitypub/actor'
+import { ActorModel } from '../models/actor/actor'
 import { MActorAccountChannelId, MActorFull } from '../types/models'
 
 type ActorFetchByUrlType = 'all' | 'association-ids'

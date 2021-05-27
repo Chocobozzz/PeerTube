@@ -1,6 +1,6 @@
 import { CONFIG } from '@server/initializers/config'
-import { UserModel } from '@server/models/account/user'
-import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
+import { UserModel } from '@server/models/user/user'
+import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
 import { VideoModel } from '@server/models/video/video'
 import { VideoChannelModel } from '@server/models/video/video-channel'

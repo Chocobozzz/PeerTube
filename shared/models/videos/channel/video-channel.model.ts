@@ -11,6 +11,9 @@ export interface VideoChannel extends Actor {
   description: string
   support: string
   isLocal: boolean
+
+  updatedAt: Date | string
+
   ownerAccount?: Account
 
   videosCount?: number

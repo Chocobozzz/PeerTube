@@ -7,7 +7,6 @@
     "declaration": false,
     "moduleResolution": "node",
     "module": "esnext",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -44,6 +43,6 @@
     "strictInjectionParameters": true,
     "fullTemplateTypeCheck": true,
     "strictTemplates": true,
-    "enableI18nLegacyMessageIdFormat": true
+    "enableI18nLegacyMessageIdFormat": false
   }
 }

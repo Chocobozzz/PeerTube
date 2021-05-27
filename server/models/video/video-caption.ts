@@ -17,6 +17,7 @@ import {
 } from 'sequelize-typescript'
 import { v4 as uuidv4 } from 'uuid'
 import { MVideo, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { logger } from '../../helpers/logger'
@@ -57,7 +58,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoCaptionModel extends Model {
+export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaptionModel>>> {
   @CreatedAt
   createdAt: Date
 

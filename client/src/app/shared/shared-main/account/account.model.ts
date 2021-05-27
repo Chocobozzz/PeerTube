@@ -4,8 +4,12 @@ import { Actor } from './actor.model'
 export class Account extends Actor implements ServerAccount {
   displayName: string
   description: string
+
+  updatedAt: Date | string
+
   nameWithHost: string
   nameWithHostForced: string
+
   mutedByUser: boolean
   mutedByInstance: boolean
   mutedServerByUser: boolean
@@ -29,6 +33,8 @@ export class Account extends Actor implements ServerAccount {
     this.userId = hash.userId
     this.nameWithHost = Actor.CREATE_BY_STRING(this.name, this.host)
     this.nameWithHostForced = Actor.CREATE_BY_STRING(this.name, this.host, true)
+
+    if (hash.updatedAt) this.updatedAt = new Date(hash.updatedAt.toString())
 
     this.mutedByUser = false
     this.mutedByInstance = false

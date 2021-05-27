@@ -62,7 +62,7 @@ storage:
   client_overrides: '../data/client-overrides/'
 
 log:
-  level: 'info' # debug/info/warning/error
+  level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 
 tracker:
   enabled: true

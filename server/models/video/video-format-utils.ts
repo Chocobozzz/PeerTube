@@ -205,7 +205,7 @@ function videoFilesModelToFormattedJSON (
           label: videoFile.resolution + 'p'
         },
 
-        magnetUri: includeMagnet && videoFile.torrentFilename
+        magnetUri: includeMagnet && videoFile.hasTorrent()
           ? generateMagnetUri(video, videoFile, trackerUrls)
           : undefined,
 
@@ -253,19 +253,21 @@ function addVideoFilesInAPAcc (
       fps: file.fps
     })
 
-    acc.push({
-      type: 'Link',
-      mediaType: 'application/x-bittorrent' as 'application/x-bittorrent',
-      href: file.getTorrentUrl(),
-      height: file.resolution
-    })
+    if (file.hasTorrent()) {
+      acc.push({
+        type: 'Link',
+        mediaType: 'application/x-bittorrent' as 'application/x-bittorrent',
+        href: file.getTorrentUrl(),
+        height: file.resolution
+      })
 
-    acc.push({
-      type: 'Link',
-      mediaType: 'application/x-bittorrent;x-scheme-handler/magnet' as 'application/x-bittorrent;x-scheme-handler/magnet',
-      href: generateMagnetUri(video, file, trackerUrls),
-      height: file.resolution
-    })
+      acc.push({
+        type: 'Link',
+        mediaType: 'application/x-bittorrent;x-scheme-handler/magnet' as 'application/x-bittorrent;x-scheme-handler/magnet',
+        href: generateMagnetUri(video, file, trackerUrls),
+        height: file.resolution
+      })
+    }
   }
 }
 

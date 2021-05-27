@@ -133,6 +133,7 @@ describe('Test plugin helpers', function () {
       })
 
       expect(res.body.username).to.equal('root')
+      expect(res.body.displayName).to.equal('root')
       expect(res.body.isAdmin).to.be.true
       expect(res.body.isModerator).to.be.false
       expect(res.body.isUser).to.be.false

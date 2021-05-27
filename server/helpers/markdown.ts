@@ -1,4 +1,6 @@
-import { SANITIZE_OPTIONS, TEXT_WITH_HTML_RULES } from '@shared/core-utils'
+import { getSanitizeOptions, TEXT_WITH_HTML_RULES } from '@shared/core-utils'
+
+const sanitizeOptions = getSanitizeOptions()
 
 const sanitizeHtml = require('sanitize-html')
 const markdownItEmoji = require('markdown-it-emoji/light')
@@ -18,7 +20,7 @@ const toSafeHtml = text => {
   const html = markdownIt.render(textWithLineFeed)
 
   // Convert to safe Html
-  return sanitizeHtml(html, SANITIZE_OPTIONS)
+  return sanitizeHtml(html, sanitizeOptions)
 }
 
 const mdToPlainText = text => {
@@ -28,7 +30,7 @@ const mdToPlainText = text => {
   const html = markdownIt.render(text)
 
   // Convert to safe Html
-  const safeHtml = sanitizeHtml(html, SANITIZE_OPTIONS)
+  const safeHtml = sanitizeHtml(html, sanitizeOptions)
 
   return safeHtml.replace(/<[^>]+>/g, '')
                  .replace(/\n$/, '')

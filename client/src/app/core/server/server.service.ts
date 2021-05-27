@@ -3,7 +3,6 @@ import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
 import { SearchTargetType, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -15,8 +14,6 @@ export class ServerService {
   private static BASE_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/video-playlists/'
   private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
   private static BASE_STATS_URL = environment.apiUrl + '/api/v1/server/stats'
-
-  private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
   configReloaded = new Subject<ServerConfig>()
 
@@ -176,6 +173,9 @@ export class ServerService {
         disableLocalSearch: false,
         isDefaultSearch: false
       }
+    },
+    homepage: {
+      enabled: false
     }
   }
 
@@ -201,9 +201,7 @@ export class ServerService {
     this.configReset = true
 
     // Notify config update
-    this.getConfig().subscribe(() => {
-      // empty, to fire a reset config event
-    })
+    return this.getConfig()
   }
 
   getConfig () {
@@ -212,7 +210,6 @@ export class ServerService {
     if (!this.configObservable) {
       this.configObservable = this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
                                   .pipe(
-                                    tap(config => this.saveConfigLocally(config)),
                                     tap(config => {
                                       this.config = config
                                       this.configLoaded = true
@@ -343,20 +340,15 @@ export class ServerService {
                )
   }
 
-  private saveConfigLocally (config: ServerConfig) {
-    peertubeLocalStorage.setItem(ServerService.CONFIG_LOCAL_STORAGE_KEY, JSON.stringify(config))
-  }
-
   private loadConfigLocally () {
-    const configString = peertubeLocalStorage.getItem(ServerService.CONFIG_LOCAL_STORAGE_KEY)
+    const configString = window['PeerTubeServerConfig']
+    if (!configString) return
 
-    if (configString) {
-      try {
-        const parsed = JSON.parse(configString)
-        Object.assign(this.config, parsed)
-      } catch (err) {
-        console.error('Cannot parse config saved in local storage.', err)
-      }
+    try {
+      const parsed = JSON.parse(configString)
+      Object.assign(this.config, parsed)
+    } catch (err) {
+      console.error('Cannot parse config saved in from index.html.', err)
     }
   }
 }

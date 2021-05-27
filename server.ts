@@ -116,6 +116,7 @@ import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-upd
 import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
 import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-history-scheduler'
 import { AutoFollowIndexInstances } from './server/lib/schedulers/auto-follow-index-instances'
+import { RemoveDanglingResumableUploadsScheduler } from './server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
@@ -126,6 +127,7 @@ import { PluginManager } from './server/lib/plugins/plugin-manager'
 import { LiveManager } from './server/lib/live-manager'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 
 // ----------- Command line -----------
 
@@ -261,7 +263,8 @@ async function startApplication () {
 
   await Promise.all([
     Emailer.Instance.checkConnection(),
-    JobQueue.Instance.init()
+    JobQueue.Instance.init(),
+    ServerConfigManager.Instance.init()
   ])
 
   // Caches initializations
@@ -280,6 +283,7 @@ async function startApplication () {
   PluginsCheckScheduler.Instance.enable()
   PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
+  RemoveDanglingResumableUploadsScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()

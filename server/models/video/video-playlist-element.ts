@@ -32,6 +32,7 @@ import { AccountModel } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
+import { AttributesOnly } from '@shared/core-utils'
 
 @Table({
   tableName: 'videoPlaylistElement',
@@ -48,7 +49,7 @@ import { VideoPlaylistModel } from './video-playlist'
     }
   ]
 })
-export class VideoPlaylistElementModel extends Model {
+export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<VideoPlaylistElementModel>>> {
   @CreatedAt
   createdAt: Date
 
@@ -274,7 +275,8 @@ export class VideoPlaylistElementModel extends Model {
       validate: false // We use a literal to update the position
     }
 
-    return VideoPlaylistElementModel.update({ position: Sequelize.literal(`${newPosition} + "position" - ${firstPosition}`) }, query)
+    const positionQuery = Sequelize.literal(`${newPosition} + "position" - ${firstPosition}`)
+    return VideoPlaylistElementModel.update({ position: positionQuery as any }, query)
   }
 
   static increasePositionOf (

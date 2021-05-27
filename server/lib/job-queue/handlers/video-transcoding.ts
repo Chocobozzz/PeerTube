@@ -2,7 +2,7 @@ import * as Bull from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
 import { getTranscodingJobPriority, publishAndFederateIfNeeded } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
-import { UserModel } from '@server/models/account/user'
+import { UserModel } from '@server/models/user/user'
 import { MUser, MUserId, MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
 import {
   HLSTranscodingPayload,
@@ -24,7 +24,7 @@ import {
   mergeAudioVideofile,
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution
-} from '../../video-transcoding'
+} from '../../transcoding/video-transcoding'
 import { JobQueue } from '../job-queue'
 
 type HandlerFunction = (job: Bull.Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<any>

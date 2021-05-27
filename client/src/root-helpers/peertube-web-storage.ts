@@ -4,17 +4,19 @@ const valuesMap = new Map()
 
 function proxify (instance: MemoryStorage) {
   return new Proxy(instance, {
-    set: function (obj, prop: string | number, value) {
+    set: function (obj, prop: string | symbol, value) {
       if (MemoryStorage.prototype.hasOwnProperty(prop)) {
-        instance[prop] = value
+        // FIXME: symbol typing issue https://github.com/microsoft/TypeScript/issues/1863
+        instance[prop as any] = value
       } else {
         instance.setItem(prop, value)
       }
       return true
     },
-    get: function (target, name: string | number) {
+    get: function (target, name: string | symbol | number) {
       if (MemoryStorage.prototype.hasOwnProperty(name)) {
-        return instance[name]
+        // FIXME: symbol typing issue https://github.com/microsoft/TypeScript/issues/1863
+        return instance[name as any]
       }
       if (valuesMap.has(name)) {
         return instance.getItem(name)
@@ -23,9 +25,8 @@ function proxify (instance: MemoryStorage) {
   })
 }
 
-class MemoryStorage {
+class MemoryStorage implements Storage {
   [key: string]: any
-  [index: number]: string
 
   getItem (key: any) {
     const stringKey = String(key)

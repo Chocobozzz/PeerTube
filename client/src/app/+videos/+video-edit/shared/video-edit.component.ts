@@ -21,8 +21,15 @@ import {
 import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { LiveVideo, ServerConfig, VideoConstant, VideoDetails, VideoPrivacy } from '@shared/models'
-import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
+import {
+  LiveVideo,
+  RegisterClientFormFieldOptions,
+  RegisterClientVideoFieldOptions,
+  ServerConfig,
+  VideoConstant,
+  VideoDetails,
+  VideoPrivacy
+} from '@shared/models'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoEditType } from './video-edit.type'

@@ -88,8 +88,8 @@ async function register ({
       return res.json({ routerRoute })
     })
 
-    router.get('/user', (req, res) => {
-      const user = peertubeHelpers.user.getAuthUser(res)
+    router.get('/user', async (req, res) => {
+      const user = await peertubeHelpers.user.getAuthUser(res)
       if (!user) return res.sendStatus(404)
 
       const isAdmin = user.role === 0
@@ -98,6 +98,7 @@ async function register ({
 
       return res.json({
         username: user.username,
+        displayName: user.Account.name,
         isAdmin,
         isModerator,
         isUser

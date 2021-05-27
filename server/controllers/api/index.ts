@@ -8,6 +8,7 @@ import { abuseRouter } from './abuse'
 import { accountsRouter } from './accounts'
 import { bulkRouter } from './bulk'
 import { configRouter } from './config'
+import { customPageRouter } from './custom-page'
 import { jobsRouter } from './jobs'
 import { oauthClientsRouter } from './oauth-clients'
 import { overviewsRouter } from './overviews'
@@ -49,6 +50,7 @@ apiRouter.use('/jobs', jobsRouter)
 apiRouter.use('/search', searchRouter)
 apiRouter.use('/overviews', overviewsRouter)
 apiRouter.use('/plugins', pluginRouter)
+apiRouter.use('/custom-pages', customPageRouter)
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)
 

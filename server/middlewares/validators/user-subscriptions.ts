@@ -1,12 +1,12 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { ActorFollowModel } from '../../models/activitypub/actor-follow'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { areValidActorHandles, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { toArray } from '../../helpers/custom-validators/misc'
+import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { ActorFollowModel } from '../../models/actor/actor-follow'
+import { areValidationErrors } from './utils'
 
 const userSubscriptionListValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),

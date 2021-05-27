@@ -1,28 +1,28 @@
 import './embed.scss'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
+  ClientHookName,
+  HTMLServerConfig,
+  PluginType,
   ResultList,
-  ServerConfig,
   UserRefreshToken,
   VideoCaption,
   VideoDetails,
   VideoPlaylist,
   VideoPlaylistElement,
-  VideoStreamingPlaylistType,
-  PluginType,
-  ClientHookName
+  VideoStreamingPlaylistType
 } from '../../../../shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { TranslationsManager } from '../../assets/player/translations-manager'
+import { peertubeLocalStorage } from '../../root-helpers/peertube-web-storage'
 import { Hooks, loadPlugin, runHook } from '../../root-helpers/plugins'
 import { Tokens } from '../../root-helpers/users'
-import { peertubeLocalStorage } from '../../root-helpers/peertube-web-storage'
 import { objectToUrlEncoded } from '../../root-helpers/utils'
-import { PeerTubeEmbedApi } from './embed-api'
 import { RegisterClientHelpers } from '../../types/register-client-option.model'
+import { PeerTubeEmbedApi } from './embed-api'
 
 type Translations = { [ id: string ]: string }
 
@@ -56,8 +56,9 @@ export class PeerTubeEmbed {
     CLIENT_SECRET: 'client_secret'
   }
 
+  config: HTMLServerConfig
+
   private translationsPromise: Promise<{ [id: string]: string }>
-  private configPromise: Promise<ServerConfig>
   private PeertubePlayerManagerModulePromise: Promise<any>
 
   private playlist: VideoPlaylist
@@ -77,6 +78,12 @@ export class PeerTubeEmbed {
 
   constructor (private videoWrapperId: string) {
     this.wrapperElement = document.getElementById(this.videoWrapperId)
+
+    try {
+      this.config = JSON.parse(window['PeerTubeServerConfig'])
+    } catch (err) {
+      console.error('Cannot parse HTML config.', err)
+    }
   }
 
   getVideoUrl (id: string) {
@@ -164,11 +171,6 @@ export class PeerTubeEmbed {
     url.search = new URLSearchParams({ start: '' + start, count: '100' }).toString()
 
     return this.refreshFetch(url.toString(), { headers: this.headers })
-  }
-
-  loadConfig (): Promise<ServerConfig> {
-    return this.refreshFetch('/api/v1/config')
-      .then(res => res.json())
   }
 
   removeElement (element: HTMLElement) {
@@ -466,6 +468,12 @@ export class PeerTubeEmbed {
     this.playerElement.setAttribute('playsinline', 'true')
     this.wrapperElement.appendChild(this.playerElement)
 
+    // Issue when we parsed config from HTML, fallback to API
+    if (!this.config) {
+      this.config = await this.refreshFetch('/api/v1/config')
+                              .then(res => res.json())
+    }
+
     const videoInfoPromise = videoResponse.json()
       .then((videoInfo: VideoDetails) => {
         if (!alreadyHadPlayer) this.loadPlaceholder(videoInfo)
@@ -473,15 +481,14 @@ export class PeerTubeEmbed {
         return videoInfo
       })
 
-    const [ videoInfoTmp, serverTranslations, captionsResponse, config, PeertubePlayerManagerModule ] = await Promise.all([
+    const [ videoInfoTmp, serverTranslations, captionsResponse, PeertubePlayerManagerModule ] = await Promise.all([
       videoInfoPromise,
       this.translationsPromise,
       captionsPromise,
-      this.configPromise,
       this.PeertubePlayerManagerModulePromise
     ])
 
-    await this.ensurePluginsAreLoaded(config, serverTranslations)
+    await this.ensurePluginsAreLoaded(serverTranslations)
 
     const videoInfo: VideoDetails = videoInfoTmp
 
@@ -576,7 +583,7 @@ export class PeerTubeEmbed {
 
     this.buildCSS()
 
-    await this.buildDock(videoInfo, config)
+    await this.buildDock(videoInfo)
 
     this.initializeApi()
 
@@ -598,7 +605,6 @@ export class PeerTubeEmbed {
   private async initCore () {
     if (this.userTokens) this.setHeadersFromTokens()
 
-    this.configPromise = this.loadConfig()
     this.translationsPromise = TranslationsManager.getServerTranslations(window.location.origin, navigator.language)
     this.PeertubePlayerManagerModulePromise = import('../../assets/player/peertube-player-manager')
 
@@ -653,7 +659,7 @@ export class PeerTubeEmbed {
     }
   }
 
-  private async buildDock (videoInfo: VideoDetails, config: ServerConfig) {
+  private async buildDock (videoInfo: VideoDetails) {
     if (!this.controls) return
 
     // On webtorrent fallback, player may have been disposed
@@ -661,7 +667,7 @@ export class PeerTubeEmbed {
 
     const title = this.title ? videoInfo.name : undefined
 
-    const description = config.tracker.enabled && this.warningTitle
+    const description = this.config.tracker.enabled && this.warningTitle
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
 
@@ -733,10 +739,10 @@ export class PeerTubeEmbed {
     return window.location.pathname.split('/')[1] === 'video-playlists'
   }
 
-  private async ensurePluginsAreLoaded (config: ServerConfig, translations?: { [ id: string ]: string }) {
-    if (config.plugin.registered.length === 0) return
+  private async ensurePluginsAreLoaded (translations?: { [ id: string ]: string }) {
+    if (this.config.plugin.registered.length === 0) return
 
-    for (const plugin of config.plugin.registered) {
+    for (const plugin of this.config.plugin.registered) {
       for (const key of Object.keys(plugin.clientScripts)) {
         const clientScript = plugin.clientScripts[key]
 

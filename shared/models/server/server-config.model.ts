@@ -214,4 +214,10 @@ export interface ServerConfig {
     level: BroadcastMessageLevel
     dismissable: boolean
   }
+
+  homepage: {
+    enabled: boolean
+  }
 }
+
+export type HTMLServerConfig = Omit<ServerConfig, 'signup'>
