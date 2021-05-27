@@ -94,7 +94,7 @@ export class MenuComponent implements OnInit {
   }
 
   get instanceName () {
-    return this.serverConfig?.instance.name || ''
+    return this.serverConfig.instance.name
   }
 
   ngOnInit () {
