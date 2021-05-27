@@ -43,6 +43,6 @@
     "strictInjectionParameters": true,
     "fullTemplateTypeCheck": true,
     "strictTemplates": true,
-    "enableI18nLegacyMessageIdFormat": true
+    "enableI18nLegacyMessageIdFormat": false
   }
 }
