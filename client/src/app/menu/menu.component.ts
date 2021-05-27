@@ -37,6 +37,24 @@ interface MenuItem {
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+
+  get isInMobileView () {
+    return this.screenService.isInMobileView()
+  }
+
+  get dropdownContainer () {
+    if (this.isInMobileView) return null
+
+    return 'body' as 'body'
+  }
+
+  get language () {
+    return this.languageChooserModal.getCurrentLanguage()
+  }
+
+  get instanceName () {
+    return this.serverConfig.instance.name
+  }
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
   @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
   @ViewChild('dropdown') dropdown: NgbDropdown
@@ -78,24 +96,6 @@ export class MenuComponent implements OnInit {
     private modalService: PeertubeModalService,
     private router: Router
   ) { }
-
-  get isInMobileView () {
-    return this.screenService.isInMobileView()
-  }
-
-  get dropdownContainer () {
-    if (this.isInMobileView) return null
-
-    return 'body' as 'body'
-  }
-
-  get language () {
-    return this.languageChooserModal.getCurrentLanguage()
-  }
-
-  get instanceName () {
-    return this.serverConfig.instance.name
-  }
 
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
