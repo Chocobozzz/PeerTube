@@ -1,6 +1,7 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isAbuseMessageValid } from '@server/helpers/custom-validators/abuses'
 import { MAbuseMessage, MAbuseMessageFormattable } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { AbuseMessage } from '@shared/models'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
@@ -17,7 +18,7 @@ import { AbuseModel } from './abuse'
     }
   ]
 })
-export class AbuseMessageModel extends Model {
+export class AbuseMessageModel extends Model<Partial<AttributesOnly<AbuseMessageModel>>> {
 
   @AllowNull(false)
   @Is('AbuseMessage', value => throwIfNotValid(value, isAbuseMessageValid, 'message'))

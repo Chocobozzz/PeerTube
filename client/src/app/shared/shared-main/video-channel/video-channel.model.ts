@@ -16,6 +16,8 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   banner: ActorImage
   bannerUrl: string
 
+  updatedAt: Date | string
+
   ownerAccount?: ServerAccount
   ownerBy?: string
 
@@ -58,6 +60,8 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.nameWithHostForced = Actor.CREATE_BY_STRING(this.name, this.host, true)
 
     this.videosCount = hash.videosCount
+
+    if (hash.updatedAt) this.updatedAt = new Date(hash.updatedAt.toString())
 
     if (hash.viewsPerDay) {
       this.viewsPerDay = hash.viewsPerDay.map(v => ({ ...v, date: new Date(v.date) }))

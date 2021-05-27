@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { ResultList, ThreadsResultList, UserRight } from '../../../../shared/models'
-import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
+import { VideoCommentCreate } from '../../../../shared/models/videos/comment/video-comment.model'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'

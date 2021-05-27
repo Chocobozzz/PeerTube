@@ -6,6 +6,10 @@ export type FunctionPropertyNames<T> = {
 
 export type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>
 
+export type AttributesOnly<T> = {
+  [K in keyof T]: T[K] extends Function ? never : T[K]
+}
+
 export type PickWith<T, KT extends keyof T, V> = {
   [P in KT]: T[P] extends V ? V : never
 }

@@ -20,8 +20,8 @@ import { getUrlFromWebfinger } from '../../helpers/webfinger'
 import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { AccountModel } from '../../models/account/account'
-import { ActorImageModel } from '../../models/account/actor-image'
-import { ActorModel } from '../../models/activitypub/actor'
+import { ActorModel } from '../../models/actor/actor'
+import { ActorImageModel } from '../../models/actor/actor-image'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import {
@@ -132,12 +132,11 @@ async function getOrCreateActorAndServerAndModel (
   return actorRefreshed
 }
 
-function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
+function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string) {
   return new ActorModel({
     type,
     url,
     preferredUsername,
-    uuid,
     publicKey: null,
     privateKey: null,
     followersCount: 0,
@@ -153,8 +152,6 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
 async function updateActorInstance (actorInstance: ActorModel, attributes: ActivityPubActor) {
   const followersCount = await fetchActorTotalItems(attributes.followers)
   const followingCount = await fetchActorTotalItems(attributes.following)
-
-  logger.info('coucou', { attributes })
 
   actorInstance.type = attributes.type
   actorInstance.preferredUsername = attributes.preferredUsername

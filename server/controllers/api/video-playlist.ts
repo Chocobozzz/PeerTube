@@ -202,7 +202,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
       id: videoPlaylistCreated.id,
       uuid: videoPlaylistCreated.uuid
     }
-  }).end()
+  })
 }
 
 async function updateVideoPlaylist (req: express.Request, res: express.Response) {

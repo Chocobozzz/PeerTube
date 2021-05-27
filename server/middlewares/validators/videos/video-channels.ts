@@ -3,6 +3,7 @@ import { body, param, query } from 'express-validator'
 import { VIDEO_CHANNELS } from '@server/initializers/constants'
 import { MChannelAccountDefault, MUser } from '@server/types/models'
 import { UserRight } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
 import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
@@ -12,10 +13,9 @@ import {
 } from '../../../helpers/custom-validators/video-channels'
 import { logger } from '../../../helpers/logger'
 import { doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../../../helpers/middlewares'
-import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors } from '../utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),

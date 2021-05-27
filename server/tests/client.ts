@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import * as request from 'supertest'
-import { Account, VideoPlaylistPrivacy } from '@shared/models'
+import { Account, HTMLServerConfig, ServerConfig, VideoPlaylistPrivacy } from '@shared/models'
 import {
   addVideoInPlaylist,
   cleanupTests,
@@ -11,6 +11,7 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getAccount,
+  getConfig,
   getCustomConfig,
   getVideosList,
   makeHTMLRequest,
@@ -25,13 +26,17 @@ import {
   waitJobs
 } from '../../shared/extra-utils'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { omit } from 'lodash'
 
 const expect = chai.expect
 
-function checkIndexTags (html: string, title: string, description: string, css: string) {
+function checkIndexTags (html: string, title: string, description: string, css: string, config: ServerConfig) {
   expect(html).to.contain('<title>' + title + '</title>')
   expect(html).to.contain('<meta name="description" content="' + description + '" />')
   expect(html).to.contain('<style class="custom-css-style">' + css + '</style>')
+
+  const htmlConfig: HTMLServerConfig = omit(config, 'signup')
+  expect(html).to.contain(`<script type="application/javascript">window.PeerTubeServerConfig = '${JSON.stringify(htmlConfig)}'</script>`)
 }
 
 describe('Test a client controllers', function () {
@@ -296,10 +301,11 @@ describe('Test a client controllers', function () {
   describe('Index HTML', function () {
 
     it('Should have valid index html tags (title, description...)', async function () {
+      const resConfig = await getConfig(servers[0].url)
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
       const description = 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
-      checkIndexTags(res.text, 'PeerTube', description, '')
+      checkIndexTags(res.text, 'PeerTube', description, '', resConfig.body)
     })
 
     it('Should update the customized configuration and have the correct index html tags', async function () {
@@ -318,15 +324,17 @@ describe('Test a client controllers', function () {
         }
       })
 
+      const resConfig = await getConfig(servers[0].url)
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
-      checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
+      checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', resConfig.body)
     })
 
     it('Should have valid index html updated tags (title, description...)', async function () {
+      const resConfig = await getConfig(servers[0].url)
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
-      checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
+      checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', resConfig.body)
     })
 
     it('Should use the original video URL for the canonical tag', async function () {
@@ -347,6 +355,16 @@ describe('Test a client controllers', function () {
     it('Should use the original playlist URL for the canonical tag', async function () {
       const res = await makeHTMLRequest(servers[1].url, '/videos/watch/playlist/' + playlistUUID)
       expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/video-playlists/${playlistUUID}" />`)
+    })
+  })
+
+  describe('Embed HTML', function () {
+
+    it('Should have the correct embed html tags', async function () {
+      const resConfig = await getConfig(servers[0].url)
+      const res = await makeHTMLRequest(servers[0].url, servers[0].video.embedPath)
+
+      checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', resConfig.body)
     })
   })
 

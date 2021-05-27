@@ -3,6 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { basename } from 'path'
+import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 import {
   cleanupTests,
   createUser,
@@ -13,6 +14,7 @@ import {
   getVideo,
   getVideoChannel,
   getVideoChannelVideos,
+  setDefaultVideoChannel,
   testImage,
   updateVideo,
   updateVideoChannelImage,
@@ -33,7 +35,6 @@ import {
 } from '../../../../shared/extra-utils/index'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { User, Video, VideoChannel, VideoDetails } from '../../../../shared/index'
-import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 
 const expect = chai.expect
 
@@ -47,9 +48,10 @@ async function findChannel (server: ServerInfo, channelId: number) {
 describe('Test video channels', function () {
   let servers: ServerInfo[]
   let userInfo: User
-  let firstVideoChannelId: number
   let secondVideoChannelId: number
+  let totoChannel: number
   let videoUUID: string
+  let accountName: string
 
   before(async function () {
     this.timeout(60000)
@@ -57,16 +59,9 @@ describe('Test video channels', function () {
     servers = await flushAndRunMultipleServers(2)
 
     await setAccessTokensToServers(servers)
+    await setDefaultVideoChannel(servers)
+
     await doubleFollow(servers[0], servers[1])
-
-    {
-      const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-      const user: User = res.body
-
-      firstVideoChannelId = user.videoChannels[0].id
-    }
-
-    await waitJobs(servers)
   })
 
   it('Should have one video channel (created with root)', async () => {
@@ -116,12 +111,14 @@ describe('Test video channels', function () {
     expect(videoChannels[1].displayName).to.equal('second video channel')
     expect(videoChannels[1].description).to.equal('super video channel description')
     expect(videoChannels[1].support).to.equal('super video channel support text')
+
+    accountName = userInfo.account.name + '@' + userInfo.account.host
   })
 
   it('Should have two video channels when getting account channels on server 1', async function () {
     const res = await getAccountVideoChannelsList({
       url: servers[0].url,
-      accountName: userInfo.account.name + '@' + userInfo.account.host
+      accountName
     })
 
     expect(res.body.total).to.equal(2)
@@ -142,7 +139,7 @@ describe('Test video channels', function () {
     {
       const res = await getAccountVideoChannelsList({
         url: servers[0].url,
-        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        accountName,
         start: 0,
         count: 1,
         sort: 'createdAt'
@@ -158,7 +155,7 @@ describe('Test video channels', function () {
     {
       const res = await getAccountVideoChannelsList({
         url: servers[0].url,
-        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        accountName,
         start: 0,
         count: 1,
         sort: '-createdAt'
@@ -174,7 +171,7 @@ describe('Test video channels', function () {
     {
       const res = await getAccountVideoChannelsList({
         url: servers[0].url,
-        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        accountName,
         start: 1,
         count: 1,
         sort: '-createdAt'
@@ -191,7 +188,7 @@ describe('Test video channels', function () {
   it('Should have one video channel when getting account channels on server 2', async function () {
     const res = await getAccountVideoChannelsList({
       url: servers[1].url,
-      accountName: userInfo.account.name + '@' + userInfo.account.host
+      accountName
     })
 
     expect(res.body.total).to.equal(1)
@@ -379,7 +376,7 @@ describe('Test video channels', function () {
   it('Should change the video channel of a video', async function () {
     this.timeout(10000)
 
-    await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { channelId: firstVideoChannelId })
+    await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { channelId: servers[0].videoChannel.id })
 
     await waitJobs(servers)
   })
@@ -419,7 +416,8 @@ describe('Test video channels', function () {
   it('Should create the main channel with an uuid if there is a conflict', async function () {
     {
       const videoChannel = { name: 'toto_channel', displayName: 'My toto channel' }
-      await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
+      const res = await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
+      totoChannel = res.body.videoChannel.id
     }
 
     {
@@ -438,7 +436,7 @@ describe('Test video channels', function () {
     {
       const res = await getAccountVideoChannelsList({
         url: servers[0].url,
-        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        accountName,
         withStats: true
       })
 
@@ -456,7 +454,7 @@ describe('Test video channels', function () {
     }
 
     {
-      // video has been posted on channel firstVideoChannelId since last update
+      // video has been posted on channel servers[0].videoChannel.id since last update
       await viewVideo(servers[0].url, videoUUID, 204, '0.0.0.1,127.0.0.1')
       await viewVideo(servers[0].url, videoUUID, 204, '0.0.0.2,127.0.0.1')
 
@@ -465,10 +463,10 @@ describe('Test video channels', function () {
 
       const res = await getAccountVideoChannelsList({
         url: servers[0].url,
-        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        accountName,
         withStats: true
       })
-      const channelWithView = res.body.data.find((channel: VideoChannel) => channel.id === firstVideoChannelId)
+      const channelWithView = res.body.data.find((channel: VideoChannel) => channel.id === servers[0].videoChannel.id)
       expect(channelWithView.viewsPerDay.slice(-1)[0].views).to.equal(2)
     }
   })
@@ -476,7 +474,7 @@ describe('Test video channels', function () {
   it('Should report correct videos count', async function () {
     const res = await getAccountVideoChannelsList({
       url: servers[0].url,
-      accountName: userInfo.account.name + '@' + userInfo.account.host,
+      accountName,
       withStats: true
     })
     const channels: VideoChannel[] = res.body.data
@@ -492,7 +490,7 @@ describe('Test video channels', function () {
     {
       const res = await getAccountVideoChannelsList({
         url: servers[0].url,
-        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        accountName,
         search: 'root'
       })
       expect(res.body.total).to.equal(1)
@@ -504,13 +502,47 @@ describe('Test video channels', function () {
     {
       const res = await getAccountVideoChannelsList({
         url: servers[0].url,
-        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        accountName,
         search: 'does not exist'
       })
       expect(res.body.total).to.equal(0)
 
       const channels = res.body.data
       expect(channels).to.have.lengthOf(0)
+    }
+  })
+
+  it('Should list channels by updatedAt desc if a video has been uploaded', async function () {
+    this.timeout(30000)
+
+    await uploadVideo(servers[0].url, servers[0].accessToken, { channelId: totoChannel })
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getAccountVideoChannelsList({
+        url: server.url,
+        accountName,
+        sort: '-updatedAt'
+      })
+
+      const channels: VideoChannel[] = res.body.data
+      expect(channels[0].name).to.equal('toto_channel')
+      expect(channels[1].name).to.equal('root_channel')
+    }
+
+    await uploadVideo(servers[0].url, servers[0].accessToken, { channelId: servers[0].videoChannel.id })
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getAccountVideoChannelsList({
+        url: server.url,
+        accountName,
+        sort: '-updatedAt'
+      })
+
+      const channels: VideoChannel[] = res.body.data
+      expect(channels[0].name).to.equal('root_channel')
+      expect(channels[1].name).to.equal('toto_channel')
     }
   })
 

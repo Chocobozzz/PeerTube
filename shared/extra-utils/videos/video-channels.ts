@@ -5,7 +5,7 @@ import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-up
 import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
 import { makeDeleteRequest, makeGetRequest, updateImageRequest } from '../requests/requests'
 import { ServerInfo } from '../server/servers'
-import { User } from '../../models/users/user.model'
+import { MyUser, User } from '../../models/users/user.model'
 import { getMyUserInformation } from '../users/users'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
@@ -170,6 +170,12 @@ function setDefaultVideoChannel (servers: ServerInfo[]) {
   return Promise.all(tasks)
 }
 
+async function getDefaultVideoChannel (url: string, token: string) {
+  const res = await getMyUserInformation(url, token)
+
+  return (res.body as MyUser).videoChannels[0].id
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -181,5 +187,6 @@ export {
   deleteVideoChannel,
   getVideoChannel,
   setDefaultVideoChannel,
-  deleteVideoChannelImage
+  deleteVideoChannelImage,
+  getDefaultVideoChannel
 }

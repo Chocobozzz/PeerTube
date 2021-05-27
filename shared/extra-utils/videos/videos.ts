@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { expect } from 'chai'
-import { pathExists, readdir, readFile } from 'fs-extra'
+import { createReadStream, pathExists, readdir, readFile, stat } from 'fs-extra'
+import got, { Response as GotResponse } from 'got/dist/source'
 import * as parseTorrent from 'parse-torrent'
 import { extname, join } from 'path'
 import * as request from 'supertest'
@@ -42,6 +43,7 @@ type VideoAttributes = {
   channelId?: number
   privacy?: VideoPrivacy
   fixture?: string
+  support?: string
   thumbnailfile?: string
   previewfile?: string
   scheduleUpdate?: {
@@ -364,8 +366,13 @@ async function checkVideoFilesWereRemoved (
   }
 }
 
-async function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = HttpStatusCode.OK_200) {
-  const path = '/api/v1/videos/upload'
+async function uploadVideo (
+  url: string,
+  accessToken: string,
+  videoAttributesArg: VideoAttributes,
+  specialStatus = HttpStatusCode.OK_200,
+  mode: 'legacy' | 'resumable' = 'legacy'
+) {
   let defaultChannelId = '1'
 
   try {
@@ -391,61 +398,9 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     fixture: 'video_short.webm'
   }, videoAttributesArg)
 
-  const req = request(url)
-              .post(path)
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + accessToken)
-              .field('name', attributes.name)
-              .field('nsfw', JSON.stringify(attributes.nsfw))
-              .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
-              .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))
-              .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
-              .field('privacy', attributes.privacy.toString())
-              .field('channelId', attributes.channelId)
-
-  if (attributes.support !== undefined) {
-    req.field('support', attributes.support)
-  }
-
-  if (attributes.description !== undefined) {
-    req.field('description', attributes.description)
-  }
-  if (attributes.language !== undefined) {
-    req.field('language', attributes.language.toString())
-  }
-  if (attributes.category !== undefined) {
-    req.field('category', attributes.category.toString())
-  }
-  if (attributes.licence !== undefined) {
-    req.field('licence', attributes.licence.toString())
-  }
-
-  const tags = attributes.tags || []
-  for (let i = 0; i < tags.length; i++) {
-    req.field('tags[' + i + ']', attributes.tags[i])
-  }
-
-  if (attributes.thumbnailfile !== undefined) {
-    req.attach('thumbnailfile', buildAbsoluteFixturePath(attributes.thumbnailfile))
-  }
-  if (attributes.previewfile !== undefined) {
-    req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
-  }
-
-  if (attributes.scheduleUpdate) {
-    req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
-
-    if (attributes.scheduleUpdate.privacy) {
-      req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
-    }
-  }
-
-  if (attributes.originallyPublishedAt !== undefined) {
-    req.field('originallyPublishedAt', attributes.originallyPublishedAt)
-  }
-
-  const res = await req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
-            .expect(specialStatus)
+  const res = mode === 'legacy'
+    ? await buildLegacyUpload(url, accessToken, attributes, specialStatus)
+    : await buildResumeUpload(url, accessToken, attributes, specialStatus)
 
   // Wait torrent generation
   if (specialStatus === HttpStatusCode.OK_200) {
@@ -459,6 +414,154 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
   }
 
   return res
+}
+
+function checkUploadVideoParam (
+  url: string,
+  token: string,
+  attributes: Partial<VideoAttributes>,
+  specialStatus = HttpStatusCode.OK_200,
+  mode: 'legacy' | 'resumable' = 'legacy'
+) {
+  return mode === 'legacy'
+    ? buildLegacyUpload(url, token, attributes, specialStatus)
+    : buildResumeUpload(url, token, attributes, specialStatus)
+}
+
+async function buildLegacyUpload (url: string, token: string, attributes: VideoAttributes, specialStatus = HttpStatusCode.OK_200) {
+  const path = '/api/v1/videos/upload'
+  const req = request(url)
+              .post(path)
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + token)
+
+  buildUploadReq(req, attributes)
+
+  if (attributes.fixture !== undefined) {
+    req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
+  }
+
+  return req.expect(specialStatus)
+}
+
+async function buildResumeUpload (url: string, token: string, attributes: VideoAttributes, specialStatus = HttpStatusCode.OK_200) {
+  let size = 0
+  let videoFilePath: string
+  let mimetype = 'video/mp4'
+
+  if (attributes.fixture) {
+    videoFilePath = buildAbsoluteFixturePath(attributes.fixture)
+    size = (await stat(videoFilePath)).size
+
+    if (videoFilePath.endsWith('.mkv')) {
+      mimetype = 'video/x-matroska'
+    } else if (videoFilePath.endsWith('.webm')) {
+      mimetype = 'video/webm'
+    }
+  }
+
+  const initializeSessionRes = await prepareResumableUpload({ url, token, attributes, size, mimetype })
+  const initStatus = initializeSessionRes.status
+
+  if (videoFilePath && initStatus === HttpStatusCode.CREATED_201) {
+    const locationHeader = initializeSessionRes.header['location']
+    expect(locationHeader).to.not.be.undefined
+
+    const pathUploadId = locationHeader.split('?')[1]
+
+    return sendResumableChunks({ url, token, pathUploadId, videoFilePath, size, specialStatus })
+  }
+
+  const expectedInitStatus = specialStatus === HttpStatusCode.OK_200
+    ? HttpStatusCode.CREATED_201
+    : specialStatus
+
+  expect(initStatus).to.equal(expectedInitStatus)
+
+  return initializeSessionRes
+}
+
+async function prepareResumableUpload (options: {
+  url: string
+  token: string
+  attributes: VideoAttributes
+  size: number
+  mimetype: string
+}) {
+  const { url, token, attributes, size, mimetype } = options
+
+  const path = '/api/v1/videos/upload-resumable'
+
+  const req = request(url)
+              .post(path)
+              .set('Authorization', 'Bearer ' + token)
+              .set('X-Upload-Content-Type', mimetype)
+              .set('X-Upload-Content-Length', size.toString())
+
+  buildUploadReq(req, attributes)
+
+  if (attributes.fixture) {
+    req.field('filename', attributes.fixture)
+  }
+
+  return req
+}
+
+function sendResumableChunks (options: {
+  url: string
+  token: string
+  pathUploadId: string
+  videoFilePath: string
+  size: number
+  specialStatus?: HttpStatusCode
+  contentLength?: number
+  contentRangeBuilder?: (start: number, chunk: any) => string
+}) {
+  const { url, token, pathUploadId, videoFilePath, size, specialStatus, contentLength, contentRangeBuilder } = options
+
+  const expectedStatus = specialStatus || HttpStatusCode.OK_200
+
+  const path = '/api/v1/videos/upload-resumable'
+  let start = 0
+
+  const readable = createReadStream(videoFilePath, { highWaterMark: 8 * 1024 })
+  return new Promise<GotResponse>((resolve, reject) => {
+    readable.on('data', async function onData (chunk) {
+      readable.pause()
+
+      const headers = {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/octet-stream',
+        'Content-Range': contentRangeBuilder
+          ? contentRangeBuilder(start, chunk)
+          : `bytes ${start}-${start + chunk.length - 1}/${size}`,
+        'Content-Length': contentLength ? contentLength + '' : chunk.length + ''
+      }
+
+      const res = await got({
+        url,
+        method: 'put',
+        headers,
+        path: path + '?' + pathUploadId,
+        body: chunk,
+        responseType: 'json',
+        throwHttpErrors: false
+      })
+
+      start += chunk.length
+
+      if (res.statusCode === expectedStatus) {
+        return resolve(res)
+      }
+
+      if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
+        readable.off('data', onData)
+        return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
+      }
+
+      readable.resume()
+    })
+  })
 }
 
 function updateVideo (
@@ -749,11 +852,13 @@ export {
   getVideoWithToken,
   getVideosList,
   removeAllVideos,
+  checkUploadVideoParam,
   getVideosListPagination,
   getVideosListSort,
   removeVideo,
   getVideosListWithToken,
   uploadVideo,
+  sendResumableChunks,
   getVideosWithFilters,
   uploadRandomVideoOnServers,
   updateVideo,
@@ -767,5 +872,50 @@ export {
   getMyVideosWithFilter,
   uploadVideoAndGetId,
   getLocalIdByUUID,
-  getVideoIdFromUUID
+  getVideoIdFromUUID,
+  prepareResumableUpload
+}
+
+// ---------------------------------------------------------------------------
+
+function buildUploadReq (req: request.Test, attributes: VideoAttributes) {
+
+  for (const key of [ 'name', 'support', 'channelId', 'description', 'originallyPublishedAt' ]) {
+    if (attributes[key] !== undefined) {
+      req.field(key, attributes[key])
+    }
+  }
+
+  for (const key of [ 'nsfw', 'commentsEnabled', 'downloadEnabled', 'waitTranscoding' ]) {
+    if (attributes[key] !== undefined) {
+      req.field(key, JSON.stringify(attributes[key]))
+    }
+  }
+
+  for (const key of [ 'language', 'privacy', 'category', 'licence' ]) {
+    if (attributes[key] !== undefined) {
+      req.field(key, attributes[key].toString())
+    }
+  }
+
+  const tags = attributes.tags || []
+  for (let i = 0; i < tags.length; i++) {
+    req.field('tags[' + i + ']', attributes.tags[i])
+  }
+
+  for (const key of [ 'thumbnailfile', 'previewfile' ]) {
+    if (attributes[key] !== undefined) {
+      req.attach(key, buildAbsoluteFixturePath(attributes[key]))
+    }
+  }
+
+  if (attributes.scheduleUpdate) {
+    if (attributes.scheduleUpdate.updateAt) {
+      req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
+    }
+
+    if (attributes.scheduleUpdate.privacy) {
+      req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
+    }
+  }
 }

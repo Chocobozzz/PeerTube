@@ -36,6 +36,8 @@
   }
 
   a {
+    @include peertube-word-wrap;
+
     color: pvar(--mainForegroundColor);
   }
 

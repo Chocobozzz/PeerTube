@@ -38,6 +38,7 @@ import {
 import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 import { getGoodVideoUrl, getMyVideoImports, importVideo } from '../../../shared/extra-utils/videos/video-imports'
 import {
+  VideoCommentThreadTree,
   VideoDetails,
   VideoImport,
   VideoImportState,
@@ -45,7 +46,6 @@ import {
   VideoPlaylistPrivacy,
   VideoPrivacy
 } from '../../../shared/models/videos'
-import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 
 const expect = chai.expect
 
@@ -55,7 +55,7 @@ describe('Test plugin filter hooks', function () {
   let threadId: number
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)
@@ -326,7 +326,7 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on remote upload', async function () {
-      this.timeout(45000)
+      this.timeout(60000)
 
       const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'remote please blacklist me' })
       await waitJobs(servers)
@@ -335,7 +335,7 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on remote update', async function () {
-      this.timeout(45000)
+      this.timeout(60000)
 
       const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video' })
       await waitJobs(servers)

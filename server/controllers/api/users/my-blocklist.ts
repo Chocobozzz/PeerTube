@@ -20,7 +20,7 @@ import {
 import { AccountBlocklistModel } from '../../../models/account/account-blocklist'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
-import { UserNotificationModel } from '@server/models/account/user-notification'
+import { UserNotificationModel } from '@server/models/user/user-notification'
 import { logger } from '@server/helpers/logger'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 

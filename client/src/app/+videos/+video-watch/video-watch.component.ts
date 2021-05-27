@@ -509,7 +509,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private async setVideoDescriptionHTML () {
     const html = await this.markdownService.textMarkdownToHTML(this.video.description)
-    this.videoHTMLDescription = await this.markdownService.processVideoTimestamps(html)
+    this.videoHTMLDescription = this.markdownService.processVideoTimestamps(html)
   }
 
   private setVideoLikesBarTooltipText () {
@@ -674,7 +674,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.one('ended', () => {
         if (this.video.isLive) {
-          this.video.state.id = VideoState.LIVE_ENDED
+          this.zone.run(() => this.video.state.id = VideoState.LIVE_ENDED)
         }
       })
 

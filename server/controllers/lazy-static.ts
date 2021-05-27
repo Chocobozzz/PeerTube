@@ -7,7 +7,7 @@ import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
 import { actorImagePathUnsafeCache, pushActorImageProcessInQueue } from '../lib/actor-image'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { asyncMiddleware } from '../middlewares'
-import { ActorImageModel } from '../models/account/actor-image'
+import { ActorImageModel } from '../models/actor/actor-image'
 
 const lazyStaticRouter = express.Router()
 

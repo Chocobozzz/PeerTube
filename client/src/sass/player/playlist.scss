@@ -40,10 +40,12 @@ $playlist-menu-width: 350px;
     }
 
     .cross {
+      mask-image: url('#{$assets-path}/images/feather/x.svg');
+      -webkit-mask-image: url('#{$assets-path}/images/feather/x.svg');
+
       cursor: pointer;
       width: 20px;
       height: 20px;
-      mask-image: url('#{$assets-path}/images/feather/x.svg');
       background-color: #fff;
       mask-size: cover;
     }
@@ -85,9 +87,11 @@ $playlist-menu-width: 350px;
 }
 
 .vjs-playlist-icon {
+  mask-image: url('#{$assets-path}/images/feather/list.svg');
+  -webkit-mask-image: url('#{$assets-path}/images/feather/list.svg');
+
   width: 22px;
   height: 22px;
-  mask-image: url('#{$assets-path}/images/feather/list.svg');
   background-color: #fff;
   mask-size: cover;
   margin-bottom: 3px;

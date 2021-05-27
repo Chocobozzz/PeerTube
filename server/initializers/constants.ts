@@ -208,7 +208,8 @@ const SCHEDULER_INTERVALS_MS = {
   autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
-  updateInboxStats: 1000 * 60// 1 minute
+  updateInboxStats: 1000 * 60, // 1 minute
+  removeDanglingResumableUploads: 60000 * 60 * 16 // 16 hours
 }
 
 // ---------------------------------------------------------------------------
@@ -285,6 +286,7 @@ const CONSTRAINTS_FIELDS = {
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
     FILE_SIZE: { min: -1 },
+    PARTIAL_UPLOAD_SIZE: { max: 50 * 1024 * 1024 * 1024 }, // 50GB
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_PLAYLISTS: {
@@ -645,6 +647,7 @@ const LRU_CACHE = {
   }
 }
 
+const RESUMABLE_UPLOAD_DIRECTORY = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploads')
 const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
 const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
@@ -699,7 +702,8 @@ const CUSTOM_HTML_TAG_COMMENTS = {
   TITLE: '<!-- title tag -->',
   DESCRIPTION: '<!-- description tag -->',
   CUSTOM_CSS: '<!-- custom css tag -->',
-  META_TAGS: '<!-- meta tags -->'
+  META_TAGS: '<!-- meta tags -->',
+  SERVER_CONFIG: '<!-- server config -->'
 }
 
 // ---------------------------------------------------------------------------
@@ -819,6 +823,7 @@ export {
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,
   SEARCH_INDEX,
+  RESUMABLE_UPLOAD_DIRECTORY,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
   ACTOR_IMAGES_SIZE,

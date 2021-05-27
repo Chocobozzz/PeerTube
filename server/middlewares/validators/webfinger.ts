@@ -1,11 +1,11 @@
 import * as express from 'express'
 import { query } from 'express-validator'
-import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'
-import { logger } from '../../helpers/logger'
-import { ActorModel } from '../../models/activitypub/actor'
-import { areValidationErrors } from './utils'
-import { getHostWithPort } from '../../helpers/express-utils'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'
+import { getHostWithPort } from '../../helpers/express-utils'
+import { logger } from '../../helpers/logger'
+import { ActorModel } from '../../models/actor/actor'
+import { areValidationErrors } from './utils'
 
 const webfingerValidator = [
   query('resource').custom(isWebfingerLocalResourceValid).withMessage('Should have a valid webfinger resource'),

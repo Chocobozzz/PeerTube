@@ -27,7 +27,7 @@ import {
   userSubscriptionsSortValidator,
   videosSortValidator
 } from '../../../middlewares/validators'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { VideoModel } from '../../../models/video/video'
 
 const mySubscriptionsRouter = express.Router()

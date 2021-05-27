@@ -68,8 +68,14 @@ channel with the same name (${videoChannel.name})!`,
     this.authService.userInformationLoaded
         .pipe(mergeMap(() => {
           const user = this.authService.getUser()
+          const options = {
+            account: user.account,
+            withStats: true,
+            search: this.search,
+            sort: '-updatedAt'
+          }
 
-          return this.videoChannelService.listAccountVideoChannels(user.account, null, true, this.search)
+          return this.videoChannelService.listAccountVideoChannels(options)
         })).subscribe(res => {
           this.videoChannels = res.data
           this.totalItems = res.total

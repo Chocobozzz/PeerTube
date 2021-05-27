@@ -3,12 +3,11 @@ import { getServerCommit } from '@server/helpers/utils'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
-import { RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConfig } from '@shared/models'
+import { HTMLServerConfig, RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConfig } from '@shared/models'
 import { Hooks } from './plugins/hooks'
 import { PluginManager } from './plugins/plugin-manager'
 import { getThemeOrDefault } from './plugins/theme-utils'
-import { getEnabledResolutions } from './video-transcoding'
-import { VideoTranscodingProfilesManager } from './video-transcoding-profiles'
+import { VideoTranscodingProfilesManager } from './transcoding/video-transcoding-profiles'
 
 /**
  *
@@ -37,20 +36,9 @@ class ServerConfigManager {
     this.homepageEnabled = !!content
   }
 
-  async getServerConfig (ip?: string): Promise<ServerConfig> {
-    if (this.serverCommit === undefined) {
-      this.serverCommit = await getServerCommit()
-    }
+  async getHTMLServerConfig (): Promise<HTMLServerConfig> {
+    if (this.serverCommit === undefined) this.serverCommit = await getServerCommit()
 
-    const { allowed } = await Hooks.wrapPromiseFun(
-      isSignupAllowed,
-      {
-        ip
-      },
-      'filter:api.user.signup.allowed.result'
-    )
-
-    const allowedForCurrentIP = isSignupAllowedForCurrentIP(ip)
     const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
     return {
@@ -94,11 +82,6 @@ class ServerConfigManager {
       },
       serverVersion: PEERTUBE_VERSION,
       serverCommit: this.serverCommit,
-      signup: {
-        allowed,
-        allowedForCurrentIP,
-        requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
-      },
       transcoding: {
         hls: {
           enabled: CONFIG.TRANSCODING.HLS.ENABLED
@@ -106,7 +89,7 @@ class ServerConfigManager {
         webtorrent: {
           enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
         },
-        enabledResolutions: getEnabledResolutions('vod'),
+        enabledResolutions: this.getEnabledResolutions('vod'),
         profile: CONFIG.TRANSCODING.PROFILE,
         availableProfiles: VideoTranscodingProfilesManager.Instance.getAvailableProfiles('vod')
       },
@@ -120,7 +103,7 @@ class ServerConfigManager {
 
         transcoding: {
           enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
-          enabledResolutions: getEnabledResolutions('live'),
+          enabledResolutions: this.getEnabledResolutions('live'),
           profile: CONFIG.LIVE.TRANSCODING.PROFILE,
           availableProfiles: VideoTranscodingProfilesManager.Instance.getAvailableProfiles('live')
         },
@@ -219,6 +202,28 @@ class ServerConfigManager {
     }
   }
 
+  async getServerConfig (ip?: string): Promise<ServerConfig> {
+    const { allowed } = await Hooks.wrapPromiseFun(
+      isSignupAllowed,
+      {
+        ip
+      },
+      'filter:api.user.signup.allowed.result'
+    )
+
+    const allowedForCurrentIP = isSignupAllowedForCurrentIP(ip)
+
+    const signup = {
+      allowed,
+      allowedForCurrentIP,
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
+    }
+
+    const htmlConfig = await this.getHTMLServerConfig()
+
+    return { ...htmlConfig, signup }
+  }
+
   getRegisteredThemes () {
     return PluginManager.Instance.getRegisteredThemes()
                         .map(t => ({
@@ -238,6 +243,16 @@ class ServerConfigManager {
                           description: p.description,
                           clientScripts: p.clientScripts
                         }))
+  }
+
+  getEnabledResolutions (type: 'vod' | 'live') {
+    const transcoding = type === 'vod'
+      ? CONFIG.TRANSCODING
+      : CONFIG.LIVE.TRANSCODING
+
+    return Object.keys(transcoding.RESOLUTIONS)
+                 .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
+                 .map(r => parseInt(r, 10))
   }
 
   private getIdAndPassAuthPlugins () {

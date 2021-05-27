@@ -7,11 +7,12 @@ import {
   MAccountVideoRateAccountVideo,
   MAccountVideoRateFormattable
 } from '@server/types/models/video/video-rate'
+import { AttributesOnly } from '@shared/core-utils'
 import { AccountVideoRate } from '../../../shared'
 import { VideoRateType } from '../../../shared/models/videos'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
@@ -42,7 +43,7 @@ import { AccountModel } from './account'
     }
   ]
 })
-export class AccountVideoRateModel extends Model {
+export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountVideoRateModel>>> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...values(VIDEO_RATE_TYPES)))

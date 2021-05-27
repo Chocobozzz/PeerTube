@@ -39,6 +39,7 @@
   - [Build your plugin](#build-your-plugin)
   - [Test your plugin/theme](#test-your-plugintheme)
   - [Publish](#publish)
+  - [Unpublish](#unpublish)
 - [Plugin & Theme hooks/helpers API](#plugin--theme-hookshelpers-api)
 - [Tips](#tips)
   - [Compatibility with PeerTube](#compatibility-with-peertube)
@@ -909,6 +910,14 @@ $ npm publish
 Every time you want to publish another version of your plugin/theme, just update the `version` key from the `package.json`
 and republish it on NPM. Remember that the PeerTube index will take into account your new plugin/theme version after ~24 hours.
 
+### Unpublish
+
+If for a particular reason you don't want to maintain your plugin/theme anymore
+you can deprecate it. The plugin index will automatically remove it preventing users to find/install it from the PeerTube admin interface:
+
+```bash
+$ npm deprecate peertube-plugin-xxx@"> 0.0.0" "explain here why you deprecate your plugin/theme"
+```
 
 ## Plugin & Theme hooks/helpers API
 

@@ -1,6 +1,6 @@
 import { ActivityReject } from '../../../../shared/models/activitypub/activity'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActor } from '../../../types/models'
 

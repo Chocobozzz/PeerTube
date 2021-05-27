@@ -219,3 +219,5 @@ export interface ServerConfig {
     enabled: boolean
   }
 }
+
+export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

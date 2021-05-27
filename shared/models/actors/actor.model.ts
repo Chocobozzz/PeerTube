@@ -8,6 +8,5 @@ export interface Actor {
   followingCount: number
   followersCount: number
   createdAt: Date | string
-  updatedAt: Date | string
   avatar?: ActorImage
 }

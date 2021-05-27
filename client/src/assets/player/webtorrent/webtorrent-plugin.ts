@@ -557,7 +557,8 @@ class WebTorrentPlugin extends Plugin {
   private pickAverageVideoFile () {
     if (this.videoFiles.length === 1) return this.videoFiles[0]
 
-    return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
+    const files = this.videoFiles.filter(f => f.resolution.id !== 0)
+    return files[Math.floor(files.length / 2)]
   }
 
   private stopTorrent (torrent: WebTorrent.Torrent) {

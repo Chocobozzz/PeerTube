@@ -1,7 +1,7 @@
 import { chunk } from 'lodash'
 import { doJSONRequest } from '@server/helpers/requests'
 import { JobQueue } from '@server/lib/job-queue'
-import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
+import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'

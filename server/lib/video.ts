@@ -1,3 +1,4 @@
+import { UploadFiles } from 'express'
 import { Transaction } from 'sequelize/types'
 import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
@@ -27,12 +28,14 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
     privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,
     channelId: channelId,
     originallyPublishedAt: videoInfo.originallyPublishedAt
+      ? new Date(videoInfo.originallyPublishedAt)
+      : null
   }
 }
 
 async function buildVideoThumbnailsFromReq (options: {
   video: MVideoThumbnail
-  files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[]
+  files: UploadFiles
   fallback: (type: ThumbnailType) => Promise<MThumbnail>
   automaticallyGenerated?: boolean
 }) {

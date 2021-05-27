@@ -236,7 +236,6 @@ async function getLiveTranscodingCommand (options: {
     }
   ]
 
-  command.outputOption('-preset superfast')
   command.outputOption('-sc_threshold 0')
 
   addDefaultEncoderGlobalParams({ command })
@@ -684,7 +683,7 @@ function getFFmpegVersion () {
 
           // Fix ffmpeg version that does not include patch version (4.4 for example)
           let version = parsed[1]
-          if (version.match(/^\d+\.\d+/)) {
+          if (version.match(/^\d+\.\d+$/)) {
             version += '.0'
           }
 

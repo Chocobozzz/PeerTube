@@ -47,14 +47,12 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
       cleanUpReqFiles(req)
       return res.status(HttpStatusCode.CONFLICT_409)
         .json({ error: 'HTTP import is not enabled on this instance.' })
-        .end()
     }
 
     if (CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED !== true && (req.body.magnetUri || torrentFile)) {
       cleanUpReqFiles(req)
       return res.status(HttpStatusCode.CONFLICT_409)
                 .json({ error: 'Torrent/magnet URI import is not enabled on this instance.' })
-                .end()
     }
 
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
@@ -65,7 +63,6 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
 
       return res.status(HttpStatusCode.BAD_REQUEST_400)
         .json({ error: 'Should have a magnetUri or a targetUrl or a torrent file.' })
-        .end()
     }
 
     if (!await isImportAccepted(req, res)) return cleanUpReqFiles(req)

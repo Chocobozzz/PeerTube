@@ -162,6 +162,7 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
 
   return res.json({ banner: banner.toFormattedJSON() })
 }
+
 async function updateVideoChannelAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files['avatarfile'][0]
   const videoChannel = res.locals.videoChannel
@@ -221,10 +222,6 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
 
   try {
     await sequelizeTypescript.transaction(async t => {
-      const sequelizeOptions = {
-        transaction: t
-      }
-
       if (videoChannelInfoToUpdate.displayName !== undefined) videoChannelInstance.name = videoChannelInfoToUpdate.displayName
       if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.description = videoChannelInfoToUpdate.description
 
@@ -238,7 +235,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
         }
       }
 
-      const videoChannelInstanceUpdated = await videoChannelInstance.save(sequelizeOptions) as MChannelBannerAccountDefault
+      const videoChannelInstanceUpdated = await videoChannelInstance.save({ transaction: t }) as MChannelBannerAccountDefault
       await sendUpdateActor(videoChannelInstanceUpdated, t)
 
       auditLogger.update(

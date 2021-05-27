@@ -16,7 +16,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isAbuseModerationCommentValid, isAbuseReasonValid, isAbuseStateValid } from '@server/helpers/custom-validators/abuses'
-import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
+import { abusePredefinedReasonsMap, AttributesOnly } from '@shared/core-utils'
 import {
   AbuseFilter,
   AbuseObject,
@@ -187,7 +187,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class AbuseModel extends Model {
+export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
 
   @AllowNull(false)
   @Default(null)

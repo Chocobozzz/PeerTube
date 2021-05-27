@@ -1,15 +1,12 @@
 {
   "name": "peertube",
   "description": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.",
-  "version": "3.1.0",
+  "version": "3.2.0-rc.1",
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
-    "node": ">=10.x",
-    "yarn": ">=1.x",
-    "postgres": ">=10.x",
-    "redis-server": ">=2.8.18",
-    "ffmpeg": ">=4.1"
+    "node": ">=12.x",
+    "yarn": ">=1.x"
   },
   "bin": {
     "peertube": "dist/server/tools/peertube.js"
@@ -76,6 +73,7 @@
     "swagger-cli": "swagger-cli"
   },
   "dependencies": {
+    "@uploadx/core": "^4.4.0",
     "apicache": "1.6.2",
     "async": "^3.0.1",
     "async-lru": "^1.1.1",

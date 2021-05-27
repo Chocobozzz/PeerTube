@@ -1,6 +1,6 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { CustomPage } from '@shared/models'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { getServerActor } from '../application/application'
 
 @Table({
