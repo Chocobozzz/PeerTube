@@ -1,4 +1,4 @@
-@import '_variables';
+@use '_variables';
 
 @mixin disable-default-a-behaviour {
   &:hover,

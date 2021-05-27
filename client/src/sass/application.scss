@@ -1,16 +1,16 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
-@import '_bootstrap-variables';
-@import '_variables';
-@import '_mixins';
+@use '_bootstrap-variables';
+@use '_variables';
+@use '_mixins';
 
-@import '_fonts';
+@use '_fonts';
 
-@import './bootstrap';
-@import './primeng-custom';
-@import './ng-select';
+@use './bootstrap';
+@use './primeng-custom';
+@use './ng-select';
 
-@import './classes';
+@use './classes';
 
 [hidden] {
   display: none !important;

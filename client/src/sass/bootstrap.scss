@@ -1,8 +1,8 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
-@import '_bootstrap';
+@use '_bootstrap';
 
-@import '_variables';
-@import '_mixins';
+@use '_variables';
+@use '_mixins';
 
 // Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
 .glyphicon-refresh-animate {

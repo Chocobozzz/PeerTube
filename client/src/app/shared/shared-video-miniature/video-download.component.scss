@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables';
+@use '_mixins';
 
 .nav-content {
   margin-top: 30px;

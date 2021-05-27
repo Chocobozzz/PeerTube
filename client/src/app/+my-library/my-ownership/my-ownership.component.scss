@@ -1,5 +1,5 @@
-@import 'miniature';
-@import 'mixins';
+@use '_miniature';
+@use '_mixins';
 
 .chip {
   @include chip;

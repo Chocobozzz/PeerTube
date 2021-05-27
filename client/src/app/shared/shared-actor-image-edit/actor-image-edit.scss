@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables';
+@use '_mixins';
 
 .actor ::ng-deep .popover-image-info .popover-body {
   padding: 0;

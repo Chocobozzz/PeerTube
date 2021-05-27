@@ -1,7 +1,7 @@
-@import '_bootstrap-variables';
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_bootstrap-variables';
+@use '_variables';
+@use '_mixins';
+@use '_miniature';
 
 $icon-size: 16px;
 

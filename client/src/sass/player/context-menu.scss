@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import './_player-variables';
+@use '_variables';
+@use '_mixins';
+@use './_player-variables';
 
 $context-menu-width: 350px;
 

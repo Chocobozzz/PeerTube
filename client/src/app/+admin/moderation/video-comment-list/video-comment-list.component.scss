@@ -1,4 +1,4 @@
-@import 'mixins';
+@use '_mixins';
 
 my-feed {
   @include margin-left(5px);

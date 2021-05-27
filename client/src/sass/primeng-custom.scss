@@ -1,8 +1,8 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables';
+@use '_mixins';
 
 /* stylelint-disable */
-@import '~primeng/resources/primeng.css';
+@use '~primeng/resources/primeng.css';
 
 // Override primeng style we don't want
 input[type=button] {

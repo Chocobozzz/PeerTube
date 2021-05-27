@@ -1,7 +1,5 @@
-@import '_variables';
-@import '_mixins';
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@use '_variables';
+@use '_mixins';
 
 .peertube-container {
   padding-bottom: 20px;

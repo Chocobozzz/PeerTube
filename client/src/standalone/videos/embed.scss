@@ -1,10 +1,10 @@
-@import '_variables';
-@import '_mixins';
-@import '~video.js/dist/video-js.css';
-@import '~videojs-dock/dist/videojs-dock.css';
+@use '_variables';
+@use '_mixins';
+@use '~video.js/dist/video-js.css';
+@use '~videojs-dock/dist/videojs-dock.css';
 
 $assets-path: '../../assets/';
-@import '../../sass/player/index';
+@use '../../sass/player/index';
 
 [hidden] {
   display: none !important;

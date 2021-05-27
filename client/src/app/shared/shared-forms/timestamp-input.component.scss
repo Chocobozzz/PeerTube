@@ -1,4 +1,4 @@
-@import 'variables';
+@use '_variables';
 
 p-inputmask {
   ::ng-deep input {

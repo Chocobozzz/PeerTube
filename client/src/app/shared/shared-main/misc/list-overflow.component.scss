@@ -1,4 +1,5 @@
-@import '_mixins';
+@use '_variables';
+@use '_mixins';
 
 :host {
   width: 100%;

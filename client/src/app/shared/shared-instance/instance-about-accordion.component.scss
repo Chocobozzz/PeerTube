@@ -1,9 +1,9 @@
-@import '_variables';
-@import '_mixins';
-@import './_bootstrap-variables';
+@use '_variables';
+@use '_mixins';
+@use './_bootstrap-variables';
 
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@use '~bootstrap/scss/functions';
+@use '~bootstrap/scss/variables';
 
 .instance-name {
   line-height: 1.7rem;

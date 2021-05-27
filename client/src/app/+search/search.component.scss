@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables';
+@use '_mixins';
 
 @mixin build-channel-img-size ($video-img-width) {
   $image-size: min(130px, $video-img-width);

@@ -1,4 +1,4 @@
-@import '_variables';
+@use '_variables';
 
 $ng-select-highlight: #f2690d;
 // $ng-select-primary-text: #333 !default;
@@ -14,7 +14,7 @@ $ng-select-height: 30px;
 $ng-select-value-padding-left: 15px;
 $ng-select-value-font-size: 15px;
 
-@import '~@ng-select/ng-select/scss/default.theme';
+@use '~@ng-select/ng-select/scss/default.theme';
 
 .ng-select {
   font-size: $ng-select-value-font-size;

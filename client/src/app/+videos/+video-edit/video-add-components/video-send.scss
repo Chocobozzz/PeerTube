@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables';
+@use '_mixins';
 
 $width-size: 190px;
 

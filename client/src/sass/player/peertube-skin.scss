@@ -1,6 +1,7 @@
-@import '_variables';
-@import '_mixins';
-@import './_player-variables';
+@use 'sass:math';
+@use '_variables';
+@use '_mixins';
+@use './_player-variables';
 
 body {
   --embedForegroundColor: #{$primary-foreground-color};
@@ -11,8 +12,8 @@ body {
 @mixin big-play-button-triangle-size($triangle-size) {
   width: $triangle-size;
   height: $triangle-size;
-  top: calc(50% - #{$triangle-size / 2});
-  left: calc(53% - #{($triangle-size / 2)});
+  top: calc(50% - math.div($triangle-size / 2));
+  left: calc(53% - math.div($triangle-size / 2));
 }
 
 .video-js.vjs-peertube-skin {
@@ -69,7 +70,7 @@ body {
     width: $big-play-width;
     height: $big-play-height;
     line-height: $big-play-height;
-    margin-top: -($big-play-height / 2);
+    margin-top: -(math.div($big-play-height / 2));
     transition: 0.4s opacity;
 
     &::-moz-focus-inner {

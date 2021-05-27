@@ -1,6 +1,6 @@
-@import 'variables';
-@import 'mixins';
-@import 'miniature';
+@use '_variables';
+@use '_mixins';
+@use '_miniature';
 
 .comment-html {
   background-color: #ececec;

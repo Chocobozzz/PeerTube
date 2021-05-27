@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables';
+@use '_mixins';
 
 .cfp-hotkeys-container {
   display: flex !important;

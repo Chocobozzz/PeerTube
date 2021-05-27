@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables';
+@use '_mixins';
+@use '_miniature';
 
 .root {
   display: grid;

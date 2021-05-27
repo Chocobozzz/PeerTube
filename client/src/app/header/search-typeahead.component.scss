@@ -1,7 +1,5 @@
-@import '_mixins';
-@import '_variables';
-@import '_bootstrap-variables';
-@import '~bootstrap/scss/mixins/_breakpoints';
+@use '_mixins';
+@use '_variables';
 
 #search-video {
   @include peertube-input-text($search-input-width);
