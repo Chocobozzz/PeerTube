@@ -108,7 +108,7 @@ info:
 
     This API features [Cross-Origin Resource Sharing (CORS)](https://fetch.spec.whatwg.org/),
     allowing cross-domain communication from the browser for some routes:
-    
+
     | Endpoint                    |
     |------------------------- ---|
     | `/api/*`                    |
@@ -124,7 +124,7 @@ tags:
   - name: Register
     description: |
       As a visitor, you can use this API to open an account (if registrations are open on
-      that PeerTube instance). As an admin, you should use the dedicated [User creation 
+      that PeerTube instance). As an admin, you should use the dedicated [User creation
       API](#operation/addUser) instead.
   - name: Session
     x-displayName: Login/Logout
@@ -939,7 +939,7 @@ paths:
       operationId: verifyUser
       description: |
         Following a user registration, the new user will receive an email asking to click a link
-        containing a secret. 
+        containing a secret.
       tags:
         - Users
         - Register
@@ -4456,7 +4456,7 @@ components:
       required: true
       description: The thread id (root comment id)
       schema:
-        $ref: '#/components/schemas/VideoCommentThreadTree/properties/comment/properties/id'
+        type: integer
     commentId:
       name: commentId
       in: path
@@ -6235,7 +6235,7 @@ components:
             # optionally present fields: they require WITH_STATS scope
             videosCount:
               type: integer
-              description: Count of videos published 
+              description: Count of videos published
             abusesCount:
               type: integer
               description: Count of reports/abuses of which the user is a target
