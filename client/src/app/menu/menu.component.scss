@@ -259,7 +259,7 @@ my-actor-avatar {
     display: block;
     width: 100%;
 
-    :not(:last-child) {
+    &:not(:last-child) {
       margin-bottom: 10px;
     }
   }
