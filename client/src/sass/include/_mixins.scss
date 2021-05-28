@@ -62,7 +62,8 @@
 
 @mixin apply-svg-color ($color) {
   ::ng-deep .feather,
-  ::ng-deep .material {
+  ::ng-deep .material,
+  ::ng-deep .misc {
     color: $color;
   }
 }

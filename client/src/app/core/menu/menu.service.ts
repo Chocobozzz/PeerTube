@@ -83,7 +83,7 @@ export class MenuService {
         priority: 130
       },
       {
-        icon: 'octagon' as 'octagon',
+        icon: 'local' as 'local',
         label: $localize`Local videos`,
         menuLabel: $localize`Local videos`,
         path: '/videos/local',

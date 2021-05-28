@@ -160,7 +160,7 @@
               "debug",
               "p2p-media-loader-hlsjs",
               "video.js",
-              "sha1",
+              "sha.js/sha1",
               "postcss",
               "core-js/features/reflect"
             ],
