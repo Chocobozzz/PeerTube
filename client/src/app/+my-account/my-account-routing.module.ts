@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MetaGuard } from '@ngx-meta/core'
 import { LoginGuard } from '../core'
 import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
+import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-blocklist.component'
 import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-account-server-blocklist.component'
 import { MyAccountNotificationsComponent } from './my-account-notifications/my-account-notifications.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountComponent } from './my-account.component'
-import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 
 const myAccountRoutes: Routes = [
   {
     path: '',
     component: MyAccountComponent,
-    canActivateChild: [ MetaGuard, LoginGuard ],
+    canActivateChild: [ LoginGuard ],
     children: [
       {
         path: '',

@@ -26,7 +26,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
-import { getHTMLServerConfig } from './config'
+import { ServerConfigManager } from './server-config-manager'
 
 type Tags = {
   ogType: string
@@ -211,7 +211,7 @@ class ClientHtml {
     if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
-    const serverConfig = await getHTMLServerConfig()
+    const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
 
     let html = buffer.toString()
     html = await ClientHtml.addAsyncPluginCSS(html)
@@ -280,7 +280,7 @@ class ClientHtml {
     if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
-    const serverConfig = await getHTMLServerConfig()
+    const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
 
     let html = buffer.toString()
 

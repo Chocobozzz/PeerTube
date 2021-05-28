@@ -3,7 +3,8 @@ import { PluginElementPlaceholder } from '@shared/models'
 
 @Component({
   selector: 'my-plugin-placeholder',
-  template: '<div [id]="getId()"></div>'
+  template: '<div [id]="getId()"></div>',
+  styleUrls: [ './plugin-placeholder.component.scss' ]
 })
 
 export class PluginPlaceholderComponent {

@@ -131,13 +131,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "localize": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "baseHref": "/",
+            "deployUrl": "",
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/sass/include"
@@ -151,39 +152,25 @@
               "src/sass/application.scss"
             ],
             "allowedCommonJsDependencies": [
-              "@angularclass/hmr",
-              "debug",
-              "mousetrap",
+              "qrcode",
               "chart.js",
-              "linkifyjs/html",
-              "linkifyjs",
-              "markdown-it",
+              "htmlparser2",
               "markdown-it-emoji/light",
               "sanitize-html",
-              "socket.io-client",
-              "socket.io-parser",
-              "@app/+about/about-peertube/about-peertube-contributors.component",
-              "path",
-              "video.js",
+              "debug",
               "p2p-media-loader-hlsjs",
-              "videojs-hotkeys/videojs.hotkeys",
-              "p2p-media-loader-core",
-              "qrcode",
-              "webtorrent",
-              "cache-chunk-store",
-              "global/document",
-              "videojs-vtt.js",
-              "videojs-vtt.js",
-              "@babel/runtime/helpers/possibleConstructorReturn",
-              "@babel/runtime/helpers/inherits",
-              "@babel/runtime/helpers/construct",
-              "@videojs/xhr",
-              "htmlparser2",
-              "url",
-              "parse-srcset",
-              "postcss"
+              "video.js",
+              "sha1",
+              "postcss",
+              "core-js/features/reflect"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -191,7 +178,6 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -251,8 +237,6 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "baseHref": "/",
-            "deployUrl": "client/",
             "browserTarget": "PeerTube:build",
             "proxyConfig": "proxy.config.json"
           },

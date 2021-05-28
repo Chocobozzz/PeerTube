@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: PeerTube
-  version: 3.2.0-rc.1
+  version: 3.2.0
   contact:
     name: PeerTube Community
     url: https://joinpeertube.org
@@ -22,7 +22,7 @@ info:
     - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
 
     See the [REST API quick start](https://docs.joinpeertube.org/api-rest-getting-started) for a few
-    examples of using with the PeerTube API.
+    examples of using the PeerTube API.
 
     # Authentication
 
@@ -65,7 +65,7 @@ info:
 
     {
       "errors": {
-        "id": { // 
+        "id": {
           "value": "a117eb-c6a9-4756-bb09-2a956239f",
           "msg": "Should have a valid id",
           "param": "id",
@@ -108,7 +108,7 @@ info:
 
     This API features [Cross-Origin Resource Sharing (CORS)](https://fetch.spec.whatwg.org/),
     allowing cross-domain communication from the browser for some routes:
-    
+
     | Endpoint                    |
     |------------------------- ---|
     | `/api/*`                    |
@@ -124,8 +124,8 @@ tags:
   - name: Register
     description: |
       As a visitor, you can use this API to open an account (if registrations are open on
-      that PeerTube instance). As an admin, you should use the dedicated [User creation 
-      API](#operation/createUser) instead.
+      that PeerTube instance). As an admin, you should use the dedicated [User creation
+      API](#operation/addUser) instead.
   - name: Session
     x-displayName: Login/Logout
     description: |
@@ -247,6 +247,8 @@ tags:
 
       Administrators can also enable the use of a remote search system, indexing
       videos and channels not could be not federated by the instance.
+  - name: Homepage
+    description: Get and update the custom homepage
   - name: Video Mirroring
     description: |
       PeerTube instances can mirror videos from one another, and help distribute some videos.
@@ -281,6 +283,9 @@ x-tagGroups:
   - name: Search
     tags:
       - Search
+  - name: Custom pages
+    tags:
+      - Homepage
   - name: Moderation
     tags:
       - Abuses
@@ -302,6 +307,7 @@ paths:
       tags:
         - Accounts
       summary: Get an account
+      operationId: getAccount
       parameters:
         - $ref: '#/components/parameters/name'
       responses:
@@ -313,12 +319,14 @@ paths:
                 $ref: '#/components/schemas/Account'
         '404':
           description: account not found
+
   '/accounts/{name}/videos':
     get:
       tags:
         - Accounts
         - Video
       summary: 'List videos of an account'
+      operationId: getAccountVideos
       parameters:
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -374,11 +382,13 @@ paths:
             json = r.json()
 
             print(json)
+
   /accounts:
     get:
       tags:
         - Accounts
       summary: List accounts
+      operationId: getAccounts
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -392,11 +402,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Account'
+
   /config:
     get:
       tags:
         - Config
       summary: Get instance public configuration
+      operationId: getConfig
       responses:
         '200':
           description: successful operation
@@ -407,9 +419,11 @@ paths:
               examples:
                 nightly:
                   externalValue: https://peertube2.cpy.re/api/v1/config
+
   /config/about:
     get:
       summary: Get instance "About" information
+      operationId: getAbout
       tags:
         - Config
       responses:
@@ -422,9 +436,11 @@ paths:
               examples:
                 nightly:
                   externalValue: https://peertube2.cpy.re/api/v1/config/about
+
   /config/custom:
     get:
       summary: Get instance runtime configuration
+      operationId: getCustomConfig
       tags:
         - Config
       security:
@@ -439,6 +455,7 @@ paths:
                 $ref: '#/components/schemas/ServerConfigCustom'
     put:
       summary: Set instance runtime configuration
+      operationId: putCustomConfig
       tags:
         - Config
       security:
@@ -455,6 +472,7 @@ paths:
               - webtorrent and hls are disabled with transcoding enabled - you need at least one enabled
     delete:
       summary: Delete instance runtime configuration
+      operationId: delCustomConfig
       tags:
         - Config
       security:
@@ -463,9 +481,45 @@ paths:
       responses:
         '200':
           description: successful operation
+
+  /custom-pages/homepage/instance:
+    get:
+      summary: Get instance custom homepage
+      tags:
+        - Homepage
+      responses:
+        '404':
+          description: No homepage set
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomHomepage'
+    put:
+      summary: Set instance custom homepage
+      tags:
+        - Homepage
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: content of the homepage, that will be injected in the client
+      responses:
+        '204':
+          description: successful operation
+
   /jobs/{state}:
     get:
       summary: List instance jobs
+      operationId: getJobs
       security:
         - OAuth2:
           - admin
@@ -532,6 +586,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Follow'
+
   '/server/followers/{nameWithHost}':
     delete:
       summary: Remove or reject a follower to your server
@@ -553,6 +608,7 @@ paths:
           description: successful operation
         '404':
           description: follower not found
+
   '/server/followers/{nameWithHost}/reject':
     post:
       summary: Reject a pending follower to your server
@@ -574,6 +630,7 @@ paths:
           description: successful operation
         '404':
           description: follower not found
+
   '/server/followers/{nameWithHost}/accept':
     post:
       summary: Accept a pending follower to your server
@@ -646,6 +703,7 @@ paths:
                     type: string
                     format: hostname
                   uniqueItems: true
+
   '/server/following/{host}':
     delete:
       summary: Unfollow a server
@@ -671,7 +729,7 @@ paths:
   /users:
     post:
       summary: Create a user
-      operationId: createUser
+      operationId: addUser
       security:
         - OAuth2:
           - admin
@@ -686,18 +744,18 @@ paths:
                 $ref: '#/components/schemas/AddUserResponse'
           links:
             # GET /users/{id}
-            GetUserId:
-              operationId: getUserId
+            GetUser:
+              operationId: getUser
               parameters:
                 id: '$response.body#/user/id'
             # PUT /users/{id}
-            PutUserId:
-              operationId: putUserId
+            PutUser:
+              operationId: putUser
               parameters:
                 id: '$response.body#/user/id'
             # DELETE /users/{id}
-            DelUserId:
-              operationId: delUserId
+            DelUser:
+              operationId: delUser
               parameters:
                 id: '$response.body#/user/id'
         '403':
@@ -713,6 +771,7 @@ paths:
         required: true
     get:
       summary: List users
+      operationId: getUsers
       security:
         - OAuth2:
           - admin
@@ -733,6 +792,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+
   '/users/{id}':
     parameters:
       - $ref: '#/components/parameters/id'
@@ -743,7 +803,7 @@ paths:
           - admin
       tags:
         - Users
-      operationId: delUserId
+      operationId: delUser
       responses:
         '204':
           description: successful operation
@@ -753,7 +813,7 @@ paths:
         - OAuth2: []
       tags:
         - Users
-      operationId: getUserId
+      operationId: getUser
       parameters:
         - name: withStats
           in: query
@@ -778,7 +838,7 @@ paths:
         - OAuth2: []
       tags:
         - Users
-      operationId: putUserId
+      operationId: putUser
       responses:
         '204':
           description: successful operation
@@ -792,7 +852,7 @@ paths:
   /oauth-clients/local:
     get:
       summary: Login prerequisite
-      description: You need to retrieve a client id and secret before [logging in](#operation/getOauthToken).
+      description: You need to retrieve a client id and secret before [logging in](#operation/getOAuthToken).
       operationId: getOAuthClient
       tags:
         - Session
@@ -816,6 +876,7 @@ paths:
 
             ## AUTH
             curl -s "$API/oauth-clients/local"
+
   /users/token:
     post:
       summary: Login
@@ -880,6 +941,7 @@ paths:
               --data username="$USERNAME" \
               --data password="$PASSWORD" \
               | jq -r ".access_token"
+
   /users/revoke-token:
     post:
       summary: Logout
@@ -896,6 +958,7 @@ paths:
   /users/register:
     post:
       summary: Register a user
+      operationId: registerUser
       tags:
         - Users
         - Register
@@ -908,12 +971,14 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterUser'
         required: true
+
   /users/{id}/verify-email:
     post:
       summary: Verify a user
+      operationId: verifyUser
       description: |
         Following a user registration, the new user will receive an email asking to click a link
-        containing a secret. 
+        containing a secret.
       tags:
         - Users
         - Register
@@ -939,9 +1004,11 @@ paths:
           description: invalid verification string
         '404':
           description: user not found
+
   /users/ask-send-verify-email:
     post:
       summary: Resend user verification link
+      operationId: resendEmailToVerifyUser
       tags:
         - Users
         - Register
@@ -952,6 +1019,7 @@ paths:
   /users/me:
     get:
       summary: Get my user information
+      operationId: getUserInfo
       security:
         - OAuth2:
           - user
@@ -968,6 +1036,7 @@ paths:
                   $ref: '#/components/schemas/User'
     put:
       summary: Update my user information
+      operationId: putUserInfo
       security:
         - OAuth2:
           - user
@@ -982,6 +1051,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateMe'
         required: true
+
   /users/me/videos/imports:
     get:
       summary: Get video imports of my user
@@ -1002,6 +1072,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoImportsList'
+
   /users/me/video-quota-used:
     get:
       summary: Get my user used quota
@@ -1026,6 +1097,7 @@ paths:
                     type: number
                     description: The user video quota used today in bytes
                     example: 1681014151
+
   '/users/me/videos/{videoId}/rating':
     get:
       summary: Get rate of my user for a video
@@ -1048,6 +1120,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetMeVideoRating'
+
   /users/me/videos:
     get:
       summary: Get videos of my user
@@ -1068,6 +1141,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+
   /users/me/subscriptions:
     get:
       summary: Get my user subscriptions
@@ -1113,6 +1187,7 @@ paths:
       responses:
         '200':
           description: successful operation
+
   /users/me/subscriptions/exist:
     get:
       summary: Get if subscriptions exist for my user
@@ -1130,6 +1205,7 @@ paths:
             application/json:
               schema:
                 type: object
+
   /users/me/subscriptions/videos:
     get:
       summary: List videos of subscriptions of my user
@@ -1159,6 +1235,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+
   '/users/me/subscriptions/{subscriptionHandle}':
     get:
       summary: Get subscription of my user
@@ -1188,6 +1265,7 @@ paths:
       responses:
         '200':
           description: successful operation
+
   /users/me/notifications:
     get:
       summary: List my notifications
@@ -1211,6 +1289,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationListResponse'
+
   /users/me/notifications/read:
     post:
       summary: Mark notifications as read by their id
@@ -1234,6 +1313,7 @@ paths:
       responses:
         '204':
           description: successful operation
+
   /users/me/notifications/read-all:
     post:
       summary: Mark all my notification as read
@@ -1244,6 +1324,7 @@ paths:
       responses:
         '204':
           description: successful operation
+
   /users/me/notification-settings:
     put:
       summary: Update my notification settings
@@ -1284,6 +1365,7 @@ paths:
       responses:
         '204':
           description: successful operation
+
   /users/me/history/videos:
     get:
       summary: List watched videos history
@@ -1302,6 +1384,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+
   /users/me/history/videos/remove:
     post:
       summary: Clear video history
@@ -1322,6 +1405,7 @@ paths:
       responses:
         '204':
           description: successful operation
+
   /users/me/avatar/pick:
     post:
       summary: Update my user avatar
@@ -1360,6 +1444,7 @@ paths:
             encoding:
               avatarfile:
                 contentType: image/png, image/jpeg
+
   /users/me/avatar:
     delete:
       summary: Delete my avatar
@@ -1381,6 +1466,7 @@ paths:
       responses:
         '200':
           description: successful operation
+
   '/videos/ownership/{id}/accept':
     post:
       summary: Accept ownership change request
@@ -1397,6 +1483,7 @@ paths:
           description: cannot terminate an ownership change of another user
         '404':
           description: video owneship change not found
+
   '/videos/ownership/{id}/refuse':
     post:
       summary: Refuse ownership change request
@@ -1413,6 +1500,7 @@ paths:
           description: cannot terminate an ownership change of another user
         '404':
           description: video owneship change not found
+
   '/videos/{id}/give-ownership':
     post:
       summary: Request ownership change
@@ -1440,9 +1528,11 @@ paths:
           description: changing video ownership to a remote account is not supported yet
         '404':
           description: video not found
+
   /videos:
     get:
       summary: List videos
+      operationId: getVideos
       tags:
         - Video
       parameters:
@@ -1465,6 +1555,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+
   /videos/categories:
     get:
       summary: List available video categories
@@ -1483,6 +1574,7 @@ paths:
               examples:
                 nightly:
                   externalValue: https://peertube2.cpy.re/api/v1/videos/categories
+
   /videos/licences:
     get:
       summary: List available video licences
@@ -1501,6 +1593,7 @@ paths:
               examples:
                 nightly:
                   externalValue: https://peertube2.cpy.re/api/v1/videos/licences
+
   /videos/languages:
     get:
       summary: List available video languages
@@ -1519,6 +1612,7 @@ paths:
               examples:
                 nightly:
                   externalValue: https://peertube2.cpy.re/api/v1/videos/languages
+
   /videos/privacies:
     get:
       summary: List available video privacy policies
@@ -1537,9 +1631,11 @@ paths:
               examples:
                 nightly:
                   externalValue: https://peertube2.cpy.re/api/v1/videos/privacies
+
   '/videos/{id}':
     put:
       summary: Update a video
+      operationId: putVideo
       security:
         - OAuth2: []
       tags:
@@ -1614,6 +1710,7 @@ paths:
                 contentType: image/jpeg
     get:
       summary: Get a video
+      operationId: getVideo
       tags:
         - Video
       parameters:
@@ -1627,6 +1724,7 @@ paths:
                 $ref: '#/components/schemas/VideoDetails'
     delete:
       summary: Delete a video
+      operationId: delVideo
       security:
         - OAuth2: []
       tags:
@@ -1636,9 +1734,11 @@ paths:
       responses:
         '204':
           description: successful operation
+
   '/videos/{id}/description':
     get:
       summary: Get complete video description
+      operationId: getVideoDesc
       tags:
         - Video
       parameters:
@@ -1655,6 +1755,7 @@ paths:
                 maxLength: 10000
                 example: |
                   **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n**Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**
+
   '/videos/{id}/views':
     post:
       summary: Add a view to a video
@@ -1665,6 +1766,7 @@ paths:
       responses:
         '204':
           description: successful operation
+
   '/videos/{id}/watching':
     put:
       summary: Set watching progress of a video
@@ -1683,6 +1785,7 @@ paths:
       responses:
         '204':
           description: successful operation
+
   /videos/upload:
     post:
       summary: Upload a video
@@ -1759,6 +1862,7 @@ paths:
               --form videofile=@"$FILE_PATH" \
               --form channelId=$CHANNEL_ID \
               --form name="$NAME"
+
   /videos/upload-resumable:
     post:
       summary: Initialize the resumable upload of a video
@@ -1822,7 +1926,7 @@ paths:
         - Video Upload
       parameters:
         - name: upload_id
-          in: path
+          in: query
           required: true
           description: |
             Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
@@ -1899,7 +2003,7 @@ paths:
         - Video Upload
       parameters:
         - name: upload_id
-          in: path
+          in: query
           required: true
           description: |
             Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
@@ -1920,6 +2024,7 @@ paths:
               schema:
                 type: number
                 example: 0
+
   /videos/imports:
     post:
       summary: Import a video
@@ -1959,7 +2064,7 @@ paths:
   /videos/live:
     post:
       summary: Create a live
-      operationId: createLive
+      operationId: addLive
       security:
         - OAuth2: []
       tags:
@@ -2207,7 +2312,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Abuse'
-
     post:
       summary: Report an abuse
       security:
@@ -2275,6 +2379,7 @@ paths:
                         $ref: '#/components/schemas/id'
         '400':
           description: incorrect request parameters
+
   '/abuses/{abuseId}':
     put:
       summary: Update an abuse
@@ -2319,6 +2424,7 @@ paths:
           description: successful operation
         '404':
           description: block not found
+
   '/abuses/{abuseId}/messages':
     get:
       summary: List messages of an abuse
@@ -2343,7 +2449,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/AbuseMessage'
-
     post:
       summary: Add message to an abuse
       security:
@@ -2371,6 +2476,7 @@ paths:
           description: successful operation
         '400':
           description: incorrect request parameters
+
   '/abuses/{abuseId}/messages/{abuseMessageId}':
     delete:
       summary: Delete an abuse message
@@ -2388,6 +2494,7 @@ paths:
   '/videos/{id}/blacklist':
     post:
       summary: Block a video
+      operationId: addVideoBlock
       security:
         - OAuth2:
           - admin
@@ -2401,6 +2508,7 @@ paths:
           description: successful operation
     delete:
       summary: Unblock a video by its id
+      operationId: delVideoBlock
       security:
         - OAuth2:
           - admin
@@ -2414,11 +2522,13 @@ paths:
           description: successful operation
         '404':
           description: block not found
+
   /videos/blacklist:
     get:
       tags:
         - Video Blocks
       summary: List video blocks
+      operationId: getVideoBlocks
       security:
         - OAuth2:
           - admin
@@ -2460,9 +2570,11 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/VideoBlacklist'
+
   /videos/{id}/captions:
     get:
       summary: List captions of a video
+      operationId: getVideoCaptions
       tags:
         - Video Captions
       parameters:
@@ -2482,9 +2594,11 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/VideoCaption'
+
   /videos/{id}/captions/{captionLanguage}:
     put:
       summary: Add or replace a video caption
+      operationId: addVideoCaption
       security:
         - OAuth2:
           - user
@@ -2513,6 +2627,7 @@ paths:
           description: video or language not found
     delete:
       summary: Delete a video caption
+      operationId: delVideoCaption
       security:
         - OAuth2:
           - user
@@ -2526,6 +2641,7 @@ paths:
           description: successful operation
         '404':
           description: video or language or caption for that language not found
+
   /video-channels:
     get:
       summary: List video channels
@@ -2545,7 +2661,7 @@ paths:
                 $ref: '#/components/schemas/VideoChannelList'
     post:
       summary: Create a video channel
-      operationId: createVideoChannel
+      operationId: addVideoChannel
       security:
         - OAuth2: []
       tags:
@@ -2568,6 +2684,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/VideoChannelCreate'
+
   '/video-channels/{channelHandle}':
     get:
       summary: Get a video channel
@@ -2585,6 +2702,7 @@ paths:
                 $ref: '#/components/schemas/VideoChannel'
     put:
       summary: Update a video channel
+      operationId: putVideoChannel
       security:
         - OAuth2: []
       tags:
@@ -2601,6 +2719,7 @@ paths:
               $ref: '#/components/schemas/VideoChannelUpdate'
     delete:
       summary: Delete a video channel
+      operationId: delVideoChannel
       security:
         - OAuth2: []
       tags:
@@ -2610,9 +2729,11 @@ paths:
       responses:
         '204':
           description: successful operation
+
   '/video-channels/{channelHandle}/videos':
     get:
       summary: List videos of a video channel
+      operationId: getVideoChannelVideos
       tags:
         - Video
         - Video Channels
@@ -2637,6 +2758,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+
   '/video-channels/{channelHandle}/avatar/pick':
     post:
       summary: Update channel avatar
@@ -2677,6 +2799,7 @@ paths:
             encoding:
               avatarfile:
                 contentType: image/png, image/jpeg
+
   '/video-channels/{channelHandle}/avatar':
     delete:
       summary: Delete channel avatar
@@ -2689,7 +2812,6 @@ paths:
       responses:
         '204':
           description: successful operation
-
 
   '/video-channels/{channelHandle}/banner/pick':
     post:
@@ -2731,6 +2853,7 @@ paths:
             encoding:
               bannerfile:
                 contentType: image/png, image/jpeg
+
   '/video-channels/{channelHandle}/banner':
     delete:
       summary: Delete channel banner
@@ -2791,7 +2914,7 @@ paths:
     post:
       summary: Create a video playlist
       description: If the video playlist is set as public, `videoChannelId` is mandatory.
-      operationId: createPlaylist
+      operationId: addPlaylist
       security:
         - OAuth2: []
       tags:
@@ -2911,6 +3034,7 @@ paths:
   /video-playlists/{playlistId}/videos:
     get:
       summary: 'List videos of a playlist'
+      operationId: getVideoPlaylistVideos
       tags:
         - Videos
         - Video Playlists
@@ -2925,6 +3049,7 @@ paths:
                 $ref: '#/components/schemas/VideoListResponse'
     post:
       summary: Add a video in a playlist
+      operationId: addVideoPlaylistVideo
       security:
         - OAuth2: []
       tags:
@@ -2971,6 +3096,7 @@ paths:
   /video-playlists/{playlistId}/videos/reorder:
     post:
       summary: 'Reorder a playlist'
+      operationId: reorderVideoPlaylist
       security:
         - OAuth2: []
       tags:
@@ -3005,6 +3131,7 @@ paths:
   /video-playlists/{playlistId}/videos/{playlistElementId}:
     put:
       summary: Update a playlist element
+      operationId: putVideoPlaylistVideo
       security:
         - OAuth2: []
       tags:
@@ -3031,6 +3158,7 @@ paths:
                   description: Stop the video at this specific timestamp
     delete:
       summary: Delete an element from a playlist
+      operationId: delVideoPlaylistVideo
       security:
         - OAuth2: []
       tags:
@@ -3105,6 +3233,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoChannelList'
+
   '/accounts/{name}/ratings':
     get:
       summary: List ratings of an account
@@ -3135,6 +3264,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VideoRating'
+
   '/videos/{id}/comment-threads':
     get:
       summary: List threads of a video
@@ -3198,6 +3328,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoCommentThreadTree'
+
   '/videos/{id}/comments/{commentId}':
     post:
       summary: Reply to a thread of a video
@@ -3230,7 +3361,6 @@ paths:
                   maxLength: 10000
               required:
                 - text
-
     delete:
       summary: Delete a comment or a reply
       security:
@@ -3249,6 +3379,7 @@ paths:
           description: comment or video does not exist
         '409':
           description: comment is already deleted
+
   '/videos/{id}/rate':
     put:
       summary: Like/dislike a video
@@ -3276,11 +3407,13 @@ paths:
           description: successful operation
         '404':
           description: video does not exist
+
   /search/videos:
     get:
       tags:
         - Search
       summary: Search videos
+      operationId: searchVideos
       parameters:
         - name: search
           in: query
@@ -3351,11 +3484,13 @@ paths:
                 $ref: '#/components/schemas/VideoListResponse'
         '500':
           description: search index unavailable
+
   /search/video-channels:
     get:
       tags:
         - Search
       summary: Search channels
+      operationId: searchChannels
       parameters:
         - name: search
           in: query
@@ -3422,6 +3557,7 @@ paths:
           description: successful operation
         '409':
           description: self-blocking forbidden
+
   '/server/blocklist/accounts/{accountName}':
     delete:
       tags:
@@ -3482,6 +3618,7 @@ paths:
           description: successful operation
         '409':
           description: self-blocking forbidden
+
   '/server/blocklist/servers/{host}':
     delete:
       tags:
@@ -3536,11 +3673,13 @@ paths:
           description: successful operation
         '404':
           description: server is not already known
+
   /server/redundancy/videos:
     get:
       tags:
         - Video Mirroring
       summary: List videos being mirrored
+      operationId: getMirroredVideos
       security:
         - OAuth2:
           - admin
@@ -3570,6 +3709,7 @@ paths:
       tags:
         - Video Mirroring
       summary: Mirror a video
+      operationId: putMirroredVideo
       security:
         - OAuth2:
           - admin
@@ -3592,11 +3732,13 @@ paths:
           description: video does not exist
         '409':
           description: video is already mirrored
+
   /server/redundancy/videos/{redundancyId}:
     delete:
       tags:
         - Video Mirroring
       summary: Delete a mirror done on a video
+      operationId: delMirroredVideo
       security:
         - OAuth2:
           - admin
@@ -3618,6 +3760,7 @@ paths:
       tags:
         - Feeds
       summary: List comments on videos
+      operationId: getSyndicatedComments
       parameters:
         - name: format
           in: path
@@ -3706,11 +3849,13 @@ paths:
           description: video, video channel or account not found
         '406':
           description: accept header unsupported
+
   '/feeds/videos.{format}':
     get:
       tags:
         - Feeds
       summary: List videos
+      operationId: getSyndicatedVideos
       parameters:
         - name: format
           in: path
@@ -3792,12 +3937,14 @@ paths:
           description: video channel or account not found
         '406':
           description: accept header unsupported
+
   '/feeds/subscriptions.{format}':
     get:
       tags:
         - Feeds
         - Account
       summary: List videos of subscriptions tied to a token
+      operationId: getSyndicatedSubscriptionVideos
       parameters:
         - name: format
           in: path
@@ -3854,11 +4001,13 @@ paths:
                 type: object
         '406':
           description: accept header unsupported
+
   /plugins:
     get:
       tags:
         - Plugins
       summary: List plugins
+      operationId: getPlugins
       security:
         - OAuth2:
           - admin
@@ -3881,11 +4030,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PluginResponse'
+
   /plugins/available:
     get:
       tags:
         - Plugins
       summary: List available plugins
+      operationId: getAvailablePlugins
       security:
         - OAuth2:
           - admin
@@ -3914,11 +4065,13 @@ paths:
                 $ref: '#/components/schemas/PluginResponse'
         '503':
           description: plugin index unavailable
+
   /plugins/install:
     post:
       tags:
         - Plugins
       summary: Install a plugin
+      operationId: addPlugin
       security:
         - OAuth2:
           - admin
@@ -3947,11 +4100,13 @@ paths:
           description: successful operation
         '400':
           description: should have either `npmName` or `path` set
+
   /plugins/update:
     post:
       tags:
         - Plugins
       summary: Update a plugin
+      operationId: updatePlugin
       security:
         - OAuth2:
           - admin
@@ -3982,11 +4137,13 @@ paths:
           description: should have either `npmName` or `path` set
         '404':
           description: existing plugin not found
+
   /plugins/uninstall:
     post:
       tags:
         - Plugins
       summary: Uninstall a plugin
+      operationId: uninstallPlugin
       security:
         - OAuth2:
           - admin
@@ -4007,11 +4164,13 @@ paths:
           description: successful operation
         '404':
           description: existing plugin not found
+
   /plugins/{npmName}:
     get:
       tags:
         - Plugins
       summary: Get a plugin
+      operationId: getPlugin
       security:
         - OAuth2:
           - admin
@@ -4026,6 +4185,7 @@ paths:
                 $ref: '#/components/schemas/Plugin'
         '404':
           description: plugin not found
+
   /plugins/{npmName}/settings:
     put:
       tags:
@@ -4050,6 +4210,7 @@ paths:
           description: successful operation
         '404':
           description: plugin not found
+
   /plugins/{npmName}/public-settings:
     get:
       tags:
@@ -4067,6 +4228,7 @@ paths:
                 additionalProperties: true
         '404':
           description: plugin not found
+
   /plugins/{npmName}/registered-settings:
     get:
       tags:
@@ -4087,6 +4249,7 @@ paths:
                 additionalProperties: true
         '404':
           description: plugin not found
+
 servers:
   - url: 'https://peertube2.cpy.re/api/v1'
     description: Live Test Server (live data - latest nightly version)
@@ -4332,7 +4495,7 @@ components:
       required: true
       description: The thread id (root comment id)
       schema:
-        $ref: '#/components/schemas/VideoCommentThreadTree/properties/comment/properties/id'
+        type: integer
     commentId:
       name: commentId
       in: path
@@ -5616,6 +5779,12 @@ components:
                     indexUrl:
                       type: string
                       format: url
+        homepage:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+
     ServerConfigAbout:
       properties:
         instance:
@@ -5806,6 +5975,12 @@ components:
                   type: boolean
                 manualApproval:
                   type: boolean
+
+    CustomHomepage:
+      properties:
+        content:
+          type: string
+
     Follow:
       properties:
         id:
@@ -6111,7 +6286,7 @@ components:
             # optionally present fields: they require WITH_STATS scope
             videosCount:
               type: integer
-              description: Count of videos published 
+              description: Count of videos published
             abusesCount:
               type: integer
               description: Count of reports/abuses of which the user is a target

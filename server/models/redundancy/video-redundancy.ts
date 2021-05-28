@@ -1,5 +1,5 @@
 import { sample } from 'lodash'
-import { FindOptions, literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
+import { literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -406,50 +406,6 @@ export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedu
     }
 
     return VideoRedundancyModel.scope([ ScopeNames.WITH_VIDEO ]).findOne(query)
-  }
-
-  static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
-    const actor = await getServerActor()
-    const redundancyInclude = {
-      attributes: [],
-      model: VideoRedundancyModel,
-      required: true,
-      where: {
-        actorId: actor.id,
-        strategy
-      }
-    }
-
-    const queryFiles: FindOptions = {
-      include: [ redundancyInclude ]
-    }
-
-    const queryStreamingPlaylists: FindOptions = {
-      include: [
-        {
-          attributes: [],
-          model: VideoModel.unscoped(),
-          required: true,
-          include: [
-            {
-              required: true,
-              attributes: [],
-              model: VideoStreamingPlaylistModel.unscoped(),
-              include: [
-                redundancyInclude
-              ]
-            }
-          ]
-        }
-      ]
-    }
-
-    return Promise.all([
-      VideoFileModel.aggregate('size', 'SUM', queryFiles),
-      VideoFileModel.aggregate('size', 'SUM', queryStreamingPlaylists)
-    ]).then(([ r1, r2 ]) => {
-      return parseAggregateResult(r1) + parseAggregateResult(r2)
-    })
   }
 
   static async listLocalExpired () {

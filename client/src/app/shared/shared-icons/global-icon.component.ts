@@ -72,6 +72,7 @@ const icons = {
   'repeat': require('!!raw-loader?!../../../assets/images/feather/repeat.svg').default,
   'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default,
   'codesandbox': require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default,
+  'octagon': require('!!raw-loader?!../../../assets/images/feather/octagon.svg').default,
   'award': require('!!raw-loader?!../../../assets/images/feather/award.svg').default
 }
 

@@ -4,7 +4,17 @@ import { switchMap } from 'rxjs/operators'
 import { ViewportScroller } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, AuthStatus, AuthUser, MenuService, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
+import {
+  AuthService,
+  AuthStatus,
+  AuthUser,
+  MenuLink,
+  MenuService,
+  RedirectService,
+  ScreenService,
+  ServerService,
+  UserService
+} from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
@@ -34,6 +44,8 @@ export class MenuComponent implements OnInit {
   nsfwPolicy: string
 
   currentInterfaceLanguage: string
+
+  commonMenuLinks: MenuLink[] = []
 
   private languages: VideoConstant<string>[] = []
   private serverConfig: ServerConfig
@@ -80,7 +92,10 @@ export class MenuComponent implements OnInit {
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+      .subscribe(config => {
+        this.serverConfig = config
+        this.buildMenuLinks()
+      })
 
     this.isLoggedIn = this.authService.isLoggedIn()
     if (this.isLoggedIn === true) {
@@ -239,6 +254,10 @@ export class MenuComponent implements OnInit {
     } else {
       document.querySelector('menu').removeEventListener('scroll', this.onMenuScrollEvent)
     }
+  }
+
+  private buildMenuLinks () {
+    this.commonMenuLinks = this.menuService.buildCommonLinks(this.serverConfig)
   }
 
   private buildUserLanguages () {

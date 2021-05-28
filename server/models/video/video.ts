@@ -1009,6 +1009,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       attributes: [ 'id' ],
       where: {
         isLive: true,
+        remote: false,
         state: VideoState.PUBLISHED
       }
     }

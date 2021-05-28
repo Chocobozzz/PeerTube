@@ -26,22 +26,13 @@
       <div class="form-group" formGroupName="instance">
         <label i18n for="instanceDefaultClientRoute">Landing page</label>
 
-        <div class="peertube-select-container">
-          <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute" class="form-control">
-            <option i18n value="/videos/overview">Discover videos</option>
-
-            <optgroup i18n-label label="Trending pages">
-              <option i18n value="/videos/trending">Default trending page</option>
-              <option i18n value="/videos/trending?alg=best" [disabled]="!doesTrendingVideosAlgorithmsEnabledInclude('best')">Best videos</option>
-              <option i18n value="/videos/trending?alg=hot" [disabled]="!doesTrendingVideosAlgorithmsEnabledInclude('hot')">Hot videos</option>
-              <option i18n value="/videos/trending?alg=most-viewed" [disabled]="!doesTrendingVideosAlgorithmsEnabledInclude('most-viewed')">Most viewed videos</option>
-              <option i18n value="/videos/trending?alg=most-liked" [disabled]="!doesTrendingVideosAlgorithmsEnabledInclude('most-liked')">Most liked videos</option>
-            </optgroup>
-
-            <option i18n value="/videos/recently-added">Recently added videos</option>
-            <option i18n value="/videos/local">Local videos</option>
-          </select>
-        </div>
+        <my-select-custom-value
+          id="instanceDefaultClientRoute"
+          [items]="defaultLandingPageOptions"
+          formControlName="defaultClientRoute"
+          inputType="text"
+          [clearable]="false"
+        ></my-select-custom-value>
 
         <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error">{{ formErrors.instance.defaultClientRoute }}</div>
       </div>
@@ -100,7 +91,7 @@
           <div class="peertube-select-container">
             <select id="broadcastMessageLevel" formControlName="level" class="form-control">
               <option value="info">info</option>
-              <option value="warn">warning</option>
+              <option value="warning">warning</option>
               <option value="error">error</option>
             </select>
           </div>

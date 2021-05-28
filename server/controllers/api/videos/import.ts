@@ -3,7 +3,7 @@ import { move, readFile } from 'fs-extra'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
-import { getEnabledResolutions } from '@server/lib/config'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { setVideoTags } from '@server/lib/video'
 import { FilteredModelAttributes } from '@server/types'
 import {
@@ -134,7 +134,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const targetUrl = body.targetUrl
   const user = res.locals.oauth.token.User
 
-  const youtubeDL = new YoutubeDL(targetUrl, getEnabledResolutions('vod'))
+  const youtubeDL = new YoutubeDL(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
 
   // Get video infos
   let youtubeDLInfo: YoutubeDLInfo

@@ -2,8 +2,10 @@ import * as Bull from 'bull'
 import { move, remove, stat } from 'fs-extra'
 import { extname } from 'path'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
+import { YoutubeDL } from '@server/helpers/youtube-dl'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
@@ -33,8 +35,6 @@ import { MThumbnail } from '../../../types/models/video/thumbnail'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
-import { YoutubeDL } from '@server/helpers/youtube-dl'
-import { getEnabledResolutions } from '@server/lib/config'
 
 async function processVideoImport (job: Bull.Job) {
   const payload = job.data as VideoImportPayload
@@ -76,7 +76,7 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
     videoImportId: videoImport.id
   }
 
-  const youtubeDL = new YoutubeDL(videoImport.targetUrl, getEnabledResolutions('vod'))
+  const youtubeDL = new YoutubeDL(videoImport.targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
 
   return processFile(
     () => youtubeDL.downloadYoutubeDLVideo(payload.fileExt, VIDEO_IMPORT_TIMEOUT),

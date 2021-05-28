@@ -44,6 +44,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/video/video-view'
 import { CONFIG } from './config'
+import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -141,7 +142,8 @@ async function initDatabaseModels (silent: boolean) {
     ThumbnailModel,
     TrackerModel,
     VideoTrackerModel,
-    PluginModel
+    PluginModel,
+    ActorCustomPageModel
   ])
 
   // Check extensions exist in the database

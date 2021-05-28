@@ -2,6 +2,8 @@ export * from './bulk/bulk'
 
 export * from './cli/cli'
 
+export * from './custom-pages/custom-pages'
+
 export * from './feeds/feeds'
 
 export * from './mock-servers/mock-instances-index'
