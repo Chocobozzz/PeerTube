@@ -293,7 +293,7 @@ function addVideosToFeed (feed, videos: VideoModel[]) {
     feed.addItem({
       title: video.name,
       id: video.url,
-      link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
+      link: WEBSERVER.URL + '/w/' + video.uuid,
       description: video.getTruncatedDescription(),
       content: video.description,
       author: [

@@ -28,7 +28,7 @@ export class VideoLazyLoadResolver implements Resolve<any> {
 
           const video = result.data[0]
 
-          return this.router.navigateByUrl('/videos/watch/' + video.uuid)
+          return this.router.navigateByUrl('/w/' + video.uuid)
         })
       )
   }

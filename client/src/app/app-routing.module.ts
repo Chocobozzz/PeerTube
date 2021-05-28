@@ -36,16 +36,27 @@ const routes: Routes = [
     loadChildren: () => import('./+signup/+verify-account/verify-account.module').then(m => m.VerifyAccountModule),
     canActivateChild: [ MetaGuard ]
   },
+
+  {
+    path: 'accounts',
+    redirectTo: 'a'
+  },
   {
     path: 'a',
     loadChildren: () => import('./+accounts/accounts.module').then(m => m.AccountsModule),
     canActivateChild: [ MetaGuard ]
+  },
+
+  {
+    path: 'video-channels',
+    redirectTo: 'c'
   },
   {
     path: 'c',
     loadChildren: () => import('./+video-channels/video-channels.module').then(m => m.VideoChannelsModule),
     canActivateChild: [ MetaGuard ]
   },
+
   {
     path: 'about',
     loadChildren: () => import('./+about/about.module').then(m => m.AboutModule),
@@ -71,31 +82,60 @@ const routes: Routes = [
     loadChildren: () => import('./+search/search.module').then(m => m.SearchModule),
     canActivateChild: [ MetaGuard ]
   },
+
+  {
+    path: 'videos/upload',
+    loadChildren: () => import('@app/+videos/+video-edit/video-add.module').then(m => m.VideoAddModule),
+    data: {
+      meta: {
+        title: $localize`Upload a video`
+      }
+    }
+  },
+  {
+    path: 'videos/update/:uuid',
+    loadChildren: () => import('@app/+videos/+video-edit/video-update.module').then(m => m.VideoUpdateModule),
+    data: {
+      meta: {
+        title: $localize`Edit a video`
+      }
+    }
+  },
+
+  {
+    path: 'videos/watch/playlist',
+    redirectTo: 'w/p'
+  },
+  {
+    path: 'videos/watch',
+    redirectTo: 'w'
+  },
+  {
+    path: 'w',
+    loadChildren: () => import('@app/+videos/+video-watch/video-watch.module').then(m => m.VideoWatchModule),
+    data: {
+      preload: 3000
+    }
+  },
   {
     path: 'videos',
     loadChildren: () => import('./+videos/videos.module').then(m => m.VideosModule),
     canActivateChild: [ MetaGuard ]
   },
   {
+    path: 'video-playlists/watch',
+    redirectTo: 'videos/watch/playlist'
+  },
+
+  {
     path: 'remote-interaction',
     loadChildren: () => import('./+remote-interaction/remote-interaction.module').then(m => m.RemoteInteractionModule),
     canActivateChild: [ MetaGuard ]
   },
-  {
-    path: 'video-playlists/watch',
-    redirectTo: 'videos/watch/playlist'
-  },
-  {
-    path: 'accounts',
-    redirectTo: 'a'
-  },
-  {
-    path: 'video-channels',
-    redirectTo: 'c'
-  },
+
+  // Matches /@:actorName
   {
     matcher: (url): UrlMatchResult => {
-      // Matches /@:actorName
       const regex = new RegExp(`^@(${USER_USERNAME_REGEX_CHARACTERS}+)$`)
       if (url.length !== 1) return null
 
@@ -113,6 +153,7 @@ const routes: Routes = [
     canActivate: [ ActorRedirectGuard ],
     component: EmptyComponent
   },
+
   {
     path: '',
     component: EmptyComponent // Avoid 404, app component will redirect dynamically

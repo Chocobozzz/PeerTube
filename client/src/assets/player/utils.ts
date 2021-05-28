@@ -65,7 +65,7 @@ function buildVideoLink (options: {
 
   const url = baseUrl
     ? baseUrl
-    : window.location.origin + window.location.pathname.replace('/embed/', '/watch/')
+    : window.location.origin + window.location.pathname.replace('/embed/', '/w/')
 
   const params = generateParams(window.location.search)
 
@@ -101,7 +101,7 @@ function buildPlaylistLink (options: {
 
   const url = baseUrl
     ? baseUrl
-    : window.location.origin + window.location.pathname.replace('/video-playlists/embed/', '/videos/watch/playlist/')
+    : window.location.origin + window.location.pathname.replace('/video-playlists/embed/', '/w/p/')
 
   const params = generateParams(window.location.search)
 

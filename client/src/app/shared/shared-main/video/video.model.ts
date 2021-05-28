@@ -88,7 +88,7 @@ export class Video implements VideoServerModel {
   pluginData?: any
 
   static buildClientUrl (videoUUID: string) {
-    return '/videos/watch/' + videoUUID
+    return '/w/' + videoUUID
   }
 
   constructor (hash: VideoServerModel, translations = {}) {

@@ -57,7 +57,7 @@ export class VideoThumbnailComponent {
   getVideoRouterLink () {
     if (this.videoRouterLink) return this.videoRouterLink
 
-    return [ '/videos/watch', this.video.uuid ]
+    return [ '/w', this.video.uuid ]
   }
 
   onWatchLaterClick (event: Event) {

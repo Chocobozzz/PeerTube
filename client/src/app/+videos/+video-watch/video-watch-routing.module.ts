@@ -4,7 +4,7 @@ import { VideoWatchComponent } from './video-watch.component'
 
 const videoWatchRoutes: Routes = [
   {
-    path: 'playlist/:playlistId',
+    path: 'p/:playlistId',
     component: VideoWatchComponent
   },
   {

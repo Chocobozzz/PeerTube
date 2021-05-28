@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 import { Router } from '@angular/router'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-
-
 @Component({
   selector: 'my-page-not-found',
   templateUrl: './page-not-found.component.html',

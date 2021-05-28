@@ -39,7 +39,7 @@ export class RemoteInteractionComponent implements OnInit {
       if (videoResult.data.length !== 0) {
         const video = videoResult.data[0]
 
-        redirectUrl = '/videos/watch/' + video.uuid
+        redirectUrl = '/w/' + video.uuid
       } else if (channelResult.data.length !== 0) {
         const channel = new VideoChannel(channelResult.data[0])
 

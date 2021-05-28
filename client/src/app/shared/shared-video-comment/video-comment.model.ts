@@ -85,7 +85,7 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
       id: hash.video.id,
       uuid: hash.video.uuid,
       name: hash.video.name,
-      localUrl: '/videos/watch/' + hash.video.uuid
+      localUrl: '/w/' + hash.video.uuid
     }
 
     this.localUrl = this.video.localUrl + ';threadId=' + this.threadId

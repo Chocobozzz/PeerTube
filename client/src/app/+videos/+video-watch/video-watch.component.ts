@@ -690,7 +690,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.playlist) {
       this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
     } else if (this.nextVideoUuid) {
-      this.router.navigate([ '/videos/watch', this.nextVideoUuid ])
+      this.router.navigate([ '/w', this.nextVideoUuid ])
     }
   }
 

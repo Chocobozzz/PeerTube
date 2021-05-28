@@ -74,31 +74,6 @@ const videosRoutes: Routes = [
             key: 'local-videos-list'
           }
         }
-      },
-      {
-        path: 'upload',
-        loadChildren: () => import('@app/+videos/+video-edit/video-add.module').then(m => m.VideoAddModule),
-        data: {
-          meta: {
-            title: $localize`Upload a video`
-          }
-        }
-      },
-      {
-        path: 'update/:uuid',
-        loadChildren: () => import('@app/+videos/+video-edit/video-update.module').then(m => m.VideoUpdateModule),
-        data: {
-          meta: {
-            title: $localize`Edit a video`
-          }
-        }
-      },
-      {
-        path: 'watch',
-        loadChildren: () => import('@app/+videos/+video-watch/video-watch.module').then(m => m.VideoWatchModule),
-        data: {
-          preload: 3000
-        }
       }
     ]
   }

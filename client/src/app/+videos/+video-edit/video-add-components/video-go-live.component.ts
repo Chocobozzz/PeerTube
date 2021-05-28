@@ -127,7 +127,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       () => {
         this.notifier.success($localize`Live published.`)
 
-        this.router.navigate(['/videos/watch', video.uuid])
+        this.router.navigate(['/w', video.uuid])
       },
 
       err => {

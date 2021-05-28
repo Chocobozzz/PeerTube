@@ -98,14 +98,14 @@ export class VideoShareComponent {
 
   getVideoUrl () {
     let baseUrl = this.customizations.originUrl ? this.video.originInstanceUrl : window.location.origin
-    baseUrl += '/videos/watch/' + this.video.uuid
+    baseUrl += '/w/' + this.video.uuid
     const options = this.getVideoOptions(baseUrl)
 
     return buildVideoLink(options)
   }
 
   getPlaylistUrl () {
-    const base = window.location.origin + '/videos/watch/playlist/' + this.playlist.uuid
+    const base = window.location.origin + '/w/p/' + this.playlist.uuid
 
     if (!this.includeVideoInPlaylist) return base
 

@@ -20,7 +20,7 @@
             </a>
           </div>
 
-          <a [routerLink]="['/videos/watch', video.uuid, { 'threadId': comment.threadId }]" class="comment-date" [title]="comment.createdAt">
+          <a [routerLink]="['/w', video.uuid, { 'threadId': comment.threadId }]" class="comment-date" [title]="comment.createdAt">
             {{ comment.createdAt | myFromNow }}
           </a>
         </div>
@@ -45,7 +45,7 @@
       <ng-container *ngIf="comment.isDeleted">
         <div class="comment-account-date">
           <span class="comment-account" i18n>Deleted</span>
-          <a [routerLink]="['/videos/watch', video.uuid, { 'threadId': comment.threadId }]"
+          <a [routerLink]="['/w', video.uuid, { 'threadId': comment.threadId }]"
              class="comment-date">{{ comment.createdAt | myFromNow }}</a>
         </div>
 

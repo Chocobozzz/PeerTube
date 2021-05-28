@@ -1920,7 +1920,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   getWatchStaticPath () {
-    return '/videos/watch/' + this.uuid
+    return '/w/' + this.uuid
   }
 
   getEmbedStaticPath () {

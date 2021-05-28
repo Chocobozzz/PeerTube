@@ -244,7 +244,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.isUploadingVideo = false
 
             this.notifier.success($localize`Video published.`)
-            this.router.navigate([ '/videos/watch', video.uuid ])
+            this.router.navigate([ '/w', video.uuid ])
           },
 
           err => {

@@ -30,7 +30,7 @@ function run (url: string, options: program.OptionValues) {
 
   const cmd = 'node ' + join(__dirname, 'node_modules', 'webtorrent-hybrid', 'bin', 'cmd.js')
   const args = ` --${options.gui} ` +
-    url.replace('videos/watch', 'download/torrents') +
+    url.replace(/(\/videos\/watch\/)|\/w\//, '/download/torrents/') +
     `-${options.resolution}.torrent`
 
   try {

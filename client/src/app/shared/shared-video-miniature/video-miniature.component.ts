@@ -125,7 +125,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   buildVideoLink () {
     if (this.videoLinkType === 'internal' || !this.video.url) {
-      this.videoRouterLink = [ '/videos/watch', this.video.uuid ]
+      this.videoRouterLink = [ '/w', this.video.uuid ]
       return
     }
 

@@ -18,6 +18,6 @@ export class VideoPlaylistMiniatureComponent {
     if (this.toManage) return [ '/my-library/video-playlists', this.playlist.uuid ]
     if (this.playlist.videosLength === 0) return null
 
-    return [ '/videos/watch/playlist', this.playlist.uuid ]
+    return [ '/w/p', this.playlist.uuid ]
   }
 }

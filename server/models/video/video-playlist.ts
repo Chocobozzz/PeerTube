@@ -496,7 +496,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   }
 
   getWatchUrl () {
-    return WEBSERVER.URL + '/videos/watch/playlist/' + this.uuid
+    return WEBSERVER.URL + '/w/p/' + this.uuid
   }
 
   getEmbedStaticPath () {

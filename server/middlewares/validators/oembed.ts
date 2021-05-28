@@ -4,15 +4,29 @@ import { join } from 'path'
 import { fetchVideo } from '@server/helpers/video'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { areValidationErrors } from './utils'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
-const startVideoPlaylistsURL = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch', 'playlist') + '/'
-const startVideosURL = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch') + '/'
+const playlistPaths = [
+  join('videos', 'watch', 'playlist'),
+  join('w', 'p')
+]
+
+const videoPaths = [
+  join('videos', 'watch'),
+  'w'
+]
+
+function buildUrls (paths: string[]) {
+  return paths.map(p => WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, p) + '/')
+}
+
+const startPlaylistURLs = buildUrls(playlistPaths)
+const startVideoURLs = buildUrls(videoPaths)
 
 const watchRegex = /([^/]+)$/
 const isURLOptions = {
@@ -43,8 +57,8 @@ const oembedValidator = [
 
     const url = req.query.url as string
 
-    const isPlaylist = url.startsWith(startVideoPlaylistsURL)
-    const isVideo = isPlaylist ? false : url.startsWith(startVideosURL)
+    const isPlaylist = startPlaylistURLs.some(u => url.startsWith(u))
+    const isVideo = isPlaylist ? false : startVideoURLs.some(u => url.startsWith(u))
 
     const startIsOk = isVideo || isPlaylist
 

@@ -156,7 +156,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.isUpdatingVideo = false
             this.loadingBar.useRef().complete()
             this.notifier.success($localize`Video updated.`)
-            this.router.navigate([ '/videos/watch', this.video.uuid ])
+            this.router.navigate([ '/w', this.video.uuid ])
           },
 
           err => {

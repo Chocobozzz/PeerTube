@@ -55,7 +55,7 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
   }
 
   getVideoUrl (video: { uuid: string }) {
-    return '/videos/watch/' + video.uuid
+    return '/w/' + video.uuid
   }
 
   getEditVideoUrl (video: { uuid: string }) {

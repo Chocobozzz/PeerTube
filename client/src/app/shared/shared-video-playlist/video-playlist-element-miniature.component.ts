@@ -71,7 +71,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   buildRouterLink () {
     if (!this.playlist) return null
 
-    return [ '/videos/watch/playlist', this.playlist.uuid ]
+    return [ '/w/p', this.playlist.uuid ]
   }
 
   buildRouterQuery () {

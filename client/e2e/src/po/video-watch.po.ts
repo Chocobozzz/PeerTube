@@ -43,7 +43,7 @@ export class VideoWatchPage {
 
   async goOnAssociatedEmbed () {
     let url = await browser.getCurrentUrl()
-    url = url.replace('/watch/', '/embed/')
+    url = url.replace('/w/', '/embed/')
     url = url.replace(':3333', ':9001')
 
     return browser.get(url)
@@ -65,7 +65,7 @@ export class VideoWatchPage {
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(video))
     await video.click()
 
-    await browser.wait(browser.ExpectedConditions.urlContains('/watch/'))
+    await browser.wait(browser.ExpectedConditions.urlContains('/w/'))
   }
 
   async clickOnFirstVideo () {
@@ -78,7 +78,7 @@ export class VideoWatchPage {
     const textToReturn = videoName.getText()
     await video.click()
 
-    await browser.wait(browser.ExpectedConditions.urlContains('/watch/'))
+    await browser.wait(browser.ExpectedConditions.urlContains('/w/'))
     return textToReturn
   }
 
