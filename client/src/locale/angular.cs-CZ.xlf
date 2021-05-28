@@ -1708,8 +1708,8 @@ The link will expire within 1 hour.</target>
       <trans-unit id="4424964105331349857" datatype="html">
         <source>I'm a teapot</source>
         <target state="new">I'm a teapot</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.ts</context><context context-type="linenumber">27</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.ts</context><context context-type="linenumber">26</context></context-group></trans-unit>
       <trans-unit id="1597262876035959248" datatype="html">
         <source>That's an error.</source>
         <target state="new">That's an error.</target>
@@ -5003,12 +5003,14 @@ The link will expire within 1 hour.</target>
         <source>Instance allowed by Twitter</source>
         <target state="new">Instance allowed by Twitter</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">485</context></context-group></trans-unit>
-      <trans-unit id="8042372696350741398" datatype="html">
-        <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />                   "/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />                   "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />                   "/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>                   "/> to see if you instance is allowed. </source>
-        <target state="new"> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />                   "/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />                   "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />                   "/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>                   "/> to see if you instance is allowed. </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">490</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">485</context></context-group></trans-unit><trans-unit id="2076338542820061819" datatype="html">
+        <source> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> to see if you instance is allowed. </source><target state="new"> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> to see if you instance is allowed. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
+          <context context-type="linenumber">490,495</context>
+        </context-group>
+      </trans-unit>
+      
       <trans-unit id="493135676263039396" datatype="html">
         <source>LIVE</source>
         <target state="new">LIVE</target>
@@ -8971,31 +8973,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="8602814243662345124">
         <source>Email is required.</source>
         <target>E-mail je vyžadován.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">37</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">7</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">7</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="4591482207344282590">
         <source>Email must be valid.</source>
         <target>E-mail musí být platný.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">38</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">8</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">40</context></context-group></trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
         <target state="new">Handle is required.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
-          <context context-type="linenumber">48</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">50</context></context-group></trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
         <target state="new">Handle must be valid (eg. chocobozzz@example.com).</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
-          <context context-type="linenumber">49</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">51</context></context-group></trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
         <target state="new">Your name is required.</target>
@@ -9044,16 +9040,16 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3868123820758341861">
         <source>Username is required.</source>
         <target>Uživatelské jméno je vyžadováno.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">12</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">9</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">9</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">14</context></context-group></trans-unit>
       <trans-unit id="3577237269587081090">
         <source>Password is required.</source>
         <target>Heslo je vyžadováno.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">58</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">69</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">18</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">18</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">60</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="3152303769378345477">
         <source>Confirmation of the password is required.</source>
         <target>Potvrzení hesla je vyžadováno.</target>
@@ -9062,129 +9058,129 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="4786141633412279939" datatype="html">
         <source>Username must be at least 1 character long.</source>
         <target state="new">Username must be at least 1 character long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">13</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">15</context></context-group></trans-unit>
       <trans-unit id="1019755749203839300" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
         <target state="new">Username cannot be more than 50 characters long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">14</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">16</context></context-group></trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
         <target state="new">Username should be lowercase alphanumeric; dots and underscores are allowed.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">15</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">17</context></context-group></trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
         <target state="new">Channel name is required.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">27</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group></trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
         <source>Channel name must be at least 1 character long.</source>
         <target state="new">Channel name must be at least 1 character long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">28</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group></trans-unit>
       <trans-unit id="8602785819772117007" datatype="html">
         <source>Channel name cannot be more than 50 characters long.</source>
         <target state="new">Channel name cannot be more than 50 characters long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
         <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">30</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">32</context></context-group></trans-unit>
       <trans-unit id="525871656034789056">
         <source>Password must be at least 6 characters long.</source>
         <target>Heslo musí mít délku minimálně 6 znaků.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">70</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">81</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">72</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">83</context></context-group></trans-unit>
       <trans-unit id="1099684476181448167">
         <source>Password cannot be more than 255 characters long.</source>
         <target>Heslo nemůže být delší než 255 znaků.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">71</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">82</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">73</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">84</context></context-group></trans-unit>
       <trans-unit id="3392630942539073768">
         <source>The new password and the confirmed password do not correspond.</source>
         <target>Nové heslo a jeho potvrzení nesouhlasí.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">89</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">91</context></context-group></trans-unit>
       <trans-unit id="2027337371129904473">
         <source>Video quota is required.</source>
         <target>Limit na videa je vyžadován.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">96</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">98</context></context-group></trans-unit>
       <trans-unit id="267386529333143660">
         <source>Quota must be greater than -1.</source>
         <target>Limit na videa musí být větší než -1.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">97</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">99</context></context-group></trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
         <source>Daily upload limit is required.</source>
         <target state="new">Daily upload limit is required.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">103</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">105</context></context-group></trans-unit>
       <trans-unit id="8959404382357999234" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
         <target state="new">Daily upload limit must be greater than -1.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">104</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">106</context></context-group></trans-unit>
       <trans-unit id="4796798537475457493">
         <source>User role is required.</source>
         <target>Role uživatele je vyžadována.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">111</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">113</context></context-group></trans-unit>
       <trans-unit id="2761226139624435788">
         <source>Description must be at least 3 characters long.</source>
         <target>Popis musí mít délku minimálně 3 znaky.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">123</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">38</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">33</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">125</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">38</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">33</context></context-group></trans-unit>
       <trans-unit id="4717982586356605243" datatype="html">
         <source>Description cannot be more than 1000 characters long.</source>
         <target state="new">Description cannot be more than 1000 characters long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">124</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">39</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">34</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">126</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">34</context></context-group></trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
         <target state="new">You must agree with the instance terms in order to register on it.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">131</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">133</context></context-group></trans-unit>
       <trans-unit id="7803960725351649605" datatype="html">
         <source>Ban reason must be at least 3 characters long.</source>
         <target state="new">Ban reason must be at least 3 characters long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">141</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">143</context></context-group></trans-unit>
       <trans-unit id="3851609012243698179" datatype="html">
         <source>Ban reason cannot be more than 250 characters long.</source>
         <target state="new">Ban reason cannot be more than 250 characters long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">142</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">144</context></context-group></trans-unit>
       <trans-unit id="6632896893630378443">
         <source>Display name is required.</source>
         <target>Zobrazované jméno je vyžadováno.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">153</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">26</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">155</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group></trans-unit>
       <trans-unit id="1303578752658966736" datatype="html">
         <source>Display name must be at least 1 character long.</source>
         <target state="new">Display name must be at least 1 character long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">154</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">27</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">13</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">156</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">13</context></context-group></trans-unit>
       <trans-unit id="4613240543124934954" datatype="html">
         <source>Display name cannot be more than 50 characters long.</source>
         <target state="new">Display name cannot be more than 50 characters long.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">155</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">28</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">157</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">28</context></context-group></trans-unit>
       <trans-unit id="1000468652492651683">
         <source>Report reason is required.</source>
         <target>Důvod nahlášení je vyžadován.</target>
@@ -11018,12 +11014,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Upload a video</source>
         <target state="new">Upload a video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">83</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">91</context></context-group></trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
         <target state="new">Edit a video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">92</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">100</context></context-group></trans-unit>
     </body>
   </file>
 </xliff>
