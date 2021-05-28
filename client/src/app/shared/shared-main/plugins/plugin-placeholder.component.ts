@@ -4,7 +4,7 @@ import { PluginElementPlaceholder } from '@shared/models'
 @Component({
   selector: 'my-plugin-placeholder',
   template: '<div [id]="getId()"></div>',
-  styles: [ 'div { height: 100%; }' ]
+  styleUrls: [ './plugin-placeholder.component.scss' ]
 })
 
 export class PluginPlaceholderComponent {

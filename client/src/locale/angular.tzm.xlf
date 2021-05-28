@@ -514,7 +514,7 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="232050922346936574" datatype="html">
+      <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807" datatype="html">
         <source>Trending</source>
         <target></target>
         <context-group purpose="location">
@@ -530,7 +530,7 @@
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2431286785954354122" datatype="html">
+      <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1" datatype="html">
         <source>Recently added</source>
         <target></target>
         <context-group purpose="location">
@@ -538,7 +538,7 @@
           <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8681933925782924101" datatype="html">
+      <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f" datatype="html">
         <source>Local videos</source>
         <target></target>
         <context-group purpose="location">
@@ -13556,7 +13556,7 @@ video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-t
           <context context-type="linenumber">43,44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8136608075220662349" datatype="html">
+      <trans-unit id="ef0f544578470cd6dd75432d0f1ba0e27914d2cc" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://chooser-beta.creativecommons.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Choose<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> the appropriate license for your work. </source>
         <target></target>
         <context-group purpose="location">
@@ -14236,7 +14236,7 @@ video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-t
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="47188419949558046" datatype="html">
+      <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
         <source>Instance information</source>
         <target></target>
         <context-group purpose="location">
@@ -14244,7 +14244,7 @@ video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-t
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4403968622852357647" datatype="html">
+      <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5" datatype="html">
         <source>Basic configuration</source>
         <target></target>
         <context-group purpose="location">
@@ -14260,7 +14260,7 @@ video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-t
           <context context-type="linenumber">701</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7368823469700320150" datatype="html">
+      <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab" datatype="html">
         <source>Advanced configuration</source>
         <target></target>
         <context-group purpose="location">
@@ -14500,7 +14500,7 @@ video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-t
           <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4668975178372693951" datatype="html">
+      <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
         <target></target>
         <context-group purpose="location">
@@ -14524,7 +14524,7 @@ video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-t
           <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="664221386829541948" datatype="html">
+      <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
         <source>Recently added videos</source>
         <target></target>
         <context-group purpose="location">
