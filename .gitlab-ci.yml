@@ -1,4 +1,4 @@
-image: chocobozzz/peertube-ci:15
+image: chocobozzz/peertube-ci:14
 
 stages:
   - clients
