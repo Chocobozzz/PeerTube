@@ -1,12 +1,14 @@
 import { ComponentRef, Injectable } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import {
+  ButtonMarkupData,
   ChannelMiniatureMarkupData,
   EmbedMarkupData,
   PlaylistMiniatureMarkupData,
   VideoMiniatureMarkupData,
   VideosListMarkupData
 } from '@shared/models'
+import { ButtonMarkupComponent } from './button-markup.component'
 import { ChannelMiniatureMarkupComponent } from './channel-miniature-markup.component'
 import { DynamicElementService } from './dynamic-element.service'
 import { EmbedMarkupComponent } from './embed-markup.component'
@@ -19,6 +21,7 @@ type BuilderFunction = (el: HTMLElement) => ComponentRef<any>
 @Injectable()
 export class CustomMarkupService {
   private builders: { [ selector: string ]: BuilderFunction } = {
+    'peertube-button': el => this.buttonBuilder(el),
     'peertube-video-embed': el => this.embedBuilder(el, 'video'),
     'peertube-playlist-embed': el => this.embedBuilder(el, 'playlist'),
     'peertube-video-miniature': el => this.videoMiniatureBuilder(el),
@@ -98,6 +101,21 @@ export class CustomMarkupService {
     return component
   }
 
+  private buttonBuilder (el: HTMLElement) {
+    const data = el.dataset as ButtonMarkupData
+    const component = this.dynamicElementService.createElement(ButtonMarkupComponent)
+
+    const model = {
+      theme: data.theme,
+      href: data.href,
+      label: data.label,
+      blankTarget: this.buildBoolean(data.blankTarget)
+    }
+    this.dynamicElementService.setModel(component, model)
+
+    return component
+  }
+
   private videosListBuilder (el: HTMLElement) {
     const data = el.dataset as VideosListMarkupData
     const component = this.dynamicElementService.createElement(VideosListMarkupComponent)
@@ -120,6 +138,13 @@ export class CustomMarkupService {
     if (!value) return undefined
 
     return parseInt(value, 10)
+  }
+
+  private buildBoolean (value: string) {
+    if (value === 'true') return true
+    if (value === 'false') return false
+
+    return undefined
   }
 
   private buildArrayNumber (value: string) {

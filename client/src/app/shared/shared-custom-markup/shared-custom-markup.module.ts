@@ -6,6 +6,7 @@ import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main'
 import { SharedVideoMiniatureModule } from '../shared-video-miniature'
 import { SharedVideoPlaylistModule } from '../shared-video-playlist'
+import { ButtonMarkupComponent } from './button-markup.component'
 import { ChannelMiniatureMarkupComponent } from './channel-miniature-markup.component'
 import { CustomMarkupService } from './custom-markup.service'
 import { DynamicElementService } from './dynamic-element.service'
@@ -30,7 +31,8 @@ import { VideosListMarkupComponent } from './videos-list-markup.component'
     PlaylistMiniatureMarkupComponent,
     ChannelMiniatureMarkupComponent,
     EmbedMarkupComponent,
-    VideosListMarkupComponent
+    VideosListMarkupComponent,
+    ButtonMarkupComponent
   ],
 
   exports: [
@@ -38,7 +40,8 @@ import { VideosListMarkupComponent } from './videos-list-markup.component'
     PlaylistMiniatureMarkupComponent,
     ChannelMiniatureMarkupComponent,
     VideosListMarkupComponent,
-    EmbedMarkupComponent
+    EmbedMarkupComponent,
+    ButtonMarkupComponent
   ],
 
   providers: [

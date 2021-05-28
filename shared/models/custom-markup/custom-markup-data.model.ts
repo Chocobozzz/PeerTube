@@ -26,3 +26,10 @@ export type VideosListMarkupData = {
   languageOneOf: string // coma separated values
   count: string
 }
+
+export type ButtonMarkupData = {
+  theme: 'primary' | 'secondary'
+  href: string
+  label: string
+  blankTarget?: string
+}
