@@ -70,6 +70,7 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  padding: 0 0 0 10px;
 
   .instance-name {
     @include ellipsis;
