@@ -4,7 +4,7 @@ import { CommonModule, DatePipe } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router'
+import { ActivatedRouteSnapshot, RouterModule } from '@angular/router'
 import {
   NgbButtonsModule,
   NgbCollapseModule,
@@ -17,7 +17,7 @@ import {
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
-import { AccountService, ActorService } from './account'
+import { AccountService } from './account'
 import {
   AutofocusDirective,
   BytesPipe,
@@ -39,6 +39,7 @@ import { UserHistoryService, UserNotificationsComponent, UserNotificationService
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
+import { ActorRedirectGuard } from './router'
 
 @NgModule({
   imports: [
@@ -161,7 +162,6 @@ import { VideoChannelService } from './video-channel'
     AUTH_INTERCEPTOR_PROVIDER,
 
     AccountService,
-    ActorService,
 
     UserHistoryService,
     UserNotificationService,
@@ -175,7 +175,9 @@ import { VideoChannelService } from './video-channel'
 
     VideoChannelService,
 
-    CustomPageService
+    CustomPageService,
+
+    ActorRedirectGuard
   ]
 })
 export class SharedMainModule { }

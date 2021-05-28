@@ -1,4 +1,3 @@
-export * from './actors/actors'
 export * from './bulk/bulk'
 
 export * from './cli/cli'

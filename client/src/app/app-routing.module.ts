@@ -5,7 +5,8 @@ import { MenuGuards } from '@app/core/routing/menu-guard.service'
 import { POSSIBLE_LOCALES } from '@shared/core-utils/i18n'
 import { MetaGuard, PreloadSelectedModulesList } from './core'
 import { EmptyComponent } from './empty.component'
-import { RootComponent } from './root.component'
+import { USER_USERNAME_REGEX_CHARACTERS } from './shared/form-validators/user-validators'
+import { ActorRedirectGuard } from './shared/shared-main'
 
 const routes: Routes = [
   {
@@ -17,7 +18,8 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./+home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('./+home/home.module').then(m => m.HomeModule),
+    canActivateChild: [ MetaGuard ]
   },
   {
     path: 'my-account',
@@ -94,18 +96,22 @@ const routes: Routes = [
   {
     matcher: (url): UrlMatchResult => {
       // Matches /@:actorName
-      if (url.length === 1 && url[0].path.match(/^@[\w]+$/gm)) {
-        return {
-          consumed: url,
-          posParams: {
-            actorName: new UrlSegment(url[0].path.substr(1), {})
-          }
+      const regex = new RegExp(`^@(${USER_USERNAME_REGEX_CHARACTERS}+)$`)
+      if (url.length !== 1) return null
+
+      const matchResult = url[0].path.match(regex)
+      if (!matchResult) return null
+
+      return {
+        consumed: url,
+        posParams: {
+          actorName: new UrlSegment(matchResult[1], {})
         }
       }
-
-      return null
     },
-    component: RootComponent
+    pathMatch: 'full',
+    canActivate: [ ActorRedirectGuard ],
+    component: EmptyComponent
   },
   {
     path: '',

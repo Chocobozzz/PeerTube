@@ -1,12 +1,14 @@
 import { Validators } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.model'
 
+export const USER_USERNAME_REGEX_CHARACTERS = '[a-z0-9][a-z0-9._]'
+
 export const USER_USERNAME_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
     Validators.required,
     Validators.minLength(1),
     Validators.maxLength(50),
-    Validators.pattern(/^[a-z0-9][a-z0-9._]*$/)
+    Validators.pattern(new RegExp(`^${USER_USERNAME_REGEX_CHARACTERS}*$`))
   ],
   MESSAGES: {
     'required': $localize`Username is required.`,

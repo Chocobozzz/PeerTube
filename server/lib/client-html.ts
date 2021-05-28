@@ -208,14 +208,12 @@ class ClientHtml {
   }
 
   static async getActorHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    const accountModel = await AccountModel.loadByNameWithHost(nameWithHost)
+    const [ account, channel ] = await Promise.all([
+      AccountModel.loadByNameWithHost(nameWithHost),
+      VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+    ])
 
-    if (accountModel) {
-      return this.getAccountOrChannelHTMLPage(() => new Promise(resolve => resolve(accountModel)), req, res)
-    } else {
-      const videoChannelModelPromise = VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
-      return this.getAccountOrChannelHTMLPage(() => videoChannelModelPromise, req, res)
-    }
+    return this.getAccountOrChannelHTMLPage(() => Promise.resolve(account || channel), req, res)
   }
 
   static async getEmbedHTML () {
