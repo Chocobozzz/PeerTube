@@ -42,7 +42,6 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   private lastScrollHash: string
 
   constructor (
-    private customMarkupService: CustomMarkupService,
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
     private notifier: Notifier,
@@ -74,8 +73,6 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
 
     this.html = await this.instanceService.buildHtml(about)
 
-    await this.injectDescription(about)
-
     this.initialized = true
   }
 
@@ -95,11 +92,5 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     const link = anchor.href
     copyToClipboard(link)
     this.notifier.success(link, $localize `Link copied`)
-  }
-
-  private async injectDescription (about: About) {
-    const element = await this.customMarkupService.buildElement(about.instance.description)
-
-    this.descriptionWrapper.nativeElement.appendChild(element)
   }
 }

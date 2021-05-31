@@ -13,8 +13,7 @@ import { InstanceService } from './instance.service'
 @NgModule({
   imports: [
     SharedMainModule,
-    NgbAccordionModule,
-    SharedCustomMarkupModule
+    NgbAccordionModule
   ],
 
   declarations: [
