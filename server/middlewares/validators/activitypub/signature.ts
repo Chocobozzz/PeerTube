@@ -14,7 +14,7 @@ const signatureValidator = [
     .custom(isSignatureTypeValid).withMessage('Should have a valid signature type'),
   body('signature.created')
     .optional()
-    .custom(isDateValid).withMessage('Should have a valid signature created date'),
+    .custom(isDateValid).withMessage('Should have a signature created date that conforms to ISO 8601'),
   body('signature.creator')
     .optional()
     .custom(isSignatureCreatorValid).withMessage('Should have a valid signature creator'),

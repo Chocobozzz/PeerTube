@@ -473,7 +473,7 @@ function getCommonVideoEditAttributes () {
       .customSanitizer(toValueOrNull),
     body('scheduleUpdate.updateAt')
       .optional()
-      .custom(isDateValid).withMessage('Should have a valid schedule update date'),
+      .custom(isDateValid).withMessage('Should have a schedule update date that conforms to ISO 8601'),
     body('scheduleUpdate.privacy')
       .optional()
       .customSanitizer(toIntOrNull)

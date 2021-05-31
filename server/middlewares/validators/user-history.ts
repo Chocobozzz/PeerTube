@@ -21,7 +21,7 @@ const userHistoryListValidator = [
 const userHistoryRemoveValidator = [
   body('beforeDate')
     .optional()
-    .custom(isDateValid).withMessage('Should have a valid before date'),
+    .custom(isDateValid).withMessage('Should have a before date that conforms to ISO 8601'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking userHistoryRemoveValidator parameters', { parameters: req.body })

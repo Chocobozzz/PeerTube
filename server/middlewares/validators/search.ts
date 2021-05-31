@@ -8,11 +8,19 @@ import { isSearchTargetValid } from '@server/helpers/custom-validators/search'
 const videosSearchValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
 
-  query('startDate').optional().custom(isDateValid).withMessage('Should have a valid start date'),
-  query('endDate').optional().custom(isDateValid).withMessage('Should have a valid end date'),
+  query('startDate')
+    .optional()
+    .custom(isDateValid).withMessage('Should have a start date that conforms to ISO 8601'),
+  query('endDate')
+    .optional()
+    .custom(isDateValid).withMessage('Should have a end date that conforms to ISO 8601'),
 
-  query('originallyPublishedStartDate').optional().custom(isDateValid).withMessage('Should have a valid published start date'),
-  query('originallyPublishedEndDate').optional().custom(isDateValid).withMessage('Should have a valid published end date'),
+  query('originallyPublishedStartDate')
+    .optional()
+    .custom(isDateValid).withMessage('Should have a published start date that conforms to ISO 8601'),
+  query('originallyPublishedEndDate')
+    .optional()
+    .custom(isDateValid).withMessage('Should have a published end date that conforms to ISO 8601'),
 
   query('durationMin').optional().isInt().withMessage('Should have a valid min duration'),
   query('durationMax').optional().isInt().withMessage('Should have a valid max duration'),
