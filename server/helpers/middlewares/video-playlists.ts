@@ -28,10 +28,10 @@ export {
 
 function handleVideoPlaylist (videoPlaylist: MVideoPlaylist, res: express.Response) {
   if (!videoPlaylist) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'Video playlist not found' })
-       .end()
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video playlist not found'
+    })
     return false
   }
 

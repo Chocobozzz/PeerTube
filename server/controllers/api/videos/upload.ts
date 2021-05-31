@@ -97,8 +97,11 @@ export async function addVideoLegacy (req: express.Request, res: express.Respons
   // Uploading the video could be long
   // Set timeout to 10 minutes, as Express's default is 2 minutes
   req.setTimeout(1000 * 60 * 10, () => {
-    logger.error('Upload video has timed out.')
-    return res.sendStatus(HttpStatusCode.REQUEST_TIMEOUT_408)
+    logger.error('Video upload has timed out.')
+    return res.fail({
+      status: HttpStatusCode.REQUEST_TIMEOUT_408,
+      message: 'Video upload has timed out.'
+    })
   })
 
   const videoPhysicalFile = req.files['videofile'][0]

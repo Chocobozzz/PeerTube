@@ -8,6 +8,7 @@ import { isArray } from './custom-validators/misc'
 import { logger } from './logger'
 import { deleteFileAndCatch, generateRandomString } from './utils'
 import { getExtFromMimetype } from './video'
+import { ProblemDocument, ProblemDocumentExtension } from 'http-problem-details'
 
 function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -125,6 +126,34 @@ function getCountVideos (req: express.Request) {
   return req.query.skipCount !== true
 }
 
+// helpers added in server.ts and used in subsequent controllers used
+const apiResponseHelpers = (req, res: express.Response, next = null) => {
+  res.fail = (options) => {
+    const { data, status, message, title, type, docs, instance } = {
+      data: null,
+      status: HttpStatusCode.BAD_REQUEST_400,
+      ...options
+    }
+
+    const extension = new ProblemDocumentExtension({
+      ...data,
+      docs: docs || res.docs
+    })
+
+    res.status(status)
+    res.setHeader('Content-Type', 'application/problem+json')
+    res.json(new ProblemDocument({
+      status,
+      title,
+      instance,
+      type: type && '' + type,
+      detail: message
+    }, extension))
+  }
+
+  if (next !== null) next()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -134,5 +163,6 @@ export {
   badRequest,
   createReqFiles,
   cleanUpReqFiles,
-  getCountVideos
+  getCountVideos,
+  apiResponseHelpers
 }

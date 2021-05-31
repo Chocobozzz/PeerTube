@@ -6,8 +6,10 @@ async function doesAbuseExist (abuseId: number | string, res: Response) {
   const abuse = await AbuseModel.loadByIdWithReporter(parseInt(abuseId + '', 10))
 
   if (!abuse) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'Abuse not found' })
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Abuse not found'
+    })
 
     return false
   }

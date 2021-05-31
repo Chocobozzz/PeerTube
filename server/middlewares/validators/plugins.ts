@@ -31,8 +31,18 @@ const getPluginValidator = (pluginType: PluginType, withVersion = true) => {
       const npmName = PluginModel.buildNpmName(req.params.pluginName, pluginType)
       const plugin = PluginManager.Instance.getRegisteredPluginOrTheme(npmName)
 
-      if (!plugin) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
-      if (withVersion && plugin.version !== req.params.pluginVersion) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+      if (!plugin) {
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'No plugin found named ' + npmName
+        })
+      }
+      if (withVersion && plugin.version !== req.params.pluginVersion) {
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'No plugin found named ' + npmName + ' with version ' + req.params.pluginVersion
+        })
+      }
 
       res.locals.registeredPlugin = plugin
 
@@ -50,10 +60,20 @@ const getExternalAuthValidator = [
     if (areValidationErrors(req, res)) return
 
     const plugin = res.locals.registeredPlugin
-    if (!plugin.registerHelpers) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    if (!plugin.registerHelpers) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'No registered helpers were found for this plugin'
+      })
+    }
 
     const externalAuth = plugin.registerHelpers.getExternalAuths().find(a => a.authName === req.params.authName)
-    if (!externalAuth) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    if (!externalAuth) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'No external auths were found for this plugin'
+      })
+    }
 
     res.locals.externalAuth = externalAuth
 
@@ -107,8 +127,7 @@ const installOrUpdatePluginValidator = [
 
     const body: InstallOrUpdatePlugin = req.body
     if (!body.path && !body.npmName) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Should have either a npmName or a path' })
+      return res.fail({ message: 'Should have either a npmName or a path' })
     }
 
     return next()
@@ -137,12 +156,13 @@ const existingPluginValidator = [
 
     const plugin = await PluginModel.loadByNpmName(req.params.npmName)
     if (!plugin) {
-      return res.status(HttpStatusCode.NOT_FOUND_404)
-                .json({ error: 'Plugin not found' })
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Plugin not found'
+      })
     }
 
     res.locals.plugin = plugin
-
     return next()
   }
 ]
@@ -177,9 +197,7 @@ const listAvailablePluginsValidator = [
     if (areValidationErrors(req, res)) return
 
     if (CONFIG.PLUGINS.INDEX.ENABLED === false) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Plugin index is not enabled' })
-                .end()
+      return res.fail({ message: 'Plugin index is not enabled' })
     }
 
     return next()

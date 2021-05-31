@@ -7,9 +7,10 @@ async function doesVideoCaptionExist (video: MVideoId, language: string, res: Re
   const videoCaption = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
 
   if (!videoCaption) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'Video caption not found' })
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video caption not found'
+    })
     return false
   }
 

@@ -24,7 +24,10 @@ async function getLocalClient (req: express.Request, res: express.Response, next
   // Don't make this check if this is a test instance
   if (process.env.NODE_ENV !== 'test' && req.get('host') !== headerHostShouldBe) {
     logger.info('Getting client tokens for host %s is forbidden (expected %s).', req.get('host'), headerHostShouldBe)
-    return res.type('json').status(HttpStatusCode.FORBIDDEN_403).end()
+    return res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: `Getting client tokens for host ${req.get('host')} is forbidden`
+    })
   }
 
   const client = await OAuthClientModel.loadFirstClient()

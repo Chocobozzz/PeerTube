@@ -21,7 +21,10 @@ const videoWatchingValidator = [
     const user = res.locals.oauth.token.User
     if (user.videosHistoryEnabled === false) {
       logger.warn('Cannot set videos to watch by user %d: videos history is disabled.', user.id)
-      return res.status(HttpStatusCode.CONFLICT_409).end()
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Video history is disabled'
+      })
     }
 
     return next()

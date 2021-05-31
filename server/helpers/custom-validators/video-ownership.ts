@@ -9,10 +9,10 @@ export async function doesChangeVideoOwnershipExist (idArg: number | string, res
   const videoChangeOwnership = await VideoChangeOwnershipModel.load(id)
 
   if (!videoChangeOwnership) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-      .json({ error: 'Video change ownership not found' })
-      .end()
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video change ownership not found'
+    })
     return false
   }
 
@@ -25,8 +25,9 @@ export function checkUserCanTerminateOwnershipChange (user: MUserId, videoChange
     return true
   }
 
-  res.status(HttpStatusCode.FORBIDDEN_403)
-    .json({ error: 'Cannot terminate an ownership change of another user' })
-    .end()
+  res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: 'Cannot terminate an ownership change of another user'
+  })
   return false
 }

@@ -183,7 +183,7 @@ async function deleteMe (req: express.Request, res: express.Response) {
 
   await user.destroy()
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateMe (req: express.Request, res: express.Response) {
@@ -237,7 +237,7 @@ async function updateMe (req: express.Request, res: express.Response) {
     await sendVerifyUserEmail(user, true)
   }
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateMyAvatar (req: express.Request, res: express.Response) {
@@ -257,5 +257,5 @@ async function deleteMyAvatar (req: express.Request, res: express.Response) {
   const userAccount = await AccountModel.load(user.Account.id)
   await deleteLocalActorImageFile(userAccount, ActorImageType.AVATAR)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

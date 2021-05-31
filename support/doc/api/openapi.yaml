@@ -38,46 +38,53 @@ info:
     # Errors
 
     The API uses standard HTTP status codes to indicate the success or failure
-    of the API call.
+    of the API call, completed by a [RFC7807-compliant](https://tools.ietf.org/html/rfc7807) response body.
 
     ```
     HTTP 1.1 404 Not Found
-    Content-Type: application/json
+    Content-Type: application/problem+json; charset=utf-8
 
     {
-      "errorCode": 1
-      "error": "Account not found"
+      "detail": "Video not found",
+      "status": 404,
+      "title": "Not Found",
+      "type": "about:blank"
     }
     ```
 
-    We provide error codes for [a growing number of cases](https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/server/server-error-code.enum.ts),
+    We provide error types for [a growing number of cases](https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/server/server-error-code.enum.ts),
     but it is still optional.
 
     ### Validation errors
 
     Each parameter is evaluated on its own against a set of rules before the route validator
-    proceeds with potential testing involving parameter combinations. Errors coming from Validation
+    proceeds with potential testing involving parameter combinations. Errors coming from validation
     errors appear earlier and benefit from a more detailed error type:
 
     ```
     HTTP 1.1 400 Bad Request
-    Content-Type: application/json
+    Content-Type: application/problem+json; charset=utf-8
 
     {
-      "errors": {
+      "detail": "Incorrect request parameters: id",
+      "instance": "/api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180",
+      "invalid-params": {
         "id": {
-          "value": "a117eb-c6a9-4756-bb09-2a956239f",
-          "msg": "Should have a valid id",
+          "location": "params",
+          "msg": "Invalid value",
           "param": "id",
-          "location": "params"
+          "value": "9c9de5e8-0a1e-484a-b099-e80766180"
         }
-      }
+      },
+      "status": 400,
+      "title": "Bad Request",
+      "type": "about:blank"
     }
     ```
 
     Where `id` is the name of the field concerned by the error, within the route definition.
-    `errors.<field>.location` can be either 'params', 'body', 'header', 'query' or 'cookies', and
-    `errors.<field>.value` reports the value that didn't pass validation whose `errors.<field>.msg`
+    `invalid-params.<field>.location` can be either 'params', 'body', 'header', 'query' or 'cookies', and
+    `invalid-params.<field>.value` reports the value that didn't pass validation whose `invalid-params.<field>.msg`
     is about.
 
     # Rate limits

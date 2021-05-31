@@ -63,11 +63,10 @@ const removeFollowingValidator = [
     const follow = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(serverActor.id, SERVER_ACTOR_NAME, req.params.host)
 
     if (!follow) {
-      return res
-        .status(HttpStatusCode.NOT_FOUND_404)
-        .json({
-          error: `Following ${req.params.host} not found.`
-        })
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: `Following ${req.params.host} not found.`
+      })
     }
 
     res.locals.follow = follow
@@ -95,12 +94,10 @@ const getFollowerValidator = [
     }
 
     if (!follow) {
-      return res
-        .status(HttpStatusCode.NOT_FOUND_404)
-        .json({
-          error: `Follower ${req.params.nameWithHost} not found.`
-        })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: `Follower ${req.params.nameWithHost} not found.`
+      })
     }
 
     res.locals.follow = follow
@@ -114,12 +111,7 @@ const acceptOrRejectFollowerValidator = [
 
     const follow = res.locals.follow
     if (follow.state !== 'pending') {
-      return res
-        .status(HttpStatusCode.BAD_REQUEST_400)
-        .json({
-          error: 'Follow is not in pending state.'
-        })
-        .end()
+      return res.fail({ message: 'Follow is not in pending state.' })
     }
 
     return next()

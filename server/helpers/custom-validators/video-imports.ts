@@ -36,10 +36,10 @@ async function doesVideoImportExist (id: number, res: express.Response) {
   const videoImport = await VideoImportModel.loadAndPopulateVideo(id)
 
   if (!videoImport) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'Video import not found' })
-       .end()
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video import not found'
+    })
     return false
   }
 

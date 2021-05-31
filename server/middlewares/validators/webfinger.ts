@@ -21,9 +21,10 @@ const webfingerValidator = [
 
     const actor = await ActorModel.loadLocalUrlByName(name)
     if (!actor) {
-      return res.status(HttpStatusCode.NOT_FOUND_404)
-                .send({ error: 'Actor not found' })
-                .end()
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Actor not found'
+      })
     }
 
     res.locals.actorUrl = actor

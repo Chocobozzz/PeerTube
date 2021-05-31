@@ -37,8 +37,10 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
 
       const rate = await AccountVideoRateModel.loadLocalAndPopulateVideo(rateType, req.params.name, +req.params.videoId)
       if (!rate) {
-        return res.status(HttpStatusCode.NOT_FOUND_404)
-                  .json({ error: 'Video rate not found' })
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'Video rate not found'
+        })
       }
 
       res.locals.accountVideoRate = rate

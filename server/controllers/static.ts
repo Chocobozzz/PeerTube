@@ -160,10 +160,9 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
   const { totalVideos } = await VideoModel.getStats()
   const { totalLocalVideoComments } = await VideoCommentModel.getStats()
   const { totalUsers, totalMonthlyActiveUsers, totalHalfYearActiveUsers } = await UserModel.getStats()
-  let json = {}
 
   if (req.params.version && (req.params.version === '2.0')) {
-    json = {
+    const json = {
       version: '2.0',
       software: {
         name: 'peertube',
@@ -291,12 +290,14 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
       }
     } as HttpNodeinfoDiasporaSoftwareNsSchema20
     res.contentType('application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.0#"')
-  } else {
-    json = { error: 'Nodeinfo schema version not handled' }
-    res.status(HttpStatusCode.NOT_FOUND_404)
+       .send(json)
+       .end()
   }
 
-  return res.send(json).end()
+  return res.fail({
+    status: HttpStatusCode.NOT_FOUND_404,
+    message: 'Nodeinfo schema version not handled'
+  })
 }
 
 function getCup (req: express.Request, res: express.Response, next: express.NextFunction) {

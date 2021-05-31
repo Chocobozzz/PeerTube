@@ -19,6 +19,7 @@ import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/l
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { User } from '../../../../shared/models/users'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const expect = chai.expect
 
@@ -89,8 +90,8 @@ describe('Test users account verification', function () {
   })
 
   it('Should not allow login for user with unverified email', async function () {
-    const resLogin = await login(server.url, server.client, user1, 400)
-    expect(resLogin.body.error).to.contain('User email is not verified.')
+    const resLogin = await login(server.url, server.client, user1, HttpStatusCode.BAD_REQUEST_400)
+    expect(resLogin.body.detail).to.contain('User email is not verified.')
   })
 
   it('Should verify the user via email and allow login', async function () {

@@ -76,7 +76,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
   await federateVideoIfNeeded(video, false)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function addLiveVideo (req: express.Request, res: express.Response) {

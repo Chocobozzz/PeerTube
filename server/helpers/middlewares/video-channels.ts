@@ -31,9 +31,10 @@ export {
 
 function processVideoChannelExist (videoChannel: MChannelBannerAccountDefault, res: express.Response) {
   if (!videoChannel) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-      .json({ error: 'Video channel not found' })
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video channel not found'
+    })
     return false
   }
 

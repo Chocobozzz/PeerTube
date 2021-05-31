@@ -73,6 +73,7 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.docs = "https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadLegacy"
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -88,9 +89,11 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
       if (!videoFile.duration) await addDurationToVideo(videoFile)
     } catch (err) {
       logger.error('Invalid input file in videosAddLegacyValidator.', { err })
-      res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
-         .json({ error: 'Video file unreadable.' })
 
+      res.fail({
+        status: HttpStatusCode.UNPROCESSABLE_ENTITY_422,
+        message: 'Video file unreadable.'
+      })
       return cleanUpReqFiles(req)
     }
 
@@ -105,6 +108,7 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
  */
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.docs = "https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadResumable"
     const user = res.locals.oauth.token.User
 
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
@@ -118,9 +122,11 @@ const videosAddResumableValidator = [
       if (!file.duration) await addDurationToVideo(file)
     } catch (err) {
       logger.error('Invalid input file in videosAddResumableValidator.', { err })
-      res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
-         .json({ error: 'Video file unreadable.' })
 
+      res.fail({
+        status: HttpStatusCode.UNPROCESSABLE_ENTITY_422,
+        message: 'Video file unreadable.'
+      })
       return cleanup()
     }
 
@@ -164,6 +170,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .withMessage('Should specify the file mimetype'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.docs = "https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadResumableInit"
     const videoFileMetadata = {
       mimetype: req.headers['x-upload-content-type'] as string,
       size: +req.headers['x-upload-content-length'],
@@ -207,6 +214,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.docs = 'https://docs.joinpeertube.org/api-rest-reference.html#operation/putVideo'
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -242,12 +250,14 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
   const serverActor = await getServerActor()
   if (await VideoModel.checkVideoHasInstanceFollow(video.id, serverActor.id) === true) return next()
 
-  return res.status(HttpStatusCode.FORBIDDEN_403)
-            .json({
-              errorCode: ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS,
-              error: 'Cannot get this video regarding follow constraints.',
-              originUrl: video.url
-            })
+  return res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: 'Cannot get this video regarding follow constraints.',
+    type: ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS.toString(),
+    data: {
+      originUrl: video.url
+    }
+  })
 }
 
 const videosCustomGetValidator = (
@@ -258,6 +268,7 @@ const videosCustomGetValidator = (
     param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      res.docs = 'https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo'
       logger.debug('Checking videosGet parameters', { parameters: req.params })
 
       if (areValidationErrors(req, res)) return
@@ -276,8 +287,10 @@ const videosCustomGetValidator = (
 
         // Only the owner or a user that have blacklist rights can see the video
         if (!user || !user.canGetVideo(video)) {
-          return res.status(HttpStatusCode.FORBIDDEN_403)
-                    .json({ error: 'Cannot get this private/internal or blacklisted video.' })
+          return res.fail({
+            status: HttpStatusCode.FORBIDDEN_403,
+            message: 'Cannot get this private/internal or blacklisted video.'
+          })
         }
 
         return next()
@@ -291,7 +304,10 @@ const videosCustomGetValidator = (
         if (isUUIDValid(req.params.id)) return next()
 
         // Don't leak this unlisted video
-        return res.status(HttpStatusCode.NOT_FOUND_404).end()
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'Video not found'
+        })
       }
     }
   ]
@@ -318,6 +334,7 @@ const videosRemoveValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.docs = "https://docs.joinpeertube.org/api-rest-reference.html#operation/delVideo"
     logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
@@ -344,13 +361,11 @@ const videosChangeOwnershipValidator = [
 
     const nextOwner = await AccountModel.loadLocalByName(req.body.username)
     if (!nextOwner) {
-      res.status(HttpStatusCode.BAD_REQUEST_400)
-        .json({ error: 'Changing video ownership to a remote account is not supported yet' })
-
+      res.fail({ message: 'Changing video ownership to a remote account is not supported yet' })
       return
     }
-    res.locals.nextOwner = nextOwner
 
+    res.locals.nextOwner = nextOwner
     return next()
   }
 ]
@@ -370,8 +385,10 @@ const videosTerminateChangeOwnershipValidator = [
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
     if (videoChangeOwnership.status !== VideoChangeOwnershipStatus.WAITING) {
-      res.status(HttpStatusCode.FORBIDDEN_403)
-         .json({ error: 'Ownership already accepted or refused' })
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Ownership already accepted or refused'
+      })
       return
     }
 
@@ -388,9 +405,10 @@ const videosAcceptChangeOwnershipValidator = [
     const videoChangeOwnership = res.locals.videoChangeOwnership
     const isAble = await isAbleToUploadVideo(user.id, videoChangeOwnership.Video.getMaxQualityFile().size)
     if (isAble === false) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-        .json({ error: 'The user video quota is exceeded with this video.' })
-
+      res.fail({
+        status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
+        message: 'The user video quota is exceeded with this video.'
+      })
       return
     }
 
@@ -538,9 +556,10 @@ const commonVideosFiltersValidator = [
       (req.query.filter === 'all-local' || req.query.filter === 'all') &&
       (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) === false)
     ) {
-      res.status(HttpStatusCode.UNAUTHORIZED_401)
-         .json({ error: 'You are not allowed to see all local videos.' })
-
+      res.fail({
+        status: HttpStatusCode.UNAUTHORIZED_401,
+        message: 'You are not allowed to see all local videos.'
+      })
       return
     }
 
@@ -581,9 +600,7 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
     if (!req.body.scheduleUpdate.updateAt) {
       logger.warn('Invalid parameters: scheduleUpdate.updateAt is mandatory.')
 
-      res.status(HttpStatusCode.BAD_REQUEST_400)
-         .json({ error: 'Schedule update at is mandatory.' })
-
+      res.fail({ message: 'Schedule update at is mandatory.' })
       return true
     }
   }
@@ -605,26 +622,27 @@ async function commonVideoChecksPass (parameters: {
   if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
 
   if (!isVideoFileMimeTypeValid(files)) {
-    res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
-        .json({
-          error: 'This file is not supported. Please, make sure it is of the following type: ' +
-                CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
-        })
-
+    res.fail({
+      status: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415,
+      message: 'This file is not supported. Please, make sure it is of the following type: ' +
+               CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
+    })
     return false
   }
 
   if (!isVideoFileSizeValid(videoFileSize.toString())) {
-    res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-        .json({ error: 'This file is too large. It exceeds the maximum file size authorized.' })
-
+    res.fail({
+      status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
+      message: 'This file is too large. It exceeds the maximum file size authorized.'
+    })
     return false
   }
 
   if (await isAbleToUploadVideo(user.id, videoFileSize) === false) {
-    res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-        .json({ error: 'The user video quota is exceeded with this video.' })
-
+    res.fail({
+      status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
+      message: 'The user video quota is exceeded with this video.'
+    })
     return false
   }
 
@@ -650,9 +668,10 @@ export async function isVideoAccepted (
 
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused local video.', { acceptedResult, acceptParameters })
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: acceptedResult.errorMessage || 'Refused local video' })
-
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: acceptedResult.errorMessage || 'Refused local video'
+    })
     return false
   }
 

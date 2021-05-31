@@ -144,7 +144,7 @@ async function installPlugin (req: express.Request, res: express.Response) {
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
     logger.warn('Cannot install plugin %s.', toInstall, { err })
-    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
+    return res.fail({ message: 'Cannot install plugin ' + toInstall })
   }
 }
 
@@ -159,7 +159,7 @@ async function updatePlugin (req: express.Request, res: express.Response) {
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
     logger.warn('Cannot update plugin %s.', toUpdate, { err })
-    return res.sendStatus(HttpStatusCode.BAD_REQUEST_400)
+    return res.fail({ message: 'Cannot update plugin ' + toUpdate })
   }
 }
 
@@ -168,7 +168,7 @@ async function uninstallPlugin (req: express.Request, res: express.Response) {
 
   await PluginManager.Instance.uninstall(body.npmName)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 function getPublicPluginSettings (req: express.Request, res: express.Response) {
@@ -197,7 +197,7 @@ async function updatePluginSettings (req: express.Request, res: express.Response
 
   await PluginManager.Instance.onSettingsChanged(plugin.name, plugin.settings)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function listAvailablePlugins (req: express.Request, res: express.Response) {
@@ -206,8 +206,10 @@ async function listAvailablePlugins (req: express.Request, res: express.Response
   const resultList = await listAvailablePluginsFromIndex(query)
 
   if (!resultList) {
-    return res.status(HttpStatusCode.SERVICE_UNAVAILABLE_503)
-      .json({ error: 'Plugin index unavailable. Please retry later' })
+    return res.fail({
+      status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
+      message: 'Plugin index unavailable. Please retry later'
+    })
   }
 
   return res.json(resultList)

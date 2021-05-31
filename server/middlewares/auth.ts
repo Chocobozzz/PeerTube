@@ -16,11 +16,11 @@ function authenticate (req: express.Request, res: express.Response, next: expres
     .catch(err => {
       logger.warn('Cannot authenticate.', { err })
 
-      return res.status(err.status)
-        .json({
-          error: 'Token is invalid.',
-          code: err.name
-        })
+      return res.fail({
+        status: err.status,
+        message: 'Token is invalid',
+        type: err.name
+      })
     })
 }
 
@@ -52,7 +52,12 @@ function authenticatePromiseIfNeeded (req: express.Request, res: express.Respons
     // Already authenticated? (or tried to)
     if (res.locals.oauth?.token.User) return resolve()
 
-    if (res.locals.authenticated === false) return res.sendStatus(HttpStatusCode.UNAUTHORIZED_401)
+    if (res.locals.authenticated === false) {
+      return res.fail({
+        status: HttpStatusCode.UNAUTHORIZED_401,
+        message: 'Not authenticated'
+      })
+    }
 
     authenticate(req, res, () => resolve(), authenticateInQuery)
   })

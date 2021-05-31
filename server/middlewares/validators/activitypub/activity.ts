@@ -10,7 +10,7 @@ async function activityPubValidator (req: express.Request, res: express.Response
   if (!isRootActivityValid(req.body)) {
     logger.warn('Incorrect activity parameters.', { activity: req.body })
     return res.status(HttpStatusCode.BAD_REQUEST_400)
-              .json({ error: 'Incorrect activity.' })
+              .end()
   }
 
   const serverActor = await getServerActor()

@@ -1,15 +1,19 @@
 import * as express from 'express'
 import { query, validationResult } from 'express-validator'
 import { logger } from '../../helpers/logger'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function areValidationErrors (req: express.Request, res: express.Response) {
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
     logger.warn('Incorrect request parameters', { path: req.originalUrl, err: errors.mapped() })
-    res.status(HttpStatusCode.BAD_REQUEST_400)
-       .json({ errors: errors.mapped() })
+    res.fail({
+      message: 'Incorrect request parameters: ' + Object.keys(errors.mapped()).join(', '),
+      instance: req.originalUrl,
+      data: {
+        'invalid-params': errors.mapped()
+      }
+    })
 
     return true
   }

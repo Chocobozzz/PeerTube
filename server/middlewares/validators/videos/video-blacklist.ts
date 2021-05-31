@@ -39,10 +39,10 @@ const videosBlacklistAddValidator = [
 
     const video = res.locals.videoAll
     if (req.body.unfederate === true && video.remote === true) {
-      return res
-        .status(HttpStatusCode.CONFLICT_409)
-        .send({ error: 'You cannot unfederate a remote video.' })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'You cannot unfederate a remote video.'
+      })
     }
 
     return next()

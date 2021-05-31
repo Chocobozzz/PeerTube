@@ -78,7 +78,7 @@ clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE.C
 
 // 404 for static files not found
 clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => {
-  res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
 
 // Always serve index client page (the client is a single page application, let it handle routing)
@@ -105,7 +105,7 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
     return res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
   }
 
-  return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  return res.status(HttpStatusCode.NOT_FOUND_404).end()
 }
 
 async function generateEmbedHtmlPage (req: express.Request, res: express.Response) {

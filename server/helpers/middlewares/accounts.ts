@@ -27,15 +27,15 @@ async function doesAccountExist (p: Promise<MAccountDefault>, res: Response, sen
 
   if (!account) {
     if (sendNotFound === true) {
-      res.status(HttpStatusCode.NOT_FOUND_404)
-         .json({ error: 'Account not found' })
+      res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Account not found'
+      })
     }
-
     return false
   }
 
   res.locals.account = account
-
   return true
 }
 
@@ -43,14 +43,14 @@ async function doesUserFeedTokenCorrespond (id: number, token: string, res: Resp
   const user = await UserModel.loadByIdWithChannels(parseInt(id + '', 10))
 
   if (token !== user.feedToken) {
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: 'User and token mismatch' })
-
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'User and token mismatch'
+    })
     return false
   }
 
   res.locals.user = user
-
   return true
 }
 

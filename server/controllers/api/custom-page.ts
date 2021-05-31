@@ -27,7 +27,12 @@ export {
 
 async function getInstanceHomepage (req: express.Request, res: express.Response) {
   const page = await ActorCustomPageModel.loadInstanceHomepage()
-  if (!page) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  if (!page) {
+    return res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Instance homepage could not be found'
+    })
+  }
 
   return res.json(page.toFormattedJSON())
 }
@@ -38,5 +43,5 @@ async function updateInstanceHomepage (req: express.Request, res: express.Respon
   await ActorCustomPageModel.updateInstanceHomepage(content)
   ServerConfigManager.Instance.updateHomepageState(content)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

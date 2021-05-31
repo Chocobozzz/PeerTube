@@ -19,9 +19,10 @@ const serverGetValidator = [
 
     const server = await ServerModel.loadByHost(req.body.host)
     if (!server) {
-      return res.status(HttpStatusCode.NOT_FOUND_404)
-                .send({ error: 'Server host not found.' })
-                .end()
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Server host not found.'
+      })
     }
 
     res.locals.server = server
@@ -44,26 +45,26 @@ const contactAdministratorValidator = [
     if (areValidationErrors(req, res)) return
 
     if (CONFIG.CONTACT_FORM.ENABLED === false) {
-      return res
-        .status(HttpStatusCode.CONFLICT_409)
-        .send({ error: 'Contact form is not enabled on this instance.' })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Contact form is not enabled on this instance.'
+      })
     }
 
     if (isEmailEnabled() === false) {
-      return res
-        .status(HttpStatusCode.CONFLICT_409)
-        .send({ error: 'Emailer is not enabled on this instance.' })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Emailer is not enabled on this instance.'
+      })
     }
 
     if (await Redis.Instance.doesContactFormIpExist(req.ip)) {
       logger.info('Refusing a contact form by %s: already sent one recently.', req.ip)
 
-      return res
-        .status(HttpStatusCode.FORBIDDEN_403)
-        .send({ error: 'You already sent a contact form recently.' })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'You already sent a contact form recently.'
+      })
     }
 
     return next()

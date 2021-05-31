@@ -102,7 +102,10 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: e
   } catch (err) {
     logger.warn('Cannot use search index to make video channels search.', { err })
 
-    return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+    return res.fail({
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+      message: 'Cannot use search index to make video channels search'
+    })
   }
 }
 
@@ -202,7 +205,10 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
   } catch (err) {
     logger.warn('Cannot use search index to make video search.', { err })
 
-    return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+    return res.fail({
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+      message: 'Cannot use search index to make video search'
+    })
   }
 }
 

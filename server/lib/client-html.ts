@@ -549,11 +549,11 @@ async function serveIndexHTML (req: express.Request, res: express.Response) {
       return
     } catch (err) {
       logger.error('Cannot generate HTML page.', err)
-      return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+      return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
     }
   }
 
-  return res.sendStatus(HttpStatusCode.NOT_ACCEPTABLE_406)
+  return res.status(HttpStatusCode.NOT_ACCEPTABLE_406).end()
 }
 
 // ---------------------------------------------------------------------------
