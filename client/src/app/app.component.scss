@@ -70,11 +70,16 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  padding: 0 0 0 10px;
 
   .instance-name {
     @include ellipsis;
 
     width: 100%;
+
+    @media screen and (max-width: $mobile-view) {
+      display: none;
+    }
   }
 
   .icon.icon-logo {
@@ -82,10 +87,6 @@
     width: 23px;
     height: 24px;
     margin-right: 0.5rem;
-  }
-
-  @media screen and (max-width: $mobile-view) {
-    display: none;
   }
 }
 
