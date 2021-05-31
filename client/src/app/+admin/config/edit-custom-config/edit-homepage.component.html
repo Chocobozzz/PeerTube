@@ -17,7 +17,7 @@
 
           <my-markdown-textarea
             name="instanceCustomHomepageContent" formControlName="content" textareaMaxWidth="90%" textareaHeight="300px"
-            [customMarkdownRenderer]="customMarkdownRenderer"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()"
             [classes]="{ 'input-error': formErrors['instanceCustomHomepage.content'] }"
           ></my-markdown-textarea>
 

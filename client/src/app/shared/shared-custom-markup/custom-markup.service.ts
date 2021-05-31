@@ -8,13 +8,15 @@ import {
   VideoMiniatureMarkupData,
   VideosListMarkupData
 } from '@shared/models'
-import { ButtonMarkupComponent } from './button-markup.component'
-import { ChannelMiniatureMarkupComponent } from './channel-miniature-markup.component'
 import { DynamicElementService } from './dynamic-element.service'
-import { EmbedMarkupComponent } from './embed-markup.component'
-import { PlaylistMiniatureMarkupComponent } from './playlist-miniature-markup.component'
-import { VideoMiniatureMarkupComponent } from './video-miniature-markup.component'
-import { VideosListMarkupComponent } from './videos-list-markup.component'
+import {
+  ButtonMarkupComponent,
+  ChannelMiniatureMarkupComponent,
+  EmbedMarkupComponent,
+  PlaylistMiniatureMarkupComponent,
+  VideoMiniatureMarkupComponent,
+  VideosListMarkupComponent
+} from './peertube-custom-tags'
 
 type BuilderFunction = (el: HTMLElement) => ComponentRef<any>
 
@@ -30,10 +32,18 @@ export class CustomMarkupService {
     'peertube-videos-list': el => this.videosListBuilder(el)
   }
 
+  private customMarkdownRenderer: (text: string) => Promise<HTMLElement>
+
   constructor (
     private dynamicElementService: DynamicElementService,
     private markdown: MarkdownService
-  ) { }
+  ) {
+    this.customMarkdownRenderer = async (text: string) => this.buildElement(text)
+  }
+
+  getCustomMarkdownRenderer () {
+    return this.customMarkdownRenderer
+  }
 
   async buildElement (text: string) {
     const html = await this.markdown.customPageMarkdownToHTML(text, this.getSupportedTags())

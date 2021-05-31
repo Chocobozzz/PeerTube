@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { VideoChannel } from '../shared-main'
+import { VideoChannel } from '../../shared-main'
 
 /*
  * Markup component that creates a button

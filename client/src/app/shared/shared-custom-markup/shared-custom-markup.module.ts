@@ -5,15 +5,18 @@ import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main'
 import { SharedVideoMiniatureModule } from '../shared-video-miniature'
 import { SharedVideoPlaylistModule } from '../shared-video-playlist'
-import { ButtonMarkupComponent } from './button-markup.component'
-import { ChannelMiniatureMarkupComponent } from './channel-miniature-markup.component'
+import { CustomMarkupContainerComponent } from './custom-markup-container.component'
 import { CustomMarkupHelpComponent } from './custom-markup-help.component'
 import { CustomMarkupService } from './custom-markup.service'
 import { DynamicElementService } from './dynamic-element.service'
-import { EmbedMarkupComponent } from './embed-markup.component'
-import { PlaylistMiniatureMarkupComponent } from './playlist-miniature-markup.component'
-import { VideoMiniatureMarkupComponent } from './video-miniature-markup.component'
-import { VideosListMarkupComponent } from './videos-list-markup.component'
+import {
+  ButtonMarkupComponent,
+  ChannelMiniatureMarkupComponent,
+  EmbedMarkupComponent,
+  PlaylistMiniatureMarkupComponent,
+  VideoMiniatureMarkupComponent,
+  VideosListMarkupComponent
+} from './peertube-custom-tags'
 
 @NgModule({
   imports: [
@@ -33,7 +36,8 @@ import { VideosListMarkupComponent } from './videos-list-markup.component'
     EmbedMarkupComponent,
     VideosListMarkupComponent,
     ButtonMarkupComponent,
-    CustomMarkupHelpComponent
+    CustomMarkupHelpComponent,
+    CustomMarkupContainerComponent
   ],
 
   exports: [
@@ -43,7 +47,8 @@ import { VideosListMarkupComponent } from './videos-list-markup.component'
     VideosListMarkupComponent,
     EmbedMarkupComponent,
     ButtonMarkupComponent,
-    CustomMarkupHelpComponent
+    CustomMarkupHelpComponent,
+    CustomMarkupContainerComponent
   ],
 
   providers: [

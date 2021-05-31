@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { VideoChannel, VideoChannelService } from '../shared-main'
+import { VideoChannel, VideoChannelService } from '../../shared-main'
 
 /*
  * Markup component that creates a channel miniature only

@@ -91,7 +91,7 @@
 
     <div class="anchor" id="information"></div>
     <a
-      *ngIf="html.description"
+      *ngIf="descriptionContent"
       class="anchor-link"
       routerLink="/about/instance"
       fragment="information"
@@ -113,7 +113,7 @@
         <h3 i18n class="section-title">Description</h3>
       </a>
 
-      <div [innerHTML]="html.description"></div>
+      <my-custom-markup-container [content]="descriptionContent"></my-custom-markup-container>
     </div>
 
     <div class="anchor" id="moderation"></div>

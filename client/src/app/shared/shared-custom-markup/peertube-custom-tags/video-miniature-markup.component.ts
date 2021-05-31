@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { AuthService } from '@app/core'
-import { Video, VideoService } from '../shared-main'
-import { MiniatureDisplayOptions } from '../shared-video-miniature'
+import { Video, VideoService } from '../../shared-main'
+import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 
 /*
  * Markup component that creates a video miniature only

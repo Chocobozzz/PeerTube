@@ -7,7 +7,7 @@ import { CustomMarkupService } from '@app/shared/shared-custom-markup'
   templateUrl: './edit-homepage.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
-export class EditHomepageComponent implements OnInit {
+export class EditHomepageComponent {
   @Input() form: FormGroup
   @Input() formErrors: any
 
@@ -17,9 +17,7 @@ export class EditHomepageComponent implements OnInit {
 
   }
 
-  ngOnInit () {
-    this.customMarkdownRenderer = async (text: string) => {
-      return this.customMarkup.buildElement(text)
-    }
+  getCustomMarkdownRenderer () {
+    return this.customMarkup.getCustomMarkdownRenderer()
   }
 }

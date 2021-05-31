@@ -5,6 +5,7 @@ import { AboutInstanceResolver } from '@app/+about/about-instance/about-instance
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 import { AboutPeertubeContributorsComponent } from '@app/+about/about-peertube/about-peertube-contributors.component'
 import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
+import { SharedCustomMarkupModule } from '@app/shared/shared-custom-markup'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedInstanceModule } from '@app/shared/shared-instance'
@@ -19,7 +20,8 @@ import { AboutComponent } from './about.component'
     SharedMainModule,
     SharedFormModule,
     SharedInstanceModule,
-    SharedGlobalIconModule
+    SharedGlobalIconModule,
+    SharedCustomMarkupModule
   ],
 
   declarations: [

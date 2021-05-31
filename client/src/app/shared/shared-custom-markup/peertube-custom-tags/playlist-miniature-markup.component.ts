@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { MiniatureDisplayOptions } from '../shared-video-miniature'
-import { VideoPlaylist, VideoPlaylistService } from '../shared-video-playlist'
+import { MiniatureDisplayOptions } from '../../shared-video-miniature'
+import { VideoPlaylist, VideoPlaylistService } from '../../shared-video-playlist'
 
 /*
  * Markup component that creates a playlist miniature only

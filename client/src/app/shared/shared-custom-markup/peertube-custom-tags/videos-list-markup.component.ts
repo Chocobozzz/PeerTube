@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { AuthService } from '@app/core'
 import { VideoSortField } from '@shared/models'
-import { Video, VideoService } from '../shared-main'
-import { MiniatureDisplayOptions } from '../shared-video-miniature'
+import { Video, VideoService } from '../../shared-main'
+import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 
 /*
  * Markup component list videos depending on criterias

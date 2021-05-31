@@ -1,11 +1,12 @@
 import { ViewportScroller } from '@angular/common'
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 import { Notifier } from '@app/core'
-import { copyToClipboard } from '../../../root-helpers/utils'
+import { CustomMarkupService } from '@app/shared/shared-custom-markup'
 import { InstanceService } from '@app/shared/shared-instance'
-import { ServerConfig } from '@shared/models'
+import { About, ServerConfig } from '@shared/models'
+import { copyToClipboard } from '../../../root-helpers/utils'
 import { ResolverData } from './about-instance.resolver'
 
 @Component({
@@ -14,12 +15,13 @@ import { ResolverData } from './about-instance.resolver'
   styleUrls: [ './about-instance.component.scss' ]
 })
 export class AboutInstanceComponent implements OnInit, AfterViewChecked {
+  @ViewChild('descriptionWrapper') descriptionWrapper: ElementRef<HTMLInputElement>
   @ViewChild('contactAdminModal', { static: true }) contactAdminModal: ContactAdminModalComponent
 
   shortDescription = ''
+  descriptionContent: string
 
   html = {
-    description: '',
     terms: '',
     codeOfConduct: '',
     moderationInformation: '',
@@ -40,6 +42,7 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   private lastScrollHash: string
 
   constructor (
+    private customMarkupService: CustomMarkupService,
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
     private notifier: Notifier,
@@ -67,8 +70,11 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     this.categories = categories
 
     this.shortDescription = about.instance.shortDescription
+    this.descriptionContent = about.instance.description
 
     this.html = await this.instanceService.buildHtml(about)
+
+    await this.injectDescription(about)
 
     this.initialized = true
   }
@@ -89,5 +95,11 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     const link = anchor.href
     copyToClipboard(link)
     this.notifier.success(link, $localize `Link copied`)
+  }
+
+  private async injectDescription (about: About) {
+    const element = await this.customMarkupService.buildElement(about.instance.description)
+
+    this.descriptionWrapper.nativeElement.appendChild(element)
   }
 }
