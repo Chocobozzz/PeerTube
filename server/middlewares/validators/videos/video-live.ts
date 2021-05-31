@@ -14,6 +14,7 @@ import { VideoModel } from '@server/models/video/video'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 
 const videoLiveGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -43,7 +44,9 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   body('name')
-    .custom(isVideoNameValid).withMessage('Should have a valid name'),
+    .custom(isVideoNameValid).withMessage(
+      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
+    ),
 
   body('saveReplay')
     .optional()

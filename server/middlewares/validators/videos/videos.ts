@@ -65,8 +65,9 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .withMessage('Should have a file'),
   body('name')
     .trim()
-    .custom(isVideoNameValid)
-    .withMessage('Should have a valid name'),
+    .custom(isVideoNameValid).withMessage(
+      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
+    ),
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid).withMessage('Should have correct video channel id'),
@@ -146,8 +147,9 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .withMessage('Should have a valid filename'),
   body('name')
     .trim()
-    .custom(isVideoNameValid)
-    .withMessage('Should have a valid name'),
+    .custom(isVideoNameValid).withMessage(
+      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
+    ),
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid).withMessage('Should have correct video channel id'),
@@ -196,7 +198,9 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   body('name')
     .optional()
     .trim()
-    .custom(isVideoNameValid).withMessage('Should have a valid name'),
+    .custom(isVideoNameValid).withMessage(
+      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
+    ),
   body('channelId')
     .optional()
     .customSanitizer(toIntOrNull)
@@ -455,7 +459,11 @@ function getCommonVideoEditAttributes () {
     body('tags')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoTagsValid).withMessage('Should have correct tags'),
+      .custom(isVideoTagsValid)
+      .withMessage(
+        `Should have an array of up to ${CONSTRAINTS_FIELDS.VIDEOS.TAGS.max} tags between ` +
+        `${CONSTRAINTS_FIELDS.VIDEOS.TAG.min} and ${CONSTRAINTS_FIELDS.VIDEOS.TAG.max} characters each`
+      ),
     body('commentsEnabled')
       .optional()
       .customSanitizer(toBooleanOrNull)

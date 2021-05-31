@@ -33,7 +33,9 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     ),
   body('name')
     .optional()
-    .custom(isVideoNameValid).withMessage('Should have a valid name'),
+    .custom(isVideoNameValid).withMessage(
+      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
+    ),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoImportAddValidator parameters', { parameters: req.body })
