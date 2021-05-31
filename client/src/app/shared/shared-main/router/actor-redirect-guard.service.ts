@@ -22,20 +22,15 @@ export class ActorRedirectGuard implements CanActivate {
       this.channelService.getVideoChannel(actorName).pipe(this.orUndefined())
     ]).pipe(
       map(([ account, channel ]) => {
-        if (!account && !channel) {
-          this.router.navigate([ '/404' ])
-          return false
-        }
-
         if (account) {
-          this.router.navigate([ `/a/${actorName}` ], { skipLocationChange: true })
+          return this.router.parseUrl(`/a/${actorName}`)
         }
 
         if (channel) {
-          this.router.navigate([ `/c/${actorName}` ], { skipLocationChange: true })
+          return this.router.parseUrl(`/c/${actorName}`)
         }
 
-        return true
+        return this.router.parseUrl('/404')
       })
     )
   }
