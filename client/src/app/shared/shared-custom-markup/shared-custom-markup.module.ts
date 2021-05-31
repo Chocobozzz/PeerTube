@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { SharedActorImageModule } from '../shared-actor-image/shared-actor-image.module'
@@ -8,6 +7,7 @@ import { SharedVideoMiniatureModule } from '../shared-video-miniature'
 import { SharedVideoPlaylistModule } from '../shared-video-playlist'
 import { ButtonMarkupComponent } from './button-markup.component'
 import { ChannelMiniatureMarkupComponent } from './channel-miniature-markup.component'
+import { CustomMarkupHelpComponent } from './custom-markup-help.component'
 import { CustomMarkupService } from './custom-markup.service'
 import { DynamicElementService } from './dynamic-element.service'
 import { EmbedMarkupComponent } from './embed-markup.component'
@@ -32,7 +32,8 @@ import { VideosListMarkupComponent } from './videos-list-markup.component'
     ChannelMiniatureMarkupComponent,
     EmbedMarkupComponent,
     VideosListMarkupComponent,
-    ButtonMarkupComponent
+    ButtonMarkupComponent,
+    CustomMarkupHelpComponent
   ],
 
   exports: [
@@ -41,7 +42,8 @@ import { VideosListMarkupComponent } from './videos-list-markup.component'
     ChannelMiniatureMarkupComponent,
     VideosListMarkupComponent,
     EmbedMarkupComponent,
-    ButtonMarkupComponent
+    ButtonMarkupComponent,
+    CustomMarkupHelpComponent
   ],
 
   providers: [
