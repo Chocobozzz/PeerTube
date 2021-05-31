@@ -73,23 +73,23 @@ const usersAddValidator = [
 
     const authUser = res.locals.oauth.token.User
     if (authUser.role !== UserRole.ADMINISTRATOR && req.body.role !== UserRole.USER) {
-      return res
-        .status(HttpStatusCode.FORBIDDEN_403)
-        .json({ error: 'You can only create users (and not administrators or moderators)' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'You can only create users (and not administrators or moderators)'
+      })
     }
 
     if (req.body.channelName) {
       if (req.body.channelName === req.body.username) {
-        return res
-          .status(HttpStatusCode.BAD_REQUEST_400)
-          .json({ error: 'Channel name cannot be the same as user username.' })
+        return res.fail({ message: 'Channel name cannot be the same as user username.' })
       }
 
       const existing = await ActorModel.loadLocalByName(req.body.channelName)
       if (existing) {
-        return res
-          .status(HttpStatusCode.CONFLICT_409)
-          .json({ error: `Channel with name ${req.body.channelName} already exists.` })
+        return res.fail({
+          status: HttpStatusCode.CONFLICT_409,
+          message: `Channel with name ${req.body.channelName} already exists.`
+        })
       }
     }
 
@@ -121,20 +121,19 @@ const usersRegisterValidator = [
     const body: UserRegister = req.body
     if (body.channel) {
       if (!body.channel.name || !body.channel.displayName) {
-        return res
-          .status(HttpStatusCode.BAD_REQUEST_400)
-          .json({ error: 'Channel is optional but if you specify it, channel.name and channel.displayName are required.' })
+        return res.fail({ message: 'Channel is optional but if you specify it, channel.name and channel.displayName are required.' })
       }
 
       if (body.channel.name === body.username) {
-        return res.status(HttpStatusCode.BAD_REQUEST_400)
-                  .json({ error: 'Channel name cannot be the same as user username.' })
+        return res.fail({ message: 'Channel name cannot be the same as user username.' })
       }
 
       const existing = await ActorModel.loadLocalByName(body.channel.name)
       if (existing) {
-        return res.status(HttpStatusCode.CONFLICT_409)
-                  .json({ error: `Channel with name ${body.channel.name} already exists.` })
+        return res.fail({
+          status: HttpStatusCode.CONFLICT_409,
+          message: `Channel with name ${body.channel.name} already exists.`
+        })
       }
     }
 
@@ -153,8 +152,7 @@ const usersRemoveValidator = [
 
     const user = res.locals.user
     if (user.username === 'root') {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Cannot remove the root user' })
+      return res.fail({ message: 'Cannot remove the root user' })
     }
 
     return next()
@@ -173,8 +171,7 @@ const usersBlockingValidator = [
 
     const user = res.locals.user
     if (user.username === 'root') {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Cannot block the root user' })
+      return res.fail({ message: 'Cannot block the root user' })
     }
 
     return next()
@@ -185,9 +182,7 @@ const deleteMeValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     if (user.username === 'root') {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'You cannot delete your root account.' })
-                .end()
+      return res.fail({ message: 'You cannot delete your root account.' })
     }
 
     return next()
@@ -217,8 +212,7 @@ const usersUpdateValidator = [
 
     const user = res.locals.user
     if (user.username === 'root' && req.body.role !== undefined && user.role !== req.body.role) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Cannot change root role.' })
+      return res.fail({ message: 'Cannot change root role.' })
     }
 
     return next()
@@ -273,18 +267,18 @@ const usersUpdateMeValidator = [
 
     if (req.body.password || req.body.email) {
       if (user.pluginAuth !== null) {
-        return res.status(HttpStatusCode.BAD_REQUEST_400)
-                  .json({ error: 'You cannot update your email or password that is associated with an external auth system.' })
+        return res.fail({ message: 'You cannot update your email or password that is associated with an external auth system.' })
       }
 
       if (!req.body.currentPassword) {
-        return res.status(HttpStatusCode.BAD_REQUEST_400)
-                  .json({ error: 'currentPassword parameter is missing.' })
+        return res.fail({ message: 'currentPassword parameter is missing.' })
       }
 
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
-        return res.status(HttpStatusCode.UNAUTHORIZED_401)
-                  .json({ error: 'currentPassword is invalid.' })
+        return res.fail({
+          status: HttpStatusCode.UNAUTHORIZED_401,
+          message: 'currentPassword is invalid.'
+        })
       }
     }
 
@@ -335,8 +329,10 @@ const ensureUserRegistrationAllowed = [
     )
 
     if (allowedResult.allowed === false) {
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-                .json({ error: allowedResult.errorMessage || 'User registration is not enabled or user limit is reached.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: allowedResult.errorMessage || 'User registration is not enabled or user limit is reached.'
+      })
     }
 
     return next()
@@ -348,8 +344,10 @@ const ensureUserRegistrationAllowedForIP = [
     const allowed = isSignupAllowedForCurrentIP(req.ip)
 
     if (allowed === false) {
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-                .json({ error: 'You are not on a network authorized for registration.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'You are not on a network authorized for registration.'
+      })
     }
 
     return next()
@@ -390,9 +388,10 @@ const usersResetPasswordValidator = [
     const redisVerificationString = await Redis.Instance.getResetPasswordLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
-      return res
-        .status(HttpStatusCode.FORBIDDEN_403)
-        .json({ error: 'Invalid verification string.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid verification string.'
+      })
     }
 
     return next()
@@ -437,9 +436,10 @@ const usersVerifyEmailValidator = [
     const redisVerificationString = await Redis.Instance.getVerifyEmailLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
-      return res
-        .status(HttpStatusCode.FORBIDDEN_403)
-        .json({ error: 'Invalid verification string.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid verification string.'
+      })
     }
 
     return next()
@@ -455,8 +455,10 @@ const ensureAuthUserOwnsAccountValidator = [
     const user = res.locals.oauth.token.User
 
     if (res.locals.account.id !== user.Account.id) {
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-                .json({ error: 'Only owner can access ratings list.' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Only owner can access ratings list.'
+      })
     }
 
     return next()
@@ -471,8 +473,10 @@ const ensureCanManageUser = [
     if (authUser.role === UserRole.ADMINISTRATOR) return next()
     if (authUser.role === UserRole.MODERATOR && onUser.role === UserRole.USER) return next()
 
-    return res.status(HttpStatusCode.FORBIDDEN_403)
-      .json({ error: 'A moderator can only manager users.' })
+    return res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'A moderator can only manager users.'
+    })
   }
 ]
 
@@ -515,15 +519,19 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
   const user = await UserModel.loadByUsernameOrEmail(username, email)
 
   if (user) {
-    res.status(HttpStatusCode.CONFLICT_409)
-              .json({ error: 'User with this username or email already exists.' })
+    res.fail({
+      status: HttpStatusCode.CONFLICT_409,
+      message: 'User with this username or email already exists.'
+    })
     return false
   }
 
   const actor = await ActorModel.loadLocalByName(username)
   if (actor) {
-    res.status(HttpStatusCode.CONFLICT_409)
-       .json({ error: 'Another actor (account/channel) with this name on this instance already exists or has already existed.' })
+    res.fail({
+      status: HttpStatusCode.CONFLICT_409,
+      message: 'Another actor (account/channel) with this name on this instance already exists or has already existed.'
+    })
     return false
   }
 
@@ -535,14 +543,15 @@ async function checkUserExist (finder: () => Promise<MUserDefault>, res: express
 
   if (!user) {
     if (abortResponse === true) {
-      res.status(HttpStatusCode.NOT_FOUND_404)
-        .json({ error: 'User not found' })
+      res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'User not found'
+      })
     }
 
     return false
   }
 
   res.locals.user = user
-
   return true
 }

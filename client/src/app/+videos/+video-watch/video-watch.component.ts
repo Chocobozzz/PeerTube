@@ -431,7 +431,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       .pipe(
         // If 400, 403 or 404, the video is private or blocked so redirect to 404
         catchError(err => {
-          if (err.body.errorCode === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && err.body.originUrl) {
+          if (err.body.type === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && err.body.originUrl) {
             const search = window.location.search
             let originUrl = err.body.originUrl
             if (search) originUrl += search

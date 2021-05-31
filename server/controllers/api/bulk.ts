@@ -34,7 +34,7 @@ async function bulkRemoveCommentsOf (req: express.Request, res: express.Response
   const comments = await VideoCommentModel.listForBulkDelete(account, filter)
 
   // Don't wait result
-  res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  res.status(HttpStatusCode.NO_CONTENT_204).end()
 
   for (const comment of comments) {
     await removeComment(comment)

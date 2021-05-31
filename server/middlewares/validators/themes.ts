@@ -20,11 +20,17 @@ const serveThemeCSSValidator = [
     const theme = PluginManager.Instance.getRegisteredThemeByShortName(req.params.themeName)
 
     if (!theme || theme.version !== req.params.themeVersion) {
-      return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'No theme named ' + req.params.themeName + ' was found with version ' + req.params.themeVersion
+      })
     }
 
     if (theme.css.includes(req.params.staticEndpoint) === false) {
-      return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'No static endpoint was found for this theme'
+      })
     }
 
     res.locals.registeredPlugin = theme

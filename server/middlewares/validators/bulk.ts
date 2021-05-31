@@ -23,9 +23,9 @@ const bulkRemoveCommentsOfValidator = [
     const body = req.body as BulkRemoveCommentsOfBody
 
     if (body.scope === 'instance' && user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT) !== true) {
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-      .json({
-        error: 'User cannot remove any comments of this instance.'
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'User cannot remove any comments of this instance.'
       })
     }
 

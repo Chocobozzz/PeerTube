@@ -61,11 +61,10 @@ const userSubscriptionGetValidator = [
     const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(user.Account.Actor.id, name, host)
 
     if (!subscription || !subscription.ActorFollowing.VideoChannel) {
-      return res
-        .status(HttpStatusCode.NOT_FOUND_404)
-        .json({
-          error: `Subscription ${req.params.uri} not found.`
-        })
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: `Subscription ${req.params.uri} not found.`
+      })
     }
 
     res.locals.subscription = subscription

@@ -146,7 +146,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const exists = await Redis.Instance.doesVideoIPViewExist(ip, immutableVideoAttrs.uuid)
   if (exists) {
     logger.debug('View for ip %s and video %s already exists.', ip, immutableVideoAttrs.uuid)
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   }
 
   const video = await VideoModel.load(immutableVideoAttrs.id)
@@ -179,7 +179,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.video.viewed', { video, ip })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function getVideoDescription (req: express.Request, res: express.Response) {

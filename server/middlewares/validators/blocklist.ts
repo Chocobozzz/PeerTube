@@ -24,9 +24,10 @@ const blockAccountValidator = [
     const accountToBlock = res.locals.account
 
     if (user.Account.id === accountToBlock.id) {
-      res.status(HttpStatusCode.CONFLICT_409)
-         .json({ error: 'You cannot block yourself.' })
-
+      res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'You cannot block yourself.'
+      })
       return
     }
 
@@ -79,8 +80,10 @@ const blockServerValidator = [
     const host: string = req.body.host
 
     if (host === WEBSERVER.HOST) {
-      return res.status(HttpStatusCode.CONFLICT_409)
-        .json({ error: 'You cannot block your own server.' })
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'You cannot block your own server.'
+      })
     }
 
     const server = await ServerModel.loadOrCreateByHost(host)
@@ -137,27 +140,27 @@ export {
 async function doesUnblockAccountExist (accountId: number, targetAccountId: number, res: express.Response) {
   const accountBlock = await AccountBlocklistModel.loadByAccountAndTarget(accountId, targetAccountId)
   if (!accountBlock) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'Account block entry not found.' })
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Account block entry not found.'
+    })
     return false
   }
 
   res.locals.accountBlock = accountBlock
-
   return true
 }
 
 async function doesUnblockServerExist (accountId: number, host: string, res: express.Response) {
   const serverBlock = await ServerBlocklistModel.loadByAccountAndHost(accountId, host)
   if (!serverBlock) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'Server block entry not found.' })
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Server block entry not found.'
+    })
     return false
   }
 
   res.locals.serverBlock = serverBlock
-
   return true
 }

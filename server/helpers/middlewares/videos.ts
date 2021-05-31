@@ -21,10 +21,10 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
   const video = await fetchVideo(id, fetchType, userId)
 
   if (video === null) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'Video not found' })
-       .end()
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video not found'
+    })
     return false
   }
 
@@ -55,10 +55,10 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
 
 async function doesVideoFileOfVideoExist (id: number, videoIdOrUUID: number | string, res: Response) {
   if (!await VideoFileModel.doesVideoExistForVideoFile(id, videoIdOrUUID)) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'VideoFile matching Video not found' })
-       .end()
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'VideoFile matching Video not found'
+    })
     return false
   }
 
@@ -69,9 +69,7 @@ async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAcc
   const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
 
   if (videoChannel === null) {
-    res.status(HttpStatusCode.BAD_REQUEST_400)
-       .json({ error: 'Unknown video "video channel" for this instance.' })
-
+    res.fail({ message: 'Unknown video "video channel" for this instance.' })
     return false
   }
 
@@ -82,9 +80,9 @@ async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAcc
   }
 
   if (videoChannel.Account.id !== user.Account.id) {
-    res.status(HttpStatusCode.BAD_REQUEST_400)
-      .json({ error: 'Unknown video "video channel" for this account.' })
-
+    res.fail({
+      message: 'Unknown video "video channel" for this account.'
+    })
     return false
   }
 
@@ -95,9 +93,10 @@ async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAcc
 function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right: UserRight, res: Response, onlyOwned = true) {
   // Retrieve the user who did the request
   if (onlyOwned && video.isOwned() === false) {
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: 'Cannot manage a video of another server.' })
-       .end()
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot manage a video of another server.'
+    })
     return false
   }
 
@@ -106,9 +105,10 @@ function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right:
   // Or if s/he is the video's account
   const account = video.VideoChannel.Account
   if (user.hasRight(right) === false && account.userId !== user.id) {
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: 'Cannot manage a video of another user.' })
-       .end()
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot manage a video of another user.'
+    })
     return false
   }
 

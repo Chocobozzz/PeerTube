@@ -16,26 +16,20 @@ async function doesVideoCommentThreadExist (idArg: number | string, video: MVide
   const videoComment = await VideoCommentModel.loadById(id)
 
   if (!videoComment) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-      .json({ error: 'Video comment thread not found' })
-      .end()
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video comment thread not found'
+    })
     return false
   }
 
   if (videoComment.videoId !== video.id) {
-    res.status(HttpStatusCode.BAD_REQUEST_400)
-      .json({ error: 'Video comment is not associated to this video.' })
-      .end()
-
+    res.fail({ message: 'Video comment is not associated to this video.' })
     return false
   }
 
   if (videoComment.inReplyToCommentId !== null) {
-    res.status(HttpStatusCode.BAD_REQUEST_400)
-      .json({ error: 'Video comment is not a thread.' })
-      .end()
-
+    res.fail({ message: 'Video comment is not a thread.' })
     return false
   }
 
@@ -48,18 +42,15 @@ async function doesVideoCommentExist (idArg: number | string, video: MVideoId, r
   const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-      .json({ error: 'Video comment thread not found' })
-      .end()
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video comment thread not found'
+    })
     return false
   }
 
   if (videoComment.videoId !== video.id) {
-    res.status(HttpStatusCode.BAD_REQUEST_400)
-      .json({ error: 'Video comment is not associated to this video.' })
-      .end()
-
+    res.fail({ message: 'Video comment is not associated to this video.' })
     return false
   }
 
@@ -72,14 +63,14 @@ async function doesCommentIdExist (idArg: number | string, res: express.Response
   const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-      .json({ error: 'Video comment thread not found' })
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video comment thread not found'
+    })
     return false
   }
 
   res.locals.videoCommentFull = videoComment
-
   return true
 }
 

@@ -93,16 +93,16 @@ describe('Test users', function () {
       const client = { id: 'client', secret: server.client.secret }
       const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
 
-      expect(res.body.code).to.equal('invalid_client')
-      expect(res.body.error).to.contain('client is invalid')
+      expect(res.body.type).to.equal('invalid_client')
+      expect(res.body.detail).to.contain('client is invalid')
     })
 
     it('Should not login with an invalid client secret', async function () {
       const client = { id: server.client.id, secret: 'coucou' }
       const res = await login(server.url, client, server.user, HttpStatusCode.BAD_REQUEST_400)
 
-      expect(res.body.code).to.equal('invalid_client')
-      expect(res.body.error).to.contain('client is invalid')
+      expect(res.body.type).to.equal('invalid_client')
+      expect(res.body.detail).to.contain('client is invalid')
     })
   })
 
@@ -112,16 +112,16 @@ describe('Test users', function () {
       const user = { username: 'captain crochet', password: server.user.password }
       const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
 
-      expect(res.body.code).to.equal('invalid_grant')
-      expect(res.body.error).to.contain('credentials are invalid')
+      expect(res.body.type).to.equal('invalid_grant')
+      expect(res.body.detail).to.contain('credentials are invalid')
     })
 
     it('Should not login with an invalid password', async function () {
       const user = { username: server.user.username, password: 'mew_three' }
       const res = await login(server.url, server.client, user, HttpStatusCode.BAD_REQUEST_400)
 
-      expect(res.body.code).to.equal('invalid_grant')
-      expect(res.body.error).to.contain('credentials are invalid')
+      expect(res.body.type).to.equal('invalid_grant')
+      expect(res.body.detail).to.contain('credentials are invalid')
     })
 
     it('Should not be able to upload a video', async function () {

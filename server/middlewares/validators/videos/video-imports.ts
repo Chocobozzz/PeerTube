@@ -47,14 +47,20 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
 
     if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true && req.body.targetUrl) {
       cleanUpReqFiles(req)
-      return res.status(HttpStatusCode.CONFLICT_409)
-        .json({ error: 'HTTP import is not enabled on this instance.' })
+
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'HTTP import is not enabled on this instance.'
+      })
     }
 
     if (CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED !== true && (req.body.magnetUri || torrentFile)) {
       cleanUpReqFiles(req)
-      return res.status(HttpStatusCode.CONFLICT_409)
-                .json({ error: 'Torrent/magnet URI import is not enabled on this instance.' })
+
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Torrent/magnet URI import is not enabled on this instance.'
+      })
     }
 
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
@@ -63,8 +69,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     if (!req.body.targetUrl && !req.body.magnetUri && !torrentFile) {
       cleanUpReqFiles(req)
 
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-        .json({ error: 'Should have a magnetUri or a targetUrl or a torrent file.' })
+      return res.fail({ message: 'Should have a magnetUri or a targetUrl or a torrent file.' })
     }
 
     if (!await isImportAccepted(req, res)) return cleanUpReqFiles(req)
@@ -100,9 +105,11 @@ async function isImportAccepted (req: express.Request, res: express.Response) {
 
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused to import video.', { acceptedResult, acceptParameters })
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: acceptedResult.errorMessage || 'Refused to import video' })
 
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: acceptedResult.errorMessage || 'Refused to import video'
+    })
     return false
   }
 

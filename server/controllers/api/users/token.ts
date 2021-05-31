@@ -78,9 +78,10 @@ async function handleToken (req: express.Request, res: express.Response, next: e
   } catch (err) {
     logger.warn('Login error', { err })
 
-    return res.status(err.code || 400).json({
-      code: err.name,
-      error: err.message
+    return res.fail({
+      status: err.code,
+      message: err.message,
+      type: err.name
     })
   }
 }

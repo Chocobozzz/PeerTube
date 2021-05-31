@@ -18,7 +18,6 @@ import {
 } from '@server/types/models'
 import { MVideoImportFormattable } from '@server/types/models/video/video-import'
 import { ServerErrorCode, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
@@ -143,10 +142,12 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   } catch (err) {
     logger.info('Cannot fetch information from import for URL %s.', targetUrl, { err })
 
-    return res.status(HttpStatusCode.BAD_REQUEST_400)
-              .json({
-                error: 'Cannot fetch remote information of this URL.'
-              })
+    return res.fail({
+      message: 'Cannot fetch remote information of this URL.',
+      data: {
+        targetUrl
+      }
+    })
   }
 
   const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
@@ -333,12 +334,10 @@ async function processTorrentOrAbortRequest (req: express.Request, res: express.
   if (parsedTorrent.files.length !== 1) {
     cleanUpReqFiles(req)
 
-    res.status(HttpStatusCode.BAD_REQUEST_400)
-      .json({
-        code: ServerErrorCode.INCORRECT_FILES_IN_TORRENT,
-        error: 'Torrents with only 1 file are supported.'
-      })
-
+    res.fail({
+      type: ServerErrorCode.INCORRECT_FILES_IN_TORRENT.toString(),
+      message: 'Torrents with only 1 file are supported.'
+    })
     return undefined
   }
 

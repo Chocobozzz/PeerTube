@@ -22,6 +22,7 @@ import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-
 import { HttpMethod } from '@shared/core-utils/miscs/http-methods'
 import { VideoCreate } from '@shared/models'
 import { File as UploadXFile, Metadata } from '@uploadx/core'
+import { ProblemDocumentOptions } from 'http-problem-details/dist/ProblemDocument'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
   MAccountDefault,
@@ -83,8 +84,15 @@ declare module 'express' {
     filename: string
   }
 
-  // Extends locals property from Response
+  // Extends Response with added functions and potential variables passed by middlewares
   interface Response {
+    docs?: string
+    fail: (options: {
+      data?: Record<string, Object>
+      docs?: string
+      message: string
+    } & ProblemDocumentOptions) => void
+
     locals: {
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable

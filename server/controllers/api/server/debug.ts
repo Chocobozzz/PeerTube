@@ -1,5 +1,6 @@
 import { InboxManager } from '@server/lib/activitypub/inbox-manager'
 import { RemoveDanglingResumableUploadsScheduler } from '@server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { SendDebugCommand } from '@shared/models'
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
@@ -41,5 +42,5 @@ async function runCommand (req: express.Request, res: express.Response) {
     await RemoveDanglingResumableUploadsScheduler.Instance.execute()
   }
 
-  return res.sendStatus(204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

@@ -128,6 +128,7 @@ import { LiveManager } from './server/lib/live-manager'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
+import { apiResponseHelpers } from '@server/helpers/express-utils'
 
 // ----------- Command line -----------
 
@@ -186,6 +187,9 @@ app.use(cookieParser())
 // W3C DNT Tracking Status
 app.use(advertiseDoNotTrack)
 
+// Response helpers used in developement
+app.use(apiResponseHelpers)
+
 // ----------- Views, routes and static files -----------
 
 // API
@@ -235,7 +239,11 @@ app.use(function (err, req, res, next) {
   const sql = err.parent ? err.parent.sql : undefined
 
   logger.error('Error in controller.', { err: error, sql })
-  return res.status(err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
+  return res.fail({
+    status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+    message: err.message,
+    type: err.name
+  })
 })
 
 const server = createWebsocketTrackerServer(app)

@@ -155,9 +155,10 @@ export {
 
 function isVideoCommentsEnabled (video: MVideo, res: express.Response) {
   if (video.commentsEnabled !== true) {
-    res.status(HttpStatusCode.CONFLICT_409)
-       .json({ error: 'Video comments are disabled for this video.' })
-
+    res.fail({
+      status: HttpStatusCode.CONFLICT_409,
+      message: 'Video comments are disabled for this video.'
+    })
     return false
   }
 
@@ -166,9 +167,10 @@ function isVideoCommentsEnabled (video: MVideo, res: express.Response) {
 
 function checkUserCanDeleteVideoComment (user: MUserAccountUrl, videoComment: MCommentOwnerVideoReply, res: express.Response) {
   if (videoComment.isDeleted()) {
-    res.status(HttpStatusCode.CONFLICT_409)
-       .json({ error: 'This comment is already deleted' })
-
+    res.fail({
+      status: HttpStatusCode.CONFLICT_409,
+      message: 'This comment is already deleted'
+    })
     return false
   }
 
@@ -179,9 +181,10 @@ function checkUserCanDeleteVideoComment (user: MUserAccountUrl, videoComment: MC
     videoComment.accountId !== userAccount.id && // Not the comment owner
     videoComment.Video.VideoChannel.accountId !== userAccount.id // Not the video owner
   ) {
-    res.status(HttpStatusCode.FORBIDDEN_403)
-      .json({ error: 'Cannot remove video comment of another user' })
-
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot remove video comment of another user'
+    })
     return false
   }
 
@@ -215,9 +218,11 @@ async function isVideoCommentAccepted (req: express.Request, res: express.Respon
 
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused local comment.', { acceptedResult, acceptParameters })
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: acceptedResult?.errorMessage || 'Refused local comment' })
 
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: acceptedResult?.errorMessage || 'Refused local comment'
+    })
     return false
   }
 
