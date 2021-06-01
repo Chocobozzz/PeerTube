@@ -46,6 +46,7 @@ info:
 
     {
       "detail": "Video not found",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
       "status": 404,
       "title": "Not Found",
       "type": "about:blank"
@@ -67,6 +68,7 @@ info:
 
     {
       "detail": "Incorrect request parameters: id",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
       "instance": "/api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180",
       "invalid-params": {
         "id": {
