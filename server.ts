@@ -7,7 +7,6 @@ if (isTestInstance()) {
 }
 
 // ----------- Node modules -----------
-import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
 import * as cors from 'cors'
@@ -170,14 +169,22 @@ app.use(morgan('combined', {
   skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
 }))
 
+// Response helpers used for errors
+app.use(apiResponseHelpers)
+
 // For body requests
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json({
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb',
-  verify: (req: express.Request, _, buf: Buffer) => {
+  verify: (req: express.Request, res: express.Response, buf: Buffer) => {
     const valid = isHTTPSignatureDigestValid(buf, req)
-    if (valid !== true) throw new Error('Invalid digest')
+    if (valid !== true) {
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid digest'
+      })
+    }
   }
 }))
 
@@ -186,9 +193,6 @@ app.use(cookieParser())
 
 // W3C DNT Tracking Status
 app.use(advertiseDoNotTrack)
-
-// Response helpers used in developement
-app.use(apiResponseHelpers)
 
 // ----------- Views, routes and static files -----------
 
@@ -222,23 +226,22 @@ if (cliOptions.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 
-// Catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  const err = new Error('Not Found')
-  err['status'] = HttpStatusCode.NOT_FOUND_404
-  next(err)
+// Catch unmatched routes
+app.use((req, res: express.Response) => {
+  res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
 
-app.use(function (err, req, res, next) {
+// Catch thrown errors
+app.use((err, req, res: express.Response, next) => {
+  // Format error to be logged
   let error = 'Unknown error.'
   if (err) {
     error = err.stack || err.message || err
   }
-
-  // Sequelize error
+  // Handling Sequelize error traces
   const sql = err.parent ? err.parent.sql : undefined
-
   logger.error('Error in controller.', { err: error, sql })
+
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
     message: err.message,

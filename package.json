@@ -80,7 +80,6 @@
     "bcrypt": "5.0.1",
     "bittorrent-tracker": "^9.0.0",
     "bluebird": "^3.5.0",
-    "body-parser": "^1.12.4",
     "bull": "^3.4.2",
     "bytes": "^3.0.0",
     "chokidar": "^3.4.2",

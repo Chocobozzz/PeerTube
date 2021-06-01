@@ -131,8 +131,8 @@ const apiResponseHelpers = (req, res: express.Response, next = null) => {
   res.fail = (options) => {
     const { data, status, message, title, type, docs, instance } = {
       data: null,
-      status: HttpStatusCode.BAD_REQUEST_400,
-      ...options
+      ...options,
+      status: options.status || HttpStatusCode.BAD_REQUEST_400
     }
 
     const extension = new ProblemDocumentExtension({
