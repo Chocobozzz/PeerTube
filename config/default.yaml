@@ -177,7 +177,9 @@ history:
 
 views:
   videos:
-    # PeerTube creates a database entry every hour for each video to track views over a period of time
+    # Cron schedule expression for how often views count should be calculated for videos.
+    update_interval: '0,15,30,45 * * * *'
+    # PeerTube creates a database entry every {views.videos.update_interval} for each video to track views over a period of time
     # This is used in particular by the Trending page
     # PeerTube could remove old remote video views if you want to reduce your database size (video view counter will not be altered)
     # -1 means no cleanup
