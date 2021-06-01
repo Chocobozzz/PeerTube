@@ -335,7 +335,7 @@ async function processTorrentOrAbortRequest (req: express.Request, res: express.
     cleanUpReqFiles(req)
 
     res.fail({
-      type: ServerErrorCode.INCORRECT_FILES_IN_TORRENT.toString(),
+      type: ServerErrorCode.INCORRECT_FILES_IN_TORRENT,
       message: 'Torrents with only 1 file are supported.'
     })
     return undefined

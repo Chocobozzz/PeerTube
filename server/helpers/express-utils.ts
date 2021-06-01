@@ -129,15 +129,14 @@ function getCountVideos (req: express.Request) {
 // helpers added in server.ts and used in subsequent controllers used
 const apiResponseHelpers = (req, res: express.Response, next = null) => {
   res.fail = (options) => {
-    const { data, status, message, title, type, docs, instance } = {
-      data: null,
-      ...options,
-      status: options.status || HttpStatusCode.BAD_REQUEST_400
-    }
+    const { data, status = HttpStatusCode.BAD_REQUEST_400, message, title, type, docs = res.docs, instance } = options
 
     const extension = new ProblemDocumentExtension({
       ...data,
-      docs: docs || res.docs
+      docs,
+      // fields for <= 3.2 compatibility, deprecated
+      error: message,
+      code: type
     })
 
     res.status(status)
@@ -146,12 +145,13 @@ const apiResponseHelpers = (req, res: express.Response, next = null) => {
       status,
       title,
       instance,
-      type: type && '' + type,
-      detail: message
+      // fields intended to replace 'error' and 'code' respectively
+      detail: message,
+      type: type && 'https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/' + type
     }, extension))
   }
 
-  if (next !== null) next()
+  if (next) next()
 }
 
 // ---------------------------------------------------------------------------
