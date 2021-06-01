@@ -336,7 +336,7 @@ async function updateVideoFromAP (options: {
       }
 
       const to = overrideTo || videoObject.to
-      const videoData = await videoActivityObjectToDBAttributes(channel, videoObject, to)
+      const videoData = videoActivityObjectToDBAttributes(channel, videoObject, to)
       video.name = videoData.name
       video.uuid = videoData.uuid
       video.url = videoData.url
