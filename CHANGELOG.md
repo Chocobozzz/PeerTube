@@ -4,9 +4,9 @@
 
 ### IMPORTANT NOTES
 
- * **Important:** v3.2.0 introduced `pg_dump` export bug in the auto upgrade script. To upgrade from v3.2.0:
+ * **Important:** v3.2.0 introduced a `pg_dump` export bug in the auto upgrade script. To upgrade from v3.2.0:
    * You can upgrade manually https://docs.joinpeertube.org/install-any-os?id=manually
-   * Or you can apply the changes introduced in this commit: https://github.com/Chocobozzz/PeerTube/commit/86dc0b9cc9374cba7548bb613ff43d92f90570a8 and then use the auto
+   * Or you can apply the changes introduced in this commit: https://github.com/Chocobozzz/PeerTube/commit/86dc0b9cc9374cba7548bb613ff43d92f90570a8 and then use the auto upgrade script
 
 ### Bug fixes
 
