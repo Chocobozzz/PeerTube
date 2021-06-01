@@ -104,7 +104,7 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
           message: 'Cannot create this live because the max instance lives limit is reached.',
-          type: ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED.toString()
+          type: ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED
         })
       }
     }
@@ -117,7 +117,7 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
-          type: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED.toString(),
+          type: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED,
           message: 'Cannot create this live because the max user lives limit is reached.'
         })
       }

@@ -253,7 +253,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
   return res.fail({
     status: HttpStatusCode.FORBIDDEN_403,
     message: 'Cannot get this video regarding follow constraints.',
-    type: ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS.toString(),
+    type: ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS,
     data: {
       originUrl: video.url
     }
