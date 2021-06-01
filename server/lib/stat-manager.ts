@@ -8,6 +8,7 @@ import { VideoCommentModel } from '@server/models/video/video-comment'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { ActivityType, ServerStats, VideoRedundancyStrategyWithManual } from '@shared/models'
+import * as Bluebird from 'bluebird'
 
 class StatsManager {
 
@@ -106,12 +107,10 @@ class StatsManager {
 
     strategies.push({ strategy: 'manual', size: null })
 
-    return Promise.all(
-      strategies.map(r => {
-        return VideoRedundancyModel.getStats(r.strategy)
-          .then(stats => Object.assign(stats, { strategy: r.strategy, totalSize: r.size }))
-      })
-    )
+    return Bluebird.mapSeries(strategies, r => {
+      return VideoRedundancyModel.getStats(r.strategy)
+        .then(stats => Object.assign(stats, { strategy: r.strategy, totalSize: r.size }))
+    })
   }
 
   private buildAPPerType () {
