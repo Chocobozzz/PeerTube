@@ -46,6 +46,7 @@ smtp:
   from_address: "PEERTUBE_SMTP_FROM"
 
 log:
+  level: "PEERTUBE_LOG_LEVEL"
   log_ping_requests:
     __name: "PEERTUBE_LOG_PING_REQUESTS"
     __format: "json"
