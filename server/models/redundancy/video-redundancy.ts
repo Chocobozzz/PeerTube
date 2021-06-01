@@ -80,6 +80,9 @@ export enum ScopeNames {
       fields: [ 'actorId' ]
     },
     {
+      fields: [ 'expiresOn' ]
+    },
+    {
       fields: [ 'url' ],
       unique: true
     }
