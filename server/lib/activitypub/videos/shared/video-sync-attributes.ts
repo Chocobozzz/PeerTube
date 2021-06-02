@@ -1,4 +1,4 @@
-import { logger } from '@server/helpers/logger'
+import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
 import { AccountVideoRateModel } from '@server/models/account/account-video-rate'
 import { VideoCommentModel } from '@server/models/video/video-comment'
@@ -9,6 +9,8 @@ import { crawlCollectionPage } from '../../crawl'
 import { addVideoShares } from '../../share'
 import { addVideoComments } from '../../video-comments'
 import { createRates } from '../../video-rates'
+
+const lTags = loggerTagsFactory('ap', 'video')
 
 type SyncParam = {
   likes: boolean
@@ -60,29 +62,33 @@ function syncRates (type: 'like' | 'dislike', video: MVideo, fetchedVideo: Video
   const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, type, crawlStartDate)
 
   return crawlCollectionPage<string>(uri, handler, cleaner)
-    .catch(err => logger.error('Cannot add rate of video %s.', video.uuid, { err, rootUrl: uri }))
+    .catch(err => logger.error('Cannot add rate of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid) }))
 }
 
 function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
+  const uri = fetchedVideo.shares
+
   if (!isSync) {
-    return createJob({ uri: fetchedVideo.shares, videoId: video.id, type: 'video-shares' })
+    return createJob({ uri, videoId: video.id, type: 'video-shares' })
   }
 
   const handler = items => addVideoShares(items, video)
   const cleaner = crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate)
 
-  return crawlCollectionPage<string>(fetchedVideo.shares, handler, cleaner)
-    .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err, rootUrl: fetchedVideo.shares }))
+  return crawlCollectionPage<string>(uri, handler, cleaner)
+    .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid) }))
 }
 
 function syncComments (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
+  const uri = fetchedVideo.comments
+
   if (!isSync) {
-    return createJob({ uri: fetchedVideo.comments, videoId: video.id, type: 'video-comments' })
+    return createJob({ uri, videoId: video.id, type: 'video-comments' })
   }
 
   const handler = items => addVideoComments(items)
   const cleaner = crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
 
-  return crawlCollectionPage<string>(fetchedVideo.comments, handler, cleaner)
-    .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: fetchedVideo.comments }))
+  return crawlCollectionPage<string>(uri, handler, cleaner)
+    .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid) }))
 }

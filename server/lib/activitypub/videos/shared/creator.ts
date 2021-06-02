@@ -1,5 +1,5 @@
 
-import { logger } from '@server/helpers/logger'
+import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
 import { VideoModel } from '@server/models/video/video'
@@ -9,13 +9,14 @@ import { APVideoAbstractBuilder } from './abstract-builder'
 import { getVideoAttributesFromObject } from './object-to-model-attributes'
 
 export class APVideoCreator extends APVideoAbstractBuilder {
+  protected lTags = loggerTagsFactory('ap', 'video', 'create')
 
   constructor (protected readonly videoObject: VideoObject) {
     super()
   }
 
   async create (waitThumbnail = false) {
-    logger.debug('Adding remote video %s.', this.videoObject.id)
+    logger.debug('Adding remote video %s.', this.videoObject.id, this.lTags(this.videoObject.uuid))
 
     const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
     const channel = channelActor.VideoChannel
@@ -56,7 +57,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
           transaction: t
         })
 
-        logger.info('Remote video with uuid %s inserted.', this.videoObject.uuid)
+        logger.info('Remote video with uuid %s inserted.', this.videoObject.uuid, this.lTags(videoCreated.uuid))
 
         return { autoBlacklisted, videoCreated }
       } catch (err) {

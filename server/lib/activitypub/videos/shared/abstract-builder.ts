@@ -1,7 +1,7 @@
 import { Transaction } from 'sequelize/types'
 import { checkUrlsSameHost } from '@server/helpers/activitypub'
 import { deleteNonExistingModels } from '@server/helpers/database-utils'
-import { logger } from '@server/helpers/logger'
+import { logger, LoggerTagsFn } from '@server/helpers/logger'
 import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '@server/lib/thumbnail'
 import { setVideoTags } from '@server/lib/video'
 import { VideoCaptionModel } from '@server/models/video/video-caption'
@@ -24,6 +24,7 @@ import { getTrackerUrls, setVideoTrackers } from './trackers'
 
 export abstract class APVideoAbstractBuilder {
   protected abstract videoObject: VideoObject
+  protected abstract lTags: LoggerTagsFn
 
   protected async getOrCreateVideoChannelFromVideoObject () {
     const channel = this.videoObject.attributedTo.find(a => a.type === 'Group')
@@ -42,7 +43,7 @@ export abstract class APVideoAbstractBuilder {
       video,
       type: ThumbnailType.MINIATURE
     }).catch(err => {
-      logger.warn('Cannot generate thumbnail of %s.', this.videoObject.id, { err })
+      logger.warn('Cannot generate thumbnail of %s.', this.videoObject.id, { err, ...this.lTags(video.uuid) })
 
       return undefined
     })
