@@ -774,9 +774,11 @@ async function completeVideoCheck (
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')
   }
 
+  expect(videoDetails.thumbnailPath).to.exist
   await testImage(url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)
 
   if (attributes.previewfile) {
+    expect(videoDetails.previewPath).to.exist
     await testImage(url, attributes.previewfile, videoDetails.previewPath)
   }
 }

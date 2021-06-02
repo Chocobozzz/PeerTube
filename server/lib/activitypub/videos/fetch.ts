@@ -1,20 +1,19 @@
-import { checkUrlsSameHost, getAPId } from "@server/helpers/activitypub"
-import { sanitizeAndCheckVideoTorrentObject } from "@server/helpers/custom-validators/activitypub/videos"
-import { retryTransactionWrapper } from "@server/helpers/database-utils"
-import { logger } from "@server/helpers/logger"
-import { doJSONRequest, PeerTubeRequestError } from "@server/helpers/requests"
-import { fetchVideoByUrl, VideoFetchByUrlType } from "@server/helpers/video"
-import { REMOTE_SCHEME } from "@server/initializers/constants"
-import { ActorFollowScoreCache } from "@server/lib/files-cache"
-import { JobQueue } from "@server/lib/job-queue"
-import { VideoModel } from "@server/models/video/video"
-import { MVideoAccountLight, MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from "@server/types/models"
-import { HttpStatusCode } from "@shared/core-utils"
-import { VideoObject } from "@shared/models"
-import { getOrCreateActorAndServerAndModel } from "../actor"
-import { SyncParam, syncVideoExternalAttributes } from "./shared"
-import { createVideo } from "./shared/video-create"
-import { APVideoUpdater } from "./update"
+import { checkUrlsSameHost, getAPId } from '@server/helpers/activitypub'
+import { sanitizeAndCheckVideoTorrentObject } from '@server/helpers/custom-validators/activitypub/videos'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
+import { logger } from '@server/helpers/logger'
+import { doJSONRequest, PeerTubeRequestError } from '@server/helpers/requests'
+import { fetchVideoByUrl, VideoFetchByUrlType } from '@server/helpers/video'
+import { REMOTE_SCHEME } from '@server/initializers/constants'
+import { ActorFollowScoreCache } from '@server/lib/files-cache'
+import { JobQueue } from '@server/lib/job-queue'
+import { VideoModel } from '@server/models/video/video'
+import { MVideoAccountLight, MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models'
+import { HttpStatusCode } from '@shared/core-utils'
+import { VideoObject } from '@shared/models'
+import { getOrCreateActorAndServerAndModel } from '../actor'
+import { APVideoCreator, SyncParam, syncVideoExternalAttributes } from './shared'
+import { APVideoUpdater } from './updater'
 
 async function fetchRemoteVideo (videoUrl: string): Promise<{ statusCode: number, videoObject: VideoObject }> {
   logger.info('Fetching remote video %s.', videoUrl)
@@ -115,16 +114,17 @@ async function getOrCreateVideoAndAccountAndChannel (
     return { video: videoFromDatabase, created: false }
   }
 
-  const { videoObject: fetchedVideo } = await fetchRemoteVideo(videoUrl)
-  if (!fetchedVideo) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
+  const { videoObject } = await fetchRemoteVideo(videoUrl)
+  if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
-  const actor = await getOrCreateVideoChannelFromVideoObject(fetchedVideo)
+  const actor = await getOrCreateVideoChannelFromVideoObject(videoObject)
   const videoChannel = actor.VideoChannel
 
   try {
-    const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(createVideo, fetchedVideo, videoChannel, syncParam.thumbnail)
+    const creator = new APVideoCreator({ videoObject, channel: videoChannel })
+    const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(creator.create.bind(creator), syncParam.thumbnail)
 
-    await syncVideoExternalAttributes(videoCreated, fetchedVideo, syncParam)
+    await syncVideoExternalAttributes(videoCreated, videoObject, syncParam)
 
     return { video: videoCreated, created: true, autoBlacklisted }
   } catch (err) {

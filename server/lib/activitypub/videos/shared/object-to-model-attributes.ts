@@ -23,6 +23,7 @@ import {
   VideoPrivacy,
   VideoStreamingPlaylistType
 } from '@shared/models'
+import { VideoCaptionModel } from '@server/models/video/video-caption'
 
 function getThumbnailFromIcons (videoObject: VideoObject) {
   let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
@@ -44,7 +45,7 @@ function getTagsFromObject (videoObject: VideoObject) {
     .map(t => t.name)
 }
 
-function videoFileActivityUrlToDBAttributes (
+function getFileAttributesFromUrl (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   urls: (ActivityTagObject | ActivityUrlObject)[]
 ) {
@@ -109,7 +110,7 @@ function videoFileActivityUrlToDBAttributes (
   return attributes
 }
 
-function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObject: VideoObject, videoFiles: MVideoFile[]) {
+function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject, videoFiles: MVideoFile[]) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 
@@ -134,6 +135,7 @@ function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObjec
       p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, files),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
       videoId: video.id,
+
       tagAPObject: playlistUrlObject.tag
     }
 
@@ -143,7 +145,24 @@ function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObjec
   return attributes
 }
 
-function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObject: VideoObject, to: string[] = []) {
+function getLiveAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
+  return {
+    saveReplay: videoObject.liveSaveReplay,
+    permanentLive: videoObject.permanentLive,
+    videoId: video.id
+  }
+}
+
+function getCaptionAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
+  return videoObject.subtitleLanguage.map(c => ({
+    videoId: video.id,
+    filename: VideoCaptionModel.generateCaptionName(c.identifier),
+    language: c.identifier,
+    fileUrl: c.url
+  }))
+}
+
+function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: VideoObject, to: string[] = []) {
   const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
     ? VideoPrivacy.PUBLIC
     : VideoPrivacy.UNLISTED
@@ -203,10 +222,13 @@ export {
 
   getTagsFromObject,
 
-  videoActivityObjectToDBAttributes,
+  getFileAttributesFromUrl,
+  getStreamingPlaylistAttributesFromObject,
 
-  videoFileActivityUrlToDBAttributes,
-  streamingPlaylistActivityUrlToDBAttributes
+  getLiveAttributesFromObject,
+  getCaptionAttributesFromObject,
+
+  getVideoAttributesFromObject
 }
 
 // ---------------------------------------------------------------------------
