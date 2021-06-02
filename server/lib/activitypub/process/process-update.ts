@@ -17,7 +17,7 @@ import { getImageInfoIfExists, updateActorImageInstance, updateActorInstance } f
 import { createOrUpdateCacheFile } from '../cache-file'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, updateVideoFromAP } from '../videos'
+import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, APVideoUpdater } from '../videos'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
   const { activity, byActor } = options
@@ -77,14 +77,13 @@ async function processUpdateVideo (actor: MActorSignature, activity: ActivityUpd
   const account = actor.Account as MAccountIdActor
   account.Actor = actor
 
-  const updateOptions = {
+  const updater = new APVideoUpdater({
     video,
     videoObject,
-    account,
     channel: channelActor.VideoChannel,
     overrideTo: activity.to
-  }
-  return updateVideoFromAP(updateOptions)
+  })
+  return updater.update()
 }
 
 async function processUpdateCacheFile (byActor: MActorSignature, activity: ActivityUpdate) {
