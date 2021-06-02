@@ -18,7 +18,7 @@ import { FilteredModelAttributes } from '../../types/sequelize'
 import { createPlaylistMiniatureFromUrl } from '../thumbnail'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { crawlCollectionPage } from './crawl'
-import { getOrCreateVideoAndAccountAndChannel } from './videos'
+import { getOrCreateAPVideo } from './videos'
 
 function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: MAccountId, to: string[]) {
   const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
@@ -169,7 +169,7 @@ async function resetVideoPlaylistElements (elementUrls: string[], playlist: MVid
         throw new Error(`Playlist element url ${elementUrl} host is different from the AP object id ${body.id}`)
       }
 
-      const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: { id: body.url }, fetchType: 'only-video' })
+      const { video } = await getOrCreateAPVideo({ videoObject: { id: body.url }, fetchType: 'only-video' })
 
       elementsToCreate.push(playlistElementObjectToDBAttributes(body, playlist, video))
     } catch (err) {

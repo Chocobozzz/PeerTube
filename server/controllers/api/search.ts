@@ -2,7 +2,7 @@ import * as express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { doJSONRequest } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
-import { getOrCreateVideoAndAccountAndChannel } from '@server/lib/activitypub/videos'
+import { getOrCreateAPVideo } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
 import { getServerActor } from '@server/models/application/application'
@@ -244,7 +244,7 @@ async function searchVideoURI (url: string, res: express.Response) {
         refreshVideo: false
       }
 
-      const result = await getOrCreateVideoAndAccountAndChannel({ videoObject: url, syncParam })
+      const result = await getOrCreateAPVideo({ videoObject: url, syncParam })
       video = result ? result.video : undefined
     } catch (err) {
       logger.info('Cannot search remote video %s.', url, { err })

@@ -23,7 +23,7 @@ import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../.
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { getLocalVideoCacheFileActivityPubUrl, getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url'
-import { getOrCreateVideoAndAccountAndChannel } from '../activitypub/videos'
+import { getOrCreateAPVideo } from '../activitypub/videos'
 import { downloadPlaylistSegments } from '../hls'
 import { removeVideoRedundancy } from '../redundancy'
 import { generateHLSRedundancyUrl, generateWebTorrentRedundancyUrl } from '../video-paths'
@@ -351,7 +351,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       syncParam: { likes: false, dislikes: false, shares: false, comments: false, thumbnail: false, refreshVideo: true },
       fetchType: 'all' as 'all'
     }
-    const { video } = await getOrCreateVideoAndAccountAndChannel(getVideoOptions)
+    const { video } = await getOrCreateAPVideo(getVideoOptions)
 
     return video
   }

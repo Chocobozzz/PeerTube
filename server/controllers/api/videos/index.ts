@@ -1,17 +1,18 @@
 import * as express from 'express'
 import toInt from 'validator/lib/toInt'
+import { doJSONRequest } from '@server/helpers/requests'
 import { LiveManager } from '@server/lib/live-manager'
 import { getServerActor } from '@server/models/application/application'
+import { MVideoAccountLight } from '@server/types/models'
 import { VideosCommonQuery } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants'
+import { REMOTE_SCHEME, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendView } from '../../../lib/activitypub/send/send-view'
-import { fetchRemoteVideoDescription } from '../../../lib/activitypub/videos'
 import { JobQueue } from '../../../lib/job-queue'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { Redis } from '../../../lib/redis'
@@ -244,4 +245,16 @@ async function removeVideo (_req: express.Request, res: express.Response) {
   return res.type('json')
             .status(HttpStatusCode.NO_CONTENT_204)
             .end()
+}
+
+// ---------------------------------------------------------------------------
+
+// FIXME: Should not exist, we rely on specific API
+async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
+  const host = video.VideoChannel.Account.Actor.Server.host
+  const path = video.getDescriptionAPIPath()
+  const url = REMOTE_SCHEME.HTTP + '://' + host + path
+
+  const { body } = await doJSONRequest<any>(url)
+  return body.description || ''
 }

@@ -1,3 +1,4 @@
 export * from './federate'
-export * from './fetch'
+export * from './get'
+export * from './refresh'
 export * from './updater'

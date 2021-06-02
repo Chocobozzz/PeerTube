@@ -17,7 +17,7 @@ import { getImageInfoIfExists, updateActorImageInstance, updateActorInstance } f
 import { createOrUpdateCacheFile } from '../cache-file'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { APVideoUpdater, getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { APVideoUpdater, getOrCreateAPVideo } from '../videos'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
   const { activity, byActor } = options
@@ -63,7 +63,7 @@ async function processUpdateVideo (activity: ActivityUpdate) {
     return undefined
   }
 
-  const { video, created } = await getOrCreateVideoAndAccountAndChannel({
+  const { video, created } = await getOrCreateAPVideo({
     videoObject: videoObject.id,
     allowRefresh: false,
     fetchType: 'all'
@@ -85,7 +85,7 @@ async function processUpdateCacheFile (byActor: MActorSignature, activity: Activ
     return undefined
   }
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
   await sequelizeTypescript.transaction(async t => {
     await createOrUpdateCacheFile(cacheFileObject, video, byActor, t)

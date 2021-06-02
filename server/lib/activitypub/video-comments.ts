@@ -7,7 +7,7 @@ import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/cons
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
 import { getOrCreateActorAndServerAndModel } from './actor'
-import { getOrCreateVideoAndAccountAndChannel } from './videos'
+import { getOrCreateAPVideo } from './videos'
 
 type ResolveThreadParams = {
   url: string
@@ -89,7 +89,7 @@ async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
   // Maybe it's a reply to a video?
   // If yes, it's done: we resolved all the thread
   const syncParam = { likes: true, dislikes: true, shares: true, comments: false, thumbnail: true, refreshVideo: false }
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: url, syncParam })
+  const { video } = await getOrCreateAPVideo({ videoObject: url, syncParam })
 
   if (video.isOwned() && !video.hasPrivacyForFederation()) {
     throw new Error('Cannot resolve thread of video with privacy that is not compatible with federation')
