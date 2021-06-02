@@ -780,6 +780,8 @@ export class PeerTubeEmbed {
     return {
       getBaseStaticRoute: unimplemented,
 
+      getBaseRouterRoute: unimplemented,
+
       getSettings: unimplemented,
 
       isLoggedIn: unimplemented,

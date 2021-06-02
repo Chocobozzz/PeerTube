@@ -4,47 +4,49 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Concepts](#concepts)
-  - [Hooks](#hooks)
-  - [Static files](#static-files)
-  - [CSS](#css)
-  - [Server API (only for plugins)](#server-api-only-for-plugins)
-    - [Settings](#settings)
-    - [Storage](#storage)
-    - [Update video constants](#update-video-constants)
-    - [Add custom routes](#add-custom-routes)
-    - [Add external auth methods](#add-external-auth-methods)
-    - [Add new transcoding profiles](#add-new-transcoding-profiles)
-    - [Server helpers](#server-helpers)
-  - [Client API (themes & plugins)](#client-api-themes--plugins)
-    - [Plugin static route](#plugin-static-route)
-    - [Notifier](#notifier)
-    - [Markdown Renderer](#markdown-renderer)
-    - [Auth header](#auth-header)
-    - [Custom Modal](#custom-modal)
-    - [Translate](#translate)
-    - [Get public settings](#get-public-settings)
-    - [Get server config](#get-server-config)
-    - [Add custom fields to video form](#add-custom-fields-to-video-form)
-    - [Register settings script](#register-settings-script)
-    - [HTML placeholder elements](#html-placeholder-elements)
-  - [Publishing](#publishing)
-- [Write a plugin/theme](#write-a-plugintheme)
-  - [Clone the quickstart repository](#clone-the-quickstart-repository)
-  - [Configure your repository](#configure-your-repository)
-  - [Update README](#update-readme)
-  - [Update package.json](#update-packagejson)
-  - [Write code](#write-code)
-  - [Add translations](#add-translations)
-  - [Build your plugin](#build-your-plugin)
-  - [Test your plugin/theme](#test-your-plugintheme)
-  - [Publish](#publish)
-  - [Unpublish](#unpublish)
-- [Plugin & Theme hooks/helpers API](#plugin--theme-hookshelpers-api)
-- [Tips](#tips)
-  - [Compatibility with PeerTube](#compatibility-with-peertube)
-  - [Spam/moderation plugin](#spammoderation-plugin)
-  - [Other plugin examples](#other-plugin-examples)
+- [Plugins & Themes](#plugins--themes)
+  - [Concepts](#concepts)
+    - [Hooks](#hooks)
+    - [Static files](#static-files)
+    - [CSS](#css)
+    - [Server API (only for plugins)](#server-api-only-for-plugins)
+      - [Settings](#settings)
+      - [Storage](#storage)
+      - [Update video constants](#update-video-constants)
+      - [Add custom routes](#add-custom-routes)
+      - [Add external auth methods](#add-external-auth-methods)
+      - [Add new transcoding profiles](#add-new-transcoding-profiles)
+      - [Server helpers](#server-helpers)
+    - [Client API (themes & plugins)](#client-api-themes--plugins)
+      - [Plugin static route](#plugin-static-route)
+      - [Notifier](#notifier)
+      - [Markdown Renderer](#markdown-renderer)
+      - [Auth header](#auth-header)
+      - [Plugin router route](#plugin-router-route)
+      - [Custom Modal](#custom-modal)
+      - [Translate](#translate)
+      - [Get public settings](#get-public-settings)
+      - [Get server config](#get-server-config)
+      - [Add custom fields to video form](#add-custom-fields-to-video-form)
+      - [Register settings script](#register-settings-script)
+      - [HTML placeholder elements](#html-placeholder-elements)
+    - [Publishing](#publishing)
+  - [Write a plugin/theme](#write-a-plugintheme)
+    - [Clone the quickstart repository](#clone-the-quickstart-repository)
+    - [Configure your repository](#configure-your-repository)
+    - [Update README](#update-readme)
+    - [Update package.json](#update-packagejson)
+    - [Write code](#write-code)
+    - [Add translations](#add-translations)
+    - [Build your plugin](#build-your-plugin)
+    - [Test your plugin/theme](#test-your-plugintheme)
+    - [Publish](#publish)
+    - [Unpublish](#unpublish)
+  - [Plugin & Theme hooks/helpers API](#plugin--theme-hookshelpers-api)
+  - [Tips](#tips)
+    - [Compatibility with PeerTube](#compatibility-with-peertube)
+    - [Spam/moderation plugin](#spammoderation-plugin)
+    - [Other plugin examples](#other-plugin-examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -556,6 +558,27 @@ function register (...) {
         headers: peertubeHelpers.getAuthHeader()
       }).then(res => res.json())
         .then(data => console.log('Hi %s.', data.username))
+    }
+  })
+}
+```
+
+#### Plugin router route
+
+**PeerTube >= 3.3**
+
+To get your plugin router route, you can use `peertubeHelpers.getBaseRouterRoute()`:
+
+```js
+function register (...) {
+  registerHook({
+    target: 'action:video-watch.video.loaded',
+    handler: ({ video }) => {
+      fetch(peertubeHelpers.getBaseRouterRoute() + '/my/plugin/api', {
+        method: 'GET',
+        headers: peertubeHelpers.getAuthHeader()
+      }).then(res => res.json())
+        .then(data => console.log('Hi %s.', data))
     }
   })
 }
