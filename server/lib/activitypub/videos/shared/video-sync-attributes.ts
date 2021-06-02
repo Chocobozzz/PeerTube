@@ -10,8 +10,6 @@ import { addVideoShares } from '../../share'
 import { addVideoComments } from '../../video-comments'
 import { createRates } from '../../video-rates'
 
-import Bluebird = require('bluebird')
-
 type SyncParam = {
   likes: boolean
   dislikes: boolean
@@ -24,52 +22,67 @@ type SyncParam = {
 async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoObject, syncParam: SyncParam) {
   logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
-  const jobPayloads: ActivitypubHttpFetcherPayload[] = []
+  await syncRates('like', video, fetchedVideo, syncParam.likes)
+  await syncRates('dislike', video, fetchedVideo, syncParam.dislikes)
 
-  if (syncParam.likes === true) {
-    const handler = items => createRates(items, video, 'like')
-    const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'like' as 'like', crawlStartDate)
+  await syncShares(video, fetchedVideo, syncParam.shares)
 
-    await crawlCollectionPage<string>(fetchedVideo.likes, handler, cleaner)
-      .catch(err => logger.error('Cannot add likes of video %s.', video.uuid, { err, rootUrl: fetchedVideo.likes }))
-  } else {
-    jobPayloads.push({ uri: fetchedVideo.likes, videoId: video.id, type: 'video-likes' as 'video-likes' })
-  }
-
-  if (syncParam.dislikes === true) {
-    const handler = items => createRates(items, video, 'dislike')
-    const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'dislike' as 'dislike', crawlStartDate)
-
-    await crawlCollectionPage<string>(fetchedVideo.dislikes, handler, cleaner)
-      .catch(err => logger.error('Cannot add dislikes of video %s.', video.uuid, { err, rootUrl: fetchedVideo.dislikes }))
-  } else {
-    jobPayloads.push({ uri: fetchedVideo.dislikes, videoId: video.id, type: 'video-dislikes' as 'video-dislikes' })
-  }
-
-  if (syncParam.shares === true) {
-    const handler = items => addVideoShares(items, video)
-    const cleaner = crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate)
-
-    await crawlCollectionPage<string>(fetchedVideo.shares, handler, cleaner)
-      .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err, rootUrl: fetchedVideo.shares }))
-  } else {
-    jobPayloads.push({ uri: fetchedVideo.shares, videoId: video.id, type: 'video-shares' as 'video-shares' })
-  }
-
-  if (syncParam.comments === true) {
-    const handler = items => addVideoComments(items)
-    const cleaner = crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
-
-    await crawlCollectionPage<string>(fetchedVideo.comments, handler, cleaner)
-      .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: fetchedVideo.comments }))
-  } else {
-    jobPayloads.push({ uri: fetchedVideo.comments, videoId: video.id, type: 'video-comments' as 'video-comments' })
-  }
-
-  await Bluebird.map(jobPayloads, payload => JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload }))
+  await syncComments(video, fetchedVideo, syncParam.comments)
 }
+
+// ---------------------------------------------------------------------------
 
 export {
   SyncParam,
   syncVideoExternalAttributes
+}
+
+// ---------------------------------------------------------------------------
+
+function createJob (payload: ActivitypubHttpFetcherPayload) {
+  return JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
+}
+
+function syncRates (type: 'like' | 'dislike', video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
+  const uri = type === 'like'
+    ? fetchedVideo.likes
+    : fetchedVideo.dislikes
+
+  if (!isSync) {
+    const jobType = type === 'like'
+      ? 'video-likes'
+      : 'video-dislikes'
+
+    return createJob({ uri, videoId: video.id, type: jobType })
+  }
+
+  const handler = items => createRates(items, video, type)
+  const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, type, crawlStartDate)
+
+  return crawlCollectionPage<string>(uri, handler, cleaner)
+    .catch(err => logger.error('Cannot add rate of video %s.', video.uuid, { err, rootUrl: uri }))
+}
+
+function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
+  if (!isSync) {
+    return createJob({ uri: fetchedVideo.shares, videoId: video.id, type: 'video-shares' })
+  }
+
+  const handler = items => addVideoShares(items, video)
+  const cleaner = crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate)
+
+  return crawlCollectionPage<string>(fetchedVideo.shares, handler, cleaner)
+    .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err, rootUrl: fetchedVideo.shares }))
+}
+
+function syncComments (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
+  if (!isSync) {
+    return createJob({ uri: fetchedVideo.comments, videoId: video.id, type: 'video-comments' })
+  }
+
+  const handler = items => addVideoComments(items)
+  const cleaner = crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
+
+  return crawlCollectionPage<string>(fetchedVideo.comments, handler, cleaner)
+    .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: fetchedVideo.comments }))
 }
