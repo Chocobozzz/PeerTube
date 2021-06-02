@@ -73,7 +73,6 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.docs = "https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadLegacy"
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -108,7 +107,6 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
  */
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.docs = "https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadResumable"
     const user = res.locals.oauth.token.User
 
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
@@ -170,7 +168,6 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .withMessage('Should specify the file mimetype'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.docs = "https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadResumableInit"
     const videoFileMetadata = {
       mimetype: req.headers['x-upload-content-type'] as string,
       size: +req.headers['x-upload-content-length'],
@@ -214,7 +211,6 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.docs = 'https://docs.joinpeertube.org/api-rest-reference.html#operation/putVideo'
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -268,7 +264,6 @@ const videosCustomGetValidator = (
     param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      res.docs = 'https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo'
       logger.debug('Checking videosGet parameters', { parameters: req.params })
 
       if (areValidationErrors(req, res)) return
@@ -334,7 +329,6 @@ const videosRemoveValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.docs = "https://docs.joinpeertube.org/api-rest-reference.html#operation/delVideo"
     logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return

@@ -8,7 +8,7 @@ import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, ServerErrorCode, VideoPrivacy } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode, VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -92,9 +92,11 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
         let message = err.message
 
-        if (err.body?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
+        const error = err.body as PeerTubeProblemDocument
+
+        if (error?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
           message = $localize`Cannot create live because this instance have too many created lives`
-        } else if (err.body?.code) {
+        } else if (error?.code === ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED) {
           message = $localize`Cannot create live because you created too many lives`
         }
 

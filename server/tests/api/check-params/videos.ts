@@ -4,6 +4,8 @@ import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
 import { join } from 'path'
+import { randomInt } from '@shared/core-utils'
+import { PeerTubeProblemDocument } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   checkUploadVideoParam,
@@ -30,7 +32,6 @@ import {
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
-import { randomInt } from '@shared/core-utils'
 
 const expect = chai.expect
 
@@ -411,6 +412,31 @@ describe('Test videos API validator', function () {
         await checkUploadVideoParam(server.url, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
+      it('Should report the appropriate error', async function () {
+        const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
+        const attaches = baseCorrectAttaches
+
+        const attributes = { ...fields, ...attaches }
+        const res = await checkUploadVideoParam(server.url, server.accessToken, attributes, HttpStatusCode.BAD_REQUEST_400, mode)
+
+        const error = res.body as PeerTubeProblemDocument
+
+        if (mode === 'legacy') {
+          expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadLegacy')
+        } else {
+          expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadResumableInit')
+        }
+
+        expect(error.type).to.equal('about:blank')
+        expect(error.title).to.equal('Bad Request')
+
+        expect(error.detail).to.equal('Incorrect request parameters: language')
+        expect(error.error).to.equal('Incorrect request parameters: language')
+
+        expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
+        expect(error['invalid-params'].language).to.exist
+      })
+
       it('Should succeed with the correct parameters', async function () {
         this.timeout(10000)
 
@@ -645,6 +671,24 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a video of another server')
 
+    it('Shoud report the appropriate error', async function () {
+      const fields = immutableAssign(baseCorrectParams, { licence: 125 })
+
+      const res = await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+      const error = res.body as PeerTubeProblemDocument
+
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/putVideo')
+
+      expect(error.type).to.equal('about:blank')
+      expect(error.title).to.equal('Bad Request')
+
+      expect(error.detail).to.equal('Incorrect request parameters: licence')
+      expect(error.error).to.equal('Incorrect request parameters: licence')
+
+      expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
+      expect(error['invalid-params'].licence).to.exist
+    })
+
     it('Should succeed with the correct parameters', async function () {
       const fields = baseCorrectParams
 
@@ -676,6 +720,22 @@ describe('Test videos API validator', function () {
 
     it('Should return 404 with an incorrect video', async function () {
       await getVideo(server.url, '4da6fde3-88f7-4d16-b119-108df5630b06', HttpStatusCode.NOT_FOUND_404)
+    })
+
+    it('Shoud report the appropriate error', async function () {
+      const res = await getVideo(server.url, 'hi', HttpStatusCode.BAD_REQUEST_400)
+      const error = res.body as PeerTubeProblemDocument
+
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
+
+      expect(error.type).to.equal('about:blank')
+      expect(error.title).to.equal('Bad Request')
+
+      expect(error.detail).to.equal('Incorrect request parameters: id')
+      expect(error.error).to.equal('Incorrect request parameters: id')
+
+      expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
+      expect(error['invalid-params'].id).to.exist
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -754,6 +814,22 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a video of another server')
+
+    it('Shoud report the appropriate error', async function () {
+      const res = await removeVideo(server.url, server.accessToken, 'hello', HttpStatusCode.BAD_REQUEST_400)
+      const error = res.body as PeerTubeProblemDocument
+
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/delVideo')
+
+      expect(error.type).to.equal('about:blank')
+      expect(error.title).to.equal('Bad Request')
+
+      expect(error.detail).to.equal('Incorrect request parameters: id')
+      expect(error.error).to.equal('Incorrect request parameters: id')
+
+      expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
+      expect(error['invalid-params'].id).to.exist
+    })
 
     it('Should succeed with the correct parameters', async function () {
       await removeVideo(server.url, server.accessToken, videoId)

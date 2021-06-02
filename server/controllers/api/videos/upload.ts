@@ -6,6 +6,7 @@ import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { docMiddleware } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { uploadx } from '@uploadx/core'
 import { VideoCreate, VideoState } from '../../../../shared'
@@ -60,6 +61,7 @@ const reqVideoFileAddResumable = createReqFiles(
 )
 
 uploadRouter.post('/upload',
+  docMiddleware('https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadLegacy'),
   authenticate,
   reqVideoFileAdd,
   asyncMiddleware(videosAddLegacyValidator),
@@ -67,6 +69,7 @@ uploadRouter.post('/upload',
 )
 
 uploadRouter.post('/upload-resumable',
+  docMiddleware('https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadResumableInit'),
   authenticate,
   reqVideoFileAddResumable,
   asyncMiddleware(videosAddResumableInitValidator),
@@ -79,6 +82,7 @@ uploadRouter.delete('/upload-resumable',
 )
 
 uploadRouter.put('/upload-resumable',
+  docMiddleware('https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadResumable'),
   authenticate,
   uploadxMiddleware, // uploadx doesn't use call next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),

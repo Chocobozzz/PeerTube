@@ -48,5 +48,13 @@ export const enum OAuth2ErrorCode {
    *
    * @see https://github.com/oauthjs/node-oauth2-server/blob/master/lib/errors/invalid-client-error.js
    */
-  INVALID_CLIENT = 'invalid_client'
+  INVALID_CLIENT = 'invalid_client',
+
+
+  /**
+   * The access token provided is expired, revoked, malformed, or invalid for other reasons
+   *
+   * @see https://github.com/oauthjs/node-oauth2-server/blob/master/lib/errors/invalid-token-error.js
+   */
+  INVALID_TOKEN = 'invalid_token',
 }

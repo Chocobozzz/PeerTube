@@ -28,7 +28,7 @@ import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/sha
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
+import { PeerTubeProblemDocument, ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupVideoWatch,
   getStoredP2PEnabled,
@@ -431,9 +431,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       .pipe(
         // If 400, 403 or 404, the video is private or blocked so redirect to 404
         catchError(err => {
-          if (err.body.type === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && err.body.originUrl) {
+          const errorBody = err.body as PeerTubeProblemDocument
+
+          if (errorBody.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
             const search = window.location.search
-            let originUrl = err.body.originUrl
+            let originUrl = errorBody.originUrl
             if (search) originUrl += search
 
             this.confirmService.confirm(

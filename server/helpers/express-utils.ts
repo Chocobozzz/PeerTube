@@ -8,7 +8,6 @@ import { isArray } from './custom-validators/misc'
 import { logger } from './logger'
 import { deleteFileAndCatch, generateRandomString } from './utils'
 import { getExtFromMimetype } from './video'
-import { ProblemDocument, ProblemDocumentExtension } from 'http-problem-details'
 
 function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -126,34 +125,6 @@ function getCountVideos (req: express.Request) {
   return req.query.skipCount !== true
 }
 
-// helpers added in server.ts and used in subsequent controllers used
-const apiResponseHelpers = (req, res: express.Response, next = null) => {
-  res.fail = (options) => {
-    const { data, status = HttpStatusCode.BAD_REQUEST_400, message, title, type, docs = res.docs, instance } = options
-
-    const extension = new ProblemDocumentExtension({
-      ...data,
-      docs,
-      // fields for <= 3.2 compatibility, deprecated
-      error: message,
-      code: type
-    })
-
-    res.status(status)
-    res.setHeader('Content-Type', 'application/problem+json')
-    res.json(new ProblemDocument({
-      status,
-      title,
-      instance,
-      // fields intended to replace 'error' and 'code' respectively
-      detail: message,
-      type: type && 'https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/' + type
-    }, extension))
-  }
-
-  if (next) next()
-}
-
 // ---------------------------------------------------------------------------
 
 export {
@@ -163,6 +134,5 @@ export {
   badRequest,
   createReqFiles,
   cleanUpReqFiles,
-  getCountVideos,
-  apiResponseHelpers
+  getCountVideos
 }

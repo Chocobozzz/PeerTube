@@ -20,6 +20,7 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
+import { docMiddleware } from '@server/middlewares/doc'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -35,6 +36,7 @@ const reqVideoFileUpdate = createReqFiles(
 )
 
 updateRouter.put('/:id',
+  docMiddleware('https://docs.joinpeertube.org/api-rest-reference.html#operation/putVideo'),
   authenticate,
   reqVideoFileUpdate,
   asyncMiddleware(videosUpdateValidator),

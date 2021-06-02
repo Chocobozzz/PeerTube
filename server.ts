@@ -106,6 +106,7 @@ import {
   downloadRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
+import { apiFailMiddleware } from './server/middlewares/error'
 import { Redis } from './server/lib/redis'
 import { ActorFollowScheduler } from './server/lib/schedulers/actor-follow-scheduler'
 import { RemoveOldViewsScheduler } from './server/lib/schedulers/remove-old-views-scheduler'
@@ -127,7 +128,6 @@ import { LiveManager } from './server/lib/live-manager'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
-import { apiResponseHelpers } from '@server/helpers/express-utils'
 
 // ----------- Command line -----------
 
@@ -169,8 +169,8 @@ app.use(morgan('combined', {
   skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
 }))
 
-// Response helpers used for errors
-app.use(apiResponseHelpers)
+// Add .fail() helper to response
+app.use(apiFailMiddleware)
 
 // For body requests
 app.use(express.urlencoded({ extended: false }))
@@ -179,6 +179,7 @@ app.use(express.json({
   limit: '500kb',
   verify: (req: express.Request, res: express.Response, buf: Buffer) => {
     const valid = isHTTPSignatureDigestValid(buf, req)
+
     if (valid !== true) {
       res.fail({
         status: HttpStatusCode.FORBIDDEN_403,

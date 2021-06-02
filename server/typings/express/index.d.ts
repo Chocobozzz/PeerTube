@@ -1,3 +1,4 @@
+
 import { RegisterServerAuthExternalOptions } from '@server/types'
 import {
   MAbuseMessage,
@@ -20,9 +21,8 @@ import { MVideoImportDefault } from '@server/types/models/video/video-import'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate'
 import { HttpMethod } from '@shared/core-utils/miscs/http-methods'
-import { VideoCreate } from '@shared/models'
+import { PeerTubeProblemDocumentData, ServerErrorCode, VideoCreate } from '@shared/models'
 import { File as UploadXFile, Metadata } from '@uploadx/core'
-import { ProblemDocumentOptions } from 'http-problem-details/dist/ProblemDocument'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager'
 import {
   MAccountDefault,
@@ -41,6 +41,7 @@ import {
   MVideoThumbnail,
   MVideoWithRights
 } from '../../types/models'
+
 declare module 'express' {
   export interface Request {
     query: any
@@ -86,14 +87,20 @@ declare module 'express' {
 
   // Extends Response with added functions and potential variables passed by middlewares
   interface Response {
-    docs?: string
     fail: (options: {
-      data?: Record<string, Object>
-      docs?: string
       message: string
-    } & ProblemDocumentOptions) => void
+
+      title?: string
+      status?: number
+      type?: ServerErrorCode
+      instance?: string
+
+      data?: PeerTubeProblemDocumentData
+    }) => void
 
     locals: {
+      docUrl?: string
+
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable
       onlyVideo?: MVideoThumbnail
