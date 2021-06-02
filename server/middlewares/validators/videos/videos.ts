@@ -252,7 +252,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
 
   return res.fail({
     status: HttpStatusCode.FORBIDDEN_403,
-    message: 'Cannot get this video regarding follow constraints.',
+    message: 'Cannot get this video regarding follow constraints',
     type: ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS,
     data: {
       originUrl: video.url
@@ -285,11 +285,11 @@ const videosCustomGetValidator = (
 
         const user = res.locals.oauth ? res.locals.oauth.token.User : null
 
-        // Only the owner or a user that have blacklist rights can see the video
+        // Only the owner or a user that have blocklist rights can see the video
         if (!user || !user.canGetVideo(video)) {
           return res.fail({
             status: HttpStatusCode.FORBIDDEN_403,
-            message: 'Cannot get this private/internal or blacklisted video.'
+            message: 'Cannot get this private/internal or blocklisted video'
           })
         }
 
