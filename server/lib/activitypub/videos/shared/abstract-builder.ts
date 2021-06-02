@@ -1,4 +1,5 @@
 import { Transaction } from 'sequelize/types'
+import { checkUrlsSameHost } from '@server/helpers/activitypub'
 import { deleteNonExistingModels } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '@server/lib/thumbnail'
@@ -9,6 +10,7 @@ import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistFilesVideo, MThumbnail, MVideoCaption, MVideoFile, MVideoFullLight, MVideoThumbnail } from '@server/types/models'
 import { ActivityTagObject, ThumbnailType, VideoObject, VideoStreamingPlaylistType } from '@shared/models'
+import { getOrCreateActorAndServerAndModel } from '../../actor'
 import {
   getCaptionAttributesFromObject,
   getFileAttributesFromUrl,
@@ -22,6 +24,17 @@ import { getTrackerUrls, setVideoTrackers } from './trackers'
 
 export abstract class APVideoAbstractBuilder {
   protected abstract videoObject: VideoObject
+
+  protected async getOrCreateVideoChannelFromVideoObject () {
+    const channel = this.videoObject.attributedTo.find(a => a.type === 'Group')
+    if (!channel) throw new Error('Cannot find associated video channel to video ' + this.videoObject.url)
+
+    if (checkUrlsSameHost(channel.id, this.videoObject.id) !== true) {
+      throw new Error(`Video channel url ${channel.id} does not have the same host than video object id ${this.videoObject.id}`)
+    }
+
+    return getOrCreateActorAndServerAndModel(channel.id, 'all')
+  }
 
   protected tryToGenerateThumbnail (video: MVideoThumbnail): Promise<MThumbnail> {
     return createVideoMiniatureFromUrl({

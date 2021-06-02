@@ -3,29 +3,24 @@ import { logger } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
 import { VideoModel } from '@server/models/video/video'
-import { MChannelAccountLight, MThumbnail, MVideoFullLight, MVideoThumbnail } from '@server/types/models'
+import { MThumbnail, MVideoFullLight, MVideoThumbnail } from '@server/types/models'
 import { VideoObject } from '@shared/models'
 import { APVideoAbstractBuilder } from './abstract-builder'
 import { getVideoAttributesFromObject } from './object-to-model-attributes'
 
 export class APVideoCreator extends APVideoAbstractBuilder {
-  protected readonly videoObject: VideoObject
-  private readonly channel: MChannelAccountLight
 
-  constructor (options: {
-    videoObject: VideoObject
-    channel: MChannelAccountLight
-  }) {
+  constructor (protected readonly videoObject: VideoObject) {
     super()
-
-    this.videoObject = options.videoObject
-    this.channel = options.channel
   }
 
   async create (waitThumbnail = false) {
     logger.debug('Adding remote video %s.', this.videoObject.id)
 
-    const videoData = await getVideoAttributesFromObject(this.channel, this.videoObject, this.videoObject.to)
+    const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
+    const channel = channelActor.VideoChannel
+
+    const videoData = await getVideoAttributesFromObject(channel, this.videoObject, this.videoObject.to)
     const video = VideoModel.build(videoData) as MVideoThumbnail
 
     const promiseThumbnail = this.tryToGenerateThumbnail(video)
@@ -38,7 +33,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
     const { autoBlacklisted, videoCreated } = await sequelizeTypescript.transaction(async t => {
       try {
         const videoCreated = await video.save({ transaction: t }) as MVideoFullLight
-        videoCreated.VideoChannel = this.channel
+        videoCreated.VideoChannel = channel
 
         if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
 
@@ -51,7 +46,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
         await this.insertOrReplaceLive(videoCreated, t)
 
         // We added a video in this channel, set it as updated
-        await this.channel.setAsUpdated(t)
+        await channel.setAsUpdated(t)
 
         const autoBlacklisted = await autoBlacklistVideoIfNeeded({
           video: videoCreated,

@@ -12,12 +12,12 @@ import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
-import { MAccountIdActor, MActorSignature } from '../../../types/models'
+import { MActorSignature } from '../../../types/models'
 import { getImageInfoIfExists, updateActorImageInstance, updateActorInstance } from '../actor'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, APVideoUpdater } from '../videos'
+import { APVideoUpdater, getOrCreateVideoAndAccountAndChannel } from '../videos'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
   const { activity, byActor } = options
@@ -25,7 +25,7 @@ async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate
   const objectType = activity.object.type
 
   if (objectType === 'Video') {
-    return retryTransactionWrapper(processUpdateVideo, byActor, activity)
+    return retryTransactionWrapper(processUpdateVideo, activity)
   }
 
   if (objectType === 'Person' || objectType === 'Application' || objectType === 'Group') {
@@ -55,7 +55,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processUpdateVideo (actor: MActorSignature, activity: ActivityUpdate) {
+async function processUpdateVideo (activity: ActivityUpdate) {
   const videoObject = activity.object as VideoObject
 
   if (sanitizeAndCheckVideoTorrentObject(videoObject) === false) {
@@ -71,19 +71,8 @@ async function processUpdateVideo (actor: MActorSignature, activity: ActivityUpd
   // We did not have this video, it has been created so no need to update
   if (created) return
 
-  // Load new channel
-  const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
-
-  const account = actor.Account as MAccountIdActor
-  account.Actor = actor
-
-  const updater = new APVideoUpdater({
-    video,
-    videoObject,
-    channel: channelActor.VideoChannel,
-    overrideTo: activity.to
-  })
-  return updater.update()
+  const updater = new APVideoUpdater(videoObject, video)
+  return updater.update(activity.to)
 }
 
 async function processUpdateCacheFile (byActor: MActorSignature, activity: ActivityUpdate) {

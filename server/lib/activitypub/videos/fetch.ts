@@ -11,7 +11,6 @@ import { VideoModel } from '@server/models/video/video'
 import { MVideoAccountLight, MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models'
 import { HttpStatusCode } from '@shared/core-utils'
 import { VideoObject } from '@shared/models'
-import { getOrCreateActorAndServerAndModel } from '../actor'
 import { APVideoCreator, SyncParam, syncVideoExternalAttributes } from './shared'
 import { APVideoUpdater } from './updater'
 
@@ -35,17 +34,6 @@ async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
 
   const { body } = await doJSONRequest<any>(url)
   return body.description || ''
-}
-
-function getOrCreateVideoChannelFromVideoObject (videoObject: VideoObject) {
-  const channel = videoObject.attributedTo.find(a => a.type === 'Group')
-  if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
-
-  if (checkUrlsSameHost(channel.id, videoObject.id) !== true) {
-    throw new Error(`Video channel url ${channel.id} does not have the same host than video object id ${videoObject.id}`)
-  }
-
-  return getOrCreateActorAndServerAndModel(channel.id, 'all')
 }
 
 type GetVideoResult <T> = Promise<{
@@ -117,11 +105,8 @@ async function getOrCreateVideoAndAccountAndChannel (
   const { videoObject } = await fetchRemoteVideo(videoUrl)
   if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
-  const actor = await getOrCreateVideoChannelFromVideoObject(videoObject)
-  const videoChannel = actor.VideoChannel
-
   try {
-    const creator = new APVideoCreator({ videoObject, channel: videoChannel })
+    const creator = new APVideoCreator(videoObject)
     const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(creator.create.bind(creator), syncParam.thumbnail)
 
     await syncVideoExternalAttributes(videoCreated, videoObject, syncParam)
@@ -160,13 +145,7 @@ async function refreshVideoIfNeeded (options: {
       return video
     }
 
-    const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
-
-    const videoUpdater = new APVideoUpdater({
-      video,
-      videoObject,
-      channel: channelActor.VideoChannel
-    })
+    const videoUpdater = new APVideoUpdater(videoObject, video)
     await videoUpdater.update()
 
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
@@ -197,6 +176,5 @@ export {
   fetchRemoteVideo,
   fetchRemoteVideoDescription,
   refreshVideoIfNeeded,
-  getOrCreateVideoChannelFromVideoObject,
   getOrCreateVideoAndAccountAndChannel
 }

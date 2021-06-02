@@ -7,17 +7,11 @@ import { PeerTubeSocket } from '@server/lib/peertube-socket'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
 import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoLiveModel } from '@server/models/video/video-live'
-import { MChannelAccountLight, MChannelDefault, MVideoAccountLightBlacklistAllFiles, MVideoFullLight } from '@server/types/models'
+import { MActor, MChannelAccountLight, MChannelId, MVideoAccountLightBlacklistAllFiles, MVideoFullLight } from '@server/types/models'
 import { VideoObject, VideoPrivacy } from '@shared/models'
 import { APVideoAbstractBuilder, getVideoAttributesFromObject } from './shared'
 
 export class APVideoUpdater extends APVideoAbstractBuilder {
-  protected readonly videoObject: VideoObject
-
-  private readonly video: MVideoAccountLightBlacklistAllFiles
-  private readonly channel: MChannelDefault
-  private readonly overrideTo: string[]
-
   private readonly wasPrivateVideo: boolean
   private readonly wasUnlistedVideo: boolean
 
@@ -25,18 +19,11 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
   private readonly oldVideoChannel: MChannelAccountLight
 
-  constructor (options: {
-    video: MVideoAccountLightBlacklistAllFiles
-    videoObject: VideoObject
-    channel: MChannelDefault
-    overrideTo?: string[]
-  }) {
+  constructor (
+    protected readonly videoObject: VideoObject,
+    private readonly video: MVideoAccountLightBlacklistAllFiles
+  ) {
     super()
-
-    this.video = options.video
-    this.videoObject = options.videoObject
-    this.channel = options.channel
-    this.overrideTo = options.overrideTo
 
     this.wasPrivateVideo = this.video.privacy === VideoPrivacy.PRIVATE
     this.wasUnlistedVideo = this.video.privacy === VideoPrivacy.UNLISTED
@@ -46,16 +33,18 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.videoFieldsSave = this.video.toJSON()
   }
 
-  async update () {
-    logger.debug('Updating remote video "%s".', this.videoObject.uuid, { videoObject: this.videoObject, channel: this.channel })
+  async update (overrideTo?: string[]) {
+    logger.debug('Updating remote video "%s".', this.videoObject.uuid, { videoObject: this.videoObject })
 
     try {
+      const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
+
       const thumbnailModel = await this.tryToGenerateThumbnail(this.video)
 
       const videoUpdated = await sequelizeTypescript.transaction(async t => {
-        this.checkChannelUpdateOrThrow()
+        this.checkChannelUpdateOrThrow(channelActor)
 
-        const videoUpdated = await this.updateVideo(t)
+        const videoUpdated = await this.updateVideo(channelActor.VideoChannel, t, overrideTo)
 
         if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)
 
@@ -97,19 +86,19 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
   }
 
   // Check we can update the channel: we trust the remote server
-  private checkChannelUpdateOrThrow () {
-    if (!this.oldVideoChannel.Actor.serverId || !this.channel.Actor.serverId) {
+  private checkChannelUpdateOrThrow (newChannelActor: MActor) {
+    if (!this.oldVideoChannel.Actor.serverId || !newChannelActor.serverId) {
       throw new Error('Cannot check old channel/new channel validity because `serverId` is null')
     }
 
-    if (this.oldVideoChannel.Actor.serverId !== this.channel.Actor.serverId) {
-      throw new Error(`New channel ${this.channel.Actor.url} is not on the same server than new channel ${this.oldVideoChannel.Actor.url}`)
+    if (this.oldVideoChannel.Actor.serverId !== newChannelActor.serverId) {
+      throw new Error(`New channel ${newChannelActor.url} is not on the same server than new channel ${this.oldVideoChannel.Actor.url}`)
     }
   }
 
-  private updateVideo (transaction: Transaction) {
-    const to = this.overrideTo || this.videoObject.to
-    const videoData = getVideoAttributesFromObject(this.channel, this.videoObject, to)
+  private updateVideo (channel: MChannelId, transaction: Transaction, overrideTo?: string[]) {
+    const to = overrideTo || this.videoObject.to
+    const videoData = getVideoAttributesFromObject(channel, this.videoObject, to)
     this.video.name = videoData.name
     this.video.uuid = videoData.uuid
     this.video.url = videoData.url
