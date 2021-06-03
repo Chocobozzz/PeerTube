@@ -65,7 +65,6 @@
       </trans-unit>
       <trans-unit id="8816959058080937679" datatype="html">
         <source><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="6464941273929604379" datatype="html">
@@ -116,7 +115,7 @@
       </trans-unit>
       <trans-unit id="5504059606863599420" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mentioned you on <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mentioned you on <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/> Thug <x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> iomradh ort air <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">164</context>
@@ -134,7 +133,7 @@
       </trans-unit>
       <trans-unit id="363592786729553688" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.pluginUrl&quot; [queryParams]=&quot;notification.pluginQueryParams&quot;&gt;"/>A new version of the plugin/theme <x id="INTERPOLATION" equiv-text="{{ notification.plugin.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is available: <x id="INTERPOLATION_1" equiv-text="{{ notification.plugin.latestVersion }}"/> </source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.pluginUrl&quot; [queryParams]=&quot;notification.pluginQueryParams&quot;&gt;"/>A new version of the plugin/theme <x id="INTERPOLATION" equiv-text="{{ notification.plugin.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is available: <x id="INTERPOLATION_1" equiv-text="{{ notification.plugin.latestVersion }}"/> </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.pluginUrl&quot; [queryParams]=&quot;notification.pluginQueryParams&quot;&gt;"/>Tha tionndadh ùr dhen phlugan/ùrlar <x id="INTERPOLATION" equiv-text="{{ notification.plugin.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ri fhaighinn: <x id="INTERPOLATION_1" equiv-text="{{ notification.plugin.latestVersion }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">198,199</context>
@@ -142,7 +141,7 @@
       </trans-unit>
       <trans-unit id="5055099158245592648" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [href]=&quot;notification.peertubeVersionLink&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferer&quot;&gt;"/>A new version of PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is available: <x id="INTERPOLATION" equiv-text="{{ notification.peertube.latestVersion }}"/> </source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [href]=&quot;notification.peertubeVersionLink&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferer&quot;&gt;"/>A new version of PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is available: <x id="INTERPOLATION" equiv-text="{{ notification.peertube.latestVersion }}"/> </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [href]=&quot;notification.peertubeVersionLink&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferer&quot;&gt;"/>Tha tionndadh ùr de PheerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ri fhaighinn: <x id="INTERPOLATION" equiv-text="{{ notification.peertube.latestVersion }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">206,207</context>
@@ -264,7 +263,7 @@
       </trans-unit>
       <trans-unit id="6438815964972582865" datatype="html">
         <source>The following link contains a private token and should not be shared with anyone.</source>
-        <target state="new"> The following link contains a private token and should not be shared with anyone. </target>
+        <target state="translated">Tha tòcan prìobhaideach am broinn a’ cheangail a leanas agus cha bu chòir dhut a cho-roinneadh le duine sam bith.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -272,7 +271,7 @@
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ file.resolution.label }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ file.resolution.label }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.resolution.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">39</context>
@@ -318,7 +317,7 @@
       </trans-unit>
       <trans-unit id="5830517253429165613" datatype="html">
         <source>Advanced</source>
-        <target state="new"> Advanced </target>
+        <target state="translated">Adhartach</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">117,118</context>
@@ -326,7 +325,7 @@
       </trans-unit>
       <trans-unit id="4493457595110310369" datatype="html">
         <source>Simple</source>
-        <target state="new"> Simple </target>
+        <target state="translated">Sìmplidh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">125,126</context>
@@ -340,7 +339,7 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="new">Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Chaidh thu thar cuota nam videothan agad leis a’ video seo (meud a’ video: <x id="PH" equiv-text="videoSizeBytes"/>, ’ga chleachdadh: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, cuota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">324</context>
@@ -348,7 +347,7 @@
       </trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="new">Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
+        <target state="translated">Bheir a’ video seo thar cuota làitheil nam videothan agad thu (meud a’ video: <x id="PH" equiv-text="videoSizeBytes"/>, ’ga chleachdadh: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, cuota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">342</context>
@@ -447,7 +446,7 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Choimhead 1 air} one {Choimhead <x id="INTERPOLATION"/> air} two {Choimhead <x id="INTERPOLATION"/> air} few {Choimhead <x id="INTERPOLATION"/> air} other {Choimhead <x id="INTERPOLATION"/> air} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Cha deach coimhead air} =1 {Choimhead 1 air} one {Choimhead <x id="INTERPOLATION"/> air} two {Choimhead <x id="INTERPOLATION"/> air} few {Choimhead <x id="INTERPOLATION"/> air} other {Choimhead <x id="INTERPOLATION"/> air} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
@@ -461,7 +460,7 @@
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Tha 1 a’ coimhead air} one {Tha <x id="INTERPOLATION"/> a’ coimhead air} two {Tha <x id="INTERPOLATION"/> a’ coimhead air} few {Tha <x id="INTERPOLATION"/> a’ coimhead air} other {Tha <x id="INTERPOLATION"/> a’ coimhead air} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eilear a’ coimhead air} =1 {Tha 1 a’ coimhead air} one {Tha <x id="INTERPOLATION"/> a’ coimhead air} two {Tha <x id="INTERPOLATION"/> a’ coimhead air} few {Tha <x id="INTERPOLATION"/> a’ coimhead air} other {Tha <x id="INTERPOLATION"/> a’ coimhead air} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
@@ -469,7 +468,7 @@
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{video.views, plural, =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}"/> </source>
-        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {Tha 1 a’ coimhead air} one {Tha {{ video.views | myNumberFormatter }}  a’ coimhead air} two {￼ a’ coimhead air} few {Tha {{ video.views | myNumberFormatter }}  a’ coimhead air} other {Tha {{ video.views | myNumberFormatter }}  a’ coimhead air}}   "/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {Tha 1 a’ coimhead air} one {Tha {{ video.views | myNumberFormatter }} a’ coimhead air} two {Tha {{ video.views | myNumberFormatter }} a’ coimhead air} few {Tha {{ video.views | myNumberFormatter }} a’ coimhead air} other {Tha {{ video.views | myNumberFormatter }} a’ coimhead air}} "/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -596,7 +595,7 @@
       </trans-unit>
       <trans-unit id="158575725114802951" datatype="html">
         <source>Only live videos</source>
-        <target state="new">Only live videos</target>
+        <target state="translated">Videothan beòtha a-mhàin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -884,7 +883,7 @@
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
-        <target state="new">The server encountered an error</target>
+        <target state="translated">Thachair am frithealaiche ri mearachd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils.ts</context>
           <context context-type="linenumber">193</context>
@@ -1128,7 +1127,7 @@
       </trans-unit>
       <trans-unit id="8434369348784683733" datatype="html">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new">for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">airson <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">10</context>
@@ -1307,7 +1306,7 @@
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html">
         <source>How you plan to pay for keeping your instance running</source>
-        <target state="new">How you plan to pay for keeping your instance running</target>
+        <target state="translated">Dè an dòigh a tha fainear dhut sa phàigheas tu airson an t-ionstans agad a’ cumail a’ dol</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1606,7 +1605,7 @@
       </trans-unit>
       <trans-unit id="3343007694071351756" datatype="html">
         <source>We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">Cha do lorg sinn video a bhiodh naisgte ris an URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> a bha thu a’ lorg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1614,7 +1613,7 @@
       </trans-unit>
       <trans-unit id="7366678433039425999" datatype="html">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">Cha do lorg sinn goireas a bhiodh naisgte ris an URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> a bha thu a’ lorg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1628,12 +1627,12 @@
       </trans-unit>
       <trans-unit id="6925335998927745197" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="translated">Chleachd thu seann-cheangal no ceangal briste</target>
+        <target state="translated">Dh’fhaoidte gun do chleachd thu seann-cheangal no ceangal briste</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1171455174603388942" datatype="html">
         <source>The video may have been moved or deleted</source>
-        <target state="new">The video may have been moved or deleted</target>
+        <target state="translated">Dh’fhaoidte gun deach a’ video a ghluasad no a sguabadh às</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1641,7 +1640,7 @@
       </trans-unit>
       <trans-unit id="2213348264902218064" datatype="html">
         <source>The resource may have been moved or deleted</source>
-        <target state="new">The resource may have been moved or deleted</target>
+        <target state="translated">Dh’fhaoidte gun deach an goireas a ghluasad no a sguabadh às</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1649,7 +1648,7 @@
       </trans-unit>
       <trans-unit id="3209594685692897380" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="translated">Rinn thu mearachd sgrìobhaidh leis an t-seòladh no URL</target>
+        <target state="translated">Dh’fhaoidte gun do rinn thu mearachd sgrìobhaidh leis an t-seòladh no URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
@@ -1659,7 +1658,7 @@
       </trans-unit>
       <trans-unit id="6209939621665316894" datatype="html">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the video or instance owner.</target>
+        <target state="translated">Bu chòir dhut dèanamh cinnteach gun do cheadaich seilbheadair a’ video no an ionstans an cunntas agad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1667,7 +1666,7 @@
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the resource or instance owner.</target>
+        <target state="translated">Bu chòir dhut dèanamh cinnteach gun do cheadaich seilbheadair a’ ghoireis no an ionstans an cunntas agad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1712,7 +1711,7 @@
       </trans-unit>
       <trans-unit id="2807610143550376912" datatype="html">
         <source>Your query will be matched against video names or descriptions, channel names.</source>
-        <target state="new">Your query will be matched against video names or descriptions, channel names.</target>
+        <target state="translated">Thèid a’ cheist agad a mhaidseadh mu choinneimh ainmean no tuairisgeulan videothan agus ainmean sheanailean.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">37</context>
@@ -1787,7 +1786,7 @@
       </trans-unit>
       <trans-unit id="4540121094340493564" datatype="html">
         <source>Display only</source>
-        <target state="new">Display only</target>
+        <target state="translated">Na seall ach</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1981,23 +1980,23 @@
       </trans-unit>
       <trans-unit id="6259523075362402245" datatype="html">
         <source>Upload a new banner</source>
-        <target state="new">Upload a new banner</target>
+        <target state="translated">Luchdaidh suas bratach ùr</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">9</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="1117672957968812680" datatype="html">
         <source>Change your banner</source>
-        <target state="new">Change your banner</target>
+        <target state="translated">Atharraich a’ bhratach agad</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="3394080812181176794" datatype="html">
         <source>Remove banner</source>
-        <target state="new">Remove banner</target>
+        <target state="translated">Thoir a’ bhratach air falbh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7306351600905511107" datatype="html">
         <source>ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></source>
-        <target state="new">ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
+        <target state="translated">co-mheas 6/1, am meud a mholamaid: 1920x317, am meud as motha: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, leudachain: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -2005,7 +2004,7 @@
       </trans-unit>
       <trans-unit id="3220184757632006830" datatype="html">
         <source>Account avatar</source>
-        <target state="new">Account avatar</target>
+        <target state="translated">Avatar a’ chunntais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -2013,7 +2012,7 @@
       </trans-unit>
       <trans-unit id="1138964882426023395" datatype="html">
         <source>Channel avatar</source>
-        <target state="new">Channel avatar</target>
+        <target state="translated">Avatar na seanail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -2021,7 +2020,7 @@
       </trans-unit>
       <trans-unit id="1460134385691851101" datatype="html">
         <source>Advanced filters</source>
-        <target state="new">Advanced filters</target>
+        <target state="translated">Criathragan adhartach</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2051,7 +2050,7 @@
       </trans-unit>
       <trans-unit id="2090254132451149776" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://chooser-beta.creativecommons.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Choose<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> the appropriate licence for your work. </source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://chooser-beta.creativecommons.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Choose<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> the appropriate licence for your work. </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://chooser-beta.creativecommons.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Tagh<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> an ceadachas iomchaidh dhan obair agad. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">79,80</context>
@@ -2114,7 +2113,7 @@
       </trans-unit>
       <trans-unit id="4850841867094321899" datatype="html">
         <source>Some instances hide videos containing mature or explicit content by default.</source>
-        <target state="new">Some instances hide videos containing mature or explicit content by default.</target>
+        <target state="translated">Cuiridh cuid a dh’ionstansan videothan am falach sa bheil susbaint a tha iomchaidh do dh’inbhich a-mhàin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">135</context>
@@ -2220,12 +2219,12 @@
       </trans-unit>
       <trans-unit id="1359533927353954373" datatype="html">
         <source>View account</source>
-        <target state="new">View account</target>
+        <target state="translated">Seall an cunntas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="3799746968259478616" datatype="html">
         <source>View account</source>
-        <target state="new"> View account </target>
+        <target state="translated">Seall an cunntas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -2233,7 +2232,7 @@
       </trans-unit>
       <trans-unit id="6778225321073009261" datatype="html">
         <source>View owner account</source>
-        <target state="new"> View owner account </target>
+        <target state="translated">Seall cunntas an t-seilbheadair</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">46,47</context>
@@ -2241,7 +2240,7 @@
       </trans-unit>
       <trans-unit id="8798391261676185924" datatype="html">
         <source>VIDEO CHANNEL</source>
-        <target state="new">VIDEO CHANNEL</target>
+        <target state="translated">SEANAIL VIDEO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">55</context>
@@ -2249,7 +2248,7 @@
       </trans-unit>
       <trans-unit id="5121874940679887597" datatype="html">
         <source>Copy channel handle</source>
-        <target state="new">Copy channel handle</target>
+        <target state="translated">Dèan lethbhreac de làimhsichear na seanail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">66</context>
@@ -2264,7 +2263,7 @@
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{channelVideosCount, plural, =1 {1 videos} other {{{ channelVideosCount }} videos}}"/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{channelVideosCount, plural, =1 {1 videos} other {{{ channelVideosCount }} videos}}"/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{channelVideosCount, plural, =0 {Chan eil video ann} =1 {1 video} one {{{ channelVideosCount }} video} two {{{ channelVideosCount }} video} few {{{ channelVideosCount }} videothan} other {{{ channelVideosCount }} video}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">76,77</context>
@@ -2272,7 +2271,7 @@
       </trans-unit>
       <trans-unit id="2486917589932345430" datatype="html">
         <source>OWNER ACCOUNT</source>
-        <target state="new">OWNER ACCOUNT</target>
+        <target state="translated">CUNNTAS SEILBHEADAIR</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1952020204339597057" datatype="html">
@@ -2415,7 +2414,7 @@
       </trans-unit>
       <trans-unit id="6161604372916832458" datatype="html">
         <source>Upload on hold</source>
-        <target state="new">Upload on hold</target>
+        <target state="translated">Tha an luchdadh suas ’ga cumail air ais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -2449,12 +2448,12 @@
       </trans-unit>
       <trans-unit id="2424051823705402833" datatype="html">
         <source>Congratulations, the video will be imported with BitTorrent! You can already add information about this video.</source>
-        <target state="translated">Meal do naidheachd, thèid a’ video ion-phortadh le BitTorrent! ’S urrainn dhut fiosrachadh mun video seo a chur ris mu thràth.</target>
+        <target state="translated">Meal do naidheachd, thèid a’ video ion-phortadh le BitTorrent!’S urrainn dhut fiosrachadh mun video seo a chur ris mu thràth.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="4422946962830681102" datatype="html">
         <source>Torrents with only 1 file are supported.</source>
-        <target state="new">Torrents with only 1 file are supported.</target>
+        <target state="translated">Cuiridh sinn taic ri torrents sa bheil 1 fhaidhle.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context>
           <context context-type="linenumber">119</context>
@@ -2761,7 +2760,7 @@
       </trans-unit>
       <trans-unit id="66785722678644243" datatype="html">
         <source>Origin</source>
-        <target state="new">Origin</target>
+        <target state="translated">Tùs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">235</context>
@@ -2833,7 +2832,7 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="new"> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </target>
+        <target state="translated">Seall <x id="ICU" equiv-text="{comment.totalReplies, plural, =0 {Chan eil freagairt ann} =1 {1 fhreagairt} one {{{ comment.totalReplies }} fhreagairt} two {{{ comment.totalReplies }} fhreagairt} few {{{ comment.totalReplies }} freagairtean} other {{{ comment.totalReplies }} freagairt}}"/> le <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> is eile </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">80,81</context>
@@ -2841,7 +2840,7 @@
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil freagairt ann} =1 {1 video} one {<x id="INTERPOLATION"/> fhreagairt} two { fhreagairt} few { freagairtean} other { freagairt} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">80</context>
@@ -2857,7 +2856,7 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="new"> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">Seall <x id="ICU" equiv-text="{comment.totalReplies, plural, =0 {Chan eil freagairt ann} =1 {1 fhreagairt} one {{{ comment.totalReplies }} fhreagairt} two {{{ comment.totalReplies }} fhreagairt} few {{{ comment.totalReplies }} freagairtean} other {{{ comment.totalReplies }} freagairt}}"/> le <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">83,84</context>
@@ -2865,7 +2864,7 @@
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></source>
-        <target state="new">View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
+        <target state="translated">Seall <x id="ICU" equiv-text="{comment.totalReplies, plural, =0 {Chan eil freagairt ann} =1 {1 fhreagairt} one {{{ comment.totalReplies }} fhreagairt} two {{{ comment.totalReplies }} fhreagairt} few {{{ comment.totalReplies }} freagairtean} other {{{ comment.totalReplies }} freagairt}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">87</context>
@@ -3215,7 +3214,7 @@
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">Gnìomh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">22</context></context-group>
@@ -3418,7 +3417,7 @@
       </trans-unit>
       <trans-unit id="6124612368324200166" datatype="html">
         <source>Banned users</source>
-        <target state="new">Banned users</target>
+        <target state="translated">Cleachdaichean toirmisgte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -3590,7 +3589,7 @@
       </trans-unit>
       <trans-unit id="4604870995665811499" datatype="html">
         <source>Local comments</source>
-        <target state="new">Local comments</target>
+        <target state="translated">Beachdan ionadail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -3598,7 +3597,7 @@
       </trans-unit>
       <trans-unit id="2721988499779041837" datatype="html">
         <source>Remote comments</source>
-        <target state="new">Remote comments</target>
+        <target state="translated">Beachdan cèine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -3616,7 +3615,7 @@
       </trans-unit>
       <trans-unit id="1807029821872995706" datatype="html">
         <source>Unsolved reports</source>
-        <target state="new">Unsolved reports</target>
+        <target state="translated">Gearanan gun fhuasgladh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -3624,7 +3623,7 @@
       </trans-unit>
       <trans-unit id="2570256912317308673" datatype="html">
         <source>Accepted reports</source>
-        <target state="new">Accepted reports</target>
+        <target state="translated">Gearanan a chaidh gabhail riutha</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -3632,7 +3631,7 @@
       </trans-unit>
       <trans-unit id="4335414817109654558" datatype="html">
         <source>Refused reports</source>
-        <target state="new">Refused reports</target>
+        <target state="translated">Gearanan a chaidh a dhiùltadh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -3640,7 +3639,7 @@
       </trans-unit>
       <trans-unit id="5604806676748121035" datatype="html">
         <source>Reports with blocked videos</source>
-        <target state="new">Reports with blocked videos</target>
+        <target state="translated">Gearanan le videothan bacte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -3648,7 +3647,7 @@
       </trans-unit>
       <trans-unit id="5105869928182826553" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="new">Reports with deleted videos</target>
+        <target state="translated">Gearanan le videothan air an sguabadh às</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -3671,7 +3670,7 @@
       </trans-unit>
       <trans-unit id="7755288609601798418" datatype="html">
         <source>Automatic blocks</source>
-        <target state="new">Automatic blocks</target>
+        <target state="translated">Bacaidhean fèin-obrachail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -3679,7 +3678,7 @@
       </trans-unit>
       <trans-unit id="6510868134640657079" datatype="html">
         <source>Manual blocks</source>
-        <target state="new">Manual blocks</target>
+        <target state="translated">Bacaidhean a làimh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -3811,7 +3810,7 @@
       </trans-unit>
       <trans-unit id="6540177673229220400" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 ghearan} one {<x id="INTERPOLATION"/> ghearan} two {<x id="INTERPOLATION"/> ghearan} few {<x id="INTERPOLATION"/> gearanan} other {<x id="INTERPOLATION"/> gearan}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil gearan ann} =1 {1 ghearan} one {<x id="INTERPOLATION"/> ghearan} two {<x id="INTERPOLATION"/> ghearan} few {<x id="INTERPOLATION"/> gearanan} other {<x id="INTERPOLATION"/> gearan}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="7239750919884229270" datatype="html">
@@ -4015,7 +4014,7 @@
       </trans-unit>
       <trans-unit id="1780056719120519633" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {toradh} one {toradh} two {thoradh} few {toraidhean} other {toradh}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">22,24</context>
@@ -4023,7 +4022,7 @@
       </trans-unit>
       <trans-unit id="3148804384763272950" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {thoradh} one {thoradh} two {thoradh} few {toraidhean} other {toradh} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Gun toradh} =1 {thoradh} one {thoradh} two {thoradh} few {toraidhean} other {toradh} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">5</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
@@ -4102,7 +4101,7 @@
       </trans-unit>
       <trans-unit id="289582790179344391" datatype="html">
         <source>This view also shows comments from muted accounts.</source>
-        <target state="new">This view also shows comments from muted accounts.</target>
+        <target state="translated">Chì thu beachdan o chunntasan mùchte cuideachd air an t-sealladh seo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -4509,7 +4508,7 @@
       </trans-unit>
       <trans-unit id="8497774075394617130" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {cleachdaiche} other {cleachdaichean}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil cleachdaiche ann} =1 {1 chleachdaiche} one {<x id="INTERPOLATION"/> chleachdaiche} two {<x id="INTERPOLATION"/> chleachdaiche} few {<x id="INTERPOLATION"/> cleachdaichean} other {<x id="INTERPOLATION"/> hleachdaiche}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="5620049714977547431" datatype="html">
@@ -4764,7 +4763,7 @@
       </trans-unit>
       <trans-unit id="2076338542820061819" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. </source>
-        <target state="new"> If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. </target>
+        <target state="translated">Ma tha Twitter a’ ceadachadh an t-ionstans agad gu sònraichte, thèid cluicheadair video a leabachadh ann an inbhir Twitter nuair a thèid video PeerTube a cho-roinneadh.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Mur eil, cleachdaidh sinn cairt ceangail deilbh a nì ath-stiùireadh air an ionstans de PheerTube agad.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Cuir cromag sa bogsa seo is cuir fo dheuchainn e le URL video an ionstans agad (https://ball-eisimpleir.com/w/rudeigin) air <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> feuch a bheil an t-ionstans agad ’ga cheadachadh. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">490,495</context>
@@ -4896,7 +4895,7 @@
       </trans-unit>
       <trans-unit id="6201638315245239510" datatype="html">
         <source>Advanced</source>
-        <target state="new">Advanced</target>
+        <target state="translated">Adhartach</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">51</context>
@@ -4933,7 +4932,7 @@
       </trans-unit>
       <trans-unit id="2150024911136171" datatype="html">
         <source>Allows users to upload <x id="INTERPOLATION" equiv-text="{{ additionalVideoExtensions }}"/> videos.</source>
-        <target state="new">Allows users to upload <x id="INTERPOLATION" equiv-text="{{ additionalVideoExtensions }}"/> videos.</target>
+        <target state="translated">Leig leis an luchd-chleachdaidh videothan<x id="INTERPOLATION" equiv-text="{{ additionalVideoExtensions }}"/> a luchdadh suas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">54</context>
@@ -5246,7 +5245,7 @@
       </trans-unit>
       <trans-unit id="7350483582490037954" datatype="html">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hide<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target state="new"> With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hide<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </target>
+        <target state="translated">Nuair a bhios <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Falaich<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> no <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Sgleò air dealbhagan<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> air, thèid dearbhadh iarraidh mus dèid a’ video a chluich. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">8,9</context>
@@ -5318,27 +5317,27 @@
       </trans-unit>
       <trans-unit id="1788875035518441092" datatype="html">
         <source>Last published first</source>
-        <target state="new">Last published first</target>
+        <target state="translated">Am foillseachadh as ùire an toiseach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4541072509002204177" datatype="html">
         <source>Last created first</source>
-        <target state="new">Last created first</target>
+        <target state="translated">An cruthachadh as ùire an toiseach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1142493792593089647" datatype="html">
         <source>Most viewed first</source>
-        <target state="new">Most viewed first</target>
+        <target state="translated">Air a choimhead air as trice an toiseach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8108088952881606566" datatype="html">
         <source>Most liked first</source>
-        <target state="new">Most liked first</target>
+        <target state="translated">An fheadhainn le fèill mhòr orra an toiseach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2782422473180760140" datatype="html">
         <source>Longest first</source>
-        <target state="new">Longest first</target>
+        <target state="translated">An fheadhainn as fhaide an toiseach</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="8714145624854863455" datatype="html">
@@ -5410,7 +5409,7 @@
       </trans-unit>
       <trans-unit id="5700655611297335752" datatype="html">
         <source>No channel found.</source>
-        <target state="new">No channel found.</target>
+        <target state="translated">Cha deach seanail a lorg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5437,7 +5436,7 @@
       </trans-unit>
       <trans-unit id="3582855804901374179" datatype="html">
         <source>Banner image of your channel</source>
-        <target state="new">Banner image of your channel</target>
+        <target state="translated">Dealbh brataich na seanail agad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -5646,7 +5645,7 @@
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}"/> </source>
-        <target state="new"> Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}"/> </target>
+        <target state="translated">Chaidh <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 liosta-chluich} one {{{ pagination.totalItems }} liosta-chluich} two {{{ pagination.totalItems }} liosta-chluich} few {{{ pagination.totalItems }} liostaichean-cluich} other {{{ pagination.totalItems }} liosta-chluich}}"/> a chruthachadh </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -5654,7 +5653,7 @@
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil liosta-chluich ann} =1 {1 bheachd} one {<x id="INTERPOLATION"/> liosta-chluich} two {<x id="INTERPOLATION"/> liosta-chluich} few {<x id="INTERPOLATION"/> liostaichean-cluich} other {<x id="INTERPOLATION"/> liosta-chluich} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5687,7 +5686,7 @@
       </trans-unit>
       <trans-unit id="1949999959792821767" datatype="html">
         <source>Manage channel</source>
-        <target state="new"> Manage channel </target>
+        <target state="translated">Stiùirich an t-seanail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -5740,7 +5739,7 @@
       </trans-unit>
       <trans-unit id="8661266239199665830" datatype="html">
         <source>Copy account handle</source>
-        <target state="new">Copy account handle</target>
+        <target state="translated">Dèan lethbhreac de làimhsichear a’ chunntais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">31</context>
@@ -5764,7 +5763,7 @@
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{accountVideosCount, plural, =1 {1 videos} other {{{ accountVideosCount }} videos}}"/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{accountVideosCount, plural, =1 {1 videos} other {{{ accountVideosCount }} videos}}"/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{accountVideosCount, plural, =0 {Chan eil video ann} =1 {1 video} one {{{ accountVideosCount }} video} two {{{ accountVideosCount }} video} few {{{ accountVideosCount }} videothan} other {{{ accountVideosCount }} video}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">41,42</context>
@@ -5772,29 +5771,29 @@
       </trans-unit>
       <trans-unit id="3061133792040537550" datatype="html">
         <source>Show the complete description</source>
-        <target state="new">Show the complete description</target>
+        <target state="translated">Seall an tuairisgeul slàn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="9098920722959201547" datatype="html">
         <source>Show more...</source>
-        <target state="new"> Show more... </target>
+        <target state="translated">Seall barrachd dheth…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="6808894347744915561" datatype="html">
         <source>Manage account</source>
-        <target state="new"> Manage account </target>
+        <target state="translated">Stiùirich an cunntas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="1311667768861466464" datatype="html">
         <source>Search account videos</source>
-        <target state="new">Search account videos</target>
+        <target state="translated">Lorg ann am videothan a’ chunntais</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="5512878593724620692" datatype="html">
         <source>CHANNELS</source>
-        <target state="new">CHANNELS</target>
+        <target state="translated">SEANAILEAN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -5807,24 +5806,24 @@
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 fho-sgrìobhaiche} one {<x id="INTERPOLATION"/> fho-sgrìobhaiche} two {<x id="INTERPOLATION"/> fho-sgrìobhaiche} few {<x id="INTERPOLATION"/> fo-sgrìobhaiche} other {<x id="INTERPOLATION"/> fo-sgrìobhaiche}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Gun fho-sgrìobhaiche} =1 {1 fho-sgrìobhaiche} one {<x id="INTERPOLATION"/> fho-sgrìobhaiche} two {<x id="INTERPOLATION"/> fho-sgrìobhaiche} few {<x id="INTERPOLATION"/> fo-sgrìobhaiche} other {<x id="INTERPOLATION"/> fo-sgrìobhaiche}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="3068011377000255023" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil video ann} =1 {1 video} one {<x id="INTERPOLATION"/> video} two {<x id="INTERPOLATION"/> video} few {<x id="INTERPOLATION"/> videothan} other {<x id="INTERPOLATION"/> video} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/> </source>
-        <target state="new"> <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{video.views, plural, =1 {Choimhead 1 air} one {Choimead {{ video.views | myNumberFormatter }} air} two {Choimhead {{ video.views | myNumberFormatter }} air} few {Choimhead {{ video.views | myNumberFormatter }} air} other {Choimhead {{ video.views | myNumberFormatter }} air}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="4071627711041975501" datatype="html">
         <source>Show this channel</source>
-        <target state="new">Show this channel</target>
+        <target state="translated">Seall an t-seanail seo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="7766488542631150871" datatype="html">
@@ -5862,7 +5861,7 @@
       </trans-unit>
       <trans-unit id="2705478076887104088" datatype="html">
         <source>SHOW THIS CHANNEL &gt;</source>
-        <target state="new">SHOW THIS CHANNEL &gt;</target>
+        <target state="translated">SEALL AN T-SEANAIL SEO &gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="4088311569349098646" datatype="html">
@@ -5892,7 +5891,7 @@
       </trans-unit>
       <trans-unit id="400578776928464905" datatype="html">
         <source>Follower instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source>
-        <target state="new">Follower instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
+        <target state="translated">Ionstansan a tha a’ leantainn air (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5968,7 +5967,7 @@
       </trans-unit>
       <trans-unit id="8765504394950427814" datatype="html">
         <source>How we will pay for keeping our instance running</source>
-        <target state="new">How we will pay for keeping our instance running</target>
+        <target state="translated">Mar a phàigheas sinn airson an ionstans againn a’ cumail a’ dol</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">86</context>
@@ -6363,7 +6362,7 @@
       </trans-unit>
       <trans-unit id="4750061469619896229" datatype="html">
         <source>PEERTUBE ACCOUNT</source>
-        <target state="new">PEERTUBE ACCOUNT</target>
+        <target state="translated">CUNNTAS PEERTUBE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">8</context>
@@ -6559,7 +6558,7 @@
       </trans-unit>
       <trans-unit id="1305357231288135414" datatype="html">
         <source>Homepage</source>
-        <target state="new">Homepage</target>
+        <target state="translated">Duilleag-dhachaigh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6571,7 +6570,7 @@
       </trans-unit>
       <trans-unit id="5037437391296624618" datatype="html">
         <source>Information</source>
-        <target state="new">Information</target>
+        <target state="translated">Fiosrachadh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6579,7 +6578,7 @@
       </trans-unit>
       <trans-unit id="8643289769990675407" datatype="html">
         <source>Basic</source>
-        <target state="new">Basic</target>
+        <target state="translated">Bunasach</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">24</context>
@@ -6592,7 +6591,7 @@
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="new">INSTANCE HOMEPAGE</target>
+        <target state="translated">DUILLEAG-DHACHAIGH na h-IONSTANS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -7087,17 +7086,17 @@
       </trans-unit>
       <trans-unit id="7914215986085479339" datatype="html">
         <source>This is a major plugin upgrade. Please go on the plugin homepage to check potential release notes.</source>
-        <target state="new">This is a major plugin upgrade. Please go on the plugin homepage to check potential release notes.</target>
+        <target state="translated">Seo àrdachadh mòr air a’ phlugan. Tadhail air duilleag-dhachaigh a’ phlugain feuch a bheil nòtaichean sgaoilidh ann.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="2849750161085431718" datatype="html">
         <source>Upgrade</source>
-        <target state="new">Upgrade</target>
+        <target state="translated">Àrdaich</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="7686590072950686188" datatype="html">
         <source>Proceed upgrade</source>
-        <target state="new">Proceed upgrade</target>
+        <target state="translated">Lean air adhart leis an àrdachadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7830308409197461339" datatype="html">
@@ -7162,7 +7161,7 @@
       </trans-unit>
       <trans-unit id="2483018961011868950" datatype="html">
         <source>IP address</source>
-        <target state="new">IP address</target>
+        <target state="translated">Seòladh IP</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">2</context>
@@ -7170,7 +7169,7 @@
       </trans-unit>
       <trans-unit id="7223931053738621590" datatype="html">
         <source>PeerTube thinks your web browser public IP is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ debug?.ip }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="new">PeerTube thinks your web browser public IP is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ debug?.ip }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">Tha PeerTube dhen bheachd gur e <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ debug?.ip }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a th’ ann an seòladh IP poblach a’ bhrabhsair agad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">4</context>
@@ -7178,7 +7177,7 @@
       </trans-unit>
       <trans-unit id="722088235348685072" datatype="html">
         <source>If this is not your correct public IP, please consider fixing it because:</source>
-        <target state="new">If this is not your correct public IP, please consider fixing it because:</target>
+        <target state="translated">Mur e seo IP poblach ceart agad, saoil an càraich thu e air na h-adhbharan seo:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">6</context>
@@ -7186,7 +7185,7 @@
       </trans-unit>
       <trans-unit id="8079826195972333513" datatype="html">
         <source>Views may not be counted correctly (reduced compared to what they should be)</source>
-        <target state="new">Views may not be counted correctly (reduced compared to what they should be)</target>
+        <target state="translated">Dh’fhaoidte nach dèid na seallaidhean agad a chunntadh mar bu chòir (le toradh ro ìseal)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">8</context>
@@ -7194,7 +7193,7 @@
       </trans-unit>
       <trans-unit id="565435193934699740" datatype="html">
         <source>Anti brute force system could be overzealous</source>
-        <target state="new">Anti brute force system could be overzealous</target>
+        <target state="translated">B’ urrainn dhan t-siostam an aghaidh brute force a bhith tuilleadh is dealaidh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7202,7 +7201,7 @@
       </trans-unit>
       <trans-unit id="4468853448271686046" datatype="html">
         <source>P2P system could not work correctly</source>
-        <target state="new">P2P system could not work correctly</target>
+        <target state="translated">Dh’fhaoidte nach obraich an siostam P2P mar bu chòir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">10</context>
@@ -7210,7 +7209,7 @@
       </trans-unit>
       <trans-unit id="5743050350352753869" datatype="html">
         <source>To fix it:</source>
-        <target state="new">To fix it:</target>
+        <target state="translated">Gus seo a chàradh:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">13</context>
@@ -7218,7 +7217,7 @@
       </trans-unit>
       <trans-unit id="1285026053775066761" datatype="html">
         <source>Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> configuration key</source>
-        <target state="new">Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> configuration key</target>
+        <target state="translated">Thoir sùil air an iuchair rèiteachaidh <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">15</context>
@@ -7226,7 +7225,7 @@
       </trans-unit>
       <trans-unit id="7014275542536964627" datatype="html">
         <source>If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</source>
-        <target state="new">If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
+        <target state="translated">Ma tha thu a’ ruith PeerTube le Docker, dearbh gun ruith thu an <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> le <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (faic <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>buga 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -7638,7 +7637,7 @@
       </trans-unit>
       <trans-unit id="2764971902180889905" datatype="html">
         <source>A new PeerTube version is available</source>
-        <target state="new">A new PeerTube version is available</target>
+        <target state="translated">Tha tionndadh ùr de PheerTube ri fhaighinn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -7646,7 +7645,7 @@
       </trans-unit>
       <trans-unit id="2560339336098442670" datatype="html">
         <source>One of your plugin/theme has a new available version</source>
-        <target state="new">One of your plugin/theme has a new available version</target>
+        <target state="translated">Tha tionndadh ùr de phlugan/ùrlar ri fhaighinn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -7731,7 +7730,7 @@
       </trans-unit>
       <trans-unit id="8407755843502300957" datatype="html">
         <source>Banner changed.</source>
-        <target state="new">Banner changed.</target>
+        <target state="translated">Chaidh a’ bhratach atharrachadh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-update.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -7739,7 +7738,7 @@
       </trans-unit>
       <trans-unit id="689638706960732906" datatype="html">
         <source>banner</source>
-        <target state="new">banner</target>
+        <target state="translated">bratach</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-update.component.ts</context>
           <context context-type="linenumber">144</context>
@@ -7747,7 +7746,7 @@
       </trans-unit>
       <trans-unit id="3230561499965076671" datatype="html">
         <source>Banner deleted.</source>
-        <target state="new">Banner deleted.</target>
+        <target state="translated">Chaidh a’ bhratach a sguabadh às.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-update.component.ts</context>
           <context context-type="linenumber">154</context>
@@ -7796,7 +7795,7 @@
       </trans-unit>
       <trans-unit id="1636934520301910285" datatype="html">
         <source>Reset password</source>
-        <target state="new">Reset password</target>
+        <target state="translated">Ath-shuidhich am facal-faire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password-routing.module.ts</context>
           <context context-type="linenumber">11</context>
@@ -8006,7 +8005,7 @@
       </trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
-        <target state="new">PLAYLISTS</target>
+        <target state="translated">LIOSTAICHEAN-CLUICH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -8084,7 +8083,7 @@
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
         <source>Trending</source>
-        <target state="new">Trending</target>
+        <target state="translated">A’ treandadh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">74</context>
@@ -8092,7 +8091,7 @@
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
         <source>Home</source>
-        <target state="new">Home</target>
+        <target state="translated">Dachaigh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">97</context>
@@ -8211,7 +8210,7 @@
       </trans-unit>
       <trans-unit id="2392481201920342009" datatype="html">
         <source>VOD videos</source>
-        <target state="new">VOD videos</target>
+        <target state="translated">Videothan air iarrtas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -8219,7 +8218,7 @@
       </trans-unit>
       <trans-unit id="2180217594100853008" datatype="html">
         <source>Live videos</source>
-        <target state="new">Live videos</target>
+        <target state="translated">Videothan beòtha</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -8276,7 +8275,7 @@
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {toradh} one {toradh} two {thoradh} few {toraidhean} other {toradh}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -8289,7 +8288,7 @@
       </trans-unit>
       <trans-unit id="8392321423487952834" datatype="html">
         <source>1 year ago</source>
-        <target state="new">1 year ago</target>
+        <target state="translated">Bliadhna air ais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">12</context>
@@ -8306,7 +8305,7 @@
       </trans-unit>
       <trans-unit id="6874778750344205852" datatype="html">
         <source>1 month ago</source>
-        <target state="new">1 month ago</target>
+        <target state="translated">Mìos air ais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -8323,7 +8322,7 @@
       </trans-unit>
       <trans-unit id="6538455390369999912" datatype="html">
         <source>1 week ago</source>
-        <target state="new">1 week ago</target>
+        <target state="translated">Seachdain air ais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">26</context>
@@ -8336,7 +8335,7 @@
       </trans-unit>
       <trans-unit id="3927517496763161987" datatype="html">
         <source>1 day ago</source>
-        <target state="new">1 day ago</target>
+        <target state="translated">Latha air ais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">30</context>
@@ -8349,7 +8348,7 @@
       </trans-unit>
       <trans-unit id="6285422673271535468" datatype="html">
         <source>1 hour ago</source>
-        <target state="new">1 hour ago</target>
+        <target state="translated">Uair a thìde air ais</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">34</context>
@@ -8437,7 +8436,7 @@
       </trans-unit>
       <trans-unit id="5630311719329022718" datatype="html">
         <source>Signup limit must be greater than 1. Use -1 to disable it.</source>
-        <target state="new">Signup limit must be greater than 1. Use -1 to disable it.</target>
+        <target state="translated">Feumaidh crìoch clàraidh a bhith nas motha na 1.Cleachd -1 gus a chur à comas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -8561,7 +8560,7 @@
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="new">Handle must be valid (eg. chocobozzz@example.com).</target>
+        <target state="translated">Feumaidh an làimhsichear a bhith dligheach (m.e. chocobozzz@ball-eisimpleir.com).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
@@ -9394,7 +9393,7 @@
       </trans-unit>
       <trans-unit id="6853170548960328665" datatype="html">
         <source>Close search</source>
-        <target state="new">Close search</target>
+        <target state="translated">Dùin an lorg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/simple-search-input.component.html</context>
           <context context-type="linenumber">14</context>
@@ -9961,7 +9960,7 @@
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil beachd ann} =1 {1 bheachd} one {<x id="INTERPOLATION"/> bheachd} two {<x id="INTERPOLATION"/> bheachd} few {<x id="INTERPOLATION"/> beachdan} other {<x id="INTERPOLATION"/> beachd} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">4</context>
@@ -10062,7 +10061,7 @@
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context>
           <context context-type="linenumber">1</context>
