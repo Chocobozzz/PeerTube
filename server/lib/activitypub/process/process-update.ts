@@ -15,7 +15,7 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
 import { getImageInfoIfExists, updateActorImageInstance, updateActorInstance } from '../actor'
 import { createOrUpdateCacheFile } from '../cache-file'
-import { createOrUpdateVideoPlaylist } from '../playlist'
+import { createOrUpdateVideoPlaylist } from '../playlists'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { APVideoUpdater, getOrCreateAPVideo } from '../videos'
 

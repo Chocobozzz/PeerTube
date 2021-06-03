@@ -1,5 +1,5 @@
 import * as Bull from 'bull'
-import { refreshVideoPlaylistIfNeeded } from '@server/lib/activitypub/playlist'
+import { refreshVideoPlaylistIfNeeded } from '@server/lib/activitypub/playlists'
 import { refreshVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { RefreshPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'

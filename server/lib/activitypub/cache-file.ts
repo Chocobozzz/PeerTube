@@ -1,8 +1,51 @@
-import { CacheFileObject } from '../../../shared/index'
-import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { Transaction } from 'sequelize'
-import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models'
+import { CacheFileObject } from '../../../shared/index'
+import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
+import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
+
+async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
+  const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
+
+  if (redundancyModel) {
+    return updateCacheFile(cacheFileObject, redundancyModel, video, byActor, t)
+  }
+
+  return createCacheFile(cacheFileObject, video, byActor, t)
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  createOrUpdateCacheFile
+}
+
+// ---------------------------------------------------------------------------
+
+function createCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
+  const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
+
+  return VideoRedundancyModel.create(attributes, { transaction: t })
+}
+
+function updateCacheFile (
+  cacheFileObject: CacheFileObject,
+  redundancyModel: MVideoRedundancy,
+  video: MVideoWithAllFiles,
+  byActor: MActorId,
+  t: Transaction
+) {
+  if (redundancyModel.actorId !== byActor.id) {
+    throw new Error('Cannot update redundancy ' + redundancyModel.url + ' of another actor.')
+  }
+
+  const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
+
+  redundancyModel.expiresOn = attributes.expiresOn
+  redundancyModel.fileUrl = attributes.fileUrl
+
+  return redundancyModel.save({ transaction: t })
+}
 
 function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId) {
 
@@ -37,46 +80,4 @@ function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject
     videoFileId: videoFile.id,
     actorId: byActor.id
   }
-}
-
-async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
-  const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
-
-  if (!redundancyModel) {
-    await createCacheFile(cacheFileObject, video, byActor, t)
-  } else {
-    await updateCacheFile(cacheFileObject, redundancyModel, video, byActor, t)
-  }
-}
-
-function createCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
-  const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
-
-  return VideoRedundancyModel.create(attributes, { transaction: t })
-}
-
-function updateCacheFile (
-  cacheFileObject: CacheFileObject,
-  redundancyModel: MVideoRedundancy,
-  video: MVideoWithAllFiles,
-  byActor: MActorId,
-  t: Transaction
-) {
-  if (redundancyModel.actorId !== byActor.id) {
-    throw new Error('Cannot update redundancy ' + redundancyModel.url + ' of another actor.')
-  }
-
-  const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
-
-  redundancyModel.expiresOn = attributes.expiresOn
-  redundancyModel.fileUrl = attributes.fileUrl
-
-  return redundancyModel.save({ transaction: t })
-}
-
-export {
-  createOrUpdateCacheFile,
-  createCacheFile,
-  updateCacheFile,
-  cacheFileActivityObjectToDBAttributes
 }

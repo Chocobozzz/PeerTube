@@ -15,30 +15,7 @@ import { getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlBy
 async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateType) {
   await Bluebird.map(ratesUrl, async rateUrl => {
     try {
-      // Fetch url
-      const { body } = await doJSONRequest<any>(rateUrl, { activityPub: true })
-      if (!body || !body.actor) throw new Error('Body or body actor is invalid')
-
-      const actorUrl = getAPId(body.actor)
-      if (checkUrlsSameHost(actorUrl, rateUrl) !== true) {
-        throw new Error(`Rate url ${rateUrl} has not the same host than actor url ${actorUrl}`)
-      }
-
-      if (checkUrlsSameHost(body.id, rateUrl) !== true) {
-        throw new Error(`Rate url ${rateUrl} host is different from the AP object id ${body.id}`)
-      }
-
-      const actor = await getOrCreateActorAndServerAndModel(actorUrl)
-
-      const entry = {
-        videoId: video.id,
-        accountId: actor.Account.id,
-        type: rate,
-        url: body.id
-      }
-
-      // Video "likes"/"dislikes" will be updated by the caller
-      await AccountVideoRateModel.upsert(entry)
+      await createRate(rateUrl, video, rate)
     } catch (err) {
       logger.warn('Cannot add rate %s.', rateUrl, { err })
     }
@@ -73,8 +50,39 @@ function getLocalRateUrl (rateType: VideoRateType, actor: MActorUrl, video: MVid
     : getVideoDislikeActivityPubUrlByLocalActor(actor, video)
 }
 
+// ---------------------------------------------------------------------------
+
 export {
   getLocalRateUrl,
   createRates,
   sendVideoRateChange
+}
+
+// ---------------------------------------------------------------------------
+
+async function createRate (rateUrl: string, video: MVideo, rate: VideoRateType) {
+  // Fetch url
+  const { body } = await doJSONRequest<any>(rateUrl, { activityPub: true })
+  if (!body || !body.actor) throw new Error('Body or body actor is invalid')
+
+  const actorUrl = getAPId(body.actor)
+  if (checkUrlsSameHost(actorUrl, rateUrl) !== true) {
+    throw new Error(`Rate url ${rateUrl} has not the same host than actor url ${actorUrl}`)
+  }
+
+  if (checkUrlsSameHost(body.id, rateUrl) !== true) {
+    throw new Error(`Rate url ${rateUrl} host is different from the AP object id ${body.id}`)
+  }
+
+  const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+
+  const entry = {
+    videoId: video.id,
+    accountId: actor.Account.id,
+    type: rate,
+    url: body.id
+  }
+
+  // Video "likes"/"dislikes" will be updated by the caller
+  await AccountVideoRateModel.upsert(entry)
 }

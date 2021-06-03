@@ -1,3 +1,4 @@
+import { isBlockedByServerOrAccount } from '@server/lib/blocklist'
 import { isRedundancyAccepted } from '@server/lib/redundancy'
 import { ActivityCreate, CacheFileObject, VideoObject } from '../../../../shared'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
@@ -9,11 +10,10 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
 import { Notifier } from '../../notifier'
 import { createOrUpdateCacheFile } from '../cache-file'
-import { createOrUpdateVideoPlaylist } from '../playlist'
+import { createOrUpdateVideoPlaylist } from '../playlists'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { resolveThread } from '../video-comments'
 import { getOrCreateAPVideo } from '../videos'
-import { isBlockedByServerOrAccount } from '@server/lib/blocklist'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
