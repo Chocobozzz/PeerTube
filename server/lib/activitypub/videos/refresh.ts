@@ -8,8 +8,6 @@ import { HttpStatusCode } from '@shared/core-utils'
 import { fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared'
 import { APVideoUpdater } from './updater'
 
-const lTags = loggerTagsFactory('ap', 'video', 'refresh')
-
 async function refreshVideoIfNeeded (options: {
   video: MVideoThumbnail
   fetchedType: VideoFetchByUrlType
@@ -22,11 +20,13 @@ async function refreshVideoIfNeeded (options: {
     ? options.video as MVideoAccountLightBlacklistAllFiles
     : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
 
+  const lTags = loggerTagsFactory('ap', 'video', 'refresh', video.uuid, video.url)
+
   try {
     const { videoObject } = await fetchRemoteVideo(video.url)
 
     if (videoObject === undefined) {
-      logger.warn('Cannot refresh remote video %s: invalid body.', video.url, lTags(video.uuid))
+      logger.warn('Cannot refresh remote video %s: invalid body.', video.url, lTags())
 
       await video.setAsRefreshed()
       return video
@@ -42,14 +42,14 @@ async function refreshVideoIfNeeded (options: {
     return video
   } catch (err) {
     if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url, lTags(video.uuid))
+      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url, lTags())
 
       // Video does not exist anymore
       await video.destroy()
       return undefined
     }
 
-    logger.warn('Cannot refresh video %s.', options.video.url, { err, ...lTags(video.uuid) })
+    logger.warn('Cannot refresh video %s.', options.video.url, { err, ...lTags() })
 
     ActorFollowScoreCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)
 

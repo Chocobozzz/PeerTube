@@ -62,7 +62,7 @@ function syncRates (type: 'like' | 'dislike', video: MVideo, fetchedVideo: Video
   const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, type, crawlStartDate)
 
   return crawlCollectionPage<string>(uri, handler, cleaner)
-    .catch(err => logger.error('Cannot add rate of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid) }))
+    .catch(err => logger.error('Cannot add rate of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid, video.url) }))
 }
 
 function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
@@ -76,7 +76,7 @@ function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) 
   const cleaner = crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate)
 
   return crawlCollectionPage<string>(uri, handler, cleaner)
-    .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid) }))
+    .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid, video.url) }))
 }
 
 function syncComments (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
@@ -90,5 +90,5 @@ function syncComments (video: MVideo, fetchedVideo: VideoObject, isSync: boolean
   const cleaner = crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
 
   return crawlCollectionPage<string>(uri, handler, cleaner)
-    .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid) }))
+    .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid, video.url) }))
 }

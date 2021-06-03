@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize/types'
 import { resetSequelizeInstance } from '@server/helpers/database-utils'
-import { logger, loggerTagsFactory } from '@server/helpers/logger'
+import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { Notifier } from '@server/lib/notifier'
 import { PeerTubeSocket } from '@server/lib/peertube-socket'
@@ -19,7 +19,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
   private readonly oldVideoChannel: MChannelAccountLight
 
-  protected lTags = loggerTagsFactory('ap', 'video', 'update')
+  protected lTags: LoggerTagsFn
 
   constructor (
     protected readonly videoObject: VideoObject,
@@ -33,12 +33,14 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.oldVideoChannel = this.video.VideoChannel
 
     this.videoFieldsSave = this.video.toJSON()
+
+    this.lTags = loggerTagsFactory('ap', 'video', 'update', video.uuid, video.url)
   }
 
   async update (overrideTo?: string[]) {
     logger.debug(
       'Updating remote video "%s".', this.videoObject.uuid,
-      { videoObject: this.videoObject, ...this.lTags(this.videoObject.uuid) }
+      { videoObject: this.videoObject, ...this.lTags() }
     )
 
     try {
@@ -82,7 +84,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         PeerTubeSocket.Instance.sendVideoViewsUpdate(videoUpdated)
       }
 
-      logger.info('Remote video with uuid %s updated', this.videoObject.uuid, this.lTags(this.videoObject.uuid))
+      logger.info('Remote video with uuid %s updated', this.videoObject.uuid, this.lTags())
 
       return videoUpdated
     } catch (err) {
@@ -158,7 +160,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     }
 
     // This is just a debug because we will retry the insert
-    logger.debug('Cannot update the remote video.', { err, ...this.lTags(this.videoObject.uuid) })
+    logger.debug('Cannot update the remote video.', { err, ...this.lTags() })
     throw err
   }
 }

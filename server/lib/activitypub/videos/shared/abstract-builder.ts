@@ -43,7 +43,7 @@ export abstract class APVideoAbstractBuilder {
       video,
       type: ThumbnailType.MINIATURE
     }).catch(err => {
-      logger.warn('Cannot generate thumbnail of %s.', this.videoObject.id, { err, ...this.lTags(video.uuid) })
+      logger.warn('Cannot generate thumbnail of %s.', this.videoObject.id, { err, ...this.lTags() })
 
       return undefined
     })
