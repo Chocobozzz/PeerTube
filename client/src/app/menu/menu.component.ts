@@ -29,7 +29,7 @@ const logger = debug('peertube:menu:MenuComponent')
 interface MenuItem {
   key: string
   title: string
-  children: MenuLink[]
+  links: MenuLink[]
 }
 
 @Component({
@@ -278,7 +278,7 @@ export class MenuComponent implements OnInit {
       {
         key: 'in-my-library',
         title: 'In my library',
-        children: [
+        links: [
           {
             path: '/my-library/videos',
             isHidden: !this.user?.canSeeVideosLink,
@@ -300,14 +300,18 @@ export class MenuComponent implements OnInit {
             icon: 'history' as GlobalIconName,
             menuLabel: 'History'
           }
-        ].filter(({ isHidden }) => isHidden !== false)
+        ]
       },
       {
         key: 'on-instance',
         title: `On ${this.instanceName}`,
-        children: this.menuService.buildCommonLinks(this.serverConfig)
+        links: this.menuService.buildCommonLinks(this.serverConfig)
       }
     ]
+    .map((block: MenuItem) => ({
+      ...block,
+      links: block.links.filter(({ isHidden }) => isHidden !== false)
+    }))
 
     this.hooks.wrapFun(this.setMenuItems, menuItems, 'top-menu', 'filter:top-menu.params', 'filter:top-menu.result')
   }
