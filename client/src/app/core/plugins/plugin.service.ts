@@ -250,6 +250,11 @@ export class PluginService implements ClientHook {
         return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/static`
       },
 
+      getBaseRouterRoute: () => {
+        const pathPrefix = this.getPluginPathPrefix(pluginInfo.isTheme)
+        return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/router`
+      },
+
       getSettings: () => {
         const path = PluginService.BASE_PLUGIN_API_URL + '/' + npmName + '/public-settings'
 
