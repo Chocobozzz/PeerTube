@@ -1,6 +1,6 @@
 import { logger } from '@server/helpers/logger'
 import { PeerTubeRequestError } from '@server/helpers/requests'
-import { ActorFetchByUrlType } from '@server/lib/model-loaders'
+import { ActorLoadByUrlType } from '@server/lib/model-loaders'
 import { ActorModel } from '@server/models/actor/actor'
 import { MActorAccountChannelId, MActorFull } from '@server/types/models'
 import { HttpStatusCode } from '@shared/core-utils'
@@ -10,7 +10,7 @@ import { getUrlFromWebfinger } from './webfinger'
 
 async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannelId> (
   actorArg: T,
-  fetchedType: ActorFetchByUrlType
+  fetchedType: ActorLoadByUrlType
 ): Promise<{ actor: T | MActorFull, refreshed: boolean }> {
   if (!actorArg.isOutdated()) return { actor: actorArg, refreshed: false }
 

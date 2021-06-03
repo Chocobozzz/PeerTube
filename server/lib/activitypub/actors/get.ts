@@ -3,7 +3,7 @@ import { checkUrlsSameHost, getAPId } from '@server/helpers/activitypub'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
-import { ActorFetchByUrlType, fetchActorByUrl } from '@server/lib/model-loaders'
+import { ActorLoadByUrlType, loadActorByUrl } from '@server/lib/model-loaders'
 import { MActor, MActorAccountChannelId, MActorAccountChannelIdActor, MActorAccountId, MActorFullActor } from '@server/types/models'
 import { ActivityPubActor } from '@shared/models'
 import { refreshActorIfNeeded } from './refresh'
@@ -25,7 +25,7 @@ function getOrCreateAPActor (
 
 async function getOrCreateAPActor (
   activityActor: string | ActivityPubActor,
-  fetchType: ActorFetchByUrlType = 'association-ids',
+  fetchType: ActorLoadByUrlType = 'association-ids',
   recurseIfNeeded = true,
   updateCollections = false
 ): Promise<MActorFullActor | MActorAccountChannelId> {
@@ -73,8 +73,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function loadActorFromDB (actorUrl: string, fetchType: ActorFetchByUrlType) {
-  let actor = await fetchActorByUrl(actorUrl, fetchType)
+async function loadActorFromDB (actorUrl: string, fetchType: ActorLoadByUrlType) {
+  let actor = await loadActorByUrl(actorUrl, fetchType)
 
   // Orphan actor (not associated to an account of channel) so recreate it
   if (actor && (!actor.Account && !actor.VideoChannel)) {

@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import { fetchVideo, VideoFetchType } from '@server/lib/model-loaders'
+import { loadVideo, VideoLoadType } from '@server/lib/model-loaders'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoFileModel } from '@server/models/video/video-file'
 import {
@@ -15,10 +15,10 @@ import {
 import { HttpStatusCode } from '@shared/core-utils'
 import { UserRight } from '@shared/models'
 
-async function doesVideoExist (id: number | string, res: Response, fetchType: VideoFetchType = 'all') {
+async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
 
-  const video = await fetchVideo(id, fetchType, userId)
+  const video = await loadVideo(id, fetchType, userId)
 
   if (video === null) {
     res.fail({

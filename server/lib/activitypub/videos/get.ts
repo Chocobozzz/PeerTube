@@ -1,7 +1,7 @@
 import { getAPId } from '@server/helpers/activitypub'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { JobQueue } from '@server/lib/job-queue'
-import { fetchVideoByUrl, VideoFetchByUrlType } from '@server/lib/model-loaders'
+import { loadVideoByUrl, VideoLoadByUrlType } from '@server/lib/model-loaders'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models'
 import { refreshVideoIfNeeded } from './refresh'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared'
@@ -47,7 +47,7 @@ async function getOrCreateAPVideo (
 
   // Get video url
   const videoUrl = getAPId(options.videoObject)
-  let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
+  let videoFromDatabase = await loadVideoByUrl(videoUrl, fetchType)
 
   if (videoFromDatabase) {
     if (allowRefresh === true) {
@@ -71,7 +71,7 @@ async function getOrCreateAPVideo (
   } catch (err) {
     // Maybe a concurrent getOrCreateAPVideo call created this video
     if (err.name === 'SequelizeUniqueConstraintError') {
-      const alreadyCreatedVideo = await fetchVideoByUrl(videoUrl, fetchType)
+      const alreadyCreatedVideo = await loadVideoByUrl(videoUrl, fetchType)
       if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false }
     }
 
@@ -87,7 +87,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function scheduleRefresh (video: MVideoThumbnail, fetchType: VideoFetchByUrlType, syncParam: SyncParam) {
+async function scheduleRefresh (video: MVideoThumbnail, fetchType: VideoLoadByUrlType, syncParam: SyncParam) {
   if (!video.isOutdated()) return video
 
   const refreshOptions = {

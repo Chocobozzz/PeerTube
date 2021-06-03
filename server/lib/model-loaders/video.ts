@@ -8,21 +8,21 @@ import {
   MVideoWithRights
 } from '@server/types/models'
 
-type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
+type VideoLoadType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
 
-function fetchVideo (id: number | string, fetchType: 'all', userId?: number): Promise<MVideoFullLight>
-function fetchVideo (id: number | string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
-function fetchVideo (id: number | string, fetchType: 'only-video', userId?: number): Promise<MVideoThumbnail>
-function fetchVideo (id: number | string, fetchType: 'only-video-with-rights', userId?: number): Promise<MVideoWithRights>
-function fetchVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Promise<MVideoIdThumbnail>
-function fetchVideo (
+function loadVideo (id: number | string, fetchType: 'all', userId?: number): Promise<MVideoFullLight>
+function loadVideo (id: number | string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
+function loadVideo (id: number | string, fetchType: 'only-video', userId?: number): Promise<MVideoThumbnail>
+function loadVideo (id: number | string, fetchType: 'only-video-with-rights', userId?: number): Promise<MVideoWithRights>
+function loadVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Promise<MVideoIdThumbnail>
+function loadVideo (
   id: number | string,
-  fetchType: VideoFetchType,
+  fetchType: VideoLoadType,
   userId?: number
 ): Promise<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable>
-function fetchVideo (
+function loadVideo (
   id: number | string,
-  fetchType: VideoFetchType,
+  fetchType: VideoLoadType,
   userId?: number
 ): Promise<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable> {
   if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id, undefined, userId)
@@ -36,18 +36,18 @@ function fetchVideo (
   if (fetchType === 'id' || fetchType === 'none') return VideoModel.loadOnlyId(id)
 }
 
-type VideoFetchByUrlType = 'all' | 'only-video' | 'only-immutable-attributes'
+type VideoLoadByUrlType = 'all' | 'only-video' | 'only-immutable-attributes'
 
-function fetchVideoByUrl (url: string, fetchType: 'all'): Promise<MVideoAccountLightBlacklistAllFiles>
-function fetchVideoByUrl (url: string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
-function fetchVideoByUrl (url: string, fetchType: 'only-video'): Promise<MVideoThumbnail>
-function fetchVideoByUrl (
+function loadVideoByUrl (url: string, fetchType: 'all'): Promise<MVideoAccountLightBlacklistAllFiles>
+function loadVideoByUrl (url: string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
+function loadVideoByUrl (url: string, fetchType: 'only-video'): Promise<MVideoThumbnail>
+function loadVideoByUrl (
   url: string,
-  fetchType: VideoFetchByUrlType
+  fetchType: VideoLoadByUrlType
 ): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable>
-function fetchVideoByUrl (
+function loadVideoByUrl (
   url: string,
-  fetchType: VideoFetchByUrlType
+  fetchType: VideoLoadByUrlType
 ): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
   if (fetchType === 'all') return VideoModel.loadByUrlAndPopulateAccount(url)
 
@@ -57,8 +57,9 @@ function fetchVideoByUrl (
 }
 
 export {
-  VideoFetchType,
-  VideoFetchByUrlType,
-  fetchVideo,
-  fetchVideoByUrl
+  VideoLoadType,
+  VideoLoadByUrlType,
+
+  loadVideo,
+  loadVideoByUrl
 }

@@ -1,7 +1,7 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { PeerTubeRequestError } from '@server/helpers/requests'
 import { ActorFollowScoreCache } from '@server/lib/files-cache'
-import { VideoFetchByUrlType } from '@server/lib/model-loaders'
+import { VideoLoadByUrlType } from '@server/lib/model-loaders'
 import { VideoModel } from '@server/models/video/video'
 import { MVideoAccountLightBlacklistAllFiles, MVideoThumbnail } from '@server/types/models'
 import { HttpStatusCode } from '@shared/core-utils'
@@ -10,7 +10,7 @@ import { APVideoUpdater } from './updater'
 
 async function refreshVideoIfNeeded (options: {
   video: MVideoThumbnail
-  fetchedType: VideoFetchByUrlType
+  fetchedType: VideoLoadByUrlType
   syncParam: SyncParam
 }): Promise<MVideoThumbnail> {
   if (!options.video.isOutdated()) return options.video

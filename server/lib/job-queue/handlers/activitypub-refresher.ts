@@ -1,7 +1,7 @@
 import * as Bull from 'bull'
 import { refreshVideoPlaylistIfNeeded } from '@server/lib/activitypub/playlists'
 import { refreshVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { fetchVideoByUrl } from '@server/lib/model-loaders'
+import { loadVideoByUrl } from '@server/lib/model-loaders'
 import { RefreshPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
@@ -30,7 +30,7 @@ async function refreshVideo (videoUrl: string) {
   const fetchType = 'all' as 'all'
   const syncParam = { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true }
 
-  const videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
+  const videoFromDatabase = await loadVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {
     const refreshOptions = {
       video: videoFromDatabase,

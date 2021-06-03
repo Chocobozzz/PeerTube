@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { query } from 'express-validator'
 import { join } from 'path'
-import { fetchVideo } from '@server/lib/model-loaders'
+import { loadVideo } from '@server/lib/model-loaders'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
@@ -85,7 +85,7 @@ const oembedValidator = [
     }
 
     if (isVideo) {
-      const video = await fetchVideo(elementId, 'all')
+      const video = await loadVideo(elementId, 'all')
 
       if (!video) {
         return res.fail({
