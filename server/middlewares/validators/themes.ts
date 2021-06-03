@@ -1,11 +1,11 @@
 import * as express from 'express'
 import { param } from 'express-validator'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { isPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
-import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { isSafePath } from '../../helpers/custom-validators/misc'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { isSafePath } from '../../helpers/custom-validators/misc'
+import { isPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
+import { logger } from '../../helpers/logger'
+import { PluginManager } from '../../lib/plugins/plugin-manager'
+import { areValidationErrors } from './shared'
 
 const serveThemeCSSValidator = [
   param('themeName').custom(isPluginNameValid).withMessage('Should have a valid theme name'),

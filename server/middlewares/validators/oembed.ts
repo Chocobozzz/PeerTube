@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { query } from 'express-validator'
 import { join } from 'path'
-import { fetchVideo } from '@server/helpers/video'
+import { fetchVideo } from '@server/lib/model-loaders'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
@@ -9,7 +9,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
 const playlistPaths = [
   join('videos', 'watch', 'playlist'),

@@ -1,7 +1,7 @@
 import { Response } from 'express'
-import { fetchVideo, VideoFetchType } from '../video'
-import { UserRight } from '../../../shared/models/users'
-import { VideoChannelModel } from '../../models/video/video-channel'
+import { fetchVideo, VideoFetchType } from '@server/lib/model-loaders'
+import { VideoChannelModel } from '@server/models/video/video-channel'
+import { VideoFileModel } from '@server/models/video/video-file'
 import {
   MUser,
   MUserAccountId,
@@ -12,8 +12,8 @@ import {
   MVideoThumbnail,
   MVideoWithRights
 } from '@server/types/models'
-import { VideoFileModel } from '@server/models/video/video-file'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
+import { UserRight } from '@shared/models'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoFetchType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined

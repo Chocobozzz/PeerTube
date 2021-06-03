@@ -1,14 +1,13 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
-import { isHostValid } from '../../helpers/custom-validators/servers'
-import { ServerModel } from '../../models/server/server'
-import { doesVideoExist } from '../../helpers/middlewares'
 import { isVideoRedundancyTarget } from '@server/helpers/custom-validators/video-redundancies'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { isHostValid } from '../../helpers/custom-validators/servers'
+import { logger } from '../../helpers/logger'
+import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
+import { ServerModel } from '../../models/server/server'
+import { areValidationErrors, doesVideoExist } from './shared'
 
 const videoFileRedundancyGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),

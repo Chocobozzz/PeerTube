@@ -1,7 +1,7 @@
 import { getAPId } from '@server/helpers/activitypub'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
-import { fetchVideoByUrl, VideoFetchByUrlType } from '@server/helpers/video'
 import { JobQueue } from '@server/lib/job-queue'
+import { fetchVideoByUrl, VideoFetchByUrlType } from '@server/lib/model-loaders'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models'
 import { refreshVideoIfNeeded } from './refresh'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared'

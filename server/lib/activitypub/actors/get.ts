@@ -1,9 +1,9 @@
 
 import { checkUrlsSameHost, getAPId } from '@server/helpers/activitypub'
-import { ActorFetchByUrlType, fetchActorByUrl } from '@server/helpers/actor'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
+import { ActorFetchByUrlType, fetchActorByUrl } from '@server/lib/model-loaders'
 import { MActor, MActorAccountChannelId, MActorAccountChannelIdActor, MActorAccountId, MActorFullActor } from '@server/types/models'
 import { ActivityPubActor } from '@shared/models'
 import { refreshActorIfNeeded } from './refresh'

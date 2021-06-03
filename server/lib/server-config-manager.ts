@@ -1,7 +1,7 @@
-import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/helpers/signup'
 import { getServerCommit } from '@server/helpers/utils'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants'
+import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
 import { HTMLServerConfig, RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConfig } from '@shared/models'
 import { Hooks } from './plugins/hooks'

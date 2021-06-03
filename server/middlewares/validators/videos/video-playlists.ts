@@ -25,12 +25,11 @@ import {
 import { isVideoImage } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
-import { doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoPlaylistFetchType } from '../../../helpers/middlewares'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { MVideoPlaylist } from '../../../types/models/video/video-playlist'
 import { authenticatePromiseIfNeeded } from '../../auth'
-import { areValidationErrors } from '../utils'
+import { areValidationErrors, doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoPlaylistFetchType } from '../shared'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')

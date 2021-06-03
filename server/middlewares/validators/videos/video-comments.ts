@@ -2,19 +2,14 @@ import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { MUserAccountUrl } from '@server/types/models'
 import { UserRight } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
-import {
-  doesVideoCommentExist,
-  doesVideoCommentThreadExist,
-  isValidVideoCommentText
-} from '../../../helpers/custom-validators/video-comments'
+import { isValidVideoCommentText } from '../../../helpers/custom-validators/video-comments'
 import { logger } from '../../../helpers/logger'
-import { doesVideoExist } from '../../../helpers/middlewares'
 import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { MCommentOwnerVideoReply, MVideo, MVideoFullLight } from '../../../types/models/video'
-import { areValidationErrors } from '../utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { areValidationErrors, doesVideoCommentExist, doesVideoCommentThreadExist, doesVideoExist } from '../shared'
 
 const listVideoCommentsValidator = [
   query('isLocal')

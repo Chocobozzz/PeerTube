@@ -1,7 +1,7 @@
 import { Response } from 'express'
-import { VideoCaptionModel } from '../../models/video/video-caption'
+import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { MVideoId } from '@server/types/models'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/core-utils'
 
 async function doesVideoCaptionExist (video: MVideoId, language: string, res: Response) {
   const videoCaption = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)

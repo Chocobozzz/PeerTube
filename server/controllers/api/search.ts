@@ -14,8 +14,7 @@ import { VideoChannelsSearchQuery, VideosSearchQuery } from '../../../shared/mod
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
-import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
-import { getOrCreateAPActor } from '../../lib/activitypub/actors'
+import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../lib/activitypub/actors'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,

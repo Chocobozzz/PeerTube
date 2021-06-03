@@ -1,12 +1,12 @@
-import { ActorFetchByUrlType } from '@server/helpers/actor'
 import { logger } from '@server/helpers/logger'
 import { PeerTubeRequestError } from '@server/helpers/requests'
-import { getUrlFromWebfinger } from '@server/helpers/webfinger'
+import { ActorFetchByUrlType } from '@server/lib/model-loaders'
 import { ActorModel } from '@server/models/actor/actor'
 import { MActorAccountChannelId, MActorFull } from '@server/types/models'
 import { HttpStatusCode } from '@shared/core-utils'
 import { fetchRemoteActor } from './shared'
 import { APActorUpdater } from './updater'
+import { getUrlFromWebfinger } from './webfinger'
 
 async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannelId> (
   actorArg: T,

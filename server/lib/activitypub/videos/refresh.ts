@@ -1,7 +1,7 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { PeerTubeRequestError } from '@server/helpers/requests'
-import { VideoFetchByUrlType } from '@server/helpers/video'
 import { ActorFollowScoreCache } from '@server/lib/files-cache'
+import { VideoFetchByUrlType } from '@server/lib/model-loaders'
 import { VideoModel } from '@server/models/video/video'
 import { MVideoAccountLightBlacklistAllFiles, MVideoThumbnail } from '@server/types/models'
 import { HttpStatusCode } from '@shared/core-utils'

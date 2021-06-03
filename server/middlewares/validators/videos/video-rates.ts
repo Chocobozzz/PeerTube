@@ -1,15 +1,14 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { VideoRateType } from '../../../../shared/models/videos'
+import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
-import { areValidationErrors } from '../utils'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { VideoRateType } from '../../../../shared/models/videos'
-import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
-import { doesVideoExist } from '../../../helpers/middlewares'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { areValidationErrors, doesVideoExist } from '../shared'
 
 const videoUpdateRateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),

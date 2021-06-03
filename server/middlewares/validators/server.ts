@@ -1,13 +1,13 @@
 import * as express from 'express'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { isHostValid, isValidContactBody } from '../../helpers/custom-validators/servers'
-import { ServerModel } from '../../models/server/server'
 import { body } from 'express-validator'
-import { isUserDisplayNameValid } from '../../helpers/custom-validators/users'
-import { Redis } from '../../lib/redis'
-import { CONFIG, isEmailEnabled } from '../../initializers/config'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { isHostValid, isValidContactBody } from '../../helpers/custom-validators/servers'
+import { isUserDisplayNameValid } from '../../helpers/custom-validators/users'
+import { logger } from '../../helpers/logger'
+import { CONFIG, isEmailEnabled } from '../../initializers/config'
+import { Redis } from '../../lib/redis'
+import { ServerModel } from '../../models/server/server'
+import { areValidationErrors } from './shared'
 
 const serverGetValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),

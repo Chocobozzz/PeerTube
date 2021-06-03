@@ -9,7 +9,7 @@ import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { PluginModel } from '../../models/server/plugin'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
 const getPluginValidator = (pluginType: PluginType, withVersion = true) => {
   const validators: (ValidationChain | express.Handler)[] = [

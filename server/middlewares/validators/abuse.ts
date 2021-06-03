@@ -13,13 +13,11 @@ import {
   isAbuseVideoIsValid
 } from '@server/helpers/custom-validators/abuses'
 import { exists, isIdOrUUIDValid, isIdValid, toIntOrNull } from '@server/helpers/custom-validators/misc'
-import { doesCommentIdExist } from '@server/helpers/custom-validators/video-comments'
 import { logger } from '@server/helpers/logger'
-import { doesAbuseExist, doesAccountIdExist, doesVideoExist } from '@server/helpers/middlewares'
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { AbuseCreate, UserRight } from '@shared/models'
-import { areValidationErrors } from './utils'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { areValidationErrors, doesAbuseExist, doesAccountIdExist, doesCommentIdExist, doesVideoExist } from './shared'
 
 const abuseReportValidator = [
   body('account.id')

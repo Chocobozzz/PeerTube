@@ -7,7 +7,7 @@ import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
 import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists().withMessage('Should have a valid instance name'),

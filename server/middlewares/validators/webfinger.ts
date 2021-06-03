@@ -5,7 +5,7 @@ import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/w
 import { getHostWithPort } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { ActorModel } from '../../models/actor/actor'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
 const webfingerValidator = [
   query('resource').custom(isWebfingerLocalResourceValid).withMessage('Should have a valid webfinger resource'),

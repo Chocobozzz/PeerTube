@@ -12,10 +12,9 @@ import {
   isVideoChannelSupportValid
 } from '../../../helpers/custom-validators/video-channels'
 import { logger } from '../../../helpers/logger'
-import { doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../../../helpers/middlewares'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { areValidationErrors } from '../utils'
+import { areValidationErrors, doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../shared'
 
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),

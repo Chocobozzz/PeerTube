@@ -1,6 +1,6 @@
 import { Response } from 'express'
-import { AbuseModel } from '../../models/abuse/abuse'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { AbuseModel } from '@server/models/abuse/abuse'
+import { HttpStatusCode } from '@shared/core-utils'
 
 async function doesAbuseExist (abuseId: number | string, res: Response) {
   const abuse = await AbuseModel.loadByIdWithReporter(parseInt(abuseId + '', 10))

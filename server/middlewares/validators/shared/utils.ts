@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { query, validationResult } from 'express-validator'
-import { logger } from '../../helpers/logger'
+import { logger } from '../../../helpers/logger'
 
 function areValidationErrors (req: express.Request, res: express.Response) {
   const errors = validationResult(req)

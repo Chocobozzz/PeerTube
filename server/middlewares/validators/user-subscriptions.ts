@@ -6,7 +6,7 @@ import { toArray } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { ActorFollowModel } from '../../models/actor/actor-follow'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
 const userSubscriptionListValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),

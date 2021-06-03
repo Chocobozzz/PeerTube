@@ -22,7 +22,7 @@ import {
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
 import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
-import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
+import { checkUserCanTerminateOwnershipChange } from '../../../helpers/custom-validators/video-ownership'
 import {
   isScheduleVideoUpdatePrivacyValid,
   isVideoCategoryValid,
@@ -42,12 +42,6 @@ import {
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { getDurationFromVideoFile } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
-import {
-  checkUserCanManageVideo,
-  doesVideoChannelOfAccountExist,
-  doesVideoExist,
-  doesVideoFileOfVideoExist
-} from '../../../helpers/middlewares'
 import { deleteFileAndCatch } from '../../../helpers/utils'
 import { getVideoWithAttributes } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
@@ -57,7 +51,14 @@ import { Hooks } from '../../../lib/plugins/hooks'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../auth'
-import { areValidationErrors } from '../utils'
+import {
+  areValidationErrors,
+  checkUserCanManageVideo,
+  doesChangeVideoOwnershipExist,
+  doesVideoChannelOfAccountExist,
+  doesVideoExist,
+  doesVideoFileOfVideoExist
+} from '../shared'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')

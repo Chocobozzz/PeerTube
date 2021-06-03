@@ -1,6 +1,6 @@
 import { Response } from 'express'
-import { VideoBlacklistModel } from '../../models/video/video-blacklist'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { VideoBlacklistModel } from '@server/models/video/video-blacklist'
+import { HttpStatusCode } from '@shared/core-utils'
 
 async function doesVideoBlacklistExist (videoId: number, res: Response) {
   const videoBlacklist = await VideoBlacklistModel.loadByVideoId(videoId)

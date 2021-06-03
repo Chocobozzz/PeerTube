@@ -1,15 +1,14 @@
-import { body, param } from 'express-validator'
 import * as express from 'express'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { AccountBlocklistModel } from '../../models/account/account-blocklist'
-import { isHostValid } from '../../helpers/custom-validators/servers'
-import { ServerBlocklistModel } from '../../models/server/server-blocklist'
-import { ServerModel } from '../../models/server/server'
-import { WEBSERVER } from '../../initializers/constants'
-import { doesAccountNameWithHostExist } from '../../helpers/middlewares'
+import { body, param } from 'express-validator'
 import { getServerActor } from '@server/models/application/application'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { isHostValid } from '../../helpers/custom-validators/servers'
+import { logger } from '../../helpers/logger'
+import { WEBSERVER } from '../../initializers/constants'
+import { AccountBlocklistModel } from '../../models/account/account-blocklist'
+import { ServerModel } from '../../models/server/server'
+import { ServerBlocklistModel } from '../../models/server/server-blocklist'
+import { areValidationErrors, doesAccountNameWithHostExist } from './shared'
 
 const blockAccountValidator = [
   body('accountName').exists().withMessage('Should have an account name with host'),

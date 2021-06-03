@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
+import { getAPId } from '@server/helpers/activitypub'
+import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor'
 import { ActivityDelete, ActivityPubSignature } from '../../shared'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants'
-import { getOrCreateAPActor } from '../lib/activitypub/actors'
-import { loadActorUrlOrGetFromWebfinger } from '../helpers/webfinger'
-import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor'
-import { getAPId } from '@server/helpers/activitypub'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../lib/activitypub/actors'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
   try {

@@ -1,10 +1,9 @@
-import { body, param } from 'express-validator'
 import * as express from 'express'
-import { isIdOrUUIDValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { areValidationErrors } from '../utils'
-import { logger } from '../../../helpers/logger'
-import { doesVideoExist } from '../../../helpers/middlewares'
+import { body, param } from 'express-validator'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { isIdOrUUIDValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import { logger } from '../../../helpers/logger'
+import { areValidationErrors, doesVideoExist } from '../shared'
 
 const videoWatchingValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),

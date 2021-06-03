@@ -30,13 +30,12 @@ import {
 } from '../../helpers/custom-validators/users'
 import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
-import { doesVideoExist } from '../../helpers/middlewares'
-import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { Redis } from '../../lib/redis'
-import { UserModel } from '../../models/user/user'
+import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../lib/signup'
 import { ActorModel } from '../../models/actor/actor'
-import { areValidationErrors } from './utils'
+import { UserModel } from '../../models/user/user'
+import { areValidationErrors, doesVideoExist } from './shared'
 
 const usersListValidator = [
   query('blocked')

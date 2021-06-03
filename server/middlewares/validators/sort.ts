@@ -1,5 +1,5 @@
 import { SORTABLE_COLUMNS } from '../../initializers/constants'
-import { checkSort, createSortableColumns } from './utils'
+import { checkSort, createSortableColumns } from './shared'
 
 // Initialize constants here for better performances
 const SORTABLE_USERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USERS)
