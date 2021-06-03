@@ -15,7 +15,7 @@ import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/expr
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
-import { getOrCreateActorAndServerAndModel } from '../../lib/activitypub/actor'
+import { getOrCreateAPActor } from '../../lib/activitypub/actors'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
@@ -145,7 +145,7 @@ async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      const actor = await getOrCreateActorAndServerAndModel(uri, 'all', true, true)
+      const actor = await getOrCreateAPActor(uri, 'all', true, true)
       videoChannel = actor.VideoChannel
     } catch (err) {
       logger.info('Cannot search remote video channel %s.', uri, { err })

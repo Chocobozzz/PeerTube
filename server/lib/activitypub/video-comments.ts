@@ -6,7 +6,7 @@ import { doJSONRequest } from '../../helpers/requests'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
-import { getOrCreateActorAndServerAndModel } from './actor'
+import { getOrCreateAPActor } from './actors'
 import { getOrCreateAPVideo } from './videos'
 
 type ResolveThreadParams = {
@@ -147,7 +147,7 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
   }
 
   const actor = actorUrl
-    ? await getOrCreateActorAndServerAndModel(actorUrl, 'all')
+    ? await getOrCreateAPActor(actorUrl, 'all')
     : null
 
   const comment = new VideoCommentModel({

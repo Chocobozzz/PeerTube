@@ -7,7 +7,7 @@ import { doJSONRequest } from '../../helpers/requests'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoShareModel } from '../../models/video/video-share'
 import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
-import { getOrCreateActorAndServerAndModel } from './actor'
+import { getOrCreateAPActor } from './actors'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
 import { getLocalVideoAnnounceActivityPubUrl } from './url'
 
@@ -64,7 +64,7 @@ async function addVideoShare (shareUrl: string, video: MVideoId) {
     throw new Error(`Actor url ${actorUrl} has not the same host than the share url ${shareUrl}`)
   }
 
-  const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+  const actor = await getOrCreateAPActor(actorUrl)
 
   const entry = {
     actorId: actor.id,

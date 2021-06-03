@@ -10,7 +10,7 @@ import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistFilesVideo, MThumbnail, MVideoCaption, MVideoFile, MVideoFullLight, MVideoThumbnail } from '@server/types/models'
 import { ActivityTagObject, ThumbnailType, VideoObject, VideoStreamingPlaylistType } from '@shared/models'
-import { getOrCreateActorAndServerAndModel } from '../../actor'
+import { getOrCreateAPActor } from '../../actors'
 import {
   getCaptionAttributesFromObject,
   getFileAttributesFromUrl,
@@ -34,7 +34,7 @@ export abstract class APVideoAbstractBuilder {
       throw new Error(`Video channel url ${channel.id} does not have the same host than video object id ${this.videoObject.id}`)
     }
 
-    return getOrCreateActorAndServerAndModel(channel.id, 'all')
+    return getOrCreateAPActor(channel.id, 'all')
   }
 
   protected tryToGenerateThumbnail (video: MVideoThumbnail): Promise<MThumbnail> {

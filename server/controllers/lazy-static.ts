@@ -4,8 +4,8 @@ import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache
 import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { logger } from '../helpers/logger'
 import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
-import { actorImagePathUnsafeCache, pushActorImageProcessInQueue } from '../lib/actor-image'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
+import { actorImagePathUnsafeCache, pushActorImageProcessInQueue } from '../lib/local-actor'
 import { asyncMiddleware } from '../middlewares'
 import { ActorImageModel } from '../models/actor/actor-image'
 

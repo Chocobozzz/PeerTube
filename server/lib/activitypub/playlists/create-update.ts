@@ -9,7 +9,7 @@ import { FilteredModelAttributes } from '@server/types'
 import { MAccountDefault, MAccountId, MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { PlaylistObject } from '@shared/models'
-import { getOrCreateActorAndServerAndModel } from '../actor'
+import { getOrCreateAPActor } from '../actors'
 import { crawlCollectionPage } from '../crawl'
 import { getOrCreateAPVideo } from '../videos'
 import {
@@ -75,7 +75,7 @@ export {
 async function setVideoChannelIfNeeded (playlistObject: PlaylistObject, playlistAttributes: AttributesOnly<VideoPlaylistModel>) {
   if (!isArray(playlistObject.attributedTo) || playlistObject.attributedTo.length !== 1) return
 
-  const actor = await getOrCreateActorAndServerAndModel(playlistObject.attributedTo[0])
+  const actor = await getOrCreateAPActor(playlistObject.attributedTo[0])
 
   if (!actor.VideoChannel) {
     logger.warn('Playlist "attributedTo" %s is not a video channel.', playlistObject.id, { playlistObject, ...lTags(playlistObject.id) })

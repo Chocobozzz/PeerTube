@@ -7,7 +7,7 @@ import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { MAccountActor, MActorUrl, MVideo, MVideoAccountLight, MVideoId } from '../../types/models'
-import { getOrCreateActorAndServerAndModel } from './actor'
+import { getOrCreateAPActor } from './actors'
 import { sendLike, sendUndoDislike, sendUndoLike } from './send'
 import { sendDislike } from './send/send-dislike'
 import { getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from './url'
@@ -74,7 +74,7 @@ async function createRate (rateUrl: string, video: MVideo, rate: VideoRateType) 
     throw new Error(`Rate url ${rateUrl} host is different from the AP object id ${body.id}`)
   }
 
-  const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+  const actor = await getOrCreateAPActor(actorUrl)
 
   const entry = {
     videoId: video.id,

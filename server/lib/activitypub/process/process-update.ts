@@ -1,19 +1,16 @@
 import { isRedundancyAccepted } from '@server/lib/redundancy'
-import { ActorImageType } from '@shared/models'
 import { ActivityUpdate, CacheFileObject, VideoObject } from '../../../../shared/models/activitypub'
 import { ActivityPubActor } from '../../../../shared/models/activitypub/activitypub-actor'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
-import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers/database-utils'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/actor/actor'
-import { VideoChannelModel } from '../../../models/video/video-channel'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
-import { MActorSignature } from '../../../types/models'
-import { getImageInfoIfExists, updateActorImageInstance, updateActorInstance } from '../actor'
+import { MActorFull, MActorSignature } from '../../../types/models'
+import { APActorUpdater } from '../actors/updater'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { createOrUpdateVideoPlaylist } from '../playlists'
 import { forwardVideoRelatedActivity } from '../send/utils'
@@ -99,56 +96,13 @@ async function processUpdateCacheFile (byActor: MActorSignature, activity: Activ
   }
 }
 
-async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) {
-  const actorAttributesToUpdate = activity.object as ActivityPubActor
+async function processUpdateActor (actor: MActorFull, activity: ActivityUpdate) {
+  const actorObject = activity.object as ActivityPubActor
 
-  logger.debug('Updating remote account "%s".', actorAttributesToUpdate.url)
-  let accountOrChannelInstance: AccountModel | VideoChannelModel
-  let actorFieldsSave: object
-  let accountOrChannelFieldsSave: object
+  logger.debug('Updating remote account "%s".', actorObject.url)
 
-  // Fetch icon?
-  const avatarInfo = getImageInfoIfExists(actorAttributesToUpdate, ActorImageType.AVATAR)
-  const bannerInfo = getImageInfoIfExists(actorAttributesToUpdate, ActorImageType.BANNER)
-
-  try {
-    await sequelizeTypescript.transaction(async t => {
-      actorFieldsSave = actor.toJSON()
-
-      if (actorAttributesToUpdate.type === 'Group') accountOrChannelInstance = actor.VideoChannel
-      else accountOrChannelInstance = actor.Account
-
-      accountOrChannelFieldsSave = accountOrChannelInstance.toJSON()
-
-      await updateActorInstance(actor, actorAttributesToUpdate)
-
-      await updateActorImageInstance(actor, ActorImageType.AVATAR, avatarInfo, t)
-      await updateActorImageInstance(actor, ActorImageType.BANNER, bannerInfo, t)
-
-      await actor.save({ transaction: t })
-
-      accountOrChannelInstance.name = actorAttributesToUpdate.name || actorAttributesToUpdate.preferredUsername
-      accountOrChannelInstance.description = actorAttributesToUpdate.summary
-
-      if (accountOrChannelInstance instanceof VideoChannelModel) accountOrChannelInstance.support = actorAttributesToUpdate.support
-
-      await accountOrChannelInstance.save({ transaction: t })
-    })
-
-    logger.info('Remote account %s updated', actorAttributesToUpdate.url)
-  } catch (err) {
-    if (actor !== undefined && actorFieldsSave !== undefined) {
-      resetSequelizeInstance(actor, actorFieldsSave)
-    }
-
-    if (accountOrChannelInstance !== undefined && accountOrChannelFieldsSave !== undefined) {
-      resetSequelizeInstance(accountOrChannelInstance, accountOrChannelFieldsSave)
-    }
-
-    // This is just a debug because we will retry the insert
-    logger.debug('Cannot update the remote account.', { err })
-    throw err
-  }
+  const updater = new APActorUpdater(actorObject, actor)
+  return updater.update()
 }
 
 async function processUpdatePlaylist (byActor: MActorSignature, activity: ActivityUpdate) {

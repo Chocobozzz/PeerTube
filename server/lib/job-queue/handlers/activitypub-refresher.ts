@@ -6,7 +6,7 @@ import { logger } from '../../../helpers/logger'
 import { fetchVideoByUrl } from '../../../helpers/video'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
-import { refreshActorIfNeeded } from '../../activitypub/actor'
+import { refreshActorIfNeeded } from '../../activitypub/actors'
 
 async function refreshAPObject (job: Bull.Job) {
   const payload = job.data as RefreshPayload

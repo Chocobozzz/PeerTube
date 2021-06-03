@@ -10,7 +10,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { ActorModel } from '../../../models/actor/actor'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { MActor, MActorFollowActors, MActorFull } from '../../../types/models'
-import { getOrCreateActorAndServerAndModel } from '../../activitypub/actor'
+import { getOrCreateAPActor } from '../../activitypub/actors'
 import { sendFollow } from '../../activitypub/send'
 import { Notifier } from '../../notifier'
 
@@ -26,7 +26,7 @@ async function processActivityPubFollow (job: Bull.Job) {
   } else {
     const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
     const actorUrl = await loadActorUrlOrGetFromWebfinger(payload.name + '@' + sanitizedHost)
-    targetActor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
+    targetActor = await getOrCreateAPActor(actorUrl, 'all')
   }
 
   if (payload.assertIsChannel && !targetActor.VideoChannel) {

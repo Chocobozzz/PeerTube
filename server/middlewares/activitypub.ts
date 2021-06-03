@@ -3,7 +3,7 @@ import { ActivityDelete, ActivityPubSignature } from '../../shared'
 import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants'
-import { getOrCreateActorAndServerAndModel } from '../lib/activitypub/actor'
+import { getOrCreateAPActor } from '../lib/activitypub/actors'
 import { loadActorUrlOrGetFromWebfinger } from '../helpers/webfinger'
 import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor'
 import { getAPId } from '@server/helpers/activitypub'
@@ -100,7 +100,7 @@ async function checkHttpSignature (req: Request, res: Response) {
     actorUrl = await loadActorUrlOrGetFromWebfinger(actorUrl.replace(/^acct:/, ''))
   }
 
-  const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+  const actor = await getOrCreateAPActor(actorUrl)
 
   const verified = isHTTPSignatureVerified(parsed, actor)
   if (verified !== true) {
@@ -135,7 +135,7 @@ async function checkJsonLDSignature (req: Request, res: Response) {
 
   logger.debug('Checking JsonLD signature of actor %s...', creator)
 
-  const actor = await getOrCreateActorAndServerAndModel(creator)
+  const actor = await getOrCreateAPActor(creator)
   const verified = await isJsonLDSignatureVerified(actor, req.body)
 
   if (verified !== true) {

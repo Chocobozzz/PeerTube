@@ -126,7 +126,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.views = videoData.views
     this.video.isLive = videoData.isLive
 
-    // Ensures we update the updated video attribute
+    // Ensures we update the updatedAt attribute, even if main attributes did not change
     this.video.changed('updatedAt', true)
 
     return this.video.save({ transaction }) as Promise<MVideoFullLight>
