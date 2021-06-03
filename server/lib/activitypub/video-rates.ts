@@ -3,7 +3,7 @@ import { Transaction } from 'sequelize'
 import { doJSONRequest } from '@server/helpers/requests'
 import { VideoRateType } from '../../../shared/models/videos'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { logger } from '../../helpers/logger'
+import { logger, loggerTagsFactory } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { MAccountActor, MActorUrl, MVideo, MVideoAccountLight, MVideoId } from '../../types/models'
@@ -12,12 +12,14 @@ import { sendLike, sendUndoDislike, sendUndoLike } from './send'
 import { sendDislike } from './send/send-dislike'
 import { getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from './url'
 
+const lTags = loggerTagsFactory('ap', 'video-rate', 'create')
+
 async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateType) {
   await Bluebird.map(ratesUrl, async rateUrl => {
     try {
       await createRate(rateUrl, video, rate)
     } catch (err) {
-      logger.warn('Cannot add rate %s.', rateUrl, { err })
+      logger.warn('Cannot add rate %s.', rateUrl, { err, ...lTags(rateUrl, video.uuid, video.url) })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
