@@ -50,7 +50,6 @@ export const enum OAuth2ErrorCode {
    */
   INVALID_CLIENT = 'invalid_client',
 
-
   /**
    * The access token provided is expired, revoked, malformed, or invalid for other reasons
    *
