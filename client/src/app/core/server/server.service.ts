@@ -3,6 +3,7 @@ import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
 import { SearchTargetType, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -14,6 +15,8 @@ export class ServerService {
   private static BASE_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/video-playlists/'
   private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
   private static BASE_STATS_URL = environment.apiUrl + '/api/v1/server/stats'
+
+  private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
   configReloaded = new Subject<ServerConfig>()
 
@@ -211,6 +214,7 @@ export class ServerService {
     if (!this.configObservable) {
       this.configObservable = this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
                                   .pipe(
+                                    tap(config => this.saveConfigLocally(config)),
                                     tap(config => {
                                       this.config = config
                                       this.configLoaded = true
@@ -341,8 +345,13 @@ export class ServerService {
                )
   }
 
+  private saveConfigLocally (config: ServerConfig) {
+    peertubeLocalStorage.setItem(ServerService.CONFIG_LOCAL_STORAGE_KEY, JSON.stringify(config))
+  }
+
   private loadConfigLocally () {
-    const configString = window['PeerTubeServerConfig']
+    const configString = peertubeLocalStorage.getItem(ServerService.CONFIG_LOCAL_STORAGE_KEY)
+
     if (!configString) return
 
     try {
