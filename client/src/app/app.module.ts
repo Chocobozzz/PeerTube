@@ -1,13 +1,13 @@
 import 'focus-visible'
 import { environment } from 'src/environments/environment'
 import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
-import { NgModule } from '@angular/core'
+import { APP_INITIALIZER, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import localeOc from '@app/helpers/locales/oc'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-import { CoreModule } from './core'
+import { CoreModule, ServerService } from './core'
 import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { HighlightPipe } from './header/highlight.pipe'
@@ -25,6 +25,10 @@ import { SharedMainModule } from './shared/shared-main'
 import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings'
 
 registerLocaleData(localeOc, 'oc')
+
+export function loadConfigFactory (server: ServerService) {
+  return () => server.loadConfig()
+}
 
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -67,7 +71,13 @@ registerLocaleData(localeOc, 'oc')
     {
       provide: APP_BASE_HREF,
       useValue: '/'
-    }
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: loadConfigFactory,
+      deps: [ ServerService ],
+      multi: true
+     }
   ]
 })
 export class AppModule {}

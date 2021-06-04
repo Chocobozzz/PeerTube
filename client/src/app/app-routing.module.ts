@@ -114,7 +114,7 @@ const routes: Routes = [
     path: 'w',
     loadChildren: () => import('@app/+videos/+video-watch/video-watch.module').then(m => m.VideoWatchModule),
     data: {
-      preload: 3000
+      preload: 5000
     }
   },
   {
