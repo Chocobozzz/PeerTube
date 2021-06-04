@@ -8,6 +8,7 @@ import {
   authenticate,
   availablePluginsSortValidator,
   ensureUserHasRight,
+  openapiOperationDoc,
   paginationValidator,
   pluginsSortValidator,
   setDefaultPagination,
@@ -35,6 +36,7 @@ import {
 const pluginRouter = express.Router()
 
 pluginRouter.get('/available',
+  openapiOperationDoc({ operationId: 'getAvailablePlugins' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   listAvailablePluginsValidator,
@@ -46,6 +48,7 @@ pluginRouter.get('/available',
 )
 
 pluginRouter.get('/',
+  openapiOperationDoc({ operationId: 'getPlugins' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   listPluginsValidator,
@@ -84,6 +87,7 @@ pluginRouter.get('/:npmName',
 )
 
 pluginRouter.post('/install',
+  openapiOperationDoc({ operationId: 'addPlugin' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   installOrUpdatePluginValidator,
@@ -91,6 +95,7 @@ pluginRouter.post('/install',
 )
 
 pluginRouter.post('/update',
+  openapiOperationDoc({ operationId: 'updatePlugin' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   installOrUpdatePluginValidator,
@@ -98,6 +103,7 @@ pluginRouter.post('/update',
 )
 
 pluginRouter.post('/uninstall',
+  openapiOperationDoc({ operationId: 'uninstallPlugin' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   uninstallPluginValidator,

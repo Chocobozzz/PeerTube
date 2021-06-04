@@ -24,6 +24,7 @@ import {
   deleteAbuseMessageValidator,
   ensureUserHasRight,
   getAbuseValidator,
+  openapiOperationDoc,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort
@@ -33,6 +34,7 @@ import { AccountModel } from '../../models/account/account'
 const abuseRouter = express.Router()
 
 abuseRouter.get('/',
+  openapiOperationDoc({ operationId: 'getAbuses' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_ABUSES),
   paginationValidator,

@@ -18,6 +18,7 @@ import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../lib/ac
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
+  openapiOperationDoc,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -34,6 +35,7 @@ import { MChannelAccountDefault, MVideoAccountLightBlacklistAllFiles } from '../
 const searchRouter = express.Router()
 
 searchRouter.get('/videos',
+  openapiOperationDoc({ operationId: 'searchVideos' }),
   paginationValidator,
   setDefaultPagination,
   videosSearchSortValidator,
@@ -45,6 +47,7 @@ searchRouter.get('/videos',
 )
 
 searchRouter.get('/video-channels',
+  openapiOperationDoc({ operationId: 'searchChannels' }),
   paginationValidator,
   setDefaultPagination,
   videoChannelsSearchSortValidator,

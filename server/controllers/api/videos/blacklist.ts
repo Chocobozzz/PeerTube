@@ -9,6 +9,7 @@ import {
   authenticate,
   blacklistSortValidator,
   ensureUserHasRight,
+  openapiOperationDoc,
   paginationValidator,
   setBlacklistSort,
   setDefaultPagination,
@@ -23,6 +24,7 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 const blacklistRouter = express.Router()
 
 blacklistRouter.post('/:videoId/blacklist',
+  openapiOperationDoc({ operationId: 'addVideoBlock' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   asyncMiddleware(videosBlacklistAddValidator),
@@ -30,6 +32,7 @@ blacklistRouter.post('/:videoId/blacklist',
 )
 
 blacklistRouter.get('/blacklist',
+  openapiOperationDoc({ operationId: 'getVideoBlocks' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   paginationValidator,
@@ -48,6 +51,7 @@ blacklistRouter.put('/:videoId/blacklist',
 )
 
 blacklistRouter.delete('/:videoId/blacklist',
+  openapiOperationDoc({ operationId: 'delVideoBlock' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   asyncMiddleware(videosBlacklistRemoveValidator),

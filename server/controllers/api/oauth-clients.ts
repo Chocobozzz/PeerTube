@@ -3,12 +3,13 @@ import { OAuthClientLocal } from '../../../shared'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import { asyncMiddleware } from '../../middlewares'
+import { asyncMiddleware, openapiOperationDoc } from '../../middlewares'
 import { OAuthClientModel } from '../../models/oauth/oauth-client'
 
 const oauthClientsRouter = express.Router()
 
 oauthClientsRouter.get('/local',
+  openapiOperationDoc({ operationId: 'getOAuthClient' }),
   asyncMiddleware(getLocalClient)
 )
 
