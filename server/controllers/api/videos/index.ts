@@ -2,7 +2,7 @@ import * as express from 'express'
 import toInt from 'validator/lib/toInt'
 import { doJSONRequest } from '@server/helpers/requests'
 import { LiveManager } from '@server/lib/live-manager'
-import { docMiddleware } from '@server/middlewares/doc'
+import { openapiOperationDoc } from '@server/middlewares/doc'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoAccountLight } from '@server/types/models'
 import { VideosCommonQuery } from '../../../../shared'
@@ -84,7 +84,7 @@ videosRouter.get('/:id/metadata/:videoFileId',
   asyncMiddleware(getVideoFileMetadata)
 )
 videosRouter.get('/:id',
-  docMiddleware('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo'),
+  openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
   asyncMiddleware(checkVideoFollowConstraints),
@@ -96,7 +96,7 @@ videosRouter.post('/:id/views',
 )
 
 videosRouter.delete('/:id',
-  docMiddleware('https://docs.joinpeertube.org/api-rest-reference.html#operation/delVideo'),
+  openapiOperationDoc({ operationId: 'delVideo' }),
   authenticate,
   asyncMiddleware(videosRemoveValidator),
   asyncRetryTransactionMiddleware(removeVideo)
