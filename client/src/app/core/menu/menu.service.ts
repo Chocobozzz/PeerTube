@@ -3,7 +3,7 @@ import { debounceTime } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
 import { sortObjectComparator } from '@shared/core-utils/miscs/miscs'
-import { ServerConfig } from '@shared/models/server'
+import { HTMLServerConfig } from '@shared/models/server'
 import { ScreenService } from '../wrappers'
 
 export type MenuLink = {
@@ -59,7 +59,7 @@ export class MenuService {
     this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
   }
 
-  buildCommonLinks (config: ServerConfig) {
+  buildCommonLinks (config: HTMLServerConfig) {
     let entries: MenuLink[] = [
       {
         icon: 'globe' as 'globe',

@@ -27,7 +27,7 @@ import {
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { CustomPageService } from '@app/shared/shared-main/custom-page'
-import { CustomConfig, CustomPage, ServerConfig } from '@shared/models'
+import { CustomConfig, CustomPage, HTMLServerConfig } from '@shared/models'
 import { EditConfigurationService } from './edit-configuration.service'
 
 type ComponentCustomConfig = CustomConfig & {
@@ -43,7 +43,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   activeNav: string
 
   customConfig: ComponentCustomConfig
-  serverConfig: ServerConfig
+  serverConfig: HTMLServerConfig
 
   homepage: CustomPage
 
@@ -64,9 +64,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     const formGroupData: { [key in keyof ComponentCustomConfig ]: any } = {
       instance: {

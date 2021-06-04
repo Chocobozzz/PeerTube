@@ -37,9 +37,9 @@ export class ServerService {
   ) {
   }
 
-  loadConfig () {
+  loadHTMLConfig () {
     try {
-      return this.loadConfigLocally()
+      return this.loadHTMLConfigLocally()
     } catch (err) {
       // Expected in dev mode since we can't inject the config in the HTML
       if (environment.production !== false) {
@@ -76,6 +76,7 @@ export class ServerService {
                                   .pipe(
                                     tap(config => {
                                       this.config = config
+                                      this.htmlConfig = config
                                       this.configLoaded = true
                                     }),
                                     tap(config => {
@@ -91,8 +92,8 @@ export class ServerService {
     return this.configObservable
   }
 
-  getTmpConfig () {
-    return this.config
+  getHTMLConfig () {
+    return this.htmlConfig
   }
 
   getVideoCategories () {
@@ -156,20 +157,6 @@ export class ServerService {
     return this.http.get<ServerStats>(ServerService.BASE_STATS_URL)
   }
 
-  getDefaultSearchTarget (): Promise<SearchTargetType> {
-    return this.getConfig().pipe(
-      map(config => {
-        const searchIndexConfig = config.search.searchIndex
-
-        if (searchIndexConfig.enabled && (searchIndexConfig.isDefaultSearch || searchIndexConfig.disableLocalSearch)) {
-          return 'search-index'
-        }
-
-        return 'local'
-      })
-    ).toPromise()
-  }
-
   private loadAttributeEnum <T extends string | number> (
     baseUrl: string,
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
@@ -204,12 +191,12 @@ export class ServerService {
                )
   }
 
-  private loadConfigLocally () {
+  private loadHTMLConfigLocally () {
     const configString = window['PeerTubeServerConfig']
     if (!configString) {
       throw new Error('Could not find PeerTubeServerConfig in HTML')
     }
 
-    this.config = JSON.parse(configString)
+    this.htmlConfig = JSON.parse(configString)
   }
 }

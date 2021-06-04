@@ -39,14 +39,13 @@ export class ActorAvatarEditComponent implements OnInit {
   ) { }
 
   ngOnInit (): void {
-    this.serverService.getConfig()
-        .subscribe(config => {
-          this.maxAvatarSize = config.avatar.file.size.max
-          this.avatarExtensions = config.avatar.file.extensions.join(', ')
+    const config = this.serverService.getHTMLConfig()
 
-          this.avatarFormat = `${$localize`max size`}: 192*192px, ` +
-                              `${getBytes(this.maxAvatarSize)} ${$localize`extensions`}: ${this.avatarExtensions}`
-        })
+    this.maxAvatarSize = config.avatar.file.size.max
+    this.avatarExtensions = config.avatar.file.extensions.join(', ')
+
+    this.avatarFormat = `${$localize`max size`}: 192*192px, ` +
+                        `${getBytes(this.maxAvatarSize)} ${$localize`extensions`}: ${this.avatarExtensions}`
   }
 
   onAvatarChange (input: HTMLInputElement) {

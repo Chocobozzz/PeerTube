@@ -60,10 +60,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.serverService.getConfig()
-        .subscribe(config => {
-          this.emailEnabled = config.email.enabled
-        })
+    const serverConfig = this.serverService.getHTMLConfig()
+    this.emailEnabled = serverConfig.email.enabled
 
     this.userInformationLoaded.subscribe(() => this.loadNotificationSettings())
   }

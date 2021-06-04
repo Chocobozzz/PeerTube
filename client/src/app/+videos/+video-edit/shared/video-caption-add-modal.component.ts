@@ -4,7 +4,7 @@ import { VIDEO_CAPTION_FILE_VALIDATOR, VIDEO_CAPTION_LANGUAGE_VALIDATOR } from '
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit } from '@app/shared/shared-main'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { ServerConfig, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, VideoConstant } from '@shared/models'
 
 @Component({
   selector: 'my-video-caption-add-modal',
@@ -14,7 +14,7 @@ import { ServerConfig, VideoConstant } from '@shared/models'
 
 export class VideoCaptionAddModalComponent extends FormReactive implements OnInit {
   @Input() existingCaptions: string[]
-  @Input() serverConfig: ServerConfig
+  @Input() serverConfig: HTMLServerConfig
 
   @Output() captionAdded = new EventEmitter<VideoCaptionEdit>()
 

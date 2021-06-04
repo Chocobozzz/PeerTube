@@ -3,7 +3,7 @@ import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { MenuService } from '@app/core'
-import { ServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
 
 @Component({
@@ -15,7 +15,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   @Input() form: FormGroup
   @Input() formErrors: any
 
-  @Input() serverConfig: ServerConfig
+  @Input() serverConfig: HTMLServerConfig
 
   signupAlertMessage: string
   defaultLandingPageOptions: SelectOptionsItem[] = []

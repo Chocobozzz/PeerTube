@@ -20,7 +20,7 @@ import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
 const logger = debug('peertube:menu:MenuComponent')
 
@@ -48,7 +48,10 @@ export class MenuComponent implements OnInit {
   commonMenuLinks: MenuLink[] = []
 
   private languages: VideoConstant<string>[] = []
+
+  private htmlServerConfig: HTMLServerConfig
   private serverConfig: ServerConfig
+
   private routesPerRight: { [role in UserRight]?: string } = {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
@@ -86,16 +89,12 @@ export class MenuComponent implements OnInit {
   }
 
   get instanceName () {
-    return this.serverConfig.instance.name
+    return this.htmlServerConfig.instance.name
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-      .subscribe(config => {
-        this.serverConfig = config
-        this.buildMenuLinks()
-      })
+    this.htmlServerConfig = this.serverService.getHTMLConfig()
+    this.buildMenuLinks()
 
     this.isLoggedIn = this.authService.isLoggedIn()
     if (this.isLoggedIn === true) {
@@ -148,6 +147,8 @@ export class MenuComponent implements OnInit {
   }
 
   isRegistrationAllowed () {
+    if (!this.serverConfig) return false
+
     return this.serverConfig.signup.allowed &&
       this.serverConfig.signup.allowedForCurrentIP
   }
@@ -257,7 +258,7 @@ export class MenuComponent implements OnInit {
   }
 
   private buildMenuLinks () {
-    this.commonMenuLinks = this.menuService.buildCommonLinks(this.serverConfig)
+    this.commonMenuLinks = this.menuService.buildCommonLinks(this.htmlServerConfig)
   }
 
   private buildUserLanguages () {

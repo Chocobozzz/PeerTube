@@ -11,7 +11,7 @@ import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { ServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-contact-admin-modal',
@@ -24,7 +24,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
   error: string
 
   private openedModal: NgbModalRef
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -41,9 +41,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.buildForm({
       fromName: FROM_NAME_VALIDATOR,

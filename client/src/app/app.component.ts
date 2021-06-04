@@ -1,6 +1,6 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { concat } from 'rxjs'
-import { filter, first, map, pairwise } from 'rxjs/operators'
+import { filter, first, map, pairwise, switchMap } from 'rxjs/operators'
 import { DOCUMENT, PlatformLocation, ViewportScroller } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
@@ -15,7 +15,7 @@ import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getShortLocale, is18nPath } from '@shared/core-utils/i18n'
-import { BroadcastMessageLevel, ServerConfig, UserRole } from '@shared/models'
+import { BroadcastMessageLevel, HTMLServerConfig, ServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
 import { InstanceService } from './shared/shared-instance'
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   customCSS: SafeHtml
   broadcastMessage: { message: string, dismissable: boolean, class: string } | null = null
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     @Inject(DOCUMENT) private document: Document,
@@ -73,9 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
 
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.loadPlugins()
     this.themeService.initialize()
@@ -88,9 +86,20 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     this.initRouteEvents()
+
     this.injectJS()
     this.injectCSS()
     this.injectBroadcastMessage()
+
+    this.serverService.configReloaded
+      .subscribe(config => {
+        this.serverConfig = config
+
+        this.injectBroadcastMessage()
+        this.injectCSS()
+
+        // Don't reinject JS since it could conflict with existing one
+      })
 
     this.initHotkeys()
 
@@ -208,69 +217,55 @@ export class AppComponent implements OnInit, AfterViewInit {
     ).subscribe(() => this.loadingBar.useRef().complete())
   }
 
-  private injectBroadcastMessage () {
-    concat(
-      this.serverService.getConfig().pipe(first()),
-      this.serverService.configReloaded
-    ).subscribe(async config => {
-      this.broadcastMessage = null
-      this.screenService.isBroadcastMessageDisplayed = false
+  private async injectBroadcastMessage () {
+    this.broadcastMessage = null
+    this.screenService.isBroadcastMessageDisplayed = false
 
-      const messageConfig = config.broadcastMessage
+    const messageConfig = this.serverConfig.broadcastMessage
 
-      if (messageConfig.enabled) {
-        // Already dismissed this message?
-        if (messageConfig.dismissable && localStorage.getItem(AppComponent.BROADCAST_MESSAGE_KEY) === messageConfig.message) {
-          return
-        }
-
-        const classes: { [id in BroadcastMessageLevel]: string } = {
-          info: 'alert-info',
-          warning: 'alert-warning',
-          error: 'alert-danger'
-        }
-
-        this.broadcastMessage = {
-          message: await this.markdownService.unsafeMarkdownToHTML(messageConfig.message, true),
-          dismissable: messageConfig.dismissable,
-          class: classes[messageConfig.level]
-        }
-
-        this.screenService.isBroadcastMessageDisplayed = true
+    if (messageConfig.enabled) {
+      // Already dismissed this message?
+      if (messageConfig.dismissable && localStorage.getItem(AppComponent.BROADCAST_MESSAGE_KEY) === messageConfig.message) {
+        return
       }
-    })
+
+      const classes: { [id in BroadcastMessageLevel]: string } = {
+        info: 'alert-info',
+        warning: 'alert-warning',
+        error: 'alert-danger'
+      }
+
+      this.broadcastMessage = {
+        message: await this.markdownService.unsafeMarkdownToHTML(messageConfig.message, true),
+        dismissable: messageConfig.dismissable,
+        class: classes[messageConfig.level]
+      }
+
+      this.screenService.isBroadcastMessageDisplayed = true
+    }
   }
 
   private injectJS () {
     // Inject JS
-    this.serverService.getConfig()
-        .subscribe(config => {
-          if (config.instance.customizations.javascript) {
-            try {
-              // tslint:disable:no-eval
-              eval(config.instance.customizations.javascript)
-            } catch (err) {
-              console.error('Cannot eval custom JavaScript.', err)
-            }
-          }
-        })
+    if (this.serverConfig.instance.customizations.javascript) {
+      try {
+        // tslint:disable:no-eval
+        eval(this.serverConfig.instance.customizations.javascript)
+      } catch (err) {
+        console.error('Cannot eval custom JavaScript.', err)
+      }
+    }
   }
 
   private injectCSS () {
-    // Inject CSS if modified (admin config settings)
-    concat(
-      this.serverService.getConfig().pipe(first()),
-      this.serverService.configReloaded
-    ).subscribe(config => {
-      const headStyle = document.querySelector('style.custom-css-style')
-      if (headStyle) headStyle.parentNode.removeChild(headStyle)
+    const headStyle = document.querySelector('style.custom-css-style')
+    if (headStyle) headStyle.parentNode.removeChild(headStyle)
 
-      // We test customCSS if the admin removed the css
-      if (this.customCSS || config.instance.customizations.css) {
-        const styleTag = '<style>' + config.instance.customizations.css + '</style>'
-        this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
-      }
-    })
+    // We test customCSS if the admin removed the css
+    if (this.customCSS || this.serverConfig.instance.customizations.css) {
+      const styleTag = '<style>' + this.serverConfig.instance.customizations.css + '</style>'
+      this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
+    }
   }
 
   private async loadPlugins () {
@@ -283,14 +278,18 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.authService.userInformationLoaded
         .pipe(
           map(() => this.authService.getUser()),
-          filter(user => user.role === UserRole.ADMINISTRATOR)
-        ).subscribe(user => setTimeout(() => this._openAdminModalsIfNeeded(user))) // setTimeout because of ngIf in template
+          filter(user => user.role === UserRole.ADMINISTRATOR),
+          switchMap(user => {
+            return this.serverService.getConfig()
+              .pipe(map(serverConfig => ({ serverConfig, user })))
+          })
+        ).subscribe(({ serverConfig, user }) => this._openAdminModalsIfNeeded(serverConfig, user))
   }
 
-  private async _openAdminModalsIfNeeded (user: User) {
+  private async _openAdminModalsIfNeeded (serverConfig: ServerConfig, user: User) {
     if (user.noWelcomeModal !== true) return this.welcomeModal.show()
 
-    if (user.noInstanceConfigWarningModal === true || !this.serverConfig.signup.allowed) return
+    if (user.noInstanceConfigWarningModal === true || !serverConfig.signup.allowed) return
 
     this.instanceService.getAbout()
       .subscribe(about => {

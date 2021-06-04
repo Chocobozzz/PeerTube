@@ -1,10 +1,10 @@
 import { of } from 'rxjs'
 import { first, tap } from 'rxjs/operators'
 import { ListKeyManager } from '@angular/cdk/a11y'
-import { AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
+import { AfterViewChecked, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
-import { SearchTargetType, ServerConfig } from '@shared/models'
+import { HTMLServerConfig, SearchTargetType } from '@shared/models'
 import { SuggestionComponent, SuggestionPayload, SuggestionPayloadType } from './suggestion.component'
 
 @Component({
@@ -12,7 +12,7 @@ import { SuggestionComponent, SuggestionPayload, SuggestionPayloadType } from '.
   templateUrl: './search-typeahead.component.html',
   styleUrls: [ './search-typeahead.component.scss' ]
 })
-export class SearchTypeaheadComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChildren(SuggestionComponent) suggestionItems: QueryList<SuggestionComponent>
 
   hasChannel = false
@@ -20,7 +20,7 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewInit, AfterVie
   areSuggestionsOpened = true
 
   search = ''
-  serverConfig: ServerConfig
+  serverConfig: HTMLServerConfig
 
   inThisChannelText: string
 
@@ -42,20 +42,14 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewInit, AfterVie
     this.route.queryParams
       .pipe(first(params => this.isOnSearch() && params.search !== undefined && params.search !== null))
       .subscribe(params => this.search = params.search)
-  }
 
-  ngAfterViewInit () {
-    this.serverService.getConfig()
+    this.serverConfig = this.serverService.getHTMLConfig()
+    this.computeTypeahead()
+
+    this.serverService.configReloaded
       .subscribe(config => {
         this.serverConfig = config
-
         this.computeTypeahead()
-
-        this.serverService.configReloaded
-          .subscribe(config => {
-            this.serverConfig = config
-            this.computeTypeahead()
-          })
       })
   }
 

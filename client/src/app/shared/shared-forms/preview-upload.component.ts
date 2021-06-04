@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
-import { ServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@shared/models'
 import { BytesPipe } from '../shared-main'
 
 @Component({
@@ -27,7 +27,7 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   allowedExtensionsMessage = ''
   maxSizeText: string
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
   private bytesPipe: BytesPipe
   private file: Blob
 
@@ -52,9 +52,7 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.allowedExtensionsMessage = this.videoImageExtensions.join(', ')
   }

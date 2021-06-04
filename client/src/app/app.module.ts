@@ -27,7 +27,7 @@ import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings
 registerLocaleData(localeOc, 'oc')
 
 export function loadConfigFactory (server: ServerService) {
-  return () => server.loadConfig()
+  return () => server.loadHTMLConfig()
 }
 
 @NgModule({

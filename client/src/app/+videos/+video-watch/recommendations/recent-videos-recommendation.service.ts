@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { ServerService, UserService } from '@app/core'
 import { Video, VideoService } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
-import { ServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@shared/models'
 import { RecommendationInfo } from './recommendation-info.model'
 import { RecommendationService } from './recommendations.service'
 
@@ -15,7 +15,7 @@ import { RecommendationService } from './recommendations.service'
 export class RecentVideosRecommendationService implements RecommendationService {
   readonly pageSize = 5
 
-  private config: ServerConfig
+  private config: HTMLServerConfig
 
   constructor (
     private videos: VideoService,
@@ -23,13 +23,11 @@ export class RecentVideosRecommendationService implements RecommendationService 
     private userService: UserService,
     private serverService: ServerService
   ) {
-    this.config = this.serverService.getTmpConfig()
-
-    this.serverService.getConfig()
-     .subscribe(config => this.config = config)
+    this.config = this.serverService.getHTMLConfig()
   }
 
   getRecommendations (recommendation: RecommendationInfo): Observable<Video[]> {
+
     return this.fetchPage(1, recommendation)
       .pipe(
         map(videos => {

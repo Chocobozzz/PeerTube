@@ -11,7 +11,7 @@ import {
   Output
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { ServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
+import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
 import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
 import { Video } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
@@ -74,7 +74,7 @@ export class VideoMiniatureComponent implements OnInit {
     mute: true
   }
   showActions = false
-  serverConfig: ServerConfig
+  serverConfig: HTMLServerConfig
 
   addToWatchLaterText: string
   addedToWatchLaterText: string
@@ -106,12 +106,8 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => {
-          this.serverConfig = config
-          this.buildVideoLink()
-        })
+    this.serverConfig = this.serverService.getHTMLConfig()
+    this.buildVideoLink()
 
     this.setUpBy()
 
