@@ -2,7 +2,7 @@ import { isArray } from '@server/helpers/custom-validators/misc'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
-import { createPlaylistMiniatureFromUrl } from '@server/lib/thumbnail'
+import { updatePlaylistMiniatureFromUrl } from '@server/lib/thumbnail'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
 import { FilteredModelAttributes } from '@server/types'
@@ -98,7 +98,7 @@ async function fetchElementUrls (playlistObject: PlaylistObject) {
 
 async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist: MVideoPlaylistFull) {
   if (playlistObject.icon) {
-    const thumbnailModel = await createPlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist })
+    const thumbnailModel = await updatePlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist })
     await playlist.setAndSaveThumbnail(thumbnailModel, undefined)
 
     return

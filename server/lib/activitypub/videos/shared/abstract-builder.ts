@@ -2,7 +2,7 @@ import { Transaction } from 'sequelize/types'
 import { checkUrlsSameHost } from '@server/helpers/activitypub'
 import { deleteNonExistingModels } from '@server/helpers/database-utils'
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
-import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '@server/lib/thumbnail'
+import { updatePlaceholderThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
 import { setVideoTags } from '@server/lib/video'
 import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -38,7 +38,7 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected tryToGenerateThumbnail (video: MVideoThumbnail): Promise<MThumbnail> {
-    return createVideoMiniatureFromUrl({
+    return updateVideoMiniatureFromUrl({
       downloadUrl: getThumbnailFromIcons(this.videoObject).url,
       video,
       type: ThumbnailType.MINIATURE
@@ -54,7 +54,7 @@ export abstract class APVideoAbstractBuilder {
     const previewIcon = getPreviewFromIcons(this.videoObject)
     if (!previewIcon) return
 
-    const previewModel = createPlaceholderThumbnail({
+    const previewModel = updatePlaceholderThumbnail({
       fileUrl: previewIcon.url,
       video,
       type: ThumbnailType.PREVIEW,
