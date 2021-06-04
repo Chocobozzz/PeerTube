@@ -24,6 +24,9 @@ import {
 } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
+import * as debug from 'debug'
+
+const logger = debug('peertube:plugins')
 
 @Injectable()
 export class PluginService implements ClientHook {
@@ -76,6 +79,8 @@ export class PluginService implements ClientHook {
   }
 
   initializePlugins () {
+    logger('Building plugin configuration')
+
     this.server.getConfig()
       .subscribe(config => {
         this.plugins = config.plugin.registered
@@ -83,6 +88,8 @@ export class PluginService implements ClientHook {
         this.buildScopeStruct()
 
         this.pluginsBuilt.next(true)
+
+        logger('Plugin configuration built')
       })
   }
 
@@ -146,6 +153,8 @@ export class PluginService implements ClientHook {
 
     this.loadingScopes[scope] = true
 
+    logger('Loading scope %s', scope)
+
     try {
       await this.ensurePluginsAreBuilt()
 
@@ -156,6 +165,7 @@ export class PluginService implements ClientHook {
         this.loadingScopes[scope] = false
         this.pluginsLoaded[scope].next(true)
 
+        logger('Nothing to load for scope %s', scope)
         return
       }
 
@@ -174,6 +184,8 @@ export class PluginService implements ClientHook {
 
       this.pluginsLoaded[scope].next(true)
       this.loadingScopes[scope] = false
+
+      logger('Scope %s loaded', scope)
     } catch (err) {
       console.error('Cannot load plugins by scope %s.', scope, err)
     }
