@@ -960,6 +960,12 @@ paths:
             Disambiguate via `type`:
             - `invalid_client` for an unmatched `client_id`
             - `invalid_grant` for unmatched credentials
+        '401':
+          x-summary: token expired
+          description: |
+            Disambiguate via `type`:
+            - default value for a regular authentication failure
+            - `invalid_token` for an expired token
       x-codeSamples:
         - lang: Shell
           source: |
