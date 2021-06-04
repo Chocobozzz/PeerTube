@@ -16,7 +16,6 @@ import { ResolverData } from './about-instance.resolver'
 })
 export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   @ViewChild('descriptionWrapper') descriptionWrapper: ElementRef<HTMLInputElement>
-  @ViewChild('contactAdminModal', { static: true }) contactAdminModal: ContactAdminModalComponent
 
   shortDescription = ''
   descriptionContent: string
@@ -83,10 +82,6 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
 
       this.lastScrollHash = window.location.hash
     }
-  }
-
-  openContactModal () {
-    return this.contactAdminModal.show()
   }
 
   onClickCopyLink (anchor: HTMLAnchorElement) {

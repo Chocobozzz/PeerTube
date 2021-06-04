@@ -1,4 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core'
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router'
+import { Subject } from 'rxjs'
+import { takeUntil, filter } from 'rxjs/operators'
 import { Notifier, ServerService } from '@app/core'
 import {
   BODY_VALIDATOR,
@@ -18,10 +21,13 @@ import { HTMLServerConfig } from '@shared/models'
   templateUrl: './contact-admin-modal.component.html',
   styleUrls: [ './contact-admin-modal.component.scss' ]
 })
-export class ContactAdminModalComponent extends FormReactive implements OnInit {
+export class ContactAdminModalComponent extends FormReactive implements OnInit, OnDestroy {
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string
+  destroy = new Subject<any>()
+
+  subject: string
 
   private openedModal: NgbModalRef
   private serverConfig: HTMLServerConfig
@@ -31,13 +37,19 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
     private modalService: NgbModal,
     private instanceService: InstanceService,
     private serverService: ServerService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     super()
   }
 
   get instanceName () {
     return this.serverConfig.instance.name
+  }
+
+  get isContactFormEnabled () {
+    return this.serverConfig.email.enabled && this.serverConfig.contactForm.enabled
   }
 
   ngOnInit () {
@@ -49,10 +61,46 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
       subject: SUBJECT_VALIDATOR,
       body: BODY_VALIDATOR
     })
+
+    // Direct access
+    if (/^\/about\/instance\/contact/.test(this.router.url)) {
+      this.show()
+      this.prefillForm()
+    }
+
+    // Router access
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy),
+        filter(event => event instanceof NavigationEnd)
+      )
+      .subscribe((event: NavigationEnd) => {
+        if (/^\/about\/instance\/contact/.test(event.url)) {
+          this.show()
+          this.prefillForm()
+        }
+      })
+  }
+
+  ngOnDestroy () {
+    this.destroy.next()
   }
 
   show () {
+    // If contactForm not enabled redirect to 404
+    if (!this.isContactFormEnabled) {
+      return this.router.navigate([ '/404' ], { state: { type: 'other', obj: { status: 404 } }, skipLocationChange: true })
+    }
+
+    // Open modal
     this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
+
+    // Go back to /about/instance after the modal is closed
+    this.openedModal.result.then(() => {
+      this.router.navigateByUrl('/about/instance')
+    }, () => {
+      this.router.navigateByUrl('/about/instance')
+    })
   }
 
   hide () {
@@ -64,7 +112,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
   }
 
   sendForm () {
-    const fromName = this.form.value['fromName']
+    const fromName = this.form.value[ 'fromName' ]
     const fromEmail = this.form.value[ 'fromEmail' ]
     const subject = this.form.value[ 'subject' ]
     const body = this.form.value[ 'body' ]
@@ -82,5 +130,17 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
               : err.message
           }
         )
+  }
+
+  private prefillForm () {
+    const { subject, body } = this.route.snapshot.queryParams
+
+    if (subject) {
+      this.form.get('subject').setValue(subject)
+    }
+
+    if (body) {
+      this.form.get('body').setValue(body)
+    }
   }
 }
