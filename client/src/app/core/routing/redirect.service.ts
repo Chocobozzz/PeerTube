@@ -42,7 +42,6 @@ export class RedirectService {
     return this.defaultRoute
   }
 
-
   getDefaultTrendingAlgorithm () {
     return this.defaultTrendingAlgorithm
   }

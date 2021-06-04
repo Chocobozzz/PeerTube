@@ -1,3 +1,4 @@
+import * as debug from 'debug'
 import { Observable, of, ReplaySubject } from 'rxjs'
 import { catchError, first, map, shareReplay } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
@@ -24,7 +25,6 @@ import {
 } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
-import * as debug from 'debug'
 
 const logger = debug('peertube:plugins')
 
@@ -32,8 +32,6 @@ const logger = debug('peertube:plugins')
 export class PluginService implements ClientHook {
   private static BASE_PLUGIN_API_URL = environment.apiUrl + '/api/v1/plugins'
   private static BASE_PLUGIN_URL = environment.apiUrl + '/plugins'
-
-  pluginsBuilt = new ReplaySubject<boolean>(1)
 
   pluginsLoaded: { [ scope in PluginClientScope ]: ReplaySubject<boolean> } = {
     common: new ReplaySubject<boolean>(1),
@@ -79,28 +77,16 @@ export class PluginService implements ClientHook {
   }
 
   initializePlugins () {
-    logger('Building plugin configuration')
+    const config = this.server.getHTMLConfig()
+    this.plugins = config.plugin.registered
 
-    this.server.getConfig()
-      .subscribe(config => {
-        this.plugins = config.plugin.registered
+    this.buildScopeStruct()
 
-        this.buildScopeStruct()
-
-        this.pluginsBuilt.next(true)
-
-        logger('Plugin configuration built')
-      })
+    this.ensurePluginsAreLoaded('common')
   }
 
   initializeCustomModal (customModal: CustomModalComponent) {
     this.customModal = customModal
-  }
-
-  ensurePluginsAreBuilt () {
-    return this.pluginsBuilt.asObservable()
-               .pipe(first(), shareReplay())
-               .toPromise()
   }
 
   ensurePluginsAreLoaded (scope: PluginClientScope) {
@@ -156,8 +142,6 @@ export class PluginService implements ClientHook {
     logger('Loading scope %s', scope)
 
     try {
-      await this.ensurePluginsAreBuilt()
-
       if (!isReload) this.loadedScopes.push(scope)
 
       const toLoad = this.scopes[ scope ]

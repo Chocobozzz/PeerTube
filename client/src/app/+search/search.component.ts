@@ -287,7 +287,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     )
   }
 
-  private getDefaultSearchTarget(): SearchTargetType {
+  private getDefaultSearchTarget (): SearchTargetType {
     const searchIndexConfig = this.serverConfig.search.searchIndex
 
     if (searchIndexConfig.enabled && (searchIndexConfig.isDefaultSearch || searchIndexConfig.disableLocalSearch)) {

@@ -11,7 +11,6 @@ export class MyLibraryComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []
   user: AuthUser
 
-
   private serverConfig: HTMLServerConfig
 
   constructor (

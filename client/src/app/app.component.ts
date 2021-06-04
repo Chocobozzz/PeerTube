@@ -1,6 +1,5 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { concat } from 'rxjs'
-import { filter, first, map, pairwise, switchMap } from 'rxjs/operators'
+import { filter, map, pairwise, switchMap } from 'rxjs/operators'
 import { DOCUMENT, PlatformLocation, ViewportScroller } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
@@ -14,7 +13,7 @@ import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { getShortLocale, is18nPath } from '@shared/core-utils/i18n'
+import { getShortLocale } from '@shared/core-utils/i18n'
 import { BroadcastMessageLevel, HTMLServerConfig, ServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
@@ -75,7 +74,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.loadPlugins()
+    this.hooks.runAction('action:application.init', 'common')
     this.themeService.initialize()
 
     this.authService.loadClientCredentials()
@@ -190,12 +189,6 @@ export class AppComponent implements OnInit, AfterViewInit {
                         }
                       })
 
-    // Homepage redirection
-    navigationEndEvent.pipe(
-      map(() => window.location.pathname),
-      filter(pathname => !pathname || pathname === '/' || is18nPath(pathname))
-    ).subscribe(() => this.redirectService.redirectToHomepage(true))
-
     // Plugin hooks
     navigationEndEvent.subscribe(e => {
       this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
@@ -266,12 +259,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       const styleTag = '<style>' + this.serverConfig.instance.customizations.css + '</style>'
       this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
     }
-  }
-
-  private async loadPlugins () {
-    this.pluginService.initializePlugins()
-
-    this.hooks.runAction('action:application.init', 'common')
   }
 
   private async openModalsIfNeeded () {

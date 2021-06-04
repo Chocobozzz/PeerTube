@@ -181,7 +181,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.hasAlreadyAcceptedPrivacyConcern = true
     }
 
-
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const videoId = routeParams[ 'videoId' ]
       if (videoId) this.loadVideo(videoId)

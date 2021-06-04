@@ -194,7 +194,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         }
       })
 
-
     this.serverConfig = this.serverService.getHTMLConfig()
 
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)

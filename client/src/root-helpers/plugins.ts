@@ -11,8 +11,8 @@ import {
   RegisterClientVideoFieldOptions,
   ServerConfigPlugin
 } from '../../../shared/models'
+import { environment } from '../environments/environment'
 import { ClientScript as ClientScriptModule } from '../types/client-script.model'
-import { importModule } from './utils'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -101,7 +101,8 @@ function loadPlugin (options: {
 
   console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
-  return importModule(clientScript.script)
+  const absURL = (environment.apiUrl || window.location.origin) + clientScript.script
+  return import(/* webpackIgnore: true */ absURL)
     .then((script: ClientScriptModule) => script.register({ registerHook, registerVideoField, registerSettingsScript, peertubeHelpers }))
     .then(() => sortHooksByPriority(hooks))
     .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))

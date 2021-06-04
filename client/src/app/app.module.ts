@@ -1,4 +1,5 @@
 import 'focus-visible'
+import { tap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
 import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
 import { APP_INITIALIZER, NgModule } from '@angular/core'
@@ -7,7 +8,7 @@ import { ServiceWorkerModule } from '@angular/service-worker'
 import localeOc from '@app/helpers/locales/oc'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-import { CoreModule, ServerService } from './core'
+import { CoreModule, PluginService, ServerService } from './core'
 import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { HighlightPipe } from './header/highlight.pipe'
@@ -26,8 +27,14 @@ import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings
 
 registerLocaleData(localeOc, 'oc')
 
-export function loadConfigFactory (server: ServerService) {
-  return () => server.loadHTMLConfig()
+export function loadConfigFactory (server: ServerService, pluginService: PluginService) {
+  return () => {
+    const result = server.loadHTMLConfig()
+
+    if (result) return result.pipe(tap(() => pluginService.initializePlugins()))
+
+    return pluginService.initializePlugins()
+  }
 }
 
 @NgModule({
@@ -75,9 +82,9 @@ export function loadConfigFactory (server: ServerService) {
     {
       provide: APP_INITIALIZER,
       useFactory: loadConfigFactory,
-      deps: [ ServerService ],
+      deps: [ ServerService, PluginService ],
       multi: true
-     }
+    }
   ]
 })
 export class AppModule {}

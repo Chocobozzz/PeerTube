@@ -99,7 +99,6 @@ export class SearchFiltersComponent implements OnInit {
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-
     this.serverService.getVideoCategories().subscribe(categories => this.videoCategories = categories)
     this.serverService.getVideoLicences().subscribe(licences => this.videoLicences = licences)
     this.serverService.getVideoLanguages().subscribe(languages => this.videoLanguages = languages)
