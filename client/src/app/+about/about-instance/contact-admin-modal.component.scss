@@ -3,6 +3,7 @@
 
 input[type=text] {
   @include peertube-input-text(340px);
+  display: block;
 }
 
 textarea {

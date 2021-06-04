@@ -15,6 +15,11 @@
     @include orange-button;
 
     height: fit-content;
+
+    &:hover,
+    &:active {
+      text-decoration: none;
+    }
   }
 }
 
