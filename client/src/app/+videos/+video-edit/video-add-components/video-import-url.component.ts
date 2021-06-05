@@ -31,8 +31,6 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
   video: VideoEdit
   error: string
 
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
-
   constructor (
     protected formValidatorService: FormValidatorService,
     protected loadingBar: LoadingBarService,
