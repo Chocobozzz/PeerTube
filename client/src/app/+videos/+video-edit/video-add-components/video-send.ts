@@ -20,7 +20,6 @@ export abstract class VideoSend extends FormReactive implements OnInit {
 
   abstract firstStepDone: EventEmitter<string>
   abstract firstStepError: EventEmitter<void>
-  protected abstract readonly DEFAULT_VIDEO_PRIVACY: VideoPrivacy
 
   protected loadingBar: LoadingBarService
   protected notifier: Notifier
@@ -46,9 +45,10 @@ export abstract class VideoSend extends FormReactive implements OnInit {
     this.serverService.getVideoPrivacies()
         .subscribe(
           privacies => {
-            this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
+            const { videoPrivacies, defaultPrivacyId } = this.videoService.explainedPrivacyLabels(privacies)
 
-            this.firstStepPrivacyId = this.DEFAULT_VIDEO_PRIVACY
+            this.videoPrivacies = videoPrivacies
+            this.firstStepPrivacyId = defaultPrivacyId
           })
   }
 

@@ -46,7 +46,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   enableRetryAfterError: boolean
 
   // So that it can be accessed in the template
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
   protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + 'upload-resumable'
 
   private uploadxOptions: UploadxOptions

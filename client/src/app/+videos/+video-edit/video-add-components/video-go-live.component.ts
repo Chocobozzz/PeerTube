@@ -30,8 +30,6 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   videoUUID: string
   error: string
 
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
-
   constructor (
     protected formValidatorService: FormValidatorService,
     protected loadingBar: LoadingBarService,

@@ -1,8 +1,8 @@
-import { Observable, of, throwError } from 'rxjs'
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators'
-import { HttpClient, HttpErrorResponse, HttpParams, HttpRequest } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { catchError, map, switchMap } from 'rxjs/operators'
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService, AuthService } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import {
   FeedFormat,
@@ -378,7 +378,7 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[]) {
+  explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[], defaultPrivacyId = VideoPrivacy.PUBLIC) {
     const base = [
       {
         id: VideoPrivacy.PRIVATE,
@@ -398,9 +398,14 @@ export class VideoService implements VideosProvider {
       }
     ]
 
-    return base
+    const videoPrivacies = base
       .filter(o => !!privacies.find(p => p.id === o.id)) // filter down to privacies that where in the input
       .map(o => ({ ...privacies[o.id - 1], ...o })) // merge the input privacies that contain a label, and extend them with a description
+
+    return {
+      defaultPrivacyId: videoPrivacies.find(p => p.id === defaultPrivacyId)?.id || videoPrivacies[0].id,
+      videoPrivacies
+    }
   }
 
   nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType) {
