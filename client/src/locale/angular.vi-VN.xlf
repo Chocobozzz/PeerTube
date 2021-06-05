@@ -852,18 +852,18 @@
       </trans-unit>
       <trans-unit id="853055819436340388" datatype="html">
         <source>video views</source>
-        <target state="translated">lượt xem video</target>
+        <target state="translated">lượt xem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="3055185920299594800" datatype="html">
         <source>video comments</source>
-        <target state="translated">bình luận video</target>
+        <target state="translated">bình luận</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="7222991934579313942" datatype="html">
         <source>of hosted video</source>
-        <target state="translated">dung lượng video</target>
+        <target state="translated">dung lượng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
@@ -983,18 +983,18 @@
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
         <source><x id="PH"/>h</source>
-        <target state="translated"><x id="PH"/>h</target>
+        <target state="translated"><x id="PH"/>giờ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH"/>min</source>
-        <target state="translated"><x id="PH"/>p</target>
+        <target state="translated"><x id="PH"/>phút</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">16</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH"/>sec</source>
-        <target state="translated"><x id="PH"/>s</target>
+        <target state="translated"><x id="PH"/>giây</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1908285951500318953">
@@ -2809,12 +2809,12 @@
       </trans-unit>
       <trans-unit id="5139892963394684487" datatype="html">
         <source>Originally published</source>
-        <target state="translated">Phát hành</target>
+        <target state="translated">Ngày đăng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">240</context></context-group>
       </trans-unit>
       <trans-unit id="6402393085909200998" datatype="html">
         <source>Friendly Reminder:</source>
-        <target state="translated">Nhắc Nhở Thân Thiện:</target>
+        <target state="translated">Nhắc Nhở:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">304</context></context-group>
       </trans-unit>
       <trans-unit id="2935783216050341269" datatype="html">
@@ -5832,7 +5832,7 @@
       </trans-unit>
       <trans-unit id="1311667768861466464" datatype="html">
         <source>Search account videos</source>
-        <target state="translated">Tìm tất cả video của người này</target>
+        <target state="translated">Tìm kiếm toàn bộ video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="5512878593724620692" datatype="html">
@@ -8414,7 +8414,7 @@
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH"/> sec </source>
-        <target state="translated"><x id="PH"/> s </target>
+        <target state="translated"><x id="PH"/> giây </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
@@ -10560,7 +10560,7 @@
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
         <source>Recently added</source>
-        <target state="translated">Mới</target>
+        <target state="translated">Mới đăng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-recently-added.component.ts</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
@@ -10601,7 +10601,7 @@
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
-        <target state="translated">Video máy chủ</target>
+        <target state="translated">Máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/video-local.component.ts</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">70</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">87</context></context-group>
