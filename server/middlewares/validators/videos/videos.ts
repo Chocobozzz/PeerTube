@@ -402,7 +402,8 @@ const videosAcceptChangeOwnershipValidator = [
     if (isAble === false) {
       res.fail({
         status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
-        message: 'The user video quota is exceeded with this video.'
+        message: 'The user video quota is exceeded with this video.',
+        type: ServerErrorCode.QUOTA_REACHED
       })
       return
     }
@@ -628,7 +629,8 @@ async function commonVideoChecksPass (parameters: {
   if (!isVideoFileSizeValid(videoFileSize.toString())) {
     res.fail({
       status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
-      message: 'This file is too large. It exceeds the maximum file size authorized.'
+      message: 'This file is too large. It exceeds the maximum file size authorized.',
+      type: ServerErrorCode.MAX_FILE_SIZE_REACHED
     })
     return false
   }
@@ -636,7 +638,8 @@ async function commonVideoChecksPass (parameters: {
   if (await isAbleToUploadVideo(user.id, videoFileSize) === false) {
     res.fail({
       status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
-      message: 'The user video quota is exceeded with this video.'
+      message: 'The user video quota is exceeded with this video.',
+      type: ServerErrorCode.QUOTA_REACHED
     })
     return false
   }

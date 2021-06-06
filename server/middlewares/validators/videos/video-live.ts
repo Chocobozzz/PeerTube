@@ -72,7 +72,8 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Live is not enabled on this instance'
+        message: 'Live is not enabled on this instance',
+        type: ServerErrorCode.LIVE_NOT_ENABLED
       })
     }
 
@@ -81,7 +82,8 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Saving live replay is not allowed instance'
+        message: 'Saving live replay is not enabled on this instance',
+        type: ServerErrorCode.LIVE_NOT_ALLOWING_REPLAY
       })
     }
 
@@ -116,8 +118,8 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
-          type: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED,
-          message: 'Cannot create this live because the max user lives limit is reached.'
+          message: 'Cannot create this live because the max user lives limit is reached.',
+          type: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED
         })
       }
     }

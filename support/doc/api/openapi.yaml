@@ -1802,6 +1802,7 @@ paths:
   '/videos/{id}/views':
     post:
       summary: Add a view to a video
+      operationId: addView
       tags:
         - Video
       parameters:
@@ -1813,6 +1814,7 @@ paths:
   '/videos/{id}/watching':
     put:
       summary: Set watching progress of a video
+      operationId: setProgress
       tags:
         - Video
       security:
@@ -1851,7 +1853,10 @@ paths:
         '408':
           description: upload has timed out
         '413':
-          description: video file too large, due to quota or max body size limit set by the reverse-proxy
+          x-summary: video file too large, due to quota or max body size limit set by the reverse-proxy
+          description: |
+            If the response has no body, it means the reverse-proxy didn't let it through. Otherwise disambiguate via `type`:
+            - `quota_reached` for quota limits wether daily or global
           headers:
             X-File-Maximum-Size:
               schema:
@@ -1951,7 +1956,11 @@ paths:
                 type: number
                 example: 0
         '413':
-          description: video file too large, due to quota, absolute max file size or concurrent partial upload limit
+          x-summary: video file too large, due to quota, absolute max file size or concurrent partial upload limit
+          description: |
+            Disambiguate via `type`:
+            - `max_file_size_reached` for the absolute file size limit
+            - `quota_reached` for quota limits whether daily or global
         '415':
           description: video type unsupported
     put:
@@ -2027,10 +2036,14 @@ paths:
                 example: 0
         '403':
           description: video didn't pass upload filter
-        '413':
-          description: video file too large, due to quota or max body size limit set by the reverse-proxy
+        '404':
+          description: upload not found
+        '409':
+          description: chunk doesn't match range
         '422':
           description: video unreadable
+        '429':
+          description: too many concurrent requests
     delete:
       summary: Cancel the resumable upload of a video, deleting any data uploaded so far
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
@@ -2063,6 +2076,8 @@ paths:
               schema:
                 type: number
                 example: 0
+        '404':
+          description: upload not found
 
   /videos/imports:
     post:
@@ -2116,8 +2131,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoUploadResponse'
+        '400':
+          x-summary: validation error, or conflicting `saveReplay` and `permanentLive` parameter set
+          description: |
+            Disambiguate via `type`:
+            - default type for a validation error
+            - `live_conflicting_permanent_and_save_replay` for conflicting parameters set
         '403':
-          description: live is not enabled, allow replay is not enabled, or max instance/user live videos limit is exceeded
+          x-summary: live is not enabled, allow replay is not enabled, or max instance/user live videos limit is exceeded
+          description: |
+            Disambiguate via `type`:
+            - `live_not_enabled` for a disabled live feature
+            - `live_not_allowing_replay` for a disabled replay feature
+            - `max_instance_lives_limit_reached` for the absolute concurrent live limit
+            - `max_user_lives_limit_reached` for the user concurrent live limit
       requestBody:
         content:
           multipart/form-data:
@@ -2318,7 +2345,7 @@ paths:
             type: string
         - name: videoIs
           in: query
-          description: only list blacklisted or deleted videos
+          description: only list deleted or blocklisted videos
           schema:
             type: string
             enum:
@@ -4396,7 +4423,7 @@ components:
       name: sort
       in: query
       required: false
-      description: Sort blacklists by criteria
+      description: Sort blocklists by criteria
       schema:
         type: string
         enum:
@@ -4859,7 +4886,7 @@ components:
       enum:
         - 0
         - 1
-      description: 'Admin flags for the user (None = `0`, Bypass video blacklist = `1`)'
+      description: 'Admin flags for the user (None = `0`, Bypass video blocklist = `1`)'
       example: 1
 
     VideoStateConstant:

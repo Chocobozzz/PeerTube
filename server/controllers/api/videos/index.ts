@@ -60,12 +60,25 @@ videosRouter.use('/', liveRouter)
 videosRouter.use('/', uploadRouter)
 videosRouter.use('/', updateRouter)
 
-videosRouter.get('/categories', listVideoCategories)
-videosRouter.get('/licences', listVideoLicences)
-videosRouter.get('/languages', listVideoLanguages)
-videosRouter.get('/privacies', listVideoPrivacies)
+videosRouter.get('/categories',
+  openapiOperationDoc({ operationId: 'getCategories' }),
+  listVideoCategories
+)
+videosRouter.get('/licences',
+  openapiOperationDoc({ operationId: 'getLicences' }),
+  listVideoLicences
+)
+videosRouter.get('/languages',
+  openapiOperationDoc({ operationId: 'getLanguages' }),
+  listVideoLanguages
+)
+videosRouter.get('/privacies',
+  openapiOperationDoc({ operationId: 'getPrivacies' }),
+  listVideoPrivacies
+)
 
 videosRouter.get('/',
+  openapiOperationDoc({ operationId: 'getVideos' }),
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
@@ -76,6 +89,7 @@ videosRouter.get('/',
 )
 
 videosRouter.get('/:id/description',
+  openapiOperationDoc({ operationId: 'getVideoDesc' }),
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
 )
@@ -91,6 +105,7 @@ videosRouter.get('/:id',
   asyncMiddleware(getVideo)
 )
 videosRouter.post('/:id/views',
+  openapiOperationDoc({ operationId: 'addView' }),
   asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
   asyncMiddleware(viewVideo)
 )
