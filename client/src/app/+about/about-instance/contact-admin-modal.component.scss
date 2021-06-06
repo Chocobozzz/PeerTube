@@ -4,8 +4,18 @@
 input[type=text] {
   @include peertube-input-text(340px);
   display: block;
+
+  @media screen and (max-width: #{map-get($container-max-widths, sm)}) {
+    width: 100%;
+  }
 }
 
 textarea {
   @include peertube-textarea(100%, 200px);
+}
+
+@media screen and (max-width: breakpoint(md)) {
+  .modal-body {
+    text-align: left;
+  }
 }
