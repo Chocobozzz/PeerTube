@@ -55,6 +55,7 @@
     "prune-storage": "node ./dist/scripts/prune-storage.js",
     "optimize-old-videos": "node ./dist/scripts/optimize-old-videos.js",
     "postinstall": "test -n \"$NOCLIENT\" || (cd client && yarn install --pure-lockfile)",
+    "transfer-channel": "node ./dist/scripts/transfer-channel.js",
     "tsc": "tsc",
     "commander": "commander",
     "lint": "npm run ci -- lint",
