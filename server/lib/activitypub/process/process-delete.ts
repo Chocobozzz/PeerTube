@@ -130,7 +130,7 @@ async function processDeleteVideoChannel (videoChannelToRemove: MChannelActor) {
 
 function processDeleteVideoComment (byActor: MActorSignature, videoComment: MCommentOwnerVideo, activity: ActivityDelete) {
   // Already deleted
-  if (videoComment.isDeleted()) return
+  if (videoComment.isDeleted()) return Promise.resolve()
 
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
