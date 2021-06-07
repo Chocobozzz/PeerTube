@@ -1,3 +1,4 @@
+import * as debug from 'debug'
 import { Observable, of, ReplaySubject } from 'rxjs'
 import { catchError, first, map, shareReplay } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
@@ -25,12 +26,12 @@ import {
 import { environment } from '../../../environments/environment'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
 
+const logger = debug('peertube:plugins')
+
 @Injectable()
 export class PluginService implements ClientHook {
   private static BASE_PLUGIN_API_URL = environment.apiUrl + '/api/v1/plugins'
   private static BASE_PLUGIN_URL = environment.apiUrl + '/plugins'
-
-  pluginsBuilt = new ReplaySubject<boolean>(1)
 
   pluginsLoaded: { [ scope in PluginClientScope ]: ReplaySubject<boolean> } = {
     common: new ReplaySubject<boolean>(1),
@@ -77,24 +78,16 @@ export class PluginService implements ClientHook {
   }
 
   initializePlugins () {
-    this.server.getConfig()
-      .subscribe(config => {
-        this.plugins = config.plugin.registered
+    const config = this.server.getHTMLConfig()
+    this.plugins = config.plugin.registered
 
-        this.buildScopeStruct()
+    this.buildScopeStruct()
 
-        this.pluginsBuilt.next(true)
-      })
+    this.ensurePluginsAreLoaded('common')
   }
 
   initializeCustomModal (customModal: CustomModalComponent) {
     this.customModal = customModal
-  }
-
-  ensurePluginsAreBuilt () {
-    return this.pluginsBuilt.asObservable()
-               .pipe(first(), shareReplay())
-               .toPromise()
   }
 
   ensurePluginsAreLoaded (scope: PluginClientScope) {
@@ -147,9 +140,9 @@ export class PluginService implements ClientHook {
 
     this.loadingScopes[scope] = true
 
-    try {
-      await this.ensurePluginsAreBuilt()
+    logger('Loading scope %s', scope)
 
+    try {
       if (!isReload) this.loadedScopes.push(scope)
 
       const toLoad = this.scopes[ scope ]
@@ -157,6 +150,7 @@ export class PluginService implements ClientHook {
         this.loadingScopes[scope] = false
         this.pluginsLoaded[scope].next(true)
 
+        logger('Nothing to load for scope %s', scope)
         return
       }
 
@@ -175,6 +169,8 @@ export class PluginService implements ClientHook {
 
       this.pluginsLoaded[scope].next(true)
       this.loadingScopes[scope] = false
+
+      logger('Scope %s loaded', scope)
     } catch (err) {
       console.error('Cannot load plugins by scope %s.', scope, err)
     }
@@ -249,6 +245,11 @@ export class PluginService implements ClientHook {
       getBaseStaticRoute: () => {
         const pathPrefix = this.getPluginPathPrefix(pluginInfo.isTheme)
         return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/static`
+      },
+
+      getBaseRouterRoute: () => {
+        const pathPrefix = this.getPluginPathPrefix(pluginInfo.isTheme)
+        return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/router`
       },
 
       getSettings: () => {

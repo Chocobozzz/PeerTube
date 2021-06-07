@@ -1,5 +1,3 @@
-
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 

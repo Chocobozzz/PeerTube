@@ -16,9 +16,7 @@ export class MetaService {
     private meta: Meta,
     private server: ServerService
   ) {
-    this.config = this.server.getTmpConfig()
-    this.server.getConfig()
-      .subscribe(config => this.config = config)
+    this.config = this.server.getHTMLConfig()
   }
 
   setTitle (subTitle?: string) {

@@ -1,9 +1,9 @@
 import * as express from 'express'
 import { body, query } from 'express-validator'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
 import { isNotEmptyIntArray, toBooleanOrNull } from '../../helpers/custom-validators/misc'
+import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
+import { logger } from '../../helpers/logger'
+import { areValidationErrors } from './shared'
 
 const listUserNotificationsValidator = [
   query('unread')

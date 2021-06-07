@@ -13,7 +13,7 @@ import { MVideoDetails, MVideoFullLight } from '@server/types/models'
 import { LiveVideoCreate, LiveVideoUpdate, VideoState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
+import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
@@ -76,7 +76,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
   await federateVideoIfNeeded(video, false)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function addLiveVideo (req: express.Request, res: express.Response) {
@@ -100,7 +100,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
     video,
     files: req.files,
     fallback: type => {
-      return createVideoMiniatureFromExisting({
+      return updateVideoMiniatureFromExisting({
         inputPath: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
         video,
         type,

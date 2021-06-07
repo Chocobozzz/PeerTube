@@ -20,23 +20,13 @@ export class RedirectService {
     private serverService: ServerService
   ) {
     // The config is first loaded from the cache so try to get the default route
-    const tmpConfig = this.serverService.getTmpConfig()
-    if (tmpConfig?.instance?.defaultClientRoute) {
-      this.defaultRoute = tmpConfig.instance.defaultClientRoute
+    const config = this.serverService.getHTMLConfig()
+    if (config?.instance?.defaultClientRoute) {
+      this.defaultRoute = config.instance.defaultClientRoute
     }
-    if (tmpConfig?.trending?.videos?.algorithms?.default) {
-      this.defaultTrendingAlgorithm = tmpConfig.trending.videos.algorithms.default
+    if (config?.trending?.videos?.algorithms?.default) {
+      this.defaultTrendingAlgorithm = config.trending.videos.algorithms.default
     }
-
-    // Load default route
-    this.serverService.getConfig()
-        .subscribe(config => {
-          const defaultRouteConfig = config.instance.defaultClientRoute
-          const defaultTrendingConfig = config.trending.videos.algorithms.default
-
-          if (defaultRouteConfig) this.defaultRoute = defaultRouteConfig
-          if (defaultTrendingConfig) this.defaultTrendingAlgorithm = defaultTrendingConfig
-        })
 
     // Track previous url
     this.currentUrl = this.router.url

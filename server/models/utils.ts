@@ -102,6 +102,10 @@ function getFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): 
 }
 
 function isOutdated (model: { createdAt: Date, updatedAt: Date }, refreshInterval: number) {
+  if (!model.createdAt || !model.updatedAt) {
+    throw new Error('Miss createdAt & updatedAt attribuets to model')
+  }
+
   const now = Date.now()
   const createdAtTime = model.createdAt.getTime()
   const updatedAtTime = model.updatedAt.getTime()

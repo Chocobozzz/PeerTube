@@ -5,6 +5,7 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 import {
   ClientHookName,
   HTMLServerConfig,
+  OAuth2ErrorCode,
   PluginType,
   ResultList,
   UserRefreshToken,
@@ -118,8 +119,8 @@ export class PeerTubeEmbed {
             if (res.status === HttpStatusCode.UNAUTHORIZED_401) return undefined
 
             return res.json()
-          }).then((obj: UserRefreshToken & { code: 'invalid_grant'}) => {
-            if (!obj || obj.code === 'invalid_grant') {
+          }).then((obj: UserRefreshToken & { code?: OAuth2ErrorCode }) => {
+            if (!obj || obj.code === OAuth2ErrorCode.INVALID_GRANT) {
               Tokens.flush()
               this.removeTokensFromHeaders()
 
@@ -779,6 +780,8 @@ export class PeerTubeEmbed {
 
     return {
       getBaseStaticRoute: unimplemented,
+
+      getBaseRouterRoute: unimplemented,
 
       getSettings: unimplemented,
 

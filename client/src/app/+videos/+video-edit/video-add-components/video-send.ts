@@ -6,7 +6,7 @@ import { listUserChannels } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
+import { HTMLServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
@@ -28,7 +28,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   protected serverService: ServerService
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
-  protected serverConfig: ServerConfig
+  protected serverConfig: HTMLServerConfig
 
   abstract canDeactivate (): CanComponentDeactivateResult
 
@@ -41,9 +41,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
         this.firstStepChannelId = this.userVideoChannels[0].id
       })
 
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.serverService.getVideoPrivacies()
         .subscribe(

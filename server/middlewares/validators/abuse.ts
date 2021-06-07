@@ -13,13 +13,11 @@ import {
   isAbuseVideoIsValid
 } from '@server/helpers/custom-validators/abuses'
 import { exists, isIdOrUUIDValid, isIdValid, toIntOrNull } from '@server/helpers/custom-validators/misc'
-import { doesCommentIdExist } from '@server/helpers/custom-validators/video-comments'
 import { logger } from '@server/helpers/logger'
-import { doesAbuseExist, doesAccountIdExist, doesVideoExist } from '@server/helpers/middlewares'
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { AbuseCreate, UserRight } from '@shared/models'
-import { areValidationErrors } from './utils'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { areValidationErrors, doesAbuseExist, doesAccountIdExist, doesCommentIdExist, doesVideoExist } from './shared'
 
 const abuseReportValidator = [
   body('account.id')
@@ -71,9 +69,7 @@ const abuseReportValidator = [
     if (body.comment?.id && !await doesCommentIdExist(body.comment.id, res)) return
 
     if (!body.video?.id && !body.account?.id && !body.comment?.id) {
-      res.status(HttpStatusCode.BAD_REQUEST_400)
-         .json({ error: 'video id or account id or comment id is required.' })
-
+      res.fail({ message: 'video id or account id or comment id is required.' })
       return
     }
 
@@ -195,8 +191,10 @@ const getAbuseValidator = [
       const message = `User ${user.username} does not have right to get abuse ${abuse.id}`
       logger.warn(message)
 
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-                .json({ error: message })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message
+      })
     }
 
     return next()
@@ -209,10 +207,7 @@ const checkAbuseValidForMessagesValidator = [
 
     const abuse = res.locals.abuse
     if (abuse.ReporterAccount.isOwned() === false) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({
-                  error: 'This abuse was created by a user of your instance.'
-                })
+      return res.fail({ message: 'This abuse was created by a user of your instance.' })
     }
 
     return next()
@@ -246,13 +241,17 @@ const deleteAbuseMessageValidator = [
     const abuseMessage = await AbuseMessageModel.loadByIdAndAbuseId(messageId, abuse.id)
 
     if (!abuseMessage) {
-      return res.status(HttpStatusCode.NOT_FOUND_404)
-                .json({ error: 'Abuse message not found' })
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Abuse message not found'
+      })
     }
 
     if (user.hasRight(UserRight.MANAGE_ABUSES) !== true && abuseMessage.accountId !== user.Account.id) {
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-                .json({ error: 'Cannot delete this abuse message' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Cannot delete this abuse message'
+      })
     }
 
     res.locals.abuseMessage = abuseMessage

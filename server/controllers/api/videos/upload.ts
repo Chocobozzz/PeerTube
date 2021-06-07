@@ -6,6 +6,7 @@ import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { addOptimizeOrMergeAudioJob, buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { uploadx } from '@uploadx/core'
 import { VideoCreate, VideoState } from '../../../../shared'
@@ -60,6 +61,7 @@ const reqVideoFileAddResumable = createReqFiles(
 )
 
 uploadRouter.post('/upload',
+  openapiOperationDoc({ operationId: 'uploadLegacy' }),
   authenticate,
   reqVideoFileAdd,
   asyncMiddleware(videosAddLegacyValidator),
@@ -67,6 +69,7 @@ uploadRouter.post('/upload',
 )
 
 uploadRouter.post('/upload-resumable',
+  openapiOperationDoc({ operationId: 'uploadResumableInit' }),
   authenticate,
   reqVideoFileAddResumable,
   asyncMiddleware(videosAddResumableInitValidator),
@@ -79,6 +82,7 @@ uploadRouter.delete('/upload-resumable',
 )
 
 uploadRouter.put('/upload-resumable',
+  openapiOperationDoc({ operationId: 'uploadResumable' }),
   authenticate,
   uploadxMiddleware, // uploadx doesn't use call next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),
@@ -97,8 +101,11 @@ export async function addVideoLegacy (req: express.Request, res: express.Respons
   // Uploading the video could be long
   // Set timeout to 10 minutes, as Express's default is 2 minutes
   req.setTimeout(1000 * 60 * 10, () => {
-    logger.error('Upload video has timed out.')
-    return res.sendStatus(HttpStatusCode.REQUEST_TIMEOUT_408)
+    logger.error('Video upload has timed out.')
+    return res.fail({
+      status: HttpStatusCode.REQUEST_TIMEOUT_408,
+      message: 'Video upload has timed out.'
+    })
   })
 
   const videoPhysicalFile = req.files['videofile'][0]

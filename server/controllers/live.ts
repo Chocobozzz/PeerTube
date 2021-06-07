@@ -25,7 +25,7 @@ function getSegmentsSha256 (req: express.Request, res: express.Response) {
   const result = LiveManager.Instance.getSegmentsSha256(videoUUID)
 
   if (!result) {
-    return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    return res.status(HttpStatusCode.NOT_FOUND_404).end()
   }
 
   return res.json(mapToJSON(result))

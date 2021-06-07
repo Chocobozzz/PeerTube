@@ -1,4 +1,4 @@
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { getOrCreateAPVideo } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { ActivityCreate, ActivityView, ViewObject } from '../../../../shared/models/activitypub'
@@ -29,7 +29,7 @@ async function processCreateView (activity: ActivityView | ActivityCreate, byAct
     fetchType: 'only-video' as 'only-video',
     allowRefresh: false as false
   }
-  const { video } = await getOrCreateVideoAndAccountAndChannel(options)
+  const { video } = await getOrCreateAPVideo(options)
 
   if (!video.isLive) {
     await Redis.Instance.addVideoView(video.id)

@@ -2,10 +2,10 @@ import { ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup'
 import { InstanceService } from '@app/shared/shared-instance'
-import { About, ServerConfig } from '@shared/models'
+import { About, HTMLServerConfig, ServerConfig } from '@shared/models'
 import { copyToClipboard } from '../../../root-helpers/utils'
 import { ResolverData } from './about-instance.resolver'
 
@@ -35,9 +35,9 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   languages: string[] = []
   categories: string[] = []
 
-  serverConfig: ServerConfig
-
   initialized = false
+
+  private serverConfig: HTMLServerConfig
 
   private lastScrollHash: string
 
@@ -45,6 +45,7 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
     private notifier: Notifier,
+    private serverService: ServerService,
     private instanceService: InstanceService
   ) {}
 
@@ -61,9 +62,9 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   }
 
   async ngOnInit () {
-    const { about, languages, categories, serverConfig }: ResolverData = this.route.snapshot.data.instanceData
+    const { about, languages, categories }: ResolverData = this.route.snapshot.data.instanceData
 
-    this.serverConfig = serverConfig
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.languages = languages
     this.categories = categories

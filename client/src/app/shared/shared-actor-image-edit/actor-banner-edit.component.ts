@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main'
@@ -36,14 +36,12 @@ export class ActorBannerEditComponent implements OnInit {
   ) { }
 
   ngOnInit (): void {
-    this.serverService.getConfig()
-        .subscribe(config => {
-          this.maxBannerSize = config.banner.file.size.max
-          this.bannerExtensions = config.banner.file.extensions.join(', ')
+    const config = this.serverService.getHTMLConfig()
+    this.maxBannerSize = config.banner.file.size.max
+    this.bannerExtensions = config.banner.file.extensions.join(', ')
 
-          // tslint:disable:max-line-length
-          this.bannerFormat = $localize`ratio 6/1, recommended size: 1920x317, max size: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
-        })
+    // tslint:disable:max-line-length
+    this.bannerFormat = $localize`ratio 6/1, recommended size: 1920x317, max size: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
   }
 
   onBannerChange (input: HTMLInputElement) {

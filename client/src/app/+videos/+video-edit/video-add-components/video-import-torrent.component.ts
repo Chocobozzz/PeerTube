@@ -5,7 +5,7 @@ import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { ServerErrorCode, VideoPrivacy, VideoUpdate } from '@shared/models'
+import { PeerTubeProblemDocument, ServerErrorCode, VideoPrivacy, VideoUpdate } from '@shared/models'
 import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
 
@@ -115,7 +115,9 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
         this.firstStepError.emit()
 
         let message = err.message
-        if (err.body?.code === ServerErrorCode.INCORRECT_FILES_IN_TORRENT) {
+
+        const error = err.body as PeerTubeProblemDocument
+        if (error?.code === ServerErrorCode.INCORRECT_FILES_IN_TORRENT) {
           message = $localize`Torrents with only 1 file are supported.`
         }
 

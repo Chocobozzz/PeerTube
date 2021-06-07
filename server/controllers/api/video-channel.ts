@@ -13,8 +13,8 @@ import { CONFIG } from '../../initializers/config'
 import { MIMETYPES } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { sendUpdateActor } from '../../lib/activitypub/send'
-import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../lib/actor-image'
 import { JobQueue } from '../../lib/job-queue'
+import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../lib/local-actor'
 import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import {
   asyncMiddleware,
@@ -180,7 +180,7 @@ async function deleteVideoChannelAvatar (req: express.Request, res: express.Resp
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.AVATAR)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function deleteVideoChannelBanner (req: express.Request, res: express.Response) {
@@ -188,7 +188,7 @@ async function deleteVideoChannelBanner (req: express.Request, res: express.Resp
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.BANNER)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function addVideoChannel (req: express.Request, res: express.Response) {

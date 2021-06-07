@@ -25,12 +25,11 @@ import {
 import { isVideoImage } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
-import { doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoPlaylistFetchType } from '../../../helpers/middlewares'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { MVideoPlaylist } from '../../../types/models/video/video-playlist'
 import { authenticatePromiseIfNeeded } from '../../auth'
-import { areValidationErrors } from '../utils'
+import { areValidationErrors, doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoPlaylistFetchType } from '../shared'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')
@@ -46,8 +45,8 @@ const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
 
     if (body.privacy === VideoPlaylistPrivacy.PUBLIC && !body.videoChannelId) {
       cleanUpReqFiles(req)
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Cannot set "public" a playlist that is not assigned to a channel.' })
+
+      return res.fail({ message: 'Cannot set "public" a playlist that is not assigned to a channel.' })
     }
 
     return next()
@@ -85,14 +84,14 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
       )
     ) {
       cleanUpReqFiles(req)
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Cannot set "public" a playlist that is not assigned to a channel.' })
+
+      return res.fail({ message: 'Cannot set "public" a playlist that is not assigned to a channel.' })
     }
 
     if (videoPlaylist.type === VideoPlaylistType.WATCH_LATER) {
       cleanUpReqFiles(req)
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Cannot update a watch later playlist.' })
+
+      return res.fail({ message: 'Cannot update a watch later playlist.' })
     }
 
     if (body.videoChannelId && !await doesVideoChannelIdExist(body.videoChannelId, res)) return cleanUpReqFiles(req)
@@ -114,8 +113,7 @@ const videoPlaylistsDeleteValidator = [
 
     const videoPlaylist = getPlaylist(res)
     if (videoPlaylist.type === VideoPlaylistType.WATCH_LATER) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({ error: 'Cannot delete a watch later playlist.' })
+      return res.fail({ message: 'Cannot delete a watch later playlist.' })
     }
 
     if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
@@ -144,7 +142,10 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
       if (videoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED) {
         if (isUUIDValid(req.params.playlistId)) return next()
 
-        return res.status(HttpStatusCode.NOT_FOUND_404).end()
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'Playlist not found'
+        })
       }
 
       if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
@@ -156,8 +157,10 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
           !user ||
           (videoPlaylist.OwnerAccount.id !== user.Account.id && !user.hasRight(UserRight.UPDATE_ANY_VIDEO_PLAYLIST))
         ) {
-          return res.status(HttpStatusCode.FORBIDDEN_403)
-                    .json({ error: 'Cannot get this private video playlist.' })
+          return res.fail({
+            status: HttpStatusCode.FORBIDDEN_403,
+            message: 'Cannot get this private video playlist.'
+          })
         }
 
         return next()
@@ -233,10 +236,10 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
 
     const videoPlaylistElement = await VideoPlaylistElementModel.loadById(req.params.playlistElementId)
     if (!videoPlaylistElement) {
-      res.status(HttpStatusCode.NOT_FOUND_404)
-         .json({ error: 'Video playlist element not found' })
-         .end()
-
+      res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Video playlist element not found'
+      })
       return
     }
     res.locals.videoPlaylistElement = videoPlaylistElement
@@ -263,15 +266,18 @@ const videoPlaylistElementAPGetValidator = [
 
     const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndElementIdForAP(playlistId, playlistElementId)
     if (!videoPlaylistElement) {
-      res.status(HttpStatusCode.NOT_FOUND_404)
-         .json({ error: 'Video playlist element not found' })
-         .end()
-
+      res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Video playlist element not found'
+      })
       return
     }
 
     if (videoPlaylistElement.VideoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-      return res.status(HttpStatusCode.FORBIDDEN_403).end()
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Cannot get this private video playlist.'
+      })
     }
 
     res.locals.videoPlaylistElementAP = videoPlaylistElement
@@ -307,18 +313,12 @@ const videoPlaylistsReorderVideosValidator = [
     const reorderLength: number = req.body.reorderLength
 
     if (startPosition >= nextPosition || insertAfterPosition >= nextPosition) {
-      res.status(HttpStatusCode.BAD_REQUEST_400)
-         .json({ error: `Start position or insert after position exceed the playlist limits (max: ${nextPosition - 1})` })
-         .end()
-
+      res.fail({ message: `Start position or insert after position exceed the playlist limits (max: ${nextPosition - 1})` })
       return
     }
 
     if (reorderLength && reorderLength + startPosition > nextPosition) {
-      res.status(HttpStatusCode.BAD_REQUEST_400)
-         .json({ error: `Reorder length with this start position exceeds the playlist limits (max: ${nextPosition - startPosition})` })
-         .end()
-
+      res.fail({ message: `Reorder length with this start position exceeds the playlist limits (max: ${nextPosition - startPosition})` })
       return
     }
 
@@ -401,10 +401,10 @@ function getCommonPlaylistEditAttributes () {
 
 function checkUserCanManageVideoPlaylist (user: MUserAccountId, videoPlaylist: MVideoPlaylist, right: UserRight, res: express.Response) {
   if (videoPlaylist.isOwned() === false) {
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: 'Cannot manage video playlist of another server.' })
-       .end()
-
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot manage video playlist of another server.'
+    })
     return false
   }
 
@@ -412,10 +412,10 @@ function checkUserCanManageVideoPlaylist (user: MUserAccountId, videoPlaylist: M
   // The user can delete it if s/he is an admin
   // Or if s/he is the video playlist's owner
   if (user.hasRight(right) === false && videoPlaylist.ownerAccountId !== user.Account.id) {
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: 'Cannot manage video playlist of another user' })
-       .end()
-
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot manage video playlist of another user'
+    })
     return false
   }
 

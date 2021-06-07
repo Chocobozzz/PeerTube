@@ -48,9 +48,8 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
     forkJoin([
       this.serverService.getVideoLanguages(),
-      this.serverService.getConfig(),
       this.userInformationLoaded.pipe(first())
-    ]).subscribe(([ languages, config ]) => {
+    ]).subscribe(([ languages ]) => {
       const group = this.allLanguagesGroup
 
       this.languageItems = [ { label: $localize`Unknown language`, id: '_unknown', group } ]
@@ -61,7 +60,8 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
         ? this.user.videoLanguages.map(l => ({ id: l }))
         : [ { group } ]
 
-      this.defaultNSFWPolicy = config.instance.defaultNSFWPolicy
+      const serverConfig = this.serverService.getHTMLConfig()
+      this.defaultNSFWPolicy = serverConfig.instance.defaultNSFWPolicy
 
       this.form.patchValue({
         nsfwPolicy: this.user.nsfwPolicy || this.defaultNSFWPolicy,

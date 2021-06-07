@@ -40,7 +40,6 @@ export class InstanceFeaturesTableComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
         .subscribe(config => {
           this.serverConfig = config

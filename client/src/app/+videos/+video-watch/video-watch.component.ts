@@ -28,7 +28,15 @@ import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/sha
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
+import {
+  HTMLServerConfig,
+  PeerTubeProblemDocument,
+  ServerErrorCode,
+  UserVideoRateType,
+  VideoCaption,
+  VideoPrivacy,
+  VideoState
+} from '@shared/models'
 import {
   cleanupVideoWatch,
   getStoredP2PEnabled,
@@ -116,7 +124,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private configSub: Subscription
   private liveVideosSub: Subscription
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private elementRef: ElementRef,
@@ -163,21 +171,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     PeertubePlayerManager.initState()
 
-    this.serverConfig = this.serverService.getTmpConfig()
-
-    this.configSub = this.serverService.getConfig()
-        .subscribe(config => {
-          this.serverConfig = config
-
-          if (
-            isWebRTCDisabled() ||
-            this.serverConfig.tracker.enabled === false ||
-            getStoredP2PEnabled() === false ||
-            peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
-          ) {
-            this.hasAlreadyAcceptedPrivacyConcern = true
-          }
-        })
+    this.serverConfig = this.serverService.getHTMLConfig()
+    if (
+      isWebRTCDisabled() ||
+      this.serverConfig.tracker.enabled === false ||
+      getStoredP2PEnabled() === false ||
+      peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
+    ) {
+      this.hasAlreadyAcceptedPrivacyConcern = true
+    }
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const videoId = routeParams[ 'videoId' ]
@@ -431,9 +433,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       .pipe(
         // If 400, 403 or 404, the video is private or blocked so redirect to 404
         catchError(err => {
-          if (err.body.errorCode === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && err.body.originUrl) {
+          const errorBody = err.body as PeerTubeProblemDocument
+
+          if (errorBody.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
             const search = window.location.search
-            let originUrl = err.body.originUrl
+            let originUrl = errorBody.originUrl
             if (search) originUrl += search
 
             this.confirmService.confirm(

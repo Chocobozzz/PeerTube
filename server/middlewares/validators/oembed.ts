@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { query } from 'express-validator'
 import { join } from 'path'
-import { fetchVideo } from '@server/helpers/video'
+import { loadVideo } from '@server/lib/model-loaders'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
@@ -9,7 +9,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
 const playlistPaths = [
   join('videos', 'watch', 'playlist'),
@@ -51,8 +51,13 @@ const oembedValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.format !== undefined && req.query.format !== 'json') {
-      return res.status(HttpStatusCode.NOT_IMPLEMENTED_501)
-        .json({ error: 'Requested format is not implemented on server.' })
+      return res.fail({
+        status: HttpStatusCode.NOT_IMPLEMENTED_501,
+        message: 'Requested format is not implemented on server.',
+        data: {
+          format: req.query.format
+        }
+      })
     }
 
     const url = req.query.url as string
@@ -65,27 +70,35 @@ const oembedValidator = [
     const matches = watchRegex.exec(url)
 
     if (startIsOk === false || matches === null) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-        .json({ error: 'Invalid url.' })
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Invalid url.',
+        data: {
+          url
+        }
+      })
     }
 
     const elementId = matches[1]
     if (isIdOrUUIDValid(elementId) === false) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-        .json({ error: 'Invalid video or playlist id.' })
+      return res.fail({ message: 'Invalid video or playlist id.' })
     }
 
     if (isVideo) {
-      const video = await fetchVideo(elementId, 'all')
+      const video = await loadVideo(elementId, 'all')
 
       if (!video) {
-        return res.status(HttpStatusCode.NOT_FOUND_404)
-          .json({ error: 'Video not found' })
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'Video not found'
+        })
       }
 
       if (video.privacy !== VideoPrivacy.PUBLIC) {
-        return res.status(HttpStatusCode.FORBIDDEN_403)
-          .json({ error: 'Video is not public' })
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'Video is not public'
+        })
       }
 
       res.locals.videoAll = video
@@ -96,13 +109,17 @@ const oembedValidator = [
 
     const videoPlaylist = await VideoPlaylistModel.loadWithAccountAndChannelSummary(elementId, undefined)
     if (!videoPlaylist) {
-      return res.status(HttpStatusCode.NOT_FOUND_404)
-        .json({ error: 'Video playlist not found' })
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Video playlist not found'
+      })
     }
 
     if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC) {
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-        .json({ error: 'Playlist is not public' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Playlist is not public'
+      })
     }
 
     res.locals.videoPlaylistSummary = videoPlaylist

@@ -4,7 +4,7 @@ import { isActorImageFile } from '@server/helpers/custom-validators/actor-images
 import { cleanUpReqFiles } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
 const updateActorImageValidatorFactory = (fieldname: string) => ([
   body(fieldname).custom((value, { req }) => isActorImageFile(req.files, fieldname)).withMessage(

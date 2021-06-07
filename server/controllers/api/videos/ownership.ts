@@ -122,7 +122,7 @@ function acceptOwnership (req: express.Request, res: express.Response) {
     videoChangeOwnership.status = VideoChangeOwnershipStatus.ACCEPTED
     await videoChangeOwnership.save({ transaction: t })
 
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   })
 }
 
@@ -133,6 +133,6 @@ function refuseOwnership (req: express.Request, res: express.Response) {
     videoChangeOwnership.status = VideoChangeOwnershipStatus.REFUSED
     await videoChangeOwnership.save({ transaction: t })
 
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   })
 }

@@ -7,7 +7,7 @@ import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPa
 import { handleOAuthToken } from '@server/lib/auth/oauth'
 import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { asyncMiddleware, authenticate } from '@server/middlewares'
+import { asyncMiddleware, authenticate, openapiOperationDoc } from '@server/middlewares'
 import { ScopedToken } from '@shared/models/users/user-scoped-token'
 
 const tokensRouter = express.Router()
@@ -19,10 +19,12 @@ const loginRateLimiter = RateLimit({
 
 tokensRouter.post('/token',
   loginRateLimiter,
+  openapiOperationDoc({ operationId: 'getOAuthToken' }),
   asyncMiddleware(handleToken)
 )
 
 tokensRouter.post('/revoke-token',
+  openapiOperationDoc({ operationId: 'revokeOAuthToken' }),
   authenticate,
   asyncMiddleware(handleTokenRevocation)
 )
@@ -78,9 +80,10 @@ async function handleToken (req: express.Request, res: express.Response, next: e
   } catch (err) {
     logger.warn('Login error', { err })
 
-    return res.status(err.code || 400).json({
-      code: err.name,
-      error: err.message
+    return res.fail({
+      status: err.code,
+      message: err.message,
+      type: err.name
     })
   }
 }

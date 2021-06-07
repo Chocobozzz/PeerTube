@@ -1,10 +1,10 @@
+import { Subscription } from 'rxjs'
 import { Component, HostBinding, Inject, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { VideoListHeaderComponent } from '@app/shared/shared-video-miniature'
-import { GlobalIconName } from '@app/shared/shared-icons'
-import { ServerService } from '@app/core/server/server.service'
-import { Subscription } from 'rxjs'
 import { AuthService, RedirectService } from '@app/core'
+import { ServerService } from '@app/core/server/server.service'
+import { GlobalIconName } from '@app/shared/shared-icons'
+import { VideoListHeaderComponent } from '@app/shared/shared-video-miniature'
 
 interface VideoTrendingHeaderItem {
   label: string
@@ -67,21 +67,19 @@ export class VideoTrendingHeaderComponent extends VideoListHeaderComponent imple
   }
 
   ngOnInit () {
-    this.serverService.getConfig()
-        .subscribe(config => {
-          const algEnabled = config.trending.videos.algorithms.enabled
+    const serverConfig = this.serverService.getHTMLConfig()
+    const algEnabled = serverConfig.trending.videos.algorithms.enabled
 
-          this.buttons = this.buttons.map(b => {
-            b.hidden = !algEnabled.includes(b.value)
+    this.buttons = this.buttons.map(b => {
+      b.hidden = !algEnabled.includes(b.value)
 
-            // Best is adapted by the user history so
-            if (b.value === 'best' && !this.auth.isLoggedIn()) {
-              b.hidden = true
-            }
+      // Best is adapted by the user history so
+      if (b.value === 'best' && !this.auth.isLoggedIn()) {
+        b.hidden = true
+      }
 
-            return b
-          })
-        })
+      return b
+    })
 
     this.algorithmChangeSub = this.route.queryParams.subscribe(
       queryParams => {

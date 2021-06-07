@@ -2,7 +2,7 @@ import * as express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { doJSONRequest } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
-import { getOrCreateVideoAndAccountAndChannel } from '@server/lib/activitypub/videos'
+import { getOrCreateAPVideo } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
 import { getServerActor } from '@server/models/application/application'
@@ -14,11 +14,11 @@ import { VideoChannelsSearchQuery, VideosSearchQuery } from '../../../shared/mod
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
-import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
-import { getOrCreateActorAndServerAndModel } from '../../lib/activitypub/actor'
+import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../lib/activitypub/actors'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
+  openapiOperationDoc,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -35,6 +35,7 @@ import { MChannelAccountDefault, MVideoAccountLightBlacklistAllFiles } from '../
 const searchRouter = express.Router()
 
 searchRouter.get('/videos',
+  openapiOperationDoc({ operationId: 'searchVideos' }),
   paginationValidator,
   setDefaultPagination,
   videosSearchSortValidator,
@@ -46,6 +47,7 @@ searchRouter.get('/videos',
 )
 
 searchRouter.get('/video-channels',
+  openapiOperationDoc({ operationId: 'searchChannels' }),
   paginationValidator,
   setDefaultPagination,
   videoChannelsSearchSortValidator,
@@ -102,7 +104,10 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: e
   } catch (err) {
     logger.warn('Cannot use search index to make video channels search.', { err })
 
-    return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+    return res.fail({
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+      message: 'Cannot use search index to make video channels search'
+    })
   }
 }
 
@@ -142,7 +147,7 @@ async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      const actor = await getOrCreateActorAndServerAndModel(uri, 'all', true, true)
+      const actor = await getOrCreateAPActor(uri, 'all', true, true)
       videoChannel = actor.VideoChannel
     } catch (err) {
       logger.info('Cannot search remote video channel %s.', uri, { err })
@@ -202,7 +207,10 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
   } catch (err) {
     logger.warn('Cannot use search index to make video search.', { err })
 
-    return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+    return res.fail({
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+      message: 'Cannot use search index to make video search'
+    })
   }
 }
 
@@ -238,7 +246,7 @@ async function searchVideoURI (url: string, res: express.Response) {
         refreshVideo: false
       }
 
-      const result = await getOrCreateVideoAndAccountAndChannel({ videoObject: url, syncParam })
+      const result = await getOrCreateAPVideo({ videoObject: url, syncParam })
       video = result ? result.video : undefined
     } catch (err) {
       logger.info('Cannot search remote video %s.', url, { err })

@@ -1,9 +1,9 @@
 import * as express from 'express'
-import { areValidationErrors } from './utils'
-import { logger } from '../../helpers/logger'
 import { query } from 'express-validator'
-import { isDateValid } from '../../helpers/custom-validators/misc'
 import { isSearchTargetValid } from '@server/helpers/custom-validators/search'
+import { isDateValid } from '../../helpers/custom-validators/misc'
+import { logger } from '../../helpers/logger'
+import { areValidationErrors } from './shared'
 
 const videosSearchValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),

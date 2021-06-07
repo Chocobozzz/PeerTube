@@ -4,13 +4,12 @@ import { ActivitypubFollowPayload } from '@shared/models'
 import { sanitizeHost } from '../../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
-import { loadActorUrlOrGetFromWebfinger } from '../../../helpers/webfinger'
 import { REMOTE_SCHEME, WEBSERVER } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { ActorModel } from '../../../models/actor/actor'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { MActor, MActorFollowActors, MActorFull } from '../../../types/models'
-import { getOrCreateActorAndServerAndModel } from '../../activitypub/actor'
+import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../activitypub/actors'
 import { sendFollow } from '../../activitypub/send'
 import { Notifier } from '../../notifier'
 
@@ -26,7 +25,7 @@ async function processActivityPubFollow (job: Bull.Job) {
   } else {
     const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
     const actorUrl = await loadActorUrlOrGetFromWebfinger(payload.name + '@' + sanitizedHost)
-    targetActor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
+    targetActor = await getOrCreateAPActor(actorUrl, 'all')
   }
 
   if (payload.assertIsChannel && !targetActor.VideoChannel) {

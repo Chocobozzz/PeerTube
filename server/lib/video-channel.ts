@@ -3,9 +3,9 @@ import { VideoChannelCreate } from '../../shared/models'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { MAccountId, MChannelId } from '../types/models'
-import { buildActorInstance } from './activitypub/actor'
 import { getLocalVideoChannelActivityPubUrl } from './activitypub/url'
 import { federateVideoIfNeeded } from './activitypub/videos'
+import { buildActorInstance } from './local-actor'
 
 async function createLocalVideoChannel (videoChannelInfo: VideoChannelCreate, account: MAccountId, t: Sequelize.Transaction) {
   const url = getLocalVideoChannelActivityPubUrl(videoChannelInfo.name)

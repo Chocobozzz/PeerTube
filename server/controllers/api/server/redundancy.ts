@@ -90,13 +90,13 @@ async function addVideoRedundancy (req: express.Request, res: express.Response) 
     payload
   })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function removeVideoRedundancyController (req: express.Request, res: express.Response) {
   await removeVideoRedundancy(res.locals.videoRedundancy)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateRedundancy (req: express.Request, res: express.Response) {
@@ -110,5 +110,5 @@ async function updateRedundancy (req: express.Request, res: express.Response) {
   removeRedundanciesOfServer(server.id)
     .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, { err }))
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

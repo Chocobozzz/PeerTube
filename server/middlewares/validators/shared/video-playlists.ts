@@ -1,7 +1,7 @@
 import * as express from 'express'
-import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { MVideoPlaylist } from '../../types/models/video/video-playlist'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist'
+import { MVideoPlaylist } from '@server/types/models'
+import { HttpStatusCode } from '@shared/core-utils'
 
 export type VideoPlaylistFetchType = 'summary' | 'all'
 async function doesVideoPlaylistExist (id: number | string, res: express.Response, fetchType: VideoPlaylistFetchType = 'summary') {
@@ -28,10 +28,10 @@ export {
 
 function handleVideoPlaylist (videoPlaylist: MVideoPlaylist, res: express.Response) {
   if (!videoPlaylist) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-       .json({ error: 'Video playlist not found' })
-       .end()
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video playlist not found'
+    })
     return false
   }
 

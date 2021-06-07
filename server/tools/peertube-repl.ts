@@ -15,7 +15,6 @@ import * as modelsUtils from '../models/utils'
 import * as coreUtils from '../helpers/core-utils'
 import * as ffmpegUtils from '../helpers/ffmpeg-utils'
 import * as peertubeCryptoUtils from '../helpers/peertube-crypto'
-import * as signupUtils from '../helpers/signup'
 import * as utils from '../helpers/utils'
 import * as YoutubeDLUtils from '../helpers/youtube-dl'
 
@@ -50,7 +49,6 @@ const start = async () => {
         coreUtils,
         ffmpegUtils,
         peertubeCryptoUtils,
-        signupUtils,
         utils,
         YoutubeDLUtils
       }

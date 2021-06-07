@@ -6,7 +6,7 @@ import { immutableAssign } from '@app/helpers'
 import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions, VideoLinkType } from '@app/shared/shared-video-miniature'
-import { SearchTargetType, ServerConfig } from '@shared/models'
+import { HTMLServerConfig, SearchTargetType } from '@shared/models'
 
 @Component({
   selector: 'my-search',
@@ -37,7 +37,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   errorMessage: string
-  serverConfig: ServerConfig
 
   userMiniature: User
 
@@ -48,6 +47,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   private channelsPerPage = 2
 
   private lastSearchTarget: SearchTargetType
+
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private route: ActivatedRoute,
@@ -62,8 +63,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit () {
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.subActivatedRoute = this.route.queryParams.subscribe(
       async queryParams => {
@@ -81,7 +81,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
         this.advancedSearch = new AdvancedSearch(queryParams)
         if (!this.advancedSearch.searchTarget) {
-          this.advancedSearch.searchTarget = await this.serverService.getDefaultSearchTarget()
+          this.advancedSearch.searchTarget = this.getDefaultSearchTarget()
         }
 
         // Don't hide filters if we have some of them AND the user just came on the webpage
@@ -285,5 +285,15 @@ export class SearchComponent implements OnInit, OnDestroy {
       'filter:api.search.video-channels.list.params',
       'filter:api.search.video-channels.list.result'
     )
+  }
+
+  private getDefaultSearchTarget (): SearchTargetType {
+    const searchIndexConfig = this.serverConfig.search.searchIndex
+
+    if (searchIndexConfig.enabled && (searchIndexConfig.isDefaultSearch || searchIndexConfig.disableLocalSearch)) {
+      return 'search-index'
+    }
+
+    return 'local'
   }
 }

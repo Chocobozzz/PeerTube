@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ServerService } from '@app/core'
 import { AdvancedSearch } from '@app/shared/shared-search'
-import { ServerConfig, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, VideoConstant } from '@shared/models'
 
 type FormOption = { id: string, label: string }
 
@@ -30,7 +30,7 @@ export class SearchFiltersComponent implements OnInit {
   originallyPublishedStartYear: string
   originallyPublishedEndYear: string
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private serverService: ServerService
@@ -97,9 +97,7 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.serverService.getVideoCategories().subscribe(categories => this.videoCategories = categories)
     this.serverService.getVideoLicences().subscribe(licences => this.videoLicences = licences)

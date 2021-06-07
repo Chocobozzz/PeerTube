@@ -2,7 +2,7 @@
 
 set -eu
 
-PEERTUBE_PATH=${1:-/var/www/peertube/}
+PEERTUBE_PATH=${1:-/var/www/peertube}
 
 if [ ! -e "$PEERTUBE_PATH" ]; then
   echo "Error - path \"$PEERTUBE_PATH\" wasn't found"

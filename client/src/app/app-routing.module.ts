@@ -3,7 +3,7 @@ import { RouteReuseStrategy, RouterModule, Routes, UrlMatchResult, UrlSegment } 
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 import { MenuGuards } from '@app/core/routing/menu-guard.service'
 import { POSSIBLE_LOCALES } from '@shared/core-utils/i18n'
-import { MetaGuard, PreloadSelectedModulesList } from './core'
+import { HomepageRedirectComponent, MetaGuard, PreloadSelectedModulesList } from './core'
 import { EmptyComponent } from './empty.component'
 import { USER_USERNAME_REGEX_CHARACTERS } from './shared/form-validators/user-validators'
 import { ActorRedirectGuard } from './shared/shared-main'
@@ -114,7 +114,7 @@ const routes: Routes = [
     path: 'w',
     loadChildren: () => import('@app/+videos/+video-watch/video-watch.module').then(m => m.VideoWatchModule),
     data: {
-      preload: 3000
+      preload: 5000
     }
   },
   {
@@ -156,7 +156,7 @@ const routes: Routes = [
 
   {
     path: '',
-    component: EmptyComponent // Avoid 404, app component will redirect dynamically
+    component: HomepageRedirectComponent
   }
 ]
 
@@ -164,7 +164,7 @@ const routes: Routes = [
 for (const locale of POSSIBLE_LOCALES) {
   routes.push({
     path: locale,
-    component: EmptyComponent
+    component: HomepageRedirectComponent
   })
 }
 

@@ -1,17 +1,19 @@
 import * as express from 'express'
 import toInt from 'validator/lib/toInt'
+import { doJSONRequest } from '@server/helpers/requests'
 import { LiveManager } from '@server/lib/live-manager'
+import { openapiOperationDoc } from '@server/middlewares/doc'
 import { getServerActor } from '@server/models/application/application'
+import { MVideoAccountLight } from '@server/types/models'
 import { VideosCommonQuery } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants'
+import { REMOTE_SCHEME, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendView } from '../../../lib/activitypub/send/send-view'
-import { fetchRemoteVideoDescription } from '../../../lib/activitypub/videos'
 import { JobQueue } from '../../../lib/job-queue'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { Redis } from '../../../lib/redis'
@@ -58,12 +60,25 @@ videosRouter.use('/', liveRouter)
 videosRouter.use('/', uploadRouter)
 videosRouter.use('/', updateRouter)
 
-videosRouter.get('/categories', listVideoCategories)
-videosRouter.get('/licences', listVideoLicences)
-videosRouter.get('/languages', listVideoLanguages)
-videosRouter.get('/privacies', listVideoPrivacies)
+videosRouter.get('/categories',
+  openapiOperationDoc({ operationId: 'getCategories' }),
+  listVideoCategories
+)
+videosRouter.get('/licences',
+  openapiOperationDoc({ operationId: 'getLicences' }),
+  listVideoLicences
+)
+videosRouter.get('/languages',
+  openapiOperationDoc({ operationId: 'getLanguages' }),
+  listVideoLanguages
+)
+videosRouter.get('/privacies',
+  openapiOperationDoc({ operationId: 'getPrivacies' }),
+  listVideoPrivacies
+)
 
 videosRouter.get('/',
+  openapiOperationDoc({ operationId: 'getVideos' }),
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
@@ -74,6 +89,7 @@ videosRouter.get('/',
 )
 
 videosRouter.get('/:id/description',
+  openapiOperationDoc({ operationId: 'getVideoDesc' }),
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
 )
@@ -82,17 +98,20 @@ videosRouter.get('/:id/metadata/:videoFileId',
   asyncMiddleware(getVideoFileMetadata)
 )
 videosRouter.get('/:id',
+  openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
   asyncMiddleware(checkVideoFollowConstraints),
   asyncMiddleware(getVideo)
 )
 videosRouter.post('/:id/views',
+  openapiOperationDoc({ operationId: 'addView' }),
   asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
   asyncMiddleware(viewVideo)
 )
 
 videosRouter.delete('/:id',
+  openapiOperationDoc({ operationId: 'delVideo' }),
   authenticate,
   asyncMiddleware(videosRemoveValidator),
   asyncRetryTransactionMiddleware(removeVideo)
@@ -146,7 +165,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const exists = await Redis.Instance.doesVideoIPViewExist(ip, immutableVideoAttrs.uuid)
   if (exists) {
     logger.debug('View for ip %s and video %s already exists.', ip, immutableVideoAttrs.uuid)
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   }
 
   const video = await VideoModel.load(immutableVideoAttrs.id)
@@ -179,7 +198,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.video.viewed', { video, ip })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function getVideoDescription (req: express.Request, res: express.Response) {
@@ -244,4 +263,16 @@ async function removeVideo (_req: express.Request, res: express.Response) {
   return res.type('json')
             .status(HttpStatusCode.NO_CONTENT_204)
             .end()
+}
+
+// ---------------------------------------------------------------------------
+
+// FIXME: Should not exist, we rely on specific API
+async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
+  const host = video.VideoChannel.Account.Actor.Server.host
+  const path = video.getDescriptionAPIPath()
+  const url = REMOTE_SCHEME.HTTP + '://' + host + path
+
+  const { body } = await doJSONRequest<any>(url)
+  return body.description || ''
 }

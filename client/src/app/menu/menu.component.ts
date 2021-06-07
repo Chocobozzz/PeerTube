@@ -20,7 +20,7 @@ import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, ServerConfig, UserRight, VideoConstant } from '@shared/models'
 import { GlobalIconName } from '../shared/shared-icons/global-icon.component'
 import { HooksService } from '../core/plugins/hooks.service'
 
@@ -38,24 +38,6 @@ interface MenuItem {
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-
-  get isInMobileView () {
-    return this.screenService.isInMobileView()
-  }
-
-  get dropdownContainer () {
-    if (this.isInMobileView) return null
-
-    return 'body' as 'body'
-  }
-
-  get language () {
-    return this.languageChooserModal.getCurrentLanguage()
-  }
-
-  get instanceName () {
-    return this.serverConfig.instance.name
-  }
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
   @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
   @ViewChild('dropdown') dropdown: NgbDropdown
@@ -73,7 +55,10 @@ export class MenuComponent implements OnInit {
   menuItems: MenuItem[]
 
   private languages: VideoConstant<string>[] = []
+
+  private htmlServerConfig: HTMLServerConfig
   private serverConfig: ServerConfig
+
   private routesPerRight: { [role in UserRight]?: string } = {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
@@ -97,19 +82,31 @@ export class MenuComponent implements OnInit {
     private hooks: HooksService
   ) { }
 
-  ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-      .subscribe(config => {
-        this.serverConfig = config
+  get isInMobileView () {
+    return this.screenService.isInMobileView()
+  }
 
-        this.computeMenuItems()
-      })
+  get dropdownContainer () {
+    if (this.isInMobileView) return null
+
+    return 'body' as 'body'
+  }
+
+  get language () {
+    return this.languageChooserModal.getCurrentLanguage()
+  }
+
+  get instanceName () {
+    return this.htmlServerConfig.instance.name
+  }
+
+  ngOnInit () {
+    this.htmlServerConfig = this.serverService.getHTMLConfig()
+    this.computeMenuItems()
 
     this.isLoggedIn = this.authService.isLoggedIn()
     if (this.isLoggedIn === true) {
       this.user = this.authService.getUser()
-      this.computeMenuItems()
 
       this.computeNSFWPolicy()
       this.computeVideosLink()
@@ -159,6 +156,8 @@ export class MenuComponent implements OnInit {
   }
 
   isRegistrationAllowed () {
+    if (!this.serverConfig) return false
+
     return this.serverConfig.signup.allowed &&
       this.serverConfig.signup.allowedForCurrentIP
   }
@@ -305,7 +304,7 @@ export class MenuComponent implements OnInit {
       {
         key: 'on-instance',
         title: `On ${this.instanceName}`,
-        links: this.menuService.buildCommonLinks(this.serverConfig)
+        links: this.menuService.buildCommonLinks(this.htmlServerConfig)
       }
     ]
     .map((block: MenuItem) => ({

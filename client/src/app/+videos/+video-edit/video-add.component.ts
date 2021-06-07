@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, AuthUser, CanComponentDeactivate, ServerService } from '@app/core'
-import { ServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@shared/models'
 import { VideoEditType } from './shared/video-edit.type'
 import { VideoGoLiveComponent } from './video-add-components/video-go-live.component'
 import { VideoImportTorrentComponent } from './video-add-components/video-import-torrent.component'
@@ -26,7 +26,7 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
 
   activeNav: string
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private auth: AuthService,
@@ -42,10 +42,7 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   ngOnInit () {
     this.user = this.auth.getUser()
 
-    this.serverConfig = this.serverService.getTmpConfig()
-
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.user = this.auth.getUser()
 

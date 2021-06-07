@@ -7,7 +7,7 @@ import { doJSONRequest } from '../../helpers/requests'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoShareModel } from '../../models/video/video-share'
 import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
-import { getOrCreateActorAndServerAndModel } from './actor'
+import { getOrCreateAPActor } from './actors'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
 import { getLocalVideoAnnounceActivityPubUrl } from './url'
 
@@ -40,23 +40,7 @@ async function changeVideoChannelShare (
 async function addVideoShares (shareUrls: string[], video: MVideoId) {
   await Bluebird.map(shareUrls, async shareUrl => {
     try {
-      const { body } = await doJSONRequest<any>(shareUrl, { activityPub: true })
-      if (!body || !body.actor) throw new Error('Body or body actor is invalid')
-
-      const actorUrl = getAPId(body.actor)
-      if (checkUrlsSameHost(shareUrl, actorUrl) !== true) {
-        throw new Error(`Actor url ${actorUrl} has not the same host than the share url ${shareUrl}`)
-      }
-
-      const actor = await getOrCreateActorAndServerAndModel(actorUrl)
-
-      const entry = {
-        actorId: actor.id,
-        videoId: video.id,
-        url: shareUrl
-      }
-
-      await VideoShareModel.upsert(entry)
+      await addVideoShare(shareUrl, video)
     } catch (err) {
       logger.warn('Cannot add share %s.', shareUrl, { err })
     }
@@ -70,6 +54,26 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function addVideoShare (shareUrl: string, video: MVideoId) {
+  const { body } = await doJSONRequest<any>(shareUrl, { activityPub: true })
+  if (!body || !body.actor) throw new Error('Body or body actor is invalid')
+
+  const actorUrl = getAPId(body.actor)
+  if (checkUrlsSameHost(shareUrl, actorUrl) !== true) {
+    throw new Error(`Actor url ${actorUrl} has not the same host than the share url ${shareUrl}`)
+  }
+
+  const actor = await getOrCreateAPActor(actorUrl)
+
+  const entry = {
+    actorId: actor.id,
+    videoId: video.id,
+    url: shareUrl
+  }
+
+  await VideoShareModel.upsert(entry)
+}
 
 async function shareByServer (video: MVideo, t: Transaction) {
   const serverActor = await getServerActor()

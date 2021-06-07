@@ -1,9 +1,9 @@
 import * as express from 'express'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { isDateValid } from '../../helpers/custom-validators/misc'
 import { query } from 'express-validator'
 import { isValidLogLevel } from '../../helpers/custom-validators/logs'
+import { isDateValid } from '../../helpers/custom-validators/misc'
+import { logger } from '../../helpers/logger'
+import { areValidationErrors } from './shared'
 
 const getLogsValidator = [
   query('startDate')

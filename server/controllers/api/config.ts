@@ -10,26 +10,32 @@ import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '..
 import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { ClientHtml } from '../../lib/client-html'
-import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
+import { asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 
 const configRouter = express.Router()
 
 const auditLogger = auditLoggerFactory('config')
 
-configRouter.get('/about', getAbout)
-
 configRouter.get('/',
+  openapiOperationDoc({ operationId: 'getConfig' }),
   asyncMiddleware(getConfig)
 )
 
+configRouter.get('/about',
+  openapiOperationDoc({ operationId: 'getAbout' }),
+  getAbout
+)
+
 configRouter.get('/custom',
+  openapiOperationDoc({ operationId: 'getCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   getCustomConfig
 )
 
 configRouter.put('/custom',
+  openapiOperationDoc({ operationId: 'putCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   customConfigUpdateValidator,
@@ -37,6 +43,7 @@ configRouter.put('/custom',
 )
 
 configRouter.delete('/custom',
+  openapiOperationDoc({ operationId: 'delCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(deleteCustomConfig)

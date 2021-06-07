@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router'
-import { ServerConfigResolver, UserRightGuard } from '@app/core'
+import { UserRightGuard } from '@app/core'
 import { UserRight } from '@shared/models'
 import { UserCreateComponent, UserUpdateComponent } from './user-edit'
 import { UserListComponent } from './user-list'
@@ -35,9 +35,6 @@ export const UsersRoutes: Routes = [
           meta: {
             title: $localize`Create a user`
           }
-        },
-        resolve: {
-          serverConfig: ServerConfigResolver
         }
       },
       {

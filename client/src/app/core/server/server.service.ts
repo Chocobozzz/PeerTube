@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
-import { SearchTargetType, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, SearchTargetType, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -28,163 +28,26 @@ export class ServerService {
   private configReset = false
 
   private configLoaded = false
-  private config: ServerConfig = {
-    instance: {
-      name: 'PeerTube',
-      shortDescription: 'PeerTube, a federated (ActivityPub) video streaming platform  ' +
-                        'using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.',
-      isNSFW: false,
-      defaultNSFWPolicy: 'do_not_list' as 'do_not_list',
-      defaultClientRoute: '',
-      customizations: {
-        javascript: '',
-        css: ''
-      }
-    },
-    plugin: {
-      registered: [],
-      registeredExternalAuths: [],
-      registeredIdAndPassAuths: []
-    },
-    theme: {
-      registered: [],
-      default: 'default'
-    },
-    email: {
-      enabled: false
-    },
-    contactForm: {
-      enabled: false
-    },
-    serverVersion: 'Unknown',
-    signup: {
-      allowed: false,
-      allowedForCurrentIP: false,
-      requiresEmailVerification: false,
-      minimumAge: 16
-    },
-    transcoding: {
-      profile: 'default',
-      availableProfiles: [ 'default' ],
-      enabledResolutions: [],
-      hls: {
-        enabled: false
-      },
-      webtorrent: {
-        enabled: true
-      }
-    },
-    live: {
-      enabled: false,
-      allowReplay: true,
-      maxDuration: null,
-      maxInstanceLives: -1,
-      maxUserLives: -1,
-      transcoding: {
-        enabled: false,
-        profile: 'default',
-        availableProfiles: [ 'default' ],
-        enabledResolutions: []
-      },
-      rtmp: {
-        port: 1935
-      }
-    },
-    avatar: {
-      file: {
-        size: { max: 0 },
-        extensions: []
-      }
-    },
-    banner: {
-      file: {
-        size: { max: 0 },
-        extensions: []
-      }
-    },
-    video: {
-      image: {
-        size: { max: 0 },
-        extensions: []
-      },
-      file: {
-        extensions: []
-      }
-    },
-    videoCaption: {
-      file: {
-        size: { max: 0 },
-        extensions: []
-      }
-    },
-    user: {
-      videoQuota: -1,
-      videoQuotaDaily: -1
-    },
-    import: {
-      videos: {
-        http: {
-          enabled: false
-        },
-        torrent: {
-          enabled: false
-        }
-      }
-    },
-    trending: {
-      videos: {
-        intervalDays: 0,
-        algorithms: {
-          enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
-          default: 'most-viewed'
-        }
-      }
-    },
-    autoBlacklist: {
-      videos: {
-        ofUsers: {
-          enabled: false
-        }
-      }
-    },
-    tracker: {
-      enabled: true
-    },
-    followings: {
-      instance: {
-        autoFollowIndex: {
-          indexUrl: 'https://instances.joinpeertube.org'
-        }
-      }
-    },
-    broadcastMessage: {
-      enabled: false,
-      message: '',
-      level: 'info',
-      dismissable: false
-    },
-    search: {
-      remoteUri: {
-        users: true,
-        anonymous: false
-      },
-      searchIndex: {
-        enabled: false,
-        url: '',
-        disableLocalSearch: false,
-        isDefaultSearch: false
-      }
-    },
-    homepage: {
-      enabled: false
-    }
-  }
+  private config: ServerConfig
+  private htmlConfig: HTMLServerConfig
 
   constructor (
     private http: HttpClient,
     @Inject(LOCALE_ID) private localeId: string
   ) {
-    this.loadConfigLocally()
+  }
+
+  loadHTMLConfig () {
+    try {
+      return this.loadHTMLConfigLocally()
+    } catch (err) {
+      // Expected in dev mode since we can't inject the config in the HTML
+      if (environment.production !== false) {
+        console.error('Cannot load config locally. Fallback to API.')
+      }
+
+      return this.getConfig()
+    }
   }
 
   getServerVersionAndCommit () {
@@ -213,6 +76,7 @@ export class ServerService {
                                   .pipe(
                                     tap(config => {
                                       this.config = config
+                                      this.htmlConfig = config
                                       this.configLoaded = true
                                     }),
                                     tap(config => {
@@ -228,8 +92,8 @@ export class ServerService {
     return this.configObservable
   }
 
-  getTmpConfig () {
-    return this.config
+  getHTMLConfig () {
+    return this.htmlConfig
   }
 
   getVideoCategories () {
@@ -293,20 +157,6 @@ export class ServerService {
     return this.http.get<ServerStats>(ServerService.BASE_STATS_URL)
   }
 
-  getDefaultSearchTarget (): Promise<SearchTargetType> {
-    return this.getConfig().pipe(
-      map(config => {
-        const searchIndexConfig = config.search.searchIndex
-
-        if (searchIndexConfig.enabled && (searchIndexConfig.isDefaultSearch || searchIndexConfig.disableLocalSearch)) {
-          return 'search-index'
-        }
-
-        return 'local'
-      })
-    ).toPromise()
-  }
-
   private loadAttributeEnum <T extends string | number> (
     baseUrl: string,
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
@@ -341,15 +191,12 @@ export class ServerService {
                )
   }
 
-  private loadConfigLocally () {
+  private loadHTMLConfigLocally () {
     const configString = window['PeerTubeServerConfig']
-    if (!configString) return
-
-    try {
-      const parsed = JSON.parse(configString)
-      Object.assign(this.config, parsed)
-    } catch (err) {
-      console.error('Cannot parse config saved in from index.html.', err)
+    if (!configString) {
+      throw new Error('Could not find PeerTubeServerConfig in HTML')
     }
+
+    this.htmlConfig = JSON.parse(configString)
   }
 }

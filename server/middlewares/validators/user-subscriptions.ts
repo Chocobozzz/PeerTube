@@ -6,7 +6,7 @@ import { toArray } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { ActorFollowModel } from '../../models/actor/actor-follow'
-import { areValidationErrors } from './utils'
+import { areValidationErrors } from './shared'
 
 const userSubscriptionListValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
@@ -61,11 +61,10 @@ const userSubscriptionGetValidator = [
     const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(user.Account.Actor.id, name, host)
 
     if (!subscription || !subscription.ActorFollowing.VideoChannel) {
-      return res
-        .status(HttpStatusCode.NOT_FOUND_404)
-        .json({
-          error: `Subscription ${req.params.uri} not found.`
-        })
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: `Subscription ${req.params.uri} not found.`
+      })
     }
 
     res.locals.subscription = subscription

@@ -166,7 +166,10 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
   }
 
   if (resultList.data.length === 0) {
-    return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    return res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'No comments were found'
+    })
   }
 
   return res.json(buildFormattedCommentTree(resultList))

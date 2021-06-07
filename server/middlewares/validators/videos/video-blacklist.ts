@@ -1,11 +1,10 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { isBooleanValid, isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../../helpers/custom-validators/video-blacklist'
 import { logger } from '../../../helpers/logger'
-import { doesVideoBlacklistExist, doesVideoExist } from '../../../helpers/middlewares'
-import { areValidationErrors } from '../utils'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { areValidationErrors, doesVideoBlacklistExist, doesVideoExist } from '../shared'
 
 const videosBlacklistRemoveValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -39,10 +38,10 @@ const videosBlacklistAddValidator = [
 
     const video = res.locals.videoAll
     if (req.body.unfederate === true && video.remote === true) {
-      return res
-        .status(HttpStatusCode.CONFLICT_409)
-        .send({ error: 'You cannot unfederate a remote video.' })
-        .end()
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'You cannot unfederate a remote video.'
+      })
     }
 
     return next()

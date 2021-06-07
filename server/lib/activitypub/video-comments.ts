@@ -6,8 +6,8 @@ import { doJSONRequest } from '../../helpers/requests'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
-import { getOrCreateActorAndServerAndModel } from './actor'
-import { getOrCreateVideoAndAccountAndChannel } from './videos'
+import { getOrCreateAPActor } from './actors'
+import { getOrCreateAPVideo } from './videos'
 
 type ResolveThreadParams = {
   url: string
@@ -29,10 +29,11 @@ async function addVideoComments (commentUrls: string[]) {
 
 async function resolveThread (params: ResolveThreadParams): ResolveThreadResult {
   const { url, isVideo } = params
+
   if (params.commentCreated === undefined) params.commentCreated = false
   if (params.comments === undefined) params.comments = []
 
-  // If it is not a video, or if we don't know if it's a video
+  // If it is not a video, or if we don't know if it's a video, try to get the thread from DB
   if (isVideo === false || isVideo === undefined) {
     const result = await resolveCommentFromDB(params)
     if (result) return result
@@ -42,7 +43,7 @@ async function resolveThread (params: ResolveThreadParams): ResolveThreadResult 
     // If it is a video, or if we don't know if it's a video
     if (isVideo === true || isVideo === undefined) {
       // Keep await so we catch the exception
-      return await tryResolveThreadFromVideo(params)
+      return await tryToResolveThreadFromVideo(params)
     }
   } catch (err) {
     logger.debug('Cannot resolve thread from video %s, maybe because it was not a video', url, { err })
@@ -62,34 +63,32 @@ async function resolveCommentFromDB (params: ResolveThreadParams) {
   const { url, comments, commentCreated } = params
 
   const commentFromDatabase = await VideoCommentModel.loadByUrlAndPopulateReplyAndVideoUrlAndAccount(url)
-  if (commentFromDatabase) {
-    let parentComments = comments.concat([ commentFromDatabase ])
+  if (!commentFromDatabase) return undefined
 
-    // Speed up things and resolve directly the thread
-    if (commentFromDatabase.InReplyToVideoComment) {
-      const data = await VideoCommentModel.listThreadParentComments(commentFromDatabase, undefined, 'DESC')
+  let parentComments = comments.concat([ commentFromDatabase ])
 
-      parentComments = parentComments.concat(data)
-    }
+  // Speed up things and resolve directly the thread
+  if (commentFromDatabase.InReplyToVideoComment) {
+    const data = await VideoCommentModel.listThreadParentComments(commentFromDatabase, undefined, 'DESC')
 
-    return resolveThread({
-      url: commentFromDatabase.Video.url,
-      comments: parentComments,
-      isVideo: true,
-      commentCreated
-    })
+    parentComments = parentComments.concat(data)
   }
 
-  return undefined
+  return resolveThread({
+    url: commentFromDatabase.Video.url,
+    comments: parentComments,
+    isVideo: true,
+    commentCreated
+  })
 }
 
-async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
+async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
   const { url, comments, commentCreated } = params
 
   // Maybe it's a reply to a video?
   // If yes, it's done: we resolved all the thread
   const syncParam = { likes: true, dislikes: true, shares: true, comments: false, thumbnail: true, refreshVideo: false }
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: url, syncParam })
+  const { video } = await getOrCreateAPVideo({ videoObject: url, syncParam })
 
   if (video.isOwned() && !video.hasPrivacyForFederation()) {
     throw new Error('Cannot resolve thread of video with privacy that is not compatible with federation')
@@ -148,7 +147,7 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
   }
 
   const actor = actorUrl
-    ? await getOrCreateActorAndServerAndModel(actorUrl, 'all')
+    ? await getOrCreateAPActor(actorUrl, 'all')
     : null
 
   const comment = new VideoCommentModel({

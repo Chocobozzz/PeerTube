@@ -18,7 +18,6 @@ import {
 } from '@server/types/models'
 import { MVideoImportFormattable } from '@server/types/models/video/video-import'
 import { ServerErrorCode, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
@@ -32,7 +31,7 @@ import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { getLocalVideoActivityPubUrl } from '../../../lib/activitypub/url'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
-import { createVideoMiniatureFromExisting, createVideoMiniatureFromUrl } from '../../../lib/thumbnail'
+import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from '../../../lib/thumbnail'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
@@ -143,10 +142,12 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   } catch (err) {
     logger.info('Cannot fetch information from import for URL %s.', targetUrl, { err })
 
-    return res.status(HttpStatusCode.BAD_REQUEST_400)
-              .json({
-                error: 'Cannot fetch remote information of this URL.'
-              })
+    return res.fail({
+      message: 'Cannot fetch remote information of this URL.',
+      data: {
+        targetUrl
+      }
+    })
   }
 
   const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
@@ -229,7 +230,7 @@ async function processThumbnail (req: express.Request, video: MVideoThumbnail) {
   if (thumbnailField) {
     const thumbnailPhysicalFile = thumbnailField[0]
 
-    return createVideoMiniatureFromExisting({
+    return updateVideoMiniatureFromExisting({
       inputPath: thumbnailPhysicalFile.path,
       video,
       type: ThumbnailType.MINIATURE,
@@ -245,7 +246,7 @@ async function processPreview (req: express.Request, video: MVideoThumbnail): Pr
   if (previewField) {
     const previewPhysicalFile = previewField[0]
 
-    return createVideoMiniatureFromExisting({
+    return updateVideoMiniatureFromExisting({
       inputPath: previewPhysicalFile.path,
       video,
       type: ThumbnailType.PREVIEW,
@@ -258,7 +259,7 @@ async function processPreview (req: express.Request, video: MVideoThumbnail): Pr
 
 async function processThumbnailFromUrl (url: string, video: MVideoThumbnail) {
   try {
-    return createVideoMiniatureFromUrl({ downloadUrl: url, video, type: ThumbnailType.MINIATURE })
+    return updateVideoMiniatureFromUrl({ downloadUrl: url, video, type: ThumbnailType.MINIATURE })
   } catch (err) {
     logger.warn('Cannot generate video thumbnail %s for %s.', url, video.url, { err })
     return undefined
@@ -267,7 +268,7 @@ async function processThumbnailFromUrl (url: string, video: MVideoThumbnail) {
 
 async function processPreviewFromUrl (url: string, video: MVideoThumbnail) {
   try {
-    return createVideoMiniatureFromUrl({ downloadUrl: url, video, type: ThumbnailType.PREVIEW })
+    return updateVideoMiniatureFromUrl({ downloadUrl: url, video, type: ThumbnailType.PREVIEW })
   } catch (err) {
     logger.warn('Cannot generate video preview %s for %s.', url, video.url, { err })
     return undefined
@@ -333,12 +334,10 @@ async function processTorrentOrAbortRequest (req: express.Request, res: express.
   if (parsedTorrent.files.length !== 1) {
     cleanUpReqFiles(req)
 
-    res.status(HttpStatusCode.BAD_REQUEST_400)
-      .json({
-        code: ServerErrorCode.INCORRECT_FILES_IN_TORRENT,
-        error: 'Torrents with only 1 file are supported.'
-      })
-
+    res.fail({
+      type: ServerErrorCode.INCORRECT_FILES_IN_TORRENT,
+      message: 'Torrents with only 1 file are supported.'
+    })
     return undefined
   }
 

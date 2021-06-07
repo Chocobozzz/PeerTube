@@ -314,7 +314,7 @@ async function removeUser (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.user.deleted', { user })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateUser (req: express.Request, res: express.Response) {
@@ -349,7 +349,7 @@ async function updateUser (req: express.Request, res: express.Response) {
 
   // Don't need to send this update to followers, these attributes are not federated
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function askResetUserPassword (req: express.Request, res: express.Response) {

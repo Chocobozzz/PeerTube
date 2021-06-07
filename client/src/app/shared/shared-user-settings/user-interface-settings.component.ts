@@ -2,7 +2,7 @@ import { Subject, Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { ServerConfig, User, UserUpdateMe } from '@shared/models'
+import { HTMLServerConfig, User, UserUpdateMe } from '@shared/models'
 
 @Component({
   selector: 'my-user-interface-settings',
@@ -17,7 +17,7 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   formValuesWatcher: Subscription
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -35,9 +35,7 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.buildForm({
       theme: null

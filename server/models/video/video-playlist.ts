@@ -18,6 +18,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { v4 as uuidv4 } from 'uuid'
+import { setAsUpdated } from '@server/helpers/database-utils'
 import { MAccountId, MChannelId } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
@@ -531,9 +532,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   }
 
   setAsRefreshed () {
-    this.changed('updatedAt', true)
-
-    return this.save()
+    return setAsUpdated('videoPlaylist', this.id)
   }
 
   isOwned () {

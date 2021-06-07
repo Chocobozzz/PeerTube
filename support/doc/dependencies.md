@@ -1,6 +1,6 @@
 # Dependencies
 
-Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/package.json#7). You can check them automatically via `sudo npx engineslist`.
+Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml). You can check them automatically via `sudo npx engineslist`.
 
 _note_: only **LTS** versions of external dependencies are supported. If no LTS version matching the version constraint is available, only **release** versions are supported.
 

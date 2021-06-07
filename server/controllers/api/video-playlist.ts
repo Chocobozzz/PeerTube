@@ -18,7 +18,7 @@ import { sequelizeTypescript } from '../../initializers/database'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
 import { JobQueue } from '../../lib/job-queue'
-import { createPlaylistMiniatureFromExisting } from '../../lib/thumbnail'
+import { updatePlaylistMiniatureFromExisting } from '../../lib/thumbnail'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -173,7 +173,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting({
+    ? await updatePlaylistMiniatureFromExisting({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylist,
       automaticallyGenerated: false
@@ -215,7 +215,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting({
+    ? await updatePlaylistMiniatureFromExisting({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylistInstance,
       automaticallyGenerated: false
@@ -482,7 +482,7 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
   }
 
   const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoMiniature.filename)
-  const thumbnailModel = await createPlaylistMiniatureFromExisting({
+  const thumbnailModel = await updatePlaylistMiniatureFromExisting({
     inputPath,
     playlist: videoPlaylist,
     automaticallyGenerated: true,

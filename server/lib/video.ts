@@ -10,7 +10,7 @@ import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } fro
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { JobQueue } from './job-queue/job-queue'
 import { Notifier } from './notifier'
-import { createVideoMiniatureFromExisting } from './thumbnail'
+import { updateVideoMiniatureFromExisting } from './thumbnail'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -54,7 +54,7 @@ async function buildVideoThumbnailsFromReq (options: {
     const fields = files?.[p.fieldName]
 
     if (fields) {
-      return createVideoMiniatureFromExisting({
+      return updateVideoMiniatureFromExisting({
         inputPath: fields[0].path,
         video,
         type: p.type,

@@ -1,7 +1,7 @@
 import * as express from 'express'
+import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MChannelBannerAccountDefault } from '@server/types/models'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
-import { VideoChannelModel } from '../../models/video/video-channel'
+import { HttpStatusCode } from '@shared/core-utils'
 
 async function doesLocalVideoChannelNameExist (name: string, res: express.Response) {
   const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
@@ -31,9 +31,10 @@ export {
 
 function processVideoChannelExist (videoChannel: MChannelBannerAccountDefault, res: express.Response) {
   if (!videoChannel) {
-    res.status(HttpStatusCode.NOT_FOUND_404)
-      .json({ error: 'Video channel not found' })
-
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: 'Video channel not found'
+    })
     return false
   }
 

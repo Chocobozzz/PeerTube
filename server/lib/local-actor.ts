@@ -3,16 +3,34 @@ import { queue } from 'async'
 import * as LRUCache from 'lru-cache'
 import { extname, join } from 'path'
 import { v4 as uuidv4 } from 'uuid'
-import { ActorImageType } from '@shared/models'
+import { ActorModel } from '@server/models/actor/actor'
+import { ActivityPubActorType, ActorImageType } from '@shared/models'
 import { retryTransactionWrapper } from '../helpers/database-utils'
 import { processImage } from '../helpers/image-utils'
 import { downloadImage } from '../helpers/requests'
 import { CONFIG } from '../initializers/config'
-import { ACTOR_IMAGES_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
+import { ACTOR_IMAGES_SIZE, LRU_CACHE, QUEUE_CONCURRENCY, WEBSERVER } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
-import { MAccountDefault, MChannelDefault } from '../types/models'
-import { deleteActorImageInstance, updateActorImageInstance } from './activitypub/actor'
+import { MAccountDefault, MActor, MChannelDefault } from '../types/models'
+import { deleteActorImageInstance, updateActorImageInstance } from './activitypub/actors'
 import { sendUpdateActor } from './activitypub/send'
+
+function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string) {
+  return new ActorModel({
+    type,
+    url,
+    preferredUsername,
+    publicKey: null,
+    privateKey: null,
+    followersCount: 0,
+    followingCount: 0,
+    inboxUrl: url + '/inbox',
+    outboxUrl: url + '/outbox',
+    sharedInboxUrl: WEBSERVER.URL + '/inbox',
+    followersUrl: url + '/followers',
+    followingUrl: url + '/following'
+  }) as MActor
+}
 
 async function updateLocalActorImageFile (
   accountOrChannel: MAccountDefault | MChannelDefault,
@@ -93,5 +111,6 @@ export {
   actorImagePathUnsafeCache,
   updateLocalActorImageFile,
   deleteLocalActorImageFile,
-  pushActorImageProcessInQueue
+  pushActorImageProcessInQueue,
+  buildActorInstance
 }

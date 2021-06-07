@@ -11,7 +11,7 @@ import { VideoShareModel } from '../../../models/video/video-share'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { getOrCreateAPVideo } from '../videos'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   const { activity, byActor } = options
@@ -55,7 +55,7 @@ export {
 async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: likeActivity.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: likeActivity.object })
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
@@ -80,7 +80,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
     ? activity.object
     : activity.object.object as DislikeObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislike.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: dislike.object })
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
@@ -103,7 +103,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
 async function processUndoCacheFile (byActor: MActorSignature, activity: ActivityUndo) {
   const cacheFileObject = activity.object.object as CacheFileObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
   return sequelizeTypescript.transaction(async t => {
     const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id)

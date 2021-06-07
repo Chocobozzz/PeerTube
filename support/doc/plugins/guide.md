@@ -21,6 +21,7 @@
     - [Notifier](#notifier)
     - [Markdown Renderer](#markdown-renderer)
     - [Auth header](#auth-header)
+    - [Plugin router route](#plugin-router-route)
     - [Custom Modal](#custom-modal)
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
@@ -556,6 +557,27 @@ function register (...) {
         headers: peertubeHelpers.getAuthHeader()
       }).then(res => res.json())
         .then(data => console.log('Hi %s.', data.username))
+    }
+  })
+}
+```
+
+#### Plugin router route
+
+**PeerTube >= 3.3**
+
+To get your plugin router route, you can use `peertubeHelpers.getBaseRouterRoute()`:
+
+```js
+function register (...) {
+  registerHook({
+    target: 'action:video-watch.video.loaded',
+    handler: ({ video }) => {
+      fetch(peertubeHelpers.getBaseRouterRoute() + '/my/plugin/api', {
+        method: 'GET',
+        headers: peertubeHelpers.getAuthHeader()
+      }).then(res => res.json())
+        .then(data => console.log('Hi %s.', data))
     }
   })
 }

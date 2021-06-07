@@ -1,12 +1,13 @@
 import * as express from 'express'
 import { body } from 'express-validator'
 import {
-  isSignatureCreatorValid, isSignatureTypeValid,
+  isSignatureCreatorValid,
+  isSignatureTypeValid,
   isSignatureValueValid
 } from '../../../helpers/custom-validators/activitypub/signature'
 import { isDateValid } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
-import { areValidationErrors } from '../utils'
+import { areValidationErrors } from '../shared'
 
 const signatureValidator = [
   body('signature.type')
