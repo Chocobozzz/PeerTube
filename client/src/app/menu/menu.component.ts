@@ -8,7 +8,8 @@ import {
   AuthService,
   AuthStatus,
   AuthUser,
-  MenuLink,
+  HooksService,
+  MenuSection,
   MenuService,
   RedirectService,
   ScreenService,
@@ -45,7 +46,7 @@ export class MenuComponent implements OnInit {
 
   currentInterfaceLanguage: string
 
-  commonMenuLinks: MenuLink[] = []
+  menuSections: MenuSection[] = []
 
   private languages: VideoConstant<string>[] = []
 
@@ -71,7 +72,8 @@ export class MenuComponent implements OnInit {
     private screenService: ScreenService,
     private menuService: MenuService,
     private modalService: PeertubeModalService,
-    private router: Router
+    private router: Router,
+    private hooks: HooksService
   ) { }
 
   get isInMobileView () {
@@ -88,46 +90,23 @@ export class MenuComponent implements OnInit {
     return this.languageChooserModal.getCurrentLanguage()
   }
 
-  get instanceName () {
-    return this.htmlServerConfig.instance.name
-  }
-
   ngOnInit () {
     this.htmlServerConfig = this.serverService.getHTMLConfig()
-    this.buildMenuLinks()
-
-    this.isLoggedIn = this.authService.isLoggedIn()
-    if (this.isLoggedIn === true) {
-      this.user = this.authService.getUser()
-
-      this.computeNSFWPolicy()
-      this.computeVideosLink()
-    }
-
-    this.computeAdminAccess()
-
     this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
+
+    this.updateUserState()
+    this.buildMenuSections()
 
     this.authService.loginChangedSource.subscribe(
       status => {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true
-          this.user = this.authService.getUser()
-
-          this.computeAdminAccess()
-          this.computeVideosLink()
-
-          logger('Logged in.')
         } else if (status === AuthStatus.LoggedOut) {
           this.isLoggedIn = false
-          this.user = undefined
-
-          this.computeAdminAccess()
-
-          logger('Logged out.')
-        } else {
-          console.error('Unknown auth status: ' + status)
         }
+
+        this.updateUserState()
+        this.buildMenuSections()
       }
     )
 
@@ -257,8 +236,20 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  private buildMenuLinks () {
-    this.commonMenuLinks = this.menuService.buildCommonLinks(this.htmlServerConfig)
+  private async buildMenuSections () {
+    const menuSections = []
+
+    if (this.isLoggedIn) {
+      menuSections.push(
+        this.menuService.buildLibraryLinks(this.user?.canSeeVideosLink)
+      )
+    }
+
+    menuSections.push(
+      this.menuService.buildCommonLinks(this.htmlServerConfig)
+    )
+
+    this.menuSections = await this.hooks.wrapObject(menuSections, 'common', 'filter:left-menu.links.create.result')
   }
 
   private buildUserLanguages () {
@@ -268,7 +259,7 @@ export class MenuComponent implements OnInit {
     }
 
     if (!this.user.videoLanguages) {
-      this.videoLanguages = [$localize`any language`]
+      this.videoLanguages = [ $localize`any language` ]
       return
     }
 
@@ -284,6 +275,8 @@ export class MenuComponent implements OnInit {
   }
 
   private computeVideosLink () {
+    if (!this.isLoggedIn) return
+
     this.authService.userInformationLoaded
       .pipe(
         switchMap(() => this.user.computeCanSeeVideosLink(this.userService.getMyVideoQuotaUsed()))
@@ -312,5 +305,15 @@ export class MenuComponent implements OnInit {
         this.nsfwPolicy = $localize`display`
         break
     }
+  }
+
+  private updateUserState () {
+    this.user = this.isLoggedIn
+      ? this.authService.getUser()
+      : undefined
+
+    this.computeAdminAccess()
+    this.computeNSFWPolicy()
+    this.computeVideosLink()
   }
 }

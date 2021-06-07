@@ -50,7 +50,10 @@ export const clientFilterHookObject = {
 
   // Filter our SVG icons content
   'filter:internal.common.svg-icons.get-content.params': true,
-  'filter:internal.common.svg-icons.get-content.result': true
+  'filter:internal.common.svg-icons.get-content.result': true,
+
+  // Filter left menu links
+  'filter:left-menu.links.create.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject

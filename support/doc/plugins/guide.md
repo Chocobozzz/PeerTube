@@ -29,6 +29,7 @@
     - [Add custom fields to video form](#add-custom-fields-to-video-form)
     - [Register settings script](#register-settings-script)
     - [HTML placeholder elements](#html-placeholder-elements)
+    - [Add/remove left menu links](#addremove-left-menu-links)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
   - [Clone the quickstart repository](#clone-the-quickstart-repository)
@@ -743,6 +744,11 @@ async function register (...) {
 ```
 
 See the complete list on https://docs.joinpeertube.org/api-plugins
+
+#### Add/remove left menu links
+
+Left menu links can be filtered (add/remove a section or add/remove links) using the `filter:left-menu.links.create.result` client hook.
+
 
 ### Publishing
 

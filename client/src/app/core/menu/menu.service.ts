@@ -2,16 +2,23 @@ import { fromEvent } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
-import { sortObjectComparator } from '@shared/core-utils/miscs/miscs'
 import { HTMLServerConfig } from '@shared/models/server'
 import { ScreenService } from '../wrappers'
 
 export type MenuLink = {
   icon: GlobalIconName
+
   label: string
-  menuLabel: string
+  // Used by the left menu for example
+  shortLabel: string
+
   path: string
-  priority: number
+}
+
+export type MenuSection = {
+  key: string
+  title: string
+  links: MenuLink[]
 }
 
 @Injectable()
@@ -59,51 +66,90 @@ export class MenuService {
     this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
   }
 
-  buildCommonLinks (config: HTMLServerConfig) {
-    let entries: MenuLink[] = [
+  buildLibraryLinks (userCanSeeVideosLink: boolean): MenuSection {
+    let links: MenuLink[] = []
+
+    if (userCanSeeVideosLink) {
+      links.push({
+        path: '/my-library/videos',
+        icon: 'videos' as GlobalIconName,
+        shortLabel: $localize`Videos`,
+        label: $localize`My videos`
+      })
+    }
+
+    links = links.concat([
+      {
+        path: '/my-library/video-playlists',
+        icon: 'playlists' as GlobalIconName,
+        shortLabel: $localize`Playlists`,
+        label: $localize`My playlists`
+      },
+      {
+        path: '/videos/subscriptions',
+        icon: 'subscriptions' as GlobalIconName,
+        shortLabel: $localize`Subscriptions`,
+        label: $localize`My subscriptions`
+      },
+      {
+        path: '/my-library/history/videos',
+        icon: 'history' as GlobalIconName,
+        shortLabel: $localize`History`,
+        label: $localize`My history`
+      }
+    ])
+
+    return {
+      key: 'in-my-library',
+      title: 'In my library',
+      links
+    }
+  }
+
+  buildCommonLinks (config: HTMLServerConfig): MenuSection {
+    let links: MenuLink[] = []
+
+    if (config.homepage.enabled) {
+      links.push({
+        icon: 'home' as 'home',
+        label: $localize`Home`,
+        shortLabel: $localize`Home`,
+        path: '/home'
+      })
+    }
+
+    links = links.concat([
       {
         icon: 'globe' as 'globe',
         label: $localize`Discover videos`,
-        menuLabel: $localize`Discover`,
-        path: '/videos/overview',
-        priority: 150
+        shortLabel: $localize`Discover`,
+        path: '/videos/overview'
       },
       {
         icon: 'trending' as 'trending',
         label: $localize`Trending videos`,
-        menuLabel: $localize`Trending`,
-        path: '/videos/trending',
-        priority: 140
+        shortLabel: $localize`Trending`,
+        path: '/videos/trending'
       },
       {
         icon: 'recently-added' as 'recently-added',
         label: $localize`Recently added videos`,
-        menuLabel: $localize`Recently added`,
-        path: '/videos/recently-added',
-        priority: 130
+        shortLabel: $localize`Recently added`,
+        path: '/videos/recently-added'
       },
       {
         icon: 'local' as 'local',
         label: $localize`Local videos`,
-        menuLabel: $localize`Local videos`,
-        path: '/videos/local',
-        priority: 120
+        shortLabel: $localize`Local videos`,
+        path: '/videos/local'
       }
-    ]
+    ])
 
-    if (config.homepage.enabled) {
-      entries.push({
-        icon: 'home' as 'home',
-        label: $localize`Home`,
-        menuLabel: $localize`Home`,
-        path: '/home',
-        priority: 160
-      })
+    return {
+      key: 'on-instance',
+      title: $localize`ON ${config.instance.name}`,
+      links
     }
-
-    entries = entries.sort(sortObjectComparator('priority', 'desc'))
-
-    return entries
   }
 
   private handleWindowResize () {
